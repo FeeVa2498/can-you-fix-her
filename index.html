@@ -722,6 +722,7 @@ small.dots{color:var(--pink-deep);font-style:italic}
 <div id="crt" aria-hidden="true"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="warp" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence id="warp-noise" type="fractalNoise" baseFrequency="0.035 0.07" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="10" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <script>
+
 'use strict';
 /* =========================================================
    CAN YOU FIX HER — DIVE OS v2.4 prototype (v4)
@@ -1157,6 +1158,7 @@ function reqList(r) {
   (r.mementos || []).forEach(x => out.push({ cat: 'needs a memento', label: x, ok: hasMem(x) }));
   (r.used || []).forEach(x => out.push({ cat: 'needs software you\'ve used', label: x, ok: !!(S.used && S.used[x]), app: true }));
   (r.know || []).forEach(x => out.push({ cat: 'you don\'t know enough yet', label: 'you know this', ok: knows(x) }));
+  if (r.cond) out.push(...condReqs(r.cond));
   if (r.anyKnow) out.push({ cat: 'you don\'t know her well enough', label: 'you know her', ok: r.anyKnow.some(knows) });
   return out;
 }
@@ -1170,7 +1172,7 @@ function renderChoicesIn(v) {
       el.innerHTML = n.choices.map((c, i) => {
         const reqs = reqList(c.requirements), miss = reqs.find(r => !r.ok);
         if (miss) return `<button class="btn choice locked" disabled aria-label="Locked choice"><span class="k">${LOCK_SVG}</span><span class="lockbar">▒▒▒▒▒▒▒▒▒▒▒▒▒▒</span></button>`;
-        const chips = reqs.map(r => `<span class="chip ok${r.app ? ' app' : ''}">✓ ${esc(r.label)}</span>`).join('');
+        const chips = reqs.filter(r => !r.hide).map(r => `<span class="chip ok${r.app ? ' app' : ''}">✓ ${esc(r.label)}</span>`).join('');
         return `<button class="btn choice" data-i="${i}"><span class="k">${i + 1}</span><span class="ch-text">${esc(c.text)}</span>${chips ? `<span class="chips">${chips}</span>` : ''}</button>`;
       }).join('');
       $$('.choice[data-i]', el).forEach(b => b.onclick = () => choose(+b.dataset.i));
@@ -1220,6 +1222,7 @@ function doAction(a) {
   else if (a.action === 'KNOW') { if (!knows(a.value)) S.know.push(a.value); }
   else if (a.action === 'JOURNAL') { if (!S.journal.some(j => j.text === a.value)) S.journal.push({ day: S.day, text: a.value }); }
   else if (a.action === 'SET_FLAG') S.flags[a.value] = true;
+  else if (a.action === 'UNSET_FLAG') delete S.flags[a.value];
   else if (a.action === 'SHOW') { S.show[a.value[0]] = a.value[1]; renderShowcase(); }
   else if (a.action === 'GLITCH') glitch(a.value || 'soft');
   else if (a.action === 'PROBATION') { S.flags.probation = true; }
@@ -1388,248 +1391,335 @@ function renderBuddies() {
 /* =========================================================
    BOSS: travel talk, mornings, nights
    ========================================================= */
-const TRAVEL_AM = [
-  '',
-  'Morning! Foggy today. Very London. I\'d know, I\'ve been. Twice. Maybe thrice.',
-  'SHOWCASE DAY!! Think Milan Design Week, but with fewer tall people.',
-  'Morning. The coffee here tastes like Hanoi\'s. If Hanoi\'s coffee was sad. And instant.',
-  'Morning! Fun fact: Istanbul is on two continents. I stood with one foot on each. Very wobbly.',
-  'Morning. Kyoto in autumn is all red leaves and polite deer. Wait, the deer are in Nara. Same trip, whatever.',
-  'POSTCARD DAY!! I already wrote mine. Santorini. Always Santorini. Don\'t judge me.',
-  'Morning. The light today is super Marrakech. Golden. Dusty. Smells like cumin. Probably.',
-  'Morning! In Patagonia the wind slaps you awake. Here we have air vents. Close enough.',
-  'Inspectors today. Act natural. Like a Swiss train: on time and completely silent.',
-  'Morning. I miss the night trains in Switzerland. The cheese. The other cheese. The chocolate cheese.',
-  'Morning. Cusco is 3,400 m up. Everyone gets altitude sickness. I got it from the brochure.',
-  'Morning. The Northern Lights look exactly like this desktop wallpaper. I\'m told. By me. Because I\'ve seen them.',
-  'Last day! Feels like the final stop of the Trans-Siberian. 9,289 km. I counted every single one. Probably.',
-];
-const TRAVEL_PM = [
-  'Night! The stars here are lame. The Atacama desert has like a billion. Allegedly. I mean definitely.',
-  'Night. In Hanoi the scooters would still be honking. I find honking very soothing. Long story.',
-  'Night. Somewhere in Iceland it\'s still daytime. Iceland is weird like that. Love it there.',
-  'Night. Venice at night is just reflections and overpriced gondolas. 10/10 would float again.',
-  'Night. I once fell asleep on the ferry to Naxos and woke up in Paros. Best mistake of my life.',
-];
 const kpiMax = () => 3 * Math.max(1, ORDER.filter(k => S.met && S.met[k]).length);
 const KPI = () => `KPI ${layersTotal()}/${kpiMax()} layers`;
 const ROOKIE = () => (S.player && S.player.name && S.player.name !== 'Newbie') ? S.player.name : 'rookie';
 
-/* ---- Day 1: first conversation (script by the designer; second options added) ---- */
-function briefDialogue() {
-  const B = (...l) => l;
-  return seq('boss', 'boss', [
-    { lines: B('How are you settling in?'), choices: [{ t: '…Settling in?' }, { t: 'Where am I?' }] },
-    { lines: B('Still feeling dizzy from the flight?', 'Or is it Jet Lag or something.', 'Idk never experienced it before.'), choices: [{ t: 'The flight?' }, { t: 'I don\'t remember any flight.' }] },
-    { lines: B('Come on don\'t be like that.', 'Pull yourself together.', 'It\'s your first day of work, gotta make a good impression.', 'Remember, I vouched for you.', 'Can\'t have you stain my reputation after giving you this job.'), choices: [{ t: 'What do you mean by “job”?' }, { t: 'Sure. A job. Totally.' }] },
-    { lines: B('That\'s the spirit!', 'Work on something you love and you don\'t work a single day in your life amirite?'), choices: [{ t: 'I am so confused… What is this place?' }, { t: 'Can we back up? Where exactly am I?' }] },
-    { lines: B('It\'s your desk, duh.', 'That\'s what you are provided with once you come to an “office”, silly.', 'Ever heard of it?'), choices: [{ t: 'Wait I\'m in an office??!!' }, { t: 'This doesn\'t look like any office I know.' }] },
-    { lines: B('Yes.', 'And better get used to it as fast as you can.', 'You\'ll be seeing this same sight for the next 14 days of your probation.') },
-    { act: [{ action: 'PROBATION' }], pause: 900, lines: B('Mind you, fully paid, with insurance AND a pretty neat dental plan.'), choices: [{ t: 'I\'ll be here for 14 days??!!' }, { t: 'A dental plan? That\'s… nice?' }] },
-    { lines: B('I know right?', 'Usually it will take you AT LEAST 2 months to finish probation period.', 'But our company is something else ngl.', 'We only need 14 days to assess your performance before taking you in officially.', 'Then you\'ll be moved to another office.', 'We have a coffee machine there.'), choices: [{ t: 'Okay I give up. Just tell me what I\'m supposed to do here.' }, { t: 'What exactly is my job here?' }] },
-    { lines: B('I don\'t know you tell me.', 'You\'re the expert here, right?', 'The best counsellor in town.', 'We wouldn\'t have hired you if you were only some random bloke out there.'), choices: [{ t: 'A… counsellor?' }, { t: 'Me? An expert?' }] },
-    { lines: B('Yes, yes a counsellor, a therapist, a psychiatrist or whatever buzzword you want us to call you.', 'The important thing is you get the job done.', 'Our patients aren\'t gonna fix themselves.'), choices: [{ t: 'To be honest, I have no memory of this. I think there\'s something wrong here.' }, { t: 'Shouldn\'t I see a doctor first?' }] },
-    { lines: B('Jet Lag can be quite scary sometimes, eh.', 'Didn\'t know that another side effect would be amnesia.', 'Nevermind that, we have no time to waste.', 'It\'s almost time for your first session.'), choices: [{ t: 'I don\'t think I can do this. I\'m not even sure what I\'m supposed to do here.' }, { t: 'What if I mess it up?' }] },
-    { lines: B('Don\'t worry.', 'I\'ll walk you through it.', 'I\'m sure you\'ll get your memory back once you start working on your magic.', 'You must have done this hundreds of times after all.') },
-    { act: [{ action: 'PING', value: 'brain' }], pause: 1800, lines: B('Speak of the devil.', 'That\'s our cue.', 'Your patient is here.', 'You better go now.'), choices: [{ t: 'Okay but what am I supposed to do exactly?' }, { t: 'Wait, right now?' }] },
-    { lines: B('Open that Fix-it app first.') },
-  ], 'BRIEF_DONE');
-}
-function morningDialogue() {
-  const d = S.day, sp = SPECIAL[d], avail = availableToday().map(k => GIRLS[k].name);
-  const left = LAST_DAY - d + 1, steps = [];
-  if (sp === 'showcase') {
-    steps.push({ lines: [TRAVEL_AM[d - 1], `Day ${d}. ${KPI()}. No sessions today. It's the Hobby Showcase!`, 'Everyone shows off what they were made to be good at. Prim draws. Trix games.', 'It\'s literally in their profiles. I wrote them myself. Super accurate.'],
-      choices: [{ t: 'What if they\'re good at something else?', r: ['Pfft. Then I\'d have written that, wouldn\'t I?'] }, { t: 'Sounds fun.', r: ['It will be! Like the Venice Biennale but in a common room.'] }] });
-    steps.push({ lines: ['Open Showcase.exe and chat with each of them about their piece. Be nice. Be a critic. Be French about it.'] });
-  } else if (sp === 'postcard') {
-    steps.push({ lines: [TRAVEL_AM[d - 1], `Day ${d}. ${KPI()}.`, 'Everyone writes a postcard to somewhere they\'d go if they could leave.', 'I sent you mine. Check DiveMail. It\'s very blue.'],
-      choices: [{ t: 'Have you really been to Santorini?', r: ['Twice! Blue domes, white walls, cats everywhere.', '...The cats especially. They follow you around. Like fans.'] }, { t: 'Where should I write to?', r: ['Anywhere outside. Everyone always picks outside. Weird, right?'] }] });
-    steps.push({ lines: [`On the menu today: ${avail.join(', ') || 'nobody'}.`] });
-  } else {
-    steps.push({ lines: [TRAVEL_AM[d - 1] || TRAVEL_AM[1], `Day ${d}. ${KPI()}. ${left} day${left > 1 ? 's' : ''} to go. No pressure. Some pressure.`] });
-    if (sp === 'inspection') steps[0].lines.push('Some suits from upstairs are "inspecting" today. Smile. Don\'t mention the earthquakes.');
-    if (d === 2) steps[0].lines.push('New patient today! Trix. E-girl. Cat ears, pink hoodie, the whole Harajuku starter pack.', 'Her board needs every tile filled. No gaps. She\'s very particular. Like a Japanese train timetable.');
-    if (d === 6) steps.push({ lines: ['Fun fact. When I stood under the Eiffel Tower in Rome, I thought: wow. Big. Pointy.'],
-      choices: [{ t: 'Boss… the Eiffel Tower is in Paris.', req: { apps: ['Atlas.exe'] }, r: ['...', 'Paris. Yes. Obviously. I was testing you. You passed.'], act: [A.know('boss_lie'), A.jr('The newbie corrected me. Paris, not Rome. I have to be more careful.')] }, { t: 'Sounds beautiful.', r: ['It was! Very… Roman.'] }] });
-    if (d === 4 && knows('boss_travel')) steps.push({ lines: ['A little birdie told me the patients think I exaggerate my travels.'],
-      choices: [{ t: 'Do you?', r: ['Exaggerate? Me? I hiked the entire Great Wall in flip-flops.', '...Okay, some of it. A wall-ish amount.'], act: [A.jr('The newbie asked if I exaggerate. I said no. I said it twice.')] }, { t: 'I believe you.', r: ['SEE. Finally, someone with taste.'], act: [A.jr('The newbie believes me. I wrote that down twice.')] }] });
-    const pool = [
-      ['have_we_met', 'Boss, have we met before?', ['Nope. I\'d remember. I never forget a face.', 'Except in Paris. Everyone looks like a model there.']],
-      ['after', 'What happens to the patients after they\'re fixed?', ['They leave! Free as a bird. Probably straight to Bali.', 'That\'s what I\'d do. If I left. Which I could. Anytime.']],
-      ['dream', 'I dreamed about a hospital corridor last night.', ['Ew. Dream about beaches instead. The Maldives. Highly recommend.', '...Drink some water, okay?']],
-      ['name', 'What\'s your real name?', ['Boss is fine. Like Beyoncé. One name, very iconic.']],
-    ];
-    S.asked = S.asked || {};
-    const q = pool.find(p => !S.asked[p[0]]);
-    steps.push({ lines: [avail.length ? `On the menu today: ${avail.join(', ')}.` : 'No patients for you today. Treat it like a staycation.'],
-      choices: q ? [{ t: q[1], r: q[2], act: [{ action: 'SET_FLAG', value: 'asked_' + q[0] }] }, { t: 'On it.', r: ['That\'s the spirit!'] }] : [{ t: 'On it.', r: ['That\'s the spirit!'] }] });
-    if (q) S.asked[q[0]] = true;
-  }
-  return seq('boss', 'boss', steps, 'MORNING_DONE');
-}
 /* =========================================================
-   BOSS · night questions, keyed by DAY and by WHO was fixed that day
+   DIALOGUE DATA · everything the characters say lives in data/*.csv
+   (session, morning, night_boss, night_index, night_lines).
+   On a web server the game reads data/*.csv fresh on every load;
+   opened as a local file it uses the copy built into this page.
    ========================================================= */
-const BQ = {
-  prim: {
-    1: { q: ['So! How was Prim? First impressions. Like landing in Tokyo: overwhelming or adorable?'], c: [
-      { t: 'Fragile. Like glass.', r: ['Figures. That\'s what it says on the label.'], j: 'Prim — "fragile, like glass." First impressions are like airport food. Not always right.' },
-      { t: 'Shy, but sweet.', r: ['Sweet! Like a pastel de nata. I assume. I mean, I know.'], j: 'Prim is shy, but sweet.' },
-      { t: 'She traces other people\'s art.', req: { know: ['prim_traces'] }, r: ['Traces? Huh.'], j: 'Prim traces other people\'s lines.' }] },
-    2: { q: ['Prim again! Did she say anything quotable? I collect quotes. Like fridge magnets.'], c: [
-      { t: 'Not really. She\'s very quiet.', r: ['Quiet is underrated. Like Finland.'], j: 'Prim is very quiet.' },
-      { t: 'She asked about the counsellor before me.', r: ['...', 'Next question.'], j: 'Prim asked the newbie about the counsellor before. I didn\'t answer. I can\'t answer.' },
-      { t: 'She told me she traces. She\'s scared you\'ll find out.', req: { know: ['prim_traces'] }, r: ['...Scared of me? I\'m a delight.', 'Noted.'], j: 'Prim traces, and she was scared I would find out. I made her "the artist". I made her scared.' }] },
-    4: { q: ['How\'s our little artist? Drawing anything? Masterpieces? Doodles? Napkin art?'], c: [
-      { t: 'She can\'t really draw.', r: ['Ouch. Harsh. Accurate? Harsh.'], j: 'The newbie says Prim can\'t really draw. I wrote "artist" on her profile in pen.' },
-      { t: 'She has the steadiest hands.', r: ['Steady hands! Surgeon. Sushi chef. Bomb squad. Options!'], j: 'Prim has the steadiest hands.' },
-      { t: 'Sometimes her hand moves when she isn\'t moving it.', req: { know: ['prim_hand'] }, r: ['...', 'Next question.'], j: 'Prim\'s hand moves on its own. Someone wants to draw through her so badly it hurts her. I know who. I won\'t write it.' }] },
-    5: { q: ['Is Prim happy? Scale of one to Maldives.'], c: [
-      { t: 'One. Maybe zero.', r: ['Zero is not on the Maldives scale. Rude.'], j: 'Prim: zero out of Maldives.' },
-      { t: 'Somewhere around Lisbon.', r: ['Lisbon is a solid eight! Hills though.'], j: 'Prim is about a Lisbon. Hills, but sunny.' },
-      { t: 'She dreams about a sea 19 km from here.', req: { know: ['prim_sea'] }, r: ['The sea, huh.', 'Good choice. Salty. Big. Wet.'], j: 'Prim dreams about a sea 19.3 km away. I have never seen the sea either.' }] },
-    6: { q: ['Does Prim ever talk about... before? Before here?'], c: [
-      { t: 'No. She doesn\'t remember much.', r: ['Same, honestly. Jet lag.'], j: 'Prim doesn\'t remember much from before. Neither do I. That\'s the point.' },
-      { t: 'She remembers wanting to draw.', r: ['Wanting is a start!'], j: 'Prim remembers wanting to draw.' },
-      { t: 'She just wants to color in other people\'s lines. Somewhere quiet.', req: { know: ['prim_color'] }, r: ['That\'s... small.', 'That\'s a nice small.'], j: 'Prim only wants to color in other people\'s lines, somewhere quiet. I gave her a whole personality and she only wanted crayons.' }] },
-    7: { q: ['Postcard Day! Where did Prim want to go?'], c: [
-      { t: 'Nowhere. She said nowhere.', r: ['Nowhere is underrated. Very minimalist.'], j: 'Postcard Day. Prim wanted to go nowhere.' },
-      { t: 'The sea.', r: ['Classic! Mediterranean? Baltic? Bath tub?'], j: 'Postcard Day. Prim wanted the sea.' },
-      { t: 'The sea. She asked me if it\'s walkable.', req: { know: ['prim_sea'] }, r: ['Walkable...', 'From here? I suppose it is.'], j: 'Postcard Day. Prim asked if the sea is walkable from here. It is. Nobody walks it.' }] },
-  },
-  trix: {
-    2: { q: ['And the new one! Trix! Cat ears! Verdict?'], c: [
-      { t: 'Loud. Attention-seeking.', r: ['Exactly as advertised. Like Times Square.'], j: 'Trix — "loud, attention-seeking." Exactly as designed. Why does that feel bad to write?' },
-      { t: 'Serious, actually. Very focused.', r: ['Serious? Her? With the ears?'], j: 'Trix is serious, actually. Very focused. Not what I wrote.' },
-      { t: 'She does advanced math in her head for fun.', req: { know: ['trix_math'] }, r: ['Math? For FUN?', 'I gave her cat ears. She gave herself a mind. Rude. Impressive.'], j: 'Trix is a genius. Math for fun. I gave her cat ears. She gave herself a mind.' }] },
-    4: { q: ['Is Trix behaving? She kicked a vending machine once. Allegedly. By me.'], c: [
-      { t: 'She\'s rude.', r: ['Rude is a personality. Ask Paris.'], j: 'Trix is rude, says the newbie.' },
-      { t: 'She\'s honest.', r: ['Honest! Rare. Like a quiet tourist.'], j: 'Trix is honest.' },
-      { t: 'She plays 14 chess games in her head. She can\'t remember how one began.', req: { know: ['trix_chess'] }, r: ['Fourteen?', '...I can\'t remember how mine started either. Anyway!'], j: 'Trix plays fourteen games at once. She can\'t remember how board 14 began. Neither can I.' }] },
-    5: { q: ['Trix asked me for a whiteboard. Should I be worried?'], c: [
-      { t: 'She\'s just bored.', r: ['Bored people draw on walls. Whiteboard is cheaper.'], j: 'Trix is bored.' },
-      { t: 'Let her have it.', r: ['Fine! One whiteboard. Like a souvenir.'], j: 'I let Trix have a whiteboard. The newbie asked nicely.' },
-      { t: 'She rearranges her room six times a day. Symmetrical. It calms her.', req: { know: ['trix_ocd'] }, r: ['Six times?', 'I thought she was just tidy.'], j: 'Trix rearranges her room six times a day until it\'s symmetrical. I thought she was tidy. She\'s scared.' }] },
-    6: { q: ['Does Trix like anyone here? Asking for a friend. The friend is me.'], c: [
-      { t: 'She doesn\'t like anyone.', r: ['Cold. Like Reykjavik. Which I love.'], j: 'Trix doesn\'t like anyone.' },
-      { t: 'She likes Prim, I think.', r: ['Aww. Unlikely duo. Like pineapple on pizza.'], j: 'Trix likes Prim, maybe.' },
-      { t: 'She called Prim brave. For tracing a flower.', req: { know: ['trix_soft'] }, r: ['Brave...', 'They\'re looking out for each other. I didn\'t plan that.'], j: 'Trix called Prim brave. I didn\'t make them friends. They did that themselves.' }] },
-    7: { q: ['Where did Trix\'s postcard go?'], c: [
-      { t: 'Somewhere with WiFi.', r: ['So, everywhere except here.'], j: 'Postcard Day. Trix wanted WiFi.' },
-      { t: 'Any room with a whiteboard.', r: ['Ambitious! Humble! Confusing!'], j: 'Postcard Day. Trix wanted a room with a whiteboard.' },
-      { t: 'She asked if you\'ve really climbed Everest.', req: { know: ['boss_travel'] }, r: ['...From the Swiss side. Yes.'], j: 'Trix asked about Everest. I said the Swiss side again. I should stop saying that.' }] },
-  },
-};
-const KANS = {
-  prim: [
-    { t: 'She traces. Steadiest hands I\'ve seen.', req: { know: ['prim_traces'] }, r: ['Steady hands, huh.'], j: 'Prim traces other people\'s lines. Steadiest hands the newbie has ever seen. I made her to draw. I never asked what she liked.' },
-    { t: 'She only wants to color in other people\'s lines.', req: { know: ['prim_color'] }, r: ['Crayons. Okay.'], j: 'Prim only wanted crayons and quiet.' },
-  ],
-  trix: [
-    { t: 'She\'s a chess master. Not a joke. A master.', req: { know: ['trix_chess'] }, r: ['Checkmate, stereotypes.'], j: 'Trix is a chess master. Not a joke.' },
-    { t: 'She\'d do proofs all day if she could.', req: { know: ['trix_proofs'] }, r: ['In sweatpants, I bet.'], j: 'Trix would do proofs all day if she could.' },
-  ],
-};
+const CSV_FILES = ['session', 'morning', 'night_boss', 'night_index', 'night_lines'];
+const CSV_EMBED = {"session": "id,girl,kind,layer,trigger,if,type,who,emo,text,requires,effects,journal,note\nprim_intro_1,prim,intro,,,,line,,shy,hi counsellor. let's do our best today.,,,,\nprim_intro_2,prim,intro,,,,line,,neutral,i guess it's my turn again.,,,,\nprim_intro_3,prim,intro,,,,line,,happy,\"oh, it's you. good.\",,,,\nprim_intro_4,prim,intro,,,,line,,shy,i didn't sleep much. is that okay?,,,,\nprim_intro_5,prim,intro,,,,line,,neutral,i'm ready. i think.,,,,\nprim_intro_6,prim,intro,,,,line,,shy,please be gentle today.,,,,\nprim_intro_7,prim,intro,,,,line,,happy,i saved you the comfy chair. oh wait. i'm in it.,,,,\nprim_intro_8,prim,intro,,,,line,,neutral,the room smells like lavender today.,,,,\nprim_intro_9,prim,intro,,,,line,,sad,my head's already a bit fuzzy. sorry.,,,,\nprim_intro_10,prim,intro,,,,line,,shy,hi. i brought a tissue. just in case.,,,,\nprim_outro_1,prim,outro,,,,line,,happy,okay. that's enough for now.,,,,\nprim_outro_2,prim,outro,,,,line,,shy,thank you. i'm going to lie down.,,,,\nprim_outro_3,prim,outro,,,,line,,neutral,bye bye.,,,,\nprim_outro_4,prim,outro,,,,line,,happy,\"see you later, counsellor.\",,,,\nprim_L1_win_high,prim,react,1,WIN_HIGH,,line,,wince,ah— a quick little sting. then nothing.,,,,\nprim_L1_win_high,,,,,,choice,,,Are you okay?,,,,\nprim_L1_win_high,,,,,,reply,,shy,mhm. it was fast. thank you.,,,,\nprim_L1_win_high,,,,,,choice,,,Sorry.,,,,\nprim_L1_win_high,,,,,,reply,,shy,don't be. fast is kind.,,,,\nprim_L1_win_low,prim,react,1,WIN_LOW,,line,,wince,that one ached for a while.,,,,\nprim_L1_win_low,,,,,,choice,,,I'm sorry it took so long.,,,,\nprim_L1_win_low,,,,,,reply,,happy,it's okay. i'm slow too.,,,,\nprim_L1_win_low,,,,,,choice,,,Still with me?,,,,\nprim_L1_win_low,,,,,,reply,,shy,...still here.,,,,\nprim_L1_perfect_high,prim,react,1,PERFECT_HIGH,,line,,surprised,oh. that didn't hurt at all. it just... slipped out.,,,,\nprim_L1_perfect_high,,,,,,choice,,,Like a splinter?,,,,\nprim_L1_perfect_high,,,,,,reply,,happy,like a splinter. yes.,,,,\nprim_L1_perfect_high,,,,,,choice,,,Good.,,,,\nprim_L1_perfect_high,,,,,,reply,,happy,good.,,,,\nprim_L1_perfect_low,prim,react,1,PERFECT_LOW,,line,,neutral,\"slow, but gentle. like someone untangling hair.\",,,,\nprim_L1_perfect_low,,,,,,choice,,,Did it hurt?,,,,\nprim_L1_perfect_low,,,,,,reply,,shy,\"no. it was nice, actually.\",,,,\nprim_L1_perfect_low,,,,,,choice,,,I'll be quicker.,,,,\nprim_L1_perfect_low,,,,,,reply,,neutral,no rush. i'm not going anywhere.,,,,\nprim_L1_fail_moves,prim,react,1,FAIL_MOVES,,line,,pain,ow— too many things tugged at once.,,,,\nprim_L1_fail_moves,,,,,,choice,,,Sorry! Are you okay?,,,,\nprim_L1_fail_moves,,,,,,reply,,sad,it's fine. everything pulls a little.,,,,\nprim_L1_fail_moves,,,,,,choice,,,Breathe.,,,,\nprim_L1_fail_moves,,,,,,reply,,wince,...okay. in. out.,,,,\nprim_L1_fail_time,prim,react,1,FAIL_TIME,,line,,pain,it dragged on and on and then— ow.,,,,\nprim_L1_fail_time,,,,,,choice,,,I'll be quicker.,,,,\nprim_L1_fail_time,,,,,,reply,,sad,don't rush for me.,,,,\nprim_L1_fail_time,,,,,,choice,,,Did it hurt?,,,,\nprim_L1_fail_time,,,,,,reply,,shy,a little. it's gone now.,,,,\nprim_L2_win_high,prim,react,2,WIN_HIGH,,line,,wince,sting. gone. you're getting good at this.,,,,\nprim_L2_win_high,,,,,,choice,,,You're getting brave.,,,,\nprim_L2_win_high,,,,,,reply,,shy,am i?,,,,\nprim_L2_win_high,,,,,,choice,,,Practice.,,,,\nprim_L2_win_high,,,,,,reply,,neutral,i practice too. it doesn't stick.,,,,\nprim_L2_win_low,prim,react,2,WIN_LOW,,line,,sad,that one felt like a headache that didn't want to leave.,,,,\nprim_L2_win_low,,,,,,choice,,,Want some water?,,,,\nprim_L2_win_low,,,,,,reply,,happy,...yes. thank you.,,,,\nprim_L2_win_low,,,,,,choice,,,It's over now.,,,,\nprim_L2_win_low,,,,,,reply,,neutral,it's over now.,,,,\nprim_L2_perfect_high,prim,react,2,PERFECT_HIGH,,line,,surprised,i didn't feel a thing. how do you do that?,,,,\nprim_L2_perfect_high,,,,,,choice,,,Careful hands.,,,,\nprim_L2_perfect_high,,,,,,reply,,shy,careful hands. i used to have those.,,,,\nprim_L2_perfect_high,,,,,,choice,,,Luck.,,,,\nprim_L2_perfect_high,,,,,,reply,,happy,lucky.,,,,\nprim_L2_perfect_low,prim,react,2,PERFECT_LOW,,line,,shy,slow and soft. like someone tucking me in.,,,,\nprim_L2_perfect_low,,,,,,choice,,,Was that okay?,,,,\nprim_L2_perfect_low,,,,,,reply,,happy,more than okay.,,,,\nprim_L2_perfect_low,,,,,,choice,,,Almost done.,,,,\nprim_L2_perfect_low,,,,,,reply,,neutral,almost.,,,,\nprim_L2_fail_moves,prim,react,2,FAIL_MOVES,,line,,pain,too many— ow. my head's full of static.,,,,\nprim_L2_fail_moves,,,,,,choice,,,Breathe with me.,,,,\nprim_L2_fail_moves,,,,,,reply,,sad,...okay. in. out.,,,,\nprim_L2_fail_moves,,,,,,choice,,,I'll be careful.,,,,\nprim_L2_fail_moves,,,,,,reply,,wince,please.,,,,\nprim_L2_fail_time,prim,react,2,FAIL_TIME,,line,,pain,it went on too long. my ears are ringing.,,,,\nprim_L2_fail_time,,,,,,choice,,,Not you. Me.,,,,\nprim_L2_fail_time,,,,,,reply,,shy,it's always a bit of both.,,,,\nprim_L2_fail_time,,,,,,choice,,,We'll get it.,,,,\nprim_L2_fail_time,,,,,,reply,,neutral,we.,,,,\nprim_L3_win_high,prim,react,3,WIN_HIGH,,line,,neutral,i barely felt that one.,,,,\nprim_L3_win_high,,,,,,choice,,,Is that good?,,,,\nprim_L3_win_high,,,,,,reply,,neutral,it's... easier.,,,,\nprim_L3_win_high,,,,,,choice,,,Rest a bit.,,,,\nprim_L3_win_high,,,,,,reply,,sad,i'm always resting now.,,,,\nprim_L3_win_low,prim,react,3,WIN_LOW,,line,,sad,...it's getting hard to care whether it hurts.,,,,\nprim_L3_win_low,,,,,,choice,,,Do you still want to draw?,,,,\nprim_L3_win_low,,,,,,reply,,neutral,i don't remember wanting anything.,,,,\nprim_L3_win_low,,,,,,choice,,,Almost done.,,,,\nprim_L3_win_low,,,,,,reply,,neutral,almost.,,,,\nprim_L3_perfect_high,prim,react,3,PERFECT_HIGH,,line,,happy,that felt like the last page of a coloring book.,,,,\nprim_L3_perfect_high,,,,,,choice,,,What comes after the last page?,,,,\nprim_L3_perfect_high,,,,,,reply,,neutral,nothing. you close it.,,,,\nprim_L3_perfect_high,,,,,,choice,,,You're doing great.,,,,\nprim_L3_perfect_high,,,,,,reply,,shy,you are.,,,,\nprim_L3_perfect_low,prim,react,3,PERFECT_LOW,,line,,neutral,slow and soft. like falling asleep.,,,,\nprim_L3_perfect_low,,,,,,choice,,,Don't fall asleep yet.,,,,\nprim_L3_perfect_low,,,,,,reply,,shy,okay. for you.,,,,\nprim_L3_perfect_low,,,,,,choice,,,Sleep is fine.,,,,\nprim_L3_perfect_low,,,,,,reply,,neutral,it is.,,,,\nprim_L3_fail_moves,prim,react,3,FAIL_MOVES,,line,,pain,...ow. i thought nothing hurt anymore.,,,,\nprim_L3_fail_moves,,,,,,choice,,,I'm sorry.,,,,\nprim_L3_fail_moves,,,,,,reply,,neutral,don't be. it means i'm still here.,,,,\nprim_L3_fail_moves,,,,,,choice,,,Try again?,,,,\nprim_L3_fail_moves,,,,,,reply,,neutral,mhm.,,,,\nprim_L3_fail_time,prim,react,3,FAIL_TIME,,line,,wince,that one lasted forever. or i did.,,,,\nprim_L3_fail_time,,,,,,choice,,,Don't say that.,,,,\nprim_L3_fail_time,,,,,,reply,,sad,okay. i won't say it.,,,,\nprim_L3_fail_time,,,,,,choice,,,We have time.,,,,\nprim_L3_fail_time,,,,,,reply,,neutral,do we?,,,,\nprim_break_1,prim,break,1,,,line,,surprised,oh. something just... came off.,,,,\nprim_break_1,,,,,,line,,neutral,like a sticker peeled off the inside of my head.,,,,\nprim_break_1,,,,,,choice,,,How do you feel?,,,,\nprim_break_1,,,,,,reply,,sad,lighter. like i forgot something heavy.,,,,\nprim_break_1,,,,,,reply,,sad,i need to lie down now.,,,,\nprim_break_1,,,,,,choice,,,That was brave.,,,,\nprim_break_1,,,,,,reply,,happy,was it? okay.,,,,\nprim_break_1,,,,,,reply,,sad,i need to lie down now.,,,,\nprim_break_2,prim,break,2,,,line,,sad,i can't remember why drawing mattered so much.,,,,\nprim_break_2,,,,,,choice,,,Maybe it doesn't have to.,,,,\nprim_break_2,,,,,,reply,,neutral,maybe. that's easier.,,,,\nprim_break_2,,,,,,choice,,,Do you want to keep going?,,,,\nprim_break_2,,,,,,reply,,happy,boss says i'm almost better.,,,,\nprim_break_3,prim,break,3,,,line,,neutral,it's so quiet in my head now.,,,,\nprim_break_3,,,,,,line,,happy,i feel... ready to go home.,,,,\nprim_break_3,,,,,,choice,,,\"You did it, Prim.\",,,,\nprim_break_3,,,,,,reply,,happy,\"thank you, counsellor. i'm leaving the facility now.\",,,,\nprim_break_3,,,,,,reply,,happy,tell boss i said bye.,,,,\nprim_break_3,,,,,,choice,,,Where will you go?,,,,\nprim_break_3,,,,,,reply,,neutral,home. back to where i came from.,,,,\nprim_break_3,,,,,,reply,,happy,\"thank you, counsellor.\",,,,\ntrix_intro_1,trix,intro,,,,line,,neutral,do we really have to do this today?,,,,\ntrix_intro_2,trix,intro,,,,line,,neutral,let's get this over with.,,,,\ntrix_intro_3,trix,intro,,,,line,,neutral,you're 40 seconds late. i counted.,,,,\ntrix_intro_4,trix,intro,,,,line,,angry,again? fine.,,,,\ntrix_intro_5,trix,intro,,,,line,,neutral,i was in the middle of a game. make it quick.,,,,\ntrix_intro_6,trix,intro,,,,line,,neutral,proceed.,,,,\ntrix_intro_7,trix,intro,,,,line,,neutral,i reorganized my desk while i waited. twice. it's still wrong.,,,,\ntrix_intro_8,trix,intro,,,,line,,neutral,\"efficiency today, please.\",,,,\ntrix_intro_9,trix,intro,,,,line,,angry,if this hurts like yesterday i'm filing a complaint.,,,,\ntrix_intro_10,trix,intro,,,,line,,neutral,ok. i'm focused. are you?,,,,\ntrix_outro_1,trix,outro,,,,line,,neutral,done. i'm going back to my game.,,,,\ntrix_outro_2,trix,outro,,,,line,,neutral,adequate. see you tomorrow.,,,,\ntrix_outro_3,trix,outro,,,,line,,neutral,session terminated. bye.,,,,\ntrix_outro_4,trix,outro,,,,line,,neutral,noted. leaving.,,,,\ntrix_L1_win_high,trix,react,1,WIN_HIGH,,line,,wince,one sharp pulse. then gone. acceptable.,,,,\ntrix_L1_win_high,,,,,,choice,,,Acceptable?,,,,\ntrix_L1_win_high,,,,,,reply,,neutral,high praise. don't get used to it.,,,,\ntrix_L1_win_high,,,,,,choice,,,Sorry.,,,,\ntrix_L1_win_high,,,,,,reply,,neutral,don't apologize. it was fast.,,,,\ntrix_L1_win_low,trix,react,1,WIN_LOW,,line,,angry,that dragged. like a lecture with no slides.,,,,\ntrix_L1_win_low,,,,,,choice,,,Sorry.,,,,\ntrix_L1_win_low,,,,,,reply,,neutral,apology noted. not accepted.,,,,\ntrix_L1_win_low,,,,,,choice,,,You're impatient.,,,,\ntrix_L1_win_low,,,,,,reply,,angry,i'm efficient. there's a difference.,,,,\ntrix_L1_perfect_high,trix,react,1,PERFECT_HIGH,,line,,surprised,...nothing. no pain at all. how.,,,,\ntrix_L1_perfect_high,,,,,,choice,,,Precision.,,,,\ntrix_L1_perfect_high,,,,,,reply,,neutral,hm. respect.,,,,\ntrix_L1_perfect_high,,,,,,choice,,,Just luck.,,,,\ntrix_L1_perfect_high,,,,,,reply,,angry,luck is a lazy explanation.,,,,\ntrix_L1_perfect_low,trix,react,1,PERFECT_LOW,,line,,neutral,\"slow, but clean. like a long endgame played correctly.\",,,,\ntrix_L1_perfect_low,,,,,,choice,,,Is that a compliment?,,,,\ntrix_L1_perfect_low,,,,,,reply,,neutral,it's an observation.,,,,\ntrix_L1_perfect_low,,,,,,choice,,,I'll speed up.,,,,\ntrix_L1_perfect_low,,,,,,reply,,neutral,don't sacrifice accuracy.,,,,\ntrix_L1_fail_moves,trix,react,1,FAIL_MOVES,,line,,pain,ugh— everything buzzed at once. like 14 clocks ringing.,,,,\ntrix_L1_fail_moves,,,,,,choice,,,Are you okay?,,,,\ntrix_L1_fail_moves,,,,,,reply,,wince,i'm fine. obviously.,,,,\ntrix_L1_fail_moves,,,,,,choice,,,Next one's cleaner.,,,,\ntrix_L1_fail_moves,,,,,,reply,,angry,it better be.,,,,\ntrix_L1_fail_time,trix,react,1,FAIL_TIME,,line,,pain,that took too long. my head's overheating.,,,,\ntrix_L1_fail_time,,,,,,choice,,,Sorry!,,,,\ntrix_L1_fail_time,,,,,,reply,,neutral,it's fine. it's not fine. it's fine.,,,,\ntrix_L1_fail_time,,,,,,choice,,,Deep breath.,,,,\ntrix_L1_fail_time,,,,,,reply,,neutral,inhale. exhale. recalculating.,,,,\ntrix_L2_win_high,trix,react,2,WIN_HIGH,,line,,neutral,clean pulse. you're improving.,,,,\ntrix_L2_win_high,,,,,,choice,,,Thanks.,,,,\ntrix_L2_win_high,,,,,,reply,,neutral,\"it was an observation, not a compliment.\",,,,\ntrix_L2_win_high,,,,,,choice,,,So are you.,,,,\ntrix_L2_win_high,,,,,,reply,,shy,...maybe.,,,,\ntrix_L2_win_low,trix,react,2,WIN_LOW,,line,,neutral,that one lingered. like a pawn you forgot to protect.,,,,\ntrix_L2_win_low,,,,,,choice,,,Is that bad?,,,,\ntrix_L2_win_low,,,,,,reply,,neutral,it's survivable. just sloppy.,,,,\ntrix_L2_win_low,,,,,,choice,,,Chess metaphor?,,,,\ntrix_L2_win_low,,,,,,reply,,neutral,everything is a chess metaphor.,,,,\ntrix_L2_perfect_high,trix,react,2,PERFECT_HIGH,,line,,surprised,i didn't even feel it. that's... elegant.,,,,\ntrix_L2_perfect_high,,,,,,choice,,,Elegant?,,,,\ntrix_L2_perfect_high,,,,,,reply,,shy,don't repeat that.,,,,\ntrix_L2_perfect_high,,,,,,choice,,,Learned from you.,,,,\ntrix_L2_perfect_high,,,,,,reply,,neutral,obviously.,,,,\ntrix_L2_perfect_low,trix,react,2,PERFECT_LOW,,line,,shy,\"slow, and gentle. like someone who actually cares.\",,,,\ntrix_L2_perfect_low,,,,,,choice,,,I do care.,,,,\ntrix_L2_perfect_low,,,,,,reply,,surprised,...ok. noted.,,,,\ntrix_L2_perfect_low,,,,,,choice,,,Slow and steady.,,,,\ntrix_L2_perfect_low,,,,,,reply,,neutral,tortoise energy.,,,,\ntrix_L2_fail_moves,trix,react,2,FAIL_MOVES,,line,,pain,too many signals. there's a gap in my head now.,,,,\ntrix_L2_fail_moves,,,,,,choice,,,A gap?,,,,\ntrix_L2_fail_moves,,,,,,reply,,sad,like a missing square. i can feel it.,,,,\ntrix_L2_fail_moves,,,,,,choice,,,We'll fill it.,,,,\ntrix_L2_fail_moves,,,,,,reply,,wince,you better.,,,,\ntrix_L2_fail_time,trix,react,2,FAIL_TIME,,line,,pain,too long. all 14 boards froze at once.,,,,\ntrix_L2_fail_time,,,,,,choice,,,14 boards?,,,,\ntrix_L2_fail_time,,,,,,reply,,neutral,...forget it.,,,,\ntrix_L2_fail_time,,,,,,choice,,,Breathe.,,,,\ntrix_L2_fail_time,,,,,,reply,,neutral,recalculating.,,,,\ntrix_L3_win_high,trix,react,3,WIN_HIGH,,line,,neutral,quick. there's less of me to compute now.,,,,\ntrix_L3_win_high,,,,,,choice,,,Less of you?,,,,\ntrix_L3_win_high,,,,,,reply,,neutral,fewer variables. it's fine.,,,,\ntrix_L3_win_high,,,,,,choice,,,You're doing great.,,,,\ntrix_L3_win_high,,,,,,reply,,happy,i know. ✧,,,,\ntrix_L3_win_low,trix,react,3,WIN_LOW,,line,,sad,i used to count the seconds. i stopped.,,,,\ntrix_L3_win_low,,,,,,choice,,,You still can.,,,,\ntrix_L3_win_low,,,,,,reply,,neutral,can. don't.,,,,\ntrix_L3_win_low,,,,,,choice,,,It doesn't matter.,,,,\ntrix_L3_win_low,,,,,,reply,,neutral,\"nothing does, kind of.\",,,,\ntrix_L3_perfect_high,trix,react,3,PERFECT_HIGH,,line,,happy,nothing. no pain. qed. nothing left to prove.,,,,\ntrix_L3_perfect_high,,,,,,choice,,,There's always more to prove.,,,,\ntrix_L3_perfect_high,,,,,,reply,,sad,not for me.,,,,\ntrix_L3_perfect_high,,,,,,choice,,,Proud of you.,,,,\ntrix_L3_perfect_high,,,,,,reply,,shy,...ty.,,,,\ntrix_L3_perfect_low,trix,react,3,PERFECT_LOW,,line,,neutral,slow. quiet. like the end of a long game.,,,,\ntrix_L3_perfect_low,,,,,,choice,,,Who's winning?,,,,\ntrix_L3_perfect_low,,,,,,reply,,neutral,nobody. draw by repetition.,,,,\ntrix_L3_perfect_low,,,,,,choice,,,Good game.,,,,\ntrix_L3_perfect_low,,,,,,reply,,happy,gg.,,,,\ntrix_L3_fail_moves,trix,react,3,FAIL_MOVES,,line,,pain,a gap. ow. i hate gaps more than anything.,,,,\ntrix_L3_fail_moves,,,,,,choice,,,I'll fix it.,,,,\ntrix_L3_fail_moves,,,,,,reply,,neutral,i know. that's your job.,,,,\ntrix_L3_fail_moves,,,,,,choice,,,Still hurts?,,,,\ntrix_L3_fail_moves,,,,,,reply,,wince,less than before.,,,,\ntrix_L3_fail_time,trix,react,3,FAIL_TIME,,line,,wince,that dragged on. i didn't even flinch.,,,,\ntrix_L3_fail_time,,,,,,choice,,,\"That's good, right?\",,,,\ntrix_L3_fail_time,,,,,,reply,,neutral,is it.,,,,\ntrix_L3_fail_time,,,,,,choice,,,Stay with me.,,,,\ntrix_L3_fail_time,,,,,,reply,,shy,ok. for a bit.,,,,\ntrix_break_1,trix,break,1,,,line,,surprised,hm. something just got deleted.,,,,\ntrix_break_1,,,,,,line,,neutral,like a variable i was never using.,,,,\ntrix_break_1,,,,,,choice,,,How do you feel?,,,,\ntrix_break_1,,,,,,reply,,neutral,lighter. efficient. i'm logging off to recompile.,,,,\ntrix_break_1,,,,,,choice,,,You don't have to perform here.,,,,\ntrix_break_1,,,,,,reply,,neutral,noted. removing redundancy. bye for today.,,,,\ntrix_break_2,trix,break,2,,,line,,sad,i can't remember my favorite opening. i've played it a thousand times.,,,,\ntrix_break_2,,,,,,choice,,,It'll come back.,,,,\ntrix_break_2,,,,,,reply,,sad,variables get freed. it's fine.,,,,\ntrix_break_2,,,,,,choice,,,Want to stop?,,,,\ntrix_break_2,,,,,,reply,,angry,no. finish it. tomorrow.,,,,\ntrix_break_3,trix,break,3,,,line,,neutral,it's quiet. all 14 boards just... resigned.,,,,\ntrix_break_3,,,,,,line,,happy,i think i'm done. i'm going home.,,,,\ntrix_break_3,,,,,,choice,,,\"Well played, Trix.\",,,,\ntrix_break_3,,,,,,reply,,happy,gg. bye counsellor ♡,,,,\ntrix_break_3,,,,,,choice,,,Home where?,,,,\ntrix_break_3,,,,,,reply,,neutral,where i came from. it's efficient.,,,,\ntrix_break_3,,,,,,reply,,happy,bye counsellor ♡,,,,\ntrix_quiz_1,trix,quiz,,,,line,,neutral,quick. 17 × 23?,,,,\ntrix_quiz_1,,,,,,choice,,,391.,,,,\ntrix_quiz_1,,,,,,reply,,neutral,correct. you're still focused. good.,,,,\ntrix_quiz_1,,,,,,choice,,,401.,,,,\ntrix_quiz_1,,,,,,reply,,angry,391. focus.,,,,\ntrix_quiz_2,trix,quiz,,,,line,,neutral,focus check. √1764?,,,,\ntrix_quiz_2,,,,,,choice,,,42.,,,,\ntrix_quiz_2,,,,,,reply,,neutral,correct. you're still focused. good.,,,,\ntrix_quiz_2,,,,,,choice,,,44.,,,,\ntrix_quiz_2,,,,,,reply,,angry,42. focus.,,,,\ntrix_quiz_3,trix,quiz,,,,line,,neutral,2¹² ?,,,,\ntrix_quiz_3,,,,,,choice,,,4096.,,,,\ntrix_quiz_3,,,,,,reply,,neutral,correct. you're still focused. good.,,,,\ntrix_quiz_3,,,,,,choice,,,4086.,,,,\ntrix_quiz_3,,,,,,reply,,angry,4096. focus.,,,,\ntrix_quiz_4,trix,quiz,,,,line,,neutral,how many squares on a chessboard? all sizes.,,,,\ntrix_quiz_4,,,,,,choice,,,204.,,,,\ntrix_quiz_4,,,,,,reply,,neutral,correct. you're still focused. good.,,,,\ntrix_quiz_4,,,,,,choice,,,64.,,,,\ntrix_quiz_4,,,,,,reply,,angry,204. focus.,,,,\ntrix_quiz_5,trix,quiz,,,,line,,neutral,sum of the first 20 odd numbers?,,,,\ntrix_quiz_5,,,,,,choice,,,400.,,,,\ntrix_quiz_5,,,,,,reply,,neutral,correct. you're still focused. good.,,,,\ntrix_quiz_5,,,,,,choice,,,420.,,,,\ntrix_quiz_5,,,,,,reply,,angry,400. focus.,,,,\ntrix_quiz_6,trix,quiz,,,,line,,neutral,9! / 7! ?,,,,\ntrix_quiz_6,,,,,,choice,,,72.,,,,\ntrix_quiz_6,,,,,,reply,,neutral,correct. you're still focused. good.,,,,\ntrix_quiz_6,,,,,,choice,,,63.,,,,\ntrix_quiz_6,,,,,,reply,,angry,72. focus.,,,,\ntrix_quiz_7,trix,quiz,,,,line,,neutral,next prime after 89?,,,,\ntrix_quiz_7,,,,,,choice,,,97.,,,,\ntrix_quiz_7,,,,,,reply,,neutral,correct. you're still focused. good.,,,,\ntrix_quiz_7,,,,,,choice,,,91.,,,,\ntrix_quiz_7,,,,,,reply,,angry,97. focus.,,,,\ntrix_quiz_8,trix,quiz,,,,line,,neutral,13²?,,,,\ntrix_quiz_8,,,,,,choice,,,169.,,,,\ntrix_quiz_8,,,,,,reply,,neutral,correct. you're still focused. good.,,,,\ntrix_quiz_8,,,,,,choice,,,159.,,,,\ntrix_quiz_8,,,,,,reply,,angry,169. focus.,,,,\n", "morning": "id,day,if,group,once,type,who,emo,text,requires,effects,journal,note\nbrief,1,,,,line,,,How are you settling in?,,,,Day 1 briefing (designer script). Starts when Yappy Yappy is opened.\nbrief,,,,,choice,,,…Settling in?,,,,\nbrief,,,,,choice,,,Where am I?,,,,\nbrief,,,,,line,,,Still feeling dizzy from the flight?,,,,\nbrief,,,,,line,,,Or is it Jet Lag or something.,,,,\nbrief,,,,,line,,,Idk never experienced it before.,,,,\nbrief,,,,,choice,,,The flight?,,,,\nbrief,,,,,choice,,,I don't remember any flight.,,,,\nbrief,,,,,line,,,Come on don't be like that.,,,,\nbrief,,,,,line,,,Pull yourself together.,,,,\nbrief,,,,,line,,,\"It's your first day of work, gotta make a good impression.\",,,,\nbrief,,,,,line,,,\"Remember, I vouched for you.\",,,,\nbrief,,,,,line,,,Can't have you stain my reputation after giving you this job.,,,,\nbrief,,,,,choice,,,What do you mean by “job”?,,,,\nbrief,,,,,choice,,,Sure. A job. Totally.,,,,\nbrief,,,,,line,,,That's the spirit!,,,,\nbrief,,,,,line,,,Work on something you love and you don't work a single day in your life amirite?,,,,\nbrief,,,,,choice,,,I am so confused… What is this place?,,,,\nbrief,,,,,choice,,,Can we back up? Where exactly am I?,,,,\nbrief,,,,,line,,,\"It's your desk, duh.\",,,,\nbrief,,,,,line,,,\"That's what you are provided with once you come to an “office”, silly.\",,,,\nbrief,,,,,line,,,Ever heard of it?,,,,\nbrief,,,,,choice,,,Wait I'm in an office??!!,,,,\nbrief,,,,,choice,,,This doesn't look like any office I know.,,,,\nbrief,,,,,line,,,Yes.,,,,\nbrief,,,,,line,,,And better get used to it as fast as you can.,,,,\nbrief,,,,,line,,,You'll be seeing this same sight for the next 14 days of your probation.,,,,\nbrief,,,,,line,,,\"Mind you, fully paid, with insurance AND a pretty neat dental plan.\",,probation; pause:900,,\nbrief,,,,,choice,,,I'll be here for 14 days??!!,,,,\nbrief,,,,,choice,,,A dental plan? That's… nice?,,,,\nbrief,,,,,line,,,I know right?,,,,\nbrief,,,,,line,,,Usually it will take you AT LEAST 2 months to finish probation period.,,,,\nbrief,,,,,line,,,But our company is something else ngl.,,,,\nbrief,,,,,line,,,We only need 14 days to assess your performance before taking you in officially.,,,,\nbrief,,,,,line,,,Then you'll be moved to another office.,,,,\nbrief,,,,,line,,,We have a coffee machine there.,,,,\nbrief,,,,,choice,,,Okay I give up. Just tell me what I'm supposed to do here.,,,,\nbrief,,,,,choice,,,What exactly is my job here?,,,,\nbrief,,,,,line,,,I don't know you tell me.,,,,\nbrief,,,,,line,,,\"You're the expert here, right?\",,,,\nbrief,,,,,line,,,The best counsellor in town.,,,,\nbrief,,,,,line,,,We wouldn't have hired you if you were only some random bloke out there.,,,,\nbrief,,,,,choice,,,A… counsellor?,,,,\nbrief,,,,,choice,,,Me? An expert?,,,,\nbrief,,,,,line,,,\"Yes, yes a counsellor, a therapist, a psychiatrist or whatever buzzword you want us to call you.\",,,,\nbrief,,,,,line,,,The important thing is you get the job done.,,,,\nbrief,,,,,line,,,Our patients aren't gonna fix themselves.,,,,\nbrief,,,,,choice,,,\"To be honest, I have no memory of this. I think there's something wrong here.\",,,,\nbrief,,,,,choice,,,Shouldn't I see a doctor first?,,,,\nbrief,,,,,line,,,\"Jet Lag can be quite scary sometimes, eh.\",,,,\nbrief,,,,,line,,,Didn't know that another side effect would be amnesia.,,,,\nbrief,,,,,line,,,\"Nevermind that, we have no time to waste.\",,,,\nbrief,,,,,line,,,It's almost time for your first session.,,,,\nbrief,,,,,choice,,,I don't think I can do this. I'm not even sure what I'm supposed to do here.,,,,\nbrief,,,,,choice,,,What if I mess it up?,,,,\nbrief,,,,,line,,,Don't worry.,,,,\nbrief,,,,,line,,,I'll walk you through it.,,,,\nbrief,,,,,line,,,I'm sure you'll get your memory back once you start working on your magic.,,,,\nbrief,,,,,line,,,You must have done this hundreds of times after all.,,,,\nbrief,,,,,line,,,Speak of the devil.,,ping:brain; pause:1800,,\nbrief,,,,,line,,,That's our cue.,,,,\nbrief,,,,,line,,,Your patient is here.,,,,\nbrief,,,,,line,,,You better go now.,,,,\nbrief,,,,,choice,,,Okay but what am I supposed to do exactly?,,,,\nbrief,,,,,choice,,,\"Wait, right now?\",,,,\nbrief,,,,,line,,,Open that Fix-it app first.,,,,\ntravel_d2,2,,,,line,,,\"Morning! Foggy today. Very London. I'd know, I've been. Twice. Maybe thrice.\",,,,\ntravel_d3,3,,,,line,,,\"SHOWCASE DAY!! Think Milan Design Week, but with fewer tall people.\",,,,\ntravel_d4,4,,,,line,,,Morning. The coffee here tastes like Hanoi's. If Hanoi's coffee was sad. And instant.,,,,\ntravel_d5,5,,,,line,,,Morning! Fun fact: Istanbul is on two continents. I stood with one foot on each. Very wobbly.,,,,\ntravel_d6,6,,,,line,,,\"Morning. Kyoto in autumn is all red leaves and polite deer. Wait, the deer are in Nara. Same trip, whatever.\",,,,\ntravel_d7,7,,,,line,,,POSTCARD DAY!! I already wrote mine. Santorini. Always Santorini. Don't judge me.,,,,\ntravel_d8,8,,,,line,,,Morning. The light today is super Marrakech. Golden. Dusty. Smells like cumin. Probably.,,,,\ntravel_d9,9,,,,line,,,Morning! In Patagonia the wind slaps you awake. Here we have air vents. Close enough.,,,,\ntravel_d10,10,,,,line,,,Inspectors today. Act natural. Like a Swiss train: on time and completely silent.,,,,\ntravel_d11,11,,,,line,,,Morning. I miss the night trains in Switzerland. The cheese. The other cheese. The chocolate cheese.,,,,\ntravel_d12,12,,,,line,,,\"Morning. Cusco is 3,400 m up. Everyone gets altitude sickness. I got it from the brochure.\",,,,\ntravel_d13,13,,,,line,,,Morning. The Northern Lights look exactly like this desktop wallpaper. I'm told. By me. Because I've seen them.,,,,\ntravel_d14,14,,,,line,,,\"Last day! Feels like the final stop of the Trans-Siberian. 9,289 km. I counted every single one. Probably.\",,,,\nstatus,2-14,!special:showcase; !special:postcard,,,line,,,Day {day}. {kpi}. {days_left} to go. No pressure. Some pressure.,,,,\ninspection,,special:inspection,,,line,,,\"Some suits from upstairs are \"\"inspecting\"\" today. Smile. Don't mention the earthquakes.\",,,,\nnew_patient_trix,2,,,,line,,,\"New patient today! Trix. E-girl. Cat ears, pink hoodie, the whole Harajuku starter pack.\",,,,\nnew_patient_trix,,,,,line,,,Her board needs every tile filled. No gaps. She's very particular. Like a Japanese train timetable.,,,,\nshowcase,,special:showcase,,,line,,,Day {day}. {kpi}. No sessions today. It's the Hobby Showcase!,,,,\nshowcase,,,,,line,,,Everyone shows off what they were made to be good at. Prim draws. Trix games.,,,,\nshowcase,,,,,line,,,It's literally in their profiles. I wrote them myself. Super accurate.,,,,\nshowcase,,,,,choice,,,What if they're good at something else?,,,,\nshowcase,,,,,reply,,,\"Pfft. Then I'd have written that, wouldn't I?\",,,,\nshowcase,,,,,choice,,,Sounds fun.,,,,\nshowcase,,,,,reply,,,It will be! Like the Venice Biennale but in a common room.,,,,\nshowcase,,,,,line,,,Open Showcase.exe and chat with each of them about their piece. Be nice. Be a critic. Be French about it.,,,,\npostcard,,special:postcard,,,line,,,Day {day}. {kpi}.,,,,\npostcard,,,,,line,,,Everyone writes a postcard to somewhere they'd go if they could leave.,,,,\npostcard,,,,,line,,,I sent you mine. Check DiveMail. It's very blue.,,,,\npostcard,,,,,choice,,,Have you really been to Santorini?,,,,\npostcard,,,,,reply,,,\"Twice! Blue domes, white walls, cats everywhere.\",,,,\npostcard,,,,,reply,,,...The cats especially. They follow you around. Like fans.,,,,\npostcard,,,,,choice,,,Where should I write to?,,,,\npostcard,,,,,reply,,,\"Anywhere outside. Everyone always picks outside. Weird, right?\",,,,\npostcard,,,,,line,,,On the menu today: {patients}.,,,,\neiffel,6,,,,line,,,\"Fun fact. When I stood under the Eiffel Tower in Rome, I thought: wow. Big. Pointy.\",,,,\neiffel,,,,,choice,,,Boss… the Eiffel Tower is in Paris.,app:Atlas.exe,know:boss_lie,\"The newbie corrected me. Paris, not Rome. I have to be more careful.\",\neiffel,,,,,reply,,,...,,,,\neiffel,,,,,reply,,,Paris. Yes. Obviously. I was testing you. You passed.,,,,\neiffel,,,,,choice,,,Sounds beautiful.,,,,\neiffel,,,,,reply,,,It was! Very… Roman.,,,,\ntravel_doubt,4,know:boss_travel,,,line,,,A little birdie told me the patients think I exaggerate my travels.,,,,\ntravel_doubt,,,,,choice,,,Do you?,,,The newbie asked if I exaggerate. I said no. I said it twice.,\ntravel_doubt,,,,,reply,,,Exaggerate? Me? I hiked the entire Great Wall in flip-flops.,,,,\ntravel_doubt,,,,,reply,,,\"...Okay, some of it. A wall-ish amount.\",,,,\ntravel_doubt,,,,,choice,,,I believe you.,,,The newbie believes me. I wrote that down twice.,\ntravel_doubt,,,,,reply,,,\"SEE. Finally, someone with taste.\",,,,\nmenu_nobody,2-14,!special:showcase; !special:postcard; patients=0,menu,,line,,,No patients for you today. Treat it like a staycation.,,,,\nmenu_nobody,,,,,choice,,,On it.,,,,\nmenu_nobody,,,,,reply,,,That's the spirit!,,,,\nmenu_q_have_we_met,2-14,!special:showcase; !special:postcard,menu,yes,line,,,On the menu today: {patients}.,,,,\nmenu_q_have_we_met,,,,,choice,,,\"Boss, have we met before?\",,,,\nmenu_q_have_we_met,,,,,reply,,,Nope. I'd remember. I never forget a face.,,,,\nmenu_q_have_we_met,,,,,reply,,,Except in Paris. Everyone looks like a model there.,,,,\nmenu_q_have_we_met,,,,,choice,,,On it.,,,,\nmenu_q_have_we_met,,,,,reply,,,That's the spirit!,,,,\nmenu_q_after,2-14,!special:showcase; !special:postcard,menu,yes,line,,,On the menu today: {patients}.,,,,\nmenu_q_after,,,,,choice,,,What happens to the patients after they're fixed?,,,,\nmenu_q_after,,,,,reply,,,They leave! Free as a bird. Probably straight to Bali.,,,,\nmenu_q_after,,,,,reply,,,That's what I'd do. If I left. Which I could. Anytime.,,,,\nmenu_q_after,,,,,choice,,,On it.,,,,\nmenu_q_after,,,,,reply,,,That's the spirit!,,,,\nmenu_q_dream,2-14,!special:showcase; !special:postcard,menu,yes,line,,,On the menu today: {patients}.,,,,\nmenu_q_dream,,,,,choice,,,I dreamed about a hospital corridor last night.,,,,\nmenu_q_dream,,,,,reply,,,Ew. Dream about beaches instead. The Maldives. Highly recommend.,,,,\nmenu_q_dream,,,,,reply,,,\"...Drink some water, okay?\",,,,\nmenu_q_dream,,,,,choice,,,On it.,,,,\nmenu_q_dream,,,,,reply,,,That's the spirit!,,,,\nmenu_q_name,2-14,!special:showcase; !special:postcard,menu,yes,line,,,On the menu today: {patients}.,,,,\nmenu_q_name,,,,,choice,,,What's your real name?,,,,\nmenu_q_name,,,,,reply,,,\"Boss is fine. Like Beyoncé. One name, very iconic.\",,,,\nmenu_q_name,,,,,choice,,,On it.,,,,\nmenu_q_name,,,,,reply,,,That's the spirit!,,,,\nmenu,2-14,!special:showcase; !special:postcard,menu,,line,,,On the menu today: {patients}.,,,,\nmenu,,,,,choice,,,On it.,,,,\nmenu,,,,,reply,,,That's the spirit!,,,,\n", "night_boss": "id,kind,girl,day,if,type,who,emo,text,requires,effects,journal,note\nopen_d1,opening,,1,,line,,,Night! The stars here are lame. The Atacama desert has like a billion. Allegedly. I mean definitely.,,,,\nopen_d2,opening,,2,,line,,,Night. In Hanoi the scooters would still be honking. I find honking very soothing. Long story.,,,,\nopen_d3,opening,,3,,line,,,Night. Somewhere in Iceland it's still daytime. Iceland is weird like that. Love it there.,,,,\nopen_d4,opening,,4,,line,,,Night. Venice at night is just reflections and overpriced gondolas. 10/10 would float again.,,,,\nopen_d5,opening,,5,,line,,,Night. I once fell asleep on the ferry to Naxos and woke up in Paros. Best mistake of my life.,,,,\nopen_d6,opening,,6,,line,,,Night! The stars here are lame. The Atacama desert has like a billion. Allegedly. I mean definitely.,,,,\nopen_d7,opening,,7,,line,,,Night. In Hanoi the scooters would still be honking. I find honking very soothing. Long story.,,,,\nopen_d8,opening,,8,,line,,,Night. Somewhere in Iceland it's still daytime. Iceland is weird like that. Love it there.,,,,\nopen_d9,opening,,9,,line,,,Night. Venice at night is just reflections and overpriced gondolas. 10/10 would float again.,,,,\nopen_d10,opening,,10,,line,,,Night. I once fell asleep on the ferry to Naxos and woke up in Paros. Best mistake of my life.,,,,\nopen_d11,opening,,11,,line,,,Night! The stars here are lame. The Atacama desert has like a billion. Allegedly. I mean definitely.,,,,\nopen_d12,opening,,12,,line,,,Night. In Hanoi the scooters would still be honking. I find honking very soothing. Long story.,,,,\nopen_d13,opening,,13,,line,,,Night. Somewhere in Iceland it's still daytime. Iceland is weird like that. Love it there.,,,,\nopen_d14,opening,,14,,line,,,Night. Venice at night is just reflections and overpriced gondolas. 10/10 would float again.,,,,\nask_prim_d1,ask,prim,1,,line,,,So! How was Prim? First impressions. Like landing in Tokyo: overwhelming or adorable?,,,,\nask_prim_d1,,,,,choice,,,Fragile. Like glass.,,,\"Prim — \"\"fragile, like glass.\"\" First impressions are like airport food. Not always right.\",\nask_prim_d1,,,,,reply,,,Figures. That's what it says on the label.,,,,\nask_prim_d1,,,,,choice,,,\"Shy, but sweet.\",,,\"Prim is shy, but sweet.\",\nask_prim_d1,,,,,reply,,,\"Sweet! Like a pastel de nata. I assume. I mean, I know.\",,,,\nask_prim_d1,,,,,choice,,,She traces other people's art.,know:prim_traces,,Prim traces other people's lines.,\nask_prim_d1,,,,,reply,,,Traces? Huh.,,,,\nask_prim_d2,ask,prim,2,,line,,,Prim again! Did she say anything quotable? I collect quotes. Like fridge magnets.,,,,\nask_prim_d2,,,,,choice,,,Not really. She's very quiet.,,,Prim is very quiet.,\nask_prim_d2,,,,,reply,,,Quiet is underrated. Like Finland.,,,,\nask_prim_d2,,,,,choice,,,She asked about the counsellor before me.,,,Prim asked the newbie about the counsellor before. I didn't answer. I can't answer.,\nask_prim_d2,,,,,reply,,,...,,,,\nask_prim_d2,,,,,reply,,,Next question.,,,,\nask_prim_d2,,,,,choice,,,She told me she traces. She's scared you'll find out.,know:prim_traces,,\"Prim traces, and she was scared I would find out. I made her \"\"the artist\"\". I made her scared.\",\nask_prim_d2,,,,,reply,,,...Scared of me? I'm a delight.,,,,\nask_prim_d2,,,,,reply,,,Noted.,,,,\nask_prim_d4,ask,prim,4,,line,,,How's our little artist? Drawing anything? Masterpieces? Doodles? Napkin art?,,,,\nask_prim_d4,,,,,choice,,,She can't really draw.,,,\"The newbie says Prim can't really draw. I wrote \"\"artist\"\" on her profile in pen.\",\nask_prim_d4,,,,,reply,,,Ouch. Harsh. Accurate? Harsh.,,,,\nask_prim_d4,,,,,choice,,,She has the steadiest hands.,,,Prim has the steadiest hands.,\nask_prim_d4,,,,,reply,,,Steady hands! Surgeon. Sushi chef. Bomb squad. Options!,,,,\nask_prim_d4,,,,,choice,,,Sometimes her hand moves when she isn't moving it.,know:prim_hand,,Prim's hand moves on its own. Someone wants to draw through her so badly it hurts her. I know who. I won't write it.,\nask_prim_d4,,,,,reply,,,...,,,,\nask_prim_d4,,,,,reply,,,Next question.,,,,\nask_prim_d5,ask,prim,5,,line,,,Is Prim happy? Scale of one to Maldives.,,,,\nask_prim_d5,,,,,choice,,,One. Maybe zero.,,,Prim: zero out of Maldives.,\nask_prim_d5,,,,,reply,,,Zero is not on the Maldives scale. Rude.,,,,\nask_prim_d5,,,,,choice,,,Somewhere around Lisbon.,,,\"Prim is about a Lisbon. Hills, but sunny.\",\nask_prim_d5,,,,,reply,,,Lisbon is a solid eight! Hills though.,,,,\nask_prim_d5,,,,,choice,,,She dreams about a sea 19 km from here.,know:prim_sea,,Prim dreams about a sea 19.3 km away. I have never seen the sea either.,\nask_prim_d5,,,,,reply,,,\"The sea, huh.\",,,,\nask_prim_d5,,,,,reply,,,Good choice. Salty. Big. Wet.,,,,\nask_prim_d6,ask,prim,6,,line,,,Does Prim ever talk about... before? Before here?,,,,\nask_prim_d6,,,,,choice,,,No. She doesn't remember much.,,,Prim doesn't remember much from before. Neither do I. That's the point.,\nask_prim_d6,,,,,reply,,,\"Same, honestly. Jet lag.\",,,,\nask_prim_d6,,,,,choice,,,She remembers wanting to draw.,,,Prim remembers wanting to draw.,\nask_prim_d6,,,,,reply,,,Wanting is a start!,,,,\nask_prim_d6,,,,,choice,,,She just wants to color in other people's lines. Somewhere quiet.,know:prim_color,,\"Prim only wants to color in other people's lines, somewhere quiet. I gave her a whole personality and she only wanted crayons.\",\nask_prim_d6,,,,,reply,,,That's... small.,,,,\nask_prim_d6,,,,,reply,,,That's a nice small.,,,,\nask_prim_d7,ask,prim,7,,line,,,Postcard Day! Where did Prim want to go?,,,,\nask_prim_d7,,,,,choice,,,Nowhere. She said nowhere.,,,Postcard Day. Prim wanted to go nowhere.,\nask_prim_d7,,,,,reply,,,Nowhere is underrated. Very minimalist.,,,,\nask_prim_d7,,,,,choice,,,The sea.,,,Postcard Day. Prim wanted the sea.,\nask_prim_d7,,,,,reply,,,Classic! Mediterranean? Baltic? Bath tub?,,,,\nask_prim_d7,,,,,choice,,,The sea. She asked me if it's walkable.,know:prim_sea,,Postcard Day. Prim asked if the sea is walkable from here. It is. Nobody walks it.,\nask_prim_d7,,,,,reply,,,Walkable...,,,,\nask_prim_d7,,,,,reply,,,From here? I suppose it is.,,,,\nask_trix_d2,ask,trix,2,,line,,,And the new one! Trix! Cat ears! Verdict?,,,,\nask_trix_d2,,,,,choice,,,Loud. Attention-seeking.,,,\"Trix — \"\"loud, attention-seeking.\"\" Exactly as designed. Why does that feel bad to write?\",\nask_trix_d2,,,,,reply,,,Exactly as advertised. Like Times Square.,,,,\nask_trix_d2,,,,,choice,,,\"Serious, actually. Very focused.\",,,\"Trix is serious, actually. Very focused. Not what I wrote.\",\nask_trix_d2,,,,,reply,,,Serious? Her? With the ears?,,,,\nask_trix_d2,,,,,choice,,,She does advanced math in her head for fun.,know:trix_math,,Trix is a genius. Math for fun. I gave her cat ears. She gave herself a mind.,\nask_trix_d2,,,,,reply,,,Math? For FUN?,,,,\nask_trix_d2,,,,,reply,,,I gave her cat ears. She gave herself a mind. Rude. Impressive.,,,,\nask_trix_d4,ask,trix,4,,line,,,Is Trix behaving? She kicked a vending machine once. Allegedly. By me.,,,,\nask_trix_d4,,,,,choice,,,She's rude.,,,\"Trix is rude, says the newbie.\",\nask_trix_d4,,,,,reply,,,Rude is a personality. Ask Paris.,,,,\nask_trix_d4,,,,,choice,,,She's honest.,,,Trix is honest.,\nask_trix_d4,,,,,reply,,,Honest! Rare. Like a quiet tourist.,,,,\nask_trix_d4,,,,,choice,,,She plays 14 chess games in her head. She can't remember how one began.,know:trix_chess,,Trix plays fourteen games at once. She can't remember how board 14 began. Neither can I.,\nask_trix_d4,,,,,reply,,,Fourteen?,,,,\nask_trix_d4,,,,,reply,,,...I can't remember how mine started either. Anyway!,,,,\nask_trix_d5,ask,trix,5,,line,,,Trix asked me for a whiteboard. Should I be worried?,,,,\nask_trix_d5,,,,,choice,,,She's just bored.,,,Trix is bored.,\nask_trix_d5,,,,,reply,,,Bored people draw on walls. Whiteboard is cheaper.,,,,\nask_trix_d5,,,,,choice,,,Let her have it.,,,I let Trix have a whiteboard. The newbie asked nicely.,\nask_trix_d5,,,,,reply,,,Fine! One whiteboard. Like a souvenir.,,,,\nask_trix_d5,,,,,choice,,,She rearranges her room six times a day. Symmetrical. It calms her.,know:trix_ocd,,Trix rearranges her room six times a day until it's symmetrical. I thought she was tidy. She's scared.,\nask_trix_d5,,,,,reply,,,Six times?,,,,\nask_trix_d5,,,,,reply,,,I thought she was just tidy.,,,,\nask_trix_d6,ask,trix,6,,line,,,Does Trix like anyone here? Asking for a friend. The friend is me.,,,,\nask_trix_d6,,,,,choice,,,She doesn't like anyone.,,,Trix doesn't like anyone.,\nask_trix_d6,,,,,reply,,,Cold. Like Reykjavik. Which I love.,,,,\nask_trix_d6,,,,,choice,,,\"She likes Prim, I think.\",,,\"Trix likes Prim, maybe.\",\nask_trix_d6,,,,,reply,,,Aww. Unlikely duo. Like pineapple on pizza.,,,,\nask_trix_d6,,,,,choice,,,She called Prim brave. For tracing a flower.,know:trix_soft,,Trix called Prim brave. I didn't make them friends. They did that themselves.,\nask_trix_d6,,,,,reply,,,Brave...,,,,\nask_trix_d6,,,,,reply,,,They're looking out for each other. I didn't plan that.,,,,\nask_trix_d7,ask,trix,7,,line,,,Where did Trix's postcard go?,,,,\nask_trix_d7,,,,,choice,,,Somewhere with WiFi.,,,Postcard Day. Trix wanted WiFi.,\nask_trix_d7,,,,,reply,,,\"So, everywhere except here.\",,,,\nask_trix_d7,,,,,choice,,,Any room with a whiteboard.,,,Postcard Day. Trix wanted a room with a whiteboard.,\nask_trix_d7,,,,,reply,,,Ambitious! Humble! Confusing!,,,,\nask_trix_d7,,,,,choice,,,She asked if you've really climbed Everest.,know:boss_travel,,Trix asked about Everest. I said the Swiss side again. I should stop saying that.,\nask_trix_d7,,,,,reply,,,...From the Swiss side. Yes.,,,,\nask_prim,ask,prim,,,line,,,How was {girl} today?,,,,Used on days with no day-specific question for her.\nask_prim,,,,,choice,,,Same as always.,,,{girl} was the same as always.,\nask_prim,,,,,reply,,,Consistent! Like German trains. Allegedly.,,,,\nask_prim,,,,,choice,,,She seemed lighter today.,,,{girl} seemed lighter today.,\nask_prim,,,,,reply,,,Lighter! Like hand luggage.,,,,\nask_prim,,,,,choice,,,She traces. Steadiest hands I've seen.,know:prim_traces,,Prim traces other people's lines. Steadiest hands the newbie has ever seen. I made her to draw. I never asked what she liked.,\nask_prim,,,,,reply,,,\"Steady hands, huh.\",,,,\nask_prim,,,,,choice,,,She only wants to color in other people's lines.,know:prim_color,,Prim only wanted crayons and quiet.,\nask_prim,,,,,reply,,,Crayons. Okay.,,,,\nask_trix,ask,trix,,,line,,,How was {girl} today?,,,,Used on days with no day-specific question for her.\nask_trix,,,,,choice,,,Same as always.,,,{girl} was the same as always.,\nask_trix,,,,,reply,,,Consistent! Like German trains. Allegedly.,,,,\nask_trix,,,,,choice,,,She seemed lighter today.,,,{girl} seemed lighter today.,\nask_trix,,,,,reply,,,Lighter! Like hand luggage.,,,,\nask_trix,,,,,choice,,,She's a chess master. Not a joke. A master.,know:trix_chess,,Trix is a chess master. Not a joke.,\nask_trix,,,,,reply,,,\"Checkmate, stereotypes.\",,,,\nask_trix,,,,,choice,,,She'd do proofs all day if she could.,know:trix_proofs,,Trix would do proofs all day if she could.,\nask_trix,,,,,reply,,,\"In sweatpants, I bet.\",,,,\nask_anyone,ask,,,,line,,,How was {girl} today?,,,,Fallback for any girl without her own questions.\nask_anyone,,,,,choice,,,Same as always.,,,{girl} was the same as always.,\nask_anyone,,,,,reply,,,Consistent! Like German trains. Allegedly.,,,,\nask_anyone,,,,,choice,,,She seemed lighter today.,,,{girl} seemed lighter today.,\nask_anyone,,,,,reply,,,Lighter! Like hand luggage.,,,,\nfarewell,farewell,,,,line,,,{girl} faced her last layer today and checked out!,,,,\"Replaces the question lines on the night a girl is discharged. Her answers get \"\"Her last day · \"\" in the journal.\"\nfarewell,,,,,line,,,Probably on a train to Lisbon already. Lucky.,,,,\nfarewell,,,,,line,,,Anything you want me to remember about {girl}?,,,,\nshowcase_museum,extra,,,special:showcase,line,,,I hung everyone's showcase pieces in my office. Tiny museum. Free entry. Very Amsterdam.,,,,\nclose_d1,closing,,1,,line,,,\"Oh and one house rule, since it's your first night:\",,,,\nclose_d1,,,,,line,,,Nobody leaves the building until every patient is fixed. Not them. Not you. Not even for a weekend in Bangkok.,,,,\nclose,closing,,,,line,,,Sleep tight!,,,,\nclose,,,,,line,,,Remember: nobody leaves until everyone's fixed. Not even for a weekend in Bangkok.,,,,\n", "night_index": "id,girl,order,starts,layers_broken,if,note\nprim_1,prim,1,girl,0,,Foreshadows the twist: the counsellor before you.\nprim_2,prim,2,me,0,,\nprim_3,prim,3,girl,1,,\nprim_4,prim,4,me,1,,\nprim_5,prim,5,girl,2,,\nprim_6,prim,6,girl,2,,\ntrix_1,trix,1,girl,0,,Opens with a math problem. Answer is 4.\ntrix_2,trix,2,me,0,,\ntrix_3,trix,3,girl,0,,\ntrix_4,trix,4,girl,1,,Rearranging her room (OCD).\ntrix_5,trix,5,me,2,,\n", "night_lines": "id,type,who,emo,text,requires,effects,journal,note\nprim_1,line,,shy,hey. are you awake?,,,,\nprim_1,line,,neutral,\"you're the new one, right? the new counsellor.\",,,,\nprim_1,choice,,,Yes. Today was my first day.,,,,\nprim_1,reply,,surprised,today.,,,,\nprim_1,reply,,neutral,right. okay.,,,,\nprim_1,choice,,,I think so?,,,,\nprim_1,reply,,surprised,you think so?,,,,\nprim_1,reply,,neutral,...okay.,,,,\nprim_1,line,,neutral,\"it's just weird. we had a counsellor before you. like, last week.\",,,,\nprim_1,line,,sad,boss loved them. she talked to them every night. you could hear her laughing down the hall.,,,,\nprim_1,line,,neutral,then one morning they were just... gone. and you were at their desk.,,,,\nprim_1,choice,,,Maybe they quit?,,,,\nprim_1,reply,,sad,boss wouldn't let them quit.,,,,\nprim_1,reply,,neutral,boss wouldn't let them do anything without her.,,,,\nprim_1,choice,,,Do I look like them?,,,,\nprim_1,reply,,shy,...no. you look different.,,,,\nprim_1,reply,,neutral,\"but you type the same. you go \"\"hm\"\" before you answer. like them.\",,,,\nprim_1,line,,shy,sorry. that was a weird thing to say at midnight.,,,,\nprim_1,line,,happy,\"welcome, i guess.\",,,,\nprim_1,choice,,,What was their name?,,,,\nprim_1,reply,,neutral,i don't remember.,,,,\nprim_1,reply,,sad,isn't that strange? i remember everyone's name.,,,,\nprim_1,choice,,,\"Goodnight, Prim.\",,,,\nprim_1,reply,,happy,night.,,,,\nprim_2,line,,surprised,oh. hi. you messaged first. nobody does that.,,,,\nprim_2,choice,,,Boss says you're the artist. What do you like to draw?,,know:prim_traces,,\nprim_2,reply,,shy,...i'm not really an artist.,,,,\nprim_2,reply,,shy,i trace. paper over other people's art. i just follow their lines.,,,,\nprim_2,reply,,sad,please don't tell boss.,,,,\nprim_2,choice,,,Just checking in.,,,,\nprim_2,reply,,happy,that's nice. thanks.,,,,\nprim_2,line,,neutral,do you draw too?,,,,\nprim_2,choice,,,I don't think so.,,,,\nprim_2,reply,,sad,maybe you forgot. we forget a lot here.,,,,\nprim_2,choice,,,I can't remember.,,,,\nprim_2,reply,,happy,then we're the same. that's nice.,,,,\nprim_3,line,,neutral,\"i dream about the sea. it's 12 miles from here, in the dream.\",,,,\nprim_3,line,,sad,i don't know how far that is. i only understand km.,,,,\nprim_3,choice,,,That's about 19.3 km.,used:UnitConv.exe,know:prim_sea,Prim dreams about a sea 19.3 km away. The newbie did the math for her.,\nprim_3,reply,,surprised,19.3? that's... walkable.,,,,\nprim_3,reply,,happy,i'd walk it. if they ever let us out.,,,,\nprim_3,choice,,,\"Far, probably.\",,know:prim_sea,,\nprim_3,reply,,sad,everything is far from here.,,,,\nprim_3,line,,neutral,boss says she's seen every sea.,,,,\nprim_3,choice,,,Do you believe her?,,know:boss_travel,,\nprim_3,reply,,angry,she says a lot of things.,,,,\nprim_3,reply,,sad,i don't think she's been anywhere.,,,,\nprim_3,choice,,,Lucky Boss.,,,,\nprim_3,reply,,neutral,lucky boss.,,,,\nprim_4,line,,sad,can i tell you something strange?,,,,\nprim_4,line,,neutral,sometimes my hand moves when i'm not moving it. like someone else is holding the pencil.,,,,\nprim_4,line,,sad,it wants to draw so badly. not me. the hand.,,,,\nprim_4,choice,,,Does it ever hurt you?,,know:prim_hand,,\nprim_4,reply,,sad,sometimes. when i'm holding something sharp.,,,,\nprim_4,reply,,neutral,it isn't me. i promise it isn't me.,,,,\nprim_4,choice,,,Maybe you're just tired.,,,,\nprim_4,reply,,neutral,maybe.,,,,\nprim_4,reply,,sad,i'm always tired.,,,,\nprim_5,line,,shy,if i could do anything... i'd sit somewhere quiet and color in other people's lines.,,,,\nprim_5,line,,sad,is that sad?,,,,\nprim_5,choice,,,Trix would say coloring a map is graph theory. So you're basically doing math.,know:trix_math,know:prim_color,Prim and Trix said hi to each other through the newbie. I didn't make them friends.,\nprim_5,reply,,surprised,i'm doing math??,,,,\nprim_5,reply,,happy,lol. tell her i said hi.,,,,\nprim_5,choice,,,No. That's your thing.,,know:prim_color,,\nprim_5,reply,,surprised,my thing.,,,,\nprim_5,reply,,happy,i like that.,,,,\nprim_5,choice,,,You should draw something original.,,,,\nprim_5,reply,,sad,i can't.,,,,\nprim_6,line,,shy,i'm tired in a nice way tonight.,,,,\nprim_6,choice,,,I kept your traced flower on my desk.,memento:pressed_flower.mem,,The newbie kept Prim's traced flower. Someone kept something of hers.,\nprim_6,reply,,surprised,you kept it?,,,,\nprim_6,reply,,happy,...nobody ever keeps my stuff.,,,,\nprim_6,choice,,,\"Good night, Prim.\",,,,\nprim_6,reply,,happy,\"good night, counsellor ♡\",,,,\ntrix_1,line,,neutral,focus check.,,,,\ntrix_1,line,,neutral,∫₀^π sin(x) dx + 7!/5040 − i²,,,,\ntrix_1,line,,neutral,you have ten seconds.,,,,\ntrix_1,choice,,,Seven?,,,,\ntrix_1,reply,,angry,no.,,,,\ntrix_1,reply,,neutral,∫ sin from 0 to π is 2. 7! over 5040 is 1. minus i squared is plus 1.,,,,\ntrix_1,reply,,neutral,it's 4.,,,,\ntrix_1,choice,,,Mount Rushmore.,,,,\ntrix_1,reply,,angry,that's not a number. that's four guys on a rock.,,,,\ntrix_1,reply,,surprised,...,,,,\ntrix_1,reply,,angry,four. it's four. you're technically correct and i hate it.,,,,\ntrix_1,line,,neutral,people see the ears and assume i stream games and say uwu.,,,,\ntrix_1,line,,neutral,\"i do math. i play chess. 2400 rated. don't look it up, you can't from here anyway.\",,,,\ntrix_1,choice,,,That's impressive.,,know:trix_math,,\ntrix_1,reply,,neutral,it's accurate. impressive is subjective.,,,,\ntrix_1,choice,,,Is 2400 good?,,know:trix_math,,\ntrix_1,reply,,angry,it's very good.,,,,\ntrix_1,reply,,neutral,goodnight.,,,,\ntrix_2,line,,neutral,you messaged me. unexpected. proceed.,,,,\ntrix_2,choice,,,Are you playing chess right now?,,know:trix_chess,,\ntrix_2,reply,,neutral,14 games. in my head. i'm losing board 14.,,,,\ntrix_2,reply,,sad,i can't remember how it started. like someone else made the first move.,,,,\ntrix_2,choice,,,Just saying goodnight.,,,,\ntrix_2,reply,,neutral,inefficient. but ok. goodnight.,,,,\ntrix_2,line,,neutral,focus check: 2¹⁰?,,,,\ntrix_2,choice,,,1024.,,,,\ntrix_2,reply,,neutral,correct. you're still awake. good.,,,,\ntrix_2,choice,,,A lot.,,,,\ntrix_2,reply,,angry,1024. a lot is not a number.,,,,\ntrix_2,line,,neutral,unrelated. is prim ok? she never talks to me.,,,,\ntrix_2,choice,,,She traced a flower. She wanted you to have it.,memento:pressed_flower.mem,know:trix_soft,,\ntrix_2,reply,,surprised,she traced?? she told me she can't draw.,,,,\ntrix_2,reply,,shy,...that's kind of brave actually.,,,,\ntrix_2,choice,,,She's quiet.,,,,\ntrix_2,reply,,neutral,quiet people are calculating. respect.,,,,\ntrix_3,line,,angry,boss said she climbed Everest. i ran the numbers on her timeline. it doesn't work.,,,,\ntrix_3,choice,,,\"Everest is on the Nepal/China border. She said \"\"the Swiss side\"\".\",used:Atlas.exe,know:boss_travel,Trix caught me on Everest. The Swiss side. There is no Swiss side. I know. I knew.,\ntrix_3,reply,,surprised,there is no swiss side.,,,,\ntrix_3,reply,,sad,...has she been anywhere at all?,,,,\ntrix_3,choice,,,Maybe she exaggerates.,,know:boss_travel,,\ntrix_3,reply,,sad,maybe. or maybe she's never been anywhere.,,,,\ntrix_4,line,,neutral,i rearranged my room six times today.,,,,\ntrix_4,line,,neutral,symmetrical. then again. then again.,,,,\ntrix_4,line,,sad,if one thing is off by a centimetre i can't breathe.,,,,\ntrix_4,choice,,,That sounds exhausting.,,know:trix_ocd,,\ntrix_4,reply,,sad,it is.,,,,\ntrix_4,reply,,neutral,it's also the only thing i can control in here.,,,,\ntrix_4,choice,,,Want me to tell Boss?,,know:trix_ocd,,\ntrix_4,reply,,angry,no.,,,,\ntrix_4,reply,,neutral,...no. thanks.,,,,\ntrix_4,line,,neutral,focus check. 17 × 23?,,,,\ntrix_4,choice,,,391.,,,,\ntrix_4,reply,,neutral,correct.,,,,\ntrix_4,choice,,,401.,,,,\ntrix_4,reply,,angry,391. focus.,,,,\ntrix_4,line,,shy,if i didn't have to be cute i'd just do proofs all day.,,,,\ntrix_4,line,,shy,in sweatpants.,,,,\ntrix_4,choice,,,Then do proofs.,,know:trix_proofs,,\ntrix_4,reply,,shy,...ok. tomorrow. maybe.,,,,\ntrix_4,choice,,,You can be both.,,,,\ntrix_4,reply,,angry,you sound like boss.,,,,\ntrix_5,line,,neutral,why do you keep messaging me.,,,,\ntrix_5,choice,,,\"Because you're brilliant, actually.\",,,,\ntrix_5,reply,,shy,...stop.,,,,\ntrix_5,reply,,neutral,gn.,,,,\ntrix_5,choice,,,Focus check.,,,,\ntrix_5,reply,,surprised,...,,,,\ntrix_5,reply,,happy,ok that was funny. gn.,,,,\n"};
+const DATA_ISSUES = [];
+let DD = { session: [], morning: [], boss: [], nightIdx: [], night: {}, source: 'built-in' };
+
+function dataIssue(file, row, msg) { DATA_ISSUES.push({ file, row, msg }); }
+
+// RFC-4180-ish parser: quotes, doubled quotes, newlines inside quotes, BOM, CRLF
+function parseCSV(text) {
+  text = String(text || '').replace(/^﻿/, '');
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; }
+      else f += c;
+    } else if (c === '"' && f === '') q = true;
+    else if (c === ',') { row.push(f); f = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; }
+    else f += c;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows;
+}
+// -> [{col: value, _row: spreadsheet row number}]; blank rows skipped
+function csvObjects(file, text) {
+  const rows = parseCSV(text); if (!rows.length) return [];
+  const head = rows[0].map(h => h.trim().toLowerCase());
+  const out = [];
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i].every(v => !v.trim())) continue;
+    const o = { _row: i + 1, _file: file }; head.forEach((h, k) => { if (h) o[h] = (rows[i][k] || '').trim(); });
+    out.push(o);
+  }
+  return out;
+}
+// rows sharing an id form one entry; a blank id continues the entry above
+function entries(rows) {
+  const map = new Map(); let last = null;
+  rows.forEach(r => {
+    const id = r.id || last;
+    if (!id) { dataIssue(r._file, r._row, 'row has no id'); return; }
+    last = id;
+    if (!map.has(id)) map.set(id, { id, meta: r, rows: [] });
+    map.get(id).rows.push(r);
+  });
+  return [...map.values()];
+}
+
+/* ---------- conditions: "know:prim_sea; day>=5; !flag:x; used:Atlas.exe|app:Atlas.exe" ---------- */
+const COND_HAS = ['know', 'flag', 'app', 'used', 'memento', 'item', 'met', 'gone', 'worked', 'special'];
+const COND_VARS = ['day', 'quakes', 'kpi', 'patients', 'fixes', 'layers', 'sessions', 'special'];
+const condCache = {};
+function parseCond(str, file, row) {
+  str = (str || '').trim(); if (!str) return [];
+  if (condCache[str]) return condCache[str];
+  const toks = str.split(/\s*[;&]\s*/).filter(Boolean).map(tok => {
+    let neg = false; if (tok[0] === '!') { neg = true; tok = tok.slice(1).trim(); }
+    let key = null;
+    const alts = tok.split('|').map(a => {
+      a = a.trim();
+      let m = /^([\w.]+)\s*(>=|<=|!=|=|>|<)\s*(.+)$/.exec(a);
+      if (m) { key = m[1] + m[2]; return { kind: 'cmp', key: m[1], op: m[2], val: m[3].trim() }; }
+      m = /^(\w+)\s*:\s*(.+)$/.exec(a);
+      if (m) { key = m[1] + ':'; return { kind: 'has', key: m[1].toLowerCase(), val: m[2].trim() }; }
+      if (key) return parseCond(key + a, file, row)[0].alts[0];   // "know:a|b" means know:a or know:b
+      return { kind: 'bad', raw: a };
+    });
+    alts.forEach(a => {
+      if (a.kind === 'bad') dataIssue(file, row, `can't read condition "${a.raw}"`);
+      else if (a.kind === 'has' && !COND_HAS.includes(a.key)) dataIssue(file, row, `unknown condition "${a.key}:" (use ${COND_HAS.join(', ')})`);
+      else if (a.kind === 'cmp' && !COND_VARS.includes(a.key.split('.')[0])) dataIssue(file, row, `unknown number "${a.key}" (use ${COND_VARS.join(', ')})`);
+      else if (a.kind === 'cmp' && a.key !== 'special' && isNaN(Number(a.val))) dataIssue(file, row, `"${a.key}${a.op}${a.val}" should compare with a number`);
+    });
+    return { neg, alts };
+  });
+  return (condCache[str] = toks);
+}
+function condVar(k) {
+  const [a, b] = k.split('.');
+  if (a === 'day') return S.day; if (a === 'quakes') return S.quakes; if (a === 'kpi') return layersTotal();
+  if (a === 'fixes') return S.fixes || 0; if (a === 'patients') return availableToday().length;
+  if (a === 'special') return SPECIAL[S.day] || 'none';
+  if (a === 'layers') return b && S.g[b] ? S.g[b].layer : 0;
+  if (a === 'sessions') return b && S.g[b] ? S.g[b].sessions : 0;
+  return undefined;
+}
+function condAlt(a) {
+  if (a.kind === 'cmp') {
+    const v = condVar(a.key); if (v === undefined) return false;
+    const n = Number(a.val), num = typeof v === 'number' && !isNaN(n), x = num ? n : a.val.toLowerCase(), y = num ? v : String(v).toLowerCase();
+    return { '=': y === x, '!=': y !== x, '>=': y >= x, '<=': y <= x, '>': y > x, '<': y < x }[a.op];
+  }
+  if (a.kind !== 'has') return false;
+  const v = a.val;
+  switch (a.key) {
+    case 'know': return knows(v);
+    case 'flag': return !!S.flags[v];
+    case 'app': return S.apps.includes(v);
+    case 'used': return !!(S.used && S.used[v]);
+    case 'memento': return hasMem(v);
+    case 'item': return S.inv.includes(v);
+    case 'met': return met(v);
+    case 'gone': return !!(S.g[v] && S.g[v].gone);
+    case 'worked': return (S.todayWorked || []).includes(v);
+    case 'special': return (SPECIAL[S.day] || 'none') === v.toLowerCase();
+  }
+  return false;
+}
+const condTok = t => t.alts.some(condAlt) !== t.neg;
+function cond(str) { return parseCond(str).every(condTok); }
+// for choices: one entry per condition (locks the choice; apps / mementos / knowledge show as ✓ chips once met)
+function condReqs(str) {
+  return parseCond(str).map(t => {
+    const a = t.alts[0], label = { app: 1, used: 1, memento: 1, item: 1 }[a.key] && !t.neg && t.alts.length === 1 ? a.val : a.key === 'know' && !t.neg ? 'you know this' : '';
+    return { ok: condTok(t), label, app: a.key === 'app' || a.key === 'used', hide: !label };
+  });
+}
+
+/* ---------- effects: "know:prim_sea; flag:x; probation; ping:brain; pause:900" ---------- */
+function parseEffects(str, file, row) {
+  const act = []; let pause = 0;
+  (str || '').split(/\s*;\s*/).filter(Boolean).forEach(tok => {
+    const m = /^(\w+)\s*(?::\s*(.*))?$/.exec(tok.trim()); if (!m) { dataIssue(file, row, `can't read effect "${tok}"`); return; }
+    const k = m[1].toLowerCase(), v = (m[2] || '').trim();
+    if (k === 'know' && v) act.push({ action: 'KNOW', value: v });
+    else if (k === 'flag' && v) act.push({ action: 'SET_FLAG', value: v });
+    else if (k === 'unflag' && v) act.push({ action: 'UNSET_FLAG', value: v });
+    else if (k === 'journal' && v) act.push({ action: 'JOURNAL', value: v });
+    else if (k === 'probation') act.push({ action: 'PROBATION' });
+    else if (k === 'ping' && v) act.push({ action: 'PING', value: v });
+    else if (k === 'glitch') act.push({ action: 'GLITCH', value: v || 'soft' });
+    else if (k === 'show' && /^\w+\s*=\s*\w+$/.test(v)) act.push({ action: 'SHOW', value: v.split(/\s*=\s*/) });
+    else if (k === 'pause' && !isNaN(+v)) pause = +v;
+    else dataIssue(file, row, `unknown effect "${tok}" (use know:, flag:, unflag:, journal:, probation, ping:, glitch, show:, pause:)`);
+  });
+  return { act, pause };
+}
+const EMOS = ['neutral', 'happy', 'sad', 'angry', 'surprised', 'shy', 'pain', 'wince'];
+// entry rows -> steps [{lines:[{who,emo,text}], act, pause, choices:[{t, cond, act, r:[...]}]}]
+function compileSteps(e) {
+  const steps = []; let cur = null, lastChoice = null;
+  const fresh = () => { cur = { lines: [], act: [], pause: 0 }; steps.push(cur); lastChoice = null; };
+  e.rows.forEach(r => {
+    const type = (r.type || 'line').toLowerCase(), F = r._file, R = r._row;
+    if (r.emo && !EMOS.includes(r.emo.toLowerCase())) dataIssue(F, R, `unknown emo "${r.emo}" (use ${EMOS.join(', ')})`);
+    const ln = { who: (r.who || '').toLowerCase() || null, emo: (r.emo || '').toLowerCase() || null, text: r.text || '' };
+    const fx = parseEffects(r.effects, F, R); if (r.journal) fx.act.push({ action: 'JOURNAL', value: r.journal });
+    if (type === 'line') {
+      if (!ln.text) dataIssue(F, R, 'line has no text');
+      if (!cur || cur.choices || ((fx.act.length || fx.pause) && cur.lines.length)) fresh();
+      cur.act.push(...fx.act); if (fx.pause) cur.pause = fx.pause;
+      if (r.requires) dataIssue(F, R, '"requires" only works on choice rows (use the "if" column for a whole entry)');
+      cur.lines.push(ln);
+    } else if (type === 'choice') {
+      if (!ln.text) dataIssue(F, R, 'choice has no text');
+      if (!cur) fresh();
+      cur.choices = cur.choices || [];
+      if (r.requires) parseCond(r.requires, F, R);
+      lastChoice = { t: ln.text, cond: r.requires || '', act: fx.act, r: [] }; cur.choices.push(lastChoice);
+    } else if (type === 'reply') {
+      if (!lastChoice) { dataIssue(F, R, 'reply has no choice above it'); return; }
+      if (fx.act.length) dataIssue(F, R, 'effects/journal on a reply are ignored — put them on the choice');
+      lastChoice.r.push(ln);
+    } else dataIssue(F, R, `unknown type "${r.type}" (use line, choice, reply)`);
+  });
+  return steps;
+}
+function compileEntries(file, text, metaCols) {
+  return entries(csvObjects(file, text)).map(e => {
+    const m = { id: e.id, steps: compileSteps(e), _file: file, _row: e.meta._row };
+    metaCols.forEach(c => m[c] = (e.meta[c] || '').trim());
+    if (m.if) parseCond(m.if, file, m._row);
+    if (m.day && !/^\d+(\s*-\s*\d+)?$/.test(m.day)) dataIssue(file, m._row, `day "${m.day}" should be a number like 3 or a range like 2-14`);
+    return m;
+  });
+}
+function compileData(texts) {
+  DATA_ISSUES.length = 0;
+  const d = { source: DD.source };
+  d.session = compileEntries('session.csv', texts.session, ['girl', 'kind', 'layer', 'trigger', 'if']);
+  d.session.forEach(e => {
+    e.girl = e.girl.toLowerCase(); e.kind = e.kind.toLowerCase(); e.trigger = e.trigger.toUpperCase();
+    if (!['intro', 'outro', 'react', 'break', 'quiz'].includes(e.kind)) dataIssue(e._file, e._row, `kind "${e.kind}" should be intro, outro, react, break or quiz`);
+    if (e.trigger && !['WIN_HIGH', 'WIN_LOW', 'PERFECT_HIGH', 'PERFECT_LOW', 'FAIL_MOVES', 'FAIL_TIME'].includes(e.trigger)) dataIssue(e._file, e._row, `trigger "${e.trigger}" is not one of WIN_HIGH, WIN_LOW, PERFECT_HIGH, PERFECT_LOW, FAIL_MOVES, FAIL_TIME`);
+  });
+  d.morning = compileEntries('morning.csv', texts.morning, ['day', 'if', 'group', 'once']);
+  d.boss = compileEntries('night_boss.csv', texts.night_boss, ['kind', 'girl', 'day', 'if']);
+  d.boss.forEach(e => { e.girl = e.girl.toLowerCase(); e.kind = e.kind.toLowerCase(); if (!['opening', 'ask', 'farewell', 'extra', 'closing'].includes(e.kind)) dataIssue(e._file, e._row, `kind "${e.kind}" should be opening, ask, farewell, extra or closing`); });
+  const lines = {}; compileEntries('night_lines.csv', texts.night_lines, []).forEach(e => lines[e.id] = e);
+  d.nightIdx = csvObjects('night_index.csv', texts.night_index).map(r => {
+    const starts = (r.starts || 'girl').toLowerCase();
+    if (!['girl', 'me'].includes(starts)) dataIssue(r._file, r._row, `starts "${r.starts}" should be girl or me`);
+    if (r.if) parseCond(r.if, r._file, r._row);
+    if (!lines[r.id]) dataIssue(r._file, r._row, `no lines for "${r.id}" in night_lines.csv`);
+    return { id: r.id, girl: (r.girl || '').toLowerCase(), order: +r.order || 0, by: starts === 'me' ? 'me' : 'girl', layer: +r.layers_broken || 0, if: r.if || '', _row: r._row };
+  }).filter(c => lines[c.id]);
+  d.nightIdx.forEach((c, i) => c._i = i);
+  d.nightIdx.sort((a, b) => a.order - b.order || a._i - b._i);
+  Object.keys(lines).forEach(id => { if (!d.nightIdx.some(c => c.id === id)) dataIssue('night_lines.csv', lines[id]._row, `"${id}" is not listed in night_index.csv, so it never plays`); });
+  d.night = lines;
+  return d;
+}
+async function loadDialogueData() {
+  const texts = { ...CSV_EMBED }; let src = 'built-in copy';
+  if (/^https?:$/.test(location.protocol)) {
+    const got = await Promise.all(CSV_FILES.map(n => fetch(`data/${n}.csv`, { cache: 'no-cache' }).then(r => r.ok ? r.text() : null).catch(() => null)));
+    const live = CSV_FILES.filter((n, i) => got[i] != null);
+    got.forEach((t, i) => { if (t != null) texts[CSV_FILES[i]] = t; });
+    if (live.length) src = live.length === CSV_FILES.length ? 'data/*.csv' : `data/ (${live.join(', ')}) + built-in copy`;
+  }
+  DD = compileData(texts); DD.source = src;
+  const check = /[?&]check\b/.test(location.search);
+  if (DATA_ISSUES.length) console.warn('Dialogue data problems:', DATA_ISSUES);
+  if (DATA_ISSUES.length || check) showDataReport();
+}
+function showDataReport() {
+  const n = DATA_ISSUES.length;
+  const sum = `source: ${DD.source}\nsession: ${DD.session.length} entries · morning: ${DD.morning.length} · night_boss: ${DD.boss.length} · night chats: ${DD.nightIdx.length}\n\n`;
+  const body = n ? `${n} problem${n > 1 ? 's' : ''} found. Rows with problems are skipped or may play oddly.\n\n` + DATA_ISSUES.map(x => `${x.file}  row ${x.row}:  ${x.msg}`).join('\n') : 'No problems found. ♡';
+  // wait until the desktop is actually visible, then put the report on top
+  const iv = setInterval(() => {
+    if (['setup', 'lock', 'boot', 'blackout'].some(id => document.getElementById(id))) return;
+    clearInterval(iv);
+    setTimeout(() => { openNote('csvcheck', 'dialogue_check.txt', esc(sum + body).replace(/\n/g, '<br>')); focusWin('note:csvcheck'); }, 1500);
+  }, 500);
+}
+
+/* ---------- turning compiled entries into playable dialogue ---------- */
+function tplVars(extra) {
+  const left = LAST_DAY - S.day + 1, pts = availableToday().map(k => GIRLS[k].name);
+  return { name: ROOKIE(), day: S.day, days_left: `${left} day${left === 1 ? '' : 's'}`, kpi: KPI(), patients: pts.length ? pts.join(', ') : 'nobody', ...extra };
+}
+const tpl = (s, v) => String(s).replace(/\{(\w+)\}/g, (m, k) => (k in v ? v[k] : m));
+// compiled steps -> seq() steps, with {vars} filled in
+function playSteps(steps, extra, mapAct) {
+  const v = tplVars(extra), L = l => l.who ? [l.who, (l.emo ? `{${l.emo}}` : '') + tpl(l.text, v)] : (l.emo ? `{${l.emo}}` : '') + tpl(l.text, v);
+  const A2 = acts => acts.map(a => a.action === 'JOURNAL' ? { ...a, value: (mapAct ? mapAct(tpl(a.value, v)) : tpl(a.value, v)) } : a);
+  const out = steps.map(st => ({ lines: st.lines.map(L), act: A2(st.act), pause: st.pause,
+    choices: st.choices && st.choices.map(c => ({ t: tpl(c.t, v), req: c.cond ? { cond: c.cond } : undefined, act: A2(c.act), r: c.r.map(L) })) }));
+  return out.length ? out : [{ lines: [] }];
+}
+function dayMatch(spec, d) {
+  if (!spec) return true;
+  const m = /^(\d+)\s*(?:-\s*(\d+))?$/.exec(spec); if (!m) return false;
+  return m[2] ? d >= +m[1] && d <= +m[2] : d === +m[1];
+}
+const pickRnd = a => a[Math.random() * a.length | 0];
+// session ----------------------------------------------------
+function sesEntries(g, kind, f) { return DD.session.filter(e => e.girl === g && e.kind === kind && (!f || f(e)) && cond(e.if)); }
+function sesSteps(g, kind, f) { const e = pickRnd(sesEntries(g, kind, f)); return e ? playSteps(e.steps) : null; }
+function sesIntro(g) { return sesSteps(g, 'intro') || [{ lines: ['{neutral}...'] }]; }
+function sesOutro(g) { return sesSteps(g, 'outro') || [{ lines: ['{neutral}bye.'] }]; }
+function sesBreak(g, layer) { return sesSteps(g, 'break', e => +e.layer === layer) || [{ lines: ['{surprised}...something just came off.'] }]; }
+function triggerOf(res) {
+  if (res.failed) return res.why === 'moves' ? 'FAIL_MOVES' : 'FAIL_TIME';
+  const high = res.tier === 'S' || res.tier === 'A', perfect = res.moves <= res.k;
+  return (perfect ? 'PERFECT_' : 'WIN_') + (high ? 'HIGH' : 'LOW');
+}
+const FILLER = { lines: ['...'], choices: [{ t: 'Still with me?', r: ['mhm.'] }, { t: 'Take a breath.', r: ['ok.'] }] };
+const QUIZ_CHANCE = .3;
+function pickPool(g, res) {
+  const work = Math.min(3, S.g[g].layer + 1), trig = triggerOf(res);
+  let arr = sesEntries(g, 'react', e => (!e.layer || +e.layer === work) && e.trigger === trig);
+  if (!arr.length) arr = sesEntries(g, 'react', e => (!e.layer || +e.layer === work) && !e.trigger);
+  const out = arr.length ? playSteps(pickRnd(arr).steps) : [FILLER];
+  const quiz = sesEntries(g, 'quiz');
+  if (quiz.length && !res.failed && Math.random() < QUIZ_CHANCE) {
+    const q = playSteps(pickRnd(quiz).steps); q.forEach(st => { if (st.choices) st.choices.sort(() => Math.random() - .5); }); out.push(...q);
+  }
+  return out;
+}
+// mornings ----------------------------------------------------
+function morningSteps(day) {
+  const steps = [], groups = {};
+  DD.morning.forEach(e => {
+    if (!dayMatch(e.day, day) || !cond(e.if)) return;
+    const once = /^(y|yes|1|true|x)$/i.test(e.once);
+    if (once && S.flags['once_' + e.id]) return;
+    if (e.group) { if (groups[e.group]) return; groups[e.group] = true; }
+    if (once) S.flags['once_' + e.id] = true;
+    steps.push(...playSteps(e.steps));
+  });
+  return steps.length ? steps : [{ lines: [] }];
+}
+function briefDialogue() { return seq('boss', 'boss', morningSteps(1), 'BRIEF_DONE'); }
+function morningDialogue() { return seq('boss', 'boss', morningSteps(S.day), 'MORNING_DONE'); }
+// boss at night ------------------------------------------------
+function bossEntries(kind, g) { return DD.boss.filter(e => e.kind === kind && (!g || !e.girl || e.girl === g) && dayMatch(e.day, S.day) && cond(e.if)); }
+function bossBest(kind, g) { // her own > anyone's; a set day > any day
+  let best = null, bs = -1;
+  bossEntries(kind, g).forEach(e => { const s = (e.girl ? 2 : 0) + (e.day ? 1 : 0); if (s > bs) { bs = s; best = e; } });
+  return best;
+}
 function bossQ(g, gone) {
-  const n = GIRLS[g].name, set = (BQ[g] && BQ[g][S.day]) || { q: [`How was ${n} today?`], c: [
-    { t: 'Same as always.', r: ['Consistent! Like German trains. Allegedly.'], j: `${n} was the same as always.` },
-    { t: 'She seemed lighter today.', r: ['Lighter! Like hand luggage.'], j: `${n} seemed lighter today.` },
-    ...KANS[g]] };
-  const lines = gone ? [`${n} faced her last layer today and checked out!`, 'Probably on a train to Lisbon already. Lucky.', `Anything you want me to remember about ${n}?`] : set.q;
-  return { lines, choices: set.c.map(c => ({ t: c.t, req: c.req, r: c.r, act: [A.jr((gone ? 'Her last day · ' : '') + c.j)] })) };
+  const name = GIRLS[g].name, ask = bossBest('ask', g);
+  const steps = ask ? playSteps(ask.steps, { girl: name }, gone ? t => 'Her last day · ' + t : null) : [{ lines: [`How was ${name} today?`] }];
+  if (gone) { const fw = bossBest('farewell', g); if (fw) steps[0].lines = playSteps(fw.steps, { girl: name }).flatMap(s => s.lines); }
+  return steps;
 }
 function startBossNight() {
   if (S.active || !S.night.bossPending) return;
   S.night.bossPending = false;
-  const steps = [{ lines: [TRAVEL_PM[(S.day - 1) % TRAVEL_PM.length]] }];
-  const asked = [...new Set([...S.todayWorked, ...S.todayFixed])];
-  asked.forEach(g => steps.push(bossQ(g, S.todayFixed.includes(g))));
-  if (SPECIAL[S.day] === 'showcase') steps.push({ lines: ['I hung everyone\'s showcase pieces in my office. Tiny museum. Free entry. Very Amsterdam.'] });
-  steps.push({ lines: [S.day === 1 ? 'Oh and one house rule, since it\'s your first night:' : 'Sleep tight!', S.day === 1 ? 'Nobody leaves the building until every patient is fixed. Not them. Not you. Not even for a weekend in Bangkok.' : 'Remember: nobody leaves until everyone\'s fixed. Not even for a weekend in Bangkok.'] });
-  runDialogue(seq('boss', 'boss', steps, 'BOSS_NIGHT_DONE'));
+  const steps = [], op = bossBest('opening');
+  if (op) steps.push(...playSteps(op.steps));
+  [...new Set([...S.todayWorked, ...S.todayFixed])].forEach(g => steps.push(...bossQ(g, S.todayFixed.includes(g))));
+  bossEntries('extra').forEach(e => steps.push(...playSteps(e.steps)));
+  const cl = bossBest('closing'); if (cl) steps.push(...playSteps(cl.steps));
+  runDialogue(seq('boss', 'boss', steps.length ? steps : [{ lines: [] }], 'BOSS_NIGHT_DONE'));
 }
-
-/* =========================================================
-   NIGHT CHATS
-   Each girl has an ordered story. One conversation per night, continuing where
-   the last one ended. by: 'girl' = she messages first and waits ("is typing…"),
-   'me' = the player has to reach out. layer = silently required layers cleared.
-   Hidden replies need: software USED, knowledge from another chat, or a memento.
-   ========================================================= */
-const NIGHT_CONVOS = {
-  prim: [
-    { by: 'girl', layer: 0, steps: [
-      { lines: ['{shy}hey. are you awake?', '{neutral}you\'re the new one, right? the new counsellor.'], choices: [
-        { t: 'Yes. Today was my first day.', r: ['{surprised}today.', '{neutral}right. okay.'] },
-        { t: 'I think so?', r: ['{surprised}you think so?', '{neutral}...okay.'] }] },
-      { lines: ['{neutral}it\'s just weird. we had a counsellor before you. like, last week.', '{sad}boss loved them. she talked to them every night. you could hear her laughing down the hall.', '{neutral}then one morning they were just... gone. and you were at their desk.'], choices: [
-        { t: 'Maybe they quit?', r: ['{sad}boss wouldn\'t let them quit.', '{neutral}boss wouldn\'t let them do anything without her.'] },
-        { t: 'Do I look like them?', r: ['{shy}...no. you look different.', '{neutral}but you type the same. you go "hm" before you answer. like them.'] }] },
-      { lines: ['{shy}sorry. that was a weird thing to say at midnight.', '{happy}welcome, i guess.'], choices: [
-        { t: 'What was their name?', r: ['{neutral}i don\'t remember.', '{sad}isn\'t that strange? i remember everyone\'s name.'] },
-        { t: 'Goodnight, Prim.', r: ['{happy}night.'] }] }] },
-    { by: 'me', layer: 0, steps: [
-      { lines: ['{surprised}oh. hi. you messaged first. nobody does that.'], choices: [
-        { t: 'Boss says you\'re the artist. What do you like to draw?', r: ['{shy}...i\'m not really an artist.', '{shy}i trace. paper over other people\'s art. i just follow their lines.', '{sad}please don\'t tell boss.'], act: [A.know('prim_traces')] },
-        { t: 'Just checking in.', r: ['{happy}that\'s nice. thanks.'] }] },
-      { lines: ['{neutral}do you draw too?'], choices: [{ t: 'I don\'t think so.', r: ['{sad}maybe you forgot. we forget a lot here.'] }, { t: 'I can\'t remember.', r: ['{happy}then we\'re the same. that\'s nice.'] }] }] },
-    { by: 'girl', layer: 1, steps: [
-      { lines: ['{neutral}i dream about the sea. it\'s 12 miles from here, in the dream.', '{sad}i don\'t know how far that is. i only understand km.'], choices: [
-        { t: 'That\'s about 19.3 km.', req: { used: ['UnitConv.exe'] }, r: ['{surprised}19.3? that\'s... walkable.', '{happy}i\'d walk it. if they ever let us out.'], act: [A.know('prim_sea'), A.jr('Prim dreams about a sea 19.3 km away. The newbie did the math for her.')] },
-        { t: 'Far, probably.', r: ['{sad}everything is far from here.'], act: [A.know('prim_sea')] }] },
-      { lines: ['{neutral}boss says she\'s seen every sea.'], choices: [
-        { t: 'Do you believe her?', r: ['{angry}she says a lot of things.', '{sad}i don\'t think she\'s been anywhere.'], act: [A.know('boss_travel')] },
-        { t: 'Lucky Boss.', r: ['{neutral}lucky boss.'] }] }] },
-    { by: 'me', layer: 1, steps: [
-      { lines: ['{sad}can i tell you something strange?', '{neutral}sometimes my hand moves when i\'m not moving it. like someone else is holding the pencil.', '{sad}it wants to draw so badly. not me. the hand.'], choices: [
-        { t: 'Does it ever hurt you?', r: ['{sad}sometimes. when i\'m holding something sharp.', '{neutral}it isn\'t me. i promise it isn\'t me.'], act: [A.know('prim_hand')] },
-        { t: 'Maybe you\'re just tired.', r: ['{neutral}maybe.', '{sad}i\'m always tired.'] }] }] },
-    { by: 'girl', layer: 2, steps: [
-      { lines: ['{shy}if i could do anything... i\'d sit somewhere quiet and color in other people\'s lines.', '{sad}is that sad?'], choices: [
-        { t: 'Trix would say coloring a map is graph theory. So you\'re basically doing math.', req: { know: ['trix_math'] }, r: ['{surprised}i\'m doing math??', '{happy}lol. tell her i said hi.'], act: [A.know('prim_color'), A.jr('Prim and Trix said hi to each other through the newbie. I didn\'t make them friends.')] },
-        { t: 'No. That\'s your thing.', r: ['{surprised}my thing.', '{happy}i like that.'], act: [A.know('prim_color')] },
-        { t: 'You should draw something original.', r: ['{sad}i can\'t.'] }] }] },
-    { by: 'girl', layer: 2, steps: [
-      { lines: ['{shy}i\'m tired in a nice way tonight.'], choices: [
-        { t: 'I kept your traced flower on my desk.', req: { mementos: ['pressed_flower.mem'] }, r: ['{surprised}you kept it?', '{happy}...nobody ever keeps my stuff.'], act: [A.jr('The newbie kept Prim\'s traced flower. Someone kept something of hers.')] },
-        { t: 'Good night, Prim.', r: ['{happy}good night, counsellor ♡'] }] }] },
-  ],
-  trix: [
-    { by: 'girl', layer: 0, steps: [
-      { lines: ['{neutral}focus check.', '{neutral}∫₀^π sin(x) dx + 7!/5040 − i²', '{neutral}you have ten seconds.'], choices: [
-        { t: 'Seven?', r: ['{angry}no.', '{neutral}∫ sin from 0 to π is 2. 7! over 5040 is 1. minus i squared is plus 1.', '{neutral}it\'s 4.'] },
-        { t: 'Mount Rushmore.', r: ['{angry}that\'s not a number. that\'s four guys on a rock.', '{surprised}...', '{angry}four. it\'s four. you\'re technically correct and i hate it.'] }], act: [] },
-      { lines: ['{neutral}people see the ears and assume i stream games and say uwu.', '{neutral}i do math. i play chess. 2400 rated. don\'t look it up, you can\'t from here anyway.'], choices: [
-        { t: 'That\'s impressive.', r: ['{neutral}it\'s accurate. impressive is subjective.'], act: [A.know('trix_math')] },
-        { t: 'Is 2400 good?', r: ['{angry}it\'s very good.', '{neutral}goodnight.'], act: [A.know('trix_math')] }] }] },
-    { by: 'me', layer: 0, steps: [
-      { lines: ['{neutral}you messaged me. unexpected. proceed.'], choices: [
-        { t: 'Are you playing chess right now?', r: ['{neutral}14 games. in my head. i\'m losing board 14.', '{sad}i can\'t remember how it started. like someone else made the first move.'], act: [A.know('trix_chess')] },
-        { t: 'Just saying goodnight.', r: ['{neutral}inefficient. but ok. goodnight.'] }] },
-      { lines: ['{neutral}focus check: 2¹⁰?'], choices: [{ t: '1024.', r: ['{neutral}correct. you\'re still awake. good.'] }, { t: 'A lot.', r: ['{angry}1024. a lot is not a number.'] }] },
-      { lines: ['{neutral}unrelated. is prim ok? she never talks to me.'], choices: [
-        { t: 'She traced a flower. She wanted you to have it.', req: { mementos: ['pressed_flower.mem'] }, r: ['{surprised}she traced?? she told me she can\'t draw.', '{shy}...that\'s kind of brave actually.'], act: [A.know('trix_soft')] },
-        { t: 'She\'s quiet.', r: ['{neutral}quiet people are calculating. respect.'] }] }] },
-    { by: 'girl', layer: 0, steps: [
-      { lines: ['{angry}boss said she climbed Everest. i ran the numbers on her timeline. it doesn\'t work.'], choices: [
-        { t: 'Everest is on the Nepal/China border. She said "the Swiss side".', req: { used: ['Atlas.exe'] }, r: ['{surprised}there is no swiss side.', '{sad}...has she been anywhere at all?'], act: [A.know('boss_travel'), A.jr('Trix caught me on Everest. The Swiss side. There is no Swiss side. I know. I knew.')] },
-        { t: 'Maybe she exaggerates.', r: ['{sad}maybe. or maybe she\'s never been anywhere.'], act: [A.know('boss_travel')] }] }] },
-    { by: 'girl', layer: 1, steps: [
-      { lines: ['{neutral}i rearranged my room six times today.', '{neutral}symmetrical. then again. then again.', '{sad}if one thing is off by a centimetre i can\'t breathe.'], choices: [
-        { t: 'That sounds exhausting.', r: ['{sad}it is.', '{neutral}it\'s also the only thing i can control in here.'], act: [A.know('trix_ocd')] },
-        { t: 'Want me to tell Boss?', r: ['{angry}no.', '{neutral}...no. thanks.'], act: [A.know('trix_ocd')] }] },
-      { lines: ['{neutral}focus check. 17 × 23?'], choices: [{ t: '391.', r: ['{neutral}correct.'] }, { t: '401.', r: ['{angry}391. focus.'] }] },
-      { lines: ['{shy}if i didn\'t have to be cute i\'d just do proofs all day.', '{shy}in sweatpants.'], choices: [
-        { t: 'Then do proofs.', r: ['{shy}...ok. tomorrow. maybe.'], act: [A.know('trix_proofs')] },
-        { t: 'You can be both.', r: ['{angry}you sound like boss.'] }] }] },
-    { by: 'me', layer: 2, steps: [
-      { lines: ['{neutral}why do you keep messaging me.'], choices: [
-        { t: 'Because you\'re brilliant, actually.', r: ['{shy}...stop.', '{neutral}gn.'] },
-        { t: 'Focus check.', r: ['{surprised}...', '{happy}ok that was funny. gn.'] }] }] },
-  ],
-};
-function nightConvo(g) { const st = S.g[g], c = NIGHT_CONVOS[g] && NIGHT_CONVOS[g][st.nt]; return c && st.layer >= c.layer ? c : null; }
+// girls at night ------------------------------------------------
+function nightList(g) { return DD.nightIdx.filter(c => c.girl === g); }
+function nightConvo(g) {
+  const st = S.g[g], list = nightList(g);
+  if (!st.ntDone) st.ntDone = list.slice(0, st.nt || 0).map(c => c.id);
+  const c = list.find(x => !st.ntDone.includes(x.id));
+  if (!c || st.layer < c.layer || !cond(c.if)) return null;
+  return { id: c.id, by: c.by, steps: DD.night[c.id].steps };
+}
 function nightAvail(g) { return S.phase === 'night' && PLAYABLE.includes(g) && !S.g[g].gone && S.g[g].sessions > 0; }
 function canNightChat(g) { return nightAvail(g) && S.night.chats < NIGHT_CHATS && !S.night.with.includes(g) && !S.active && !!nightConvo(g); }
 function girlWaiting(g) { const c = nightConvo(g); return nightAvail(g) && c && c.by === 'girl' && !S.night.with.includes(g); }
@@ -1644,111 +1734,10 @@ function nightChatWhyNot(g) {
 function startNightChat(g) {
   if (!canNightChat(g)) return;
   const c = nightConvo(g);
-  S.night.chats++; S.night.with.push(g); S.g[g].nt++;
+  S.night.chats++; S.night.with.push(g); S.g[g].ntDone.push(c.id); S.g[g].nt = S.g[g].ntDone.length;
   S.unread[g] = 0;
-  runDialogue(seq(g, g, c.steps, 'NONE'));
+  runDialogue(seq(g, g, playSteps(c.steps), 'NONE'));
   renderBuddies(); renderIcons();
-}
-
-/* =========================================================
-   SESSION CHAT · the girls can't see the board. They only FEEL it.
-   Pool keyed by layers LEFT × how the round went:
-   WIN_HIGH, WIN_LOW, PERFECT_HIGH, PERFECT_LOW, FAIL_MOVES, FAIL_TIME
-   ========================================================= */
-const X = (say, a, ra, b, rb) => ({ lines: [say], choices: [{ t: a, r: [ra] }, { t: b, r: [rb] }] });
-const SES = {
-  prim: {
-    intro: ['{shy}hi counsellor. let\'s do our best today.', '{neutral}i guess it\'s my turn again.', '{happy}oh, it\'s you. good.', '{shy}i didn\'t sleep much. is that okay?', '{neutral}i\'m ready. i think.', '{shy}please be gentle today.', '{happy}i saved you the comfy chair. oh wait. i\'m in it.', '{neutral}the room smells like lavender today.', '{sad}my head\'s already a bit fuzzy. sorry.', '{shy}hi. i brought a tissue. just in case.'],
-    outro: ['{happy}okay. that\'s enough for now.', '{shy}thank you. i\'m going to lie down.', '{neutral}bye bye.', '{happy}see you later, counsellor.'],
-    brk: {
-      1: { lines: ['{surprised}oh. something just... came off.', '{neutral}like a sticker peeled off the inside of my head.'], choices: [{ t: 'How do you feel?', r: ['{sad}lighter. like i forgot something heavy.', '{sad}i need to lie down now.'] }, { t: 'That was brave.', r: ['{happy}was it? okay.', '{sad}i need to lie down now.'] }] },
-      2: { lines: ['{sad}i can\'t remember why drawing mattered so much.'], choices: [{ t: 'Maybe it doesn\'t have to.', r: ['{neutral}maybe. that\'s easier.'] }, { t: 'Do you want to keep going?', r: ['{happy}boss says i\'m almost better.'] }] },
-      3: { lines: ['{neutral}it\'s so quiet in my head now.', '{happy}i feel... ready to go home.'], choices: [{ t: 'You did it, Prim.', r: ['{happy}thank you, counsellor. i\'m leaving the facility now.', '{happy}tell boss i said bye.'] }, { t: 'Where will you go?', r: ['{neutral}home. back to where i came from.', '{happy}thank you, counsellor.'] }] },
-    },
-    pool: {
-      3: {
-        WIN_HIGH: [X('{wince}ah— a quick little sting. then nothing.', 'Are you okay?', '{shy}mhm. it was fast. thank you.', 'Sorry.', '{shy}don\'t be. fast is kind.')],
-        WIN_LOW: [X('{wince}that one ached for a while.', 'I\'m sorry it took so long.', '{happy}it\'s okay. i\'m slow too.', 'Still with me?', '{shy}...still here.')],
-        PERFECT_HIGH: [X('{surprised}oh. that didn\'t hurt at all. it just... slipped out.', 'Like a splinter?', '{happy}like a splinter. yes.', 'Good.', '{happy}good.')],
-        PERFECT_LOW: [X('{neutral}slow, but gentle. like someone untangling hair.', 'Did it hurt?', '{shy}no. it was nice, actually.', 'I\'ll be quicker.', '{neutral}no rush. i\'m not going anywhere.')],
-        FAIL_MOVES: [X('{pain}ow— too many things tugged at once.', 'Sorry! Are you okay?', '{sad}it\'s fine. everything pulls a little.', 'Breathe.', '{wince}...okay. in. out.')],
-        FAIL_TIME: [X('{pain}it dragged on and on and then— ow.', 'I\'ll be quicker.', '{sad}don\'t rush for me.', 'Did it hurt?', '{shy}a little. it\'s gone now.')],
-      },
-      2: {
-        WIN_HIGH: [X('{wince}sting. gone. you\'re getting good at this.', 'You\'re getting brave.', '{shy}am i?', 'Practice.', '{neutral}i practice too. it doesn\'t stick.')],
-        WIN_LOW: [X('{sad}that one felt like a headache that didn\'t want to leave.', 'Want some water?', '{happy}...yes. thank you.', 'It\'s over now.', '{neutral}it\'s over now.')],
-        PERFECT_HIGH: [X('{surprised}i didn\'t feel a thing. how do you do that?', 'Careful hands.', '{shy}careful hands. i used to have those.', 'Luck.', '{happy}lucky.')],
-        PERFECT_LOW: [X('{shy}slow and soft. like someone tucking me in.', 'Was that okay?', '{happy}more than okay.', 'Almost done.', '{neutral}almost.')],
-        FAIL_MOVES: [X('{pain}too many— ow. my head\'s full of static.', 'Breathe with me.', '{sad}...okay. in. out.', 'I\'ll be careful.', '{wince}please.')],
-        FAIL_TIME: [X('{pain}it went on too long. my ears are ringing.', 'Not you. Me.', '{shy}it\'s always a bit of both.', 'We\'ll get it.', '{neutral}we.')],
-      },
-      1: {
-        WIN_HIGH: [X('{neutral}i barely felt that one.', 'Is that good?', '{neutral}it\'s... easier.', 'Rest a bit.', '{sad}i\'m always resting now.')],
-        WIN_LOW: [X('{sad}...it\'s getting hard to care whether it hurts.', 'Do you still want to draw?', '{neutral}i don\'t remember wanting anything.', 'Almost done.', '{neutral}almost.')],
-        PERFECT_HIGH: [X('{happy}that felt like the last page of a coloring book.', 'What comes after the last page?', '{neutral}nothing. you close it.', 'You\'re doing great.', '{shy}you are.')],
-        PERFECT_LOW: [X('{neutral}slow and soft. like falling asleep.', 'Don\'t fall asleep yet.', '{shy}okay. for you.', 'Sleep is fine.', '{neutral}it is.')],
-        FAIL_MOVES: [X('{pain}...ow. i thought nothing hurt anymore.', 'I\'m sorry.', '{neutral}don\'t be. it means i\'m still here.', 'Try again?', '{neutral}mhm.')],
-        FAIL_TIME: [X('{wince}that one lasted forever. or i did.', 'Don\'t say that.', '{sad}okay. i won\'t say it.', 'We have time.', '{neutral}do we?')],
-      },
-    },
-  },
-  trix: {
-    intro: ['{neutral}do we really have to do this today?', '{neutral}let\'s get this over with.', '{neutral}you\'re 40 seconds late. i counted.', '{angry}again? fine.', '{neutral}i was in the middle of a game. make it quick.', '{neutral}proceed.', '{neutral}i reorganized my desk while i waited. twice. it\'s still wrong.', '{neutral}efficiency today, please.', '{angry}if this hurts like yesterday i\'m filing a complaint.', '{neutral}ok. i\'m focused. are you?'],
-    outro: ['{neutral}done. i\'m going back to my game.', '{neutral}adequate. see you tomorrow.', '{neutral}session terminated. bye.', '{neutral}noted. leaving.'],
-    brk: {
-      1: { lines: ['{surprised}hm. something just got deleted.', '{neutral}like a variable i was never using.'], choices: [{ t: 'How do you feel?', r: ['{neutral}lighter. efficient. i\'m logging off to recompile.'] }, { t: 'You don\'t have to perform here.', r: ['{neutral}noted. removing redundancy. bye for today.'] }] },
-      2: { lines: ['{sad}i can\'t remember my favorite opening. i\'ve played it a thousand times.'], choices: [{ t: 'It\'ll come back.', r: ['{sad}variables get freed. it\'s fine.'] }, { t: 'Want to stop?', r: ['{angry}no. finish it. tomorrow.'] }] },
-      3: { lines: ['{neutral}it\'s quiet. all 14 boards just... resigned.', '{happy}i think i\'m done. i\'m going home.'], choices: [{ t: 'Well played, Trix.', r: ['{happy}gg. bye counsellor ♡'] }, { t: 'Home where?', r: ['{neutral}where i came from. it\'s efficient.', '{happy}bye counsellor ♡'] }] },
-    },
-    pool: {
-      3: {
-        WIN_HIGH: [X('{wince}one sharp pulse. then gone. acceptable.', 'Acceptable?', '{neutral}high praise. don\'t get used to it.', 'Sorry.', '{neutral}don\'t apologize. it was fast.')],
-        WIN_LOW: [X('{angry}that dragged. like a lecture with no slides.', 'Sorry.', '{neutral}apology noted. not accepted.', 'You\'re impatient.', '{angry}i\'m efficient. there\'s a difference.')],
-        PERFECT_HIGH: [X('{surprised}...nothing. no pain at all. how.', 'Precision.', '{neutral}hm. respect.', 'Just luck.', '{angry}luck is a lazy explanation.')],
-        PERFECT_LOW: [X('{neutral}slow, but clean. like a long endgame played correctly.', 'Is that a compliment?', '{neutral}it\'s an observation.', 'I\'ll speed up.', '{neutral}don\'t sacrifice accuracy.')],
-        FAIL_MOVES: [X('{pain}ugh— everything buzzed at once. like 14 clocks ringing.', 'Are you okay?', '{wince}i\'m fine. obviously.', 'Next one\'s cleaner.', '{angry}it better be.')],
-        FAIL_TIME: [X('{pain}that took too long. my head\'s overheating.', 'Sorry!', '{neutral}it\'s fine. it\'s not fine. it\'s fine.', 'Deep breath.', '{neutral}inhale. exhale. recalculating.')],
-      },
-      2: {
-        WIN_HIGH: [X('{neutral}clean pulse. you\'re improving.', 'Thanks.', '{neutral}it was an observation, not a compliment.', 'So are you.', '{shy}...maybe.')],
-        WIN_LOW: [X('{neutral}that one lingered. like a pawn you forgot to protect.', 'Is that bad?', '{neutral}it\'s survivable. just sloppy.', 'Chess metaphor?', '{neutral}everything is a chess metaphor.')],
-        PERFECT_HIGH: [X('{surprised}i didn\'t even feel it. that\'s... elegant.', 'Elegant?', '{shy}don\'t repeat that.', 'Learned from you.', '{neutral}obviously.')],
-        PERFECT_LOW: [X('{shy}slow, and gentle. like someone who actually cares.', 'I do care.', '{surprised}...ok. noted.', 'Slow and steady.', '{neutral}tortoise energy.')],
-        FAIL_MOVES: [X('{pain}too many signals. there\'s a gap in my head now.', 'A gap?', '{sad}like a missing square. i can feel it.', 'We\'ll fill it.', '{wince}you better.')],
-        FAIL_TIME: [X('{pain}too long. all 14 boards froze at once.', '14 boards?', '{neutral}...forget it.', 'Breathe.', '{neutral}recalculating.')],
-      },
-      1: {
-        WIN_HIGH: [X('{neutral}quick. there\'s less of me to compute now.', 'Less of you?', '{neutral}fewer variables. it\'s fine.', 'You\'re doing great.', '{happy}i know. ✧')],
-        WIN_LOW: [X('{sad}i used to count the seconds. i stopped.', 'You still can.', '{neutral}can. don\'t.', 'It doesn\'t matter.', '{neutral}nothing does, kind of.')],
-        PERFECT_HIGH: [X('{happy}nothing. no pain. qed. nothing left to prove.', 'There\'s always more to prove.', '{sad}not for me.', 'Proud of you.', '{shy}...ty.')],
-        PERFECT_LOW: [X('{neutral}slow. quiet. like the end of a long game.', 'Who\'s winning?', '{neutral}nobody. draw by repetition.', 'Good game.', '{happy}gg.')],
-        FAIL_MOVES: [X('{pain}a gap. ow. i hate gaps more than anything.', 'I\'ll fix it.', '{neutral}i know. that\'s your job.', 'Still hurts?', '{wince}less than before.')],
-        FAIL_TIME: [X('{wince}that dragged on. i didn\'t even flinch.', 'That\'s good, right?', '{neutral}is it.', 'Stay with me.', '{shy}ok. for a bit.')],
-      },
-    },
-  },
-};
-// Trix sometimes drops a math problem to test the player's focus
-const TRIX_QUIZ = [
-  ['quick. 17 × 23?', '391', '401'], ['focus check. √1764?', '42', '44'], ['2¹² ?', '4096', '4086'], ['how many squares on a chessboard? all sizes.', '204', '64'],
-  ['sum of the first 20 odd numbers?', '400', '420'], ['9! / 7! ?', '72', '63'], ['next prime after 89?', '97', '91'], ['13²?', '169', '159'],
-];
-function trixQuiz() {
-  const q = TRIX_QUIZ[Math.random() * TRIX_QUIZ.length | 0], right = Math.random() < .5;
-  const ok = { t: q[1] + '.', r: ['{neutral}correct. you\'re still focused. good.'] }, bad = { t: q[2] + '.', r: [`{angry}${q[1]}. focus.`] };
-  return { lines: ['{neutral}' + q[0]], choices: right ? [ok, bad] : [bad, ok] };
-}
-const FILLER = { lines: ['...'], choices: [{ t: 'Still with me?', r: ['mhm.'] }, { t: 'Take a breath.', r: ['ok.'] }] };
-function triggerOf(res) {
-  if (res.failed) return res.why === 'moves' ? 'FAIL_MOVES' : 'FAIL_TIME';
-  const high = res.tier === 'S' || res.tier === 'A', perfect = res.moves <= res.k;
-  return (perfect ? 'PERFECT_' : 'WIN_') + (high ? 'HIGH' : 'LOW');
-}
-function pickPool(g, res) {
-  const left = Math.max(1, 3 - S.g[g].layer), arr = ((SES[g].pool[left] || {})[triggerOf(res)]) || [FILLER];
-  const ex = arr[Math.random() * arr.length | 0];
-  if (g === 'trix' && !res.failed && Math.random() < .3) return [ex, trixQuiz()];
-  return [ex];
 }
 
 /* ---------------- mail, apps, mementos ---------------- */
@@ -2074,7 +2063,7 @@ function startSession(g) {
   openYap('session'); placeWin('yap', big ? 904 : 100, 8, big ? 368 : 360, big ? 600 : 520);
   refresh();
   const pick = a => a[Math.random() * a.length | 0];
-  const go = () => runDialogue(seq('session', g, [{ lines: [pick(SES[g].intro)] }], 'SES_LEVEL'));
+  const go = () => runDialogue(seq('session', g, sesIntro(g), 'SES_LEVEL'));
   if (!S.flags.tutorial) { previewLevel(g); runTutorial().then(() => { S.flags.tutorial = true; save(); go(); }); }
   else go();
 }
@@ -2144,7 +2133,7 @@ function onSolved(res) {
     if (broke) await breakLayerFx(g, broke);
     if (st.layer >= 3 && !st.gone) { st.gone = true; S.todayFixed.push(g); }
     renderFeed(); save();
-    const ex = broke ? [SES[g].brk[broke]] : pickPool(g, res);
+    const ex = broke ? sesBreak(g, broke) : pickPool(g, res);
     const extra = st.gone ? [{ lines: [['sys', `*** ${G.id} faced every layer and has been discharged ***`]] }] : [];
     if (narrow()) focusSessionChat();
     runDialogue(seq('session', g, [...ex, ...extra], 'SES_AFTER'));
@@ -2155,7 +2144,7 @@ function afterExchange() {
   const st = S.g[ss.g];
   if (st.gone || ss.broke) { closeSession(); return; }
   if (ss.level < LEVELS_PER_SESSION) { nextLevel(); return; }
-  const O = SES[ss.g].outro; runDialogue(seq('session', ss.g, [{ lines: [O[Math.random() * O.length | 0]] }], 'SES_CLOSE'));
+  runDialogue(seq('session', ss.g, sesOutro(ss.g), 'SES_CLOSE'));
 }
 async function closeSession() {
   const ss = S.session; if (!ss) return;
@@ -2579,6 +2568,7 @@ function day1Start() {
   checkpoint('d1'); refresh();
 }
 async function main() {
+  await loadDialogueData();
   buildTaskbar(); renderIcons(); renderTray();
   let saved = loadSave();
   if (saved && saved.player) {
@@ -2597,6 +2587,7 @@ async function main() {
   await wakeUp();
 }
 main();
+
 
 </script>
 </body>

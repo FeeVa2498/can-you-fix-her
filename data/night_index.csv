@@ -1,0 +1,12 @@
+﻿id,girl,order,starts,layers_broken,if,note
+prim_1,prim,1,girl,0,,Foreshadows the twist: the counsellor before you.
+prim_2,prim,2,me,0,,
+prim_3,prim,3,girl,1,,
+prim_4,prim,4,me,1,,
+prim_5,prim,5,girl,2,,
+prim_6,prim,6,girl,2,,
+trix_1,trix,1,girl,0,,Opens with a math problem. Answer is 4.
+trix_2,trix,2,me,0,,
+trix_3,trix,3,girl,0,,
+trix_4,trix,4,girl,1,,Rearranging her room (OCD).
+trix_5,trix,5,me,2,,
