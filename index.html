@@ -4718,9 +4718,56 @@ function edLoad() {
   try { const s = JSON.parse(localStorage.getItem('cyfh_level_edits')); return s && Array.isArray(s.panels) && s.panels.length ? s.panels : null; } catch (e) { return null; }
 }
 function edPersist() {
+  edSync();
   try { localStorage.setItem('cyfh_level_edits', JSON.stringify({ panels: PANELS, t: Date.now() })); return true; }
   catch (e) { edMsg('Could not save in this browser (storage full or blocked). Use Export to keep your work.', 'bad'); return false; }
 }
+/* When the game runs as a claude.ai artifact, edits are also kept in the artifact's shared
+   database: every hand-edited level is one document in "levels", and "levelmeta/order" holds
+   where every level sits (girl, layer, n) plus the deleted ids. Other devices (and Claude)
+   then see the same edits. Elsewhere (GitHub Pages, a local file) only this browser keeps them. */
+const EDB = { db: null, sent: {}, sentOrder: '' };
+function edMerge(builtin, docs, meta) {
+  const out = JSON.parse(JSON.stringify(builtin)), byId = new Map(out.map(p => [p.id, p]));
+  docs.forEach(p => { if (byId.has(p.id)) Object.assign(byId.get(p.id), p); else { out.push(p); byId.set(p.id, p); } });
+  if (meta) {
+    const del = new Set(meta.removed || []);
+    Object.entries(meta.order || {}).forEach(([id, [g, l, n]]) => { const p = byId.get(id); if (p) { p.girl = g; p.layer = l; p.n = n; } });
+    return out.filter(p => !del.has(p.id));
+  }
+  return out;
+}
+async function edDbInit() {
+  if (!window.claude || typeof window.claude.use !== 'function') return;
+  let db = null; try { db = await window.claude.use('db'); } catch (e) { db = null; }
+  if (!db) return;
+  EDB.db = db;
+  try {
+    const timeout = new Promise((_, rj) => setTimeout(() => rj(new Error('timeout')), 10000));
+    const [ls, meta] = await Promise.race([Promise.all([db.collection('levels').get(), db.doc('levelmeta/order').get()]), timeout]);
+    const docs = ls.docs.map(d => d.data()).filter(p => p && p.id);
+    const m = meta && meta.data ? meta.data() : null;
+    docs.forEach(p => EDB.sent[p.id] = JSON.stringify(p));
+    if (m) EDB.sentOrder = JSON.stringify(m);
+    if (!docs.length && !m) { if (PANELS.some(p => p.edited)) edSync(); return; }   // first run: upload what this browser already has
+    PANELS = edMerge(PANELS_BUILTIN, docs, m);
+    try { localStorage.setItem('cyfh_level_edits', JSON.stringify({ panels: PANELS, t: Date.now() })); } catch (e) { }
+    UPD.forEach(f => f()); if (WINS.editor) edRender();
+  } catch (e) { console.warn('level edits: shared database unavailable', e); }
+}
+function edSync() {
+  const db = EDB.db; if (!db) return;
+  const ids = new Set(PANELS.map(p => p.id));
+  PANELS.filter(p => p.edited).forEach(p => {
+    const j = JSON.stringify(p); if (EDB.sent[p.id] === j) return;
+    EDB.sent[p.id] = j; db.doc('levels/' + p.id).set(JSON.parse(j)).catch(e => { delete EDB.sent[p.id]; edMsg('Shared save failed (' + (e.code || e.message) + '): kept in this browser only.', 'bad'); });
+  });
+  Object.keys(EDB.sent).filter(id => !ids.has(id)).forEach(id => { delete EDB.sent[id]; db.doc('levels/' + id).delete().catch(() => { }); });
+  const meta = { order: Object.fromEntries(PANELS.map(p => [p.id, [p.girl, p.layer, p.n]])), removed: PANELS_BUILTIN.map(p => p.id).filter(id => !ids.has(id)), t: Date.now() };
+  const mj = JSON.stringify({ order: meta.order, removed: meta.removed });
+  if (mj !== EDB.sentOrder) { EDB.sentOrder = mj; db.doc('levelmeta/order').set(meta).catch(() => { EDB.sentOrder = ''; }); }
+}
+setTimeout(edDbInit, 0);
 const ED_GIRLS = ['prim', 'trix', 'paige', 'vel', 'myne'];
 const ED_TOOLS = {
   line: [['start', 'Start', 'node', 'Điểm xuất phát (chỉ một)'], ['exit', 'Goal', 'node', 'Ô đích (có thể nhiều)'], ['wall', 'Wall', 'edge', 'Đoạn đứt / tường'], ['hole', 'Hole', 'node', 'Lỗ trên map'],
@@ -4772,6 +4819,7 @@ function edRender(b) {
   $('#ed-resetall', b).onclick = e => {
     const bt = e.currentTarget; if (!bt.dataset.sure) { bt.dataset.sure = 1; bt.textContent = 'Sure? click again'; return; }
     PANELS = edClone(PANELS_BUILTIN); try { localStorage.removeItem('cyfh_level_edits'); } catch (er) { }
+    if (EDB.db) { Object.keys(EDB.sent).forEach(id => EDB.db.doc('levels/' + id).delete().catch(() => { })); EDB.sent = {}; EDB.sentOrder = ''; EDB.db.doc('levelmeta/order').delete().catch(() => { }); }
     ED.id = ED.p = null; ED.dirty = false; UPD.forEach(f => f()); edRender(); edMsg('Back to the built-in levels.', 'ok');
   };
   edTree(); edTools(); edProps(); edDraw(); edBindSvg();
@@ -4996,8 +5044,15 @@ function edDuplicate() {
   const p = edNorm(ED.p); p.id = `${p.girl}_${p.layer}_c${Date.now().toString(36).slice(-5)}`; p.n = Math.max(0, ...PANELS.filter(x => x.girl === p.girl && x.layer === p.layer).map(x => x.n)) + 1; p.edited = true; delete p.tut;
   PANELS.push(p); edPersist(); UPD.forEach(f => f()); edSelect(p.id, true); edMsg('Copy made at the end of the layer.', 'ok');
 }
-function edExport() {
+async function edExport() {
   const t = JSON.stringify(PANELS, null, 1);
+  let dl = null;
+  if (window.claude && typeof window.claude.use === 'function') { try { dl = await window.claude.use('downloads'); } catch (e) { dl = null; } }
+  if (dl) {
+    try { await dl.save({ filename: 'panels.json', data: new Blob([t], { type: 'application/json' }) }); edMsg(`Exported panels.json (${PANELS.length} levels).`, 'ok'); }
+    catch (e) { edMsg(e && e.code === 'declined' ? 'Export cancelled.' : 'Export unavailable here: use Copy JSON.', e && e.code === 'declined' ? '' : 'bad'); }
+    return;
+  }
   try {
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([t], { type: 'application/json' })); a.download = 'panels.json';
     document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
