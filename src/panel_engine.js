@@ -29,10 +29,8 @@
      nums    [[cx,cy,n]]  the line uses n of this cell's 4 sides
    Lines
      mirror  'x'|'y'|'rot'  a second line copies the first, rigidly
-     twin    'mirror'|'same'|'opposite'  a second line with its own start[1]
-             and exit[1]; every key moves both (mirror: left/right swapped).
-             A blocked line stays put; a line that reaches its exit parks.
-             Twin panels are played and solved as key sequences.
+   Box panels (p.boxes): tokens instead of a line, see the box section below.
+             Played and solved as key sequences.
    ========================================================= */
 const PanelEngine = (() => {
   const key = (x, y) => x + ',' + y;
@@ -197,14 +195,14 @@ const PanelEngine = (() => {
     return { ok: !bad.length, bad };
   }
   function validate(p, path) {
-    if (p.twin) return { ok: false, bad: [{ kind: 'path' }] };
+    if (p.boxes) return { ok: false, bad: [{ kind: 'path' }] };
     const C = ctx(p), st = replay(p, path, C);
     if (!st || !canStop(p, st, C)) return { ok: false, bad: [{ kind: 'path' }] };
     return rules(p, path, st);
   }
   /* every distinct solution (node paths), up to `limit` */
   function solve(p, limit = 50) {
-    if (p.twin) return [];
+    if (p.boxes) return [];
     const C = ctx(p), sols = [], N = nodeCount(p);
     (p.avoid || []).forEach(e => C.avoidHard.add(ekey(e[0], e[1], e[2], e[3])));
     const starts = p.mirror ? (p.start || []).slice(0, 1) : (p.start || []);
@@ -221,75 +219,83 @@ const PanelEngine = (() => {
     return sols;
   }
 
-  /* ---------------- twin: two lines, one keyboard ---------------- */
-  function twinDir(p, i, d) { if (!i) return d; return p.twin === 'same' ? d : p.twin === 'opposite' ? [-d[0], -d[1]] : [-d[0], d[1]]; }
-  function twinStart(p) {
-    return { heads: (p.start || []).slice(0, 2).map(s => ({ path: [s.slice()], jump: [false], slide: null, parked: false })), taken: new Set((p.start || []).slice(0, 2).map(s => key(...s))), inputs: '' };
+  /* ---------------- boxes: every key moves every box ----------------
+     p.boxes [{x,y, m:'same'|'mx'|'my'|'opp', dash, n, trail}]
+       m      how the box reads the key: same, mx (left/right swapped), my (up/down swapped), opp (both)
+       dash   one press = slide until blocked
+       n      moves this box may still make (shown on the box); at 0 it is stuck
+       trail  the box pulls a rope behind it that nothing can cross (the "line" is such a box)
+     p.exit   goal tiles. Boxes never lock: the panel is solved the moment every goal holds a box.
+     Map tiles: pads (dash tiles), stops, portals, holes, broken (walls), oneway. */
+  function boxDir(b, d) { const m = b.m || 'same'; return m === 'mx' ? [-d[0], d[1]] : m === 'my' ? [d[0], -d[1]] : m === 'opp' ? [-d[0], -d[1]] : d; }
+  function boxStart(p) {
+    return { pos: p.boxes.map(b => [b.x, b.y]), left: p.boxes.map(b => b.n == null ? null : b.n), trail: new Set(), inputs: '',
+      tracks: p.boxes.map(b => [[b.x, b.y]]), jumps: p.boxes.map(() => [false]) };
   }
-  const twinClone = s => ({ heads: s.heads.map(h => ({ path: h.path.map(n => n.slice()), jump: h.jump.slice(), slide: h.slide, parked: h.parked })), taken: new Set(s.taken), inputs: s.inputs });
-  // one key press; returns { state, moved: [bool, bool] } (state is a new object)
-  function twinStep(p, s0, d) {
-    const s = twinClone(s0), C = ctx(p), moved = [false, false];
-    const free = (h, to, from, isJump) => inside(p, to[0], to[1]) && !s.taken.has(key(...to)) && (isJump || linkOk(p, C, from, to));
-    // first steps, decided together (both aiming at one node = both blocked)
-    const want = s.heads.map((h, i) => {
-      if (h.parked) return null;
-      const at = h.path[h.path.length - 1], dd = twinDir(p, i, d), to = norm(p, at[0] + dd[0], at[1] + dd[1]);
-      return free(h, to, at, false) ? { to, dd } : null;
-    });
-    if (want[0] && want[1] && want[0].to[0] === want[1].to[0] && want[0].to[1] === want[1].to[1]) { want[0] = want[1] = null; }
-    s.heads.forEach((h, i) => {
-      const w = want[i]; if (!w) return;
-      moved[i] = true;
-      let at = w.to, dir = w.dd, slide = null;
-      h.path.push(at.slice()); h.jump.push(false); s.taken.add(key(...at));
-      // forced follow-ups: portals, pads
-      for (let guard = 0; guard < 60; guard++) {
-        const t = twin(p, ...at);
-        if (t && !h.jump[h.jump.length - 1]) { if (!free(h, t, at, true)) break; h.path.push(t.slice()); h.jump.push(true); s.taken.add(key(...t)); at = t; continue; }
-        const pd = padAt(p, ...at); if (pd) slide = pd; else if (isStop(p, ...at)) slide = null;
-        if (!slide) break;
-        const nx = norm(p, at[0] + slide[0], at[1] + slide[1]);
-        if (!free(h, nx, at, false)) break;
-        h.path.push(nx.slice()); h.jump.push(false); s.taken.add(key(...nx)); at = nx;
+  // one key press; returns { state, moved: [bool…] } (a new state; rec=false skips the drawing tracks)
+  function boxStep(p, s0, d, rec = true) {
+    const C = ctx(p), n = p.boxes.length;
+    const s = { pos: s0.pos.map(q => q.slice()), left: s0.left.slice(), trail: new Set(s0.trail), inputs: s0.inputs + dirKey(d),
+      tracks: rec && s0.tracks ? s0.tracks.map(t => t.map(q => q.slice())) : null, jumps: rec && s0.jumps ? s0.jumps.map(j => j.slice()) : null };
+    const act = p.boxes.map((b, i) => s.left[i] === null || s.left[i] > 0);
+    const dir = p.boxes.map(b => boxDir(b, d)), dash = p.boxes.map(b => !!b.dash), moved = Array(n).fill(false);
+    const push = (i, q, j) => { if (s.tracks) { s.tracks[i].push(q.slice()); s.jumps[i].push(j); } };
+    for (let tick = 0; tick < 200 && act.some(Boolean); tick++) {
+      const occ = new Map(s.pos.map((q, i) => [key(...q), i]));
+      const want = s.pos.map((q, i) => {
+        if (!act[i]) return null;
+        const to = [q[0] + dir[i][0], q[1] + dir[i][1]];
+        return inside(p, ...to) && linkOk(p, C, q, to) && !s.trail.has(key(...to)) ? to : null;
+      });
+      const ok = want.map(Boolean);
+      for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (ok[i] && ok[j] && want[i][0] === want[j][0] && want[i][1] === want[j][1]) ok[i] = ok[j] = false;
+      for (let changed = true; changed;) {
+        changed = false;
+        for (let i = 0; i < n; i++) {
+          if (!ok[i]) continue;
+          const j = occ.get(key(...want[i])); if (j === undefined) continue;
+          if (!ok[j] || (want[j][0] === s.pos[i][0] && want[j][1] === s.pos[i][1])) { ok[i] = false; changed = true; }
+        }
       }
-      if (p.exit && p.exit[i] && at[0] === p.exit[i][0] && at[1] === p.exit[i][1]) h.parked = true;
-    });
-    s.inputs += dirKey(d);
+      for (let i = 0; i < n; i++) {
+        if (!ok[i]) { act[i] = false; continue; }
+        if (p.boxes[i].trail) s.trail.add(key(...s.pos[i]));
+        s.pos[i] = want[i]; moved[i] = true; push(i, want[i], false);
+      }
+      for (let i = 0; i < n; i++) {
+        if (!ok[i]) continue;
+        let at = s.pos[i];
+        const t = twin(p, ...at);
+        if (t) {
+          const busy = s.pos.some((q, j) => j !== i && q[0] === t[0] && q[1] === t[1]) || s.trail.has(key(...t));
+          if (busy) { act[i] = false; continue; }
+          if (p.boxes[i].trail) s.trail.add(key(...at));
+          s.pos[i] = t.slice(); at = t; push(i, t, true);
+        }
+        const pd = padAt(p, ...at);
+        if (pd) { dir[i] = pd; dash[i] = true; } else if (isStop(p, ...at)) dash[i] = false;
+        if (!dash[i]) act[i] = false;
+      }
+    }
+    for (let i = 0; i < n; i++) if (moved[i] && s.left[i] !== null) s.left[i]--;
     return { state: s, moved };
   }
-  function twinWon(p, s) {
-    if (!s.heads.every(h => h.parked)) return false;
-    const seen = new Set(s.heads.flatMap(h => h.path.map(n => key(...n))));
-    if ((p.dots || []).some(dd => !seen.has(key(dd[0], dd[1])))) return false;
-    if (p.visitAll && seen.size !== nodeCount(p)) return false;
-    if (p.moves && s.inputs.length !== p.moves) return false;
-    return true;
-  }
-  function twinRules(p, s) {
-    const bad = [], seen = new Set(s.heads.flatMap(h => h.path.map(n => key(...n))));
-    if (!s.heads.every(h => h.parked)) bad.push({ kind: 'path' });
-    (p.dots || []).forEach((dd, i) => { if (!seen.has(key(dd[0], dd[1]))) bad.push({ kind: 'dots', i }); });
-    if (p.visitAll && seen.size !== nodeCount(p)) bad.push({ kind: 'visitAll' });
-    if (p.moves && s.inputs.length !== p.moves) bad.push({ kind: 'moves' });
-    return { ok: !bad.length, bad };
-  }
-  function twinReplay(p, inputs) { let s = twinStart(p); for (const c of inputs) s = twinStep(p, s, DK[c]).state; return s; }
-  // breadth-first: the shortest key sequences that win (up to `limit`), and how many states were explored
-  function twinSolve(p, maxDepth = 40, limit = 20, maxStates = 400000) {
-    let frontier = [twinStart(p)], wins = [], explored = 0;
-    const seenStates = new Set();
-    const sk = s => s.heads.map(h => key(...h.path[h.path.length - 1]) + (h.parked ? 'P' : '')).join('/') + '#' + [...s.taken].sort().join(';');
-    seenStates.add(sk(frontier[0]));
+  const boxWon = (p, s) => (p.exit || []).every(g => s.pos.some(q => q[0] === g[0] && q[1] === g[1]));
+  function boxReplay(p, inputs) { let s = boxStart(p); for (const c of inputs) s = boxStep(p, s, DK[c]).state; return s; }
+  const boxKey = s => s.pos.map(q => key(...q)).join('/') + '|' + s.left.join(',') + (s.trail.size ? '#' + [...s.trail].sort().join(';') : '');
+  // breadth-first: the shortest key sequences that win (up to `limit`)
+  function boxSolve(p, maxDepth = 40, limit = 20, maxStates = 400000) {
+    let s0 = boxStart(p); s0.tracks = s0.jumps = null;
+    if (boxWon(p, s0)) return { wins: [''], explored: 0, capped: false };
+    let frontier = [s0], wins = [], explored = 0;
+    const seen = new Set([boxKey(s0)]);
     for (let depth = 0; depth < maxDepth && frontier.length && !wins.length; depth++) {
       const next = [];
       for (const s of frontier) for (const c of 'RLDU') {
-        const r = twinStep(p, s, DK[c]); if (!r.moved[0] && !r.moved[1]) continue;
-        if (p.moves && r.state.inputs.length > p.moves) continue;
-        const k = sk(r.state);
-        if (twinWon(p, r.state)) { if (wins.length < limit) wins.push(r.state.inputs); continue; }
-        if (seenStates.has(k)) continue;
-        seenStates.add(k); next.push(r.state); explored++;
+        const r = boxStep(p, s, DK[c], false); if (!r.moved.some(Boolean)) continue;
+        if (boxWon(p, r.state)) { if (wins.length < limit) wins.push(r.state.inputs); continue; }
+        const k = boxKey(r.state); if (seen.has(k)) continue;
+        seen.add(k); next.push(r.state); explored++;
         if (explored > maxStates) return { wins, explored, capped: true };
       }
       frontier = next;
@@ -297,6 +303,6 @@ const PanelEngine = (() => {
     return { wins, explored, capped: false };
   }
   return { validate, solve, replay, options, apply, undo, start, canStop, rules, ctx, neighbors, brokenSet, isStart, isExit, exitDir, key, ekey, nodeCount, dims, norm, inside, twin, jumps, mirrorOf, lines, regions, cellSides, edgeSet, padAt, isStop, isBridge, holeSet, usedEdges,
-    twinStart, twinStep, twinWon, twinRules, twinReplay, twinSolve, DK, dirKey, twinDir };
+    boxStart, boxStep, boxWon, boxReplay, boxSolve, boxDir, DK, dirKey };
 })();
 if (typeof module !== 'undefined') module.exports = PanelEngine;

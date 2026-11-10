@@ -13,8 +13,8 @@ const CH_GIRLS = [
   { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'pencil · two inks · the other hand' },
   { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'edge counts · holes · goals anywhere · one-way · every point' },
   { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'portals · overpasses · broken maps' },
-  { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'launch pads · brakes · one-way · exact moves' },
-  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'twin lines · parking · pads & portals' },
+  { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'boxes · dash tiles · dash boxes · move budgets' },
+  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'twin boxes · no locking · rope boxes' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
 const CH_MEM = {
@@ -125,18 +125,18 @@ function magnifierIntro(p) {
 /* ---------------- projector: the panel ---------------- */
 let PJ = null;
 function openProjector(p) {
-  PJ = { p, st: null, ts: p.twin ? PanelEngine.twinStart(p) : null, tsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null };
+  PJ = { p, st: null, bs: p.boxes ? PanelEngine.boxStart(p) : null, bsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null };
   openWin('projector', { title: `Projector.exe · ${GIRLS[p.girl].name}`, icon: 'brain', w: 580, h: 660, x: CH.opt.intro ? 330 : 120, y: 10,
     onClose: () => { if (PJ) clearInterval(PJ.solTimer); PJ = null; document.removeEventListener('keydown', pjKey); },
     render: b => {
       b.innerHTML = `<div class="pj g-${p.girl}">
         <div class="pj-top"><span>Layer ${p.layer} · ${REGION[p.layer]} · ${p.n}/${panelsOf(p.girl).filter(x => x.layer === p.layer).length}</span><span class="pj-id">${p.id}</span></div>
         <div class="pj-belief" id="pj-belief"><span>${esc(p.belief || '')}</span></div>
-        <div class="pj-stage"><svg id="pj-svg" viewBox="${vb(p)}" role="img" aria-label="Puzzle board. Move the line with WASD or the arrow keys from the start circle to the exit."></svg></div>
-        <div class="pj-keys"><span>${p.twin ? 'WASD moves both lines' : 'WASD / drag'} · Z undo · R reset${p.twin ? '' : ' · Enter ends'}</span><b id="pj-moves"></b></div>
+        <div class="pj-stage"><svg id="pj-svg" viewBox="${vb(p)}" role="img" aria-label="Puzzle board. Move with WASD or the arrow keys."></svg></div>
+        <div class="pj-keys"><span>${p.boxes ? 'WASD moves every box' : 'WASD / drag'} · Z undo · R reset${p.boxes ? '' : ' · Enter ends'}</span><b id="pj-moves"></b></div>
         <div class="pj-msg" id="pj-msg" aria-live="polite"></div>
         <div class="pj-solbox sunk" id="pj-solbox" hidden>
-          <div class="sb-why"><b>Ý chính</b> ${esc(p.why || 'Chưa có giải thích cho bảng này.')}${p.solutions !== 1 ? ` <i>(Bảng có ${p.solutions} lời giải${p.twin ? ' ngắn nhất' : ''}; đây là một.)</i>` : ''}</div>
+          <div class="sb-why"><b>Ý chính</b> ${esc(p.why || 'Chưa có giải thích cho bảng này.')}${p.solutions !== 1 ? ` <i>(Bảng có ${p.solutions} lời giải${p.boxes ? ' ngắn nhất' : ''}; đây là một.)</i>` : ''}</div>
           <div class="sb-ctrl"><button class="btn" id="sb-first" aria-label="Back to start">⏮</button><button class="btn" id="sb-prev" aria-label="Step back">◀</button><button class="btn primary" id="sb-play">▶ Play</button><button class="btn" id="sb-next" aria-label="Step forward">▶</button><span id="sb-k"></span></div>
           <ol class="sb-log" id="sb-log"></ol>
         </div>
@@ -149,7 +149,7 @@ function openProjector(p) {
           <button class="btn" id="pj-sol" aria-pressed="false">Solution</button>
           <button class="btn primary" id="pj-next" hidden>Next ▸</button>
         </div>
-        ${CH.opt.debug ? `<div class="pj-debug">solutions: ${p.solutions} · fewest moves ${p.minMoves || '?'}${p.twin ? ` · random-play wins ${p.luck}% · answer ${p.solIn}` : ''}</div>` : ''}
+        ${CH.opt.debug ? `<div class="pj-debug">solutions: ${p.solutions} · fewest moves ${p.minMoves || '?'}${p.boxes ? ` · random-play wins ${p.luck}% · answer ${p.solIn}` : ''}</div>` : ''}
       </div>`;
       $('#pj-back', b).onclick = () => { closeWin('projector'); ['feedcam', 'magnifier'].forEach(closeWin); focusWin('chamber'); };
       $('#pj-reset', b).onclick = pjReset;
@@ -166,7 +166,7 @@ function openProjector(p) {
     } });
 }
 async function pjSubmit() {
-  const p = PJ.p, r = p.twin ? PanelEngine.twinRules(p, PJ.ts) : PanelEngine.validate(p, pjPath()); PJ.tries++;
+  const p = PJ.p, r = p.boxes ? { ok: PanelEngine.boxWon(p, PJ.bs), bad: [{ kind: 'path' }] } : PanelEngine.validate(p, pjPath()); PJ.tries++;
   let ok = r.ok;
   if (!ok && CH.opt.mem.queen_piece && !PJ.eraseUsed && r.bad.length === 1 && r.bad[0].kind !== 'path' && r.bad[0].kind !== 'moves') {
     ok = true; PJ.eraseUsed = true; PJ.erased = r.bad[0].kind + ':' + r.bad[0].i;

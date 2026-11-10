@@ -1,12 +1,15 @@
 /* =========================================================
    TEST CHAMBER · drawing and playing a panel (engine v3)
-   Keyboard: WASD / arrows move, Z (or Backspace) undoes a move,
-   R resets, Enter submits. Mouse drag works for one-line panels.
+   Two kinds of panel:
+   · line panels: a head that pulls a line (WASD / arrows or drag)
+   · box panels (p.boxes): every key moves every box
+   Z (or Backspace) undoes a move, R resets, Enter finishes a line.
    ========================================================= */
 const COLS = { pink: '#ff6fb5', ink: '#0d0714' };
 const PORTAL = ['#ffd86e', '#8fdcf7', '#7be3a4'];
-const TWINC = ['#ff8cc6', '#b48cff'];
-function vb(p, pad = .75) { const d = PanelEngine.dims(p); return `${-pad} ${-pad} ${d.cols - 1 + pad * 2} ${d.rows - 1 + pad * 2}`; }
+const BOXC = ['#ff8cc6', '#b48cff', '#7be3a4', '#ffd86e'];
+function vb(p, pad) {
+  if (pad === undefined) pad = p.boxes ? .62 : 1.12; const d = PanelEngine.dims(p); return `${-pad} ${-pad} ${d.cols - 1 + pad * 2} ${d.rows - 1 + pad * 2}`; }
 function allEdgesOf(p) {
   const E = PanelEngine, d = E.dims(p), out = [];
   for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) {
@@ -21,8 +24,61 @@ const arrowAt = (x, y, dx, dy, s, cls) => {   // a small chevron pointing (dx,dy
   const px = -dy, py = dx;
   return `<path class="${cls}" d="M${x - dx * s * .6 + px * s} ${y - dy * s * .6 + py * s} L${x + dx * s * .7} ${y + dy * s * .7} L${x - dx * s * .6 - px * s} ${y - dy * s * .6 - py * s}"/>`;
 };
+function exitSVG(p, x, y, mini) {
+  const dir = PanelEngine.exitDir(p, x, y);
+  if (dir) {
+    const [dx, dy] = dir, px = -dy, py = dx, ch = k => { const cx = x + dx * (.62 + k * .2), cy = y + dy * (.62 + k * .2); return `<path class="chev c${k}" d="M${cx - dx * .08 + px * .13} ${cy - dy * .08 + py * .13}L${cx + dx * .08} ${cy + dy * .08}L${cx - dx * .08 - px * .13} ${cy - dy * .08 - py * .13}"/>`; };
+    const L = 1.08, gx = Math.min(x, x + dx * L) - (dx ? 0 : .24), gy = Math.min(y, y + dy * L) - (dy ? 0 : .24);
+    return `<g class="pb-exit"><rect class="gate" x="${gx}" y="${gy}" width="${dx ? L : .48}" height="${dy ? L : .48}" rx=".24"/><circle class="halo" cx="${x + dx * .34}" cy="${y + dy * .34}" r=".26"/><line class="stub" x1="${x}" y1="${y}" x2="${x + dx * .48}" y2="${y + dy * .48}"/>${mini ? '' : ch(0) + ch(1) + ch(2)}</g>`;
+  }
+  return `<g class="pb-exit in"><circle class="halo" cx="${x}" cy="${y}" r=".36"/><circle class="ring" cx="${x}" cy="${y}" r=".3"/><circle class="ring2" cx="${x}" cy="${y}" r=".19"/></g>`;
+}
+/* box panels: tiles instead of tracks; walls sit between tiles */
+function boxBoardSVG(p, o = {}) {
+  const E = PanelEngine, d = E.dims(p), out = [], br = E.brokenSet(p);
+  for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) if (E.inside(p, x, y)) out.push(`<rect class="pbx-tile" x="${x - .47}" y="${y - .47}" width=".94" height=".94" rx=".14"/>`);
+  (p.exit || []).forEach(([x, y]) => { const on = o.boxAt && o.boxAt.has(x + ',' + y); out.push(`<g class="pbx-goal${on ? ' on' : ''}"><rect class="glow" x="${x - .47}" y="${y - .47}" width=".94" height=".94" rx=".14"/><rect class="frame" x="${x - .36}" y="${y - .36}" width=".72" height=".72" rx=".1"/>${o.mini ? '' : `<rect class="pulse" x="${x - .36}" y="${y - .36}" width=".72" height=".72" rx=".1"/>`}</g>`); });
+  (p.pads || []).forEach(([x, y, dx, dy]) => out.push(`<g class="pbx-pad"><rect x="${x - .4}" y="${y - .4}" width=".8" height=".8" rx=".12"/>${arrowAt(x - dx * .12, y - dy * .12, dx, dy, .14, '')}${arrowAt(x + dx * .1, y + dy * .1, dx, dy, .14, '')}</g>`));
+  (p.stops || []).forEach(([x, y]) => out.push(`<g class="pbx-stop"><rect x="${x - .34}" y="${y - .34}" width=".68" height=".68" rx=".1"/><path d="M${x - .16} ${y}H${x + .16}"/></g>`));
+  (p.portals || []).forEach((q, i) => [[q[0], q[1]], [q[2], q[3]]].forEach(([x, y]) => out.push(`<circle class="pb-portal" cx="${x}" cy="${y}" r=".3" stroke="${PORTAL[i % 3]}"/><circle cx="${x}" cy="${y}" r=".14" fill="${PORTAL[i % 3]}" opacity=".7"/>`)));
+  // walls between tiles, and one-way gaps
+  const allE = allEdgesOf(p);
+  allE.forEach(([x1, y1, x2, y2]) => {
+    if (!br.has(E.ekey(x1, y1, x2, y2))) return;
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    out.push(x1 !== x2 ? segLine('pbx-wall', [mx, my - .5, mx, my + .5]) : segLine('pbx-wall', [mx - .5, my, mx + .5, my]));
+  });
+  (p.oneway || []).forEach(e => out.push(`<g class="pbx-ow">${arrowAt((e[0] + e[2]) / 2, (e[1] + e[3]) / 2, e[2] - e[0], e[3] - e[1], .13, '')}</g>`));
+  if (!o.noBoxes) out.push(boxesSVG(p, E.boxStart(p), { mini: o.mini }));
+  return out.join('');
+}
+// the boxes (and the rope behind rope boxes). o.at: positions to draw (for animation)
+function boxesSVG(p, s, o = {}) {
+  const out = [], at = o.at || s.pos;
+  p.boxes.forEach((b, i) => {
+    if (!b.trail || !s.tracks) return;
+    const keep = o.ropeLen ? o.ropeLen[i] : s.tracks[i].length, t = s.tracks[i].slice(0, keep), J = s.jumps[i], polys = [[t[0]]];
+    for (let k = 1; k < t.length; k++) { if (J[k]) polys.push([t[k]]); else polys[polys.length - 1].push(t[k]); }
+    polys[polys.length - 1].push(at[i]);
+    polys.forEach(pl => out.push(`<polyline class="pbx-rope" points="${pl.map(n => n.join(',')).join(' ')}" style="stroke:${BOXC[i]}"/>`));
+  });
+  p.boxes.forEach((b, i) => {
+    const [x, y] = at[i], c = BOXC[i % 4], left = s.left ? s.left[i] : b.n, dead = left === 0;
+    const onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1]);
+    let g = `<g class="pbx-box${dead ? ' dead' : ''}${onG ? ' on' : ''}${o.cls ? ' ' + o.cls : ''}"><rect x="${x - .32}" y="${y - .32}" width=".64" height=".64" rx=".13" fill="${c}"/>`;
+    if (b.dash) g += `<path class="dash" d="M${x - .2} ${y - .14}h.16M${x - .24} ${y}h.2M${x - .2} ${y + .14}h.16"/>`;
+    if (b.m === 'mx') g += `<path class="mark" d="M${x} ${y - .3}V${y + .3}"/>`;
+    if (b.m === 'my') g += `<path class="mark" d="M${x - .3} ${y}H${x + .3}"/>`;
+    if (b.m === 'opp') g += `<path class="mark" d="M${x - .26} ${y - .26}L${x + .26} ${y + .26}M${x + .26} ${y - .26}L${x - .26} ${y + .26}"/>`;
+    if (b.trail) g += `<circle class="knot" cx="${left != null && !o.mini ? x + .2 : x}" cy="${left != null && !o.mini ? y - .2 : y}" r=".07"/>`;
+    if (left != null && !o.mini) g += `<text class="num" x="${x + (b.dash ? .08 : 0)}" y="${y + .01}">${left}</text>`;
+    out.push(g + '</g>');
+  });
+  return out.join('');
+}
 /* the board. o: { bad, seen (Set of 'x,y'), mini, erased, parked:[bool,bool] } */
 function boardSVG(p, o = {}) {
+  if (p.boxes) return boxBoardSVG(p, o);
   const E = PanelEngine, d = E.dims(p), br = E.brokenSet(p), out = [];
   const B = (k, i) => o.bad && o.bad[k] && o.bad[k].has(i) ? ' bad' : '';
   const gone = (k, i) => o.erased === k + ':' + i ? ' gone' : '';
@@ -51,12 +107,8 @@ function boardSVG(p, o = {}) {
   // edge rules
   const edges = (list, cls, k) => (list || []).forEach((e, i) => out.push(segLine(cls + B(k, i) + gone(k, i), e)));
   edges(p.sketch, 'pb-sketch', 'sketch'); edges(p.avoid, 'pb-avoid', 'avoid');
-  // exits: a stub off the border, or a ring inside the board
-  (p.exit || []).forEach(([x, y], i) => {
-    const dir = p.twin ? null : E.exitDir(p, x, y);
-    const tw = p.twin ? ` style="stroke:${TWINC[i]}"` : '';
-    out.push(dir ? segLine('pb-trk', [x, y, x + dir[0] * .38, y + dir[1] * .38]) : `<circle class="pb-exitring${o.parked && o.parked[i] ? ' parked' : ''}" cx="${x}" cy="${y}" r=".3"${tw}/>`);
-  });
+  // exits: a glowing gate off the border, or a pulsing portal-like ring inside the board
+  (p.exit || []).forEach(([x, y]) => out.push(exitSVG(p, x, y, o.mini)));
   // cells
   (p.squares || []).forEach((e, i) => out.push(`<rect class="pb-sq${B('squares', i)}${gone('squares', i)}" x="${e[0] + .3}" y="${e[1] + .3}" width=".4" height=".4" rx=".09" fill="${COLS[e[2]]}"/>`));
   (p.nums || []).forEach((e, i) => out.push(`<text class="pb-num${B('nums', i)}${gone('nums', i)}" x="${e[0] + .5}" y="${e[1] + .5}">${e[2]}</text>`));
@@ -67,7 +119,7 @@ function boardSVG(p, o = {}) {
   (p.bridges || []).forEach(([x, y]) => out.push(`<g class="pb-bridge"><rect x="${x - .2}" y="${y - .2}" width=".4" height=".4" rx=".05" transform="rotate(45 ${x} ${y})"/><path d="M${x - .1} ${y}H${x + .1}M${x} ${y - .1}V${y + .1}"/></g>`));
   (p.portals || []).forEach((q, i) => [[q[0], q[1]], [q[2], q[3]]].forEach(([x, y]) => out.push(`<circle class="pb-portal" cx="${x}" cy="${y}" r=".21" stroke="${PORTAL[i % 3]}"/><circle cx="${x}" cy="${y}" r=".09" fill="${PORTAL[i % 3]}"/>`)));
   (p.dots || []).forEach((e, i) => out.push(`<circle class="pb-dot${B('dots', i)}" cx="${e[0]}" cy="${e[1]}" r=".1"/>`));
-  (p.start || []).forEach(([x, y], i) => out.push(`<circle class="pb-start${p.mirror && i ? ' other' : ''}" cx="${x}" cy="${y}" r=".2"${p.twin ? ` style="fill:${TWINC[i]};opacity:.55"` : ''}/>`));
+  (p.start || []).forEach(([x, y], i) => out.push(`<circle class="pb-start${p.mirror && i ? ' other' : ''}" cx="${x}" cy="${y}" r=".2"/>`));
   return out.join('');
 }
 // the line, split where it jumps through a portal. J: jump flags (computed if missing)
@@ -92,7 +144,7 @@ function bridgeOver(p, path) {
 /* ---------------- state helpers ---------------- */
 const pjPath = () => PJ.st ? PJ.st.path : [];
 function pjMovesText() {
-  const p = PJ.p, n = p.twin ? (PJ.ts ? PJ.ts.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0);
+  const p = PJ.p, n = p.boxes ? (PJ.bs ? PJ.bs.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0);
   return p.moves ? `moves ${n}/${p.moves}` : `moves ${n}`;
 }
 function drawPJ() {
@@ -101,16 +153,9 @@ function drawPJ() {
   const bad = {};
   if (PJ.state === 'fail') PJ.bad.forEach(x => { if (x.kind === 'visitAll') bad.visitAll = true; else (bad[x.kind] = bad[x.kind] || new Set()).add(x.i); });
   let h;
-  if (p.twin) {
-    const ts = PJ.ts, seen = new Set(ts.heads.flatMap(hd => hd.path.map(n => n.join(','))));
-    h = boardSVG(p, { bad, seen, erased: PJ.erased, parked: ts.heads.map(hd => hd.parked) });
-    ts.heads.forEach((hd, i) => {
-      const st = ` style="stroke:${TWINC[i]}"`;
-      h += lineSVG(p, hd.path, PJ.state === 'fail' ? 'fail' : PJ.state === 'win' ? 'win' : '', false, hd.jump, PJ.state === 'draw' || PJ.state === 'idle' ? st : '');
-      const last = hd.path[hd.path.length - 1];
-      h += `<circle class="pb-start on" cx="${hd.path[0][0]}" cy="${hd.path[0][1]}" r=".2" style="fill:${TWINC[i]}"/>`;
-      h += hd.parked ? `<circle class="pb-park" cx="${last[0]}" cy="${last[1]}" r=".3" style="stroke:${TWINC[i]}"/>` : `<circle class="pb-head" cx="${last[0]}" cy="${last[1]}" r=".13" style="fill:${TWINC[i]}"/>`;
-    });
+  if (p.boxes) {
+    const bs = PJ.bs, boxAt = new Set(bs.pos.map(q => q.join(',')));
+    h = boxBoardSVG(p, { boxAt, noBoxes: true }) + boxesSVG(p, bs, { at: PJ.animAt, ropeLen: PJ.animAt && PJ.animPrev, cls: PJ.state === 'win' ? 'win' : '' });
   } else {
     const path = pjPath(), lines = path.length ? PanelEngine.lines(p, path) : [];
     const seen = new Set(lines.flat().map(n => n.join(',')));
@@ -120,7 +165,7 @@ function drawPJ() {
       const last = path[path.length - 1], out = PJ.state === 'win';
       if (p.mirror) { const m = lines[1]; h += lineSVG(p, m, 'other ' + PJ.state, out, PJ.st.jump) + `<circle class="pb-start on other ${PJ.state}" cx="${m[0][0]}" cy="${m[0][1]}" r=".2"/>`; }
       h += lineSVG(p, path, PJ.state, out, PJ.st.jump) + bridgeOver(p, path) + `<circle class="pb-start on ${PJ.state}" cx="${path[0][0]}" cy="${path[0][1]}" r=".2"/>`;
-      if (PJ.state !== 'win') h += `<circle class="pb-head ${PJ.state}" cx="${last[0]}" cy="${last[1]}" r=".11"/>`;
+      if (PJ.state !== 'win') h += `<rect class="pb-head ${PJ.state}" x="${last[0] - .15}" y="${last[1] - .15}" width=".3" height=".3" rx=".07"/>`;
     }
   }
   svg.innerHTML = h;
@@ -130,7 +175,7 @@ function drawPJ() {
 }
 function pjReset() {
   if (!PJ) return;
-  PJ.st = null; PJ.ts = PJ.p.twin ? PanelEngine.twinStart(PJ.p) : null; PJ.tsHist = [];
+  PJ.st = null; PJ.bs = PJ.p.boxes ? PanelEngine.boxStart(PJ.p) : null; PJ.bsHist = []; PJ.animAt = null; $('#pj-msg').textContent = '';
   PJ.state = 'idle'; PJ.bad = []; drawPJ();
 }
 function svgPt(svg, e) { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const r = pt.matrixTransform(svg.getScreenCTM().inverse()); return [r.x, r.y]; }
@@ -140,13 +185,16 @@ const sameDir = (a, b) => a && b && a[0] === b[0] && a[1] === b[1];
 function pjMove(d) {
   const E = PanelEngine, p = PJ.p;
   if (PJ.state === 'fail') { PJ.state = 'draw'; PJ.bad = []; }
-  if (p.twin) {
-    const r = E.twinStep(p, PJ.ts, d);
-    if (!r.moved[0] && !r.moved[1]) { SFX.tick(); return false; }
-    PJ.tsHist.push(PJ.ts); PJ.ts = r.state; PJ.state = 'draw';
-    SFX.step(PJ.ts.inputs.length);
-    if (r.state.heads.some((h, i) => h.parked && !PJ.tsHist[PJ.tsHist.length - 1].heads[i].parked)) SFX.link();
-    if (PJ.ts.heads.every(h => h.parked)) pjSubmit();
+  if (p.boxes) {
+    const r = E.boxStep(p, PJ.bs, d);
+    if (!r.moved.some(Boolean)) { SFX.tick(); return false; }
+    PJ.bsHist.push(PJ.bs); const prev = PJ.bs; PJ.bs = r.state; PJ.state = 'draw';
+    SFX.step(PJ.bs.inputs.length);
+    if (r.state.tracks.some((t, i) => t.length - prev.tracks[i].length > 1)) SFX.link();
+    boxAnim(prev, PJ.bs);
+    if (E.boxWon(p, PJ.bs)) pjSubmit();
+    else if (PJ.bs.left.every(l => l === 0) || ['R', 'L', 'U', 'D'].every(c => !E.boxStep(p, PJ.bs, E.DK[c], false).moved.some(Boolean))) $('#pj-msg').textContent = 'Không hộp nào đi được nữa. Ấn Z để lùi hoặc R để chơi lại.';
+    else $('#pj-msg').textContent = '';
     return true;
   }
   if (!PJ.st) PJ.st = E.start(p, p.start[0]);
@@ -173,7 +221,7 @@ function pjMove(d) {
 function pjUndo() {
   const E = PanelEngine, p = PJ.p;
   if (PJ.state === 'fail') { PJ.state = 'draw'; PJ.bad = []; }
-  if (p.twin) { if (PJ.tsHist.length) { PJ.ts = PJ.tsHist.pop(); SFX.tick(); } return; }
+  if (p.boxes) { if (PJ.bsHist.length) { PJ.bs = PJ.bsHist.pop(); PJ.animAt = null; $('#pj-msg').textContent = ''; SFX.tick(); } return; }
   const st = PJ.st; if (!st) return;
   if (st.path.length <= 1) { PJ.st = null; return; }
   while (st.path.length > 1 && st.forced[st.forced.length - 1]) E.undo(p, st);
@@ -199,7 +247,7 @@ function pjFollow(fx, fy) {
 }
 function bindPJ(svg) {
   svg.addEventListener('pointerdown', e => {
-    if (!PJ || PJ.state === 'win' || PJ.solOn || PJ.p.twin) return;
+    if (!PJ || PJ.state === 'win' || PJ.solOn || PJ.p.boxes) return;
     const [fx, fy] = svgPt(svg, e), p = PJ.p, path = pjPath();
     const last = path[path.length - 1];
     const st = (p.start || []).slice(0, 1).find(([x, y]) => Math.hypot(fx - x, fy - y) < .4);
@@ -235,7 +283,7 @@ function pjKey(e) {
   else if (k === 'z' || k === 'Backspace') { e.preventDefault(); pjUndo(); drawPJ(); }
   else if (k === 'r' || k === 'Escape') { e.preventDefault(); pjReset(); }
   else if (k === 'Enter') {
-    if (PJ.p.twin) return;
+    if (PJ.p.boxes) return;
     if (PJ.st && PanelEngine.canStop(PJ.p, PJ.st, PanelEngine.ctx(PJ.p))) { e.preventDefault(); pjSubmit(); }
   }
 }
@@ -244,8 +292,8 @@ function useHint() {
   if (!PJ || PJ.hintUsed) return;
   const E = PanelEngine, p = PJ.p;
   PJ.hintUsed = true; SFX.item();
-  if (p.twin) {
-    const have = PJ.ts.inputs, sol = p.solIn; let k = 0;
+  if (p.boxes) {
+    const have = PJ.bs.inputs, sol = p.solIn; let k = 0;
     while (k < have.length && k < sol.length && have[k] === sol[k]) k++;
     const arrows = { R: '→', L: '←', U: '↑', D: '↓' };
     $('#pj-msg').textContent = k < have.length ? `The tracing paper says: undo ${have.length - k} move(s), then ${[...sol.slice(k, k + 3)].map(c => arrows[c]).join(' ')}` : `The tracing paper says: ${[...sol.slice(k, k + 3)].map(c => arrows[c]).join(' ')}`;
@@ -257,4 +305,21 @@ function useHint() {
   PJ.hint = { path: sol.slice(from, from + 5), jump: J.slice(from, from + 5).map((j, i) => i ? j : false) };
   $('#pj-msg').textContent = k < path.length ? 'The tracing paper shows where your line went wrong.' : 'The next strokes show through the tracing paper.';
   drawPJ();
+}
+
+// slide the boxes along this press's route (cosmetic; input is never blocked)
+function boxAnim(prev, next) {
+  if (REDUCED) { PJ.animAt = null; return; }
+  const routes = next.tracks.map((t, i) => ({ pts: t.slice(prev.tracks[i].length - 1), J: next.jumps[i].slice(prev.tracks[i].length - 1) }));
+  const steps = Math.max(...routes.map(r => r.pts.length - 1)); if (steps < 1) return;
+  PJ.animPrev = prev.tracks.map(t => t.length);
+  const dur = Math.min(420, 70 + steps * 45), t0 = performance.now(), tok = PJ.animTok = {};
+  const frame = now => {
+    if (!PJ || PJ.animTok !== tok || PJ.bs !== next) return;
+    const f = Math.max(0, Math.min(1, (now - t0) / dur)), e = 1 - Math.pow(1 - f, 2);
+    PJ.animAt = routes.map(r => { const n = r.pts.length - 1; if (!n) return r.pts[0]; const u = e * n, k = Math.min(n - 1, Math.floor(u)), w = u - k; if (r.J[k + 1]) return w < .5 ? r.pts[k] : r.pts[k + 1]; return [r.pts[k][0] + (r.pts[k + 1][0] - r.pts[k][0]) * w, r.pts[k][1] + (r.pts[k + 1][1] - r.pts[k][1]) * w]; });
+    if (f >= 1) PJ.animAt = null;
+    drawPJ(); if (f < 1) requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
 }

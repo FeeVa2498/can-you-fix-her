@@ -20,7 +20,7 @@ function solMovesOf(p) {
 }
 function solEvents(p) {
   const E = PanelEngine;
-  if (p.twin) return twinSolEvents(p);
+  if (p.boxes) return boxSolEvents(p);
   const sol = p.sol, { st, ends } = solMovesOf(p), ev = [['Bắt đầu ở vòng tròn.' + (p.mirror ? ' Bàn tay kia bắt đầu ở vòng tròn đối xứng.' : '')]];
   const used = new Set(), skN = (p.sketch || []).length, sk = new Set((p.sketch || []).map(e => E.ekey(e[0], e[1], e[2], e[3])));
   let traced = 0;
@@ -60,27 +60,32 @@ function solEvents(p) {
   }
   return { ev, ends, n: ends.length - 1 };
 }
-function twinSolEvents(p) {
-  const E = PanelEngine, inp = p.solIn, ev = [['Hai đường bắt đầu ở hai vòng tròn: hồng và tím.']];
-  let s = E.twinStart(p);
-  const nm = ['hồng', 'tím'];
+const BOXN = ['hồng', 'tím', 'xanh', 'vàng'];
+function boxSolEvents(p) {
+  const E = PanelEngine, inp = p.solIn, n = p.boxes.length;
+  const ev = [[n === 1 ? 'Hộp bắt đầu ở đây.' : `${n} hộp bắt đầu ở đây; mỗi phím di chuyển cả ${n}.`]];
+  const onG = q => (p.exit || []).some(g => g[0] === q[0] && g[1] === q[1]);
+  let s = E.boxStart(p);
   for (let k = 0; k < inp.length; k++) {
-    const c = inp[k], r = E.twinStep(p, s, E.DK[c]), out = [`Ấn ${KEYN[c]}${p.moves ? ` (nước ${k + 1}/${p.moves})` : ''}.`];
-    r.state.heads.forEach((h, i) => {
-      const was = s.heads[i];
-      if (was.parked) { out.push(`Đường ${nm[i]} đã đỗ, đứng yên.`); return; }
-      if (!r.moved[i]) { out.push(`Đường ${nm[i]} bị chặn, đứng yên.`); return; }
-      const d = E.twinDir(p, i, E.DK[c]), added = h.path.length - was.path.length;
-      let t = `Đường ${nm[i]} đi ${ARW[E.dirKey(d)]}`;
-      const jumps = h.jump.slice(was.path.length).filter(Boolean).length;
-      if (jumps) t += ', qua cổng';
-      if (added - jumps > 1) t += `, trượt thêm ${added - jumps - 1} ô`;
-      out.push(t + '.');
-      if (h.parked) out.push(`Đường ${nm[i]} tới đích của nó và đỗ lại.`);
+    const c = inp[k], r = E.boxStep(p, s, E.DK[c]), out = [`Ấn ${KEYN[c]}.`];
+    p.boxes.forEach((b, i) => {
+      const nm = n === 1 ? 'Hộp' : `Hộp ${BOXN[i % 4]}`;
+      if (!r.moved[i]) { out.push(s.left[i] === 0 ? `${nm} hết nước, đứng im.` : `${nm} bị chặn, đứng yên.`); return; }
+      const t = r.state.tracks[i].slice(s.tracks[i].length - 1), J = r.state.jumps[i].slice(s.tracks[i].length - 1);
+      const d = E.boxDir(b, E.DK[c]), jumps = J.filter(Boolean).length, steps = t.length - 1 - jumps;
+      let msg = `${nm} đi ${ARW[E.dirKey(d)]}${steps > 1 ? ` ${steps} ô` : ''}`;
+      if (t.slice(1).some(q => E.padAt(p, ...q))) msg += ', bị ô dash phóng đi';
+      if (jumps) msg += ', qua cổng';
+      if (steps > 1 && E.isStop(p, ...r.state.pos[i])) msg += ', dừng ở ô phanh';
+      if (r.state.left[i] != null) msg += ` (còn ${r.state.left[i]} nước)`;
+      msg += '.';
+      if (onG(r.state.pos[i])) msg += ' Đang đứng trong goal.';
+      else if (onG(s.pos[i])) msg += ' Rời khỏi goal (hộp không bị khoá).';
+      out.push(msg);
     });
     s = r.state; ev.push(out);
   }
-  ev[ev.length - 1].push('Cả hai đã đỗ: xong.');
+  ev[ev.length - 1].push('Mọi goal cùng có hộp: xong.');
   return { ev, n: inp.length };
 }
 function solMode(on) {
@@ -116,15 +121,10 @@ function renderSolLog() {
 function drawSol(svg) {
   const E = PanelEngine, p = PJ.p, k = PJ.solK, done = k === PJ.solData.n;
   let h;
-  if (p.twin) {
-    const s = E.twinReplay(p, p.solIn.slice(0, k));
-    h = boardSVG(p, { seen: new Set(s.heads.flatMap(hd => hd.path.map(n => n.join(',')))), parked: s.heads.map(hd => hd.parked) });
-    s.heads.forEach((hd, i) => {
-      const last = hd.path[hd.path.length - 1];
-      h += lineSVG(p, hd.path, 'sol', false, hd.jump, ` style="stroke:${TWINC[i]}"`) + `<circle class="pb-start on" cx="${hd.path[0][0]}" cy="${hd.path[0][1]}" r=".2" style="fill:${TWINC[i]}"/>`;
-      h += hd.parked ? `<circle class="pb-park" cx="${last[0]}" cy="${last[1]}" r=".3" style="stroke:${TWINC[i]}"/>` : `<circle class="pb-head" cx="${last[0]}" cy="${last[1]}" r=".13" style="fill:${TWINC[i]}"/>`;
-    });
-    svg.innerHTML = h; return;
+  if (p.boxes) {
+    const s = E.boxReplay(p, p.solIn.slice(0, k));
+    svg.innerHTML = boxBoardSVG(p, { boxAt: new Set(s.pos.map(q => q.join(','))), noBoxes: true }) + boxesSVG(p, s, { cls: 'sol' });
+    return;
   }
   const { st, ends } = solMovesOf(p), upto = ends[k], pts = p.sol.slice(0, upto + 1), J = st.jump.slice(0, upto + 1), lines = E.lines(p, pts);
   const seen = new Set(lines.flat().map(n => n.join(','))), used = E.usedEdges(p, pts, J);

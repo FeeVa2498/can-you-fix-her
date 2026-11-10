@@ -5,9 +5,8 @@
 // Single-line panels: random map features → enumerate routes that really use the feature →
 // add clue units (walls, holes, dots, numbers…) agreeing with one winding route until at most
 // `target` answers remain → prune clues that aren't needed.
-// Twin panels: random walls/holes → breadth-first search for the shortest key sequences →
-// keep maps that need the lines to fall out of step, have few shortest answers and that
-// random play almost never solves.
+// Box panels (Vel, Myne): random walls/holes/tiles → breadth-first search for the shortest key
+// sequences → keep maps with few shortest answers that random play almost never solves.
 const E = require('../src/panel_engine.js');
 const fs = require('fs'), path = require('path');
 const OUT = path.join(__dirname, '../src/panels.json');
@@ -128,50 +127,73 @@ function designSingle(spec) {
   throw new Error(spec.id + ': could not design');
 }
 
-/* ---------- twin panels ---------- */
+/* ---------- box panels ---------- */
 function randomPlay(p, len, tries = 1500) {
   let wins = 0;
-  for (let t = 0; t < tries; t++) { let s = E.twinStart(p); for (let i = 0; i < len; i++) { s = E.twinStep(p, s, E.DK['RLDU'[ri(4)]]).state; if (E.twinWon(p, s)) { wins++; break; } } }
+  for (let t = 0; t < tries; t++) { let s = E.boxStart(p); for (let i = 0; i < len; i++) { s = E.boxStep(p, s, E.DK['RLDU'[ri(4)]], false).state; if (E.boxWon(p, s)) { wins++; break; } } }
   return wins / tries;
 }
-function desyncs(p, inputs) { let s = E.twinStart(p), n = 0; for (const c of inputs) { const r = E.twinStep(p, s, E.DK[c]); if (r.moved[0] !== r.moved[1]) n++; s = r.state; } return n; }
-function designTwin(spec) {
+function boxStats(p, inputs) {
+  let s = E.boxStart(p), desync = 0, left = false; const onGoal = q => (p.exit || []).some(g => g[0] === q[0] && g[1] === q[1]);
+  const movesBy = p.boxes.map(() => 0);
+  for (const c of inputs) {
+    const before = s.pos.map(q => q.slice()), r = E.boxStep(p, s, E.DK[c]);
+    r.moved.forEach((m, i) => { if (m) movesBy[i]++; });
+    if (r.moved.some(Boolean) && r.moved.some(m => !m)) desync++;
+    before.forEach((q, i) => { if (onGoal(q) && r.moved[i]) left = true; });
+    s = r.state;
+  }
+  return { s, desync, left, movesBy };
+}
+function designBox(spec) {
   const g = spec.gen || {};
-  for (let attempt = 0; attempt < 400; attempt++) {
-    const p = { id: spec.id, girl: spec.girl, layer: spec.layer, n: spec.n, w: spec.w, h: spec.h, twin: spec.twin || 'mirror' };
-    const ns = shuffle(allNodes(p));
-    // two starts and two exits, all different; exits away from their starts
-    const s0 = ns[0], s1 = ns.find(n => n !== s0 && Math.abs(n[0] - s0[0]) + Math.abs(n[1] - s0[1]) >= 2);
-    const e0 = ns.find(n => ![s0, s1].includes(n) && Math.abs(n[0] - s0[0]) + Math.abs(n[1] - s0[1]) >= 3);
-    const e1 = ns.find(n => ![s0, s1, e0].includes(n) && Math.abs(n[0] - s1[0]) + Math.abs(n[1] - s1[1]) >= 3);
-    if (!s1 || !e0 || !e1) continue;
-    p.start = [s0, s1]; p.exit = [e0, e1];
-    const sp = () => special(p);
-    const edges = shuffle(allEdges(p));
-    p.broken = edges.slice(0, g.walls || 4);
-    for (let i = 0; i < (g.holes || 0); i++) { const n = shuffle(allNodes(p)).find(n => !sp().has(n.join(','))); if (n) (p.holes = p.holes || []).push(n); }
-    p.broken = p.broken.filter(e => E.inside(p, e[0], e[1]) && E.inside(p, e[2], e[3]));
-    for (let i = 0; i < (g.pads || 0); i++) { const n = shuffle(allNodes(p)).find(n => !sp().has(n.join(','))); if (n) (p.pads = p.pads || []).push([...n, ...[[1, 0], [-1, 0], [0, 1], [0, -1]][ri(4)]]); }
-    for (let i = 0; i < (g.portals || 0); i++) { const f = shuffle(allNodes(p)).filter(n => !sp().has(n.join(','))); const a = f[0], b = f.find(n => Math.abs(n[0] - a[0]) + Math.abs(n[1] - a[1]) >= 3); if (b) (p.portals = p.portals || []).push([...a, ...b]); }
+  for (let attempt = 0; attempt < (spec.tries || 800); attempt++) {
+    const p = { id: spec.id, girl: spec.girl, layer: spec.layer, n: spec.n, w: spec.w, h: spec.h };
+    const taken = new Set(), pick = (ok = () => true) => { const n = shuffle(allNodes(p)).find(n => !taken.has(n.join(',')) && ok(n)); if (n) taken.add(n.join(',')); return n; };
+    for (let i = 0; i < (g.holes || 0); i++) { const n = pick(); if (n) (p.holes = p.holes || []).push(n); }
+    taken.clear();
+    p.broken = allEdges(p).filter(() => rnd() < (g.walls || .2));
+    const boxes = spec.boxes.map(b => { const n = pick(); return n && { x: n[0], y: n[1], ...(b.m && b.m !== 'same' ? { m: b.m } : {}), ...(b.dash ? { dash: true } : {}), ...(b.trail ? { trail: true } : {}) }; });
+    if (boxes.some(b => !b)) continue;
+    p.boxes = boxes;
+    const ng = spec.boxes.length - (spec.helpers || 0);
+    p.exit = []; for (let i = 0; i < ng; i++) { const n = pick(); if (n) p.exit.push(n); }
+    for (let i = 0; i < (g.pads || 0); i++) { const n = pick(); if (n) (p.pads = p.pads || []).push([...n, ...[[1, 0], [-1, 0], [0, 1], [0, -1]][ri(4)]]); }
+    for (let i = 0; i < (g.stops || 0); i++) { const n = pick(); if (n) (p.stops = p.stops || []).push(n); }
+    for (let i = 0; i < (g.portals || 0); i++) { const a = pick(), b = a && pick(n => Math.abs(n[0] - a[0]) + Math.abs(n[1] - a[1]) >= 3); if (b) (p.portals = p.portals || []).push([...a, ...b]); }
     for (let i = 0; i < (g.oneway || 0); i++) { const e = shuffle(allEdges(p)).find(e => !p.broken.some(b => E.ekey(...b) === E.ekey(...e))); if (e) (p.oneway = p.oneway || []).push(rnd() < .5 ? e : [e[2], e[3], e[0], e[1]]); }
-    for (let i = 0; i < (g.dots || 0); i++) { const n = shuffle(allNodes(p)).find(n => !sp().has(n.join(','))); if (n) (p.dots = p.dots || []).push(n); }
-    if (g.visitAll) p.visitAll = true;
-    const r = E.twinSolve(p, spec.maxLen || 22, 6, 250000);
+    if (!p.broken.length) delete p.broken;
+    const maxL = spec.maxLen || 20;
+    let r = E.boxSolve(p, maxL, 8, 200000);
     if (!r.wins.length || r.capped) continue;
+    // move budgets: each box gets exactly the moves it makes in a shortest answer
+    if (spec.boxes.some(b => b.n)) {
+      const st = boxStats(p, r.wins[0]);
+      let bad = false;
+      spec.boxes.forEach((b, i) => { if (b.n) { if (!st.movesBy[i]) bad = true; p.boxes[i].n = st.movesBy[i]; } });
+      if (bad) continue;
+      const r0 = r; r = E.boxSolve(p, maxL, 8, 200000);
+      if (!r.wins.length || r.capped) continue;
+      if (!(r0.wins.length > r.wins.length || randomPlay({ ...p, boxes: p.boxes.map(b => ({ ...b, n: undefined })) }, r.wins[0].length * 2, 400) > 2 * randomPlay(p, r.wins[0].length * 2, 400))) continue;
+    }
     const best = r.wins[0], L = best.length;
-    if (L < (spec.minLen || 5) || L > (spec.maxLen || 22)) continue;
+    if (L < (spec.minLen || 4)) continue;
     if (r.wins.length > (spec.maxShortest || 3)) continue;
-    if (desyncs(p, best) < (spec.desync || 1)) continue;
-    if (g.pads && !E.twinReplay(p, best).heads.some(h => h.path.some(n => E.padAt(p, ...n)))) continue;
-    if (g.portals && !E.twinReplay(p, best).heads.some(h => h.jump.some(Boolean))) continue;
-    if (g.dots && !(p.dots || []).length) continue;
+    const st = boxStats(p, best), tr = st.s.tracks.flat(), allJ = st.s.jumps.flat();
+    const u = spec.uses || {};
+    if (u.pads && tr.filter(n => E.padAt(p, ...n)).length < u.pads) continue;
+    if (u.stops && !tr.some(n => E.isStop(p, ...n))) continue;
+    if (u.portals && !allJ.some(Boolean)) continue;
+    if (u.oneway && !(p.oneway || []).some(e => st.s.tracks.some(t => t.some((n, i) => i && t[i - 1][0] === e[0] && t[i - 1][1] === e[1] && n[0] === e[2] && n[1] === e[3])))) continue;
+    if (spec.helpers && !st.movesBy[spec.boxes.length - 1]) continue;
+    if (spec.leave && !st.left) continue;
+    if (st.desync < (spec.desync || 0)) continue;
     const luck = randomPlay(p, L * 2);
-    if (luck > (spec.luck || .02)) continue;
-    if (spec.exactMoves) p.moves = L;
-    Object.assign(p, { solIn: best, solutions: r.wins.length >= 6 ? '6+' : r.wins.length, minMoves: L, luck: Math.round(luck * 1000) / 10 });
+    if (luck > (spec.luck || .03)) continue;
+    Object.assign(p, { solIn: best, solutions: r.wins.length, minMoves: L, luck: Math.round(luck * 1000) / 10 });
     return p;
   }
-  throw new Error(spec.id + ': could not design twin');
+  throw new Error(spec.id + ': could not design box panel');
 }
 
 /* ---------- key ideas ---------- */
@@ -192,6 +214,45 @@ const TIP = {
   twin: 'Dùng tường để làm hai đường lệch nhịp: một đường bị chặn đứng yên trong khi đường kia đi tiếp.', oneway: 'Mũi tên chặn đường quay lại: tính thứ tự trước khi đi.',
   visitAll: 'Góc chỉ có 2 lối nên đường đi qua góc theo đúng 2 lối đó.',
 };
+const BRULE = {
+  goal: 'Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên.',
+  pads: 'Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại.',
+  stops: 'Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây.',
+  portals: 'Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp).',
+  oneway: 'Mũi tên trên khe: chỉ đi qua được theo chiều đó.',
+  holes: 'Chỗ trống trên map không đi được.',
+  dash: 'Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại.',
+  budget: 'Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn.',
+  mx: 'Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều).',
+  my: 'Hộp có vạch ngang: lên/xuống bị đảo.',
+  opp: 'Hộp có dấu chéo: đi ngược cả hai chiều.',
+  many: 'Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng.',
+  nolock: 'Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp.',
+  helpers: 'Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ.',
+  trail: 'Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái "đường" ở các bảng khác chính là một hộp như thế.',
+};
+const BTIP = {
+  pads: 'Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?', stops: 'Ô phanh là chỗ duy nhất giữa đường mà hộp đang lướt chịu dừng.',
+  dash: 'Hộp dash chỉ dừng cạnh tường: tìm những ô có tường phía sau theo hướng bạn đi.', budget: 'Đếm trước: mỗi nước phí là mất một số, không lấy lại được.',
+  mx: 'Dùng tường để làm hai hộp lệch nhau: một hộp bị chặn đứng yên trong khi hộp kia đi tiếp.', many: 'Hộp đứng yên cũng là một bức tường cho hộp khác.',
+  nolock: 'Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ.', helpers: 'Đặt hộp thừa trước, rồi mới phóng hộp chính.',
+  trail: 'Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp đi ngược nhau: tìm chỗ một hộp bị tường giữ lại.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
+};
+function whyBox(p, spec) {
+  const r = ['goal'];
+  for (const f of ['pads', 'stops', 'portals', 'oneway', 'holes']) if ((p[f] || []).length) r.push(f);
+  if (p.boxes.some(b => b.dash)) r.push('dash');
+  if (p.boxes.some(b => b.n != null)) r.push('budget');
+  for (const m of ['mx', 'my', 'opp']) if (p.boxes.some(b => b.m === m)) r.push(m);
+  if (p.boxes.length > 1) r.push('nolock');
+  if (p.boxes.length > 2 || (p.boxes.length > 1 && p.boxes.every(b => !b.m))) r.push('many');
+  if (p.boxes.length > p.exit.length) r.push('helpers');
+  if (p.boxes.some(b => b.trail)) r.push('trail');
+  let s = spec.intro ? `Bảng dạy luật mới. ${BRULE[spec.intro]} ` : '';
+  s += 'Luật trên bảng: ' + r.filter(k => k !== spec.intro).map(k => BRULE[k]).join(' ') + ' ';
+  const tip = BTIP[spec.feature || spec.intro] || BTIP[r[r.length - 1]]; if (tip) s += 'Mẹo: ' + tip;
+  return s.trim();
+}
 function whyFor(p, spec) {
   const r = [];
   if (p.twin) r.push('twin');
@@ -258,51 +319,52 @@ add('paige', 3, 5, PG({ base: { ...SE(4, 4), visitAll: true }, gen: { bridges: 1
 add('paige', 3, 6, PG({ base: SE(5, 5), gen: { bridges: 2, portals: 2, holes: 3 }, uses: { bridges: 1, portals: 2 }, feature: 'portals', belief: 'whatever happens, i saw it coming.' }));
 add('paige', 3, 7, PG({ base: SE(5, 5), gen: { bridges: 2, portals: 2, ends: 1, holes: 3 }, uses: { bridges: 2, portals: 1 }, feature: 'bridges', belief: 'as long as someone needs me at the table, i stay.' }));
 
-/* VEL · launch pads, stops, one-way links; then an exact number of moves */
-const VL = o => ({ clues: ['broken', 'dots'], lead: ['broken'], walls: 10, ...o });
-add('vel', 1, 1, VL({ base: SE(3, 3), gen: { pads: 1 }, uses: { pads: 1, slides: 1 }, target: 3, intro: 'pads', belief: 'omg a launch pad!! ...trajectory confirmed.' }));
-add('vel', 1, 2, VL({ base: SE(4, 3), gen: { pads: 2 }, uses: { pads: 1, slides: 2 }, feature: 'pads', belief: "always have two exits. that's basic." }));
-add('vel', 1, 3, VL({ base: SE(4, 4), gen: { pads: 2, stops: 1 }, uses: { pads: 1, slides: 1, stops: 1 }, intro: 'stops', feature: 'pads', belief: 'cute outfit, full tactical plan underneath.' }));
-add('vel', 1, 4, VL({ base: SE(4, 4), gen: { pads: 2, ends: 1 }, uses: { pads: 2, slides: 2 }, feature: 'pads', belief: 'if the road is blocked, go around. or through.' }));
-add('vel', 1, 5, VL({ base: SE(5, 4), gen: { pads: 3, stops: 1, holes: 2 }, uses: { pads: 2, slides: 3 }, feature: 'pads', belief: 'two routes in, two routes out. always.' }));
-add('vel', 1, 6, VL({ base: SE(5, 4), gen: { pads: 3, stops: 1, ends: 1 }, uses: { pads: 2, slides: 3 }, feature: 'pads', belief: "i'm fun at parties because i know where every exit is." }));
-add('vel', 2, 1, VL({ base: SE(3, 3), gen: { pads: 1 }, uses: { pads: 1 }, clues: ['oneway', 'broken'], lead: ['oneway'], need: { oneway: 1 }, target: 3, intro: 'oneway', belief: 'up, down, up. pick a lane, vel.' }));
-add('vel', 2, 2, VL({ base: SE(4, 4), gen: { pads: 2 }, uses: { pads: 1, slides: 1 }, clues: ['oneway', 'broken'], lead: ['oneway'], need: { oneway: 2 }, feature: 'oneway', belief: 'yesterday i loved everyone. today i hate this font.' }));
-add('vel', 2, 3, VL({ base: SE(4, 4), gen: { pads: 2, stops: 1, holes: 2 }, uses: { pads: 1, slides: 2 }, clues: ['oneway', 'broken', 'dots'], need: { oneway: 1 }, feature: 'pads', belief: "highs and lows are just terrain. i've mapped worse." }));
-add('vel', 2, 4, VL({ base: SE(5, 4), gen: { pads: 3, ends: 1 }, uses: { pads: 2, slides: 3 }, clues: ['oneway', 'broken'], need: { oneway: 2 }, feature: 'pads', belief: 'when the floor drops, i already have a rope.' }));
-add('vel', 2, 5, VL({ base: SE(5, 4), gen: { pads: 3, stops: 1, portals: 1 }, uses: { pads: 2, slides: 3 }, clues: ['oneway', 'broken', 'dots'], feature: 'pads', belief: 'i write the sad chapters on the good days. just in case.' }));
-add('vel', 2, 6, VL({ base: SE(5, 5), gen: { pads: 3, stops: 1, holes: 3 }, uses: { pads: 2, slides: 3 }, clues: ['oneway', 'broken'], need: { oneway: 2 }, feature: 'pads', belief: 'stay sharp. moods are weather. weather passes.' }));
-add('vel', 2, 7, VL({ base: SE(5, 5), gen: { pads: 4, stops: 2, ends: 1, holes: 2 }, uses: { pads: 3, slides: 4 }, clues: ['oneway', 'broken'], feature: 'pads', belief: 'if i keep moving, the low can never catch me.' }));
-add('vel', 3, 1, VL({ base: SE(3, 3), gen: { pads: 1 }, uses: { pads: 1, slides: 1 }, exactMoves: true, target: 3, intro: 'moves', belief: 'map the ground before you walk it.' }));
-add('vel', 3, 2, VL({ base: SE(4, 4), gen: { pads: 2 }, uses: { pads: 1, slides: 2 }, exactMoves: true, feature: 'moves', belief: "you don't step where you haven't checked. ever." }));
-add('vel', 3, 3, VL({ base: SE(4, 4), gen: { pads: 2, stops: 1, ends: 1 }, uses: { pads: 2, slides: 2 }, exactMoves: true, feature: 'moves', belief: 'a story is a minefield. i know where i buried everything.' }));
-add('vel', 3, 4, VL({ base: SE(5, 4), gen: { pads: 3, portals: 1 }, uses: { pads: 2, slides: 3 }, exactMoves: true, feature: 'moves', belief: 'swings and landmines. same drill.' }));
-add('vel', 3, 5, VL({ base: SE(5, 4), gen: { pads: 3, stops: 1, holes: 2 }, uses: { pads: 2, slides: 3 }, exactMoves: true, clues: ['oneway', 'broken'], feature: 'moves', belief: 'i plan for the worst so nobody sees me fall.' }));
-add('vel', 3, 6, VL({ base: SE(5, 5), gen: { pads: 4, stops: 1, ends: 1, holes: 2 }, uses: { pads: 3, slides: 4 }, exactMoves: true, feature: 'moves', belief: "if i'm in control, nothing explodes." }));
-add('vel', 3, 7, VL({ base: SE(5, 5), gen: { pads: 4, stops: 2, portals: 1, holes: 2 }, uses: { pads: 3, slides: 4 }, exactMoves: true, clues: ['oneway', 'broken'], feature: 'moves', belief: 'as long as i hold the map, nobody gets left behind.' }));
+/* VEL · boxes: dash tiles and stops, then the dash box, then move budgets and several boxes */
+const BX = (w, h, boxes, o) => ({ box: true, w, h, boxes, ...o });
+const B1 = [{}], D1 = [{ dash: true }];
+add('vel', 1, 1, BX(3, 3, B1, { gen: { walls: .15, pads: 2 }, uses: { pads: 1 }, minLen: 3, luck: .15, intro: 'pads', belief: 'omg a launch pad!! ...trajectory confirmed.' }));
+add('vel', 1, 2, BX(4, 3, B1, { gen: { walls: .2, pads: 3 }, uses: { pads: 2 }, minLen: 4, luck: .08, feature: 'pads', belief: "always have two exits. that's basic." }));
+add('vel', 1, 3, BX(4, 4, B1, { gen: { walls: .2, pads: 3, stops: 1 }, uses: { pads: 1, stops: 1 }, minLen: 5, luck: .06, intro: 'stops', belief: 'cute outfit, full tactical plan underneath.' }));
+add('vel', 1, 4, BX(4, 4, B1, { gen: { walls: .22, pads: 4, stops: 1, holes: 2 }, uses: { pads: 2 }, minLen: 6, luck: .05, feature: 'pads', belief: 'if the road is blocked, go around. or through.' }));
+add('vel', 1, 5, BX(5, 4, B1, { gen: { walls: .2, pads: 4, stops: 1, portals: 1 }, uses: { pads: 1, portals: 1 }, minLen: 6, luck: .04, intro: 'portals', belief: 'two routes in, two routes out. always.' }));
+add('vel', 1, 6, BX(5, 5, B1, { gen: { walls: .22, pads: 5, stops: 2, holes: 3 }, uses: { pads: 3 }, minLen: 7, luck: .03, feature: 'pads', belief: "i'm fun at parties because i know where every exit is." }));
+add('vel', 2, 1, BX(3, 3, D1, { gen: { walls: .25 }, minLen: 3, luck: .15, intro: 'dash', belief: 'up, down, up. pick a lane, vel.' }));
+add('vel', 2, 2, BX(4, 4, D1, { gen: { walls: .25 }, minLen: 5, luck: .06, feature: 'dash', belief: 'yesterday i loved everyone. today i hate this font.' }));
+add('vel', 2, 3, BX(4, 4, D1, { gen: { walls: .2, stops: 2 }, uses: { stops: 1 }, minLen: 5, luck: .05, feature: 'stops', belief: "highs and lows are just terrain. i've mapped worse." }));
+add('vel', 2, 4, BX(4, 4, D1, { gen: { walls: .2, oneway: 3 }, uses: { oneway: 1 }, minLen: 5, luck: .05, intro: 'oneway', belief: 'when the floor drops, i already have a rope.' }));
+add('vel', 2, 5, BX(5, 4, [{ dash: true }, {}], { helpers: 1, gen: { walls: .2 }, minLen: 5, luck: .04, intro: 'helpers', belief: 'i write the sad chapters on the good days. just in case.' }));
+add('vel', 2, 6, BX(5, 5, D1, { gen: { walls: .22, holes: 3, stops: 1, pads: 2 }, uses: { pads: 1 }, minLen: 6, luck: .03, feature: 'dash', belief: 'stay sharp. moods are weather. weather passes.' }));
+add('vel', 2, 7, BX(5, 5, [{ dash: true }, { dash: true }], { gen: { walls: .22, stops: 1 }, minLen: 6, luck: .02, intro: 'many', belief: 'if i keep moving, the low can never catch me.' }));
+add('vel', 3, 1, BX(4, 3, [{ n: 1 }], { gen: { walls: .2, pads: 2 }, minLen: 4, luck: .06, intro: 'budget', belief: 'map the ground before you walk it.' }));
+add('vel', 3, 2, BX(4, 4, [{ dash: true, n: 1 }], { gen: { walls: .2, stops: 1 }, minLen: 5, luck: .04, feature: 'budget', belief: "you don't step where you haven't checked. ever." }));
+add('vel', 3, 3, BX(4, 4, [{ n: 1 }, { n: 1 }], { gen: { walls: .22 }, minLen: 5, luck: .03, feature: 'budget', belief: 'a story is a minefield. i know where i buried everything.' }));
+add('vel', 3, 4, BX(5, 4, [{ dash: true, n: 1 }, { n: 1 }], { gen: { walls: .2, pads: 2 }, minLen: 5, luck: .03, feature: 'many', belief: 'swings and landmines. same drill.' }));
+add('vel', 3, 5, BX(5, 4, [{ n: 1 }, { dash: true }, {}], { helpers: 1, gen: { walls: .2, stops: 1 }, minLen: 5, luck: .03, feature: 'helpers', belief: 'i plan for the worst so nobody sees me fall.' }));
+add('vel', 3, 6, BX(5, 5, [{ dash: true, n: 1 }, { dash: true, n: 1 }], { gen: { walls: .22, pads: 2, portals: 1 }, minLen: 6, luck: .02, feature: 'budget', belief: "if i'm in control, nothing explodes." }));
+add('vel', 3, 7, BX(5, 5, [{ n: 1 }, { dash: true, n: 1 }, {}], { helpers: 1, gen: { walls: .22, stops: 1, pads: 2 }, minLen: 6, luck: .02, feature: 'many', belief: 'as long as the map is mine, nobody gets left behind.' }));
 
-/* MYNE · twin lines (left/right mirrored); later with one-way links, dots, pads and portals */
-const TW = (n, o) => ({ twin: 'mirror', ...o });
-add('myne', 1, 1, TW(1, { w: 3, h: 2, gen: { walls: 2 }, minLen: 3, maxLen: 8, desync: 1, luck: .2, maxShortest: 4, intro: 'twin', belief: 'two of me. one keyboard. let\'s go.' }));
-add('myne', 1, 2, TW(2, { w: 3, h: 3, gen: { walls: 3 }, minLen: 5, maxLen: 12, desync: 1, luck: .08, belief: 'left goes right. my brain is fine with this.' }));
-add('myne', 1, 3, TW(3, { w: 4, h: 3, gen: { walls: 4 }, minLen: 6, maxLen: 14, desync: 2, luck: .05, belief: 'if one of us gets stuck, the other keeps running.' }));
-add('myne', 1, 4, TW(4, { w: 4, h: 3, gen: { walls: 5, holes: 1 }, minLen: 7, maxLen: 16, desync: 2, luck: .03, belief: 'i look strong so nobody asks me to carry things.' }));
-add('myne', 1, 5, TW(5, { w: 4, h: 4, gen: { walls: 6, holes: 1 }, minLen: 8, maxLen: 18, desync: 2, luck: .02, belief: 'co-op mode with myself. high score.' }));
-add('myne', 1, 6, TW(6, { w: 4, h: 4, gen: { walls: 7, holes: 2 }, minLen: 9, maxLen: 20, desync: 3, luck: .01, belief: 'if i stop moving, everyone sees how tired i am.' }));
-add('myne', 2, 1, TW(1, { w: 3, h: 3, gen: { walls: 3, oneway: 1 }, minLen: 5, maxLen: 12, desync: 1, luck: .08, intro: 'oneway', belief: "can't. sit. still." }));
-add('myne', 2, 2, TW(2, { w: 4, h: 3, gen: { walls: 4, dots: 1 }, minLen: 6, maxLen: 14, desync: 2, luck: .04, intro: 'dots', belief: 'boredom is a bug. i patch it with noise.' }));
-add('myne', 2, 3, TW(3, { w: 4, h: 3, gen: { walls: 4, oneway: 2 }, minLen: 7, maxLen: 16, desync: 2, luck: .03, belief: 'ten tabs open. all of them important.' }));
-add('myne', 2, 4, TW(4, { w: 4, h: 4, gen: { walls: 5, dots: 2, holes: 1 }, minLen: 8, maxLen: 18, desync: 2, luck: .02, belief: 'one-way streets? speedrun route.' }));
-add('myne', 2, 5, TW(5, { w: 4, h: 4, gen: { walls: 6, oneway: 2, holes: 1 }, minLen: 9, maxLen: 18, desync: 3, luck: .02, belief: "if i'm loud enough nobody notices i'm fragile." }));
-add('myne', 2, 6, TW(6, { w: 4, h: 4, gen: { walls: 6, dots: 2, oneway: 1, holes: 1 }, minLen: 9, maxLen: 20, desync: 3, luck: .01, belief: 'finish everything. right now. all of it.' }));
-add('myne', 2, 7, TW(7, { w: 5, h: 4, gen: { walls: 7, dots: 2, oneway: 2, holes: 2 }, minLen: 10, maxLen: 22, desync: 3, luck: .01, belief: 'keep moving or the lag catches up.' }));
-add('myne', 3, 1, TW(1, { w: 3, h: 3, gen: { walls: 3, pads: 1 }, minLen: 4, maxLen: 12, desync: 1, luck: .1, intro: 'pads', belief: 'boost pads! zoom!' }));
-add('myne', 3, 2, TW(2, { w: 4, h: 3, gen: { walls: 4, portals: 1 }, minLen: 5, maxLen: 14, desync: 2, luck: .05, intro: 'portals', belief: 'my body can\'t keep up. so my head runs for both.' }));
-add('myne', 3, 3, TW(3, { w: 4, h: 4, gen: { walls: 5, pads: 2 }, minLen: 6, maxLen: 16, desync: 2, luck: .03, belief: 'warp, dash, park. combo.' }));
-add('myne', 3, 4, TW(4, { w: 4, h: 4, gen: { walls: 5, pads: 1, portals: 1, holes: 1 }, minLen: 7, maxLen: 18, desync: 2, luck: .02, belief: 'every direction is forward if you go fast enough.' }));
-add('myne', 3, 5, TW(5, { w: 4, h: 4, gen: { walls: 6, pads: 2, dots: 1 }, minLen: 8, maxLen: 18, desync: 3, luck: .02, belief: 'i have to see every pixel. every one.' }));
-add('myne', 3, 6, TW(6, { w: 5, h: 4, gen: { walls: 7, pads: 2, portals: 1, holes: 1 }, minLen: 8, maxLen: 20, desync: 3, luck: .01, belief: 'two players, one heart rate.' }));
-add('myne', 3, 7, TW(7, { w: 5, h: 4, gen: { walls: 7, pads: 2, portals: 1, oneway: 1, holes: 2 }, minLen: 9, maxLen: 22, desync: 3, luck: .01, belief: 'as long as the game is running, i get to keep playing.' }));
+/* MYNE · twin boxes: every key moves both, one of them mirrored; boxes never lock in a goal */
+const MX = [{}, { m: 'mx' }];
+add('myne', 1, 1, BX(3, 2, MX, { gen: { walls: .2 }, minLen: 3, luck: .2, maxShortest: 4, intro: 'mx', belief: "two of me. one keyboard. let's go." }));
+add('myne', 1, 2, BX(3, 3, MX, { gen: { walls: .25 }, minLen: 4, luck: .1, intro: 'nolock', leave: true, belief: 'left goes right. my brain is fine with this.' }));
+add('myne', 1, 3, BX(4, 3, MX, { gen: { walls: .25, holes: 1 }, minLen: 5, luck: .05, desync: 2, feature: 'mx', belief: 'if one of us gets stuck, the other keeps running.' }));
+add('myne', 1, 4, BX(4, 4, MX, { gen: { walls: .25, holes: 2 }, minLen: 6, luck: .04, desync: 2, feature: 'nolock', belief: 'i look strong so nobody asks me to carry things.' }));
+add('myne', 1, 5, BX(4, 4, [{}, { m: 'opp' }], { gen: { walls: .25 }, minLen: 5, luck: .04, desync: 2, intro: 'opp', belief: 'co-op mode with myself. high score.' }));
+add('myne', 1, 6, BX(4, 4, MX, { gen: { walls: .28, holes: 2 }, minLen: 7, luck: .02, desync: 3, leave: true, feature: 'nolock', belief: 'if i stop moving, everyone sees how tired i am.' }));
+add('myne', 2, 1, BX(3, 3, [{ n: 1 }, { m: 'mx', n: 1 }], { gen: { walls: .2 }, minLen: 4, luck: .06, intro: 'budget', belief: "can't. sit. still." }));
+add('myne', 2, 2, BX(4, 3, MX, { gen: { walls: .2, oneway: 2 }, uses: { oneway: 1 }, minLen: 5, luck: .04, desync: 2, intro: 'oneway', belief: 'boredom is a bug. i patch it with noise.' }));
+add('myne', 2, 3, BX(4, 4, [{}, { m: 'mx' }, { m: 'my' }], { gen: { walls: .22 }, minLen: 5, luck: .03, desync: 2, intro: 'my', belief: 'ten tabs open. all of them important.' }));
+add('myne', 2, 4, BX(4, 4, [{ n: 1 }, { m: 'opp', n: 1 }], { gen: { walls: .22, oneway: 2, holes: 1 }, minLen: 5, luck: .03, feature: 'budget', belief: 'one-way streets? speedrun route.' }));
+add('myne', 2, 5, BX(4, 4, [{}, { m: 'mx' }, {}], { helpers: 1, gen: { walls: .22 }, minLen: 6, luck: .03, desync: 2, feature: 'helpers', belief: "if i'm loud enough nobody notices i'm fragile." }));
+add('myne', 2, 6, BX(5, 4, [{ n: 1 }, { m: 'mx', n: 1 }, { m: 'my' }], { gen: { walls: .22, holes: 1 }, minLen: 6, luck: .02, feature: 'budget', belief: 'finish everything. right now. all of it.' }));
+add('myne', 2, 7, BX(5, 4, [{}, { m: 'mx' }, { m: 'opp' }], { gen: { walls: .22, oneway: 2, holes: 2 }, minLen: 7, luck: .02, desync: 3, feature: 'many', belief: 'keep moving or the lag catches up.' }));
+add('myne', 3, 1, BX(4, 3, [{ dash: true }, { m: 'mx', dash: true }], { gen: { walls: .25 }, minLen: 4, luck: .08, intro: 'dash', belief: 'boost pads! zoom!' }));
+add('myne', 3, 2, BX(4, 4, MX, { gen: { walls: .2, pads: 3, stops: 1 }, uses: { pads: 1 }, minLen: 5, luck: .04, intro: 'pads', belief: "my body can't keep up. so my head runs for both." }));
+add('myne', 3, 3, BX(4, 4, [{ dash: true }, { m: 'mx' }], { gen: { walls: .22, portals: 1 }, uses: { portals: 1 }, minLen: 5, luck: .03, intro: 'portals', belief: 'warp, dash, park. combo.' }));
+add('myne', 3, 4, BX(4, 4, [{ trail: true }, { m: 'mx' }], { gen: { walls: .2 }, minLen: 6, luck: .03, desync: 1, intro: 'trail', belief: 'every direction is forward if you go fast enough.' }));
+add('myne', 3, 5, BX(4, 4, [{ trail: true }, { m: 'mx', dash: true }], { gen: { walls: .18, pads: 2 }, minLen: 6, luck: .02, feature: 'trail', belief: 'i have to see every pixel. every one.' }));
+add('myne', 3, 6, BX(5, 4, [{ trail: true }, { m: 'mx', trail: true }], { gen: { walls: .15, holes: 1 }, minLen: 6, luck: .02, feature: 'trail', belief: 'two players, one heart rate.' }));
+add('myne', 3, 7, BX(5, 5, [{ trail: true, n: 1 }, { m: 'mx', dash: true }, { m: 'opp' }], { gen: { walls: .2, portals: 1, pads: 2 }, minLen: 7, luck: .02, feature: 'many', belief: 'as long as the game is running, i get to keep playing.' }));
 
 /* ======================= build ======================= */
 const old = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
@@ -314,12 +376,12 @@ for (const spec of S) {
   if (ONLY && spec.girl !== ONLY) continue;
   seed = hash(spec.id) || 1;
   const t0 = Date.now(); let p;
-  try { p = spec.twin ? designTwin(spec) : designSingle(spec); } catch (e) { console.log('SKIP', spec.id, e.message); continue; }
+  try { p = spec.box ? designBox(spec) : designSingle(spec); } catch (e) { console.log('SKIP', spec.id, e.message); continue; }
   Object.assign(p, { belief: spec.belief, intro: spec.intro || null });
-  p.why = whyFor(p, spec);
+  p.why = p.boxes ? whyBox(p, spec) : whyFor(p, spec);
   out.push(p);
   const f = ['holes', 'broken', 'oneway', 'pads', 'stops', 'portals', 'bridges', 'dots', 'nums', 'sketch', 'avoid', 'squares'].filter(k => (p[k] || []).length).map(k => `${k} ${p[k].length}`).join(', ');
-  console.log(`${p.id.padEnd(10)} ${p.w}x${p.h}${p.twin ? ' twin' : ''}${p.mirror ? ' mirror' : ''}${p.visitAll ? ' all' : ''}${p.moves ? ' moves=' + p.moves : ''}  ${p.twin ? `shortest ${p.minMoves} (${p.solutions} ways, luck ${p.luck}%)` : `sols ${p.solutions} · ${p.minMoves} moves`}  ${f}  (${Date.now() - t0}ms)`);
+  console.log(`${p.id.padEnd(10)} ${p.w}x${p.h}${p.boxes ? ' boxes ' + p.boxes.length : ''}${p.mirror ? ' mirror' : ''}${p.visitAll ? ' all' : ''}${p.moves ? ' moves=' + p.moves : ''}  ${p.boxes ? `shortest ${p.minMoves} (${p.solutions} ways, luck ${p.luck}%)` : `sols ${p.solutions} · ${p.minMoves} moves`}  ${f}  (${Date.now() - t0}ms)`);
 }
 const ord = { prim: 0, trix: 1, paige: 2, vel: 3, myne: 4 };
 out.sort((a, b) => ord[a.girl] - ord[b.girl] || a.layer - b.layer || a.n - b.n);
