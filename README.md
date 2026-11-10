@@ -26,6 +26,7 @@ On GitHub Pages the game reads `data/dialogue.xlsx` fresh on every load (via the
 | `src/chamber*.js` | Title screen (Continue / New game / Test chamber), the Test chamber, panel drawing, Solution mode and `chamber_3d.js` (PROJECT3D.EXE: the panel projected as a 3D vaporwave scene; View menu switches to the flat board) |
 | `tools/design_v3.js` | Designs and verifies panels (`node tools/design_v3.js [girl]` → `src/panels.json`); keeps Prim layers 1–2 and Trix layer 1 as they are; box panels are checked by breadth-first search |
 | `src/art/` | Character sprites |
+| `audio/projector_bgm.mp3` | Music for the projector window ("factory at night", provided by the user; re-encoded at 112 kb/s). Loaded by path, so keep it next to `index.html` |
 | `build.py` | Builds `index.html` from `src/` + `data/` (`python3 build.py`, needs openpyxl) |
 
 Progress autosaves in the browser at the start of each morning, afternoon and night. To restart, use **Start → New game…** inside the game.

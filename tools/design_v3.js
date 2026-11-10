@@ -215,7 +215,7 @@ function designBox(spec) {
       if (bad) continue;
       const r0 = r; r = E.boxSolve(p, maxL, 8, 200000);
       if (!r.wins.length || r.capped) continue;
-      if (!(r0.wins.length > r.wins.length || randomPlay({ ...p, boxes: p.boxes.map(b => ({ ...b, n: undefined })) }, r.wins[0].length * 2, 400) > 2 * randomPlay(p, r.wins[0].length * 2, 400))) continue;
+      if (!spec.noBind && !(r0.wins.length > r.wins.length || randomPlay({ ...p, boxes: p.boxes.map(b => ({ ...b, n: undefined })) }, r.wins[0].length * 2, 400) > 2 * randomPlay(p, r.wins[0].length * 2, 400))) continue;
     }
     const best = r.wins[0], L = best.length;
     if (L < (spec.minLen || 4)) continue;
@@ -224,6 +224,7 @@ function designBox(spec) {
     const u = spec.uses || {};
     if (u.pads && tr.filter(n => E.padAt(p, ...n)).length < u.pads) continue;
     if (u.stops && !tr.some(n => E.isStop(p, ...n))) continue;
+    if (u.slide && !st.s.tracks.some(t => t.some((n, i) => { if (i < 2) return false; const pd = E.padAt(p, ...t[i - 1]); return pd && n[0] - t[i - 1][0] === pd[0] && n[1] - t[i - 1][1] === pd[1]; }))) continue;
     if (u.portals && !allJ.some(Boolean)) continue;
     if (u.oneway && !(p.oneway || []).some(e => st.s.tracks.some(t => t.some((n, i) => i && t[i - 1][0] === e[0] && t[i - 1][1] === e[1] && n[0] === e[2] && n[1] === e[3])))) continue;
     if (spec.helpers && !st.movesBy[spec.boxes.length - 1]) continue;
@@ -247,6 +248,7 @@ const RULE = {
   bridges: 'Cầu vượt: được đi qua hai lần, một lần ngang một lần dọc, luôn đi thẳng qua.', pads: 'Bệ phóng: giẫm lên là trượt theo mũi tên tới khi bị chặn.',
   stops: 'Ô phanh: đang trượt thì dừng lại ở đây.', moves: n => `Phải tới đích bằng đúng ${n} nước (mỗi lần ấn phím là một nước, cả cú trượt tính một nước).`,
   ends: 'Điểm xuất phát và đích có thể nằm ở bất kỳ đâu.',
+  basic: 'Ấn WASD để lăn khối, kéo theo sợi dây phía sau; dây không được cắt qua chính nó. Đưa khối tới ô vàng.',
   plates: 'Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại).',
   twin: 'Hai đường song sinh: ấn trái thì đường hồng sang trái, đường tím sang phải (lên/xuống thì cùng chiều). Đường bị chặn thì đứng yên, đường kia vẫn đi. Mỗi đường tới đích của mình thì đỗ lại; thắng khi cả hai đã đỗ.',
 };
@@ -421,6 +423,36 @@ add('myne', 3, 5, BX(4, 4, [{ dash: true }, { m: 'mx' }], { gen: { walls: .18, g
 add('myne', 3, 6, BX(5, 4, [{ trail: true }, { m: 'mx' }], { gen: { walls: .15, guard: 1, plates: 1 }, uses: { gate: 1 }, minLen: 6, luck: .02, feature: 'trail', belief: 'two players, one heart rate.' }));
 add('myne', 3, 7, BX(5, 5, [{ n: 1 }, { m: 'mx', dash: true }, { m: 'opp' }], { gen: { walls: .2, guard: 2, toggle: 1, plates: 1, portals: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 7, luck: .02, feature: 'many', belief: 'as long as the game is running, i get to keep playing.' }));
 
+/* TUTORIALS · one tiny, very easy panel right before each mechanic first shows up (id <girl>_<layer>_t<n>) */
+const TUT = (girl, layer, before, teach, o, k = 0) => S.push({ id: `${girl}_${layer}_t${before}${k ? 'b' : ''}`, girl, layer, n: before - .6 + k * .3, tut: teach, intro: o.intro || teach, belief: o.belief || '', ...o });
+const EZ = o => ({ luck: 1, maxShortest: 6, minLen: 1, ...o });
+TUT('prim', 1, 1, 'basic', { base: SE(2, 1), clues: [], target: 99, intro: 'basic' });
+TUT('prim', 1, 1, 'sketch', { base: SE(2, 1), clues: ['sketch'], need: { sketch: 2 }, target: 2 }, 1);
+TUT('prim', 1, 3, 'plates', { base: SE(2, 1), gen: { plates: 1, gates: 1 }, uses: { gate: 1 }, clues: ['broken'], target: 3 });
+TUT('prim', 2, 1, 'avoid', { base: SE(2, 1), clues: ['avoid'], need: { avoid: 1 }, target: 2 });
+TUT('prim', 2, 3, 'mirror', { base: MIR(2, 2), clues: [], target: 3 });
+TUT('prim', 3, 2, 'swap', { base: SE(3, 1), gen: { plates: 1, gates: 1, toggle: 1 }, uses: { gate: 1, toggle: 1 }, clues: ['broken'], target: 3, intro: 'plates' });
+TUT('trix', 1, 3, 'nums', { base: SE(2, 2), clues: ['nums'], lead: ['nums'], need: { nums: 1 }, target: 3 });
+TUT('trix', 2, 2, 'ends', { base: SE(2, 2), gen: { ends: 1 }, clues: ['broken'], target: 4 });
+TUT('trix', 2, 3, 'holes', { base: SE(2, 2), gen: { holes: 1 }, clues: [], target: 6 });
+TUT('trix', 3, 3, 'oneway', { base: SE(2, 2), clues: ['oneway', 'broken'], lead: ['oneway'], need: { oneway: 1 }, target: 3 });
+TUT('paige', 1, 1, 'portals', { base: SE(2, 2), gen: { portals: 1 }, uses: { portals: 1 }, clues: ['broken'], target: 3 });
+TUT('paige', 2, 1, 'bridges', { base: SE(2, 2), gen: { bridges: 1 }, uses: { bridges: 1 }, clues: ['broken'], target: 3 });
+TUT('vel', 1, 1, 'boxes', BX(2, 1, [{}], EZ({ gen: { walls: .01 }, minLen: 2, intro: 'goal' })));
+TUT('vel', 1, 1, 'pads', BX(3, 1, [{}], EZ({ gen: { walls: .05, pads: 1 }, uses: { pads: 1, slide: 1 }, maxLen: 3 })), 1);
+TUT('vel', 1, 3, 'stops', BX(3, 1, [{}], EZ({ gen: { walls: .01, pads: 1, stops: 1 }, uses: { pads: 1, stops: 1, slide: 1 }, maxLen: 4 })));
+TUT('vel', 1, 5, 'portals', BX(3, 2, [{}], EZ({ gen: { walls: .05, portals: 1 }, uses: { portals: 1 }, maxLen: 4 })));
+TUT('vel', 2, 1, 'dash', BX(2, 2, D1, EZ({ gen: { walls: .15 }, maxLen: 3 })));
+TUT('vel', 2, 4, 'plates', BX(3, 1, [{}, {}], EZ({ helpers: 1, gen: { walls: .01, guard: 1, plates: 1 }, uses: { gate: 1 }, maxLen: 5 })));
+TUT('vel', 3, 1, 'budget', BX(3, 1, [{ n: 1 }], EZ({ gen: { walls: .1 }, minLen: 2, maxLen: 4, noBind: true })));
+TUT('vel', 3, 7, 'swap', BX(3, 2, [{}, {}, {}], EZ({ helpers: 1, gen: { walls: .05, guard: 2, toggle: 1, plates: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 2, maxLen: 6, tries: 3000, intro: 'plates' })));
+TUT('myne', 1, 1, 'twin', BX(2, 1, MX, EZ({ gen: { walls: .01 }, maxLen: 3, intro: 'mx' })));
+TUT('myne', 1, 2, 'nolock', BX(3, 1, MX, EZ({ gen: { walls: .1 }, leave: true, minLen: 2, maxLen: 5 })));
+TUT('myne', 1, 5, 'opp', BX(2, 2, [{}, { m: 'opp' }], EZ({ gen: { walls: .1 }, desync: 1, maxLen: 4 })));
+TUT('myne', 2, 3, 'my', BX(2, 2, [{}, { m: 'my' }], EZ({ gen: { walls: .1 }, desync: 1, maxLen: 4 })));
+TUT('myne', 2, 5, 'swap', BX(3, 2, MX, EZ({ gen: { walls: .05, guard: 2, toggle: 1, plates: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 2, maxLen: 6, tries: 3000, intro: 'plates' })));
+TUT('myne', 3, 4, 'trail', BX(2, 2, [{ trail: true }], EZ({ gen: { walls: .1 }, minLen: 2, maxLen: 4 })));
+
 /* ======================= build ======================= */
 const old = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
 const isKept = p => (p.girl === 'prim' && p.layer <= 2) || (p.girl === 'trix' && p.layer === 1);
@@ -434,7 +466,7 @@ for (const spec of S) {
   seed = hash(spec.id) || 1;
   const t0 = Date.now(); let p;
   try { p = spec.box ? designBox(spec) : designSingle(spec); } catch (e) { console.log('SKIP', spec.id, e.message); continue; }
-  Object.assign(p, { belief: spec.belief, intro: spec.intro || null });
+  Object.assign(p, { belief: spec.belief, intro: spec.intro || null }); if (spec.tut) p.tut = spec.tut;
   p.why = p.boxes ? whyBox(p, spec) : whyFor(p, spec);
   out.push(p);
   const f = ['holes', 'broken', 'oneway', 'pads', 'stops', 'portals', 'bridges', 'plates', 'gates', 'dots', 'nums', 'sketch', 'avoid', 'squares'].filter(k => (p[k] || []).length).map(k => `${k} ${p[k].length}`).join(', ');

@@ -1,5 +1,107 @@
 [
  {
+  "id": "prim_1_t1",
+  "girl": "prim",
+  "layer": 1,
+  "n": 0.4,
+  "w": 2,
+  "h": 1,
+  "start": [
+   [
+    0,
+    1
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 4,
+  "minMoves": 3,
+  "belief": "",
+  "intro": "basic",
+  "tut": "basic",
+  "why": "Bảng dạy luật mới. Ấn WASD để lăn khối, kéo theo sợi dây phía sau; dây không được cắt qua chính nó. Đưa khối tới ô vàng. Luật trên bảng:"
+ },
+ {
+  "id": "prim_1_t1b",
+  "girl": "prim",
+  "layer": 1,
+  "n": 0.7,
+  "w": 2,
+  "h": 1,
+  "start": [
+   [
+    0,
+    1
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "sketch": [
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "minMoves": 3,
+  "belief": "",
+  "intro": "sketch",
+  "tut": "sketch",
+  "why": "Bảng dạy luật mới. Nét chì mờ phải được tô lại. Luật trên bảng:  Mẹo: Tìm đoạn chì chỉ nối được theo một cách."
+ },
+ {
   "id": "prim_1_1",
   "girl": "prim",
   "layer": 1,
@@ -190,6 +292,83 @@
   ],
   "solutions": 1,
   "why": "Có 6 đoạn chì rời rạc và chỉ một thứ tự đi qua hết. Mẹo: đoạn chì dọc ở cột giữa phía trên chỉ tô được theo chiều từ trên xuống, vì ngay sau nó là dãy chì ở hàng giữa chạy thẳng tới lối ra. Vậy trước đó đường phải gom hết phần bên trái (chữ L bên dưới, rồi đoạn chì hàng giữa bên trái) rồi mới lên hàng trên cùng."
+ },
+ {
+  "id": "prim_1_t3",
+  "girl": "prim",
+  "layer": 1,
+  "n": 2.4,
+  "w": 2,
+  "h": 1,
+  "start": [
+   [
+    0,
+    1
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "plates": [
+   [
+    1,
+    1,
+    0
+   ]
+  ],
+  "gates": [
+   [
+    2,
+    0,
+    2,
+    1,
+    0,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    1,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 2,
+  "minMoves": 5,
+  "belief": "",
+  "intro": "plates",
+  "tut": "plates",
+  "why": "Bảng dạy luật mới. Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Luật trên bảng: Đoạn đứt không đi được. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
   "id": "prim_1_3",
@@ -895,6 +1074,58 @@
   "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì mờ phải được tô lại. Đoạn đứt không đi được. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
+  "id": "prim_2_t1",
+  "girl": "prim",
+  "layer": 2,
+  "n": 0.4,
+  "w": 2,
+  "h": 1,
+  "start": [
+   [
+    0,
+    1
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "avoid": [
+   [
+    1,
+    0,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 2,
+  "minMoves": 3,
+  "belief": "",
+  "intro": "avoid",
+  "tut": "avoid",
+  "why": "Bảng dạy luật mới. Nét chì đen không được đi lên. Luật trên bảng:"
+ },
+ {
   "id": "prim_2_1",
   "girl": "prim",
   "layer": 2,
@@ -1159,6 +1390,55 @@
   "note": "",
   "intro": null,
   "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Mẹo: Tìm đoạn chì chỉ có một cách nối hợp lý với vòng tròn hoặc lối ra, rồi lần dần vào giữa."
+ },
+ {
+  "id": "prim_2_t3",
+  "girl": "prim",
+  "layer": 2,
+  "n": 2.4,
+  "w": 2,
+  "h": 2,
+  "start": [
+   [
+    0,
+    2
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "exit": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "mirror": "x",
+  "sol": [
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "minMoves": 2,
+  "belief": "",
+  "intro": "mirror",
+  "tut": "mirror",
+  "why": "Bảng dạy luật mới. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Luật trên bảng:  Mẹo: Coi trục giữa như tường."
  },
  {
   "id": "prim_2_3",
@@ -1879,6 +2159,95 @@
   "belief": "what if i drew something of my own?",
   "intro": null,
   "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Nét chì đen không được đi lên. Đoạn đứt không đi được. Mẹo: Tìm đoạn chì chỉ nối được theo một cách."
+ },
+ {
+  "id": "prim_3_t2",
+  "girl": "prim",
+  "layer": 3,
+  "n": 1.4,
+  "w": 3,
+  "h": 1,
+  "start": [
+   [
+    0,
+    1
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "plates": [
+   [
+    2,
+    1,
+    0
+   ]
+  ],
+  "gates": [
+   [
+    2,
+    0,
+    3,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    1,
+    0,
+    0,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    1,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 3,
+  "minMoves": 6,
+  "belief": "",
+  "intro": "plates",
+  "tut": "swap",
+  "why": "Bảng dạy luật mới. Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Luật trên bảng: Đoạn đứt không đi được. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
   "id": "prim_3_2",
@@ -3089,6 +3458,61 @@
   "why": "Hai đoạn đứt làm điểm thứ hai trong hàng thứ ba chỉ còn đúng 2 đường nối. Một điểm phải đi qua mà chỉ có 2 lối thì đường bắt buộc dùng cả hai lối đó: từ vòng tròn đi lên, rẽ phải, rồi đi xuống. Phần còn lại là đi kiểu con rắn: hết hàng dưới, lên, quay trái, lên tiếp, rồi sang phải tới lối ra."
  },
  {
+  "id": "trix_1_t3",
+  "girl": "trix",
+  "layer": 1,
+  "n": 2.4,
+  "w": 2,
+  "h": 2,
+  "start": [
+   [
+    0,
+    2
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "nums": [
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 2,
+  "minMoves": 4,
+  "belief": "",
+  "intro": "nums",
+  "tut": "nums",
+  "why": "Bảng dạy luật mới. Con số trong ô = số cạnh của ô mà đường chạm vào. Luật trên bảng:  Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+ },
+ {
   "id": "trix_1_3",
   "girl": "trix",
   "layer": 1,
@@ -3701,6 +4125,68 @@
   "why": "Luật trên bảng: Con số trong ô = số cạnh của ô mà đường chạm vào. Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
  },
  {
+  "id": "trix_2_t2",
+  "girl": "trix",
+  "layer": 2,
+  "n": 1.4,
+  "w": 2,
+  "h": 2,
+  "start": [
+   [
+    1,
+    0
+   ]
+  ],
+  "exit": [
+   [
+    1,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    1,
+    0,
+    2
+   ],
+   [
+    1,
+    0,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ]
+  ],
+  "solutions": 4,
+  "minMoves": 4,
+  "belief": "",
+  "intro": "ends",
+  "tut": "ends",
+  "why": "Bảng dạy luật mới. Điểm xuất phát và đích có thể nằm ở bất kỳ đâu. Luật trên bảng: Đoạn đứt không đi được."
+ },
+ {
   "id": "trix_2_2",
   "girl": "trix",
   "layer": 2,
@@ -3842,6 +4328,60 @@
   "belief": "zero means zero. not 'almost'.",
   "intro": "ends",
   "why": "Bảng dạy luật mới. Điểm xuất phát và đích có thể nằm ở bất kỳ đâu. Luật trên bảng: Con số trong ô = số cạnh của ô mà đường chạm vào. Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+ },
+ {
+  "id": "trix_2_t3",
+  "girl": "trix",
+  "layer": 2,
+  "n": 2.4,
+  "w": 2,
+  "h": 2,
+  "start": [
+   [
+    0,
+    2
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "holes": [
+   [
+    0,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 4,
+  "minMoves": 4,
+  "belief": "",
+  "intro": "holes",
+  "tut": "holes",
+  "why": "Bảng dạy luật mới. Map có lỗ: chỗ trống không đi được. Luật trên bảng:"
  },
  {
   "id": "trix_2_3",
@@ -4995,6 +5535,76 @@
   "why": "Luật trên bảng: Map có lỗ: chỗ trống không đi được. Con số trong ô = số cạnh của ô mà đường chạm vào. Phải đi qua mọi điểm. Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
  },
  {
+  "id": "trix_3_t3",
+  "girl": "trix",
+  "layer": 3,
+  "n": 2.4,
+  "w": 2,
+  "h": 2,
+  "start": [
+   [
+    0,
+    2
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "oneway": [
+   [
+    1,
+    1,
+    1,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 3,
+  "minMoves": 4,
+  "belief": "",
+  "intro": "oneway",
+  "tut": "oneway",
+  "why": "Bảng dạy luật mới. Mũi tên trên đoạn nối: chỉ đi được theo chiều đó. Luật trên bảng: Đoạn đứt không đi được. Mẹo: Mũi tên chặn đường quay lại: tính thứ tự trước khi đi."
+ },
+ {
   "id": "trix_3_3",
   "girl": "trix",
   "layer": 3,
@@ -5927,6 +6537,90 @@
   "belief": "i exist to be the one who's never wrong.",
   "intro": null,
   "why": "Luật trên bảng: Map có lỗ: chỗ trống không đi được. Con số trong ô = số cạnh của ô mà đường chạm vào. Đoạn đứt không đi được. Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+ },
+ {
+  "id": "paige_1_t1",
+  "girl": "paige",
+  "layer": 1,
+  "n": 0.4,
+  "w": 2,
+  "h": 2,
+  "start": [
+   [
+    0,
+    2
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    2,
+    1,
+    0,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    0,
+    1,
+    0,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 3,
+  "minMoves": 5,
+  "belief": "",
+  "intro": "portals",
+  "tut": "portals",
+  "why": "Bảng dạy luật mới. Bước lên cổng thì đường xuất hiện ở cổng cùng màu (đang trượt thì trượt tiếp). Luật trên bảng: Đoạn đứt không đi được. Mẹo: Coi hai cổng như một điểm."
  },
  {
   "id": "paige_1_1",
@@ -7001,6 +7695,90 @@
   "belief": "stay. please. i'll raise the stakes.",
   "intro": null,
   "why": "Luật trên bảng: Bước lên cổng thì đường xuất hiện ở cổng cùng màu (đang trượt thì trượt tiếp). Map có lỗ: chỗ trống không đi được. Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Coi hai cổng như một điểm."
+ },
+ {
+  "id": "paige_2_t1",
+  "girl": "paige",
+  "layer": 2,
+  "n": 0.4,
+  "w": 2,
+  "h": 2,
+  "start": [
+   [
+    0,
+    2
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "bridges": [
+   [
+    1,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 2,
+  "minMoves": 6,
+  "belief": "",
+  "intro": "bridges",
+  "tut": "bridges",
+  "why": "Bảng dạy luật mới. Cầu vượt: được đi qua hai lần, một lần ngang một lần dọc, luôn đi thẳng qua. Luật trên bảng: Đoạn đứt không đi được. Mẹo: Cầu vượt là chỗ duy nhất đường được cắt qua chính nó: dùng nó để quay lại vùng đã đi."
  },
  {
   "id": "paige_2_1",
@@ -9641,6 +10419,70 @@
   "why": "Luật trên bảng: Bước lên cổng thì đường xuất hiện ở cổng cùng màu (đang trượt thì trượt tiếp). Cầu vượt: được đi qua hai lần, một lần ngang một lần dọc, luôn đi thẳng qua. Map có lỗ: chỗ trống không đi được. Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Cầu vượt là chỗ duy nhất đường được cắt qua chính nó: dùng nó để quay lại vùng đã đi."
  },
  {
+  "id": "vel_1_t1",
+  "girl": "vel",
+  "layer": 1,
+  "n": 0.4,
+  "w": 2,
+  "h": 1,
+  "boxes": [
+   {
+    "x": 1,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    0,
+    1
+   ]
+  ],
+  "solIn": "LD",
+  "solutions": 2,
+  "minMoves": 2,
+  "luck": 27.3,
+  "belief": "",
+  "intro": "goal",
+  "tut": "boxes",
+  "why": "Bảng dạy luật mới. Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Luật trên bảng:"
+ },
+ {
+  "id": "vel_1_t1b",
+  "girl": "vel",
+  "layer": 1,
+  "n": 0.7,
+  "w": 3,
+  "h": 1,
+  "boxes": [
+   {
+    "x": 3,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    1,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    2,
+    0,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "LRD",
+  "solutions": 3,
+  "minMoves": 3,
+  "luck": 26.6,
+  "belief": "",
+  "intro": "pads",
+  "tut": "pads",
+  "why": "Bảng dạy luật mới. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+ },
+ {
   "id": "vel_1_1",
   "girl": "vel",
   "layer": 1,
@@ -9797,6 +10639,48 @@
   "belief": "always have two exits. that's basic.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+ },
+ {
+  "id": "vel_1_t3",
+  "girl": "vel",
+  "layer": 1,
+  "n": 2.4,
+  "w": 3,
+  "h": 1,
+  "boxes": [
+   {
+    "x": 3,
+    "y": 1
+   }
+  ],
+  "exit": [
+   [
+    0,
+    0
+   ]
+  ],
+  "pads": [
+   [
+    2,
+    0,
+    -1,
+    0
+   ]
+  ],
+  "stops": [
+   [
+    1,
+    0
+   ]
+  ],
+  "solIn": "LUL",
+  "solutions": 1,
+  "minMoves": 3,
+  "luck": 20.1,
+  "belief": "",
+  "intro": "stops",
+  "tut": "stops",
+  "why": "Bảng dạy luật mới. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Mẹo: Ô phanh là chỗ duy nhất giữa đường mà hộp đang lướt chịu dừng."
  },
  {
   "id": "vel_1_3",
@@ -10037,6 +10921,50 @@
   "belief": "if the road is blocked, go around. or through.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Chỗ trống trên map không đi được. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+ },
+ {
+  "id": "vel_1_t5",
+  "girl": "vel",
+  "layer": 1,
+  "n": 4.4,
+  "w": 3,
+  "h": 2,
+  "broken": [
+   [
+    1,
+    2,
+    2,
+    2
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 3,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    0,
+    2
+   ]
+  ],
+  "portals": [
+   [
+    0,
+    1,
+    3,
+    2
+   ]
+  ],
+  "solIn": "DDD",
+  "solutions": 1,
+  "minMoves": 3,
+  "luck": 7,
+  "belief": "",
+  "intro": "portals",
+  "tut": "portals",
+  "why": "Bảng dạy luật mới. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mẹo: Coi hai cổng như một ô."
  },
  {
   "id": "vel_1_5",
@@ -10319,6 +11247,49 @@
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Chỗ trống trên map không đi được. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
+  "id": "vel_2_t1",
+  "girl": "vel",
+  "layer": 2,
+  "n": 0.4,
+  "w": 2,
+  "h": 2,
+  "broken": [
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    0,
+    2,
+    1,
+    2
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 1,
+    "y": 2,
+    "dash": true
+   }
+  ],
+  "exit": [
+   [
+    2,
+    1
+   ]
+  ],
+  "solIn": "UR",
+  "solutions": 1,
+  "minMoves": 2,
+  "luck": 18.1,
+  "belief": "",
+  "intro": "dash",
+  "tut": "dash",
+  "why": "Bảng dạy luật mới. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mẹo: Hộp dash chỉ dừng cạnh tường: tìm những ô có tường phía sau theo hướng bạn đi."
+ },
+ {
   "id": "vel_2_1",
   "girl": "vel",
   "layer": 2,
@@ -10549,6 +11520,69 @@
   "belief": "highs and lows are just terrain. i've mapped worse.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Mẹo: Ô phanh là chỗ duy nhất giữa đường mà hộp đang lướt chịu dừng."
+ },
+ {
+  "id": "vel_2_t4",
+  "girl": "vel",
+  "layer": 2,
+  "n": 3.4,
+  "w": 3,
+  "h": 1,
+  "broken": [
+   [
+    2,
+    1,
+    3,
+    1
+   ],
+   [
+    2,
+    1,
+    1,
+    1
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 1,
+    "y": 1
+   },
+   {
+    "x": 0,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    2,
+    1
+   ]
+  ],
+  "gates": [
+   [
+    2,
+    1,
+    2,
+    0,
+    0,
+    0
+   ]
+  ],
+  "plates": [
+   [
+    0,
+    1,
+    0
+   ]
+  ],
+  "solIn": "RRRLD",
+  "solutions": 1,
+  "minMoves": 5,
+  "luck": 0.6,
+  "belief": "",
+  "intro": "plates",
+  "tut": "plates",
+  "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "vel_2_4",
@@ -11005,6 +12039,49 @@
   "belief": "if i keep moving, the low can never catch me.",
   "intro": "many",
   "why": "Bảng dạy luật mới. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+ },
+ {
+  "id": "vel_3_t1",
+  "girl": "vel",
+  "layer": 3,
+  "n": 0.4,
+  "w": 3,
+  "h": 1,
+  "broken": [
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 1,
+    "n": 2
+   }
+  ],
+  "exit": [
+   [
+    1,
+    0
+   ]
+  ],
+  "solIn": "RU",
+  "solutions": 2,
+  "minMoves": 2,
+  "luck": 34.5,
+  "belief": "",
+  "intro": "budget",
+  "tut": "budget",
+  "why": "Bảng dạy luật mới. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
  },
  {
   "id": "vel_3_1",
@@ -11670,6 +12747,91 @@
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
  },
  {
+  "id": "vel_3_t7",
+  "girl": "vel",
+  "layer": 3,
+  "n": 6.4,
+  "w": 3,
+  "h": 2,
+  "broken": [
+   [
+    3,
+    0,
+    3,
+    1
+   ],
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    1,
+    0,
+    0,
+    0
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 2
+   },
+   {
+    "x": 1,
+    "y": 1
+   },
+   {
+    "x": 0,
+    "y": 1
+   }
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "gates": [
+   [
+    3,
+    0,
+    2,
+    0,
+    0,
+    0
+   ],
+   [
+    1,
+    0,
+    2,
+    0,
+    0,
+    1
+   ]
+  ],
+  "plates": [
+   [
+    2,
+    1,
+    0
+   ]
+  ],
+  "solIn": "RRURUL",
+  "solutions": 1,
+  "minMoves": 6,
+  "luck": 1.5,
+  "belief": "",
+  "intro": "plates",
+  "tut": "swap",
+  "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
+ },
+ {
   "id": "vel_3_7",
   "girl": "vel",
   "layer": 3,
@@ -11793,6 +12955,43 @@
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
+  "id": "myne_1_t1",
+  "girl": "myne",
+  "layer": 1,
+  "n": 0.4,
+  "w": 2,
+  "h": 1,
+  "boxes": [
+   {
+    "x": 0,
+    "y": 1
+   },
+   {
+    "x": 1,
+    "y": 1,
+    "m": "mx"
+   }
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "solIn": "LU",
+  "solutions": 2,
+  "minMoves": 2,
+  "luck": 39.1,
+  "belief": "",
+  "intro": "mx",
+  "tut": "twin",
+  "why": "Bảng dạy luật mới. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Dùng tường để làm hai hộp lệch nhau: một hộp bị chặn đứng yên trong khi hộp kia đi tiếp."
+ },
+ {
   "id": "myne_1_1",
   "girl": "myne",
   "layer": 1,
@@ -11847,6 +13046,51 @@
   "belief": "two of me. one keyboard. let's go.",
   "intro": "mx",
   "why": "Bảng dạy luật mới. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Dùng tường để làm hai hộp lệch nhau: một hộp bị chặn đứng yên trong khi hộp kia đi tiếp."
+ },
+ {
+  "id": "myne_1_t2",
+  "girl": "myne",
+  "layer": 1,
+  "n": 1.4,
+  "w": 3,
+  "h": 1,
+  "broken": [
+   [
+    1,
+    1,
+    2,
+    1
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 3,
+    "y": 1
+   },
+   {
+    "x": 2,
+    "y": 1,
+    "m": "mx"
+   }
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "solIn": "URRL",
+  "solutions": 1,
+  "minMoves": 4,
+  "luck": 7.3,
+  "belief": "",
+  "intro": "nolock",
+  "tut": "nolock",
+  "why": "Bảng dạy luật mới. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
  },
  {
   "id": "myne_1_2",
@@ -12073,6 +13317,51 @@
   "belief": "i look strong so nobody asks me to carry things.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
+ },
+ {
+  "id": "myne_1_t5",
+  "girl": "myne",
+  "layer": 1,
+  "n": 4.4,
+  "w": 2,
+  "h": 2,
+  "broken": [
+   [
+    0,
+    0,
+    0,
+    1
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 2
+   },
+   {
+    "x": 1,
+    "y": 2,
+    "m": "opp"
+   }
+  ],
+  "exit": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "solIn": "DDU",
+  "solutions": 1,
+  "minMoves": 3,
+  "luck": 5.5,
+  "belief": "",
+  "intro": "opp",
+  "tut": "opp",
+  "why": "Bảng dạy luật mới. Hộp có dấu chéo: đi ngược cả hai chiều. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hai hộp đi ngược nhau: tìm chỗ một hộp bị tường giữ lại."
  },
  {
   "id": "myne_1_5",
@@ -12403,6 +13692,51 @@
   "why": "Bảng dạy luật mới. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Khe một chiều không cho quay lại: tính thứ tự trước khi đi."
  },
  {
+  "id": "myne_2_t3",
+  "girl": "myne",
+  "layer": 2,
+  "n": 2.4,
+  "w": 2,
+  "h": 2,
+  "broken": [
+   [
+    1,
+    1,
+    1,
+    2
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 1,
+    "y": 0
+   },
+   {
+    "x": 2,
+    "y": 2,
+    "m": "my"
+   }
+  ],
+  "exit": [
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    1
+   ]
+  ],
+  "solIn": "LD",
+  "solutions": 1,
+  "minMoves": 2,
+  "luck": 8.3,
+  "belief": "",
+  "intro": "my",
+  "tut": "my",
+  "why": "Bảng dạy luật mới. Hộp có vạch ngang: lên/xuống bị đảo. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
+ },
+ {
   "id": "myne_2_3",
   "girl": "myne",
   "layer": 2,
@@ -12594,6 +13928,94 @@
   "luck": 0.9,
   "belief": "one-way streets? speedrun route.",
   "intro": "plates",
+  "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
+ },
+ {
+  "id": "myne_2_t5",
+  "girl": "myne",
+  "layer": 2,
+  "n": 4.4,
+  "w": 3,
+  "h": 2,
+  "broken": [
+   [
+    0,
+    0,
+    0,
+    1
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 0
+   },
+   {
+    "x": 2,
+    "y": 2,
+    "m": "mx"
+   }
+  ],
+  "exit": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "gates": [
+   [
+    0,
+    1,
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    1,
+    1,
+    1,
+    0,
+    0,
+    1
+   ]
+  ],
+  "plates": [
+   [
+    2,
+    0,
+    0
+   ]
+  ],
+  "solIn": "RRULD",
+  "solutions": 1,
+  "minMoves": 5,
+  "luck": 0.3,
+  "belief": "",
+  "intro": "plates",
+  "tut": "swap",
   "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
@@ -13260,6 +14682,43 @@
   "belief": "warp, dash, park. combo.",
   "intro": "portals",
   "why": "Bảng dạy luật mới. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Coi hai cổng như một ô."
+ },
+ {
+  "id": "myne_3_t4",
+  "girl": "myne",
+  "layer": 3,
+  "n": 3.4,
+  "w": 2,
+  "h": 2,
+  "broken": [
+   [
+    0,
+    1,
+    0,
+    2
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 1,
+    "trail": true
+   }
+  ],
+  "exit": [
+   [
+    1,
+    0
+   ]
+  ],
+  "solIn": "RU",
+  "solutions": 2,
+  "minMoves": 2,
+  "luck": 37,
+  "belief": "",
+  "intro": "trail",
+  "tut": "trail",
+  "why": "Bảng dạy luật mới. Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái \"đường\" ở các bảng khác chính là một hộp như thế. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mẹo: Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác."
  },
  {
   "id": "myne_3_4",

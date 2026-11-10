@@ -17,6 +17,8 @@ const CH_GIRLS = [
   { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'twin boxes · no locking · switch & swap gates · rope boxes' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
+// what each tutorial panel teaches (shown as a NEW tag)
+const TEACH = { basic: 'roll to the gold tile', sketch: 'trace the pencil', plates: 'switches open gates', avoid: 'black pencil: keep off', mirror: 'the other hand', swap: 'striped gates swap', nums: 'edge count', ends: 'goal anywhere', holes: 'holes in the map', oneway: 'one-way', portals: 'portals', bridges: 'overpass', boxes: 'every key moves the box', pads: 'dash tiles', stops: 'brake tiles', dash: 'rocket box', budget: 'move budget', twin: 'twin boxes', nolock: 'goals never lock', opp: 'opposite twin', my: 'up/down twin', trail: 'rope box' };
 const CH_MEM = {
   tracing_paper: { name: 'tracing_paper.mem', ic: 'thread', desc: 'Once per panel: lay it over the board and the next few strokes of the answer show through.' },
   queen_piece: { name: 'queen_piece.mem', ic: 'queen', desc: 'Once per panel: one broken rule is forgiven (like an eraser).' },
@@ -63,9 +65,9 @@ function renderChamber(b) {
     }).join('')}</div>
     <div class="chm-main">
       <div class="chm-head"><b>${G.name}</b> <span>${esc(G.tag)}${G.rules ? ' · ' + esc(G.rules) : ''}</span></div>
-      ${layers.map(L => `<div class="chm-layer"><h4>Layer ${L} · ${REGION[L]}</h4><div class="chm-cards">${list.filter(p => p.layer === L).sort((a, c) => a.n - c.n).map(p => {
+      ${layers.map(L => `<div class="chm-layer"><h4>Layer ${L} · ${REGION[L]}</h4><div class="chm-cards">${list.filter(p => p.layer === L).sort((a, c) => a.n - c.n).map((p, idx) => {
         const d = CH.done[p.id];
-        return `<button class="chm-card bevel${d ? ' done' : ''}" data-p="${p.id}"><span class="no">${p.n}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}${d.peek ? '<br><i>saw solution</i>' : ''}` : 'not solved<br>&nbsp;'}</small></button>`;
+        return `<button class="chm-card bevel${d ? ' done' : ''}${p.tut ? ' tut' : ''}" data-p="${p.id}" title="${p.tut ? 'Tutorial: ' + esc(TEACH[p.tut] || p.tut) : ''}"><span class="no">${idx + 1}${p.tut ? '<i>NEW</i>' : ''}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}${d.peek ? '<br><i>saw solution</i>' : ''}` : 'not solved<br>&nbsp;'}</small></button>`;
       }).join('')}</div></div>`).join('')}
       <div class="chm-opts sunk">
         <label><input type="checkbox" id="co-intro" ${CH.opt.intro ? 'checked' : ''}> Magnifier → projector intro</label>
@@ -190,13 +192,41 @@ function magDashRun(p) {
   return () => { alive = false; };
 }
 
+/* ---------------- projector music ----------------
+   audio/projector_bgm.mp3 plays only while the projector window is open: it fades in when the
+   window opens and fades out when it closes (re-opening within the fade picks it back up). The
+   desktop's own ambient music is ducked meanwhile. Muted with the tray's sound button. */
+const BGM = { el: null, vol: 0, want: 0, iv: null, LEVEL: .5 };
+function bgmTick() {
+  const el = BGM.el; if (!el) return;
+  const target = BGM.want * (AU.on ? BGM.LEVEL : 0), step = BGM.want ? BGM.LEVEL / 50 : BGM.LEVEL / 18;   // ~2.5 s in, ~0.9 s out
+  BGM.vol = BGM.vol < target ? Math.min(target, BGM.vol + step) : Math.max(target, BGM.vol - step);
+  el.volume = Math.max(0, Math.min(1, BGM.vol));
+  if (!BGM.want && BGM.vol <= 0) { el.pause(); clearInterval(BGM.iv); BGM.iv = null; }
+  if (BGM.want && BGM.vol >= target) { clearInterval(BGM.iv); BGM.iv = null; }
+}
+function bgmRun() { if (!BGM.iv) BGM.iv = setInterval(bgmTick, 50); }
+function bgmOn() {
+  try {
+    if (!BGM.el) { BGM.el = new Audio('audio/projector_bgm.mp3'); BGM.el.loop = true; BGM.el.preload = 'auto'; BGM.el.volume = 0; }
+    BGM.want = 1; if (BGM.el.paused) { const pr = BGM.el.play(); if (pr && pr.catch) pr.catch(() => { }); }
+    bgmRun();
+    if (AU.ctx && AU.music) AU.music.gain.setTargetAtTime(0, AU.ctx.currentTime, .6);
+  } catch (e) { }
+}
+function bgmOff() {
+  if (!BGM.el) return; BGM.want = 0; bgmRun();
+  if (AU.ctx && AU.music) AU.music.gain.setTargetAtTime(.15, AU.ctx.currentTime, 1.2);
+}
+function bgmMute() { if (BGM.el && BGM.want) bgmRun(); }
+
 /* ---------------- projector: the panel ---------------- */
 let PJ = null;
 function openProjector(p) {
   PJ = { p, st: null, bs: p.boxes ? PanelEngine.boxStart(p) : null, bsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null, view: null };
-  const nL = panelsOf(p.girl).filter(x => x.layer === p.layer).length;
+  const inL = panelsOf(p.girl).filter(x => x.layer === p.layer).sort((a, c) => a.n - c.n), nL = inL.length, idx = inL.findIndex(x => x.id === p.id) + 1;
   openWin('projector', { title: `PROJECT3D.EXE · ${GIRLS[p.girl].name}`, icon: 'brain', w: 600, h: 720, x: CH.opt.intro ? 320 : 120, y: 6,
-    onClose: () => { if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); if (PJ.view) PJ.view.dispose(); } PJ = null; document.removeEventListener('keydown', pjKey); },
+    onClose: () => { bgmOff(); if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); if (PJ.view) PJ.view.dispose(); } PJ = null; document.removeEventListener('keydown', pjKey); },
     render: b => {
       b.innerHTML = `<div class="pj pj3 g-${p.girl}">
         <div class="pj-menu" role="menubar">
@@ -226,7 +256,7 @@ function openProjector(p) {
           <button class="btn" id="pj-sol" aria-pressed="false">Solution</button>
           <button class="btn primary" id="pj-next" hidden>Next ▸</button>
         </div>
-        <div class="pj-status"><span id="pj-st1">Ready</span><span>Layer ${p.layer} · ${REGION[p.layer]} · ${p.n}/${nL}</span><span id="pj-moves"></span><span id="pj-fps"></span></div>
+        <div class="pj-status"><span id="pj-st1">Ready</span><span>Layer ${p.layer} · ${REGION[p.layer]} · ${idx}/${nL}</span><span id="pj-moves"></span><span id="pj-fps"></span></div>
         ${CH.opt.debug ? `<div class="pj-debug">solutions: ${p.solutions} · fewest moves ${p.minMoves || '?'}${p.boxes ? ` · random-play wins ${p.luck}% · answer ${p.solIn}` : ''}</div>` : ''}
       </div>`;
       $('#pj-back', b).onclick = () => { closeWin('projector'); ['feedcam', 'magnifier'].forEach(closeWin); focusWin('chamber'); };
@@ -248,7 +278,7 @@ function openProjector(p) {
         }
       });
       document.addEventListener('keydown', pjKey);
-      mountStage();
+      mountStage(); bgmOn();
       PJ.fpsTimer = setInterval(() => { const f = $('#pj-fps'); if (f && PJ) f.textContent = PJ.view ? (PJ.view.fps() ? `WebGL · ${PJ.view.fps()} fps` : 'WebGL') : '2D view'; }, 1000);
     } });
 }
@@ -258,7 +288,7 @@ function mountStage() {
   if (PJ.view) { PJ.view.dispose(); PJ.view = null; }
   vp.innerHTML = ''; vp.classList.toggle('flat', true);
   if (CH.opt.view3d && P3.has()) {
-    try { PJ.view = P3.create(vp, PJ.p); PJ.view.setRetro(!!CH.opt.retro); bindPJ(PJ.view.canvas, PJ.view.toBoard); vp.classList.remove('flat'); vp.insertAdjacentHTML('beforeend', `<div class="pj3-hud">◉ DIVE·PROJ 3D <i>${PJ.p.boxes ? 'BOX' : 'LINE'} MODE</i></div>`); }
+    try { PJ.view = P3.create(vp, PJ.p); PJ.view.setRetro(!!CH.opt.retro); bindPJ(PJ.view.canvas, PJ.view.toBoard); vp.classList.remove('flat'); vp.insertAdjacentHTML('beforeend', `<div class="pj3-hud">◉ DIVE·PROJ 3D <i>${PJ.p.boxes ? 'BOX' : 'LINE'} MODE</i>${PJ.p.tut ? `<b class="tut">NEW · ${esc(TEACH[PJ.p.tut] || PJ.p.tut)}</b>` : ''}</div>`); }
     catch (e) { console.warn('3D projection failed, using the flat board', e); if (PJ.view) PJ.view.dispose(); PJ.view = null; vp.innerHTML = ''; }
   }
   if (!PJ.view) { vp.innerHTML = `<svg id="pj-svg" viewBox="${vb(PJ.p)}" role="img" aria-label="Puzzle board. Move with WASD or the arrow keys."></svg>`; bindPJ($('#pj-svg')); }

@@ -618,7 +618,7 @@ function buildTaskbar() {
   $$('button', sm).forEach(b => b.onclick = () => { SFX.click(); toggleStart(false); items[b.dataset.i][2](); });
   $('#startbtn').onclick = () => { SFX.click(); toggleStart(sm.hidden); };
   document.addEventListener('pointerdown', e => { if (!sm.hidden && !e.target.closest('#startmenu,#startbtn')) toggleStart(false); });
-  $('#soundbtn').onclick = () => { AU.on = !AU.on; $('#soundbtn').textContent = AU.on ? '♪' : '×'; if (AU.master) AU.master.gain.value = AU.on ? .5 : 0; };
+  $('#soundbtn').onclick = () => { AU.on = !AU.on; $('#soundbtn').textContent = AU.on ? '♪' : '×'; if (AU.master) AU.master.gain.value = AU.on ? .5 : 0; if (typeof bgmMute === 'function') bgmMute(); };
 }
 function toggleStart(on) { const sm = $('#startmenu'); sm.hidden = !on; $('#startbtn').setAttribute('aria-expanded', String(on)); $('#startbtn').classList.toggle('on', on); }
 function confirmReset() {
