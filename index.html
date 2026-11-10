@@ -696,6 +696,116 @@ body.tutorial #taskbar{filter:brightness(.35) saturate(.5);pointer-events:none}
 @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
 small.dots{color:var(--pink-deep);font-style:italic}
 @media (prefers-reduced-motion:reduce){#lock,#lock.out{animation:none}#lock.out{opacity:0}.dots::after{animation:none;content:'…'}}
+/* ================= title + test chamber ================= */
+#title{position:fixed;inset:0;z-index:170;display:grid;place-items:center;padding:20px 16px;box-sizing:border-box;text-align:center;
+  background:radial-gradient(#fff 1.4px,transparent 1.6px) 0 0/18px 18px,linear-gradient(160deg,var(--bg-a),var(--bg-b));animation:dayin .4s ease-out}
+#title.out{opacity:0;transition:opacity .3s}
+#title .logo{font-family:var(--display);font-weight:700;font-size:clamp(46px,11vw,92px);line-height:.95;color:#fff;
+  text-shadow:4px 0 var(--line),-4px 0 var(--line),0 4px var(--line),0 -4px var(--line),3px 3px var(--line),-3px -3px var(--line),3px -3px var(--line),-3px 3px var(--line),8px 9px 0 var(--pink)}
+#title .sub{font-family:var(--mono);font-size:22px;margin-top:14px}
+.tt-menu{display:flex;flex-direction:column;gap:12px;align-items:stretch;width:min(260px,80vw);margin:28px auto 0}
+.tt-menu .btn{font-family:var(--display);font-weight:700;font-size:18px;padding:8px 14px}
+.tt-menu .btn:disabled{background:var(--lav-hi);color:var(--line-soft);text-shadow:none;box-shadow:0 3px 0 var(--line-soft)}
+.tt-note{min-height:1.4em;margin-top:12px;font-size:12px;color:var(--danger)}
+
+.chm{display:grid;grid-template-columns:170px minmax(0,1fr);gap:8px;height:100%}
+.chm-girls{display:flex;flex-direction:column;gap:4px;padding:6px;overflow:auto;background:var(--lav-hi)}
+.chm-girl{display:flex;align-items:center;gap:8px;padding:6px;border:2px solid transparent;border-radius:8px;background:none;cursor:pointer;text-align:left}
+.chm-girl .av{width:34px;height:34px}
+.chm-girl b{display:block;font-family:var(--display);font-size:15px}
+.chm-girl small{font-size:11px;color:var(--ink-soft)}
+.chm-girl:hover:not(:disabled){background:var(--pink-hi)}
+.chm-girl.sel{background:var(--pink);border-color:var(--line);color:#fff}
+.chm-girl.sel small{color:#fff}
+.chm-girl:disabled{opacity:.5;cursor:default}
+.chm-main{display:flex;flex-direction:column;gap:8px;overflow:auto;min-width:0;padding-right:2px}
+.chm-head{padding:8px 10px;border:2px solid var(--line);border-radius:10px;color:#fff;text-shadow:1px 1px 0 var(--line);
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.15) 0 2px,transparent 2px 6px),linear-gradient(120deg,var(--pink),#b693ef)}
+.chm-head b{font-family:var(--display);font-size:22px}
+.chm-head span{font-family:var(--mono);font-size:18px}
+.chm-layer h4{margin:2px 2px 6px;font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--pink-deep)}
+.chm-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px}
+.chm-card{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px;cursor:pointer;position:relative}
+.chm-card:hover{background:var(--pink-hi)}
+.chm-card .no{position:absolute;left:6px;top:4px;font-family:var(--mono);font-size:18px;color:var(--pink-deep)}
+.chm-card small{font-family:var(--mono);font-size:14px;line-height:1;color:var(--ink-soft);text-align:center}
+.chm-card.done small{color:var(--mint)}
+.chm-card .mini{width:64px;height:64px}
+.chm-opts{display:flex;flex-direction:column;gap:6px;padding:8px 10px;font-size:12px}
+.chm-opts label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.chm-opts label svg{width:18px;height:18px}
+.chm-mem{display:flex;flex-wrap:wrap;gap:4px 14px;padding-top:4px;border-top:2px dotted var(--line-soft)}
+.chm-btns{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+
+.cam{display:flex;flex-direction:column;gap:6px;height:100%}
+.cam-room{flex:1;position:relative;overflow:hidden;border:2px solid var(--line);border-radius:10px;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.35) 0 2px,transparent 2px 4px),radial-gradient(circle at 50% 30%,#fff 0,var(--pink-hi) 45%,var(--lav) 100%)}
+.cam-room img{position:absolute;left:50%;bottom:0;height:92%;transform:translateX(-50%);image-rendering:pixelated}
+.cam-cap{font-family:var(--mono);font-size:16px;color:var(--danger)}
+.lens{position:absolute;width:64px;height:64px;border-radius:50%;border:4px solid var(--line);background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 3px #fff,4px 5px 0 var(--shadow);
+  left:70%;top:80%;transition:left 1.1s cubic-bezier(.5,0,.2,1),top 1.1s cubic-bezier(.5,0,.2,1)}
+.lens::after{content:"";position:absolute;width:30px;height:8px;background:var(--line);border-radius:4px;right:-26px;bottom:-8px;transform:rotate(45deg)}
+.lens.on{left:calc(50% - 32px);top:9%}
+.mag{display:flex;flex-direction:column;gap:6px;height:100%}
+.mag-view{--z:1;--t:0;flex:1;position:relative;overflow:hidden;border-radius:50% / 46%;border:4px solid var(--line);box-shadow:inset 0 0 0 3px #fff;background:var(--lav-hi)}
+.mag-view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated;transform:scale(var(--z));opacity:calc(1 - var(--t) * .85)}
+.mag-tissue{position:absolute;inset:0;opacity:var(--t);mix-blend-mode:multiply;
+  background:radial-gradient(circle at 30% 40%,transparent 0 18%,rgba(255,255,255,.0) 19%),repeating-radial-gradient(circle at 40% 45%,#ffc2e0 0 6px,#f59ccc 6px 9px,#ffd9ec 9px 15px)}
+.mag-tissue.g-trix{background:repeating-radial-gradient(circle at 60% 40%,#d4f2ff 0 6px,#a8d8f7 6px 9px,#e9ddff 9px 15px)}
+.mag-scan{position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(107,74,158,.12) 0 2px,transparent 2px 4px);animation:scan 2.4s linear infinite}
+@keyframes scan{to{background-position:0 40px}}
+.mag-info{font-family:var(--mono);font-size:17px;line-height:1.15}
+.mag-btns{display:flex;gap:6px;justify-content:flex-end}
+.beam{position:absolute;z-index:4000;height:14px;width:0;border-radius:7px;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,255,255,.95),rgba(255,140,198,.85),rgba(143,220,247,.2));box-shadow:0 0 18px var(--pink);animation:beam .5s ease-out forwards}
+@keyframes beam{to{width:260px;opacity:.1}}
+
+.pj{display:flex;flex-direction:column;gap:6px;height:100%}
+.pj-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:17px;color:var(--ink-soft)}
+.pj-belief{position:relative;align-self:center;max-width:94%;font-family:var(--mono);font-size:21px;line-height:1.1;text-align:center;color:var(--ink);padding:2px 8px}
+.pj-belief::after{content:"";position:absolute;left:0;top:52%;height:3px;width:0;background:var(--pink-deep);transition:width .9s cubic-bezier(.6,0,.3,1)}
+.pj-belief.struck{color:var(--ink-soft)}
+.pj-belief.struck::after{width:100%}
+.pj-stage{flex:1;min-height:0;display:grid;place-items:center;border:2px solid var(--line);border-radius:12px;padding:6px;
+  background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.5),transparent 70%),repeating-radial-gradient(circle at 30% 60%,#ffd0e8 0 8px,#ffc0df 8px 12px,#ffe1f0 12px 20px)}
+.g-trix .pj-stage{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.5),transparent 70%),repeating-radial-gradient(circle at 70% 30%,#dbf3ff 0 8px,#c4e7fb 8px 12px,#efe6ff 12px 20px)}
+.pj-stage svg{width:100%;height:100%;max-height:100%;touch-action:none;cursor:crosshair;user-select:none;-webkit-user-select:none}
+.pj-msg{min-height:1.2em;font-family:var(--mono);font-size:17px;color:var(--ink-soft);text-align:center}
+.pj-bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.pj-bar .sp{flex:1}
+.pj-bar svg{width:16px;height:16px;vertical-align:-3px}
+.pj-tok{font-family:var(--mono);font-size:16px;padding:2px 8px;border:2px dashed var(--line);border-radius:8px;background:var(--lav-hi)}
+.pj-debug{font-size:11px;color:var(--ink-soft);border-top:2px dotted var(--line-soft);padding-top:4px}
+
+.pb-bg{fill:#4a3168;stroke:var(--line);stroke-width:.05}
+.g-trix .pb-bg,.mini .pb-bg{fill:#3a2554}
+.pb-trk{stroke:#8d6fbf;stroke-width:.22;stroke-linecap:round}
+.g-trix .pb-trk{stroke:#6f8fcf}
+.pb-sketch{stroke:#fff6d8;stroke-width:.09;stroke-dasharray:.1 .07;stroke-linecap:round}
+.pb-sq{stroke:#fff;stroke-width:.045}
+.pb-num{fill:#f4e9ff;font-family:var(--mono);font-size:.5px;text-anchor:middle;dominant-baseline:central}
+.pb-ring{fill:none;stroke:#cbb8ea;stroke-width:.03}
+.pb-ring.on{fill:#ff8cc6;stroke:#ff8cc6}
+.pb-dot{fill:#2b1b3d;stroke:#fff;stroke-width:.03}
+.pb-start{fill:#8d6fbf}
+.g-trix .pb-start{fill:#6f8fcf}
+.pb-start.on,.pb-head{fill:#ff8cc6;stroke:none}
+.pb-line{fill:none;stroke:#ff8cc6;stroke-width:.17;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 .08px #fff)}
+.pb-line.win{stroke:#fff;filter:drop-shadow(0 0 .12px #ff8cc6)}
+.pb-start.on.win{fill:#fff}
+.pb-line.fail{stroke:#ff4d7a;opacity:.8}
+.pb-start.on.fail,.pb-head.fail{fill:#ff4d7a}
+.pb-line.idle{opacity:.8}
+.pb-ghost{fill:none;stroke:#8fdcf7;stroke-width:.08;stroke-dasharray:.12 .08;stroke-linecap:round;opacity:.9}
+.pb-hint{fill:none;stroke:#fff;stroke-width:.1;stroke-linecap:round;opacity:.55;stroke-dasharray:.05 .06}
+.bad{animation:badblink .35s steps(2) 4}
+.pb-sq.bad,.pb-dot.bad{stroke:#ff4d7a;stroke-width:.08}
+.pb-num.bad,.pb-ring.bad{fill:#ff4d7a;stroke:#ff4d7a}
+.pb-sketch.bad{stroke:#ff4d7a;stroke-dasharray:none}
+.gone{opacity:.15}
+@keyframes badblink{50%{opacity:.2}}
+@media (max-width:720px){.chm{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}.chm-girls{flex-direction:row;overflow-x:auto}.chm-girl small{display:none}}
+@media (prefers-reduced-motion:reduce){.bad,.mag-scan{animation:none}.lens{transition:none}}
 </style>
 </head>
 <body>
@@ -2595,6 +2705,9 @@ async function main() {
   await loadDialogueData();
   buildTaskbar(); renderIcons(); renderTray();
   let saved = loadSave();
+  const pick = await titleScreen(!!(saved && saved.player));
+  if (pick === 'chamber') { await bootOS(); openChamber(); return; }
+  if (pick === 'new') { wipeSave(); saved = null; }
   if (saved && saved.player) {
     // autosave: continue from the last checkpoint, no menus
     S = Object.assign(fresh(), saved);
@@ -2610,8 +2723,389 @@ async function main() {
   S = fresh(); S.player = player; day1Start();
   await wakeUp();
 }
-main();
 
+/* =========================================================
+   PANEL ENGINE · line puzzles drawn on a grid of nodes
+   Shared by the game (browser) and tools/panels.js (node).
+
+   A panel has w×h cells → (w+1)×(h+1) nodes, x right, y down.
+   The line starts on a start node and ends on an exit node,
+   moving along edges, never revisiting a node.
+
+   Symbols
+     broken   [[x1,y1,x2,y2]]   edge can't be used
+     sketch   [[x1,y1,x2,y2]]   (Prim) faint pencil line: must be traced (used)
+     dots     [[x,y]]           node must be visited
+     squares  [[cx,cy,color]]   cell ink: each region the line cuts out may hold one ink colour only
+     nums     [[cx,cy,n]]       (Trix) the line uses exactly n of this cell's 4 sides
+     visitAll true              (Trix) the line must visit every node
+   ========================================================= */
+const PanelEngine = (() => {
+  const key = (x, y) => x + ',' + y;
+  const ekey = (a, b, c, d) => (a < c || (a === c && b < d)) ? `${a},${b}|${c},${d}` : `${c},${d}|${a},${b}`;
+  const nodeCount = p => (p.w + 1) * (p.h + 1);
+  function brokenSet(p) { const s = new Set(); (p.broken || []).forEach(e => s.add(ekey(...e))); return s; }
+  function neighbors(p, x, y, broken) {
+    const out = [];
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const nx = x + dx, ny = y + dy;
+      if (nx < 0 || ny < 0 || nx > p.w || ny > p.h) continue;
+      if (broken.has(ekey(x, y, nx, ny))) continue;
+      out.push([nx, ny]);
+    }
+    return out;
+  }
+  const isStart = (p, x, y) => (p.start || []).some(s => s[0] === x && s[1] === y);
+  const isExit = (p, x, y) => (p.exit || []).some(s => s[0] === x && s[1] === y);
+  // which way the exit stub points (off the edge of the board)
+  function exitDir(p, x, y) { return x === 0 ? [-1, 0] : x === p.w ? [1, 0] : y === 0 ? [0, -1] : [0, 1]; }
+
+  /* returns { ok, broken: [{kind, i}] } — kind/i point at the symbol that failed */
+  function validate(p, path) {
+    const bad = [];
+    if (!path || path.length < 2 || !isStart(p, ...path[0]) || !isExit(p, ...path[path.length - 1])) return { ok: false, bad: [{ kind: 'path' }] };
+    const used = new Set(), seen = new Set();
+    for (let i = 0; i < path.length; i++) {
+      seen.add(key(...path[i]));
+      if (i) used.add(ekey(...path[i - 1], ...path[i]));
+    }
+    (p.sketch || []).forEach((e, i) => { if (!used.has(ekey(...e))) bad.push({ kind: 'sketch', i }); });
+    (p.dots || []).forEach((d, i) => { if (!seen.has(key(...d))) bad.push({ kind: 'dots', i }); });
+    if (p.visitAll && seen.size !== nodeCount(p)) bad.push({ kind: 'visitAll' });
+    (p.nums || []).forEach(([cx, cy, n], i) => {
+      const c = [ekey(cx, cy, cx + 1, cy), ekey(cx, cy + 1, cx + 1, cy + 1), ekey(cx, cy, cx, cy + 1), ekey(cx + 1, cy, cx + 1, cy + 1)].filter(k => used.has(k)).length;
+      if (c !== n) bad.push({ kind: 'nums', i });
+    });
+    if ((p.squares || []).length) {
+      // regions of cells the line separates
+      const reg = {}; let r = 0;
+      for (let y = 0; y < p.h; y++) for (let x = 0; x < p.w; x++) {
+        if (reg[key(x, y)] !== undefined) continue;
+        const st = [[x, y]]; reg[key(x, y)] = r;
+        while (st.length) {
+          const [cx, cy] = st.pop();
+          const nb = [[cx + 1, cy, ekey(cx + 1, cy, cx + 1, cy + 1)], [cx - 1, cy, ekey(cx, cy, cx, cy + 1)], [cx, cy + 1, ekey(cx, cy + 1, cx + 1, cy + 1)], [cx, cy - 1, ekey(cx, cy, cx + 1, cy)]];
+          for (const [nx, ny, wall] of nb) {
+            if (nx < 0 || ny < 0 || nx >= p.w || ny >= p.h || used.has(wall) || reg[key(nx, ny)] !== undefined) continue;
+            reg[key(nx, ny)] = r; st.push([nx, ny]);
+          }
+        }
+        r++;
+      }
+      const colors = {};
+      p.squares.forEach(([cx, cy, col]) => { const g = reg[key(cx, cy)]; (colors[g] = colors[g] || new Set()).add(col); });
+      p.squares.forEach(([cx, cy], i) => { if (colors[reg[key(cx, cy)]].size > 1) bad.push({ kind: 'squares', i }); });
+    }
+    return { ok: !bad.length, bad };
+  }
+
+  /* every distinct solution (as node paths), up to `limit` */
+  function solve(p, limit = 50) {
+    const broken = brokenSet(p), sols = [], N = nodeCount(p);
+    const seen = new Set();
+    function dfs(path) {
+      if (sols.length >= limit) return;
+      const [x, y] = path[path.length - 1];
+      if (isExit(p, x, y) && validate(p, path).ok) sols.push(path.slice());
+      for (const [nx, ny] of neighbors(p, x, y, broken)) {
+        const k = key(nx, ny); if (seen.has(k)) continue;
+        seen.add(k); path.push([nx, ny]); dfs(path); path.pop(); seen.delete(k);
+      }
+    }
+    for (const s of p.start || []) { seen.clear(); seen.add(key(...s)); dfs([s.slice()]); }
+    return sols;
+  }
+  return { validate, solve, neighbors, brokenSet, isStart, isExit, exitDir, key, ekey, nodeCount };
+})();
+if (typeof module !== 'undefined') module.exports = PanelEngine;
+
+/* =========================================================
+   TITLE SCREEN + TEST CHAMBER
+   The chamber is a sandbox for the new line panels: pick a girl,
+   pick a panel, play it (with the magnifier → projector intro).
+   Nothing here touches the story save.
+   ========================================================= */
+const PANELS = [{"id":"prim_1_1","girl":"prim","layer":1,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"sketch":[[0,3,0,2],[0,2,1,2],[1,1,2,1],[2,1,2,0]],"belief":"i only draw on top of other people's lines.","note":"D\u1ea1y c\u00e1ch v\u1ebd \u0111\u01b0\u1eddng + n\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i.","sol":[[0,3],[0,2],[1,2],[1,1],[2,1],[2,0],[3,0]],"solutions":1},{"id":"prim_1_2","girl":"prim","layer":1,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"sketch":[[3,1,4,1],[2,0,2,1],[0,1,1,1],[2,1,3,1],[1,2,0,2],[1,3,1,2]],"belief":"if i lose the line, i'll ruin the whole page.","note":"N\u00e9t ch\u00ec r\u1eddi r\u1ea1c: ph\u1ea3i t\u00ecm \u0111\u01b0\u1eddng duy nh\u1ea5t n\u1ed1i h\u1ebft c\u00e1c m\u1ea3nh.","sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[2,1],[3,1],[4,1],[4,0]],"solutions":1},{"id":"prim_1_3","girl":"prim","layer":1,"n":3,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"squares":[[2,2,"ink"],[1,1,"pink"],[2,0,"pink"],[0,1,"pink"],[2,1,"ink"],[0,2,"ink"]],"belief":"my hand and the other hand must never touch.","note":"D\u1ea1y lu\u1eadt m\u1ef1c: m\u1ed7i v\u00f9ng ch\u1ec9 \u0111\u01b0\u1ee3c m\u1ed9t m\u00e0u. V\u00e0i l\u1eddi gi\u1ea3i (b\u1ea3ng d\u1ea1y lu\u1eadt).","sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[3,1],[2,1],[2,2],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0]],"solutions":4},{"id":"prim_1_4","girl":"prim","layer":1,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"squares":[[3,1,"ink"],[1,1,"pink"],[3,0,"pink"],[3,3,"ink"],[1,3,"pink"],[1,0,"ink"],[2,1,"pink"],[0,0,"pink"],[0,3,"pink"]],"belief":"pink is mine. black is hers. i keep them apart.","note":"Ch\u1ec9 c\u00f3 m\u1ef1c, b\u1ea3ng l\u1edbn h\u01a1n: ch\u1ec9 c\u00f2n r\u1ea5t \u00edt c\u00e1ch chia.","sol":[[0,4],[0,3],[1,3],[2,3],[3,3],[3,4],[4,4],[4,3],[4,2],[4,1],[3,1],[3,2],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[4,0]],"solutions":3},{"id":"prim_1_5","girl":"prim","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"squares":[[3,2,"ink"],[2,3,"pink"],[0,0,"pink"],[2,1,"pink"],[1,2,"ink"],[1,3,"ink"],[0,1,"ink"]],"sketch":[[3,4,4,4],[3,1,2,1],[1,2,0,2],[0,4,1,4]],"belief":"i can't draw. i can only trace.","note":"B\u1ea3ng l\u00f5i: n\u00e9t ch\u00ec + m\u1ef1c. C\u1ea7n d\u00f9ng c\u1ea3 hai lu\u1eadt.","sol":[[0,4],[1,4],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0],[3,1],[2,1],[2,2],[2,3],[2,4],[3,4],[4,4],[4,3],[3,3],[3,2],[4,2],[4,1],[4,0]],"solutions":1},{"id":"trix_1_1","girl":"trix","layer":1,"n":1,"w":2,"h":2,"start":[[0,2]],"exit":[[2,0]],"visitAll":true,"belief":"every point gets visited. no exceptions.","note":"D\u1ea1y lu\u1eadt ph\u1ee7 k\u00edn: \u0111i qua m\u1ecdi n\u00fat. 2 l\u1eddi gi\u1ea3i \u0111\u1ed1i x\u1ee9ng l\u00e0 \u0111\u01b0\u1ee3c.","sol":[[0,2],[1,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0]],"solutions":2},{"id":"trix_1_2","girl":"trix","layer":1,"n":2,"w":3,"h":3,"start":[[0,3]],"exit":[[3,1]],"visitAll":true,"broken":[[1,2,2,2],[1,1,1,2]],"belief":"a gap means i failed.","note":"Ph\u1ee7 k\u00edn + \u0111\u01b0\u1eddng \u0111\u1ee9t: t\u00ecm th\u1ee9 t\u1ef1 duy nh\u1ea5t.","sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[3,1]],"solutions":1},{"id":"trix_1_3","girl":"trix","layer":1,"n":3,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"nums":[[0,2,3],[1,2,2],[1,1,2],[0,1,1]],"belief":"numbers don't lie. people do.","note":"D\u1ea1y lu\u1eadt s\u1ed1: \u0111\u01b0\u1eddng ch\u1ea1m \u0111\u00fang n c\u1ea1nh c\u1ee7a \u00f4.","sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[1,1],[1,0],[2,0],[3,0]],"solutions":1},{"id":"trix_1_4","girl":"trix","layer":1,"n":4,"w":3,"h":3,"start":[[0,3]],"exit":[[3,1]],"visitAll":true,"nums":[[1,0,3]],"belief":"if i count it twice, it is real.","note":"S\u1ed1 + ph\u1ee7 k\u00edn c\u00f9ng l\u00fac.","sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1]],"solutions":1},{"id":"trix_1_5","girl":"trix","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"visitAll":true,"nums":[[3,1,2],[1,2,2],[0,2,2],[3,3,2],[1,0,3]],"belief":"i can't stop until it's perfect.","note":"B\u1ea3ng l\u00f5i: ph\u1ee7 k\u00edn 25 n\u00fat + s\u1ed1.","sol":[[0,4],[0,3],[1,3],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[3,2],[3,3],[2,3],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1}];
+const CH_KEY = 'cyfh_chamber';
+const CH = (() => { try { return JSON.parse(localStorage.getItem(CH_KEY)) || {}; } catch (e) { return {}; } })();
+CH.done = CH.done || {}; CH.opt = Object.assign({ intro: true, debug: false, mem: { tracing_paper: false, queen_piece: false } }, CH.opt || {});
+const chSave = () => { try { localStorage.setItem(CH_KEY, JSON.stringify(CH)); } catch (e) { } };
+const CH_GIRLS = [
+  { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'pencil sketch · two inks' },
+  { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'every point · counting' },
+  { g: 'paige', name: 'Paige', tag: 'Goth' }, { g: 'vel', name: 'Vel', tag: 'Gyaru' }, { g: 'myne', name: 'Myne', tag: 'Tomboy' },
+];
+const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
+const CH_MEM = {
+  tracing_paper: { name: 'tracing_paper.mem', ic: 'thread', desc: 'Once per panel: lay it over the board and the next few strokes of the answer show through.' },
+  queen_piece: { name: 'queen_piece.mem', ic: 'queen', desc: 'Once per panel: one broken rule is forgiven (like an eraser).' },
+};
+
+/* ---------------- title ---------------- */
+function titleScreen(hasSave) {
+  return new Promise(res => {
+    const el = document.createElement('div'); el.id = 'title';
+    el.innerHTML = `<div class="tt-box"><div class="logo">Can You<br>Fix Her</div><div class="sub">DIVE OS v2.4 ♡</div>
+      <div class="tt-menu">
+        <button class="btn primary" data-go="continue" ${hasSave ? '' : 'disabled'}>Continue</button>
+        <button class="btn" data-go="new">New game</button>
+        <button class="btn" data-go="chamber">Test chamber</button>
+      </div><div class="tt-note" id="tt-note"></div></div>`;
+    document.body.appendChild(el);
+    const done = v => { el.classList.add('out'); setTimeout(() => { el.remove(); res(v); }, REDUCED ? 0 : 300); };
+    $$('[data-go]', el).forEach(b => b.onclick = () => {
+      auInit(); SFX.click();
+      const v = b.dataset.go;
+      if (v === 'new' && hasSave && !b.dataset.sure) { b.dataset.sure = '1'; b.textContent = 'New game (erase save?)'; $('#tt-note', el).textContent = 'Your current game will be erased. Click again to confirm.'; return; }
+      done(v);
+    });
+    const first = $('[data-go]:not(:disabled)', el); if (first) first.focus();
+  });
+}
+
+/* ---------------- chamber: lists ---------------- */
+let chGirl = 'prim';
+function openChamber() {
+  S = fresh(); S.player = { name: 'tester', avatar: '' }; S.flags.chamber = true; S.phase = 'day';
+  $$('.dicon').forEach(d => d.hidden = true);   // a bare desktop: nothing from the story here
+  openWin('chamber', { title: 'Test chamber', icon: 'puzzle', w: 640, h: 500, x: 30, y: 20, render: (b, rec) => { addUpd(rec, () => renderChamber(b)); renderChamber(b); } });
+}
+function panelsOf(g) { return PANELS.filter(p => p.girl === g); }
+function fmtT(ms) { const s = Math.round(ms / 1000); return `${s / 60 | 0}:${String(s % 60).padStart(2, '0')}`; }
+function renderChamber(b) {
+  const list = panelsOf(chGirl), G = CH_GIRLS.find(x => x.g === chGirl);
+  const layers = [...new Set(list.map(p => p.layer))];
+  b.innerHTML = `<div class="chm">
+    <div class="chm-girls sunk">${CH_GIRLS.map(x => {
+      const n = panelsOf(x.g).length, d = panelsOf(x.g).filter(p => CH.done[p.id]).length;
+      return `<button class="chm-girl${x.g === chGirl ? ' sel' : ''}" data-g="${x.g}" ${n ? '' : 'disabled'}>${ART[x.g] ? `<img class="av" src="${ART[x.g].face}" alt="">` : '<div class="av q">?</div>'}<span><b>${x.name}</b><small>${n ? `${d}/${n} solved` : 'no panels yet'}</small></span></button>`;
+    }).join('')}</div>
+    <div class="chm-main">
+      <div class="chm-head"><b>${G.name}</b> <span>${esc(G.tag)}${G.rules ? ' · ' + esc(G.rules) : ''}</span></div>
+      ${layers.map(L => `<div class="chm-layer"><h4>Layer ${L} · ${REGION[L]}</h4><div class="chm-cards">${list.filter(p => p.layer === L).sort((a, c) => a.n - c.n).map(p => {
+        const d = CH.done[p.id];
+        return `<button class="chm-card bevel${d ? ' done' : ''}" data-p="${p.id}"><span class="no">${p.n}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}` : 'not solved<br>&nbsp;'}</small></button>`;
+      }).join('')}</div></div>`).join('')}
+      <div class="chm-opts sunk">
+        <label><input type="checkbox" id="co-intro" ${CH.opt.intro ? 'checked' : ''}> Magnifier → projector intro</label>
+        <label><input type="checkbox" id="co-debug" ${CH.opt.debug ? 'checked' : ''}> Designer info (solution count, notes, show answer)</label>
+        <div class="chm-mem">${Object.entries(CH_MEM).map(([k, m]) => `<label title="${esc(m.desc)}"><input type="checkbox" data-mem="${k}" ${CH.opt.mem[k] ? 'checked' : ''}> ${icon(m.ic)} ${m.name}</label>`).join('')}</div>
+        <div class="chm-btns"><button class="btn" id="co-reset">Clear progress</button><button class="btn" id="co-title">Back to title</button></div>
+      </div>
+    </div></div>`;
+  $$('[data-g]', b).forEach(x => x.onclick = () => { SFX.click(); chGirl = x.dataset.g; renderChamber(b); });
+  $$('[data-p]', b).forEach(x => x.onclick = () => { SFX.click(); startPanel(x.dataset.p); });
+  $('#co-intro', b).onchange = e => { CH.opt.intro = e.target.checked; chSave(); };
+  $('#co-debug', b).onchange = e => { CH.opt.debug = e.target.checked; chSave(); };
+  $$('[data-mem]', b).forEach(x => x.onchange = () => { CH.opt.mem[x.dataset.mem] = x.checked; chSave(); });
+  $('#co-reset', b).onclick = () => { CH.done = {}; chSave(); renderChamber(b); };
+  $('#co-title', b).onclick = () => location.reload();
+}
+// tiny preview of a panel (structure only, no answer)
+function miniBoard(p) { return `<svg class="mini" viewBox="${-0.6} ${-0.6} ${p.w + 1.2} ${p.h + 1.2}" aria-hidden="true">${boardSVG(p, { mini: true })}</svg>`; }
+
+/* ---------------- magnifier → projector ---------------- */
+async function startPanel(id) {
+  const p = PANELS.find(x => x.id === id); if (!p) return;
+  ['projector', 'feedcam', 'magnifier'].forEach(closeWin);
+  if (CH.opt.intro) await magnifierIntro(p);
+  openProjector(p);
+}
+function magnifierIntro(p) {
+  return new Promise(res => {
+    const g = p.girl, A = ART[g];
+    openWin('feedcam', { title: `Live feed · ${GIRLS[g].id}`, icon: 'feed', w: 260, h: 330, x: 30, y: 30, render: b => {
+      b.innerHTML = `<div class="cam"><div class="cam-room"><img src="${A.body}" alt="${GIRLS[g].name} on the chair"><div class="lens" id="lens"></div></div><div class="cam-cap">● REC · room 0</div></div>`;
+    } });
+    openWin('magnifier', { title: 'Magnifier.exe', icon: 'img', w: 280, h: 330, x: 310, y: 40, render: b => {
+      b.innerHTML = `<div class="mag"><div class="mag-view" id="magv"><img src="${portraitURL(g, 'neutral')}" alt=""><div class="mag-tissue g-${g}"></div><div class="mag-scan"></div></div>
+        <div class="mag-info">region: <b>${REGION[p.layer]}</b> · layer ${p.layer}<br>focus <span id="magf">0</span>%</div>
+        <div class="mag-btns"><button class="btn" id="mag-skip">Skip</button><button class="btn primary" id="mag-go" disabled>Project ▸</button></div></div>`;
+    } });
+    const lens = $('#lens'), f = $('#magf'), go = $('#mag-go'), v = $('#magv');
+    requestAnimationFrame(() => lens.classList.add('on'));
+    let k = 0; const iv = setInterval(() => { k = Math.min(100, k + 4); f.textContent = k; v.style.setProperty('--z', 1 + k / 60); v.style.setProperty('--t', k / 100); if (k >= 100) { clearInterval(iv); go.disabled = false; go.focus(); SFX.chime(); } }, REDUCED ? 5 : 45);
+    const finish = async beam => {
+      clearInterval(iv);
+      if (beam && !REDUCED) {
+        SFX.link();
+        const r = WINS.magnifier.el.getBoundingClientRect(), d = $('#desktop').getBoundingClientRect();
+        const bm = document.createElement('div'); bm.className = 'beam';
+        Object.assign(bm.style, { left: (r.right - d.left - 10) + 'px', top: (r.top - d.top + r.height * .35) + 'px' });
+        $('#desktop').appendChild(bm); await wait(520); bm.remove();
+      }
+      res();
+    };
+    $('#mag-go').onclick = () => finish(true);
+    $('#mag-skip').onclick = () => finish(false);
+  });
+}
+
+/* ---------------- projector: the panel ---------------- */
+let PJ = null;
+function openProjector(p) {
+  PJ = { p, path: [], drawing: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null };
+  openWin('projector', { title: `Projector.exe · ${GIRLS[p.girl].name}`, icon: 'brain', w: 560, h: 600, x: CH.opt.intro ? 330 : 120, y: 10,
+    onClose: () => { PJ = null; document.removeEventListener('keydown', pjKey); },
+    render: b => {
+      b.innerHTML = `<div class="pj g-${p.girl}">
+        <div class="pj-top"><span>Layer ${p.layer} · ${REGION[p.layer]} · ${p.n}/${panelsOf(p.girl).filter(x => x.layer === p.layer).length}</span><span class="pj-id">${p.id}</span></div>
+        <div class="pj-belief" id="pj-belief"><span>${esc(p.belief || '')}</span></div>
+        <div class="pj-stage"><svg id="pj-svg" viewBox="${-0.75} ${-0.75} ${p.w + 1.5} ${p.h + 1.5}" role="img" aria-label="Puzzle board. Draw a line from the start circle to the exit."></svg></div>
+        <div class="pj-msg" id="pj-msg" aria-live="polite"></div>
+        <div class="pj-bar">
+          <button class="btn" id="pj-back">◂ Panels</button>
+          <button class="btn" id="pj-reset">Reset</button>
+          ${CH.opt.mem.tracing_paper ? `<button class="btn" id="pj-hint" title="${esc(CH_MEM.tracing_paper.desc)}">${icon('thread')} trace</button>` : ''}
+          ${CH.opt.mem.queen_piece ? `<span class="pj-tok" id="pj-erase" title="${esc(CH_MEM.queen_piece.desc)}">${icon('queen')} ready</span>` : ''}
+          <span class="sp"></span>
+          ${CH.opt.debug ? `<button class="btn" id="pj-sol">Show answer</button>` : ''}
+          <button class="btn primary" id="pj-next" hidden>Next ▸</button>
+        </div>
+        ${CH.opt.debug ? `<div class="pj-debug">solutions: ${p.solutions} · ${esc(p.note || '')}</div>` : ''}
+      </div>`;
+      $('#pj-back', b).onclick = () => { closeWin('projector'); ['feedcam', 'magnifier'].forEach(closeWin); focusWin('chamber'); };
+      $('#pj-reset', b).onclick = () => { PJ.path = []; PJ.state = 'idle'; PJ.bad = []; drawPJ(); };
+      const h = $('#pj-hint', b); if (h) h.onclick = useHint;
+      const s = $('#pj-sol', b); if (s) s.onclick = () => { PJ.showSol = !PJ.showSol; drawPJ(); };
+      $('#pj-next', b).onclick = () => { const L = panelsOf(p.girl).sort((a, c) => a.layer - c.layer || a.n - c.n), i = L.findIndex(x => x.id === p.id); if (L[i + 1]) startPanel(L[i + 1].id); else $('#pj-back', b).click(); };
+      bindPJ($('#pj-svg', b));
+      document.addEventListener('keydown', pjKey);
+      drawPJ();
+    } });
+}
+const COLS = { pink: '#ff6fb5', ink: '#0d0714' };
+function boardSVG(p, o = {}) {
+  const E = PanelEngine, br = E.brokenSet(p), sk = new Set((p.sketch || []).map(e => E.ekey(...e)));
+  const out = [];
+  out.push(`<rect class="pb-bg" x="-0.5" y="-0.5" width="${p.w + 1}" height="${p.h + 1}" rx="0.35"/>`);
+  // tracks
+  for (let y = 0; y <= p.h; y++) for (let x = 0; x <= p.w; x++) {
+    for (const [nx, ny] of [[x + 1, y], [x, y + 1]]) {
+      if (nx > p.w || ny > p.h) continue;
+      const k = E.ekey(x, y, nx, ny);
+      if (br.has(k)) { // broken: two stubs with a gap
+        const mx = (x + nx) / 2, my = (y + ny) / 2, dx = (nx - x) * .32, dy = (ny - y) * .32;
+        out.push(`<line class="pb-trk" x1="${x}" y1="${y}" x2="${mx - dx * .5}" y2="${my - dy * .5}"/><line class="pb-trk" x1="${mx + dx * .5}" y1="${my + dy * .5}" x2="${nx}" y2="${ny}"/>`);
+      } else out.push(`<line class="pb-trk" x1="${x}" y1="${y}" x2="${nx}" y2="${ny}"/>`);
+      if (sk.has(k)) { const i = p.sketch.findIndex(e => E.ekey(...e) === k); out.push(`<line class="pb-sketch${o.bad && o.bad.sketch.has(i) ? ' bad' : ''}" x1="${x}" y1="${y}" x2="${nx}" y2="${ny}"/>`); }
+    }
+  }
+  // exits
+  (p.exit || []).forEach(([x, y]) => { const [dx, dy] = E.exitDir(p, x, y); out.push(`<line class="pb-trk" x1="${x}" y1="${y}" x2="${x + dx * .38}" y2="${y + dy * .38}"/>`); });
+  // cell symbols
+  (p.squares || []).forEach(([x, y, c], i) => out.push(`<rect class="pb-sq${o.bad && o.bad.squares.has(i) ? ' bad' : ''}${o.erased === 'squares:' + i ? ' gone' : ''}" x="${x + .3}" y="${y + .3}" width=".4" height=".4" rx=".09" fill="${COLS[c]}"/>`));
+  (p.nums || []).forEach(([x, y, n], i) => out.push(`<text class="pb-num${o.bad && o.bad.nums.has(i) ? ' bad' : ''}${o.erased === 'nums:' + i ? ' gone' : ''}" x="${x + .5}" y="${y + .5}">${n}</text>`));
+  // visit-all: every node is a small ring waiting to be filled
+  if (p.visitAll) for (let y = 0; y <= p.h; y++) for (let x = 0; x <= p.w; x++) out.push(`<circle class="pb-ring${o.seen && o.seen.has(x + ',' + y) ? ' on' : ''}${o.bad && o.bad.visitAll ? ' bad' : ''}" cx="${x}" cy="${y}" r=".09"/>`);
+  (p.dots || []).forEach(([x, y], i) => out.push(`<circle class="pb-dot${o.bad && o.bad.dots.has(i) ? ' bad' : ''}" cx="${x}" cy="${y}" r=".1"/>`));
+  (p.start || []).forEach(([x, y]) => out.push(`<circle class="pb-start" cx="${x}" cy="${y}" r=".2"/>`));
+  return out.join('');
+}
+function drawPJ() {
+  if (!PJ) return; const p = PJ.p, svg = $('#pj-svg'); if (!svg) return;
+  const bad = { sketch: new Set(), squares: new Set(), nums: new Set(), dots: new Set(), visitAll: false };
+  if (PJ.state === 'fail') PJ.bad.forEach(x => x.kind === 'visitAll' ? bad.visitAll = true : bad[x.kind] && bad[x.kind].add(x.i));
+  const seen = new Set(PJ.path.map(n => n.join(',')));
+  let h = boardSVG(p, { bad, seen, erased: PJ.erased });
+  const line = pts => pts.map(n => n.join(',')).join(' ');
+  if (PJ.showSol && p.sol) h += `<polyline class="pb-ghost" points="${line(p.sol)}"/>`;
+  if (PJ.hint) h += `<polyline class="pb-hint" points="${line(PJ.hint)}"/>`;
+  if (PJ.path.length) {
+    const last = PJ.path[PJ.path.length - 1];
+    let tail = '';
+    if (PanelEngine.isExit(p, ...last) && (PJ.state === 'win' || PJ.atExit)) { const [dx, dy] = PanelEngine.exitDir(p, ...last); tail = ` ${last[0] + dx * .38},${last[1] + dy * .38}`; }
+    h += `<polyline class="pb-line ${PJ.state}" points="${line(PJ.path)}${tail}"/><circle class="pb-start on ${PJ.state}" cx="${PJ.path[0][0]}" cy="${PJ.path[0][1]}" r=".2"/>`;
+    if (PJ.state !== 'win') h += `<circle class="pb-head ${PJ.state}" cx="${last[0]}" cy="${last[1]}" r=".11"/>`;
+  }
+  svg.innerHTML = h;
+  const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
+  const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';
+}
+// pointer → node coordinates
+function svgPt(svg, e) { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const m = svg.getScreenCTM().inverse(); const r = pt.matrixTransform(m); return [r.x, r.y]; }
+function pjCanStep(n) {
+  const p = PJ.p, last = PJ.path[PJ.path.length - 1], [x, y] = n;
+  if (x < 0 || y < 0 || x > p.w || y > p.h) return false;
+  if (PanelEngine.brokenSet(p).has(PanelEngine.ekey(...last, x, y))) return false;
+  return !PJ.path.some(q => q[0] === x && q[1] === y);
+}
+function pjFollow(fx, fy) {
+  const p = PJ.p;
+  for (let guard = 0; guard < 40; guard++) {
+    const last = PJ.path[PJ.path.length - 1], prev = PJ.path[PJ.path.length - 2];
+    // back up along the line
+    if (prev && Math.hypot(fx - prev[0], fy - prev[1]) < .45) { PJ.path.pop(); SFX.tick(); continue; }
+    const dx = fx - last[0], dy = fy - last[1];
+    PJ.atExit = PanelEngine.isExit(p, ...last) && (() => { const [ex, ey] = PanelEngine.exitDir(p, ...last); return dx * ex + dy * ey > .2; })();
+    const tryAxis = ax => { const d = ax === 'x' ? dx : dy; if (Math.abs(d) < .55) return false; const s = Math.sign(d), n = ax === 'x' ? [last[0] + s, last[1]] : [last[0], last[1] + s]; if (!pjCanStep(n)) return false; PJ.path.push(n); SFX.step(PJ.path.length); return true; };
+    const first = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
+    if (tryAxis(first) || tryAxis(first === 'x' ? 'y' : 'x')) continue;
+    break;
+  }
+}
+function bindPJ(svg) {
+  svg.addEventListener('pointerdown', e => {
+    if (!PJ || PJ.state === 'win') return;
+    const [fx, fy] = svgPt(svg, e), p = PJ.p;
+    const last = PJ.path[PJ.path.length - 1];
+    const st = (p.start || []).find(([x, y]) => Math.hypot(fx - x, fy - y) < .4);
+    if (last && Math.hypot(fx - last[0], fy - last[1]) < .4 && PJ.state !== 'fail') { /* keep drawing from the end */ }
+    else if (st) { PJ.path = [st.slice()]; SFX.click(); }
+    else return;
+    PJ.state = 'draw'; PJ.bad = []; PJ.drawing = true; svg.setPointerCapture(e.pointerId); drawPJ();
+  });
+  svg.addEventListener('pointermove', e => { if (!PJ || !PJ.drawing) return; const [fx, fy] = svgPt(svg, e); pjFollow(fx, fy); drawPJ(); });
+  const up = () => { if (!PJ || !PJ.drawing) return; PJ.drawing = false; const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last)) pjSubmit(); else { PJ.state = 'idle'; drawPJ(); } };
+  svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
+}
+function pjKey(e) {
+  if (!PJ || !WINS.projector || PJ.state === 'win') return;
+  if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  const D = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+  if (D) {
+    e.preventDefault();
+    if (!PJ.path.length || PJ.state === 'fail') { PJ.path = [PJ.p.start[0].slice()]; PJ.bad = []; }
+    PJ.state = 'draw';
+    const last = PJ.path[PJ.path.length - 1], prev = PJ.path[PJ.path.length - 2], n = [last[0] + D[0], last[1] + D[1]];
+    if (prev && prev[0] === n[0] && prev[1] === n[1]) PJ.path.pop(); else if (pjCanStep(n)) { PJ.path.push(n); SFX.step(PJ.path.length); }
+    drawPJ();
+  } else if (e.key === 'Enter') { const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last)) pjSubmit(); }
+  else if (e.key === 'Backspace') { e.preventDefault(); if (PJ.path.length > 1) PJ.path.pop(); drawPJ(); }
+  else if (e.key === 'Escape') { PJ.path = []; PJ.state = 'idle'; drawPJ(); }
+}
+function useHint() {
+  if (!PJ || PJ.hintUsed || !PJ.p.sol) return;
+  const sol = PJ.p.sol; let k = 0;
+  while (k < PJ.path.length && k < sol.length && sol[k][0] === PJ.path[k][0] && sol[k][1] === PJ.path[k][1]) k++;
+  const from = Math.max(0, k - 1);
+  PJ.hint = sol.slice(from, from + 4); PJ.hintUsed = true; SFX.item();
+  $('#pj-msg').textContent = k < PJ.path.length ? 'The tracing paper shows where your line went wrong.' : 'The next strokes show through the tracing paper.';
+  drawPJ();
+}
+async function pjSubmit() {
+  const p = PJ.p, r = PanelEngine.validate(p, PJ.path); PJ.tries++;
+  let ok = r.ok;
+  if (!ok && CH.opt.mem.queen_piece && !PJ.eraseUsed && r.bad.length === 1 && r.bad[0].kind !== 'path') {
+    ok = true; PJ.eraseUsed = true; PJ.erased = r.bad[0].kind + ':' + r.bad[0].i;
+    $('#pj-msg').textContent = 'The queen took one rule off the board.';
+  }
+  if (ok) {
+    PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win();
+    const t = performance.now() - PJ.t0, prev = CH.done[p.id];
+    CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries }; chSave();
+    $('#pj-belief').classList.add('struck');
+    if (!PJ.erased) $('#pj-msg').textContent = `${fmtT(t)} · ${PJ.tries} ${PJ.tries === 1 ? 'try' : 'tries'}`;
+    $('#pj-next').hidden = false; $('#pj-next').focus();
+    UPD.forEach(f => f());
+  } else {
+    PJ.state = 'fail'; PJ.bad = r.bad; drawPJ(); SFX.buzz();
+    $('#pj-msg').textContent = '';
+    setTimeout(() => { if (PJ && PJ.state === 'fail') { PJ.state = 'idle'; drawPJ(); } }, 1400);
+  }
+}
+
+main();
 
 </script>
 </body>

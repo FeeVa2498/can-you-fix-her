@@ -20,7 +20,10 @@ On GitHub Pages the game reads `data/dialogue.xlsx` fresh on every load (via the
 | `vendor/xlsx.full.min.js` | SheetJS 0.18.5 (Apache-2.0), reads the workbook in the browser |
 | `src/game.js` | Game code (with placeholders filled in by the build) |
 | `src/shell.html` | Page markup and styles |
-| `src/levels.json` | Generated puzzle boards |
+| `src/levels.json` | Puzzle boards used by the story game (old ColorLine) |
+| `src/panel_engine.js`, `src/panels.json` | New line-panel rules + the hand-checked panels played in the Test chamber |
+| `src/chamber.js` | Title screen (Continue / New game / Test chamber) and the Test chamber |
+| `tools/design_panels.js` | Designs and verifies panels (`node tools/design_panels.js` → `src/panels.json`) |
 | `src/art/` | Character sprites |
 | `build.py` | Builds `index.html` from `src/` + `data/` (`python3 build.py`, needs openpyxl) |
 

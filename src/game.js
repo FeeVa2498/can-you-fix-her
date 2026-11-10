@@ -1871,6 +1871,9 @@ async function main() {
   await loadDialogueData();
   buildTaskbar(); renderIcons(); renderTray();
   let saved = loadSave();
+  const pick = await titleScreen(!!(saved && saved.player));
+  if (pick === 'chamber') { await bootOS(); openChamber(); return; }
+  if (pick === 'new') { wipeSave(); saved = null; }
   if (saved && saved.player) {
     // autosave: continue from the last checkpoint, no menus
     S = Object.assign(fresh(), saved);
@@ -1886,5 +1889,3 @@ async function main() {
   S = fresh(); S.player = player; day1Start();
   await wakeUp();
 }
-main();
-
