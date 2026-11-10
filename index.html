@@ -815,13 +815,53 @@ small.dots{color:var(--pink-deep);font-style:italic}
 .sb-ctrl span{margin-left:auto;font-family:var(--mono);font-size:16px;color:var(--ink-soft)}
 .sb-log{margin:0;padding:0 0 0 44px;overflow:auto;flex:1;min-height:40px;font-family:var(--mono);font-size:16px;line-height:1.15;color:var(--ink-soft)}
 .sb-log li.now{color:var(--ink);background:var(--pink-hi);border-radius:4px}
-.sb-reg{opacity:.35}
-.sb-reg.pink{fill:#ff8cc6}.sb-reg.ink{fill:#000}.sb-reg.none{fill:#cbb8ea}
+.sb-reg{opacity:.3}
 .sb-traced{stroke:#8fdcf7;stroke-width:.06;stroke-linecap:round}
 .sb-numok{fill:none;stroke:#7be3a4;stroke-width:.05}
 .pb-line.sol{stroke:#8fdcf7}
 .pb-start.on.sol,.pb-head.sol{fill:#8fdcf7}
 .chm-card small i{color:#c47a00;font-style:normal}
+
+.pb-avoid{stroke:#120a1c;stroke-width:.11;stroke-dasharray:.11 .06;stroke-linecap:round}
+.pb-avoid.bad{stroke:#ff4d7a}
+.pb-warm{stroke:#ff9f5a;stroke-width:.22;stroke-linecap:round}
+.pb-cool{stroke:#5fb8ff;stroke-width:.22;stroke-linecap:round}
+.pb-warm.bad,.pb-cool.bad{stroke:#ff4d7a}
+.pb-wrap{fill:#cbb8ea;font-family:var(--mono);font-size:.34px;text-anchor:middle;dominant-baseline:central}
+.pb-exitring{fill:none;stroke:#ff8cc6;stroke-width:.06;stroke-dasharray:.08 .05}
+.pb-piece{fill:#f4e9ff;font-size:.5px;text-anchor:middle;dominant-baseline:central}
+.pb-heart{font-size:.46px;text-anchor:middle;dominant-baseline:central;stroke:#fff;stroke-width:.012}
+.pb-card rect{fill:#2b1b3d;stroke:#cbb8ea;stroke-width:.03}
+.pb-card text,.pb-fogdot{fill:#cbb8ea;font-family:var(--mono);font-size:.32px;text-anchor:middle;dominant-baseline:central}
+.pb-shape rect{fill:#ffd86e}
+.pb-shape.bad rect{fill:#ff4d7a}
+.pb-radar rect{fill:#2f5a3a;stroke:#7be3a4;stroke-width:.03}
+.pb-radar text{fill:#7be3a4;font-family:var(--mono);font-size:.32px;text-anchor:middle;dominant-baseline:central}
+.pb-mine{fill:#ff4d7a;font-size:.42px;text-anchor:middle;dominant-baseline:central}
+.pb-portal{fill:none;stroke-width:.05}
+.pb-switch circle{fill:#fff;stroke:#2b1b3d;stroke-width:.03}
+.pb-switch path{fill:#5fb8ff}
+.pb-order circle{fill:#f4e9ff;stroke:#2b1b3d;stroke-width:.03}
+.pb-order text{fill:#2b1b3d;font-family:var(--mono);font-size:.26px;text-anchor:middle;dominant-baseline:central}
+.pb-order.bad circle{fill:#ff4d7a}
+.pb-lens{fill:none;stroke:#fff;stroke-width:.05;stroke-dasharray:.12 .06;pointer-events:none}
+.pb-jump{stroke:#ff8cc6;stroke-width:.04;stroke-dasharray:.05 .08;opacity:.7}
+.pb-start.other{fill:#5b4478}
+.pb-line.other{stroke:#1a1024;filter:drop-shadow(0 0 .05px #fff)}
+.pb-start.on.other{fill:#1a1024}
+.pb-line.other.win{stroke:#2b1b3d}
+.pb-line.hint{stroke:#fff;opacity:.55;stroke-width:.1;stroke-dasharray:.05 .06}
+.pb-line.ghost{stroke:#8fdcf7;stroke-width:.08;stroke-dasharray:.12 .08;opacity:.85}
+.pb-line.other.sol{stroke:#1a1024}
+.pb-start.on.other.sol{fill:#1a1024}
+.sb-reg.r0{fill:#ff8cc6}.sb-reg.r1{fill:#8fdcf7}.sb-reg.r2{fill:#ffd86e}.sb-reg.r3{fill:#b48cff}
+.cam-sil,.mag-sil{position:absolute;left:50%;bottom:0;width:46%;height:80%;transform:translateX(-50%);border-radius:45% 45% 10% 10%;
+  background:radial-gradient(circle at 50% 22%,#9e93ae 0 18%,transparent 19%),radial-gradient(ellipse 50% 60% at 50% 100%,#9e93ae 0 98%,transparent 100%)}
+.mag-sil{width:70%;height:100%;bottom:-10%}
+#pj-lens.on{background:var(--pink);color:#fff}
+.g-paige .pj-stage{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.4),transparent 70%),repeating-radial-gradient(circle at 40% 60%,#e1d6ef 0 8px,#d3c4e8 8px 12px,#efe8f8 12px 20px)}
+.g-vel .pj-stage{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.5),transparent 70%),repeating-radial-gradient(circle at 60% 40%,#ffe6c9 0 8px,#ffd8a8 8px 12px,#fff1de 12px 20px)}
+.g-myne .pj-stage{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.5),transparent 70%),repeating-radial-gradient(circle at 50% 50%,#d6f5e6 0 8px,#bdebd5 8px 12px,#ecfbf3 12px 20px)}
 @media (max-width:720px){.chm{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}.chm-girls{flex-direction:row;overflow-x:auto}.chm-girl small{display:none}}
 @media (prefers-reduced-motion:reduce){.bad,.mag-scan{animation:none}.lens{transition:none}}
 </style>
@@ -2743,31 +2783,66 @@ async function main() {
 }
 
 /* =========================================================
-   PANEL ENGINE · line puzzles drawn on a grid of nodes
-   Shared by the game (browser) and tools/panels.js (node).
+   PANEL ENGINE v2 · line puzzles on a grid of nodes
+   Shared by the game (browser) and tools/design_panels.js (node).
 
-   A panel has w×h cells → (w+1)×(h+1) nodes, x right, y down.
-   The line starts on a start node and ends on an exit node,
-   moving along edges, never revisiting a node.
+   Board: w×h cells → (w+1)×(h+1) nodes, x right, y down.
+   With wrap 'x' the left and right edges join (w node columns);
+   with wrap 'xy' the board is a torus (w×h nodes, no border).
+   The line runs from a start node to an exit node along edges and
+   never visits a node twice.
 
-   Symbols
-     broken   [[x1,y1,x2,y2]]   edge can't be used
-     sketch   [[x1,y1,x2,y2]]   (Prim) faint pencil line: must be traced (used)
-     dots     [[x,y]]           node must be visited
-     squares  [[cx,cy,color]]   cell ink: each region the line cuts out may hold one ink colour only
-     nums     [[cx,cy,n]]       (Trix) the line uses exactly n of this cell's 4 sides
-     visitAll true              (Trix) the line must visit every node
+   Structure
+     start, exit [[x,y]]       mirror: start[1]/exit[1] belong to the mirrored line
+     broken  [[x1,y1,x2,y2]]   edge can't be used
+     portals [[x1,y1,x2,y2]]   stepping onto one end carries the line to the other
+     mirror  'x'|'y'|'rot'     a second line copies the first (it may not touch it)
+     wrap    'x'|'xy'
+   Rules on edges / nodes
+     sketch  edges that must be used          (Prim · pencil)
+     avoid   edges that must not be used      (Prim · black pencil)
+     dots    nodes that must be visited
+     visitAll                                 (Trix)
+     order   [[x,y]] visit these in this order (Trix · proof steps)
+     switches [[x,y]] each visit flips the mood; warm edges need the first mood,
+     warm, cool                                cool edges the second          (Vel)
+     mines   [[cx,cy]] hidden cells whose sides the line must not touch       (Vel)
+     radar   [[cx,cy,n]] n mines among the 8 cells around                    (Vel)
+     restless n: no straight run longer than n edges                         (Myne)
+   Rules on regions (cells the line separates)
+     squares [[cx,cy,'pink'|'ink']]  one ink per region                        (Prim)
+     shapes  [[cx,cy,[[dx,dy],…]]]   the region must have exactly this shape   (Prim)
+     nums    [[cx,cy,n]]             the line uses n of this cell's 4 sides    (Trix)
+     pieces  [[cx,cy,'P'|'N'|'B'|'R'|'Q']] region size = sum of piece values   (Trix)
+     hearts  [[cx,cy,color]]         each heart shares its region with exactly
+                                     one other heart of its colour             (Paige)
+   Any symbol can carry fog:true (hidden until the line passes next to it) or
+   lens:true (only visible through the magnifier). That only changes drawing.
    ========================================================= */
 const PanelEngine = (() => {
+  const VAL = { P: 1, N: 3, B: 3, R: 5, Q: 9 };
   const key = (x, y) => x + ',' + y;
   const ekey = (a, b, c, d) => (a < c || (a === c && b < d)) ? `${a},${b}|${c},${d}` : `${c},${d}|${a},${b}`;
-  const nodeCount = p => (p.w + 1) * (p.h + 1);
-  function brokenSet(p) { const s = new Set(); (p.broken || []).forEach(e => s.add(ekey(...e))); return s; }
-  function neighbors(p, x, y, broken) {
+  function dims(p) {
+    const wx = !!(p.wrap && p.wrap.includes('x')), wy = !!(p.wrap && p.wrap.includes('y'));
+    return { wx, wy, cols: wx ? p.w : p.w + 1, rows: wy ? p.h : p.h + 1 };
+  }
+  const nodeCount = p => { const d = dims(p); return d.cols * d.rows; };
+  function norm(p, x, y) { const d = dims(p); if (d.wx) x = ((x % d.cols) + d.cols) % d.cols; if (d.wy) y = ((y % d.rows) + d.rows) % d.rows; return [x, y]; }
+  function inside(p, x, y) { const d = dims(p); return x >= 0 && y >= 0 && x < d.cols && y < d.rows; }
+  const edgeSet = list => { const s = new Set(); (list || []).forEach(e => s.add(ekey(e[0], e[1], e[2], e[3]))); return s; };
+  function brokenSet(p) { return edgeSet(p.broken); }
+  const cellSides = (cx, cy) => [ekey(cx, cy, cx + 1, cy), ekey(cx, cy + 1, cx + 1, cy + 1), ekey(cx, cy, cx, cy + 1), ekey(cx + 1, cy, cx + 1, cy + 1)];
+  function mineEdges(p) { const s = new Set(); (p.mines || []).forEach(([cx, cy]) => cellSides(cx, cy).forEach(k => s.add(k))); return s; }
+  function twin(p, x, y) {
+    for (const [a, b, c, d] of p.portals || []) { if (a === x && b === y) return [c, d]; if (c === x && d === y) return [a, b]; }
+    return null;
+  }
+  function neighbors(p, x, y, broken = brokenSet(p)) {
     const out = [];
     for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-      const nx = x + dx, ny = y + dy;
-      if (nx < 0 || ny < 0 || nx > p.w || ny > p.h) continue;
+      const [nx, ny] = norm(p, x + dx, y + dy);
+      if (!inside(p, nx, ny) || (nx === x && ny === y)) continue;
       if (broken.has(ekey(x, y, nx, ny))) continue;
       out.push([nx, ny]);
     }
@@ -2775,65 +2850,177 @@ const PanelEngine = (() => {
   }
   const isStart = (p, x, y) => (p.start || []).some(s => s[0] === x && s[1] === y);
   const isExit = (p, x, y) => (p.exit || []).some(s => s[0] === x && s[1] === y);
-  // which way the exit stub points (off the edge of the board)
-  function exitDir(p, x, y) { return x === 0 ? [-1, 0] : x === p.w ? [1, 0] : y === 0 ? [0, -1] : [0, 1]; }
+  // which way the exit stub points (off the board); null = an exit in the middle (torus)
+  function exitDir(p, x, y) {
+    const d = dims(p);
+    if (!d.wx && x === 0) return [-1, 0]; if (!d.wx && x === p.w) return [1, 0];
+    if (!d.wy && y === 0) return [0, -1]; if (!d.wy && y === p.h) return [0, 1];
+    return null;
+  }
+  function mirrorOf(p, [x, y]) { return p.mirror === 'x' ? [p.w - x, y] : p.mirror === 'y' ? [x, p.h - y] : [p.w - x, p.h - y]; }
+  const isSwitch = (p, x, y) => (p.switches || []).some(s => s[0] === x && s[1] === y);
 
-  /* returns { ok, broken: [{kind, i}] } — kind/i point at the symbol that failed */
-  function validate(p, path) {
-    const bad = [];
-    if (!path || path.length < 2 || !isStart(p, ...path[0]) || !isExit(p, ...path[path.length - 1])) return { ok: false, bad: [{ kind: 'path' }] };
-    const used = new Set(), seen = new Set();
-    for (let i = 0; i < path.length; i++) {
-      seen.add(key(...path[i]));
-      if (i) used.add(ekey(...path[i - 1], ...path[i]));
+  /* was step i (path[i-1] → path[i]) a portal jump? */
+  function jumps(p, path) {
+    const j = new Array(path.length).fill(false);
+    for (let i = 1; i < path.length; i++) {
+      const t = twin(p, ...path[i - 1]);
+      j[i] = !!(t && !j[i - 1] && t[0] === path[i][0] && t[1] === path[i][1]);
     }
-    (p.sketch || []).forEach((e, i) => { if (!used.has(ekey(...e))) bad.push({ kind: 'sketch', i }); });
-    (p.dots || []).forEach((d, i) => { if (!seen.has(key(...d))) bad.push({ kind: 'dots', i }); });
-    if (p.visitAll && seen.size !== nodeCount(p)) bad.push({ kind: 'visitAll' });
-    (p.nums || []).forEach(([cx, cy, n], i) => {
-      const c = [ekey(cx, cy, cx + 1, cy), ekey(cx, cy + 1, cx + 1, cy + 1), ekey(cx, cy, cx, cy + 1), ekey(cx + 1, cy, cx + 1, cy + 1)].filter(k => used.has(k)).length;
-      if (c !== n) bad.push({ kind: 'nums', i });
-    });
-    if ((p.squares || []).length) {
-      // regions of cells the line separates
-      const reg = {}; let r = 0;
-      for (let y = 0; y < p.h; y++) for (let x = 0; x < p.w; x++) {
-        if (reg[key(x, y)] !== undefined) continue;
-        const st = [[x, y]]; reg[key(x, y)] = r;
-        while (st.length) {
-          const [cx, cy] = st.pop();
-          const nb = [[cx + 1, cy, ekey(cx + 1, cy, cx + 1, cy + 1)], [cx - 1, cy, ekey(cx, cy, cx, cy + 1)], [cx, cy + 1, ekey(cx, cy + 1, cx + 1, cy + 1)], [cx, cy - 1, ekey(cx, cy, cx + 1, cy)]];
-          for (const [nx, ny, wall] of nb) {
-            if (nx < 0 || ny < 0 || nx >= p.w || ny >= p.h || used.has(wall) || reg[key(nx, ny)] !== undefined) continue;
-            reg[key(nx, ny)] = r; st.push([nx, ny]);
-          }
+    return j;
+  }
+  // all lines drawn (the player's, and the mirror's)
+  function lines(p, path) { return p.mirror ? [path, path.map(n => mirrorOf(p, n))] : [path]; }
+
+  function regions(p, used) {
+    const reg = {}, list = []; let r = 0;
+    for (let y = 0; y < p.h; y++) for (let x = 0; x < p.w; x++) {
+      if (reg[key(x, y)] !== undefined) continue;
+      const st = [[x, y]], cells = [[x, y]]; reg[key(x, y)] = r;
+      while (st.length) {
+        const [cx, cy] = st.pop();
+        for (const [nx, ny, wall] of [[cx + 1, cy, ekey(cx + 1, cy, cx + 1, cy + 1)], [cx - 1, cy, ekey(cx, cy, cx, cy + 1)], [cx, cy + 1, ekey(cx, cy + 1, cx + 1, cy + 1)], [cx, cy - 1, ekey(cx, cy, cx + 1, cy)]]) {
+          if (nx < 0 || ny < 0 || nx >= p.w || ny >= p.h || used.has(wall) || reg[key(nx, ny)] !== undefined) continue;
+          reg[key(nx, ny)] = r; st.push([nx, ny]); cells.push([nx, ny]);
         }
-        r++;
       }
-      const colors = {};
-      p.squares.forEach(([cx, cy, col]) => { const g = reg[key(cx, cy)]; (colors[g] = colors[g] || new Set()).add(col); });
-      p.squares.forEach(([cx, cy], i) => { if (colors[reg[key(cx, cy)]].size > 1) bad.push({ kind: 'squares', i }); });
+      list.push(cells); r++;
+    }
+    return { reg, list };
+  }
+  const shapeKey = cells => { const mx = Math.min(...cells.map(c => c[0])), my = Math.min(...cells.map(c => c[1])); return cells.map(([x, y]) => (x - mx) + ',' + (y - my)).sort().join(' '); };
+
+  /* structural check: legal moves, no revisits, start → exit (and the mirror line too) */
+  function structure(p, path) {
+    if (!path || path.length < 2 || !isStart(p, ...path[0]) || !isExit(p, ...path[path.length - 1])) return false;
+    if (p.mirror && !(p.start || []).some(s => s[0] === mirrorOf(p, path[0])[0] && s[1] === mirrorOf(p, path[0])[1])) return false;
+    const broken = brokenSet(p), J = jumps(p, path), seen = new Set();
+    for (let i = 0; i < path.length; i++) {
+      const [x, y] = path[i];
+      if (!inside(p, x, y)) return false;
+      if (i) {
+        if (!J[i] && !neighbors(p, ...path[i - 1], broken).some(n => n[0] === x && n[1] === y)) return false;
+        // stepping onto a portal must carry the line through it
+        if (!J[i] && twin(p, x, y) && !(i + 1 < path.length && J[i + 1])) return false;
+      }
+      seen.add(key(x, y));
+    }
+    if (seen.size !== path.length) return false;
+    if (p.mirror) {
+      const m = path.map(n => mirrorOf(p, n));
+      if (m.some(n => seen.has(key(...n)))) return false;
+      if (!isExit(p, ...m[m.length - 1])) return false;
+    }
+    return true;
+  }
+
+  /* returns { ok, bad: [{kind, i}] } — kind/i point at the symbol that failed */
+  function validate(p, path) {
+    if (!structure(p, path)) return { ok: false, bad: [{ kind: 'path' }] };
+    const bad = [], used = new Set(), seen = new Set(), J = jumps(p, path);
+    for (const ln of lines(p, path)) for (let i = 0; i < ln.length; i++) { seen.add(key(...ln[i])); if (i && !J[i]) used.add(ekey(...ln[i - 1], ...ln[i])); }
+    (p.sketch || []).forEach((e, i) => { if (!used.has(ekey(e[0], e[1], e[2], e[3]))) bad.push({ kind: 'sketch', i }); });
+    (p.avoid || []).forEach((e, i) => { if (used.has(ekey(e[0], e[1], e[2], e[3]))) bad.push({ kind: 'avoid', i }); });
+    (p.dots || []).forEach((d, i) => { if (!seen.has(key(d[0], d[1]))) bad.push({ kind: 'dots', i }); });
+    if (p.visitAll && seen.size !== nodeCount(p)) bad.push({ kind: 'visitAll' });
+    if (p.order) {
+      const idx = p.order.map(([x, y]) => path.findIndex(n => n[0] === x && n[1] === y));
+      idx.forEach((v, i) => { if (v < 0 || (i && v < idx[i - 1])) bad.push({ kind: 'order', i }); });
+    }
+    if (p.restless) for (const ln of lines(p, path)) {
+      let run = 0, dir = null;
+      for (let i = 1; i < ln.length; i++) {
+        if (J[i]) { run = 0; dir = null; continue; }
+        let dx = ln[i][0] - ln[i - 1][0], dy = ln[i][1] - ln[i - 1][1];
+        if (Math.abs(dx) > 1) dx = -Math.sign(dx); if (Math.abs(dy) > 1) dy = -Math.sign(dy);   // wrapped step
+        const d = dx + ',' + dy; run = d === dir ? run + 1 : 1; dir = d;
+        if (run > p.restless) { bad.push({ kind: 'restless', i }); break; }
+      }
+    }
+    if (p.switches) {
+      const warm = edgeSet(p.warm), cool = edgeSet(p.cool); let up = true;
+      for (let i = 1; i < path.length; i++) {
+        if (!J[i]) {
+          const k = ekey(...path[i - 1], ...path[i]);
+          if (warm.has(k) && !up) bad.push({ kind: 'warm', i: (p.warm || []).findIndex(e => ekey(e[0], e[1], e[2], e[3]) === k) });
+          if (cool.has(k) && up) bad.push({ kind: 'cool', i: (p.cool || []).findIndex(e => ekey(e[0], e[1], e[2], e[3]) === k) });
+        }
+        if (isSwitch(p, ...path[i])) up = !up;
+      }
+    }
+    (p.mines || []).forEach(([cx, cy], i) => { if (cellSides(cx, cy).some(k => used.has(k))) bad.push({ kind: 'mines', i }); });
+    (p.nums || []).forEach(([cx, cy, n], i) => { if (cellSides(cx, cy).filter(k => used.has(k)).length !== n) bad.push({ kind: 'nums', i }); });
+    if ((p.squares || []).length || (p.hearts || []).length || (p.pieces || []).length || (p.shapes || []).length) {
+      const { reg, list } = regions(p, used), R = (cx, cy) => reg[key(cx, cy)];
+      if ((p.squares || []).length) {
+        const colors = {};
+        p.squares.forEach(([cx, cy, col]) => { (colors[R(cx, cy)] = colors[R(cx, cy)] || new Set()).add(col); });
+        p.squares.forEach(([cx, cy], i) => { if (colors[R(cx, cy)].size > 1) bad.push({ kind: 'squares', i }); });
+      }
+      (p.hearts || []).forEach(([cx, cy, col], i) => {
+        const n = p.hearts.filter(([x, y, c]) => c === col && R(x, y) === R(cx, cy)).length;
+        if (n !== 2) bad.push({ kind: 'hearts', i });
+      });
+      (p.pieces || []).forEach(([cx, cy], i) => {
+        const r = R(cx, cy), sum = p.pieces.filter(([x, y]) => R(x, y) === r).reduce((a, q) => a + VAL[q[2]], 0);
+        if (list[r].length !== sum) bad.push({ kind: 'pieces', i });
+      });
+      (p.shapes || []).forEach(([cx, cy, shape], i) => {
+        const r = R(cx, cy), others = p.shapes.filter(([x, y]) => R(x, y) === r).length;
+        if (others !== 1 || shapeKey(list[r]) !== shapeKey(shape)) bad.push({ kind: 'shapes', i });
+      });
     }
     return { ok: !bad.length, bad };
   }
 
-  /* every distinct solution (as node paths), up to `limit` */
+  /* every distinct solution (as the player's node path), up to `limit` */
   function solve(p, limit = 50) {
     const broken = brokenSet(p), sols = [], N = nodeCount(p);
-    const seen = new Set();
-    function dfs(path) {
+    const hard = new Set([...edgeSet(p.avoid), ...mineEdges(p)]);
+    const warm = edgeSet(p.warm), cool = edgeSet(p.cool);
+    const ord = (p.order || []).map(([x, y]) => key(x, y));
+    const occ = new Set();
+    function dfs(path, up, run, dir, jumped, nextOrd) {
       if (sols.length >= limit) return;
       const [x, y] = path[path.length - 1];
-      if (isExit(p, x, y) && validate(p, path).ok) sols.push(path.slice());
-      for (const [nx, ny] of neighbors(p, x, y, broken)) {
-        const k = key(nx, ny); if (seen.has(k)) continue;
-        seen.add(k); path.push([nx, ny]); dfs(path); path.pop(); seen.delete(k);
+      if (isExit(p, x, y) && !(twin(p, x, y) && !jumped) && (!p.visitAll || occ.size === N) && nextOrd === ord.length && validate(p, path).ok) sols.push(path.slice());
+      // standing on a portal reached by a normal step: the only move is through it
+      const t = twin(p, x, y);
+      const moves = t && !jumped ? [[t, true]] : neighbors(p, x, y, broken).map(n => [n, false]);
+      for (const [[nx, ny], isJump] of moves) {
+        const k = key(nx, ny); if (occ.has(k)) continue;
+        let m = null;
+        if (p.mirror) { m = mirrorOf(p, [nx, ny]); const mk = key(...m); if (occ.has(mk) || mk === k) continue; }
+        let nup = up, nrun = 0, ndir = null;
+        if (!isJump) {
+          const ek = ekey(x, y, nx, ny);
+          if (hard.has(ek)) continue;
+          if (warm.has(ek) && !up) continue;
+          if (cool.has(ek) && up) continue;
+          if (p.restless) {
+            let dx = nx - x, dy = ny - y; if (Math.abs(dx) > 1) dx = -Math.sign(dx); if (Math.abs(dy) > 1) dy = -Math.sign(dy);
+            ndir = dx + ',' + dy; nrun = ndir === dir ? run + 1 : 1;
+            if (nrun > p.restless) continue;
+          }
+        }
+        let no = nextOrd;
+        const oi = ord.indexOf(k);
+        if (oi >= 0) { if (oi !== nextOrd) continue; no++; }
+        if (isSwitch(p, nx, ny)) nup = !up;
+        occ.add(k); if (m) occ.add(key(...m));
+        path.push([nx, ny]); dfs(path, nup, nrun, ndir, isJump, no); path.pop();
+        occ.delete(k); if (m) occ.delete(key(...m));
       }
     }
-    for (const s of p.start || []) { seen.clear(); seen.add(key(...s)); dfs([s.slice()]); }
+    const starts = p.mirror ? (p.start || []).slice(0, 1) : (p.start || []);
+    for (const s of starts) {
+      occ.clear(); occ.add(key(...s)); if (p.mirror) occ.add(key(...mirrorOf(p, s)));
+      const o0 = ord[0] === key(...s) ? 1 : 0;
+      dfs([s.slice()], true, 0, null, false, o0);
+    }
     return sols;
   }
-  return { validate, solve, neighbors, brokenSet, isStart, isExit, exitDir, key, ekey, nodeCount };
+  return { validate, solve, neighbors, brokenSet, isStart, isExit, exitDir, key, ekey, nodeCount, dims, norm, inside, twin, jumps, mirrorOf, lines, regions, cellSides, shapeKey, VAL, isSwitch, edgeSet };
 })();
 if (typeof module !== 'undefined') module.exports = PanelEngine;
 
@@ -2843,17 +3030,20 @@ if (typeof module !== 'undefined') module.exports = PanelEngine;
    pick a panel, play it (with the magnifier → projector intro).
    Nothing here touches the story save.
    ========================================================= */
-const PANELS = [{"id":"prim_1_1","girl":"prim","layer":1,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"sketch":[[0,3,0,2],[0,2,1,2],[1,1,2,1],[2,1,2,0]],"belief":"i only draw on top of other people's lines.","note":"D\u1ea1y c\u00e1ch v\u1ebd \u0111\u01b0\u1eddng + n\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i.","sol":[[0,3],[0,2],[1,2],[1,1],[2,1],[2,0],[3,0]],"solutions":1,"why":"B\u1ea3ng d\u1ea1y c\u00e1ch ch\u01a1i. M\u1ecdi \u0111o\u1ea1n n\u00e9t ch\u00ec m\u1edd \u0111\u1ec1u ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i. \u1ede \u0111\u00e2y c\u00e1c \u0111o\u1ea1n ch\u00ec n\u1ed1i \u0111u\u00f4i nhau th\u00e0nh m\u1ed9t b\u1eadc thang t\u1eeb v\u00f2ng tr\u00f2n t\u1edbi l\u1ed1i ra: ch\u1ec9 c\u1ea7n \u0111i theo."},{"id":"prim_1_2","girl":"prim","layer":1,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"sketch":[[3,1,4,1],[2,0,2,1],[0,1,1,1],[2,1,3,1],[1,2,0,2],[1,3,1,2]],"belief":"if i lose the line, i'll ruin the whole page.","note":"N\u00e9t ch\u00ec r\u1eddi r\u1ea1c: ph\u1ea3i t\u00ecm \u0111\u01b0\u1eddng duy nh\u1ea5t n\u1ed1i h\u1ebft c\u00e1c m\u1ea3nh.","sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[2,1],[3,1],[4,1],[4,0]],"solutions":1,"why":"C\u00f3 6 \u0111o\u1ea1n ch\u00ec r\u1eddi r\u1ea1c v\u00e0 ch\u1ec9 m\u1ed9t th\u1ee9 t\u1ef1 \u0111i qua h\u1ebft. M\u1eb9o: \u0111o\u1ea1n ch\u00ec d\u1ecdc \u1edf c\u1ed9t gi\u1eefa ph\u00eda tr\u00ean ch\u1ec9 t\u00f4 \u0111\u01b0\u1ee3c theo chi\u1ec1u t\u1eeb tr\u00ean xu\u1ed1ng, v\u00ec ngay sau n\u00f3 l\u00e0 d\u00e3y ch\u00ec \u1edf h\u00e0ng gi\u1eefa ch\u1ea1y th\u1eb3ng t\u1edbi l\u1ed1i ra. V\u1eady tr\u01b0\u1edbc \u0111\u00f3 \u0111\u01b0\u1eddng ph\u1ea3i gom h\u1ebft ph\u1ea7n b\u00ean tr\u00e1i (ch\u1eef L b\u00ean d\u01b0\u1edbi, r\u1ed3i \u0111o\u1ea1n ch\u00ec h\u00e0ng gi\u1eefa b\u00ean tr\u00e1i) r\u1ed3i m\u1edbi l\u00ean h\u00e0ng tr\u00ean c\u00f9ng."},{"id":"prim_1_3","girl":"prim","layer":1,"n":3,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"squares":[[2,2,"ink"],[1,1,"pink"],[2,0,"pink"],[0,1,"pink"],[2,1,"ink"],[0,2,"ink"]],"belief":"my hand and the other hand must never touch.","note":"D\u1ea1y lu\u1eadt m\u1ef1c: m\u1ed7i v\u00f9ng ch\u1ec9 \u0111\u01b0\u1ee3c m\u1ed9t m\u00e0u. V\u00e0i l\u1eddi gi\u1ea3i (b\u1ea3ng d\u1ea1y lu\u1eadt).","sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[3,1],[2,1],[2,2],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0]],"solutions":4,"why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1ef1c: \u0111\u01b0\u1eddng \u0111i c\u1eaft b\u1ea3ng th\u00e0nh c\u00e1c v\u00f9ng, m\u1ed7i v\u00f9ng ch\u1ec9 \u0111\u01b0\u1ee3c ch\u1ee9a m\u1ed9t m\u00e0u. \u00d4 h\u1ed3ng v\u00e0 \u00f4 \u0111en n\u1eb1m xen k\u1ebd nhau, n\u00ean m\u1ed7i c\u1eb7p h\u1ed3ng\u2013\u0111en n\u1eb1m s\u00e1t nhau ph\u1ea3i b\u1ecb \u0111\u01b0\u1eddng \u0111i chia c\u1eaft. \u0110i th\u1eb3ng d\u1ecdc m\u00e9p kh\u00f4ng l\u00e0m \u0111\u01b0\u1ee3c, \u0111\u01b0\u1eddng ph\u1ea3i lu\u1ed3n v\u00e0o gi\u1eefa b\u1ea3ng. B\u1ea3ng c\u00f3 4 l\u1eddi gi\u1ea3i, \u0111\u00e2y l\u00e0 m\u1ed9t trong s\u1ed1 \u0111\u00f3."},{"id":"prim_1_4","girl":"prim","layer":1,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"squares":[[3,1,"ink"],[1,1,"pink"],[3,0,"pink"],[3,3,"ink"],[1,3,"pink"],[1,0,"ink"],[2,1,"pink"],[0,0,"pink"],[0,3,"pink"]],"belief":"pink is mine. black is hers. i keep them apart.","note":"Ch\u1ec9 c\u00f3 m\u1ef1c, b\u1ea3ng l\u1edbn h\u01a1n: ch\u1ec9 c\u00f2n r\u1ea5t \u00edt c\u00e1ch chia.","sol":[[0,4],[0,3],[1,3],[2,3],[3,3],[3,4],[4,4],[4,3],[4,2],[4,1],[3,1],[3,2],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[4,0]],"solutions":3,"why":"\u00d4 \u0111en \u1edf h\u00e0ng tr\u00ean c\u00f9ng b\u1ecb c\u00e1c \u00f4 h\u1ed3ng v\u00e2y quanh, n\u00ean \u0111\u01b0\u1eddng ph\u1ea3i khoanh ri\u00eang n\u00f3 th\u00e0nh m\u1ed9t v\u00f9ng nh\u1ecf. Hai \u00f4 \u0111en b\u00ean ph\u1ea3i ph\u1ea3i n\u1eb1m c\u00f9ng ph\u00eda, t\u00e1ch kh\u1ecfi \u00f4 h\u1ed3ng \u1edf g\u00f3c tr\u00ean b\u00ean ph\u1ea3i. B\u1ea3ng c\u00f3 3 l\u1eddi gi\u1ea3i, kh\u00e1c nhau \u1edf ph\u1ea7n gi\u1eefa b\u1ea3ng."},{"id":"prim_1_5","girl":"prim","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"squares":[[3,2,"ink"],[2,3,"pink"],[0,0,"pink"],[2,1,"pink"],[1,2,"ink"],[1,3,"ink"],[0,1,"ink"]],"sketch":[[3,4,4,4],[3,1,2,1],[1,2,0,2],[0,4,1,4]],"belief":"i can't draw. i can only trace.","note":"B\u1ea3ng l\u00f5i: n\u00e9t ch\u00ec + m\u1ef1c. C\u1ea7n d\u00f9ng c\u1ea3 hai lu\u1eadt.","sol":[[0,4],[1,4],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0],[3,1],[2,1],[2,2],[2,3],[2,4],[3,4],[4,4],[4,3],[3,3],[3,2],[4,2],[4,1],[4,0]],"solutions":1,"why":"B\u1ea3ng l\u00f5i: n\u00e9t ch\u00ec g\u1ee3i \u00fd m\u1ed9t con \u0111\u01b0\u1eddng nh\u01b0ng kh\u00f4ng \u0111\u1ee7, m\u1ef1c m\u1edbi quy\u1ebft \u0111\u1ecbnh. \u00d4 h\u1ed3ng \u1edf g\u00f3c tr\u00ean tr\u00e1i c\u00f3 \u00f4 \u0111en ngay d\u01b0\u1edbi n\u00ean \u0111\u01b0\u1eddng ph\u1ea3i c\u1eaft ngang gi\u1eefa hai \u00f4 \u0111\u00f3, v\u00ec v\u1eady \u0111o\u1ea1n ch\u00ec \u1edf h\u00e0ng th\u1ee9 ba d\u1eabn sang tr\u00e1i. Sau \u0111\u00f3 \u0111\u01b0\u1eddng v\u00f2ng l\u00ean h\u00e0ng tr\u00ean, t\u00f4 \u0111o\u1ea1n ch\u00ec \u1edf h\u00e0ng th\u1ee9 hai t\u1eeb ph\u1ea3i sang tr\u00e1i, \u0111i xu\u1ed1ng c\u1ed9t gi\u1eefa \u0111\u1ec3 t\u00e1ch c\u00e1c \u00f4 h\u1ed3ng \u1edf gi\u1eefa kh\u1ecfi c\u00e1c \u00f4 \u0111en hai b\u00ean, r\u1ed3i zigzag \u1edf c\u1ed9t ph\u1ea3i \u0111\u1ec3 khoanh \u00f4 \u0111en b\u00ean ph\u1ea3i."},{"id":"trix_1_1","girl":"trix","layer":1,"n":1,"w":2,"h":2,"start":[[0,2]],"exit":[[2,0]],"visitAll":true,"belief":"every point gets visited. no exceptions.","note":"D\u1ea1y lu\u1eadt ph\u1ee7 k\u00edn: \u0111i qua m\u1ecdi n\u00fat. 2 l\u1eddi gi\u1ea3i \u0111\u1ed1i x\u1ee9ng l\u00e0 \u0111\u01b0\u1ee3c.","sol":[[0,2],[1,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0]],"solutions":2,"why":"Lu\u1eadt ph\u1ee7 k\u00edn: ph\u1ea3i \u0111i qua m\u1ecdi \u0111i\u1ec3m (c\u00e1c v\u00f2ng tr\u00f2n nh\u1ecf s\u00e1ng l\u00ean khi \u0111i qua). V\u1edbi 3\u00d73 \u0111i\u1ec3m ch\u1ec9 c\u1ea7n \u0111i ki\u1ec3u con r\u1eafn, h\u1ebft h\u00e0ng n\u00e0y t\u1edbi h\u00e0ng kia. C\u00f3 2 l\u1eddi gi\u1ea3i \u0111\u1ed1i x\u1ee9ng (theo h\u00e0ng ho\u1eb7c theo c\u1ed9t)."},{"id":"trix_1_2","girl":"trix","layer":1,"n":2,"w":3,"h":3,"start":[[0,3]],"exit":[[3,1]],"visitAll":true,"broken":[[1,2,2,2],[1,1,1,2]],"belief":"a gap means i failed.","note":"Ph\u1ee7 k\u00edn + \u0111\u01b0\u1eddng \u0111\u1ee9t: t\u00ecm th\u1ee9 t\u1ef1 duy nh\u1ea5t.","sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[3,1]],"solutions":1,"why":"Hai \u0111o\u1ea1n \u0111\u1ee9t l\u00e0m \u0111i\u1ec3m th\u1ee9 hai trong h\u00e0ng th\u1ee9 ba ch\u1ec9 c\u00f2n \u0111\u00fang 2 \u0111\u01b0\u1eddng n\u1ed1i. M\u1ed9t \u0111i\u1ec3m ph\u1ea3i \u0111i qua m\u00e0 ch\u1ec9 c\u00f3 2 l\u1ed1i th\u00ec \u0111\u01b0\u1eddng b\u1eaft bu\u1ed9c d\u00f9ng c\u1ea3 hai l\u1ed1i \u0111\u00f3: t\u1eeb v\u00f2ng tr\u00f2n \u0111i l\u00ean, r\u1ebd ph\u1ea3i, r\u1ed3i \u0111i xu\u1ed1ng. Ph\u1ea7n c\u00f2n l\u1ea1i l\u00e0 \u0111i ki\u1ec3u con r\u1eafn: h\u1ebft h\u00e0ng d\u01b0\u1edbi, l\u00ean, quay tr\u00e1i, l\u00ean ti\u1ebfp, r\u1ed3i sang ph\u1ea3i t\u1edbi l\u1ed1i ra."},{"id":"trix_1_3","girl":"trix","layer":1,"n":3,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"nums":[[0,2,3],[1,2,2],[1,1,2],[0,1,1]],"belief":"numbers don't lie. people do.","note":"D\u1ea1y lu\u1eadt s\u1ed1: \u0111\u01b0\u1eddng ch\u1ea1m \u0111\u00fang n c\u1ea1nh c\u1ee7a \u00f4.","sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[1,1],[1,0],[2,0],[3,0]],"solutions":1,"why":"Lu\u1eadt s\u1ed1: con s\u1ed1 l\u00e0 s\u1ed1 c\u1ea1nh c\u1ee7a \u00f4 m\u00e0 \u0111\u01b0\u1eddng \u0111i ch\u1ea1m v\u00e0o. \u00d4 \"3\" \u1edf g\u00f3c d\u01b0\u1edbi b\u00ean tr\u00e1i ngh\u0129a l\u00e0 \u0111\u01b0\u1eddng \u00f4m 3 trong 4 c\u1ea1nh c\u1ee7a n\u00f3: \u0111i l\u00ean, sang ph\u1ea3i, r\u1ed3i \u0111i xu\u1ed1ng. C\u00e1c \u00f4 \"2\" b\u00ean c\u1ea1nh bu\u1ed9c \u0111\u01b0\u1eddng l\u01b0\u1ee3n qua l\u1ea1i, v\u00e0 \u00f4 \"1\" ph\u00eda tr\u00ean cho bi\u1ebft \u0111\u01b0\u1eddng ch\u1ec9 ch\u1ea1m n\u00f3 \u0111\u00fang m\u1ed9t c\u1ea1nh."},{"id":"trix_1_4","girl":"trix","layer":1,"n":4,"w":3,"h":3,"start":[[0,3]],"exit":[[3,1]],"visitAll":true,"nums":[[1,0,3]],"belief":"if i count it twice, it is real.","note":"S\u1ed1 + ph\u1ee7 k\u00edn c\u00f9ng l\u00fac.","sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1]],"solutions":1,"why":"Ch\u1ec9 c\u00f3 m\u1ed9t con s\u1ed1, nh\u01b0ng k\u1ebft h\u1ee3p v\u1edbi lu\u1eadt ph\u1ee7 k\u00edn l\u00e0 \u0111\u1ee7. \u00d4 \"3\" \u1edf h\u00e0ng tr\u00ean ngh\u0129a l\u00e0 \u0111\u01b0\u1eddng ph\u1ea3i t\u1ea1o h\u00ecnh ch\u1eef U quanh n\u00f3: \u0111i xu\u1ed1ng, sang ph\u1ea3i, r\u1ed3i \u0111i l\u00ean. Mu\u1ed1n ph\u1ee7 h\u1ebft 16 \u0111i\u1ec3m m\u00e0 v\u1eabn t\u1ea1o \u0111\u01b0\u1ee3c ch\u1eef U \u0111\u00f3 ngay tr\u01b0\u1edbc l\u1ed1i ra, \u0111\u01b0\u1eddng ph\u1ea3i \u0111i h\u1ebft h\u00e0ng d\u01b0\u1edbi tr\u01b0\u1edbc, l\u01b0\u1ee3n r\u1eafn l\u00ean, r\u1ed3i m\u1edbi l\u00e0m ch\u1eef U."},{"id":"trix_1_5","girl":"trix","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"visitAll":true,"nums":[[3,1,2],[1,2,2],[0,2,2],[3,3,2],[1,0,3]],"belief":"i can't stop until it's perfect.","note":"B\u1ea3ng l\u00f5i: ph\u1ee7 k\u00edn 25 n\u00fat + s\u1ed1.","sol":[[0,4],[0,3],[1,3],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[3,2],[3,3],[2,3],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"why":"B\u1ea3ng l\u00f5i: 25 \u0111i\u1ec3m ph\u1ea3i \u0111i qua h\u1ebft, c\u1ed9ng 5 con s\u1ed1. M\u1eb9o 1: g\u00f3c kh\u00f4ng ph\u1ea3i \u0111i\u1ec3m xu\u1ea5t ph\u00e1t hay l\u1ed1i ra ch\u1ec9 c\u00f3 2 l\u1ed1i, n\u00ean \u0111\u01b0\u1eddng \u0111i qua g\u00f3c theo \u0111\u00fang 2 l\u1ed1i \u0111\u00f3. M\u1eb9o 2: \u00f4 \"3\" \u1edf h\u00e0ng tr\u00ean l\u1ea1i l\u00e0 ch\u1eef U nh\u01b0 b\u1ea3ng tr\u01b0\u1edbc. M\u1eb9o 3: hai \u00f4 \"2\" b\u00ean tr\u00e1i h\u00e0ng th\u1ee9 ba bu\u1ed9c \u0111\u01b0\u1eddng c\u1eaft ngang gi\u1eefa b\u1ea3ng thay v\u00ec \u0111i th\u1eb3ng l\u00ean m\u00e9p tr\u00e1i, c\u00f2n hai \u00f4 \"2\" b\u00ean ph\u1ea3i bu\u1ed9c \u0111\u01b0\u1eddng zigzag \u1edf c\u1ed9t ph\u1ea3i."}];
+const PANELS = [{"id":"prim_1_1","girl":"prim","layer":1,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"sketch":[[0,3,0,2],[0,2,1,2],[1,1,2,1],[2,1,2,0]],"belief":"i only draw on top of other people's lines.","note":"D\u1ea1y c\u00e1ch v\u1ebd \u0111\u01b0\u1eddng + n\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i.","sol":[[0,3],[0,2],[1,2],[1,1],[2,1],[2,0],[3,0]],"solutions":1,"why":"B\u1ea3ng d\u1ea1y c\u00e1ch ch\u01a1i. M\u1ecdi \u0111o\u1ea1n n\u00e9t ch\u00ec m\u1edd \u0111\u1ec1u ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i. \u1ede \u0111\u00e2y c\u00e1c \u0111o\u1ea1n ch\u00ec n\u1ed1i \u0111u\u00f4i nhau th\u00e0nh m\u1ed9t b\u1eadc thang t\u1eeb v\u00f2ng tr\u00f2n t\u1edbi l\u1ed1i ra: ch\u1ec9 c\u1ea7n \u0111i theo."},{"id":"prim_1_2","girl":"prim","layer":1,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"sketch":[[3,1,4,1],[2,0,2,1],[0,1,1,1],[2,1,3,1],[1,2,0,2],[1,3,1,2]],"belief":"if i lose the line, i'll ruin the whole page.","note":"N\u00e9t ch\u00ec r\u1eddi r\u1ea1c: ph\u1ea3i t\u00ecm \u0111\u01b0\u1eddng duy nh\u1ea5t n\u1ed1i h\u1ebft c\u00e1c m\u1ea3nh.","sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[2,1],[3,1],[4,1],[4,0]],"solutions":1,"why":"C\u00f3 6 \u0111o\u1ea1n ch\u00ec r\u1eddi r\u1ea1c v\u00e0 ch\u1ec9 m\u1ed9t th\u1ee9 t\u1ef1 \u0111i qua h\u1ebft. M\u1eb9o: \u0111o\u1ea1n ch\u00ec d\u1ecdc \u1edf c\u1ed9t gi\u1eefa ph\u00eda tr\u00ean ch\u1ec9 t\u00f4 \u0111\u01b0\u1ee3c theo chi\u1ec1u t\u1eeb tr\u00ean xu\u1ed1ng, v\u00ec ngay sau n\u00f3 l\u00e0 d\u00e3y ch\u00ec \u1edf h\u00e0ng gi\u1eefa ch\u1ea1y th\u1eb3ng t\u1edbi l\u1ed1i ra. V\u1eady tr\u01b0\u1edbc \u0111\u00f3 \u0111\u01b0\u1eddng ph\u1ea3i gom h\u1ebft ph\u1ea7n b\u00ean tr\u00e1i (ch\u1eef L b\u00ean d\u01b0\u1edbi, r\u1ed3i \u0111o\u1ea1n ch\u00ec h\u00e0ng gi\u1eefa b\u00ean tr\u00e1i) r\u1ed3i m\u1edbi l\u00ean h\u00e0ng tr\u00ean c\u00f9ng."},{"id":"prim_1_3","girl":"prim","layer":1,"n":3,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"squares":[[2,2,"ink"],[1,1,"pink"],[2,0,"pink"],[0,1,"pink"],[2,1,"ink"],[0,2,"ink"]],"belief":"my hand and the other hand must never touch.","note":"D\u1ea1y lu\u1eadt m\u1ef1c: m\u1ed7i v\u00f9ng ch\u1ec9 \u0111\u01b0\u1ee3c m\u1ed9t m\u00e0u. V\u00e0i l\u1eddi gi\u1ea3i (b\u1ea3ng d\u1ea1y lu\u1eadt).","sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[3,1],[2,1],[2,2],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0]],"solutions":4,"why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1ef1c: \u0111\u01b0\u1eddng \u0111i c\u1eaft b\u1ea3ng th\u00e0nh c\u00e1c v\u00f9ng, m\u1ed7i v\u00f9ng ch\u1ec9 \u0111\u01b0\u1ee3c ch\u1ee9a m\u1ed9t m\u00e0u. \u00d4 h\u1ed3ng v\u00e0 \u00f4 \u0111en n\u1eb1m xen k\u1ebd nhau, n\u00ean m\u1ed7i c\u1eb7p h\u1ed3ng\u2013\u0111en n\u1eb1m s\u00e1t nhau ph\u1ea3i b\u1ecb \u0111\u01b0\u1eddng \u0111i chia c\u1eaft. \u0110i th\u1eb3ng d\u1ecdc m\u00e9p kh\u00f4ng l\u00e0m \u0111\u01b0\u1ee3c, \u0111\u01b0\u1eddng ph\u1ea3i lu\u1ed3n v\u00e0o gi\u1eefa b\u1ea3ng. B\u1ea3ng c\u00f3 4 l\u1eddi gi\u1ea3i, \u0111\u00e2y l\u00e0 m\u1ed9t trong s\u1ed1 \u0111\u00f3."},{"id":"prim_1_4","girl":"prim","layer":1,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"squares":[[3,1,"ink"],[1,1,"pink"],[3,0,"pink"],[3,3,"ink"],[1,3,"pink"],[1,0,"ink"],[2,1,"pink"],[0,0,"pink"],[0,3,"pink"]],"belief":"pink is mine. black is hers. i keep them apart.","note":"Ch\u1ec9 c\u00f3 m\u1ef1c, b\u1ea3ng l\u1edbn h\u01a1n: ch\u1ec9 c\u00f2n r\u1ea5t \u00edt c\u00e1ch chia.","sol":[[0,4],[0,3],[1,3],[2,3],[3,3],[3,4],[4,4],[4,3],[4,2],[4,1],[3,1],[3,2],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[4,0]],"solutions":3,"why":"\u00d4 \u0111en \u1edf h\u00e0ng tr\u00ean c\u00f9ng b\u1ecb c\u00e1c \u00f4 h\u1ed3ng v\u00e2y quanh, n\u00ean \u0111\u01b0\u1eddng ph\u1ea3i khoanh ri\u00eang n\u00f3 th\u00e0nh m\u1ed9t v\u00f9ng nh\u1ecf. Hai \u00f4 \u0111en b\u00ean ph\u1ea3i ph\u1ea3i n\u1eb1m c\u00f9ng ph\u00eda, t\u00e1ch kh\u1ecfi \u00f4 h\u1ed3ng \u1edf g\u00f3c tr\u00ean b\u00ean ph\u1ea3i. B\u1ea3ng c\u00f3 3 l\u1eddi gi\u1ea3i, kh\u00e1c nhau \u1edf ph\u1ea7n gi\u1eefa b\u1ea3ng."},{"id":"prim_1_5","girl":"prim","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"squares":[[3,2,"ink"],[2,3,"pink"],[0,0,"pink"],[2,1,"pink"],[1,2,"ink"],[1,3,"ink"],[0,1,"ink"]],"sketch":[[3,4,4,4],[3,1,2,1],[1,2,0,2],[0,4,1,4]],"belief":"i can't draw. i can only trace.","note":"B\u1ea3ng l\u00f5i: n\u00e9t ch\u00ec + m\u1ef1c. C\u1ea7n d\u00f9ng c\u1ea3 hai lu\u1eadt.","sol":[[0,4],[1,4],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0],[3,1],[2,1],[2,2],[2,3],[2,4],[3,4],[4,4],[4,3],[3,3],[3,2],[4,2],[4,1],[4,0]],"solutions":1,"why":"B\u1ea3ng l\u00f5i: n\u00e9t ch\u00ec g\u1ee3i \u00fd m\u1ed9t con \u0111\u01b0\u1eddng nh\u01b0ng kh\u00f4ng \u0111\u1ee7, m\u1ef1c m\u1edbi quy\u1ebft \u0111\u1ecbnh. \u00d4 h\u1ed3ng \u1edf g\u00f3c tr\u00ean tr\u00e1i c\u00f3 \u00f4 \u0111en ngay d\u01b0\u1edbi n\u00ean \u0111\u01b0\u1eddng ph\u1ea3i c\u1eaft ngang gi\u1eefa hai \u00f4 \u0111\u00f3, v\u00ec v\u1eady \u0111o\u1ea1n ch\u00ec \u1edf h\u00e0ng th\u1ee9 ba d\u1eabn sang tr\u00e1i. Sau \u0111\u00f3 \u0111\u01b0\u1eddng v\u00f2ng l\u00ean h\u00e0ng tr\u00ean, t\u00f4 \u0111o\u1ea1n ch\u00ec \u1edf h\u00e0ng th\u1ee9 hai t\u1eeb ph\u1ea3i sang tr\u00e1i, \u0111i xu\u1ed1ng c\u1ed9t gi\u1eefa \u0111\u1ec3 t\u00e1ch c\u00e1c \u00f4 h\u1ed3ng \u1edf gi\u1eefa kh\u1ecfi c\u00e1c \u00f4 \u0111en hai b\u00ean, r\u1ed3i zigzag \u1edf c\u1ed9t ph\u1ea3i \u0111\u1ec3 khoanh \u00f4 \u0111en b\u00ean ph\u1ea3i."},{"id":"prim_1_6","girl":"prim","layer":1,"n":6,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"squares":[[2,2,"pink"],[2,1,"ink"],[2,0,"pink"],[3,2,"pink"],[3,0,"ink"],[0,2,"ink"]],"sketch":[[0,0,0,1],[0,1,1,1]],"sol":[[0,3],[1,3],[1,2],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[3,1],[2,1],[2,2],[3,2],[4,2],[4,1],[4,0]],"solutions":1,"belief":"if i copy, i can't be wrong.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: N\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i. M\u1ef1c h\u1ed3ng v\u00e0 m\u1ef1c \u0111en ph\u1ea3i n\u1eb1m \u1edf c\u00e1c v\u00f9ng kh\u00e1c nhau. M\u1eb9o: T\u00ecm \u0111o\u1ea1n ch\u00ec ch\u1ec9 c\u00f3 m\u1ed9t c\u00e1ch n\u1ed1i h\u1ee3p l\u00fd v\u1edbi v\u00f2ng tr\u00f2n ho\u1eb7c l\u1ed1i ra, r\u1ed3i l\u1ea7n d\u1ea7n v\u00e0o gi\u1eefa."},{"id":"prim_2_1","girl":"prim","layer":2,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"avoid":[[3,0,3,1],[1,0,2,0],[1,3,2,3],[1,1,1,2],[0,1,1,1],[1,2,2,2]],"sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0]],"solutions":2,"belief":"the black lines aren't mine. i won't touch them.","note":"","intro":"avoid","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. N\u00e9t ch\u00ec \u0111en l\u00e0 c\u1ee7a \"b\u00e0n tay kia\": kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i l\u00ean n\u00f3. Lu\u1eadt tr\u00ean b\u1ea3ng:  M\u1eb9o: N\u00e9t ch\u00ec \u0111en ch\u1eb7n \u0111\u01b0\u1eddng nh\u01b0 t\u01b0\u1eddng: xem ch\u00fang t\u1ea1o th\u00e0nh h\u00e0nh lang n\u00e0o."},{"id":"prim_2_2","girl":"prim","layer":2,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"avoid":[[4,1,4,2],[1,1,2,1],[1,3,2,3],[1,0,1,1],[0,1,0,2]],"sketch":[[3,0,3,1],[4,2,4,3],[0,2,0,3],[2,1,2,2]],"sol":[[0,3],[0,2],[1,2],[1,1],[0,1],[0,0],[1,0],[2,0],[2,1],[2,2],[2,3],[3,3],[4,3],[4,2],[3,2],[3,1],[3,0],[4,0]],"solutions":1,"belief":"i know which lines are mine. i think.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: N\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i. N\u00e9t ch\u00ec \u0111en l\u00e0 c\u1ee7a \"b\u00e0n tay kia\": kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i l\u00ean n\u00f3. M\u1eb9o: T\u00ecm \u0111o\u1ea1n ch\u00ec ch\u1ec9 c\u00f3 m\u1ed9t c\u00e1ch n\u1ed1i h\u1ee3p l\u00fd v\u1edbi v\u00f2ng tr\u00f2n ho\u1eb7c l\u1ed1i ra, r\u1ed3i l\u1ea7n d\u1ea7n v\u00e0o gi\u1eefa."},{"id":"prim_2_3","girl":"prim","layer":2,"n":3,"w":4,"h":3,"start":[[0,3],[4,3]],"exit":[[1,0],[3,0]],"mirror":"x","sketch":[[3,1,3,2],[4,2,4,3]],"sol":[[0,3],[0,2],[1,2],[1,1],[1,0]],"solutions":2,"belief":"when i draw, the other hand draws too.","note":"","intro":"mirror","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. B\u00e0n tay kia t\u1ef1 v\u1ebd m\u1ed9t \u0111\u01b0\u1eddng \u0111\u1ed1i x\u1ee9ng; hai \u0111\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m nhau. Lu\u1eadt tr\u00ean b\u1ea3ng: N\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i. M\u1eb9o: T\u00ecm \u0111o\u1ea1n ch\u00ec ch\u1ec9 c\u00f3 m\u1ed9t c\u00e1ch n\u1ed1i h\u1ee3p l\u00fd v\u1edbi v\u00f2ng tr\u00f2n ho\u1eb7c l\u1ed1i ra, r\u1ed3i l\u1ea7n d\u1ea7n v\u00e0o gi\u1eefa."},{"id":"prim_2_4","girl":"prim","layer":2,"n":4,"w":4,"h":3,"start":[[0,3],[4,3]],"exit":[[0,0],[4,0]],"mirror":"x","sketch":[[1,1,1,2],[0,0,1,0]],"avoid":[[3,2,3,3]],"sol":[[0,3],[0,2],[1,2],[1,1],[1,0],[0,0]],"solutions":1,"belief":"it copies everything i do.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: N\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i. N\u00e9t ch\u00ec \u0111en l\u00e0 c\u1ee7a \"b\u00e0n tay kia\": kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i l\u00ean n\u00f3. B\u00e0n tay kia t\u1ef1 v\u1ebd m\u1ed9t \u0111\u01b0\u1eddng \u0111\u1ed1i x\u1ee9ng; hai \u0111\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m nhau. M\u1eb9o: T\u00ecm \u0111o\u1ea1n ch\u00ec ch\u1ec9 c\u00f3 m\u1ed9t c\u00e1ch n\u1ed1i h\u1ee3p l\u00fd v\u1edbi v\u00f2ng tr\u00f2n ho\u1eb7c l\u1ed1i ra, r\u1ed3i l\u1ea7n d\u1ea7n v\u00e0o gi\u1eefa."},{"id":"prim_2_5","girl":"prim","layer":2,"n":5,"w":4,"h":4,"start":[[0,4],[4,4]],"exit":[[1,0],[3,0]],"mirror":"x","squares":[[2,3,"pink"],[0,1,"ink"],[3,3,"ink"],[0,0,"pink"],[0,2,"pink"]],"sol":[[0,4],[1,4],[1,3],[0,3],[0,2],[1,2],[1,1],[0,1],[0,0],[1,0]],"solutions":1,"belief":"we never touch. we can't.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ef1c h\u1ed3ng v\u00e0 m\u1ef1c \u0111en ph\u1ea3i n\u1eb1m \u1edf c\u00e1c v\u00f9ng kh\u00e1c nhau. B\u00e0n tay kia t\u1ef1 v\u1ebd m\u1ed9t \u0111\u01b0\u1eddng \u0111\u1ed1i x\u1ee9ng; hai \u0111\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m nhau. M\u1eb9o: Hai \u00f4 kh\u00e1c m\u00e0u n\u1eb1m s\u00e1t nhau bu\u1ed9c \u0111\u01b0\u1eddng ph\u1ea3i \u0111i qua c\u1ea1nh chung c\u1ee7a ch\u00fang."},{"id":"prim_2_6","girl":"prim","layer":2,"n":6,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"avoid":[[0,1,1,1],[3,4,4,4],[3,0,4,0],[1,2,1,3],[0,2,1,2],[0,4,1,4]],"squares":[[3,1,"ink"],[2,2,"ink"],[2,0,"pink"],[1,0,"ink"],[2,3,"pink"],[3,3,"ink"]],"sol":[[0,4],[0,3],[1,3],[1,4],[2,4],[3,4],[3,3],[2,3],[2,2],[1,2],[1,1],[1,0],[2,0],[2,1],[3,1],[4,1],[4,0]],"solutions":1,"belief":"pink is mine. the black was never mine.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: N\u00e9t ch\u00ec \u0111en l\u00e0 c\u1ee7a \"b\u00e0n tay kia\": kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i l\u00ean n\u00f3. M\u1ef1c h\u1ed3ng v\u00e0 m\u1ef1c \u0111en ph\u1ea3i n\u1eb1m \u1edf c\u00e1c v\u00f9ng kh\u00e1c nhau. M\u1eb9o: N\u00e9t ch\u00ec \u0111en ch\u1eb7n \u0111\u01b0\u1eddng nh\u01b0 t\u01b0\u1eddng: xem ch\u00fang t\u1ea1o th\u00e0nh h\u00e0nh lang n\u00e0o."},{"id":"prim_2_7","girl":"prim","layer":2,"n":7,"w":4,"h":4,"start":[[0,4],[4,4]],"exit":[[0,0],[4,0]],"mirror":"x","squares":[[3,2,"ink"],[1,1,"pink"]],"sketch":[[0,1,0,2]],"avoid":[[0,4,1,4],[3,0,4,0]],"sol":[[0,4],[0,3],[1,3],[1,2],[0,2],[0,1],[0,0]],"solutions":1,"belief":"the other hand always knows where i am going.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: N\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i. N\u00e9t ch\u00ec \u0111en l\u00e0 c\u1ee7a \"b\u00e0n tay kia\": kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i l\u00ean n\u00f3. M\u1ef1c h\u1ed3ng v\u00e0 m\u1ef1c \u0111en ph\u1ea3i n\u1eb1m \u1edf c\u00e1c v\u00f9ng kh\u00e1c nhau. B\u00e0n tay kia t\u1ef1 v\u1ebd m\u1ed9t \u0111\u01b0\u1eddng \u0111\u1ed1i x\u1ee9ng; hai \u0111\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m nhau. M\u1eb9o: T\u00ecm \u0111o\u1ea1n ch\u00ec ch\u1ec9 c\u00f3 m\u1ed9t c\u00e1ch n\u1ed1i h\u1ee3p l\u00fd v\u1edbi v\u00f2ng tr\u00f2n ho\u1eb7c l\u1ed1i ra, r\u1ed3i l\u1ea7n d\u1ea7n v\u00e0o gi\u1eefa."},{"id":"prim_3_1","girl":"prim","layer":3,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"shapes":[[2,0,[[2,0],[2,1],[1,1],[2,2]]],[1,0,[[0,0],[1,0],[0,1],[0,2],[1,2]]]],"sol":[[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[1,1],[1,2],[2,2],[2,3],[3,3],[3,2],[3,1],[3,0]],"solutions":2,"belief":"what if i drew something of my own?","note":"","intro":"shapes","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. V\u00f9ng ch\u1ee9a \u00f4 h\u00ecnh m\u1eabu ph\u1ea3i c\u00f3 \u0111\u00fang h\u00ecnh d\u1ea1ng \u0111\u00f3 (kh\u00f4ng xoay). Lu\u1eadt tr\u00ean b\u1ea3ng:  M\u1eb9o: V\u1ebd th\u1eed h\u00ecnh m\u1eabu quanh \u00f4 c\u1ee7a n\u00f3: th\u01b0\u1eddng ch\u1ec9 c\u00f3 m\u1ed9t ch\u1ed7 \u0111\u1eb7t v\u1eeba m\u00e0 kh\u00f4ng \u0111\u00e8 l\u00ean k\u00fd hi\u1ec7u kh\u00e1c."},{"id":"prim_3_2","girl":"prim","layer":3,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"shapes":[[2,0,[[2,0],[2,1],[3,1],[2,2]]],[1,0,[[1,0],[1,1],[0,1],[1,2]]]],"sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[2,1],[2,2],[2,3],[3,3],[3,2],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"it doesn't look like anything. it's mine.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: V\u00f9ng ch\u1ee9a \u00f4 h\u00ecnh m\u1eabu ph\u1ea3i c\u00f3 \u0111\u00fang h\u00ecnh d\u1ea1ng \u0111\u00f3 (kh\u00f4ng xoay). M\u1eb9o: V\u1ebd th\u1eed h\u00ecnh m\u1eabu quanh \u00f4 c\u1ee7a n\u00f3: th\u01b0\u1eddng ch\u1ec9 c\u00f3 m\u1ed9t ch\u1ed7 \u0111\u1eb7t v\u1eeba m\u00e0 kh\u00f4ng \u0111\u00e8 l\u00ean k\u00fd hi\u1ec7u kh\u00e1c."},{"id":"prim_3_3","girl":"prim","layer":3,"n":3,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"shapes":[[0,3,[[0,0],[0,1],[0,2],[1,2],[0,3]]],[3,0,[[3,0],[3,1]]]],"squares":[[2,1,"ink"],[3,3,"pink"]],"sol":[[0,4],[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[1,2],[2,2],[2,3],[1,3],[1,4],[2,4],[3,4],[3,3],[4,3],[4,2],[3,2],[3,1],[3,0],[4,0]],"solutions":1,"belief":"my colours. my shapes.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ef1c h\u1ed3ng v\u00e0 m\u1ef1c \u0111en ph\u1ea3i n\u1eb1m \u1edf c\u00e1c v\u00f9ng kh\u00e1c nhau. V\u00f9ng ch\u1ee9a \u00f4 h\u00ecnh m\u1eabu ph\u1ea3i c\u00f3 \u0111\u00fang h\u00ecnh d\u1ea1ng \u0111\u00f3 (kh\u00f4ng xoay). M\u1eb9o: Hai \u00f4 kh\u00e1c m\u00e0u n\u1eb1m s\u00e1t nhau bu\u1ed9c \u0111\u01b0\u1eddng ph\u1ea3i \u0111i qua c\u1ea1nh chung c\u1ee7a ch\u00fang."},{"id":"prim_3_4","girl":"prim","layer":3,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"shapes":[[2,3,[[1,3],[2,3]]],[2,1,[[2,0],[2,1],[3,1],[1,1]]]],"avoid":[[2,3,2,4]],"sol":[[0,4],[1,4],[1,3],[2,3],[3,3],[3,4],[4,4],[4,3],[4,2],[3,2],[2,2],[1,2],[1,1],[2,1],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"belief":"no pencil. nothing to follow.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: N\u00e9t ch\u00ec \u0111en l\u00e0 c\u1ee7a \"b\u00e0n tay kia\": kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i l\u00ean n\u00f3. V\u00f9ng ch\u1ee9a \u00f4 h\u00ecnh m\u1eabu ph\u1ea3i c\u00f3 \u0111\u00fang h\u00ecnh d\u1ea1ng \u0111\u00f3 (kh\u00f4ng xoay). M\u1eb9o: N\u00e9t ch\u00ec \u0111en ch\u1eb7n \u0111\u01b0\u1eddng nh\u01b0 t\u01b0\u1eddng: xem ch\u00fang t\u1ea1o th\u00e0nh h\u00e0nh lang n\u00e0o."},{"id":"prim_3_5","girl":"prim","layer":3,"n":5,"w":4,"h":4,"start":[[0,4],[4,4]],"exit":[[0,0],[4,0]],"mirror":"x","shapes":[[0,2,[[0,1],[0,2]]]],"sketch":[[0,3,0,4]],"sol":[[0,4],[0,3],[1,3],[1,2],[1,1],[0,1],[0,0]],"solutions":1,"belief":"even the other hand draws my shapes now.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: N\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i. V\u00f9ng ch\u1ee9a \u00f4 h\u00ecnh m\u1eabu ph\u1ea3i c\u00f3 \u0111\u00fang h\u00ecnh d\u1ea1ng \u0111\u00f3 (kh\u00f4ng xoay). B\u00e0n tay kia t\u1ef1 v\u1ebd m\u1ed9t \u0111\u01b0\u1eddng \u0111\u1ed1i x\u1ee9ng; hai \u0111\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m nhau. M\u1eb9o: T\u00ecm \u0111o\u1ea1n ch\u00ec ch\u1ec9 c\u00f3 m\u1ed9t c\u00e1ch n\u1ed1i h\u1ee3p l\u00fd v\u1edbi v\u00f2ng tr\u00f2n ho\u1eb7c l\u1ed1i ra, r\u1ed3i l\u1ea7n d\u1ea7n v\u00e0o gi\u1eefa."},{"id":"prim_3_6","girl":"prim","layer":3,"n":6,"w":5,"h":4,"start":[[0,4]],"exit":[[5,0]],"shapes":[[4,0,[[4,0],[4,1],[3,1],[4,2]]],[1,3,[[0,2],[1,2],[1,3],[2,3]]]],"squares":[[4,3,"pink"]],"avoid":[[0,4,1,4],[2,0,2,1],[0,1,1,1]],"sol":[[0,4],[0,3],[1,3],[1,4],[2,4],[3,4],[3,3],[2,3],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[2,0],[3,0],[4,0],[4,1],[3,1],[3,2],[4,2],[4,3],[5,3],[5,2],[5,1],[5,0]],"solutions":1,"belief":"i don't need the pencil anymore.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: N\u00e9t ch\u00ec \u0111en l\u00e0 c\u1ee7a \"b\u00e0n tay kia\": kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i l\u00ean n\u00f3. M\u1ef1c h\u1ed3ng v\u00e0 m\u1ef1c \u0111en ph\u1ea3i n\u1eb1m \u1edf c\u00e1c v\u00f9ng kh\u00e1c nhau. V\u00f9ng ch\u1ee9a \u00f4 h\u00ecnh m\u1eabu ph\u1ea3i c\u00f3 \u0111\u00fang h\u00ecnh d\u1ea1ng \u0111\u00f3 (kh\u00f4ng xoay). M\u1eb9o: N\u00e9t ch\u00ec \u0111en ch\u1eb7n \u0111\u01b0\u1eddng nh\u01b0 t\u01b0\u1eddng: xem ch\u00fang t\u1ea1o th\u00e0nh h\u00e0nh lang n\u00e0o."},{"id":"prim_3_7","girl":"prim","layer":3,"n":7,"w":4,"h":4,"start":[[0,4],[4,4]],"exit":[[0,0],[4,0]],"mirror":"x","shapes":[[0,3,[[0,2],[0,3]]]],"squares":[[1,1,"ink"]],"avoid":[[4,0,4,1]],"sol":[[0,4],[1,4],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[0,0]],"solutions":1,"belief":"i trace so she can draw. that is why i am here.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: N\u00e9t ch\u00ec \u0111en l\u00e0 c\u1ee7a \"b\u00e0n tay kia\": kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i l\u00ean n\u00f3. M\u1ef1c h\u1ed3ng v\u00e0 m\u1ef1c \u0111en ph\u1ea3i n\u1eb1m \u1edf c\u00e1c v\u00f9ng kh\u00e1c nhau. V\u00f9ng ch\u1ee9a \u00f4 h\u00ecnh m\u1eabu ph\u1ea3i c\u00f3 \u0111\u00fang h\u00ecnh d\u1ea1ng \u0111\u00f3 (kh\u00f4ng xoay). B\u00e0n tay kia t\u1ef1 v\u1ebd m\u1ed9t \u0111\u01b0\u1eddng \u0111\u1ed1i x\u1ee9ng; hai \u0111\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m nhau. M\u1eb9o: N\u00e9t ch\u00ec \u0111en ch\u1eb7n \u0111\u01b0\u1eddng nh\u01b0 t\u01b0\u1eddng: xem ch\u00fang t\u1ea1o th\u00e0nh h\u00e0nh lang n\u00e0o."},{"id":"trix_1_1","girl":"trix","layer":1,"n":1,"w":2,"h":2,"start":[[0,2]],"exit":[[2,0]],"visitAll":true,"belief":"every point gets visited. no exceptions.","note":"D\u1ea1y lu\u1eadt ph\u1ee7 k\u00edn: \u0111i qua m\u1ecdi n\u00fat. 2 l\u1eddi gi\u1ea3i \u0111\u1ed1i x\u1ee9ng l\u00e0 \u0111\u01b0\u1ee3c.","sol":[[0,2],[1,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0]],"solutions":2,"why":"Lu\u1eadt ph\u1ee7 k\u00edn: ph\u1ea3i \u0111i qua m\u1ecdi \u0111i\u1ec3m (c\u00e1c v\u00f2ng tr\u00f2n nh\u1ecf s\u00e1ng l\u00ean khi \u0111i qua). V\u1edbi 3\u00d73 \u0111i\u1ec3m ch\u1ec9 c\u1ea7n \u0111i ki\u1ec3u con r\u1eafn, h\u1ebft h\u00e0ng n\u00e0y t\u1edbi h\u00e0ng kia. C\u00f3 2 l\u1eddi gi\u1ea3i \u0111\u1ed1i x\u1ee9ng (theo h\u00e0ng ho\u1eb7c theo c\u1ed9t)."},{"id":"trix_1_2","girl":"trix","layer":1,"n":2,"w":3,"h":3,"start":[[0,3]],"exit":[[3,1]],"visitAll":true,"broken":[[1,2,2,2],[1,1,1,2]],"belief":"a gap means i failed.","note":"Ph\u1ee7 k\u00edn + \u0111\u01b0\u1eddng \u0111\u1ee9t: t\u00ecm th\u1ee9 t\u1ef1 duy nh\u1ea5t.","sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[3,1]],"solutions":1,"why":"Hai \u0111o\u1ea1n \u0111\u1ee9t l\u00e0m \u0111i\u1ec3m th\u1ee9 hai trong h\u00e0ng th\u1ee9 ba ch\u1ec9 c\u00f2n \u0111\u00fang 2 \u0111\u01b0\u1eddng n\u1ed1i. M\u1ed9t \u0111i\u1ec3m ph\u1ea3i \u0111i qua m\u00e0 ch\u1ec9 c\u00f3 2 l\u1ed1i th\u00ec \u0111\u01b0\u1eddng b\u1eaft bu\u1ed9c d\u00f9ng c\u1ea3 hai l\u1ed1i \u0111\u00f3: t\u1eeb v\u00f2ng tr\u00f2n \u0111i l\u00ean, r\u1ebd ph\u1ea3i, r\u1ed3i \u0111i xu\u1ed1ng. Ph\u1ea7n c\u00f2n l\u1ea1i l\u00e0 \u0111i ki\u1ec3u con r\u1eafn: h\u1ebft h\u00e0ng d\u01b0\u1edbi, l\u00ean, quay tr\u00e1i, l\u00ean ti\u1ebfp, r\u1ed3i sang ph\u1ea3i t\u1edbi l\u1ed1i ra."},{"id":"trix_1_3","girl":"trix","layer":1,"n":3,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"nums":[[0,2,3],[1,2,2],[1,1,2],[0,1,1]],"belief":"numbers don't lie. people do.","note":"D\u1ea1y lu\u1eadt s\u1ed1: \u0111\u01b0\u1eddng ch\u1ea1m \u0111\u00fang n c\u1ea1nh c\u1ee7a \u00f4.","sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[1,1],[1,0],[2,0],[3,0]],"solutions":1,"why":"Lu\u1eadt s\u1ed1: con s\u1ed1 l\u00e0 s\u1ed1 c\u1ea1nh c\u1ee7a \u00f4 m\u00e0 \u0111\u01b0\u1eddng \u0111i ch\u1ea1m v\u00e0o. \u00d4 \"3\" \u1edf g\u00f3c d\u01b0\u1edbi b\u00ean tr\u00e1i ngh\u0129a l\u00e0 \u0111\u01b0\u1eddng \u00f4m 3 trong 4 c\u1ea1nh c\u1ee7a n\u00f3: \u0111i l\u00ean, sang ph\u1ea3i, r\u1ed3i \u0111i xu\u1ed1ng. C\u00e1c \u00f4 \"2\" b\u00ean c\u1ea1nh bu\u1ed9c \u0111\u01b0\u1eddng l\u01b0\u1ee3n qua l\u1ea1i, v\u00e0 \u00f4 \"1\" ph\u00eda tr\u00ean cho bi\u1ebft \u0111\u01b0\u1eddng ch\u1ec9 ch\u1ea1m n\u00f3 \u0111\u00fang m\u1ed9t c\u1ea1nh."},{"id":"trix_1_4","girl":"trix","layer":1,"n":4,"w":3,"h":3,"start":[[0,3]],"exit":[[3,1]],"visitAll":true,"nums":[[1,0,3]],"belief":"if i count it twice, it is real.","note":"S\u1ed1 + ph\u1ee7 k\u00edn c\u00f9ng l\u00fac.","sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1]],"solutions":1,"why":"Ch\u1ec9 c\u00f3 m\u1ed9t con s\u1ed1, nh\u01b0ng k\u1ebft h\u1ee3p v\u1edbi lu\u1eadt ph\u1ee7 k\u00edn l\u00e0 \u0111\u1ee7. \u00d4 \"3\" \u1edf h\u00e0ng tr\u00ean ngh\u0129a l\u00e0 \u0111\u01b0\u1eddng ph\u1ea3i t\u1ea1o h\u00ecnh ch\u1eef U quanh n\u00f3: \u0111i xu\u1ed1ng, sang ph\u1ea3i, r\u1ed3i \u0111i l\u00ean. Mu\u1ed1n ph\u1ee7 h\u1ebft 16 \u0111i\u1ec3m m\u00e0 v\u1eabn t\u1ea1o \u0111\u01b0\u1ee3c ch\u1eef U \u0111\u00f3 ngay tr\u01b0\u1edbc l\u1ed1i ra, \u0111\u01b0\u1eddng ph\u1ea3i \u0111i h\u1ebft h\u00e0ng d\u01b0\u1edbi tr\u01b0\u1edbc, l\u01b0\u1ee3n r\u1eafn l\u00ean, r\u1ed3i m\u1edbi l\u00e0m ch\u1eef U."},{"id":"trix_1_5","girl":"trix","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"visitAll":true,"nums":[[3,1,2],[1,2,2],[0,2,2],[3,3,2],[1,0,3]],"belief":"i can't stop until it's perfect.","note":"B\u1ea3ng l\u00f5i: ph\u1ee7 k\u00edn 25 n\u00fat + s\u1ed1.","sol":[[0,4],[0,3],[1,3],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[3,2],[3,3],[2,3],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"why":"B\u1ea3ng l\u00f5i: 25 \u0111i\u1ec3m ph\u1ea3i \u0111i qua h\u1ebft, c\u1ed9ng 5 con s\u1ed1. M\u1eb9o 1: g\u00f3c kh\u00f4ng ph\u1ea3i \u0111i\u1ec3m xu\u1ea5t ph\u00e1t hay l\u1ed1i ra ch\u1ec9 c\u00f3 2 l\u1ed1i, n\u00ean \u0111\u01b0\u1eddng \u0111i qua g\u00f3c theo \u0111\u00fang 2 l\u1ed1i \u0111\u00f3. M\u1eb9o 2: \u00f4 \"3\" \u1edf h\u00e0ng tr\u00ean l\u1ea1i l\u00e0 ch\u1eef U nh\u01b0 b\u1ea3ng tr\u01b0\u1edbc. M\u1eb9o 3: hai \u00f4 \"2\" b\u00ean tr\u00e1i h\u00e0ng th\u1ee9 ba bu\u1ed9c \u0111\u01b0\u1eddng c\u1eaft ngang gi\u1eefa b\u1ea3ng thay v\u00ec \u0111i th\u1eb3ng l\u00ean m\u00e9p tr\u00e1i, c\u00f2n hai \u00f4 \"2\" b\u00ean ph\u1ea3i bu\u1ed9c \u0111\u01b0\u1eddng zigzag \u1edf c\u1ed9t ph\u1ea3i."},{"id":"trix_1_6","girl":"trix","layer":1,"n":6,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"nums":[[2,0,1],[1,0,3],[1,1,2],[2,1,1],[3,1,1]],"broken":[[2,1,2,2]],"sol":[[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[1,1],[1,2],[1,3],[2,3],[2,2],[3,2],[3,3],[4,3],[4,2],[4,1],[4,0]],"solutions":1,"belief":"rules exist so nothing surprises me.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Con s\u1ed1 trong \u00f4 = s\u1ed1 c\u1ea1nh c\u1ee7a \u00f4 m\u00e0 \u0111\u01b0\u1eddng ch\u1ea1m v\u00e0o. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: \u00d4 \"0\" v\u00e0 \u00f4 \"3\" cho nhi\u1ec1u th\u00f4ng tin nh\u1ea5t: b\u1eaft \u0111\u1ea7u t\u1eeb ch\u00fang."},{"id":"trix_2_1","girl":"trix","layer":2,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"pieces":[[2,0,"P"],[2,1,"P"],[0,2,"P"]],"sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[2,2],[3,2],[3,1],[3,0]],"solutions":3,"belief":"every piece has a value. so does everyone.","note":"","intro":"pieces","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. S\u1ed1 \u00f4 c\u1ee7a v\u00f9ng = t\u1ed5ng gi\u00e1 tr\u1ecb qu\u00e2n c\u1edd trong v\u00f9ng (t\u1ed1t 1, m\u00e3 3, t\u01b0\u1ee3ng 3, xe 5, h\u1eadu 9). Lu\u1eadt tr\u00ean b\u1ea3ng:  M\u1eb9o: Qu\u00e2n gi\u00e1 tr\u1ecb l\u1edbn (xe, h\u1eadu) c\u1ea7n v\u00f9ng l\u1edbn, qu\u00e2n t\u1ed1t c\u1ea7n v\u00f9ng \u0111\u00fang 1 \u00f4: khoanh t\u1ed1t tr\u01b0\u1edbc."},{"id":"trix_2_2","girl":"trix","layer":2,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"pieces":[[3,0,"P"],[3,2,"P"],[1,2,"P"]],"sol":[[0,3],[1,3],[1,2],[2,2],[2,3],[3,3],[3,2],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"a knight is worth three. i counted.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: S\u1ed1 \u00f4 c\u1ee7a v\u00f9ng = t\u1ed5ng gi\u00e1 tr\u1ecb qu\u00e2n c\u1edd trong v\u00f9ng (t\u1ed1t 1, m\u00e3 3, t\u01b0\u1ee3ng 3, xe 5, h\u1eadu 9). M\u1eb9o: Qu\u00e2n gi\u00e1 tr\u1ecb l\u1edbn (xe, h\u1eadu) c\u1ea7n v\u00f9ng l\u1edbn, qu\u00e2n t\u1ed1t c\u1ea7n v\u00f9ng \u0111\u00fang 1 \u00f4: khoanh t\u1ed1t tr\u01b0\u1edbc."},{"id":"trix_2_3","girl":"trix","layer":2,"n":3,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"pieces":[[2,1,"R"],[0,1,"P"],[0,2,"P"]],"nums":[[2,2,2],[1,2,1],[1,0,2],[1,1,2]],"sol":[[0,3],[1,3],[1,2],[1,1],[0,1],[0,0],[1,0],[2,0],[2,1],[2,2],[3,2],[3,3],[4,3],[4,2],[4,1],[4,0]],"solutions":1,"belief":"pieces and numbers. both obey me.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Con s\u1ed1 trong \u00f4 = s\u1ed1 c\u1ea1nh c\u1ee7a \u00f4 m\u00e0 \u0111\u01b0\u1eddng ch\u1ea1m v\u00e0o. S\u1ed1 \u00f4 c\u1ee7a v\u00f9ng = t\u1ed5ng gi\u00e1 tr\u1ecb qu\u00e2n c\u1edd trong v\u00f9ng (t\u1ed1t 1, m\u00e3 3, t\u01b0\u1ee3ng 3, xe 5, h\u1eadu 9). M\u1eb9o: \u00d4 \"0\" v\u00e0 \u00f4 \"3\" cho nhi\u1ec1u th\u00f4ng tin nh\u1ea5t: b\u1eaft \u0111\u1ea7u t\u1eeb ch\u00fang."},{"id":"trix_2_4","girl":"trix","layer":2,"n":4,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"visitAll":true,"pieces":[[3,0,"N"],[2,2,"P"]],"sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1],[3,2],[2,2],[2,3],[3,3],[4,3],[4,2],[4,1],[4,0]],"solutions":1,"belief":"i have to cover the whole board.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: S\u1ed1 \u00f4 c\u1ee7a v\u00f9ng = t\u1ed5ng gi\u00e1 tr\u1ecb qu\u00e2n c\u1edd trong v\u00f9ng (t\u1ed1t 1, m\u00e3 3, t\u01b0\u1ee3ng 3, xe 5, h\u1eadu 9). Ph\u1ea3i \u0111i qua m\u1ecdi \u0111i\u1ec3m. M\u1eb9o: Qu\u00e2n gi\u00e1 tr\u1ecb l\u1edbn (xe, h\u1eadu) c\u1ea7n v\u00f9ng l\u1edbn, qu\u00e2n t\u1ed1t c\u1ea7n v\u00f9ng \u0111\u00fang 1 \u00f4: khoanh t\u1ed1t tr\u01b0\u1edbc."},{"id":"trix_2_5","girl":"trix","layer":2,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"pieces":[[3,0,"P"],[0,0,"P"],[0,1,"P"],[0,3,"N"],[3,3,"P"]],"broken":[[0,1,0,2],[4,0,4,1]],"sol":[[0,4],[1,4],[2,4],[3,4],[4,4],[4,3],[3,3],[2,3],[1,3],[0,3],[0,2],[1,2],[1,1],[1,0],[2,0],[2,1],[2,2],[3,2],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"i see twelve moves ahead. always.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: S\u1ed1 \u00f4 c\u1ee7a v\u00f9ng = t\u1ed5ng gi\u00e1 tr\u1ecb qu\u00e2n c\u1edd trong v\u00f9ng (t\u1ed1t 1, m\u00e3 3, t\u01b0\u1ee3ng 3, xe 5, h\u1eadu 9). \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: Qu\u00e2n gi\u00e1 tr\u1ecb l\u1edbn (xe, h\u1eadu) c\u1ea7n v\u00f9ng l\u1edbn, qu\u00e2n t\u1ed1t c\u1ea7n v\u00f9ng \u0111\u00fang 1 \u00f4: khoanh t\u1ed1t tr\u01b0\u1edbc."},{"id":"trix_2_6","girl":"trix","layer":2,"n":6,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"pieces":[[0,3,"P"],[2,1,"B"],[2,2,"P"]],"nums":[[3,2,1],[1,1,3]],"sol":[[0,4],[1,4],[1,3],[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[1,1],[1,2],[2,2],[2,3],[3,3],[3,2],[3,1],[3,0],[4,0]],"solutions":1,"belief":"a sacrifice is fine if the math works.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Con s\u1ed1 trong \u00f4 = s\u1ed1 c\u1ea1nh c\u1ee7a \u00f4 m\u00e0 \u0111\u01b0\u1eddng ch\u1ea1m v\u00e0o. S\u1ed1 \u00f4 c\u1ee7a v\u00f9ng = t\u1ed5ng gi\u00e1 tr\u1ecb qu\u00e2n c\u1edd trong v\u00f9ng (t\u1ed1t 1, m\u00e3 3, t\u01b0\u1ee3ng 3, xe 5, h\u1eadu 9). M\u1eb9o: \u00d4 \"0\" v\u00e0 \u00f4 \"3\" cho nhi\u1ec1u th\u00f4ng tin nh\u1ea5t: b\u1eaft \u0111\u1ea7u t\u1eeb ch\u00fang."},{"id":"trix_2_7","girl":"trix","layer":2,"n":7,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"pieces":[[2,0,"R"],[2,2,"N"],[0,1,"P"],[0,0,"P"]],"nums":[[1,1,2],[3,3,3],[1,2,2]],"broken":[[2,2,3,2]],"sol":[[0,4],[0,3],[0,2],[1,2],[1,1],[1,0],[2,0],[2,1],[2,2],[2,3],[1,3],[1,4],[2,4],[3,4],[4,4],[4,3],[3,3],[3,2],[4,2],[4,1],[4,0]],"solutions":1,"belief":"i don't lose. losing is an arithmetic error.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Con s\u1ed1 trong \u00f4 = s\u1ed1 c\u1ea1nh c\u1ee7a \u00f4 m\u00e0 \u0111\u01b0\u1eddng ch\u1ea1m v\u00e0o. S\u1ed1 \u00f4 c\u1ee7a v\u00f9ng = t\u1ed5ng gi\u00e1 tr\u1ecb qu\u00e2n c\u1edd trong v\u00f9ng (t\u1ed1t 1, m\u00e3 3, t\u01b0\u1ee3ng 3, xe 5, h\u1eadu 9). \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: \u00d4 \"0\" v\u00e0 \u00f4 \"3\" cho nhi\u1ec1u th\u00f4ng tin nh\u1ea5t: b\u1eaft \u0111\u1ea7u t\u1eeb ch\u00fang."},{"id":"trix_3_1","girl":"trix","layer":3,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"order":[[1,3],[1,2],[3,3],[2,1]],"sol":[[0,3],[1,3],[1,2],[2,2],[2,3],[3,3],[3,2],[3,1],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0]],"solutions":3,"belief":"step one, then step two. never skip.","note":"","intro":"order","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. C\u00e1c \u0111i\u1ec3m \u0111\u00e1nh s\u1ed1 ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua theo \u0111\u00fang th\u1ee9 t\u1ef1 1, 2, 3\u2026 Lu\u1eadt tr\u00ean b\u1ea3ng:  M\u1eb9o: \u0110i t\u1eeb s\u1ed1 n\u00e0y t\u1edbi s\u1ed1 k\u1ebf b\u1eb1ng \u0111\u01b0\u1eddng ng\u1eafn nh\u1ea5t, nh\u01b0ng nh\u1edb ch\u1eeba l\u1ed1i cho c\u00e1c s\u1ed1 sau."},{"id":"trix_3_2","girl":"trix","layer":3,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"order":[[0,0],[2,2],[4,3],[3,2],[2,0]],"sol":[[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[1,2],[2,2],[2,3],[3,3],[4,3],[4,2],[3,2],[3,1],[2,1],[2,0],[3,0],[4,0]],"solutions":1,"belief":"a proof has exactly one order.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: C\u00e1c \u0111i\u1ec3m \u0111\u00e1nh s\u1ed1 ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua theo \u0111\u00fang th\u1ee9 t\u1ef1 1, 2, 3\u2026 M\u1eb9o: \u0110i t\u1eeb s\u1ed1 n\u00e0y t\u1edbi s\u1ed1 k\u1ebf b\u1eb1ng \u0111\u01b0\u1eddng ng\u1eafn nh\u1ea5t, nh\u01b0ng nh\u1edb ch\u1eeba l\u1ed1i cho c\u00e1c s\u1ed1 sau."},{"id":"trix_3_3","girl":"trix","layer":3,"n":3,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"visitAll":true,"order":[[3,3],[2,1],[1,2],[4,1]],"sol":[[0,3],[1,3],[2,3],[3,3],[4,3],[4,2],[3,2],[2,2],[2,1],[1,1],[1,2],[0,2],[0,1],[0,0],[1,0],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"belief":"complete, and in order.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: C\u00e1c \u0111i\u1ec3m \u0111\u00e1nh s\u1ed1 ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua theo \u0111\u00fang th\u1ee9 t\u1ef1 1, 2, 3\u2026 Ph\u1ea3i \u0111i qua m\u1ecdi \u0111i\u1ec3m. M\u1eb9o: \u0110i t\u1eeb s\u1ed1 n\u00e0y t\u1edbi s\u1ed1 k\u1ebf b\u1eb1ng \u0111\u01b0\u1eddng ng\u1eafn nh\u1ea5t, nh\u01b0ng nh\u1edb ch\u1eeba l\u1ed1i cho c\u00e1c s\u1ed1 sau."},{"id":"trix_3_4","girl":"trix","layer":3,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"order":[[4,3],[1,2],[0,3],[0,0],[2,0],[2,1],[3,0]],"nums":[[3,2,1]],"sol":[[0,4],[1,4],[2,4],[3,4],[4,4],[4,3],[3,3],[2,3],[2,2],[1,2],[1,3],[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"if i check every line twice, i'm allowed to rest.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Con s\u1ed1 trong \u00f4 = s\u1ed1 c\u1ea1nh c\u1ee7a \u00f4 m\u00e0 \u0111\u01b0\u1eddng ch\u1ea1m v\u00e0o. C\u00e1c \u0111i\u1ec3m \u0111\u00e1nh s\u1ed1 ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua theo \u0111\u00fang th\u1ee9 t\u1ef1 1, 2, 3\u2026 M\u1eb9o: \u00d4 \"0\" v\u00e0 \u00f4 \"3\" cho nhi\u1ec1u th\u00f4ng tin nh\u1ea5t: b\u1eaft \u0111\u1ea7u t\u1eeb ch\u00fang."},{"id":"trix_3_5","girl":"trix","layer":3,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"order":[[1,3],[3,3],[4,2],[1,0],[3,1]],"pieces":[[1,3,"P"],[2,3,"P"],[0,0,"R"],[0,2,"N"],[2,0,"P"]],"sol":[[0,4],[1,4],[1,3],[2,3],[3,3],[3,4],[4,4],[4,3],[4,2],[3,2],[2,2],[1,2],[1,1],[1,0],[2,0],[2,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"the board is mine. every square of it.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: S\u1ed1 \u00f4 c\u1ee7a v\u00f9ng = t\u1ed5ng gi\u00e1 tr\u1ecb qu\u00e2n c\u1edd trong v\u00f9ng (t\u1ed1t 1, m\u00e3 3, t\u01b0\u1ee3ng 3, xe 5, h\u1eadu 9). C\u00e1c \u0111i\u1ec3m \u0111\u00e1nh s\u1ed1 ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua theo \u0111\u00fang th\u1ee9 t\u1ef1 1, 2, 3\u2026 M\u1eb9o: Qu\u00e2n gi\u00e1 tr\u1ecb l\u1edbn (xe, h\u1eadu) c\u1ea7n v\u00f9ng l\u1edbn, qu\u00e2n t\u1ed1t c\u1ea7n v\u00f9ng \u0111\u00fang 1 \u00f4: khoanh t\u1ed1t tr\u01b0\u1edbc."},{"id":"trix_3_6","girl":"trix","layer":3,"n":6,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"visitAll":true,"order":[[2,2],[3,3]],"nums":[[2,1,3],[1,2,0]],"sol":[[0,4],[1,4],[1,3],[0,3],[0,2],[1,2],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[3,1],[2,1],[2,2],[3,2],[3,3],[2,3],[2,4],[3,4],[4,4],[4,3],[4,2],[4,1],[4,0]],"solutions":1,"belief":"perfect is the minimum.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Con s\u1ed1 trong \u00f4 = s\u1ed1 c\u1ea1nh c\u1ee7a \u00f4 m\u00e0 \u0111\u01b0\u1eddng ch\u1ea1m v\u00e0o. C\u00e1c \u0111i\u1ec3m \u0111\u00e1nh s\u1ed1 ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua theo \u0111\u00fang th\u1ee9 t\u1ef1 1, 2, 3\u2026 Ph\u1ea3i \u0111i qua m\u1ecdi \u0111i\u1ec3m. M\u1eb9o: \u00d4 \"0\" v\u00e0 \u00f4 \"3\" cho nhi\u1ec1u th\u00f4ng tin nh\u1ea5t: b\u1eaft \u0111\u1ea7u t\u1eeb ch\u00fang."},{"id":"trix_3_7","girl":"trix","layer":3,"n":7,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"order":[[0,3],[2,3],[4,4],[3,3]],"nums":[[0,3,2],[3,0,3],[1,0,3]],"pieces":[[3,2,"R"]],"sol":[[0,4],[0,3],[1,3],[2,3],[2,4],[3,4],[4,4],[4,3],[3,3],[3,2],[2,2],[2,1],[1,1],[1,0],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"belief":"i exist to be the one who's never wrong.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Con s\u1ed1 trong \u00f4 = s\u1ed1 c\u1ea1nh c\u1ee7a \u00f4 m\u00e0 \u0111\u01b0\u1eddng ch\u1ea1m v\u00e0o. S\u1ed1 \u00f4 c\u1ee7a v\u00f9ng = t\u1ed5ng gi\u00e1 tr\u1ecb qu\u00e2n c\u1edd trong v\u00f9ng (t\u1ed1t 1, m\u00e3 3, t\u01b0\u1ee3ng 3, xe 5, h\u1eadu 9). C\u00e1c \u0111i\u1ec3m \u0111\u00e1nh s\u1ed1 ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua theo \u0111\u00fang th\u1ee9 t\u1ef1 1, 2, 3\u2026 M\u1eb9o: \u00d4 \"0\" v\u00e0 \u00f4 \"3\" cho nhi\u1ec1u th\u00f4ng tin nh\u1ea5t: b\u1eaft \u0111\u1ea7u t\u1eeb ch\u00fang."},{"id":"paige_1_1","girl":"paige","layer":1,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"hearts":[[1,2,"pink"],[2,2,"pink"],[0,0,"pink"],[0,1,"pink"],[1,1,"violet"],[1,0,"violet"],[2,0,"pink"],[2,1,"pink"]],"sol":[[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[2,0],[3,0]],"solutions":4,"belief":"nobody should be alone in the dark.","note":"","intro":"hearts","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Lu\u1eadt tr\u00ean b\u1ea3ng:  M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_1_2","girl":"paige","layer":1,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"hearts":[[3,1,"pink"],[3,0,"pink"],[3,2,"pink"],[2,2,"pink"],[0,1,"pink"],[0,0,"pink"],[1,0,"pink"],[1,1,"pink"]],"dots":[[0,2],[4,3]],"sol":[[0,3],[0,2],[1,2],[1,1],[1,0],[2,0],[2,1],[2,2],[2,3],[3,3],[4,3],[4,2],[3,2],[3,1],[3,0],[4,0]],"solutions":1,"belief":"two of a kind. that's the safest hand.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_1_3","girl":"paige","layer":1,"n":3,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"hearts":[[0,2,"pink"],[1,2,"pink"],[2,2,"pink"],[1,0,"pink"],[3,1,"teal"],[0,0,"teal"],[3,0,"pink"],[2,0,"pink"]],"broken":[[0,2,1,2],[3,2,3,3],[0,3,1,3]],"sol":[[0,3],[0,2],[0,1],[1,1],[1,2],[2,2],[2,3],[3,3],[4,3],[4,2],[4,1],[3,1],[2,1],[2,0],[3,0],[4,0]],"solutions":1,"belief":"if they're going to leave, i leave first.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_1_4","girl":"paige","layer":1,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"hearts":[[2,3,"pink"],[3,3,"pink"],[2,2,"teal"],[1,0,"teal"],[0,2,"pink"],[0,3,"pink"],[0,0,"pink"],[1,1,"pink"],[2,0,"pink"],[3,1,"pink"]],"broken":[[1,1,2,1],[3,0,4,0],[1,1,1,2]],"sol":[[0,4],[0,3],[0,2],[1,2],[1,3],[1,4],[2,4],[2,3],[3,3],[4,3],[4,2],[3,2],[2,2],[2,1],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"belief":"some doors are already closed.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_1_5","girl":"paige","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"hearts":[[1,1,"violet"],[1,0,"violet"],[1,2,"teal"],[2,3,"teal"],[3,0,"pink"],[3,3,"pink"],[3,2,"pink"],[3,1,"pink"],[0,0,"teal"],[0,2,"teal"]],"dots":[[4,1],[2,0],[2,3],[4,3]],"sol":[[0,4],[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[2,2],[1,2],[1,3],[2,3],[2,4],[3,4],[4,4],[4,3],[3,3],[3,2],[3,1],[4,1],[4,0]],"solutions":1,"belief":"i keep everyone close. too close.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_1_6","girl":"paige","layer":1,"n":6,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"hearts":[[2,2,"pink"],[0,1,"pink"],[0,2,"pink"],[1,3,"pink"],[1,2,"violet"],[2,3,"violet"],[3,0,"pink"],[2,0,"pink"],[3,3,"teal"],[3,2,"teal"]],"dots":[[3,0]],"broken":[[0,3,0,4],[4,1,4,2],[1,0,2,0]],"sol":[[0,4],[1,4],[1,3],[0,3],[0,2],[1,2],[2,2],[2,3],[3,3],[3,4],[4,4],[4,3],[4,2],[3,2],[3,1],[2,1],[2,0],[3,0],[4,0]],"solutions":1,"belief":"stay. please. i'll raise the stakes.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_2_1","girl":"paige","layer":2,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"hearts":[[2,0,"pink",{"fog":true}],[2,1,"pink",{"fog":true}],[0,2,"pink",{"fog":true}],[0,1,"pink",{"fog":true}],[2,2,"violet",{"fog":true}],[1,0,"violet",{"fog":true}],[1,2,"pink",{"fog":true}],[0,0,"pink",{"fog":true}]],"sol":[[0,3],[0,2],[0,1],[1,1],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[2,0],[3,0]],"solutions":3,"belief":"you don't get to see the cards before you bet.","note":"","intro":"fog","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. L\u00e1 b\u00e0i \u00fap: k\u00fd hi\u1ec7u ch\u1ec9 l\u1eadt l\u00ean khi \u0111\u01b0\u1eddng \u0111i s\u00e1t b\u00ean \u00f4 \u0111\u00f3. Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_2_2","girl":"paige","layer":2,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"hearts":[[1,2,"pink",{"fog":true}],[0,2,"pink",{"fog":true}],[2,1,"pink",{"fog":true}],[2,0,"pink",{"fog":true}],[0,1,"pink",{"fog":true}],[0,0,"pink",{"fog":true}],[3,0,"violet",{"fog":true}],[2,2,"violet",{"fog":true}]],"dots":[[2,0],[4,3],[3,2],[4,1],[0,2]],"sol":[[0,3],[0,2],[1,2],[1,1],[1,0],[2,0],[2,1],[2,2],[2,3],[3,3],[4,3],[4,2],[3,2],[3,1],[4,1],[4,0]],"solutions":1,"belief":"every hand is a gamble.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. L\u00e1 b\u00e0i \u00fap: k\u00fd hi\u1ec7u ch\u1ec9 l\u1eadt l\u00ean khi \u0111\u01b0\u1eddng \u0111i s\u00e1t b\u00ean \u00f4 \u0111\u00f3. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_2_3","girl":"paige","layer":2,"n":3,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"hearts":[[1,1,"violet",{"fog":true}],[1,2,"violet",{"fog":true}],[0,0,"teal",{"fog":true}],[2,2,"teal",{"fog":true}],[0,1,"pink",{"fog":true}],[2,1,"pink",{"fog":true}]],"broken":[[2,3,3,3],[0,1,0,2],[0,3,1,3]],"sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[2,2],[3,2],[3,1],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[4,0]],"solutions":1,"belief":"i always bet on the worst outcome. it pays.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. L\u00e1 b\u00e0i \u00fap: k\u00fd hi\u1ec7u ch\u1ec9 l\u1eadt l\u00ean khi \u0111\u01b0\u1eddng \u0111i s\u00e1t b\u00ean \u00f4 \u0111\u00f3. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_2_4","girl":"paige","layer":2,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"hearts":[[3,0,"pink",{"fog":true}],[2,0,"pink",{"fog":true}],[1,1,"teal",{"fog":true}],[3,3,"teal",{"fog":true}],[2,2,"pink",{"fog":true}],[2,3,"pink",{"fog":true}],[0,3,"pink",{"fog":true}],[1,3,"pink",{"fog":true}],[2,1,"pink",{"fog":true}],[1,0,"pink",{"fog":true}],[3,2,"violet",{"fog":true}],[0,1,"violet",{"fog":true}]],"dots":[[2,0],[1,1]],"sol":[[0,4],[0,3],[1,3],[2,3],[2,4],[3,4],[3,3],[3,2],[2,2],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[2,1],[3,1],[4,1],[4,0]],"solutions":1,"belief":"the house always wins. i am the house.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. L\u00e1 b\u00e0i \u00fap: k\u00fd hi\u1ec7u ch\u1ec9 l\u1eadt l\u00ean khi \u0111\u01b0\u1eddng \u0111i s\u00e1t b\u00ean \u00f4 \u0111\u00f3. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_2_5","girl":"paige","layer":2,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"hearts":[[3,0,"teal",{"fog":true}],[0,2,"teal",{"fog":true}],[2,0,"pink",{"fog":true}],[0,1,"pink",{"fog":true}],[1,3,"pink",{"fog":true}],[2,2,"pink",{"fog":true}],[2,3,"pink",{"fog":true}],[3,2,"pink",{"fog":true}]],"broken":[[1,3,2,3],[0,0,0,1],[1,1,1,2]],"sol":[[0,4],[1,4],[2,4],[2,3],[3,3],[3,2],[4,2],[4,1],[3,1],[2,1],[2,2],[1,2],[1,3],[0,3],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0],[4,0]],"solutions":1,"belief":"i count the exits in every room.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. L\u00e1 b\u00e0i \u00fap: k\u00fd hi\u1ec7u ch\u1ec9 l\u1eadt l\u00ean khi \u0111\u01b0\u1eddng \u0111i s\u00e1t b\u00ean \u00f4 \u0111\u00f3. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_2_6","girl":"paige","layer":2,"n":6,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"hearts":[[2,2,"violet"],[2,3,"violet"],[0,3,"pink"],[1,3,"pink"],[0,2,"pink"],[0,0,"pink"],[3,1,"teal"],[2,0,"teal"]],"dots":[[3,0,{"fog":true}],[0,0,{"fog":true}],[4,4,{"fog":true}],[1,2,{"fog":true}]],"broken":[[1,2,1,3],[1,0,2,0]],"sol":[[0,4],[1,4],[2,4],[2,3],[1,3],[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[1,2],[2,2],[3,2],[3,3],[3,4],[4,4],[4,3],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"if i lose everything, at least it was my choice.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. L\u00e1 b\u00e0i \u00fap: k\u00fd hi\u1ec7u ch\u1ec9 l\u1eadt l\u00ean khi \u0111\u01b0\u1eddng \u0111i s\u00e1t b\u00ean \u00f4 \u0111\u00f3. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_2_7","girl":"paige","layer":2,"n":7,"w":5,"h":4,"start":[[0,4]],"exit":[[5,0]],"hearts":[[4,3,"teal",{"fog":true}],[0,3,"teal",{"fog":true}],[2,1,"teal",{"fog":true}],[4,2,"teal",{"fog":true}],[4,1,"pink",{"fog":true}],[3,1,"pink",{"fog":true}],[1,3,"pink",{"fog":true}],[2,3,"pink",{"fog":true}],[3,0,"pink",{"fog":true}],[4,0,"pink",{"fog":true}],[0,2,"pink",{"fog":true}],[0,0,"pink",{"fog":true}]],"dots":[[3,0],[1,2],[2,1],[1,4]],"sol":[[0,4],[1,4],[1,3],[2,3],[3,3],[3,4],[4,4],[5,4],[5,3],[4,3],[4,2],[3,2],[2,2],[1,2],[1,1],[2,1],[2,0],[3,0],[3,1],[4,1],[5,1],[5,0]],"solutions":1,"belief":"i'd rather lose than be left.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. L\u00e1 b\u00e0i \u00fap: k\u00fd hi\u1ec7u ch\u1ec9 l\u1eadt l\u00ean khi \u0111\u01b0\u1eddng \u0111i s\u00e1t b\u00ean \u00f4 \u0111\u00f3. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_3_1","girl":"paige","layer":3,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"hearts":[[0,1,"pink",{"lens":true}],[0,2,"pink",{"lens":true}],[2,0,"pink",{"lens":true}],[2,1,"pink",{"lens":true}],[1,1,"pink",{"lens":true}],[1,0,"pink",{"lens":true}],[0,0,"violet",{"lens":true}],[1,2,"violet",{"lens":true}]],"sol":[[0,3],[1,3],[1,2],[1,1],[0,1],[0,0],[1,0],[2,0],[2,1],[2,2],[2,3],[3,3],[3,2],[3,1],[3,0]],"solutions":4,"belief":"the real cards are hidden. look closer.","note":"","intro":"lens","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. M\u1ed9t s\u1ed1 k\u00fd hi\u1ec7u ch\u1ec9 th\u1ea5y \u0111\u01b0\u1ee3c qua k\u00ednh l\u00fap (n\u00fat Lens, r\u00ea chu\u1ed9t tr\u00ean b\u1ea3ng). Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_3_2","girl":"paige","layer":3,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"hearts":[[2,0,"violet",{"lens":true}],[3,1,"violet"],[1,0,"violet",{"lens":true}],[2,2,"violet"],[1,1,"pink",{"lens":true}],[2,1,"pink"]],"dots":[[0,2],[4,3],[2,1],[3,2],[3,0],[4,1]],"sol":[[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[1,1],[1,2],[2,2],[3,2],[3,3],[4,3],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"nobody sees what i'm holding.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. M\u1ed9t s\u1ed1 k\u00fd hi\u1ec7u ch\u1ec9 th\u1ea5y \u0111\u01b0\u1ee3c qua k\u00ednh l\u00fap (n\u00fat Lens, r\u00ea chu\u1ed9t tr\u00ean b\u1ea3ng). M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_3_3","girl":"paige","layer":3,"n":3,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"hearts":[[2,0,"pink"],[2,1,"pink"],[1,1,"teal"],[1,0,"teal"],[3,2,"violet"],[3,1,"violet"],[0,1,"violet"],[1,2,"violet"]],"dots":[[4,2,{"lens":true}],[3,2,{"lens":true}],[0,0,{"lens":true}],[1,3,{"lens":true}],[3,0,{"lens":true}],[2,1,{"lens":true}]],"sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[2,2],[3,2],[3,3],[4,3],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"half the deck is lies.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. M\u1ed9t s\u1ed1 k\u00fd hi\u1ec7u ch\u1ec9 th\u1ea5y \u0111\u01b0\u1ee3c qua k\u00ednh l\u00fap (n\u00fat Lens, r\u00ea chu\u1ed9t tr\u00ean b\u1ea3ng). M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_3_4","girl":"paige","layer":3,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"hearts":[[3,1,"pink",{"lens":true}],[2,0,"pink"],[0,0,"violet",{"lens":true}],[2,1,"violet"],[3,2,"violet",{"lens":true}],[1,2,"violet"],[0,2,"violet",{"lens":true}],[0,3,"violet"],[3,3,"pink",{"lens":true}],[1,1,"pink"],[2,3,"pink",{"lens":true}],[1,3,"pink"]],"dots":[[4,4],[4,1]],"sol":[[0,4],[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,4],[4,4],[4,3],[4,2],[3,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"belief":"i read the cards so nobody reads me.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. M\u1ed9t s\u1ed1 k\u00fd hi\u1ec7u ch\u1ec9 th\u1ea5y \u0111\u01b0\u1ee3c qua k\u00ednh l\u00fap (n\u00fat Lens, r\u00ea chu\u1ed9t tr\u00ean b\u1ea3ng). M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_3_5","girl":"paige","layer":3,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"hearts":[[3,3,"pink",{"lens":true}],[3,1,"pink"],[2,1,"pink"],[2,0,"pink",{"lens":true}],[1,0,"violet"],[3,0,"violet"],[1,2,"teal",{"lens":true}],[2,3,"teal"],[0,0,"pink"],[1,3,"pink",{"lens":true}]],"broken":[[2,3,3,3],[1,1,1,2],[0,1,1,1]],"sol":[[0,4],[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,2],[1,2],[1,3],[2,3],[2,4],[3,4],[3,3],[3,2],[3,1],[4,1],[4,0]],"solutions":1,"belief":"i only show my hand to people who stay.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1ed9t s\u1ed1 k\u00fd hi\u1ec7u ch\u1ec9 th\u1ea5y \u0111\u01b0\u1ee3c qua k\u00ednh l\u00fap (n\u00fat Lens, r\u00ea chu\u1ed9t tr\u00ean b\u1ea3ng). M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_3_6","girl":"paige","layer":3,"n":6,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"hearts":[[2,2,"violet",{"fog":true}],[3,3,"violet",{"fog":true}],[1,1,"pink",{"fog":true}],[2,0,"pink",{"fog":true}],[2,3,"pink",{"fog":true}],[3,2,"pink",{"fog":true}],[0,2,"teal",{"fog":true}],[2,1,"teal",{"fog":true}]],"dots":[[0,0,{"lens":true}],[3,1,{"lens":true}],[1,1,{"lens":true}]],"broken":[[2,1,2,2],[1,3,2,3],[3,1,3,2]],"sol":[[0,4],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[3,2],[2,2],[1,2],[1,3],[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"belief":"whatever happens, i saw it coming.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. L\u00e1 b\u00e0i \u00fap: k\u00fd hi\u1ec7u ch\u1ec9 l\u1eadt l\u00ean khi \u0111\u01b0\u1eddng \u0111i s\u00e1t b\u00ean \u00f4 \u0111\u00f3. M\u1ed9t s\u1ed1 k\u00fd hi\u1ec7u ch\u1ec9 th\u1ea5y \u0111\u01b0\u1ee3c qua k\u00ednh l\u00fap (n\u00fat Lens, r\u00ea chu\u1ed9t tr\u00ean b\u1ea3ng). M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"paige_3_7","girl":"paige","layer":3,"n":7,"w":5,"h":4,"start":[[0,4]],"exit":[[5,0]],"hearts":[[2,0,"violet",{"lens":true}],[2,1,"violet"],[3,1,"violet",{"lens":true}],[3,2,"violet"],[1,0,"pink",{"lens":true}],[2,3,"pink"],[4,1,"pink",{"lens":true}],[3,0,"pink"],[0,0,"violet",{"lens":true}],[1,1,"violet"]],"dots":[[0,0],[4,1],[5,2],[1,2],[1,4],[0,3]],"sol":[[0,4],[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,2],[1,2],[1,3],[1,4],[2,4],[3,4],[4,4],[5,4],[5,3],[5,2],[4,2],[4,3],[3,3],[3,2],[3,1],[3,0],[4,0],[4,1],[5,1],[5,0]],"solutions":1,"belief":"as long as someone needs me at the table, i stay.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i tr\u00e1i tim ph\u1ea3i \u1edf chung v\u00f9ng v\u1edbi \u0111\u00fang m\u1ed9t tr\u00e1i tim c\u00f9ng m\u00e0u: kh\u00f4ng ai m\u1ed9t m\u00ecnh, kh\u00f4ng ai th\u1eeba. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. M\u1ed9t s\u1ed1 k\u00fd hi\u1ec7u ch\u1ec9 th\u1ea5y \u0111\u01b0\u1ee3c qua k\u00ednh l\u00fap (n\u00fat Lens, r\u00ea chu\u1ed9t tr\u00ean b\u1ea3ng). M\u1eb9o: Tr\u00e1i tim c\u00f9ng m\u00e0u \u1edf xa nhau th\u00ec ph\u1ea3i chung m\u1ed9t v\u00f9ng l\u1edbn; hai tr\u00e1i tim c\u00f9ng m\u00e0u n\u1eb1m s\u00e1t nhau m\u00e0 c\u00f3 tr\u00e1i tim th\u1ee9 ba c\u00f9ng m\u00e0u g\u1ea7n \u0111\u00f3 th\u00ec ph\u1ea3i t\u00e1ch ra."},{"id":"vel_1_1","girl":"vel","layer":1,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"portals":[[1,3,2,0]],"broken":[[3,1,3,2],[1,1,2,1],[2,0,2,1]],"dots":[[3,3],[3,1],[0,1]],"sol":[[0,3],[0,2],[1,2],[1,1],[0,1],[0,0],[1,0],[2,0],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[3,1],[3,0]],"solutions":3,"belief":"omg a teleporter!! ...extraction point confirmed.","note":"","intro":"portals","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. B\u01b0\u1edbc l\u00ean m\u1ed9t c\u1ed5ng th\u00ec \u0111\u01b0\u1eddng xu\u1ea5t hi\u1ec7n \u1edf c\u1ed5ng c\u00f9ng m\u00e0u b\u00ean kia. Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c."},{"id":"vel_1_2","girl":"vel","layer":1,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"portals":[[0,1,4,2]],"dots":[[0,1],[2,0],[2,2]],"broken":[[0,3,1,3],[1,2,1,3],[3,1,4,1],[1,2,2,2],[2,0,3,0]],"sol":[[0,3],[0,2],[1,2],[1,1],[2,1],[2,0],[1,0],[0,0],[0,1],[4,2],[4,3],[3,3],[2,3],[2,2],[3,2],[3,1],[3,0],[4,0]],"solutions":1,"belief":"always have two exits. that's basic.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. B\u01b0\u1edbc l\u00ean m\u1ed9t c\u1ed5ng th\u00ec \u0111\u01b0\u1eddng xu\u1ea5t hi\u1ec7n \u1edf c\u1ed5ng c\u00f9ng m\u00e0u b\u00ean kia."},{"id":"vel_1_3","girl":"vel","layer":1,"n":3,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"portals":[[1,1,3,2]],"dots":[[2,2],[4,2],[0,0],[2,0]],"broken":[[3,2,3,3],[2,3,3,3],[1,0,2,0]],"sol":[[0,3],[1,3],[2,3],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[3,2],[4,2],[4,1],[3,1],[2,1],[2,0],[3,0],[4,0]],"solutions":1,"belief":"cute outfit, full tactical plan underneath.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. B\u01b0\u1edbc l\u00ean m\u1ed9t c\u1ed5ng th\u00ec \u0111\u01b0\u1eddng xu\u1ea5t hi\u1ec7n \u1edf c\u1ed5ng c\u00f9ng m\u00e0u b\u00ean kia."},{"id":"vel_1_4","girl":"vel","layer":1,"n":4,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"portals":[[2,3,2,0]],"broken":[[2,1,2,2],[0,3,1,3],[1,0,2,0],[2,1,3,1],[1,2,2,2]],"dots":[[3,0],[2,2],[3,3],[0,0]],"sol":[[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[2,3],[2,2],[3,2],[3,3],[4,3],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"if the road is blocked, go around. or through.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. B\u01b0\u1edbc l\u00ean m\u1ed9t c\u1ed5ng th\u00ec \u0111\u01b0\u1eddng xu\u1ea5t hi\u1ec7n \u1edf c\u1ed5ng c\u00f9ng m\u00e0u b\u00ean kia."},{"id":"vel_1_5","girl":"vel","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"portals":[[0,2,4,3],[2,4,1,0]],"dots":[[0,0],[3,2],[0,3],[2,1],[1,2],[2,3],[4,1]],"broken":[[2,0,2,1],[1,2,1,3],[0,3,1,3],[1,4,2,4],[3,1,3,2]],"sol":[[0,4],[0,3],[0,2],[4,3],[4,2],[3,2],[3,3],[2,3],[2,4],[1,0],[0,0],[0,1],[1,1],[1,2],[2,2],[2,1],[3,1],[4,1],[4,0]],"solutions":1,"belief":"two routes in, two routes out. always.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. B\u01b0\u1edbc l\u00ean m\u1ed9t c\u1ed5ng th\u00ec \u0111\u01b0\u1eddng xu\u1ea5t hi\u1ec7n \u1edf c\u1ed5ng c\u00f9ng m\u00e0u b\u00ean kia."},{"id":"vel_1_6","girl":"vel","layer":1,"n":6,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"portals":[[1,3,3,1],[0,1,4,3]],"dots":[[1,2],[4,4],[3,3],[1,0],[2,1]],"broken":[[1,2,2,2],[0,0,1,0],[2,1,3,1],[3,2,3,3],[1,1,2,1],[0,2,0,3]],"sol":[[0,4],[1,4],[2,4],[2,3],[3,3],[3,4],[4,4],[4,3],[0,1],[0,2],[1,2],[1,1],[1,0],[2,0],[2,1],[2,2],[3,2],[4,2],[4,1],[4,0]],"solutions":1,"belief":"i'm fun at parties because i know where every exit is.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. B\u01b0\u1edbc l\u00ean m\u1ed9t c\u1ed5ng th\u00ec \u0111\u01b0\u1eddng xu\u1ea5t hi\u1ec7n \u1edf c\u1ed5ng c\u00f9ng m\u00e0u b\u00ean kia."},{"id":"vel_2_1","girl":"vel","layer":2,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"switches":[[1,2]],"cool":[[3,0,3,1],[0,2,0,3],[2,0,2,1],[1,1,2,1],[1,2,1,3],[2,2,2,3]],"warm":[[0,0,0,1],[0,1,1,1],[2,0,3,0]],"sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[2,2],[1,2],[1,1],[1,0],[2,0],[2,1],[3,1],[3,0]],"solutions":2,"belief":"up, down, up. pick a lane, vel.","note":"","intro":"switches","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. M\u1ed7i l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc \u25d0, t\u00e2m tr\u1ea1ng \u0111\u1ed5i. \u0110\u01b0\u1eddng \u1ea5m (cam) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"l\u00ean\" (l\u00fac \u0111\u1ea7u), \u0111\u01b0\u1eddng l\u1ea1nh (xanh) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"xu\u1ed1ng\". Lu\u1eadt tr\u00ean b\u1ea3ng:  M\u1eb9o: \u0110\u00e1nh d\u1ea5u m\u1ed7i \u0111o\u1ea1n m\u00e0u c\u1ea7n t\u00e2m tr\u1ea1ng n\u00e0o, r\u1ed3i x\u1ebfp c\u00e1c l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc cho kh\u1edbp."},{"id":"vel_2_2","girl":"vel","layer":2,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"switches":[[2,1]],"cool":[[1,0,2,0],[1,2,2,2],[1,3,2,3],[0,2,0,3],[0,1,1,1],[1,1,1,2]],"warm":[[2,0,3,0],[3,2,4,2],[3,0,3,1],[4,1,4,2],[2,1,3,1],[2,2,3,2]],"sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,2],[2,3],[3,3],[3,2],[3,1],[4,1],[4,0]],"solutions":1,"belief":"yesterday i loved everyone. today i hate this font.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc \u25d0, t\u00e2m tr\u1ea1ng \u0111\u1ed5i. \u0110\u01b0\u1eddng \u1ea5m (cam) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"l\u00ean\" (l\u00fac \u0111\u1ea7u), \u0111\u01b0\u1eddng l\u1ea1nh (xanh) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"xu\u1ed1ng\". M\u1eb9o: \u0110\u00e1nh d\u1ea5u m\u1ed7i \u0111o\u1ea1n m\u00e0u c\u1ea7n t\u00e2m tr\u1ea1ng n\u00e0o, r\u1ed3i x\u1ebfp c\u00e1c l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc cho kh\u1edbp."},{"id":"vel_2_3","girl":"vel","layer":2,"n":3,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"switches":[[1,2],[3,1]],"warm":[[3,0,4,0],[2,1,3,1],[2,0,2,1],[1,1,1,2],[3,0,3,1],[4,0,4,1],[3,3,4,3],[2,2,3,2],[0,0,0,1],[1,2,2,2],[3,1,3,2]],"cool":[[1,3,2,3],[0,2,0,3]],"sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[1,1],[2,1],[2,2],[2,3],[3,3],[3,2],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"highs and lows are just terrain. i've mapped worse.","note":"(relaxed limits)","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc \u25d0, t\u00e2m tr\u1ea1ng \u0111\u1ed5i. \u0110\u01b0\u1eddng \u1ea5m (cam) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"l\u00ean\" (l\u00fac \u0111\u1ea7u), \u0111\u01b0\u1eddng l\u1ea1nh (xanh) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"xu\u1ed1ng\". M\u1eb9o: \u0110\u00e1nh d\u1ea5u m\u1ed7i \u0111o\u1ea1n m\u00e0u c\u1ea7n t\u00e2m tr\u1ea1ng n\u00e0o, r\u1ed3i x\u1ebfp c\u00e1c l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc cho kh\u1edbp."},{"id":"vel_2_4","girl":"vel","layer":2,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"switches":[[2,2]],"portals":[[0,1,4,3]],"cool":[[1,0,1,1],[4,2,4,3],[1,4,2,4]],"dots":[[2,2],[2,0],[3,4],[1,4],[3,2]],"broken":[[0,2,1,2],[2,2,3,2],[2,2,2,3],[4,3,4,4]],"warm":[[1,2,2,2]],"sol":[[0,4],[1,4],[1,3],[2,3],[2,4],[3,4],[3,3],[4,3],[0,1],[1,1],[1,2],[2,2],[2,1],[2,0],[3,0],[3,1],[3,2],[4,2],[4,1],[4,0]],"solutions":1,"belief":"when the floor drops, i already have a rope.","note":"(relaxed limits)","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. B\u01b0\u1edbc l\u00ean m\u1ed9t c\u1ed5ng th\u00ec \u0111\u01b0\u1eddng xu\u1ea5t hi\u1ec7n \u1edf c\u1ed5ng c\u00f9ng m\u00e0u b\u00ean kia. M\u1ed7i l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc \u25d0, t\u00e2m tr\u1ea1ng \u0111\u1ed5i. \u0110\u01b0\u1eddng \u1ea5m (cam) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"l\u00ean\" (l\u00fac \u0111\u1ea7u), \u0111\u01b0\u1eddng l\u1ea1nh (xanh) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"xu\u1ed1ng\"."},{"id":"vel_2_5","girl":"vel","layer":2,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"switches":[[1,2],[3,2]],"cool":[[1,3,1,4],[0,3,0,4],[0,0,1,0],[2,0,3,0]],"warm":[[3,4,4,4],[1,0,1,1],[1,0,2,0]],"dots":[[4,1],[1,0],[3,4],[3,0],[4,3]],"sol":[[0,4],[1,4],[2,4],[3,4],[4,4],[4,3],[3,3],[2,3],[1,3],[0,3],[0,2],[0,1],[1,1],[1,0],[2,0],[2,1],[2,2],[3,2],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"i write the sad chapters on the good days. just in case.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. M\u1ed7i l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc \u25d0, t\u00e2m tr\u1ea1ng \u0111\u1ed5i. \u0110\u01b0\u1eddng \u1ea5m (cam) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"l\u00ean\" (l\u00fac \u0111\u1ea7u), \u0111\u01b0\u1eddng l\u1ea1nh (xanh) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"xu\u1ed1ng\"."},{"id":"vel_2_6","girl":"vel","layer":2,"n":6,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"switches":[[2,3],[2,1]],"cool":[[0,3,0,4],[1,2,2,2],[3,1,4,1],[2,0,3,0]],"broken":[[3,0,4,0],[1,4,2,4],[3,1,3,2],[2,1,2,2]],"warm":[[4,0,4,1],[2,2,2,3]],"sol":[[0,4],[1,4],[1,3],[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[1,1],[1,2],[2,2],[3,2],[3,3],[2,3],[2,4],[3,4],[4,4],[4,3],[4,2],[4,1],[4,0]],"solutions":1,"belief":"stay sharp. moods are weather. weather passes.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1ed7i l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc \u25d0, t\u00e2m tr\u1ea1ng \u0111\u1ed5i. \u0110\u01b0\u1eddng \u1ea5m (cam) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"l\u00ean\" (l\u00fac \u0111\u1ea7u), \u0111\u01b0\u1eddng l\u1ea1nh (xanh) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"xu\u1ed1ng\"."},{"id":"vel_2_7","girl":"vel","layer":2,"n":7,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"switches":[[1,1],[3,3]],"portals":[[0,2,4,2]],"dots":[[1,3],[3,3],[2,0],[2,4],[1,2]],"cool":[[3,2,3,3],[1,4,2,4],[2,0,2,1],[4,0,4,1]],"broken":[[3,3,4,3],[1,0,1,1],[1,3,2,3],[1,2,1,3]],"warm":[[2,1,3,1]],"sol":[[0,4],[1,4],[1,3],[0,3],[0,2],[4,2],[4,3],[4,4],[3,4],[2,4],[2,3],[3,3],[3,2],[2,2],[1,2],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[4,0]],"solutions":1,"belief":"if i keep moving, the low can never catch me.","note":"(relaxed limits)","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. B\u01b0\u1edbc l\u00ean m\u1ed9t c\u1ed5ng th\u00ec \u0111\u01b0\u1eddng xu\u1ea5t hi\u1ec7n \u1edf c\u1ed5ng c\u00f9ng m\u00e0u b\u00ean kia. M\u1ed7i l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc \u25d0, t\u00e2m tr\u1ea1ng \u0111\u1ed5i. \u0110\u01b0\u1eddng \u1ea5m (cam) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"l\u00ean\" (l\u00fac \u0111\u1ea7u), \u0111\u01b0\u1eddng l\u1ea1nh (xanh) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"xu\u1ed1ng\"."},{"id":"vel_3_1","girl":"vel","layer":3,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"broken":[[0,1,0,2],[1,1,2,1]],"dots":[[1,0],[2,1],[0,2]],"mines":[[2,2]],"radar":[[1,2,1],[2,1,1],[1,1,1]],"sol":[[0,3],[0,2],[1,2],[1,1],[0,1],[0,0],[1,0],[2,0],[2,1],[3,1],[3,0]],"solutions":2,"belief":"map the minefield before you walk it.","note":"(relaxed limits)","intro":"mines","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. C\u00f3 m\u00ecn gi\u1ea5u trong v\u00e0i \u00f4. S\u1ed1 trong \u00f4 radar \u25c7 = s\u1ed1 m\u00ecn \u1edf 8 \u00f4 xung quanh. \u0110\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m c\u1ea1nh \u00f4 c\u00f3 m\u00ecn. Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c."},{"id":"vel_3_2","girl":"vel","layer":3,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"broken":[[3,2,3,3],[3,2,4,2],[0,2,0,3],[4,0,4,1]],"mines":[[0,0],[1,0]],"dots":[[3,3],[2,2]],"radar":[[1,1,2],[2,1,1],[2,0,1],[0,2,0]],"sol":[[0,3],[1,3],[1,2],[2,2],[2,3],[3,3],[4,3],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"you don't step where you haven't checked. ever.","note":"(relaxed limits)","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. C\u00f3 m\u00ecn gi\u1ea5u trong v\u00e0i \u00f4. S\u1ed1 trong \u00f4 radar \u25c7 = s\u1ed1 m\u00ecn \u1edf 8 \u00f4 xung quanh. \u0110\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m c\u1ea1nh \u00f4 c\u00f3 m\u00ecn."},{"id":"vel_3_3","girl":"vel","layer":3,"n":3,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"portals":[[0,1,3,3]],"dots":[[0,1],[1,0],[3,2]],"broken":[[3,0,4,0],[0,2,0,3],[0,0,1,0]],"mines":[[2,2]],"radar":[[2,1,1],[3,1,1],[3,2,1],[1,1,1]],"sol":[[0,3],[1,3],[1,2],[2,2],[2,1],[2,0],[1,0],[1,1],[0,1],[3,3],[4,3],[4,2],[3,2],[3,1],[4,1],[4,0]],"solutions":1,"belief":"a story is a minefield. i know where i buried everything.","note":"(relaxed limits)","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. B\u01b0\u1edbc l\u00ean m\u1ed9t c\u1ed5ng th\u00ec \u0111\u01b0\u1eddng xu\u1ea5t hi\u1ec7n \u1edf c\u1ed5ng c\u00f9ng m\u00e0u b\u00ean kia. C\u00f3 m\u00ecn gi\u1ea5u trong v\u00e0i \u00f4. S\u1ed1 trong \u00f4 radar \u25c7 = s\u1ed1 m\u00ecn \u1edf 8 \u00f4 xung quanh. \u0110\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m c\u1ea1nh \u00f4 c\u00f3 m\u00ecn."},{"id":"vel_3_4","girl":"vel","layer":3,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"switches":[[2,2]],"mines":[[1,1]],"cool":[[1,0,1,1],[3,2,4,2],[3,1,4,1],[4,0,4,1],[0,0,1,0],[4,3,4,4],[3,1,3,2]],"warm":[[2,2,3,2],[2,0,2,1],[0,2,0,3],[3,0,4,0],[0,0,0,1]],"radar":[[1,2,1],[2,0,1],[1,0,1],[2,2,1],[0,0,1],[0,1,1]],"sol":[[0,4],[1,4],[2,4],[3,4],[3,3],[3,2],[2,2],[2,3],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"belief":"mood swings and landmines. same drill.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u1ed7i l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc \u25d0, t\u00e2m tr\u1ea1ng \u0111\u1ed5i. \u0110\u01b0\u1eddng \u1ea5m (cam) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"l\u00ean\" (l\u00fac \u0111\u1ea7u), \u0111\u01b0\u1eddng l\u1ea1nh (xanh) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"xu\u1ed1ng\". C\u00f3 m\u00ecn gi\u1ea5u trong v\u00e0i \u00f4. S\u1ed1 trong \u00f4 radar \u25c7 = s\u1ed1 m\u00ecn \u1edf 8 \u00f4 xung quanh. \u0110\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m c\u1ea1nh \u00f4 c\u00f3 m\u00ecn. M\u1eb9o: \u0110\u00e1nh d\u1ea5u m\u1ed7i \u0111o\u1ea1n m\u00e0u c\u1ea7n t\u00e2m tr\u1ea1ng n\u00e0o, r\u1ed3i x\u1ebfp c\u00e1c l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc cho kh\u1edbp."},{"id":"vel_3_5","girl":"vel","layer":3,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"dots":[[1,1],[4,4]],"broken":[[3,0,4,0]],"mines":[[0,1],[1,3]],"radar":[[0,3,1],[0,0,1],[2,2,1],[1,2,2],[0,2,2],[2,0,0]],"sol":[[0,4],[0,3],[1,3],[1,2],[2,2],[2,1],[1,1],[1,0],[2,0],[3,0],[3,1],[3,2],[3,3],[3,4],[4,4],[4,3],[4,2],[4,1],[4,0]],"solutions":1,"belief":"i plan for the worst so nobody sees me fall.","note":"(relaxed limits)","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. C\u00f3 m\u00ecn gi\u1ea5u trong v\u00e0i \u00f4. S\u1ed1 trong \u00f4 radar \u25c7 = s\u1ed1 m\u00ecn \u1edf 8 \u00f4 xung quanh. \u0110\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m c\u1ea1nh \u00f4 c\u00f3 m\u00ecn."},{"id":"vel_3_6","girl":"vel","layer":3,"n":6,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"mines":[[1,2],[2,3]],"dots":[[1,3],[2,2],[0,0],[4,1]],"broken":[[2,0,2,1],[4,1,4,2]],"radar":[[0,2,1],[2,1,1],[3,2,1],[1,1,1],[1,3,2],[2,2,2]],"sol":[[0,4],[1,4],[1,3],[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,2],[3,2],[3,1],[4,1],[4,0]],"solutions":1,"belief":"if i'm in control, nothing explodes.","note":"(relaxed limits)","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. C\u00f3 m\u00ecn gi\u1ea5u trong v\u00e0i \u00f4. S\u1ed1 trong \u00f4 radar \u25c7 = s\u1ed1 m\u00ecn \u1edf 8 \u00f4 xung quanh. \u0110\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m c\u1ea1nh \u00f4 c\u00f3 m\u00ecn."},{"id":"vel_3_7","girl":"vel","layer":3,"n":7,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"switches":[[1,2]],"portals":[[0,1,3,4]],"mines":[[0,0]],"warm":[[3,1,3,2],[1,1,2,1],[3,3,4,3],[2,1,2,2],[3,2,4,2],[4,0,4,1]],"cool":[[1,2,1,3],[3,0,4,0],[2,2,3,2],[0,4,1,4],[4,1,4,2],[1,2,2,2],[3,1,4,1],[1,3,2,3]],"radar":[[1,0,1],[2,2,0],[3,0,0],[1,2,0]],"sol":[[0,4],[0,3],[1,3],[1,4],[2,4],[2,3],[2,2],[2,1],[1,1],[1,2],[0,2],[0,1],[3,4],[4,4],[4,3],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"as long as i hold the map, nobody gets left behind.","note":"(relaxed limits)","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: B\u01b0\u1edbc l\u00ean m\u1ed9t c\u1ed5ng th\u00ec \u0111\u01b0\u1eddng xu\u1ea5t hi\u1ec7n \u1edf c\u1ed5ng c\u00f9ng m\u00e0u b\u00ean kia. M\u1ed7i l\u1ea7n \u0111i qua c\u00f4ng t\u1eafc \u25d0, t\u00e2m tr\u1ea1ng \u0111\u1ed5i. \u0110\u01b0\u1eddng \u1ea5m (cam) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"l\u00ean\" (l\u00fac \u0111\u1ea7u), \u0111\u01b0\u1eddng l\u1ea1nh (xanh) ch\u1ec9 \u0111i \u0111\u01b0\u1ee3c khi \u0111ang \"xu\u1ed1ng\". C\u00f3 m\u00ecn gi\u1ea5u trong v\u00e0i \u00f4. S\u1ed1 trong \u00f4 radar \u25c7 = s\u1ed1 m\u00ecn \u1edf 8 \u00f4 xung quanh. \u0110\u01b0\u1eddng kh\u00f4ng \u0111\u01b0\u1ee3c ch\u1ea1m c\u1ea1nh \u00f4 c\u00f3 m\u00ecn. M\u1eb9o: Coi hai c\u1ed5ng nh\u01b0 m\u1ed9t \u0111i\u1ec3m: \u0111\u01b0\u1eddng v\u00e0o m\u1ed9t c\u1ed5ng l\u00e0 \u0111i ti\u1ebfp t\u1eeb c\u1ed5ng kia."},{"id":"myne_1_1","girl":"myne","layer":1,"n":1,"w":3,"h":3,"wrap":"x","start":[[0,3]],"exit":[[2,0]],"broken":[[1,2,2,2],[2,0,2,1],[1,0,2,0],[1,2,1,3]],"dots":[[1,3],[0,2],[0,1],[1,0]],"sol":[[0,3],[1,3],[2,3],[2,2],[2,1],[0,1],[0,2],[1,2],[1,1],[1,0],[0,0],[2,0]],"solutions":3,"belief":"screen edge? not real. it loops.","note":"","intro":"wrapx","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. M\u00e9p tr\u00e1i v\u00e0 m\u00e9p ph\u1ea3i n\u1ed1i v\u1edbi nhau: \u0111i ra m\u1ed9t b\u00ean th\u00ec v\u00e0o l\u1ea1i t\u1eeb b\u00ean kia. Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_1_2","girl":"myne","layer":1,"n":2,"w":4,"h":3,"wrap":"x","start":[[1,3]],"exit":[[2,0]],"dots":[[2,1],[1,0],[3,2],[0,1],[3,0]],"broken":[[2,2,3,2],[0,1,1,1],[1,0,1,1]],"sol":[[1,3],[1,2],[1,1],[2,1],[2,2],[2,3],[3,3],[3,2],[0,2],[0,1],[3,1],[3,0],[0,0],[1,0],[2,0]],"solutions":1,"belief":"wait where was i. oh right. the other side.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u00e9p tr\u00e1i v\u00e0 m\u00e9p ph\u1ea3i n\u1ed1i v\u1edbi nhau: \u0111i ra m\u1ed9t b\u00ean th\u00ec v\u00e0o l\u1ea1i t\u1eeb b\u00ean kia. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_1_3","girl":"myne","layer":1,"n":3,"w":4,"h":3,"wrap":"x","start":[[0,3]],"exit":[[1,0]],"broken":[[3,2,3,3],[0,0,1,0],[0,3,1,3],[1,1,2,1],[1,0,1,1],[2,0,2,1],[2,1,2,2]],"dots":[[0,0],[1,3],[2,2],[1,1]],"sol":[[0,3],[0,2],[3,2],[2,2],[2,3],[1,3],[1,2],[1,1],[0,1],[0,0],[3,0],[2,0],[1,0]],"solutions":1,"belief":"shortcuts are the only real way to travel.","note":"(relaxed limits)","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u00e9p tr\u00e1i v\u00e0 m\u00e9p ph\u1ea3i n\u1ed1i v\u1edbi nhau: \u0111i ra m\u1ed9t b\u00ean th\u00ec v\u00e0o l\u1ea1i t\u1eeb b\u00ean kia. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_1_4","girl":"myne","layer":1,"n":4,"w":4,"h":3,"wrap":"x","start":[[2,3]],"exit":[[3,0]],"dots":[[3,2],[0,0],[3,3],[1,0],[1,3]],"broken":[[1,2,2,2],[3,2,3,3],[3,2,0,2],[0,0,1,0]],"sol":[[2,3],[3,3],[0,3],[1,3],[1,2],[1,1],[1,0],[2,0],[2,1],[2,2],[3,2],[3,1],[0,1],[0,0],[3,0]],"solutions":1,"belief":"i look strong so nobody asks me to carry things.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u00e9p tr\u00e1i v\u00e0 m\u00e9p ph\u1ea3i n\u1ed1i v\u1edbi nhau: \u0111i ra m\u1ed9t b\u00ean th\u00ec v\u00e0o l\u1ea1i t\u1eeb b\u00ean kia. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_1_5","girl":"myne","layer":1,"n":5,"w":4,"h":3,"wrap":"x","start":[[0,3]],"exit":[[2,0]],"visitAll":true,"broken":[[2,0,3,0],[2,0,2,1],[0,2,0,3],[1,1,2,1],[3,2,0,2]],"sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[3,1],[3,0],[0,0],[0,1],[0,2],[1,2],[1,1],[1,0],[2,0]],"solutions":1,"belief":"100% completion or it doesn't count. ...ooh, a side quest.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u00e9p tr\u00e1i v\u00e0 m\u00e9p ph\u1ea3i n\u1ed1i v\u1edbi nhau: \u0111i ra m\u1ed9t b\u00ean th\u00ec v\u00e0o l\u1ea1i t\u1eeb b\u00ean kia. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Ph\u1ea3i \u0111i qua m\u1ecdi \u0111i\u1ec3m. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_1_6","girl":"myne","layer":1,"n":6,"w":4,"h":4,"wrap":"x","start":[[1,4]],"exit":[[3,0]],"broken":[[0,0,0,1],[0,2,1,2],[2,4,3,4],[3,0,0,0],[0,1,1,1],[1,2,1,3]],"dots":[[3,4],[0,1],[1,2],[2,4],[1,3]],"sol":[[1,4],[2,4],[2,3],[1,3],[0,3],[0,4],[3,4],[3,3],[3,2],[0,2],[0,1],[3,1],[2,1],[2,2],[1,2],[1,1],[1,0],[2,0],[3,0]],"solutions":1,"belief":"if i stop moving, everyone sees how tired i am.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u00e9p tr\u00e1i v\u00e0 m\u00e9p ph\u1ea3i n\u1ed1i v\u1edbi nhau: \u0111i ra m\u1ed9t b\u00ean th\u00ec v\u00e0o l\u1ea1i t\u1eeb b\u00ean kia. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_2_1","girl":"myne","layer":2,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"restless":1,"broken":[[1,1,1,2]],"sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[2,2],[3,2],[3,1],[2,1],[2,0],[3,0]],"solutions":3,"belief":"can't. sit. still.","note":"","intro":"restless","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. Kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i th\u1eb3ng qu\u00e1 1 \u0111o\u1ea1n li\u00ean ti\u1ebfp: ph\u1ea3i r\u1ebd li\u00ean t\u1ee5c. Lu\u1eadt tr\u00ean b\u1ea3ng: \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c."},{"id":"myne_2_2","girl":"myne","layer":2,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"restless":2,"dots":[[3,0],[1,2],[4,2]],"broken":[[4,2,4,3],[0,2,1,2],[1,2,1,3],[2,0,3,0]],"sol":[[0,3],[0,2],[0,1],[1,1],[1,2],[2,2],[2,3],[3,3],[3,2],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"boredom is a bug. i patch it with noise.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i th\u1eb3ng qu\u00e1 2 \u0111o\u1ea1n li\u00ean ti\u1ebfp: ph\u1ea3i r\u1ebd li\u00ean t\u1ee5c."},{"id":"myne_2_3","girl":"myne","layer":2,"n":3,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"restless":1,"broken":[[2,1,3,1]],"dots":[[2,1],[3,0]],"sol":[[0,3],[0,2],[1,2],[1,1],[2,1],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"belief":"ten tabs open. all of them important.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i th\u1eb3ng qu\u00e1 1 \u0111o\u1ea1n li\u00ean ti\u1ebfp: ph\u1ea3i r\u1ebd li\u00ean t\u1ee5c."},{"id":"myne_2_4","girl":"myne","layer":2,"n":4,"w":4,"h":3,"wrap":"x","start":[[0,3]],"exit":[[2,0]],"restless":2,"broken":[[2,1,2,2],[1,3,2,3],[3,0,3,1]],"dots":[[1,3],[0,0],[1,1],[3,1],[3,3]],"sol":[[0,3],[1,3],[1,2],[2,2],[2,3],[3,3],[3,2],[3,1],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0]],"solutions":1,"belief":"loop, turn, loop. like a speedrun.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u00e9p tr\u00e1i v\u00e0 m\u00e9p ph\u1ea3i n\u1ed1i v\u1edbi nhau: \u0111i ra m\u1ed9t b\u00ean th\u00ec v\u00e0o l\u1ea1i t\u1eeb b\u00ean kia. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i th\u1eb3ng qu\u00e1 2 \u0111o\u1ea1n li\u00ean ti\u1ebfp: ph\u1ea3i r\u1ebd li\u00ean t\u1ee5c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_2_5","girl":"myne","layer":2,"n":5,"w":4,"h":4,"wrap":"x","start":[[1,4]],"exit":[[2,0]],"restless":1,"dots":[[1,3],[0,1]],"broken":[[0,0,1,0],[1,4,2,4],[1,3,1,4],[0,1,0,2],[0,3,1,3]],"sol":[[1,4],[0,4],[0,3],[3,3],[3,4],[2,4],[2,3],[1,3],[1,2],[2,2],[2,1],[3,1],[3,0],[0,0],[0,1],[1,1],[1,0],[2,0]],"solutions":1,"belief":"if i'm loud enough nobody notices i'm fragile.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u00e9p tr\u00e1i v\u00e0 m\u00e9p ph\u1ea3i n\u1ed1i v\u1edbi nhau: \u0111i ra m\u1ed9t b\u00ean th\u00ec v\u00e0o l\u1ea1i t\u1eeb b\u00ean kia. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i th\u1eb3ng qu\u00e1 1 \u0111o\u1ea1n li\u00ean ti\u1ebfp: ph\u1ea3i r\u1ebd li\u00ean t\u1ee5c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_2_6","girl":"myne","layer":2,"n":6,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"restless":3,"visitAll":true,"broken":[[2,0,3,0]],"sol":[[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[1,1],[1,2],[1,3],[2,3],[2,2],[3,2],[3,3],[4,3],[4,2],[4,1],[3,1],[3,0],[4,0]],"solutions":1,"belief":"finish everything. right now. all of it.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Ph\u1ea3i \u0111i qua m\u1ecdi \u0111i\u1ec3m. Kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i th\u1eb3ng qu\u00e1 3 \u0111o\u1ea1n li\u00ean ti\u1ebfp: ph\u1ea3i r\u1ebd li\u00ean t\u1ee5c."},{"id":"myne_2_7","girl":"myne","layer":2,"n":7,"w":4,"h":4,"wrap":"x","start":[[0,4]],"exit":[[3,0]],"restless":2,"dots":[[3,1],[0,0],[1,1],[2,4],[1,4]],"broken":[[2,1,2,2],[1,2,1,3],[3,3,0,3],[1,4,2,4],[1,1,1,2]],"sol":[[0,4],[1,4],[1,3],[2,3],[2,4],[3,4],[3,3],[3,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[3,1],[3,0]],"solutions":1,"belief":"keep moving or the lag catches up.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: M\u00e9p tr\u00e1i v\u00e0 m\u00e9p ph\u1ea3i n\u1ed1i v\u1edbi nhau: \u0111i ra m\u1ed9t b\u00ean th\u00ec v\u00e0o l\u1ea1i t\u1eeb b\u00ean kia. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i th\u1eb3ng qu\u00e1 2 \u0111o\u1ea1n li\u00ean ti\u1ebfp: ph\u1ea3i r\u1ebd li\u00ean t\u1ee5c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_3_1","girl":"myne","layer":3,"n":1,"w":3,"h":3,"wrap":"xy","start":[[0,0]],"exit":[[1,1]],"dots":[[2,1],[1,0]],"broken":[[1,2,2,2],[1,0,1,1],[2,2,2,0],[1,0,2,0]],"sol":[[0,0],[1,0],[1,2],[0,2],[2,2],[2,1],[0,1],[1,1]],"solutions":3,"belief":"the whole world is one screen. no edges anywhere.","note":"","intro":"wrapxy","why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1edbi. B\u1ea3ng n\u1ed1i c\u1ea3 b\u1ed1n m\u00e9p (nh\u01b0 m\u00e0n h\u00ecnh game c\u0169); l\u1ed1i ra l\u00e0 v\u00f2ng s\u00e1ng n\u1eb1m gi\u1eefa b\u1ea3ng. Lu\u1eadt tr\u00ean b\u1ea3ng: Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_3_2","girl":"myne","layer":3,"n":2,"w":4,"h":3,"wrap":"xy","start":[[0,0]],"exit":[[2,1]],"dots":[[2,2],[0,1],[0,2],[1,1]],"broken":[[1,0,1,1],[0,1,0,2],[0,1,1,1]],"sol":[[0,0],[0,1],[3,1],[3,0],[2,0],[2,2],[3,2],[0,2],[1,2],[1,1],[2,1]],"solutions":1,"belief":"if there's no edge, i can't fall off.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: B\u1ea3ng n\u1ed1i c\u1ea3 b\u1ed1n m\u00e9p (nh\u01b0 m\u00e0n h\u00ecnh game c\u0169); l\u1ed1i ra l\u00e0 v\u00f2ng s\u00e1ng n\u1eb1m gi\u1eefa b\u1ea3ng. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_3_3","girl":"myne","layer":3,"n":3,"w":4,"h":3,"wrap":"xy","start":[[1,2]],"exit":[[3,0]],"dots":[[2,0],[0,0],[0,2]],"broken":[[0,2,1,2],[0,0,1,0],[2,2,2,0],[1,1,1,2],[2,2,3,2],[0,2,0,0]],"sol":[[1,2],[1,0],[2,0],[2,1],[3,1],[3,2],[0,2],[0,1],[0,0],[3,0]],"solutions":1,"belief":"walls are just level design.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: B\u1ea3ng n\u1ed1i c\u1ea3 b\u1ed1n m\u00e9p (nh\u01b0 m\u00e0n h\u00ecnh game c\u0169); l\u1ed1i ra l\u00e0 v\u00f2ng s\u00e1ng n\u1eb1m gi\u1eefa b\u1ea3ng. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_3_4","girl":"myne","layer":3,"n":4,"w":4,"h":4,"wrap":"xy","start":[[0,0]],"exit":[[2,2]],"restless":2,"broken":[[0,0,1,0],[3,2,3,3],[1,2,1,3],[3,3,0,3],[2,3,2,0],[2,2,3,2]],"dots":[[1,2],[3,3],[3,2],[1,3]],"sol":[[0,0],[3,0],[3,3],[2,3],[1,3],[1,0],[2,0],[2,1],[3,1],[3,2],[0,2],[0,1],[1,1],[1,2],[2,2]],"solutions":1,"belief":"every direction is forward if you go far enough.","note":"(relaxed limits)","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: B\u1ea3ng n\u1ed1i c\u1ea3 b\u1ed1n m\u00e9p (nh\u01b0 m\u00e0n h\u00ecnh game c\u0169); l\u1ed1i ra l\u00e0 v\u00f2ng s\u00e1ng n\u1eb1m gi\u1eefa b\u1ea3ng. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i th\u1eb3ng qu\u00e1 2 \u0111o\u1ea1n li\u00ean ti\u1ebfp: ph\u1ea3i r\u1ebd li\u00ean t\u1ee5c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_3_5","girl":"myne","layer":3,"n":5,"w":4,"h":3,"wrap":"xy","start":[[0,0]],"exit":[[3,2]],"visitAll":true,"broken":[[2,0,2,1],[0,2,1,2],[2,0,3,0],[3,2,3,0]],"sol":[[0,0],[3,0],[3,1],[2,1],[2,2],[2,0],[1,0],[1,2],[1,1],[0,1],[0,2],[3,2]],"solutions":1,"belief":"i have to see every pixel. every one.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: B\u1ea3ng n\u1ed1i c\u1ea3 b\u1ed1n m\u00e9p (nh\u01b0 m\u00e0n h\u00ecnh game c\u0169); l\u1ed1i ra l\u00e0 v\u00f2ng s\u00e1ng n\u1eb1m gi\u1eefa b\u1ea3ng. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Ph\u1ea3i \u0111i qua m\u1ecdi \u0111i\u1ec3m. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_3_6","girl":"myne","layer":3,"n":6,"w":4,"h":4,"wrap":"xy","start":[[1,1]],"exit":[[3,3]],"restless":2,"dots":[[1,2],[3,2],[3,1],[0,1]],"broken":[[1,0,2,0],[3,1,3,2],[3,1,0,1],[3,0,0,0],[2,1,2,2]],"sol":[[1,1],[2,1],[3,1],[3,0],[2,0],[2,3],[2,2],[1,2],[1,3],[1,0],[0,0],[0,1],[0,2],[3,2],[3,3]],"solutions":1,"belief":"my body can't keep up. so my head runs for both.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: B\u1ea3ng n\u1ed1i c\u1ea3 b\u1ed1n m\u00e9p (nh\u01b0 m\u00e0n h\u00ecnh game c\u0169); l\u1ed1i ra l\u00e0 v\u00f2ng s\u00e1ng n\u1eb1m gi\u1eefa b\u1ea3ng. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i th\u1eb3ng qu\u00e1 2 \u0111o\u1ea1n li\u00ean ti\u1ebfp: ph\u1ea3i r\u1ebd li\u00ean t\u1ee5c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."},{"id":"myne_3_7","girl":"myne","layer":3,"n":7,"w":4,"h":4,"wrap":"xy","start":[[0,3]],"exit":[[2,1]],"restless":1,"broken":[[1,0,1,1],[0,0,1,0],[2,2,2,3]],"dots":[[3,1],[1,0]],"sol":[[0,3],[1,3],[1,0],[2,0],[2,3],[3,3],[3,0],[0,0],[0,1],[3,1],[3,2],[2,2],[2,1]],"solutions":1,"belief":"as long as the game is running, i get to keep playing.","note":"","intro":null,"why":"Lu\u1eadt tr\u00ean b\u1ea3ng: B\u1ea3ng n\u1ed1i c\u1ea3 b\u1ed1n m\u00e9p (nh\u01b0 m\u00e0n h\u00ecnh game c\u0169); l\u1ed1i ra l\u00e0 v\u00f2ng s\u00e1ng n\u1eb1m gi\u1eefa b\u1ea3ng. Ch\u1ea5m \u0111en ph\u1ea3i \u0111\u01b0\u1ee3c \u0111i qua. \u0110o\u1ea1n \u0111\u1ee9t kh\u00f4ng \u0111i \u0111\u01b0\u1ee3c. Kh\u00f4ng \u0111\u01b0\u1ee3c \u0111i th\u1eb3ng qu\u00e1 1 \u0111o\u1ea1n li\u00ean ti\u1ebfp: ph\u1ea3i r\u1ebd li\u00ean t\u1ee5c. M\u1eb9o: \u0110\u01b0\u1eddng ng\u1eafn nh\u1ea5t c\u00f3 th\u1ec3 l\u00e0 \u0111i xuy\u00ean m\u00e9p."}];
 const CH_KEY = 'cyfh_chamber';
 const CH = (() => { try { return JSON.parse(localStorage.getItem(CH_KEY)) || {}; } catch (e) { return {}; } })();
 CH.done = CH.done || {}; CH.opt = Object.assign({ intro: true, debug: false, mem: { tracing_paper: false, queen_piece: false } }, CH.opt || {});
 const chSave = () => { try { localStorage.setItem(CH_KEY, JSON.stringify(CH)); } catch (e) { } };
 const CH_GIRLS = [
-  { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'pencil sketch · two inks' },
-  { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'every point · counting' },
-  { g: 'paige', name: 'Paige', tag: 'Goth' }, { g: 'vel', name: 'Vel', tag: 'Gyaru' }, { g: 'myne', name: 'Myne', tag: 'Tomboy' },
+  { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'pencil · two inks · the other hand · her own shapes' },
+  { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'every point · counting · chess · proof order' },
+  { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'heart pairs · face-down cards · the lens' },
+  { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'portals · mood swings · minefield' },
+  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'looping edges · restless · no edges at all' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
+const hasLens = p => ['hearts', 'dots', 'nums', 'pieces'].some(f => (p[f] || []).some(e => { const o = e[e.length - 1]; return o && typeof o === 'object' && !Array.isArray(o) && o.lens; }));
 const CH_MEM = {
   tracing_paper: { name: 'tracing_paper.mem', ic: 'thread', desc: 'Once per panel: lay it over the board and the next few strokes of the answer show through.' },
   queen_piece: { name: 'queen_piece.mem', ic: 'queen', desc: 'Once per panel: one broken rule is forgiven (like an eraser).' },
@@ -2920,7 +3110,7 @@ function renderChamber(b) {
   $('#co-title', b).onclick = () => location.reload();
 }
 // tiny preview of a panel (structure only, no answer)
-function miniBoard(p) { return `<svg class="mini" viewBox="${-0.6} ${-0.6} ${p.w + 1.2} ${p.h + 1.2}" aria-hidden="true">${boardSVG(p, { mini: true })}</svg>`; }
+function miniBoard(p) { return `<svg class="mini g-${p.girl}" viewBox="${vb(p, .6)}" aria-hidden="true">${boardSVG(p, { mini: true })}</svg>`; }
 
 /* ---------------- magnifier → projector ---------------- */
 async function startPanel(id) {
@@ -2931,12 +3121,12 @@ async function startPanel(id) {
 }
 function magnifierIntro(p) {
   return new Promise(res => {
-    const g = p.girl, A = ART[g];
+    const g = p.girl, A = ART[g] || null;
     openWin('feedcam', { title: `Live feed · ${GIRLS[g].id}`, icon: 'feed', w: 260, h: 330, x: 30, y: 30, render: b => {
-      b.innerHTML = `<div class="cam"><div class="cam-room"><img src="${A.body}" alt="${GIRLS[g].name} on the chair"><div class="lens" id="lens"></div></div><div class="cam-cap">● REC · room 0</div></div>`;
+      b.innerHTML = `<div class="cam"><div class="cam-room">${A ? `<img src="${A.body}" alt="${GIRLS[g].name} on the chair">` : `<div class="cam-sil" aria-label="${GIRLS[g].name} on the chair"></div>`}<div class="lens" id="lens"></div></div><div class="cam-cap">● REC · room 0</div></div>`;
     } });
     openWin('magnifier', { title: 'Magnifier.exe', icon: 'img', w: 280, h: 330, x: 310, y: 40, render: b => {
-      b.innerHTML = `<div class="mag"><div class="mag-view" id="magv"><img src="${portraitURL(g, 'neutral')}" alt=""><div class="mag-tissue g-${g}"></div><div class="mag-scan"></div></div>
+      b.innerHTML = `<div class="mag"><div class="mag-view" id="magv">${PORTRAIT[g] ? `<img src="${portraitURL(g, 'neutral')}" alt="">` : '<div class="mag-sil"></div>'}<div class="mag-tissue g-${g}"></div><div class="mag-scan"></div></div>
         <div class="mag-info">region: <b>${REGION[p.layer]}</b> · layer ${p.layer}<br>focus <span id="magf">0</span>%</div>
         <div class="mag-btns"><button class="btn" id="mag-skip">Skip</button><button class="btn primary" id="mag-go" disabled>Project ▸</button></div></div>`;
     } });
@@ -2969,7 +3159,7 @@ function openProjector(p) {
       b.innerHTML = `<div class="pj g-${p.girl}">
         <div class="pj-top"><span>Layer ${p.layer} · ${REGION[p.layer]} · ${p.n}/${panelsOf(p.girl).filter(x => x.layer === p.layer).length}</span><span class="pj-id">${p.id}</span></div>
         <div class="pj-belief" id="pj-belief"><span>${esc(p.belief || '')}</span></div>
-        <div class="pj-stage"><svg id="pj-svg" viewBox="${-0.75} ${-0.75} ${p.w + 1.5} ${p.h + 1.5}" role="img" aria-label="Puzzle board. Draw a line from the start circle to the exit."></svg></div>
+        <div class="pj-stage"><svg id="pj-svg" viewBox="${vb(p)}" role="img" aria-label="Puzzle board. Draw a line from the start circle to the exit."></svg></div>
         <div class="pj-msg" id="pj-msg" aria-live="polite"></div>
         <div class="pj-solbox sunk" id="pj-solbox" hidden>
           <div class="sb-why"><b>Ý chính</b> ${esc(p.why || 'Chưa có giải thích cho bảng này.')}${p.solutions !== 1 ? ` <i>(Bảng có ${p.solutions} lời giải; đây là một.)</i>` : ''}</div>
@@ -2981,6 +3171,7 @@ function openProjector(p) {
           <button class="btn" id="pj-reset">Reset</button>
           ${CH.opt.mem.tracing_paper ? `<button class="btn" id="pj-hint" title="${esc(CH_MEM.tracing_paper.desc)}">${icon('thread')} trace</button>` : ''}
           ${CH.opt.mem.queen_piece ? `<span class="pj-tok" id="pj-erase" title="${esc(CH_MEM.queen_piece.desc)}">${icon('queen')} ready</span>` : ''}
+          ${hasLens(p) ? `<button class="btn" id="pj-lens" aria-pressed="false" title="Some symbols only show through the magnifier">${icon('img')} Lens</button>` : ''}
           <span class="sp"></span>
           <button class="btn" id="pj-sol" aria-pressed="false">Solution</button>
           <button class="btn primary" id="pj-next" hidden>Next ▸</button>
@@ -2996,125 +3187,11 @@ function openProjector(p) {
       $('#sb-next', b).onclick = () => solStep(1);
       $('#sb-play', b).onclick = solPlay;
       $('#pj-next', b).onclick = () => { const L = panelsOf(p.girl).sort((a, c) => a.layer - c.layer || a.n - c.n), i = L.findIndex(x => x.id === p.id); if (L[i + 1]) startPanel(L[i + 1].id); else $('#pj-back', b).click(); };
+      const ln = $('#pj-lens', b); if (ln) ln.onclick = () => { PJ.lensOn = !PJ.lensOn; ln.setAttribute('aria-pressed', String(PJ.lensOn)); ln.classList.toggle('on', PJ.lensOn); PJ.lensAt = PJ.lensAt || [PJ.p.w / 2, PJ.p.h / 2]; drawPJ(); };
       bindPJ($('#pj-svg', b));
       document.addEventListener('keydown', pjKey);
       drawPJ();
     } });
-}
-const COLS = { pink: '#ff6fb5', ink: '#0d0714' };
-function boardSVG(p, o = {}) {
-  const E = PanelEngine, br = E.brokenSet(p), sk = new Set((p.sketch || []).map(e => E.ekey(...e)));
-  const out = [];
-  out.push(`<rect class="pb-bg" x="-0.5" y="-0.5" width="${p.w + 1}" height="${p.h + 1}" rx="0.35"/>`);
-  // tracks
-  for (let y = 0; y <= p.h; y++) for (let x = 0; x <= p.w; x++) {
-    for (const [nx, ny] of [[x + 1, y], [x, y + 1]]) {
-      if (nx > p.w || ny > p.h) continue;
-      const k = E.ekey(x, y, nx, ny);
-      if (br.has(k)) { // broken: two stubs with a gap
-        const mx = (x + nx) / 2, my = (y + ny) / 2, dx = (nx - x) * .32, dy = (ny - y) * .32;
-        out.push(`<line class="pb-trk" x1="${x}" y1="${y}" x2="${mx - dx * .5}" y2="${my - dy * .5}"/><line class="pb-trk" x1="${mx + dx * .5}" y1="${my + dy * .5}" x2="${nx}" y2="${ny}"/>`);
-      } else out.push(`<line class="pb-trk" x1="${x}" y1="${y}" x2="${nx}" y2="${ny}"/>`);
-      if (sk.has(k)) { const i = p.sketch.findIndex(e => E.ekey(...e) === k); out.push(`<line class="pb-sketch${o.bad && o.bad.sketch.has(i) ? ' bad' : ''}" x1="${x}" y1="${y}" x2="${nx}" y2="${ny}"/>`); }
-    }
-  }
-  // exits
-  (p.exit || []).forEach(([x, y]) => { const [dx, dy] = E.exitDir(p, x, y); out.push(`<line class="pb-trk" x1="${x}" y1="${y}" x2="${x + dx * .38}" y2="${y + dy * .38}"/>`); });
-  // cell symbols
-  (p.squares || []).forEach(([x, y, c], i) => out.push(`<rect class="pb-sq${o.bad && o.bad.squares.has(i) ? ' bad' : ''}${o.erased === 'squares:' + i ? ' gone' : ''}" x="${x + .3}" y="${y + .3}" width=".4" height=".4" rx=".09" fill="${COLS[c]}"/>`));
-  (p.nums || []).forEach(([x, y, n], i) => out.push(`<text class="pb-num${o.bad && o.bad.nums.has(i) ? ' bad' : ''}${o.erased === 'nums:' + i ? ' gone' : ''}" x="${x + .5}" y="${y + .5}">${n}</text>`));
-  // visit-all: every node is a small ring waiting to be filled
-  if (p.visitAll) for (let y = 0; y <= p.h; y++) for (let x = 0; x <= p.w; x++) out.push(`<circle class="pb-ring${o.seen && o.seen.has(x + ',' + y) ? ' on' : ''}${o.bad && o.bad.visitAll ? ' bad' : ''}" cx="${x}" cy="${y}" r=".09"/>`);
-  (p.dots || []).forEach(([x, y], i) => out.push(`<circle class="pb-dot${o.bad && o.bad.dots.has(i) ? ' bad' : ''}" cx="${x}" cy="${y}" r=".1"/>`));
-  (p.start || []).forEach(([x, y]) => out.push(`<circle class="pb-start" cx="${x}" cy="${y}" r=".2"/>`));
-  return out.join('');
-}
-function drawPJ() {
-  if (!PJ) return; const p = PJ.p, svg = $('#pj-svg'); if (!svg) return;
-  const bad = { sketch: new Set(), squares: new Set(), nums: new Set(), dots: new Set(), visitAll: false };
-  if (PJ.state === 'fail') PJ.bad.forEach(x => x.kind === 'visitAll' ? bad.visitAll = true : bad[x.kind] && bad[x.kind].add(x.i));
-  const line = pts => pts.map(n => n.join(',')).join(' ');
-  if (PJ.solOn) { drawSol(svg, line); return; }
-  const seen = new Set(PJ.path.map(n => n.join(',')));
-  let h = boardSVG(p, { bad, seen, erased: PJ.erased });
-  if (PJ.hint) h += `<polyline class="pb-hint" points="${line(PJ.hint)}"/>`;
-  if (PJ.path.length) {
-    const last = PJ.path[PJ.path.length - 1];
-    let tail = '';
-    if (PanelEngine.isExit(p, ...last) && (PJ.state === 'win' || PJ.atExit)) { const [dx, dy] = PanelEngine.exitDir(p, ...last); tail = ` ${last[0] + dx * .38},${last[1] + dy * .38}`; }
-    h += `<polyline class="pb-line ${PJ.state}" points="${line(PJ.path)}${tail}"/><circle class="pb-start on ${PJ.state}" cx="${PJ.path[0][0]}" cy="${PJ.path[0][1]}" r=".2"/>`;
-    if (PJ.state !== 'win') h += `<circle class="pb-head ${PJ.state}" cx="${last[0]}" cy="${last[1]}" r=".11"/>`;
-  }
-  svg.innerHTML = h;
-  const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
-  const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';
-}
-// pointer → node coordinates
-function svgPt(svg, e) { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const m = svg.getScreenCTM().inverse(); const r = pt.matrixTransform(m); return [r.x, r.y]; }
-function pjCanStep(n) {
-  const p = PJ.p, last = PJ.path[PJ.path.length - 1], [x, y] = n;
-  if (x < 0 || y < 0 || x > p.w || y > p.h) return false;
-  if (PanelEngine.brokenSet(p).has(PanelEngine.ekey(...last, x, y))) return false;
-  return !PJ.path.some(q => q[0] === x && q[1] === y);
-}
-function pjFollow(fx, fy) {
-  const p = PJ.p;
-  for (let guard = 0; guard < 40; guard++) {
-    const last = PJ.path[PJ.path.length - 1], prev = PJ.path[PJ.path.length - 2];
-    // back up along the line
-    if (prev && Math.hypot(fx - prev[0], fy - prev[1]) < .45) { PJ.path.pop(); SFX.tick(); continue; }
-    const dx = fx - last[0], dy = fy - last[1];
-    PJ.atExit = PanelEngine.isExit(p, ...last) && (() => { const [ex, ey] = PanelEngine.exitDir(p, ...last); return dx * ex + dy * ey > .2; })();
-    const tryAxis = ax => { const d = ax === 'x' ? dx : dy; if (Math.abs(d) < .55) return false; const s = Math.sign(d), n = ax === 'x' ? [last[0] + s, last[1]] : [last[0], last[1] + s]; if (!pjCanStep(n)) return false; PJ.path.push(n); SFX.step(PJ.path.length); return true; };
-    const first = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
-    if (tryAxis(first) || tryAxis(first === 'x' ? 'y' : 'x')) continue;
-    break;
-  }
-}
-function bindPJ(svg) {
-  svg.addEventListener('pointerdown', e => {
-    if (!PJ || PJ.state === 'win' || PJ.solOn) return;
-    const [fx, fy] = svgPt(svg, e), p = PJ.p;
-    const last = PJ.path[PJ.path.length - 1];
-    const st = (p.start || []).find(([x, y]) => Math.hypot(fx - x, fy - y) < .4);
-    if (last && Math.hypot(fx - last[0], fy - last[1]) < .4 && PJ.state !== 'fail') { /* keep drawing from the end */ }
-    else if (st) { PJ.path = [st.slice()]; SFX.click(); }
-    else return;
-    PJ.state = 'draw'; PJ.bad = []; PJ.drawing = true; svg.setPointerCapture(e.pointerId); drawPJ();
-  });
-  svg.addEventListener('pointermove', e => { if (!PJ || !PJ.drawing) return; const [fx, fy] = svgPt(svg, e); pjFollow(fx, fy); drawPJ(); });
-  const up = () => { if (!PJ || !PJ.drawing) return; PJ.drawing = false; const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last)) pjSubmit(); else { PJ.state = 'idle'; drawPJ(); } };
-  svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
-}
-function pjKey(e) {
-  if (!PJ || !WINS.projector) return;
-  if (PJ.solOn) {
-    if (e.key === 'ArrowRight') { e.preventDefault(); solStep(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); solStep(-1); }
-    else if (e.key === ' ') { e.preventDefault(); solPlay(); } else if (e.key === 'Escape') solMode(false);
-    return;
-  }
-  if (PJ.state === 'win') return;
-  if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
-  const D = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
-  if (D) {
-    e.preventDefault();
-    if (!PJ.path.length || PJ.state === 'fail') { PJ.path = [PJ.p.start[0].slice()]; PJ.bad = []; }
-    PJ.state = 'draw';
-    const last = PJ.path[PJ.path.length - 1], prev = PJ.path[PJ.path.length - 2], n = [last[0] + D[0], last[1] + D[1]];
-    if (prev && prev[0] === n[0] && prev[1] === n[1]) PJ.path.pop(); else if (pjCanStep(n)) { PJ.path.push(n); SFX.step(PJ.path.length); }
-    drawPJ();
-  } else if (e.key === 'Enter') { const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last)) { e.preventDefault(); pjSubmit(); } }
-  else if (e.key === 'Backspace') { e.preventDefault(); if (PJ.path.length > 1) PJ.path.pop(); drawPJ(); }
-  else if (e.key === 'Escape') { PJ.path = []; PJ.state = 'idle'; drawPJ(); }
-}
-function useHint() {
-  if (!PJ || PJ.hintUsed || !PJ.p.sol) return;
-  const sol = PJ.p.sol; let k = 0;
-  while (k < PJ.path.length && k < sol.length && sol[k][0] === PJ.path[k][0] && sol[k][1] === PJ.path[k][1]) k++;
-  const from = Math.max(0, k - 1);
-  PJ.hint = sol.slice(from, from + 4); PJ.hintUsed = true; SFX.item();
-  $('#pj-msg').textContent = k < PJ.path.length ? 'The tracing paper shows where your line went wrong.' : 'The next strokes show through the tracing paper.';
-  drawPJ();
 }
 async function pjSubmit() {
   const p = PJ.p, r = PanelEngine.validate(p, PJ.path); PJ.tries++;
@@ -3139,75 +3216,289 @@ async function pjSubmit() {
 }
 
 /* =========================================================
+   TEST CHAMBER · drawing and playing a panel (all rules)
+   ========================================================= */
+const COLS = { pink: '#ff6fb5', ink: '#0d0714' };
+const HEART = { pink: '#ff6fb5', violet: '#b48cff', teal: '#5fd6c8' };
+const PORTAL = ['#ffd86e', '#8fdcf7', '#b48cff'];
+const PIECE = { P: '♟', N: '♞', B: '♝', R: '♜', Q: '♛' };
+const opt = e => (e && typeof e[e.length - 1] === 'object' && !Array.isArray(e[e.length - 1])) ? e[e.length - 1] : {};
+function vb(p, pad = .75) { const d = PanelEngine.dims(p); return `${-pad} ${-pad} ${d.cols - 1 + pad * 2} ${d.rows - 1 + pad * 2}`; }
+function allEdgesOf(p) {
+  const E = PanelEngine, d = E.dims(p), out = [];
+  for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) for (const [nx, ny] of [[x + 1, y], [x, y + 1]]) {
+    const [a, b] = E.norm(p, nx, ny); if (!E.inside(p, a, b) || (a === x && b === y)) continue;
+    out.push([x, y, a, b]);
+  }
+  return out;
+}
+// an edge as drawable pieces (a wrapped edge becomes two stubs leaving the board)
+function edgeSegs(x1, y1, x2, y2) {
+  if (Math.abs(x2 - x1) + Math.abs(y2 - y1) === 1) return [[x1, y1, x2, y2]];
+  const dx = Math.abs(x2 - x1) > 1 ? -Math.sign(x2 - x1) : (x2 - x1), dy = Math.abs(y2 - y1) > 1 ? -Math.sign(y2 - y1) : (y2 - y1);
+  return [[x1, y1, x1 + dx * .5, y1 + dy * .5], [x2 - dx * .5, y2 - dy * .5, x2, y2]];
+}
+const segLine = (cls, s, extra = '') => `<line class="${cls}" x1="${s[0]}" y1="${s[1]}" x2="${s[2]}" y2="${s[3]}"${extra}/>`;
+/* the board. o: { bad, seen (Set of 'x,y' on the line), reveal (show fog/lens), mini, erased } */
+function boardSVG(p, o = {}) {
+  const E = PanelEngine, d = E.dims(p), br = E.brokenSet(p), out = [];
+  const B = (k, i) => o.bad && o.bad[k] && o.bad[k].has(i) ? ' bad' : '';
+  const gone = (k, i) => o.erased === k + ':' + i ? ' gone' : '';
+  out.push(`<rect class="pb-bg" x="-0.5" y="-0.5" width="${d.cols - 1 + 1}" height="${d.rows - 1 + 1}" rx="0.35"/>`);
+  // tracks
+  allEdgesOf(p).forEach(([x1, y1, x2, y2]) => {
+    if (br.has(E.ekey(x1, y1, x2, y2))) {
+      const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, ddx = (x2 - x1) * .16, ddy = (y2 - y1) * .16;
+      if (Math.abs(x2 - x1) + Math.abs(y2 - y1) === 1) out.push(segLine('pb-trk', [x1, y1, mx - ddx, my - ddy]) + segLine('pb-trk', [mx + ddx, my + ddy, x2, y2]));
+      return;
+    }
+    edgeSegs(x1, y1, x2, y2).forEach(s => out.push(segLine('pb-trk', s)));
+  });
+  if (d.wx) for (let y = 0; y < d.rows; y++) { out.push(`<text class="pb-wrap" x="${-0.62}" y="${y}">‹</text><text class="pb-wrap" x="${d.cols - 1 + .62}" y="${y}">›</text>`); }
+  if (d.wy) for (let x = 0; x < d.cols; x++) { out.push(`<text class="pb-wrap" x="${x}" y="${-0.62}">⌃</text><text class="pb-wrap" x="${x}" y="${d.rows - 1 + .66}">⌄</text>`); }
+  // edge rules
+  const edges = (list, cls, k) => (list || []).forEach((e, i) => edgeSegs(e[0], e[1], e[2], e[3]).forEach(s => out.push(segLine(cls + B(k, i) + gone(k, i), s))));
+  edges(p.warm, 'pb-warm', 'warm'); edges(p.cool, 'pb-cool', 'cool');
+  edges(p.sketch, 'pb-sketch', 'sketch'); edges(p.avoid, 'pb-avoid', 'avoid');
+  // exits
+  (p.exit || []).forEach(([x, y]) => { const dir = E.exitDir(p, x, y); out.push(dir ? segLine('pb-trk', [x, y, x + dir[0] * .38, y + dir[1] * .38]) : `<circle class="pb-exitring" cx="${x}" cy="${y}" r=".3"/>`); });
+  // cell symbols (fog = face-down card until the line passes next to it)
+  const near = (cx, cy) => o.reveal || (o.seen && [[cx, cy], [cx + 1, cy], [cx, cy + 1], [cx + 1, cy + 1]].some(([x, y]) => o.seen.has(x + ',' + y)));
+  const lensOnly = [];
+  const cell = (e, k, i, draw) => {
+    const [cx, cy] = e, f = opt(e);
+    if (f.lens && !o.reveal) { lensOnly.push(draw()); return; }
+    if (f.fog && !near(cx, cy)) { out.push(`<g class="pb-card${B(k, i)}"><rect x="${cx + .26}" y="${cy + .2}" width=".48" height=".6" rx=".07"/><text x="${cx + .5}" y="${cy + .52}">?</text></g>`); return; }
+    out.push(draw());
+  };
+  (p.squares || []).forEach((e, i) => cell(e, 'squares', i, () => `<rect class="pb-sq${B('squares', i)}${gone('squares', i)}" x="${e[0] + .3}" y="${e[1] + .3}" width=".4" height=".4" rx=".09" fill="${COLS[e[2]]}"/>`));
+  (p.nums || []).forEach((e, i) => cell(e, 'nums', i, () => `<text class="pb-num${B('nums', i)}${gone('nums', i)}" x="${e[0] + .5}" y="${e[1] + .5}">${e[2]}</text>`));
+  (p.pieces || []).forEach((e, i) => cell(e, 'pieces', i, () => `<text class="pb-piece${B('pieces', i)}${gone('pieces', i)}" x="${e[0] + .5}" y="${e[1] + .53}">${PIECE[e[2]]}</text>`));
+  (p.hearts || []).forEach((e, i) => cell(e, 'hearts', i, () => `<text class="pb-heart${B('hearts', i)}${gone('hearts', i)}" x="${e[0] + .5}" y="${e[1] + .55}" fill="${HEART[e[2]]}">♥</text>`));
+  (p.shapes || []).forEach((e, i) => cell(e, 'shapes', i, () => {
+    const sh = e[2], mx = Math.min(...sh.map(c => c[0])), my = Math.min(...sh.map(c => c[1])), W = Math.max(...sh.map(c => c[0])) - mx + 1, Hh = Math.max(...sh.map(c => c[1])) - my + 1;
+    const u = .58 / Math.max(W, Hh, 2), ox = e[0] + .5 - W * u / 2, oy = e[1] + .5 - Hh * u / 2;
+    return `<g class="pb-shape${B('shapes', i)}${gone('shapes', i)}">${sh.map(([x, y]) => `<rect x="${ox + (x - mx) * u + .01}" y="${oy + (y - my) * u + .01}" width="${u - .02}" height="${u - .02}"/>`).join('')}</g>`;
+  }));
+  (p.radar || []).forEach((e, i) => out.push(`<g class="pb-radar"><rect x="${e[0] + .5}" y="${e[1] + .2}" width=".42" height=".42" transform="rotate(45 ${e[0] + .5} ${e[1] + .2})"/><text x="${e[0] + .5}" y="${e[1] + .52}">${e[2]}</text></g>`));
+  if (o.showMines) (p.mines || []).forEach((m, i) => out.push(`<text class="pb-mine${B('mines', i)}" x="${m[0] + .5}" y="${m[1] + .55}">✸</text>`));
+  // nodes
+  if (p.visitAll) for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) out.push(`<circle class="pb-ring${o.seen && o.seen.has(x + ',' + y) ? ' on' : ''}${o.bad && o.bad.visitAll ? ' bad' : ''}" cx="${x}" cy="${y}" r=".09"/>`);
+  (p.portals || []).forEach((q, i) => [[q[0], q[1]], [q[2], q[3]]].forEach(([x, y]) => out.push(`<circle class="pb-portal" cx="${x}" cy="${y}" r=".2" stroke="${PORTAL[i % 3]}"/><circle cx="${x}" cy="${y}" r=".09" fill="${PORTAL[i % 3]}"/>`)));
+  (p.switches || []).forEach(([x, y]) => out.push(`<g class="pb-switch"><circle cx="${x}" cy="${y}" r=".19"/><path d="M${x} ${y - .19} A.19 .19 0 0 1 ${x} ${y + .19} Z"/></g>`));
+  (p.dots || []).forEach((e, i) => {
+    const f = opt(e), draw = `<circle class="pb-dot${B('dots', i)}" cx="${e[0]}" cy="${e[1]}" r=".1"/>`;
+    if (f.lens && !o.reveal) lensOnly.push(draw);
+    else if (f.fog && !(o.reveal || (o.seen && [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]].some(([a, b]) => o.seen.has((e[0] + a) + ',' + (e[1] + b)))))) out.push(`<text class="pb-fogdot" x="${e[0]}" y="${e[1] + .06}">?</text>`);
+    else out.push(draw);
+  });
+  (p.order || []).forEach((e, i) => out.push(`<g class="pb-order${B('order', i)}"><circle cx="${e[0]}" cy="${e[1]}" r=".17"/><text x="${e[0]}" y="${e[1] + .01}">${i + 1}</text></g>`));
+  (p.start || []).forEach(([x, y], i) => out.push(`<circle class="pb-start${p.mirror && i ? ' other' : ''}" cx="${x}" cy="${y}" r=".2"/>`));
+  if (lensOnly.length && !o.mini) {
+    const L = o.lens;
+    if (L) out.push(`<defs><clipPath id="lensclip"><circle cx="${L[0]}" cy="${L[1]}" r=".95"/></clipPath></defs><g clip-path="url(#lensclip)">${lensOnly.join('')}</g><circle class="pb-lens" cx="${L[0]}" cy="${L[1]}" r=".95"/>`);
+  }
+  return out.join('');
+}
+// the line, split where it wraps or jumps through a portal
+function lineSVG(p, path, cls, tailOut) {
+  if (!path.length) return '';
+  const E = PanelEngine, J = E.jumps(p, path), polys = [[path[0]]], extra = [];
+  for (let i = 1; i < path.length; i++) {
+    const a = path[i - 1], b = path[i];
+    if (J[i]) { extra.push(`<line class="pb-jump" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/>`); polys.push([b]); continue; }
+    const segs = edgeSegs(a[0], a[1], b[0], b[1]);
+    if (segs.length === 1) polys[polys.length - 1].push(b);
+    else { polys[polys.length - 1].push([segs[0][2], segs[0][3]]); polys.push([[segs[1][0], segs[1][1]], b]); }
+  }
+  const last = path[path.length - 1];
+  if (tailOut) { const dir = E.exitDir(p, ...last); if (dir) polys[polys.length - 1].push([last[0] + dir[0] * .38, last[1] + dir[1] * .38]); }
+  return extra.join('') + polys.map(pl => `<polyline class="pb-line ${cls}" points="${pl.map(n => n.join(',')).join(' ')}"/>`).join('');
+}
+function drawPJ() {
+  if (!PJ) return; const p = PJ.p, svg = $('#pj-svg'); if (!svg) return;
+  const line = pts => pts.map(n => n.join(',')).join(' ');
+  if (PJ.solOn) { drawSol(svg, line); return; }
+  const bad = {};
+  if (PJ.state === 'fail') PJ.bad.forEach(x => { if (x.kind === 'visitAll') bad.visitAll = true; else (bad[x.kind] = bad[x.kind] || new Set()).add(x.i); });
+  const lines = PJ.path.length ? PanelEngine.lines(p, PJ.path) : [];
+  const seen = new Set(lines.flat().map(n => n.join(',')));
+  let h = boardSVG(p, { bad, seen, erased: PJ.erased, lens: PJ.lensOn && PJ.lensAt, showMines: PJ.state === 'fail' && bad.mines });
+  if (PJ.hint) h += lineSVG(p, PJ.hint, 'hint');
+  if (PJ.path.length) {
+    const last = PJ.path[PJ.path.length - 1], out = PanelEngine.isExit(p, ...last) && (PJ.state === 'win' || PJ.atExit);
+    if (p.mirror) { const m = lines[1]; h += lineSVG(p, m, 'other ' + PJ.state, out) + `<circle class="pb-start on other ${PJ.state}" cx="${m[0][0]}" cy="${m[0][1]}" r=".2"/>`; }
+    h += lineSVG(p, PJ.path, PJ.state, out) + `<circle class="pb-start on ${PJ.state}" cx="${PJ.path[0][0]}" cy="${PJ.path[0][1]}" r=".2"/>`;
+    if (PJ.state !== 'win') h += `<circle class="pb-head ${PJ.state}" cx="${last[0]}" cy="${last[1]}" r=".11"/>`;
+  }
+  svg.innerHTML = h + orderOverlay(p, bad);
+  const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
+  const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';
+}
+function svgPt(svg, e) { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const r = pt.matrixTransform(svg.getScreenCTM().inverse()); return [r.x, r.y]; }
+/* try to move the line one step; handles wrap, portals, the mirror and walls */
+function pjStep(dx, dy) {
+  const E = PanelEngine, p = PJ.p, path = PJ.path, last = path[path.length - 1], J = E.jumps(p, path);
+  const prev = path[path.length - 2];
+  const [nx, ny] = E.norm(p, last[0] + dx, last[1] + dy);
+  // stepping back the way we came = undo (right after a portal, undo is Backspace / dragging back)
+  if (!J[path.length - 1] && prev && prev[0] === nx && prev[1] === ny) { pjBack(); return true; }
+  if (!E.inside(p, nx, ny) || (nx === last[0] && ny === last[1])) return false;
+  if (!E.neighbors(p, ...last).some(n => n[0] === nx && n[1] === ny)) return false;
+  const taken = new Set(E.lines(p, path).flat().map(n => n.join(',')));
+  const ok = n => { if (taken.has(n.join(','))) return false; if (p.mirror) { const m = E.mirrorOf(p, n); if (taken.has(m.join(',')) || (m[0] === n[0] && m[1] === n[1])) return false; } return true; };
+  if (!ok([nx, ny])) return false;
+  path.push([nx, ny]); SFX.step(path.length);
+  const t = E.twin(p, nx, ny);
+  if (t) { if (ok(t) && !(t[0] === nx && t[1] === ny)) { path.push(t.slice()); SFX.link(); } else { path.pop(); return false; } }
+  return true;
+}
+function pjBack() {
+  const E = PanelEngine, J = E.jumps(PJ.p, PJ.path);
+  if (PJ.path.length <= 1) return;
+  if (J[PJ.path.length - 1]) PJ.path.pop();
+  PJ.path.pop(); SFX.tick();
+}
+function pjFollow(fx, fy) {
+  const E = PanelEngine, p = PJ.p, d = E.dims(p);
+  for (let guard = 0; guard < 40; guard++) {
+    const last = PJ.path[PJ.path.length - 1];
+    // on a wrapping board, read the pointer as the copy nearest to the head
+    let gx = fx, gy = fy;
+    if (d.wx) gx -= d.cols * Math.round((fx - last[0]) / d.cols);
+    if (d.wy) gy -= d.rows * Math.round((fy - last[1]) / d.rows);
+    // back up along the line
+    const J = E.jumps(p, PJ.path), back = J[PJ.path.length - 1] ? PJ.path[PJ.path.length - 3] : PJ.path[PJ.path.length - 2];
+    if (back) {
+      let bx = back[0], by = back[1]; const ref = J[PJ.path.length - 1] ? PJ.path[PJ.path.length - 2] : last;
+      if (d.wx) bx -= d.cols * Math.round((bx - ref[0]) / d.cols); if (d.wy) by -= d.rows * Math.round((by - ref[1]) / d.rows);
+      if (!J[PJ.path.length - 1] && Math.hypot(gx - bx, gy - by) < .45) { pjBack(); continue; }
+    }
+    const dx = gx - last[0], dy = gy - last[1];
+    const dir = E.exitDir(p, ...last);
+    PJ.atExit = E.isExit(p, ...last) && (!dir || dx * dir[0] + dy * dir[1] > .2);
+    const tryAxis = ax => { const v = ax === 'x' ? dx : dy; if (Math.abs(v) < .55) return false; const s = Math.sign(v); const before = PJ.path.length; return pjStep(ax === 'x' ? s : 0, ax === 'y' ? s : 0) && PJ.path.length > before; };
+    const first = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
+    if (tryAxis(first) || tryAxis(first === 'x' ? 'y' : 'x')) continue;
+    break;
+  }
+}
+function bindPJ(svg) {
+  svg.addEventListener('pointerdown', e => {
+    if (!PJ || PJ.state === 'win' || PJ.solOn) return;
+    const [fx, fy] = svgPt(svg, e), p = PJ.p;
+    const last = PJ.path[PJ.path.length - 1];
+    const st = (p.start || []).slice(0, p.mirror ? 1 : 9).find(([x, y]) => Math.hypot(fx - x, fy - y) < .4);
+    if (last && Math.hypot(fx - last[0], fy - last[1]) < .4 && PJ.state !== 'fail') { /* keep drawing from the end */ }
+    else if (st) { PJ.path = [st.slice()]; SFX.click(); }
+    else return;
+    PJ.state = 'draw'; PJ.bad = []; PJ.drawing = true; svg.setPointerCapture(e.pointerId); drawPJ();
+  });
+  svg.addEventListener('pointermove', e => {
+    if (!PJ) return; const [fx, fy] = svgPt(svg, e);
+    if (PJ.lensOn) PJ.lensAt = [fx, fy];
+    if (PJ.drawing) pjFollow(fx, fy);
+    if (PJ.drawing || PJ.lensOn) drawPJ();
+  });
+  const up = () => { if (!PJ || !PJ.drawing) return; PJ.drawing = false; const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last) && PJ.path.length > 1) pjSubmit(); else { PJ.state = 'idle'; drawPJ(); } };
+  svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
+}
+function pjKey(e) {
+  if (!PJ || !WINS.projector) return;
+  if (PJ.solOn) {
+    if (e.key === 'ArrowRight') { e.preventDefault(); solStep(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); solStep(-1); }
+    else if (e.key === ' ') { e.preventDefault(); solPlay(); } else if (e.key === 'Escape') solMode(false);
+    return;
+  }
+  if (PJ.state === 'win') return;
+  if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  const D = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+  if (D) {
+    e.preventDefault();
+    if (!PJ.path.length || PJ.state === 'fail') { PJ.path = [PJ.p.start[0].slice()]; PJ.bad = []; }
+    PJ.state = 'draw'; pjStep(...D); drawPJ();
+  } else if (e.key === 'Enter') { const last = PJ.path[PJ.path.length - 1]; if (last && PJ.path.length > 1 && PanelEngine.isExit(PJ.p, ...last)) { e.preventDefault(); pjSubmit(); } }
+  else if (e.key === 'Backspace') { e.preventDefault(); pjBack(); drawPJ(); }
+  else if (e.key === 'Escape') { PJ.path = []; PJ.state = 'idle'; drawPJ(); }
+}
+function useHint() {
+  if (!PJ || PJ.hintUsed || !PJ.p.sol) return;
+  const sol = PJ.p.sol; let k = 0;
+  while (k < PJ.path.length && k < sol.length && sol[k][0] === PJ.path[k][0] && sol[k][1] === PJ.path[k][1]) k++;
+  const from = Math.max(0, k - 1);
+  PJ.hint = sol.slice(from, from + 4);
+  PJ.hintUsed = true; SFX.item();
+  $('#pj-msg').textContent = k < PJ.path.length ? 'The tracing paper shows where your line went wrong.' : 'The next strokes show through the tracing paper.';
+  drawPJ();
+}
+
+// numbered points stay readable on top of the line
+function orderOverlay(p, bad = {}) { return (p.order || []).map((e, i) => `<g class="pb-order${bad.order && bad.order.has(i) ? ' bad' : ''}"><circle cx="${e[0]}" cy="${e[1]}" r=".15"/><text x="${e[0]}" y="${e[1] + .01}">${i + 1}</text></g>`).join(''); }
+
+/* =========================================================
    TEST CHAMBER · Solution mode
    Replays a panel's answer step by step. Each step says what it
-   achieves (pencil traced, region cut off and its ink, number cell
-   filled), so it works for any panel; panels.json adds a hand-written
-   "key idea" (p.why).
+   achieves, so it works for any panel; panels.json adds a "key idea"
+   (p.why). Hidden things (mines, face-down cards, lens-only symbols)
+   are all shown here.
    ========================================================= */
-function cellRegions(p, used) {
-  const E = PanelEngine, reg = {}, list = []; let r = 0;
-  for (let y = 0; y < p.h; y++) for (let x = 0; x < p.w; x++) {
-    if (reg[x + ',' + y] !== undefined) continue;
-    const st = [[x, y]], cells = [[x, y]]; reg[x + ',' + y] = r;
-    while (st.length) {
-      const [cx, cy] = st.pop();
-      for (const [nx, ny, wall] of [[cx + 1, cy, E.ekey(cx + 1, cy, cx + 1, cy + 1)], [cx - 1, cy, E.ekey(cx, cy, cx, cy + 1)], [cx, cy + 1, E.ekey(cx, cy + 1, cx + 1, cy + 1)], [cx, cy - 1, E.ekey(cx, cy, cx + 1, cy)]]) {
-        if (nx < 0 || ny < 0 || nx >= p.w || ny >= p.h || used.has(wall) || reg[nx + ',' + ny] !== undefined) continue;
-        reg[nx + ',' + ny] = r; st.push([nx, ny]); cells.push([nx, ny]);
-      }
-    }
-    list.push(cells); r++;
-  }
-  return list;
+const HEART_VI = { pink: 'hồng', violet: 'tím', teal: 'xanh' };
+function regionNote(p, cells) {
+  const E = PanelEngine, has = (list) => (list || []).filter(e => cells.some(c => c[0] === e[0] && c[1] === e[1]));
+  const bits = [], sq = has(p.squares), hs = has(p.hearts), pc = has(p.pieces), sh = has(p.shapes);
+  if (sq.length) { const cols = new Set(sq.map(q => q[2])); bits.push(cols.size === 1 ? `chỉ có mực ${[...cols][0] === 'pink' ? 'hồng' : 'đen'} ✓` : 'còn lẫn hai màu mực'); }
+  if (hs.length) { const by = {}; hs.forEach(h => by[h[2]] = (by[h[2]] || 0) + 1); bits.push(Object.entries(by).map(([c, n]) => `${n} tim ${HEART_VI[c] || c}${n === 2 ? ' ✓' : ''}`).join(', ')); }
+  if (pc.length) { const sum = pc.reduce((a, q) => a + E.VAL[q[2]], 0); bits.push(`${cells.length} ô, quân cờ cộng lại = ${sum}${sum === cells.length ? ' ✓' : ''}`); }
+  if (sh.length) bits.push(sh.length === 1 && E.shapeKey(cells) === E.shapeKey(sh[0][2]) ? 'đúng hình mẫu ✓' : 'chưa đúng hình mẫu');
+  return bits.length ? bits.join('; ') : 'vùng trống';
 }
-const cellSides = (E, cx, cy) => [E.ekey(cx, cy, cx + 1, cy), E.ekey(cx, cy + 1, cx + 1, cy + 1), E.ekey(cx, cy, cx, cy + 1), E.ekey(cx + 1, cy, cx + 1, cy + 1)];
+const hasRegionRules = p => ['squares', 'hearts', 'pieces', 'shapes'].some(f => (p[f] || []).length);
 function solEvents(p) {
-  const E = PanelEngine, sol = p.sol, ev = [['Bắt đầu ở vòng tròn.']], used = new Set();
-  const skN = (p.sketch || []).length, sk = new Set((p.sketch || []).map(e => E.ekey(...e)));
+  const E = PanelEngine, sol = p.sol, J = E.jumps(p, sol), ev = [['Bắt đầu ở vòng tròn.' + (p.mirror ? ' Bàn tay kia bắt đầu ở vòng tròn đối xứng.' : '')]], used = new Set(), closed = [];
+  const skN = (p.sketch || []).length, sk = new Set((p.sketch || []).map(e => E.ekey(e[0], e[1], e[2], e[3])));
+  const warm = E.edgeSet(p.warm), cool = E.edgeSet(p.cool);
   const sigOf = regs => regs.map(c => c.map(q => q.join(',')).sort().join('|'));
-  let traced = 0, prev = sigOf(cellRegions(p, used));
-  const closed = [];
+  let traced = 0, prev = sigOf(E.regions(p, used).list), up = true, ordN = 0;
   for (let k = 1; k < sol.length; k++) {
-    const key = E.ekey(...sol[k - 1], ...sol[k]), out = [];
-    used.add(key);
-    if (sk.has(key)) { traced++; out.push(`Tô nét chì (${traced}/${skN}).`); }
-    (p.nums || []).forEach(([cx, cy, n]) => {
-      const sides = cellSides(E, cx, cy); if (!sides.includes(key)) return;
-      const c = sides.filter(s => used.has(s)).length;
-      out.push(c === n ? `Ô "${n}" đã đủ ${n} cạnh: không được chạm thêm cạnh nào của nó.` : `Ô "${n}": đã chạm ${c}/${n} cạnh.`);
-    });
-    if ((p.squares || []).length) {
-      const regs = cellRegions(p, used), sig = sigOf(regs);
+    const a = sol[k - 1], b = sol[k], out = [];
+    if (J[k]) out.push('Qua cổng: đường xuất hiện ở cổng cùng màu.');
+    else {
+      for (const ln of E.lines(p, sol.slice(0, k + 1))) used.add(E.ekey(...ln[k - 1], ...ln[k]));
+      const key = E.ekey(...a, ...b);
+      if (sk.has(key)) { traced++; out.push(`Tô nét chì (${traced}/${skN}).`); }
+      if (p.mirror) { const m = sol.slice(k - 1, k + 1).map(n => E.mirrorOf(p, n)); if (sk.has(E.ekey(...m[0], ...m[1]))) { traced++; out.push(`Bàn tay kia tô nét chì (${traced}/${skN}).`); } }
+      if (warm.has(key)) out.push('Đường ấm: được đi vì đang "lên".');
+      if (cool.has(key)) out.push('Đường lạnh: được đi vì đang "xuống".');
+      if (Math.abs(b[0] - a[0]) > 1 || Math.abs(b[1] - a[1]) > 1) out.push('Đi xuyên mép, ra ở phía bên kia.');
+      (p.nums || []).forEach(([cx, cy, n]) => {
+        const sides = E.cellSides(cx, cy); if (!sides.includes(key)) return;
+        const c = sides.filter(s => used.has(s)).length;
+        out.push(c === n ? `Ô "${n}" đã đủ ${n} cạnh: không được chạm thêm cạnh nào của nó.` : `Ô "${n}": đã chạm ${c}/${n} cạnh.`);
+      });
+    }
+    if (E.isSwitch(p, ...b)) { up = !up; out.push(`Qua công tắc ◐: tâm trạng giờ là "${up ? 'lên' : 'xuống'}", chỉ đi được đường ${up ? 'ấm (cam)' : 'lạnh (xanh)'}.`); }
+    const oi = (p.order || []).findIndex(n => n[0] === b[0] && n[1] === b[1]); if (oi >= 0) { ordN++; out.push(`Qua điểm số ${oi + 1}.`); }
+    if ((p.dots || []).some(n => n[0] === b[0] && n[1] === b[1])) out.push('Đi qua chấm.');
+    if (hasRegionRules(p) && !p.wrap) {
+      const regs = E.regions(p, used).list, sig = sigOf(regs);
       if (regs.length > prev.length) {
-        // the newly separated pieces, except the biggest one (the side still open)
         const fresh = regs.map((c, i) => ({ c, i })).filter(({ i }) => !prev.includes(sig[i]));
-        const biggest = fresh.reduce((a, b) => (b.c.length > a.c.length ? b : a), fresh[0]);
-        fresh.filter(f => f !== biggest || fresh.length === 1).forEach(({ c }) => {
-          const cols = new Set((p.squares || []).filter(([x, y]) => c.some(q => q[0] === x && q[1] === y)).map(q => q[2]));
-          closed.push({ k, cells: c, col: cols.size === 1 ? [...cols][0] : 'none' });
-          out.push(cols.size === 0 ? 'Cắt ra một vùng trống.' : cols.size === 1 ? `Cắt ra một vùng chỉ có mực ${[...cols][0] === 'pink' ? 'hồng' : 'đen'} ✓` : 'Cắt ra một vùng còn lẫn hai màu: phần sau của đường sẽ chia tiếp nó.');
-        });
+        const biggest = fresh.reduce((x, y) => (y.c.length > x.c.length ? y : x), fresh[0]);
+        fresh.filter(f => f !== biggest || fresh.length === 1).forEach(({ c }) => { closed.push({ k, cells: c }); out.push(`Cắt ra một vùng: ${regionNote(p, c)}.`); });
       }
       prev = sig;
     }
     if (k === sol.length - 1) {
       out.push('Tới lối ra.');
-      if ((p.squares || []).length) {
-        // finish: every region the line made, including the last big one
+      if (hasRegionRules(p) && !p.wrap) {
         const have = new Set(closed.map(c => c.cells.map(q => q.join(',')).sort().join('|')));
-        const tally = { pink: 0, ink: 0, none: 0 };
-        cellRegions(p, used).forEach(c => {
-          const cols = new Set((p.squares || []).filter(([x, y]) => c.some(q => q[0] === x && q[1] === y)).map(q => q[2]));
-          const col = cols.size === 1 ? [...cols][0] : 'none'; tally[col]++;
-          if (!have.has(c.map(q => q.join(',')).sort().join('|'))) closed.push({ k, cells: c, col });
-        });
-        out.push(`Bảng chia thành ${tally.pink} vùng hồng, ${tally.ink} vùng đen${tally.none ? `, ${tally.none} vùng trống` : ''}: không vùng nào lẫn màu ✓`);
+        E.regions(p, used).list.forEach(c => { if (!have.has(c.map(q => q.join(',')).sort().join('|'))) { closed.push({ k, cells: c }); out.push(`Vùng còn lại: ${regionNote(p, c)}.`); } });
       }
       if (p.visitAll) out.push(`Đã đi qua đủ ${E.nodeCount(p)}/${E.nodeCount(p)} điểm.`);
       if (skN) out.push(`Đã tô đủ ${skN}/${skN} nét chì.`);
+      if ((p.mines || []).length) out.push(`Không chạm cạnh ô nào trong ${p.mines.length} ô có mìn (✸).`);
     }
-    if (!out.length) { const dx = sol[k][0] - sol[k - 1][0], dy = sol[k][1] - sol[k - 1][1]; out.push(dx > 0 ? 'Sang phải.' : dx < 0 ? 'Sang trái.' : dy > 0 ? 'Đi xuống.' : 'Đi lên.'); }
+    if (!out.length) { let dx = b[0] - a[0], dy = b[1] - a[1]; out.push(dx > 0 ? 'Sang phải.' : dx < 0 ? 'Sang trái.' : dy > 0 ? 'Đi xuống.' : 'Đi lên.'); }
     ev.push(out);
   }
   return { ev, closed };
@@ -3242,20 +3533,20 @@ function renderSolLog() {
   log.innerHTML = ev.slice(0, k + 1).map((lines, i) => `<li class="${i === k ? 'now' : ''}" value="${i}">${lines.map(esc).join(' ')}</li>`).join('');
   const now = $('li.now', log); if (now) now.scrollIntoView({ block: 'nearest' });
 }
-function drawSol(svg, line) {
-  const E = PanelEngine, p = PJ.p, k = PJ.solK, pts = p.sol.slice(0, k + 1), seen = new Set(pts.map(n => n.join(',')));
-  const used = new Set(); for (let i = 1; i < pts.length; i++) used.add(E.ekey(...pts[i - 1], ...pts[i]));
-  let h = boardSVG(p, { seen });
-  PJ.solData.closed.filter(c => c.k <= k).forEach(c => c.cells.forEach(([x, y]) => { h += `<rect class="sb-reg ${c.col}" x="${x + .06}" y="${y + .06}" width=".88" height=".88" rx=".08"/>`; }));
-  (p.sketch || []).forEach(e => { if (used.has(E.ekey(...e))) h += `<line class="sb-traced" x1="${e[0]}" y1="${e[1]}" x2="${e[2]}" y2="${e[3]}"/>`; });
-  (p.nums || []).forEach(([cx, cy, n]) => { if (cellSides(E, cx, cy).filter(s => used.has(s)).length === n) h += `<circle class="sb-numok" cx="${cx + .5}" cy="${cy + .5}" r=".3"/>`; });
-  h += `<polyline class="pb-ghost" points="${line(p.sol)}"/>`;
+function drawSol(svg) {
+  const E = PanelEngine, p = PJ.p, k = PJ.solK, pts = p.sol.slice(0, k + 1), lines = E.lines(p, pts);
+  const seen = new Set(lines.flat().map(n => n.join(','))), J = E.jumps(p, pts), used = new Set();
+  for (const ln of lines) for (let i = 1; i < ln.length; i++) if (!J[i]) used.add(E.ekey(...ln[i - 1], ...ln[i]));
+  let h = boardSVG(p, { seen, reveal: true, showMines: true });
+  PJ.solData.closed.filter(c => c.k <= k).forEach((c, ci) => c.cells.forEach(([x, y]) => { h += `<rect class="sb-reg r${ci % 4}" x="${x + .06}" y="${y + .06}" width=".88" height=".88" rx=".08"/>`; }));
+  (p.sketch || []).forEach(e => { if (used.has(E.ekey(e[0], e[1], e[2], e[3]))) edgeSegs(e[0], e[1], e[2], e[3]).forEach(s => { h += segLine('sb-traced', s); }); });
+  (p.nums || []).forEach(([cx, cy, n]) => { if (E.cellSides(cx, cy).filter(s => used.has(s)).length === n) h += `<circle class="sb-numok" cx="${cx + .5}" cy="${cy + .5}" r=".3"/>`; });
   const done = k === p.sol.length - 1;
-  let tail = '';
-  if (done) { const last = p.sol[k], [dx, dy] = E.exitDir(p, ...last); tail = ` ${last[0] + dx * .38},${last[1] + dy * .38}`; }
-  h += `<polyline class="pb-line sol" points="${line(pts)}${tail}"/><circle class="pb-start on sol" cx="${pts[0][0]}" cy="${pts[0][1]}" r=".2"/>`;
+  h += lineSVG(p, p.sol, 'ghost', false);
+  if (p.mirror) h += lineSVG(p, lines[1], 'other sol', done) + `<circle class="pb-start on other sol" cx="${lines[1][0][0]}" cy="${lines[1][0][1]}" r=".2"/>`;
+  h += lineSVG(p, pts, 'sol', done) + `<circle class="pb-start on sol" cx="${pts[0][0]}" cy="${pts[0][1]}" r=".2"/>`;
   if (!done) h += `<circle class="pb-head sol" cx="${pts[k][0]}" cy="${pts[k][1]}" r=".11"/>`;
-  svg.innerHTML = h;
+  svg.innerHTML = h + orderOverlay(p);
 }
 
 main();

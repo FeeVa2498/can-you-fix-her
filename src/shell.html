@@ -810,13 +810,53 @@ small.dots{color:var(--pink-deep);font-style:italic}
 .sb-ctrl span{margin-left:auto;font-family:var(--mono);font-size:16px;color:var(--ink-soft)}
 .sb-log{margin:0;padding:0 0 0 44px;overflow:auto;flex:1;min-height:40px;font-family:var(--mono);font-size:16px;line-height:1.15;color:var(--ink-soft)}
 .sb-log li.now{color:var(--ink);background:var(--pink-hi);border-radius:4px}
-.sb-reg{opacity:.35}
-.sb-reg.pink{fill:#ff8cc6}.sb-reg.ink{fill:#000}.sb-reg.none{fill:#cbb8ea}
+.sb-reg{opacity:.3}
 .sb-traced{stroke:#8fdcf7;stroke-width:.06;stroke-linecap:round}
 .sb-numok{fill:none;stroke:#7be3a4;stroke-width:.05}
 .pb-line.sol{stroke:#8fdcf7}
 .pb-start.on.sol,.pb-head.sol{fill:#8fdcf7}
 .chm-card small i{color:#c47a00;font-style:normal}
+
+.pb-avoid{stroke:#120a1c;stroke-width:.11;stroke-dasharray:.11 .06;stroke-linecap:round}
+.pb-avoid.bad{stroke:#ff4d7a}
+.pb-warm{stroke:#ff9f5a;stroke-width:.22;stroke-linecap:round}
+.pb-cool{stroke:#5fb8ff;stroke-width:.22;stroke-linecap:round}
+.pb-warm.bad,.pb-cool.bad{stroke:#ff4d7a}
+.pb-wrap{fill:#cbb8ea;font-family:var(--mono);font-size:.34px;text-anchor:middle;dominant-baseline:central}
+.pb-exitring{fill:none;stroke:#ff8cc6;stroke-width:.06;stroke-dasharray:.08 .05}
+.pb-piece{fill:#f4e9ff;font-size:.5px;text-anchor:middle;dominant-baseline:central}
+.pb-heart{font-size:.46px;text-anchor:middle;dominant-baseline:central;stroke:#fff;stroke-width:.012}
+.pb-card rect{fill:#2b1b3d;stroke:#cbb8ea;stroke-width:.03}
+.pb-card text,.pb-fogdot{fill:#cbb8ea;font-family:var(--mono);font-size:.32px;text-anchor:middle;dominant-baseline:central}
+.pb-shape rect{fill:#ffd86e}
+.pb-shape.bad rect{fill:#ff4d7a}
+.pb-radar rect{fill:#2f5a3a;stroke:#7be3a4;stroke-width:.03}
+.pb-radar text{fill:#7be3a4;font-family:var(--mono);font-size:.32px;text-anchor:middle;dominant-baseline:central}
+.pb-mine{fill:#ff4d7a;font-size:.42px;text-anchor:middle;dominant-baseline:central}
+.pb-portal{fill:none;stroke-width:.05}
+.pb-switch circle{fill:#fff;stroke:#2b1b3d;stroke-width:.03}
+.pb-switch path{fill:#5fb8ff}
+.pb-order circle{fill:#f4e9ff;stroke:#2b1b3d;stroke-width:.03}
+.pb-order text{fill:#2b1b3d;font-family:var(--mono);font-size:.26px;text-anchor:middle;dominant-baseline:central}
+.pb-order.bad circle{fill:#ff4d7a}
+.pb-lens{fill:none;stroke:#fff;stroke-width:.05;stroke-dasharray:.12 .06;pointer-events:none}
+.pb-jump{stroke:#ff8cc6;stroke-width:.04;stroke-dasharray:.05 .08;opacity:.7}
+.pb-start.other{fill:#5b4478}
+.pb-line.other{stroke:#1a1024;filter:drop-shadow(0 0 .05px #fff)}
+.pb-start.on.other{fill:#1a1024}
+.pb-line.other.win{stroke:#2b1b3d}
+.pb-line.hint{stroke:#fff;opacity:.55;stroke-width:.1;stroke-dasharray:.05 .06}
+.pb-line.ghost{stroke:#8fdcf7;stroke-width:.08;stroke-dasharray:.12 .08;opacity:.85}
+.pb-line.other.sol{stroke:#1a1024}
+.pb-start.on.other.sol{fill:#1a1024}
+.sb-reg.r0{fill:#ff8cc6}.sb-reg.r1{fill:#8fdcf7}.sb-reg.r2{fill:#ffd86e}.sb-reg.r3{fill:#b48cff}
+.cam-sil,.mag-sil{position:absolute;left:50%;bottom:0;width:46%;height:80%;transform:translateX(-50%);border-radius:45% 45% 10% 10%;
+  background:radial-gradient(circle at 50% 22%,#9e93ae 0 18%,transparent 19%),radial-gradient(ellipse 50% 60% at 50% 100%,#9e93ae 0 98%,transparent 100%)}
+.mag-sil{width:70%;height:100%;bottom:-10%}
+#pj-lens.on{background:var(--pink);color:#fff}
+.g-paige .pj-stage{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.4),transparent 70%),repeating-radial-gradient(circle at 40% 60%,#e1d6ef 0 8px,#d3c4e8 8px 12px,#efe8f8 12px 20px)}
+.g-vel .pj-stage{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.5),transparent 70%),repeating-radial-gradient(circle at 60% 40%,#ffe6c9 0 8px,#ffd8a8 8px 12px,#fff1de 12px 20px)}
+.g-myne .pj-stage{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.5),transparent 70%),repeating-radial-gradient(circle at 50% 50%,#d6f5e6 0 8px,#bdebd5 8px 12px,#ecfbf3 12px 20px)}
 @media (max-width:720px){.chm{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}.chm-girls{flex-direction:row;overflow-x:auto}.chm-girl small{display:none}}
 @media (prefers-reduced-motion:reduce){.bad,.mag-scan{animation:none}.lens{transition:none}}
 </style>

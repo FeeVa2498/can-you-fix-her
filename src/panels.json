@@ -656,6 +656,1918 @@
   "why": "Bảng lõi: nét chì gợi ý một con đường nhưng không đủ, mực mới quyết định. Ô hồng ở góc trên trái có ô đen ngay dưới nên đường phải cắt ngang giữa hai ô đó, vì vậy đoạn chì ở hàng thứ ba dẫn sang trái. Sau đó đường vòng lên hàng trên, tô đoạn chì ở hàng thứ hai từ phải sang trái, đi xuống cột giữa để tách các ô hồng ở giữa khỏi các ô đen hai bên, rồi zigzag ở cột phải để khoanh ô đen bên phải."
  },
  {
+  "id": "prim_1_6",
+  "girl": "prim",
+  "layer": 1,
+  "n": 6,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "squares": [
+   [
+    2,
+    2,
+    "pink"
+   ],
+   [
+    2,
+    1,
+    "ink"
+   ],
+   [
+    2,
+    0,
+    "pink"
+   ],
+   [
+    3,
+    2,
+    "pink"
+   ],
+   [
+    3,
+    0,
+    "ink"
+   ],
+   [
+    0,
+    2,
+    "ink"
+   ]
+  ],
+  "sketch": [
+   [
+    0,
+    0,
+    0,
+    1
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "if i copy, i can't be wrong.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Mẹo: Tìm đoạn chì chỉ có một cách nối hợp lý với vòng tròn hoặc lối ra, rồi lần dần vào giữa."
+ },
+ {
+  "id": "prim_2_1",
+  "girl": "prim",
+  "layer": 2,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "avoid": [
+   [
+    3,
+    0,
+    3,
+    1
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ],
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 2,
+  "belief": "the black lines aren't mine. i won't touch them.",
+  "note": "",
+  "intro": "avoid",
+  "why": "Bảng dạy luật mới. Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Luật trên bảng:  Mẹo: Nét chì đen chặn đường như tường: xem chúng tạo thành hành lang nào."
+ },
+ {
+  "id": "prim_2_2",
+  "girl": "prim",
+  "layer": 2,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "avoid": [
+   [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    0,
+    1,
+    0,
+    2
+   ]
+  ],
+  "sketch": [
+   [
+    3,
+    0,
+    3,
+    1
+   ],
+   [
+    4,
+    2,
+    4,
+    3
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    2,
+    1,
+    2,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i know which lines are mine. i think.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Mẹo: Tìm đoạn chì chỉ có một cách nối hợp lý với vòng tròn hoặc lối ra, rồi lần dần vào giữa."
+ },
+ {
+  "id": "prim_2_3",
+  "girl": "prim",
+  "layer": 2,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    1,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "mirror": "x",
+  "sketch": [
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    4,
+    2,
+    4,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "solutions": 2,
+  "belief": "when i draw, the other hand draws too.",
+  "note": "",
+  "intro": "mirror",
+  "why": "Bảng dạy luật mới. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Luật trên bảng: Nét chì mờ phải được tô lại. Mẹo: Tìm đoạn chì chỉ có một cách nối hợp lý với vòng tròn hoặc lối ra, rồi lần dần vào giữa."
+ },
+ {
+  "id": "prim_2_4",
+  "girl": "prim",
+  "layer": 2,
+  "n": 4,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    0,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "mirror": "x",
+  "sketch": [
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ]
+  ],
+  "avoid": [
+   [
+    3,
+    2,
+    3,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "it copies everything i do.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Tìm đoạn chì chỉ có một cách nối hợp lý với vòng tròn hoặc lối ra, rồi lần dần vào giữa."
+ },
+ {
+  "id": "prim_2_5",
+  "girl": "prim",
+  "layer": 2,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    1,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "mirror": "x",
+  "squares": [
+   [
+    2,
+    3,
+    "pink"
+   ],
+   [
+    0,
+    1,
+    "ink"
+   ],
+   [
+    3,
+    3,
+    "ink"
+   ],
+   [
+    0,
+    0,
+    "pink"
+   ],
+   [
+    0,
+    2,
+    "pink"
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "we never touch. we can't.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mực hồng và mực đen phải nằm ở các vùng khác nhau. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Hai ô khác màu nằm sát nhau buộc đường phải đi qua cạnh chung của chúng."
+ },
+ {
+  "id": "prim_2_6",
+  "girl": "prim",
+  "layer": 2,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "avoid": [
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    3,
+    4,
+    4,
+    4
+   ],
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    0,
+    4,
+    1,
+    4
+   ]
+  ],
+  "squares": [
+   [
+    3,
+    1,
+    "ink"
+   ],
+   [
+    2,
+    2,
+    "ink"
+   ],
+   [
+    2,
+    0,
+    "pink"
+   ],
+   [
+    1,
+    0,
+    "ink"
+   ],
+   [
+    2,
+    3,
+    "pink"
+   ],
+   [
+    3,
+    3,
+    "ink"
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "pink is mine. the black was never mine.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Mẹo: Nét chì đen chặn đường như tường: xem chúng tạo thành hành lang nào."
+ },
+ {
+  "id": "prim_2_7",
+  "girl": "prim",
+  "layer": 2,
+  "n": 7,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    0,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "mirror": "x",
+  "squares": [
+   [
+    3,
+    2,
+    "ink"
+   ],
+   [
+    1,
+    1,
+    "pink"
+   ]
+  ],
+  "sketch": [
+   [
+    0,
+    1,
+    0,
+    2
+   ]
+  ],
+  "avoid": [
+   [
+    0,
+    4,
+    1,
+    4
+   ],
+   [
+    3,
+    0,
+    4,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "the other hand always knows where i am going.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Tìm đoạn chì chỉ có một cách nối hợp lý với vòng tròn hoặc lối ra, rồi lần dần vào giữa."
+ },
+ {
+  "id": "prim_3_1",
+  "girl": "prim",
+  "layer": 3,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "shapes": [
+   [
+    2,
+    0,
+    [
+     [
+      2,
+      0
+     ],
+     [
+      2,
+      1
+     ],
+     [
+      1,
+      1
+     ],
+     [
+      2,
+      2
+     ]
+    ]
+   ],
+   [
+    1,
+    0,
+    [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      0
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ]
+    ]
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 2,
+  "belief": "what if i drew something of my own?",
+  "note": "",
+  "intro": "shapes",
+  "why": "Bảng dạy luật mới. Vùng chứa ô hình mẫu phải có đúng hình dạng đó (không xoay). Luật trên bảng:  Mẹo: Vẽ thử hình mẫu quanh ô của nó: thường chỉ có một chỗ đặt vừa mà không đè lên ký hiệu khác."
+ },
+ {
+  "id": "prim_3_2",
+  "girl": "prim",
+  "layer": 3,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "shapes": [
+   [
+    2,
+    0,
+    [
+     [
+      2,
+      0
+     ],
+     [
+      2,
+      1
+     ],
+     [
+      3,
+      1
+     ],
+     [
+      2,
+      2
+     ]
+    ]
+   ],
+   [
+    1,
+    0,
+    [
+     [
+      1,
+      0
+     ],
+     [
+      1,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      1,
+      2
+     ]
+    ]
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "it doesn't look like anything. it's mine.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Vùng chứa ô hình mẫu phải có đúng hình dạng đó (không xoay). Mẹo: Vẽ thử hình mẫu quanh ô của nó: thường chỉ có một chỗ đặt vừa mà không đè lên ký hiệu khác."
+ },
+ {
+  "id": "prim_3_3",
+  "girl": "prim",
+  "layer": 3,
+  "n": 3,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "shapes": [
+   [
+    0,
+    3,
+    [
+     [
+      0,
+      0
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      0,
+      3
+     ]
+    ]
+   ],
+   [
+    3,
+    0,
+    [
+     [
+      3,
+      0
+     ],
+     [
+      3,
+      1
+     ]
+    ]
+   ]
+  ],
+  "squares": [
+   [
+    2,
+    1,
+    "ink"
+   ],
+   [
+    3,
+    3,
+    "pink"
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "my colours. my shapes.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mực hồng và mực đen phải nằm ở các vùng khác nhau. Vùng chứa ô hình mẫu phải có đúng hình dạng đó (không xoay). Mẹo: Hai ô khác màu nằm sát nhau buộc đường phải đi qua cạnh chung của chúng."
+ },
+ {
+  "id": "prim_3_4",
+  "girl": "prim",
+  "layer": 3,
+  "n": 4,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "shapes": [
+   [
+    2,
+    3,
+    [
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ]
+   ],
+   [
+    2,
+    1,
+    [
+     [
+      2,
+      0
+     ],
+     [
+      2,
+      1
+     ],
+     [
+      3,
+      1
+     ],
+     [
+      1,
+      1
+     ]
+    ]
+   ]
+  ],
+  "avoid": [
+   [
+    2,
+    3,
+    2,
+    4
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "no pencil. nothing to follow.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Vùng chứa ô hình mẫu phải có đúng hình dạng đó (không xoay). Mẹo: Nét chì đen chặn đường như tường: xem chúng tạo thành hành lang nào."
+ },
+ {
+  "id": "prim_3_5",
+  "girl": "prim",
+  "layer": 3,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    0,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "mirror": "x",
+  "shapes": [
+   [
+    0,
+    2,
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ]
+    ]
+   ]
+  ],
+  "sketch": [
+   [
+    0,
+    3,
+    0,
+    4
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "even the other hand draws my shapes now.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Vùng chứa ô hình mẫu phải có đúng hình dạng đó (không xoay). Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Tìm đoạn chì chỉ có một cách nối hợp lý với vòng tròn hoặc lối ra, rồi lần dần vào giữa."
+ },
+ {
+  "id": "prim_3_6",
+  "girl": "prim",
+  "layer": 3,
+  "n": 6,
+  "w": 5,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    5,
+    0
+   ]
+  ],
+  "shapes": [
+   [
+    4,
+    0,
+    [
+     [
+      4,
+      0
+     ],
+     [
+      4,
+      1
+     ],
+     [
+      3,
+      1
+     ],
+     [
+      4,
+      2
+     ]
+    ]
+   ],
+   [
+    1,
+    3,
+    [
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ]
+   ]
+  ],
+  "squares": [
+   [
+    4,
+    3,
+    "pink"
+   ]
+  ],
+  "avoid": [
+   [
+    0,
+    4,
+    1,
+    4
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    5,
+    3
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    5,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i don't need the pencil anymore.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Vùng chứa ô hình mẫu phải có đúng hình dạng đó (không xoay). Mẹo: Nét chì đen chặn đường như tường: xem chúng tạo thành hành lang nào."
+ },
+ {
+  "id": "prim_3_7",
+  "girl": "prim",
+  "layer": 3,
+  "n": 7,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    0,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "mirror": "x",
+  "shapes": [
+   [
+    0,
+    3,
+    [
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ]
+    ]
+   ]
+  ],
+  "squares": [
+   [
+    1,
+    1,
+    "ink"
+   ]
+  ],
+  "avoid": [
+   [
+    4,
+    0,
+    4,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i trace so she can draw. that is why i am here.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Vùng chứa ô hình mẫu phải có đúng hình dạng đó (không xoay). Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Nét chì đen chặn đường như tường: xem chúng tạo thành hành lang nào."
+ },
+ {
   "id": "trix_1_1",
   "girl": "trix",
   "layer": 1,
@@ -1174,5 +3086,11551 @@
   ],
   "solutions": 1,
   "why": "Bảng lõi: 25 điểm phải đi qua hết, cộng 5 con số. Mẹo 1: góc không phải điểm xuất phát hay lối ra chỉ có 2 lối, nên đường đi qua góc theo đúng 2 lối đó. Mẹo 2: ô \"3\" ở hàng trên lại là chữ U như bảng trước. Mẹo 3: hai ô \"2\" bên trái hàng thứ ba buộc đường cắt ngang giữa bảng thay vì đi thẳng lên mép trái, còn hai ô \"2\" bên phải buộc đường zigzag ở cột phải."
+ },
+ {
+  "id": "trix_1_6",
+  "girl": "trix",
+  "layer": 1,
+  "n": 6,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "nums": [
+   [
+    2,
+    0,
+    1
+   ],
+   [
+    1,
+    0,
+    3
+   ],
+   [
+    1,
+    1,
+    2
+   ],
+   [
+    2,
+    1,
+    1
+   ],
+   [
+    3,
+    1,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    1,
+    2,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "rules exist so nothing surprises me.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Con số trong ô = số cạnh của ô mà đường chạm vào. Đoạn đứt không đi được. Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+ },
+ {
+  "id": "trix_2_1",
+  "girl": "trix",
+  "layer": 2,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "pieces": [
+   [
+    2,
+    0,
+    "P"
+   ],
+   [
+    2,
+    1,
+    "P"
+   ],
+   [
+    0,
+    2,
+    "P"
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 3,
+  "belief": "every piece has a value. so does everyone.",
+  "note": "",
+  "intro": "pieces",
+  "why": "Bảng dạy luật mới. Số ô của vùng = tổng giá trị quân cờ trong vùng (tốt 1, mã 3, tượng 3, xe 5, hậu 9). Luật trên bảng:  Mẹo: Quân giá trị lớn (xe, hậu) cần vùng lớn, quân tốt cần vùng đúng 1 ô: khoanh tốt trước."
+ },
+ {
+  "id": "trix_2_2",
+  "girl": "trix",
+  "layer": 2,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "pieces": [
+   [
+    3,
+    0,
+    "P"
+   ],
+   [
+    3,
+    2,
+    "P"
+   ],
+   [
+    1,
+    2,
+    "P"
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "a knight is worth three. i counted.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Số ô của vùng = tổng giá trị quân cờ trong vùng (tốt 1, mã 3, tượng 3, xe 5, hậu 9). Mẹo: Quân giá trị lớn (xe, hậu) cần vùng lớn, quân tốt cần vùng đúng 1 ô: khoanh tốt trước."
+ },
+ {
+  "id": "trix_2_3",
+  "girl": "trix",
+  "layer": 2,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "pieces": [
+   [
+    2,
+    1,
+    "R"
+   ],
+   [
+    0,
+    1,
+    "P"
+   ],
+   [
+    0,
+    2,
+    "P"
+   ]
+  ],
+  "nums": [
+   [
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    2,
+    1
+   ],
+   [
+    1,
+    0,
+    2
+   ],
+   [
+    1,
+    1,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "pieces and numbers. both obey me.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Con số trong ô = số cạnh của ô mà đường chạm vào. Số ô của vùng = tổng giá trị quân cờ trong vùng (tốt 1, mã 3, tượng 3, xe 5, hậu 9). Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+ },
+ {
+  "id": "trix_2_4",
+  "girl": "trix",
+  "layer": 2,
+  "n": 4,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "visitAll": true,
+  "pieces": [
+   [
+    3,
+    0,
+    "N"
+   ],
+   [
+    2,
+    2,
+    "P"
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i have to cover the whole board.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Số ô của vùng = tổng giá trị quân cờ trong vùng (tốt 1, mã 3, tượng 3, xe 5, hậu 9). Phải đi qua mọi điểm. Mẹo: Quân giá trị lớn (xe, hậu) cần vùng lớn, quân tốt cần vùng đúng 1 ô: khoanh tốt trước."
+ },
+ {
+  "id": "trix_2_5",
+  "girl": "trix",
+  "layer": 2,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "pieces": [
+   [
+    3,
+    0,
+    "P"
+   ],
+   [
+    0,
+    0,
+    "P"
+   ],
+   [
+    0,
+    1,
+    "P"
+   ],
+   [
+    0,
+    3,
+    "N"
+   ],
+   [
+    3,
+    3,
+    "P"
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    1,
+    0,
+    2
+   ],
+   [
+    4,
+    0,
+    4,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i see twelve moves ahead. always.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Số ô của vùng = tổng giá trị quân cờ trong vùng (tốt 1, mã 3, tượng 3, xe 5, hậu 9). Đoạn đứt không đi được. Mẹo: Quân giá trị lớn (xe, hậu) cần vùng lớn, quân tốt cần vùng đúng 1 ô: khoanh tốt trước."
+ },
+ {
+  "id": "trix_2_6",
+  "girl": "trix",
+  "layer": 2,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "pieces": [
+   [
+    0,
+    3,
+    "P"
+   ],
+   [
+    2,
+    1,
+    "B"
+   ],
+   [
+    2,
+    2,
+    "P"
+   ]
+  ],
+  "nums": [
+   [
+    3,
+    2,
+    1
+   ],
+   [
+    1,
+    1,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "a sacrifice is fine if the math works.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Con số trong ô = số cạnh của ô mà đường chạm vào. Số ô của vùng = tổng giá trị quân cờ trong vùng (tốt 1, mã 3, tượng 3, xe 5, hậu 9). Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+ },
+ {
+  "id": "trix_2_7",
+  "girl": "trix",
+  "layer": 2,
+  "n": 7,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "pieces": [
+   [
+    2,
+    0,
+    "R"
+   ],
+   [
+    2,
+    2,
+    "N"
+   ],
+   [
+    0,
+    1,
+    "P"
+   ],
+   [
+    0,
+    0,
+    "P"
+   ]
+  ],
+  "nums": [
+   [
+    1,
+    1,
+    2
+   ],
+   [
+    3,
+    3,
+    3
+   ],
+   [
+    1,
+    2,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    2,
+    3,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i don't lose. losing is an arithmetic error.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Con số trong ô = số cạnh của ô mà đường chạm vào. Số ô của vùng = tổng giá trị quân cờ trong vùng (tốt 1, mã 3, tượng 3, xe 5, hậu 9). Đoạn đứt không đi được. Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+ },
+ {
+  "id": "trix_3_1",
+  "girl": "trix",
+  "layer": 3,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "order": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 3,
+  "belief": "step one, then step two. never skip.",
+  "note": "",
+  "intro": "order",
+  "why": "Bảng dạy luật mới. Các điểm đánh số phải được đi qua theo đúng thứ tự 1, 2, 3… Luật trên bảng:  Mẹo: Đi từ số này tới số kế bằng đường ngắn nhất, nhưng nhớ chừa lối cho các số sau."
+ },
+ {
+  "id": "trix_3_2",
+  "girl": "trix",
+  "layer": 3,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "order": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "a proof has exactly one order.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Các điểm đánh số phải được đi qua theo đúng thứ tự 1, 2, 3… Mẹo: Đi từ số này tới số kế bằng đường ngắn nhất, nhưng nhớ chừa lối cho các số sau."
+ },
+ {
+  "id": "trix_3_3",
+  "girl": "trix",
+  "layer": 3,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "visitAll": true,
+  "order": [
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    4,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "complete, and in order.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Các điểm đánh số phải được đi qua theo đúng thứ tự 1, 2, 3… Phải đi qua mọi điểm. Mẹo: Đi từ số này tới số kế bằng đường ngắn nhất, nhưng nhớ chừa lối cho các số sau."
+ },
+ {
+  "id": "trix_3_4",
+  "girl": "trix",
+  "layer": 3,
+  "n": 4,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "order": [
+   [
+    4,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "nums": [
+   [
+    3,
+    2,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "if i check every line twice, i'm allowed to rest.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Con số trong ô = số cạnh của ô mà đường chạm vào. Các điểm đánh số phải được đi qua theo đúng thứ tự 1, 2, 3… Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+ },
+ {
+  "id": "trix_3_5",
+  "girl": "trix",
+  "layer": 3,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "order": [
+   [
+    1,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    3,
+    1
+   ]
+  ],
+  "pieces": [
+   [
+    1,
+    3,
+    "P"
+   ],
+   [
+    2,
+    3,
+    "P"
+   ],
+   [
+    0,
+    0,
+    "R"
+   ],
+   [
+    0,
+    2,
+    "N"
+   ],
+   [
+    2,
+    0,
+    "P"
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "the board is mine. every square of it.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Số ô của vùng = tổng giá trị quân cờ trong vùng (tốt 1, mã 3, tượng 3, xe 5, hậu 9). Các điểm đánh số phải được đi qua theo đúng thứ tự 1, 2, 3… Mẹo: Quân giá trị lớn (xe, hậu) cần vùng lớn, quân tốt cần vùng đúng 1 ô: khoanh tốt trước."
+ },
+ {
+  "id": "trix_3_6",
+  "girl": "trix",
+  "layer": 3,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "visitAll": true,
+  "order": [
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "nums": [
+   [
+    2,
+    1,
+    3
+   ],
+   [
+    1,
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "perfect is the minimum.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Con số trong ô = số cạnh của ô mà đường chạm vào. Các điểm đánh số phải được đi qua theo đúng thứ tự 1, 2, 3… Phải đi qua mọi điểm. Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+ },
+ {
+  "id": "trix_3_7",
+  "girl": "trix",
+  "layer": 3,
+  "n": 7,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "order": [
+   [
+    0,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "nums": [
+   [
+    0,
+    3,
+    2
+   ],
+   [
+    3,
+    0,
+    3
+   ],
+   [
+    1,
+    0,
+    3
+   ]
+  ],
+  "pieces": [
+   [
+    3,
+    2,
+    "R"
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i exist to be the one who's never wrong.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Con số trong ô = số cạnh của ô mà đường chạm vào. Số ô của vùng = tổng giá trị quân cờ trong vùng (tốt 1, mã 3, tượng 3, xe 5, hậu 9). Các điểm đánh số phải được đi qua theo đúng thứ tự 1, 2, 3… Mẹo: Ô \"0\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+ },
+ {
+  "id": "paige_1_1",
+  "girl": "paige",
+  "layer": 1,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    1,
+    2,
+    "pink"
+   ],
+   [
+    2,
+    2,
+    "pink"
+   ],
+   [
+    0,
+    0,
+    "pink"
+   ],
+   [
+    0,
+    1,
+    "pink"
+   ],
+   [
+    1,
+    1,
+    "violet"
+   ],
+   [
+    1,
+    0,
+    "violet"
+   ],
+   [
+    2,
+    0,
+    "pink"
+   ],
+   [
+    2,
+    1,
+    "pink"
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 4,
+  "belief": "nobody should be alone in the dark.",
+  "note": "",
+  "intro": "hearts",
+  "why": "Bảng dạy luật mới. Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Luật trên bảng:  Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_1_2",
+  "girl": "paige",
+  "layer": 1,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    3,
+    1,
+    "pink"
+   ],
+   [
+    3,
+    0,
+    "pink"
+   ],
+   [
+    3,
+    2,
+    "pink"
+   ],
+   [
+    2,
+    2,
+    "pink"
+   ],
+   [
+    0,
+    1,
+    "pink"
+   ],
+   [
+    0,
+    0,
+    "pink"
+   ],
+   [
+    1,
+    0,
+    "pink"
+   ],
+   [
+    1,
+    1,
+    "pink"
+   ]
+  ],
+  "dots": [
+   [
+    0,
+    2
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "two of a kind. that's the safest hand.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_1_3",
+  "girl": "paige",
+  "layer": 1,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    0,
+    2,
+    "pink"
+   ],
+   [
+    1,
+    2,
+    "pink"
+   ],
+   [
+    2,
+    2,
+    "pink"
+   ],
+   [
+    1,
+    0,
+    "pink"
+   ],
+   [
+    3,
+    1,
+    "teal"
+   ],
+   [
+    0,
+    0,
+    "teal"
+   ],
+   [
+    3,
+    0,
+    "pink"
+   ],
+   [
+    2,
+    0,
+    "pink"
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    0,
+    3,
+    1,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "if they're going to leave, i leave first.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Đoạn đứt không đi được. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_1_4",
+  "girl": "paige",
+  "layer": 1,
+  "n": 4,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    2,
+    3,
+    "pink"
+   ],
+   [
+    3,
+    3,
+    "pink"
+   ],
+   [
+    2,
+    2,
+    "teal"
+   ],
+   [
+    1,
+    0,
+    "teal"
+   ],
+   [
+    0,
+    2,
+    "pink"
+   ],
+   [
+    0,
+    3,
+    "pink"
+   ],
+   [
+    0,
+    0,
+    "pink"
+   ],
+   [
+    1,
+    1,
+    "pink"
+   ],
+   [
+    2,
+    0,
+    "pink"
+   ],
+   [
+    3,
+    1,
+    "pink"
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "some doors are already closed.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Đoạn đứt không đi được. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_1_5",
+  "girl": "paige",
+  "layer": 1,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    1,
+    1,
+    "violet"
+   ],
+   [
+    1,
+    0,
+    "violet"
+   ],
+   [
+    1,
+    2,
+    "teal"
+   ],
+   [
+    2,
+    3,
+    "teal"
+   ],
+   [
+    3,
+    0,
+    "pink"
+   ],
+   [
+    3,
+    3,
+    "pink"
+   ],
+   [
+    3,
+    2,
+    "pink"
+   ],
+   [
+    3,
+    1,
+    "pink"
+   ],
+   [
+    0,
+    0,
+    "teal"
+   ],
+   [
+    0,
+    2,
+    "teal"
+   ]
+  ],
+  "dots": [
+   [
+    4,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i keep everyone close. too close.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_1_6",
+  "girl": "paige",
+  "layer": 1,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    2,
+    2,
+    "pink"
+   ],
+   [
+    0,
+    1,
+    "pink"
+   ],
+   [
+    0,
+    2,
+    "pink"
+   ],
+   [
+    1,
+    3,
+    "pink"
+   ],
+   [
+    1,
+    2,
+    "violet"
+   ],
+   [
+    2,
+    3,
+    "violet"
+   ],
+   [
+    3,
+    0,
+    "pink"
+   ],
+   [
+    2,
+    0,
+    "pink"
+   ],
+   [
+    3,
+    3,
+    "teal"
+   ],
+   [
+    3,
+    2,
+    "teal"
+   ]
+  ],
+  "dots": [
+   [
+    3,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    3,
+    0,
+    4
+   ],
+   [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "stay. please. i'll raise the stakes.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_2_1",
+  "girl": "paige",
+  "layer": 2,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    2,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    2,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    2,
+    "violet",
+    {
+     "fog": true
+    }
+   ],
+   [
+    1,
+    0,
+    "violet",
+    {
+     "fog": true
+    }
+   ],
+   [
+    1,
+    2,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 3,
+  "belief": "you don't get to see the cards before you bet.",
+  "note": "",
+  "intro": "fog",
+  "why": "Bảng dạy luật mới. Lá bài úp: ký hiệu chỉ lật lên khi đường đi sát bên ô đó. Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_2_2",
+  "girl": "paige",
+  "layer": 2,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    1,
+    2,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    2,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    3,
+    0,
+    "violet",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    2,
+    "violet",
+    {
+     "fog": true
+    }
+   ]
+  ],
+  "dots": [
+   [
+    2,
+    0
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    0,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "every hand is a gamble.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Lá bài úp: ký hiệu chỉ lật lên khi đường đi sát bên ô đó. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_2_3",
+  "girl": "paige",
+  "layer": 2,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    1,
+    1,
+    "violet",
+    {
+     "fog": true
+    }
+   ],
+   [
+    1,
+    2,
+    "violet",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    0,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    2,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    3,
+    3,
+    3
+   ],
+   [
+    0,
+    1,
+    0,
+    2
+   ],
+   [
+    0,
+    3,
+    1,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i always bet on the worst outcome. it pays.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Đoạn đứt không đi được. Lá bài úp: ký hiệu chỉ lật lên khi đường đi sát bên ô đó. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_2_4",
+  "girl": "paige",
+  "layer": 2,
+  "n": 4,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    3,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    1,
+    1,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    3,
+    3,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    2,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    3,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    3,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    1,
+    3,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    1,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    3,
+    2,
+    "violet",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    1,
+    "violet",
+    {
+     "fog": true
+    }
+   ]
+  ],
+  "dots": [
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "the house always wins. i am the house.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Lá bài úp: ký hiệu chỉ lật lên khi đường đi sát bên ô đó. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_2_5",
+  "girl": "paige",
+  "layer": 2,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    3,
+    0,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    2,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    1,
+    3,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    2,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    3,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    3,
+    2,
+    "pink",
+    {
+     "fog": true
+    }
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    0,
+    0,
+    0,
+    1
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i count the exits in every room.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Đoạn đứt không đi được. Lá bài úp: ký hiệu chỉ lật lên khi đường đi sát bên ô đó. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_2_6",
+  "girl": "paige",
+  "layer": 2,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    2,
+    2,
+    "violet"
+   ],
+   [
+    2,
+    3,
+    "violet"
+   ],
+   [
+    0,
+    3,
+    "pink"
+   ],
+   [
+    1,
+    3,
+    "pink"
+   ],
+   [
+    0,
+    2,
+    "pink"
+   ],
+   [
+    0,
+    0,
+    "pink"
+   ],
+   [
+    3,
+    1,
+    "teal"
+   ],
+   [
+    2,
+    0,
+    "teal"
+   ]
+  ],
+  "dots": [
+   [
+    3,
+    0,
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    0,
+    {
+     "fog": true
+    }
+   ],
+   [
+    4,
+    4,
+    {
+     "fog": true
+    }
+   ],
+   [
+    1,
+    2,
+    {
+     "fog": true
+    }
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "if i lose everything, at least it was my choice.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Đoạn đứt không đi được. Lá bài úp: ký hiệu chỉ lật lên khi đường đi sát bên ô đó. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_2_7",
+  "girl": "paige",
+  "layer": 2,
+  "n": 7,
+  "w": 5,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    5,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    4,
+    3,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    3,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    1,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    4,
+    2,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    4,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    3,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    1,
+    3,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    3,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    3,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    4,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    2,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ]
+  ],
+  "dots": [
+   [
+    3,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    4
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    5,
+    4
+   ],
+   [
+    5,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    5,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i'd rather lose than be left.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Lá bài úp: ký hiệu chỉ lật lên khi đường đi sát bên ô đó. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_3_1",
+  "girl": "paige",
+  "layer": 3,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    0,
+    1,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    0,
+    2,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    2,
+    0,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    2,
+    1,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    1,
+    1,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    1,
+    0,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    0,
+    0,
+    "violet",
+    {
+     "lens": true
+    }
+   ],
+   [
+    1,
+    2,
+    "violet",
+    {
+     "lens": true
+    }
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 4,
+  "belief": "the real cards are hidden. look closer.",
+  "note": "",
+  "intro": "lens",
+  "why": "Bảng dạy luật mới. Một số ký hiệu chỉ thấy được qua kính lúp (nút Lens, rê chuột trên bảng). Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_3_2",
+  "girl": "paige",
+  "layer": 3,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    2,
+    0,
+    "violet",
+    {
+     "lens": true
+    }
+   ],
+   [
+    3,
+    1,
+    "violet"
+   ],
+   [
+    1,
+    0,
+    "violet",
+    {
+     "lens": true
+    }
+   ],
+   [
+    2,
+    2,
+    "violet"
+   ],
+   [
+    1,
+    1,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    2,
+    1,
+    "pink"
+   ]
+  ],
+  "dots": [
+   [
+    0,
+    2
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "nobody sees what i'm holding.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Một số ký hiệu chỉ thấy được qua kính lúp (nút Lens, rê chuột trên bảng). Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_3_3",
+  "girl": "paige",
+  "layer": 3,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    2,
+    0,
+    "pink"
+   ],
+   [
+    2,
+    1,
+    "pink"
+   ],
+   [
+    1,
+    1,
+    "teal"
+   ],
+   [
+    1,
+    0,
+    "teal"
+   ],
+   [
+    3,
+    2,
+    "violet"
+   ],
+   [
+    3,
+    1,
+    "violet"
+   ],
+   [
+    0,
+    1,
+    "violet"
+   ],
+   [
+    1,
+    2,
+    "violet"
+   ]
+  ],
+  "dots": [
+   [
+    4,
+    2,
+    {
+     "lens": true
+    }
+   ],
+   [
+    3,
+    2,
+    {
+     "lens": true
+    }
+   ],
+   [
+    0,
+    0,
+    {
+     "lens": true
+    }
+   ],
+   [
+    1,
+    3,
+    {
+     "lens": true
+    }
+   ],
+   [
+    3,
+    0,
+    {
+     "lens": true
+    }
+   ],
+   [
+    2,
+    1,
+    {
+     "lens": true
+    }
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "half the deck is lies.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Một số ký hiệu chỉ thấy được qua kính lúp (nút Lens, rê chuột trên bảng). Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_3_4",
+  "girl": "paige",
+  "layer": 3,
+  "n": 4,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    3,
+    1,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    2,
+    0,
+    "pink"
+   ],
+   [
+    0,
+    0,
+    "violet",
+    {
+     "lens": true
+    }
+   ],
+   [
+    2,
+    1,
+    "violet"
+   ],
+   [
+    3,
+    2,
+    "violet",
+    {
+     "lens": true
+    }
+   ],
+   [
+    1,
+    2,
+    "violet"
+   ],
+   [
+    0,
+    2,
+    "violet",
+    {
+     "lens": true
+    }
+   ],
+   [
+    0,
+    3,
+    "violet"
+   ],
+   [
+    3,
+    3,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    1,
+    1,
+    "pink"
+   ],
+   [
+    2,
+    3,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    1,
+    3,
+    "pink"
+   ]
+  ],
+  "dots": [
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i read the cards so nobody reads me.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Một số ký hiệu chỉ thấy được qua kính lúp (nút Lens, rê chuột trên bảng). Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_3_5",
+  "girl": "paige",
+  "layer": 3,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    3,
+    3,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    3,
+    1,
+    "pink"
+   ],
+   [
+    2,
+    1,
+    "pink"
+   ],
+   [
+    2,
+    0,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    1,
+    0,
+    "violet"
+   ],
+   [
+    3,
+    0,
+    "violet"
+   ],
+   [
+    1,
+    2,
+    "teal",
+    {
+     "lens": true
+    }
+   ],
+   [
+    2,
+    3,
+    "teal"
+   ],
+   [
+    0,
+    0,
+    "pink"
+   ],
+   [
+    1,
+    3,
+    "pink",
+    {
+     "lens": true
+    }
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    3,
+    3,
+    3
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i only show my hand to people who stay.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Đoạn đứt không đi được. Một số ký hiệu chỉ thấy được qua kính lúp (nút Lens, rê chuột trên bảng). Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_3_6",
+  "girl": "paige",
+  "layer": 3,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    2,
+    2,
+    "violet",
+    {
+     "fog": true
+    }
+   ],
+   [
+    3,
+    3,
+    "violet",
+    {
+     "fog": true
+    }
+   ],
+   [
+    1,
+    1,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    0,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    3,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    3,
+    2,
+    "pink",
+    {
+     "fog": true
+    }
+   ],
+   [
+    0,
+    2,
+    "teal",
+    {
+     "fog": true
+    }
+   ],
+   [
+    2,
+    1,
+    "teal",
+    {
+     "fog": true
+    }
+   ]
+  ],
+  "dots": [
+   [
+    0,
+    0,
+    {
+     "lens": true
+    }
+   ],
+   [
+    3,
+    1,
+    {
+     "lens": true
+    }
+   ],
+   [
+    1,
+    1,
+    {
+     "lens": true
+    }
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "whatever happens, i saw it coming.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Đoạn đứt không đi được. Lá bài úp: ký hiệu chỉ lật lên khi đường đi sát bên ô đó. Một số ký hiệu chỉ thấy được qua kính lúp (nút Lens, rê chuột trên bảng). Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "paige_3_7",
+  "girl": "paige",
+  "layer": 3,
+  "n": 7,
+  "w": 5,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    5,
+    0
+   ]
+  ],
+  "hearts": [
+   [
+    2,
+    0,
+    "violet",
+    {
+     "lens": true
+    }
+   ],
+   [
+    2,
+    1,
+    "violet"
+   ],
+   [
+    3,
+    1,
+    "violet",
+    {
+     "lens": true
+    }
+   ],
+   [
+    3,
+    2,
+    "violet"
+   ],
+   [
+    1,
+    0,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    2,
+    3,
+    "pink"
+   ],
+   [
+    4,
+    1,
+    "pink",
+    {
+     "lens": true
+    }
+   ],
+   [
+    3,
+    0,
+    "pink"
+   ],
+   [
+    0,
+    0,
+    "violet",
+    {
+     "lens": true
+    }
+   ],
+   [
+    1,
+    1,
+    "violet"
+   ]
+  ],
+  "dots": [
+   [
+    0,
+    0
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    0,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    5,
+    4
+   ],
+   [
+    5,
+    3
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    5,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "as long as someone needs me at the table, i stay.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi trái tim phải ở chung vùng với đúng một trái tim cùng màu: không ai một mình, không ai thừa. Chấm đen phải được đi qua. Một số ký hiệu chỉ thấy được qua kính lúp (nút Lens, rê chuột trên bảng). Mẹo: Trái tim cùng màu ở xa nhau thì phải chung một vùng lớn; hai trái tim cùng màu nằm sát nhau mà có trái tim thứ ba cùng màu gần đó thì phải tách ra."
+ },
+ {
+  "id": "vel_1_1",
+  "girl": "vel",
+  "layer": 1,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    1,
+    3,
+    2,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ]
+  ],
+  "dots": [
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    0,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 3,
+  "belief": "omg a teleporter!! ...extraction point confirmed.",
+  "note": "",
+  "intro": "portals",
+  "why": "Bảng dạy luật mới. Bước lên một cổng thì đường xuất hiện ở cổng cùng màu bên kia. Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được."
+ },
+ {
+  "id": "vel_1_2",
+  "girl": "vel",
+  "layer": 1,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    0,
+    1,
+    4,
+    2
+   ]
+  ],
+  "dots": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    3,
+    1,
+    3
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    3,
+    1,
+    4,
+    1
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    2,
+    0,
+    3,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "always have two exits. that's basic.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Bước lên một cổng thì đường xuất hiện ở cổng cùng màu bên kia."
+ },
+ {
+  "id": "vel_1_3",
+  "girl": "vel",
+  "layer": 1,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    1,
+    1,
+    3,
+    2
+   ]
+  ],
+  "dots": [
+   [
+    2,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    2,
+    3,
+    3,
+    3
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "cute outfit, full tactical plan underneath.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Bước lên một cổng thì đường xuất hiện ở cổng cùng màu bên kia."
+ },
+ {
+  "id": "vel_1_4",
+  "girl": "vel",
+  "layer": 1,
+  "n": 4,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    2,
+    3,
+    2,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    0,
+    3,
+    1,
+    3
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ],
+   [
+    2,
+    1,
+    3,
+    1
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ]
+  ],
+  "dots": [
+   [
+    3,
+    0
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "if the road is blocked, go around. or through.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Bước lên một cổng thì đường xuất hiện ở cổng cùng màu bên kia."
+ },
+ {
+  "id": "vel_1_5",
+  "girl": "vel",
+  "layer": 1,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    0,
+    2,
+    4,
+    3
+   ],
+   [
+    2,
+    4,
+    1,
+    0
+   ]
+  ],
+  "dots": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    4,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    0,
+    3,
+    1,
+    3
+   ],
+   [
+    1,
+    4,
+    2,
+    4
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "two routes in, two routes out. always.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Bước lên một cổng thì đường xuất hiện ở cổng cùng màu bên kia."
+ },
+ {
+  "id": "vel_1_6",
+  "girl": "vel",
+  "layer": 1,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    1,
+    3,
+    3,
+    1
+   ],
+   [
+    0,
+    1,
+    4,
+    3
+   ]
+  ],
+  "dots": [
+   [
+    1,
+    2
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    2,
+    1,
+    3,
+    1
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i'm fun at parties because i know where every exit is.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Bước lên một cổng thì đường xuất hiện ở cổng cùng màu bên kia."
+ },
+ {
+  "id": "vel_2_1",
+  "girl": "vel",
+  "layer": 2,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "switches": [
+   [
+    1,
+    2
+   ]
+  ],
+  "cool": [
+   [
+    3,
+    0,
+    3,
+    1
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ]
+  ],
+  "warm": [
+   [
+    0,
+    0,
+    0,
+    1
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    2,
+    0,
+    3,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 2,
+  "belief": "up, down, up. pick a lane, vel.",
+  "note": "",
+  "intro": "switches",
+  "why": "Bảng dạy luật mới. Mỗi lần đi qua công tắc ◐, tâm trạng đổi. Đường ấm (cam) chỉ đi được khi đang \"lên\" (lúc đầu), đường lạnh (xanh) chỉ đi được khi đang \"xuống\". Luật trên bảng:  Mẹo: Đánh dấu mỗi đoạn màu cần tâm trạng nào, rồi xếp các lần đi qua công tắc cho khớp."
+ },
+ {
+  "id": "vel_2_2",
+  "girl": "vel",
+  "layer": 2,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "switches": [
+   [
+    2,
+    1
+   ]
+  ],
+  "cool": [
+   [
+    1,
+    0,
+    2,
+    0
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ]
+  ],
+  "warm": [
+   [
+    2,
+    0,
+    3,
+    0
+   ],
+   [
+    3,
+    2,
+    4,
+    2
+   ],
+   [
+    3,
+    0,
+    3,
+    1
+   ],
+   [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    2,
+    1,
+    3,
+    1
+   ],
+   [
+    2,
+    2,
+    3,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "yesterday i loved everyone. today i hate this font.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi lần đi qua công tắc ◐, tâm trạng đổi. Đường ấm (cam) chỉ đi được khi đang \"lên\" (lúc đầu), đường lạnh (xanh) chỉ đi được khi đang \"xuống\". Mẹo: Đánh dấu mỗi đoạn màu cần tâm trạng nào, rồi xếp các lần đi qua công tắc cho khớp."
+ },
+ {
+  "id": "vel_2_3",
+  "girl": "vel",
+  "layer": 2,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "switches": [
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    1
+   ]
+  ],
+  "warm": [
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    2,
+    1,
+    3,
+    1
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    3,
+    0,
+    3,
+    1
+   ],
+   [
+    4,
+    0,
+    4,
+    1
+   ],
+   [
+    3,
+    3,
+    4,
+    3
+   ],
+   [
+    2,
+    2,
+    3,
+    2
+   ],
+   [
+    0,
+    0,
+    0,
+    1
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ]
+  ],
+  "cool": [
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "highs and lows are just terrain. i've mapped worse.",
+  "note": "(relaxed limits)",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi lần đi qua công tắc ◐, tâm trạng đổi. Đường ấm (cam) chỉ đi được khi đang \"lên\" (lúc đầu), đường lạnh (xanh) chỉ đi được khi đang \"xuống\". Mẹo: Đánh dấu mỗi đoạn màu cần tâm trạng nào, rồi xếp các lần đi qua công tắc cho khớp."
+ },
+ {
+  "id": "vel_2_4",
+  "girl": "vel",
+  "layer": 2,
+  "n": 4,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "switches": [
+   [
+    2,
+    2
+   ]
+  ],
+  "portals": [
+   [
+    0,
+    1,
+    4,
+    3
+   ]
+  ],
+  "cool": [
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    4,
+    2,
+    4,
+    3
+   ],
+   [
+    1,
+    4,
+    2,
+    4
+   ]
+  ],
+  "dots": [
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    3,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    2,
+    2,
+    3,
+    2
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ],
+   [
+    4,
+    3,
+    4,
+    4
+   ]
+  ],
+  "warm": [
+   [
+    1,
+    2,
+    2,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "when the floor drops, i already have a rope.",
+  "note": "(relaxed limits)",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Bước lên một cổng thì đường xuất hiện ở cổng cùng màu bên kia. Mỗi lần đi qua công tắc ◐, tâm trạng đổi. Đường ấm (cam) chỉ đi được khi đang \"lên\" (lúc đầu), đường lạnh (xanh) chỉ đi được khi đang \"xuống\"."
+ },
+ {
+  "id": "vel_2_5",
+  "girl": "vel",
+  "layer": 2,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "switches": [
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    2
+   ]
+  ],
+  "cool": [
+   [
+    1,
+    3,
+    1,
+    4
+   ],
+   [
+    0,
+    3,
+    0,
+    4
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    2,
+    0,
+    3,
+    0
+   ]
+  ],
+  "warm": [
+   [
+    3,
+    4,
+    4,
+    4
+   ],
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ]
+  ],
+  "dots": [
+   [
+    4,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i write the sad chapters on the good days. just in case.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Mỗi lần đi qua công tắc ◐, tâm trạng đổi. Đường ấm (cam) chỉ đi được khi đang \"lên\" (lúc đầu), đường lạnh (xanh) chỉ đi được khi đang \"xuống\"."
+ },
+ {
+  "id": "vel_2_6",
+  "girl": "vel",
+  "layer": 2,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "switches": [
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    1
+   ]
+  ],
+  "cool": [
+   [
+    0,
+    3,
+    0,
+    4
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    3,
+    1,
+    4,
+    1
+   ],
+   [
+    2,
+    0,
+    3,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    1,
+    4,
+    2,
+    4
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    2,
+    1,
+    2,
+    2
+   ]
+  ],
+  "warm": [
+   [
+    4,
+    0,
+    4,
+    1
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "stay sharp. moods are weather. weather passes.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Đoạn đứt không đi được. Mỗi lần đi qua công tắc ◐, tâm trạng đổi. Đường ấm (cam) chỉ đi được khi đang \"lên\" (lúc đầu), đường lạnh (xanh) chỉ đi được khi đang \"xuống\"."
+ },
+ {
+  "id": "vel_2_7",
+  "girl": "vel",
+  "layer": 2,
+  "n": 7,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "switches": [
+   [
+    1,
+    1
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "portals": [
+   [
+    0,
+    2,
+    4,
+    2
+   ]
+  ],
+  "dots": [
+   [
+    1,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    1,
+    2
+   ]
+  ],
+  "cool": [
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    1,
+    4,
+    2,
+    4
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    4,
+    0,
+    4,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    3,
+    4,
+    3
+   ],
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ]
+  ],
+  "warm": [
+   [
+    2,
+    1,
+    3,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "if i keep moving, the low can never catch me.",
+  "note": "(relaxed limits)",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Bước lên một cổng thì đường xuất hiện ở cổng cùng màu bên kia. Mỗi lần đi qua công tắc ◐, tâm trạng đổi. Đường ấm (cam) chỉ đi được khi đang \"lên\" (lúc đầu), đường lạnh (xanh) chỉ đi được khi đang \"xuống\"."
+ },
+ {
+  "id": "vel_3_1",
+  "girl": "vel",
+  "layer": 3,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    1,
+    0,
+    2
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ]
+  ],
+  "dots": [
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    0,
+    2
+   ]
+  ],
+  "mines": [
+   [
+    2,
+    2
+   ]
+  ],
+  "radar": [
+   [
+    1,
+    2,
+    1
+   ],
+   [
+    2,
+    1,
+    1
+   ],
+   [
+    1,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 2,
+  "belief": "map the minefield before you walk it.",
+  "note": "(relaxed limits)",
+  "intro": "mines",
+  "why": "Bảng dạy luật mới. Có mìn giấu trong vài ô. Số trong ô radar ◇ = số mìn ở 8 ô xung quanh. Đường không được chạm cạnh ô có mìn. Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được."
+ },
+ {
+  "id": "vel_3_2",
+  "girl": "vel",
+  "layer": 3,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    3,
+    2,
+    4,
+    2
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    4,
+    0,
+    4,
+    1
+   ]
+  ],
+  "mines": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "dots": [
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "radar": [
+   [
+    1,
+    1,
+    2
+   ],
+   [
+    2,
+    1,
+    1
+   ],
+   [
+    2,
+    0,
+    1
+   ],
+   [
+    0,
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "you don't step where you haven't checked. ever.",
+  "note": "(relaxed limits)",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Có mìn giấu trong vài ô. Số trong ô radar ◇ = số mìn ở 8 ô xung quanh. Đường không được chạm cạnh ô có mìn."
+ },
+ {
+  "id": "vel_3_3",
+  "girl": "vel",
+  "layer": 3,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    0,
+    1,
+    3,
+    3
+   ]
+  ],
+  "dots": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    3,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ]
+  ],
+  "mines": [
+   [
+    2,
+    2
+   ]
+  ],
+  "radar": [
+   [
+    2,
+    1,
+    1
+   ],
+   [
+    3,
+    1,
+    1
+   ],
+   [
+    3,
+    2,
+    1
+   ],
+   [
+    1,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "a story is a minefield. i know where i buried everything.",
+  "note": "(relaxed limits)",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Bước lên một cổng thì đường xuất hiện ở cổng cùng màu bên kia. Có mìn giấu trong vài ô. Số trong ô radar ◇ = số mìn ở 8 ô xung quanh. Đường không được chạm cạnh ô có mìn."
+ },
+ {
+  "id": "vel_3_4",
+  "girl": "vel",
+  "layer": 3,
+  "n": 4,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "switches": [
+   [
+    2,
+    2
+   ]
+  ],
+  "mines": [
+   [
+    1,
+    1
+   ]
+  ],
+  "cool": [
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    3,
+    2,
+    4,
+    2
+   ],
+   [
+    3,
+    1,
+    4,
+    1
+   ],
+   [
+    4,
+    0,
+    4,
+    1
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    4,
+    3,
+    4,
+    4
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ]
+  ],
+  "warm": [
+   [
+    2,
+    2,
+    3,
+    2
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    1
+   ]
+  ],
+  "radar": [
+   [
+    1,
+    2,
+    1
+   ],
+   [
+    2,
+    0,
+    1
+   ],
+   [
+    1,
+    0,
+    1
+   ],
+   [
+    2,
+    2,
+    1
+   ],
+   [
+    0,
+    0,
+    1
+   ],
+   [
+    0,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "mood swings and landmines. same drill.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mỗi lần đi qua công tắc ◐, tâm trạng đổi. Đường ấm (cam) chỉ đi được khi đang \"lên\" (lúc đầu), đường lạnh (xanh) chỉ đi được khi đang \"xuống\". Có mìn giấu trong vài ô. Số trong ô radar ◇ = số mìn ở 8 ô xung quanh. Đường không được chạm cạnh ô có mìn. Mẹo: Đánh dấu mỗi đoạn màu cần tâm trạng nào, rồi xếp các lần đi qua công tắc cho khớp."
+ },
+ {
+  "id": "vel_3_5",
+  "girl": "vel",
+  "layer": 3,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "dots": [
+   [
+    1,
+    1
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    0,
+    4,
+    0
+   ]
+  ],
+  "mines": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "radar": [
+   [
+    0,
+    3,
+    1
+   ],
+   [
+    0,
+    0,
+    1
+   ],
+   [
+    2,
+    2,
+    1
+   ],
+   [
+    1,
+    2,
+    2
+   ],
+   [
+    0,
+    2,
+    2
+   ],
+   [
+    2,
+    0,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i plan for the worst so nobody sees me fall.",
+  "note": "(relaxed limits)",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Có mìn giấu trong vài ô. Số trong ô radar ◇ = số mìn ở 8 ô xung quanh. Đường không được chạm cạnh ô có mìn."
+ },
+ {
+  "id": "vel_3_6",
+  "girl": "vel",
+  "layer": 3,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "mines": [
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "dots": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    4,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    4,
+    1,
+    4,
+    2
+   ]
+  ],
+  "radar": [
+   [
+    0,
+    2,
+    1
+   ],
+   [
+    2,
+    1,
+    1
+   ],
+   [
+    3,
+    2,
+    1
+   ],
+   [
+    1,
+    1,
+    1
+   ],
+   [
+    1,
+    3,
+    2
+   ],
+   [
+    2,
+    2,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "if i'm in control, nothing explodes.",
+  "note": "(relaxed limits)",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Có mìn giấu trong vài ô. Số trong ô radar ◇ = số mìn ở 8 ô xung quanh. Đường không được chạm cạnh ô có mìn."
+ },
+ {
+  "id": "vel_3_7",
+  "girl": "vel",
+  "layer": 3,
+  "n": 7,
+  "w": 4,
+  "h": 4,
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "switches": [
+   [
+    1,
+    2
+   ]
+  ],
+  "portals": [
+   [
+    0,
+    1,
+    3,
+    4
+   ]
+  ],
+  "mines": [
+   [
+    0,
+    0
+   ]
+  ],
+  "warm": [
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    3,
+    3,
+    4,
+    3
+   ],
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    3,
+    2,
+    4,
+    2
+   ],
+   [
+    4,
+    0,
+    4,
+    1
+   ]
+  ],
+  "cool": [
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    2,
+    2,
+    3,
+    2
+   ],
+   [
+    0,
+    4,
+    1,
+    4
+   ],
+   [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    3,
+    1,
+    4,
+    1
+   ],
+   [
+    1,
+    3,
+    2,
+    3
+   ]
+  ],
+  "radar": [
+   [
+    1,
+    0,
+    1
+   ],
+   [
+    2,
+    2,
+    0
+   ],
+   [
+    3,
+    0,
+    0
+   ],
+   [
+    1,
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "as long as i hold the map, nobody gets left behind.",
+  "note": "(relaxed limits)",
+  "intro": null,
+  "why": "Luật trên bảng: Bước lên một cổng thì đường xuất hiện ở cổng cùng màu bên kia. Mỗi lần đi qua công tắc ◐, tâm trạng đổi. Đường ấm (cam) chỉ đi được khi đang \"lên\" (lúc đầu), đường lạnh (xanh) chỉ đi được khi đang \"xuống\". Có mìn giấu trong vài ô. Số trong ô radar ◇ = số mìn ở 8 ô xung quanh. Đường không được chạm cạnh ô có mìn. Mẹo: Coi hai cổng như một điểm: đường vào một cổng là đi tiếp từ cổng kia."
+ },
+ {
+  "id": "myne_1_1",
+  "girl": "myne",
+  "layer": 1,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "wrap": "x",
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ]
+  ],
+  "dots": [
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 3,
+  "belief": "screen edge? not real. it loops.",
+  "note": "",
+  "intro": "wrapx",
+  "why": "Bảng dạy luật mới. Mép trái và mép phải nối với nhau: đi ra một bên thì vào lại từ bên kia. Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_1_2",
+  "girl": "myne",
+  "layer": 1,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "wrap": "x",
+  "start": [
+   [
+    1,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "dots": [
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    2,
+    3,
+    2
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    1,
+    0,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "wait where was i. oh right. the other side.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mép trái và mép phải nối với nhau: đi ra một bên thì vào lại từ bên kia. Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_1_3",
+  "girl": "myne",
+  "layer": 1,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "wrap": "x",
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    1,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    0,
+    3,
+    1,
+    3
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    2,
+    1,
+    2,
+    2
+   ]
+  ],
+  "dots": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "shortcuts are the only real way to travel.",
+  "note": "(relaxed limits)",
+  "intro": null,
+  "why": "Luật trên bảng: Mép trái và mép phải nối với nhau: đi ra một bên thì vào lại từ bên kia. Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_1_4",
+  "girl": "myne",
+  "layer": 1,
+  "n": 4,
+  "w": 4,
+  "h": 3,
+  "wrap": "x",
+  "start": [
+   [
+    2,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "dots": [
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    3,
+    2,
+    0,
+    2
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i look strong so nobody asks me to carry things.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mép trái và mép phải nối với nhau: đi ra một bên thì vào lại từ bên kia. Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_1_5",
+  "girl": "myne",
+  "layer": 1,
+  "n": 5,
+  "w": 4,
+  "h": 3,
+  "wrap": "x",
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "visitAll": true,
+  "broken": [
+   [
+    2,
+    0,
+    3,
+    0
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    3,
+    2,
+    0,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "100% completion or it doesn't count. ...ooh, a side quest.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mép trái và mép phải nối với nhau: đi ra một bên thì vào lại từ bên kia. Đoạn đứt không đi được. Phải đi qua mọi điểm. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_1_6",
+  "girl": "myne",
+  "layer": 1,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "wrap": "x",
+  "start": [
+   [
+    1,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    0,
+    0,
+    1
+   ],
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    2,
+    4,
+    3,
+    4
+   ],
+   [
+    3,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ]
+  ],
+  "dots": [
+   [
+    3,
+    4
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "if i stop moving, everyone sees how tired i am.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mép trái và mép phải nối với nhau: đi ra một bên thì vào lại từ bên kia. Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_2_1",
+  "girl": "myne",
+  "layer": 2,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "restless": 1,
+  "broken": [
+   [
+    1,
+    1,
+    1,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 3,
+  "belief": "can't. sit. still.",
+  "note": "",
+  "intro": "restless",
+  "why": "Bảng dạy luật mới. Không được đi thẳng quá 1 đoạn liên tiếp: phải rẽ liên tục. Luật trên bảng: Đoạn đứt không đi được."
+ },
+ {
+  "id": "myne_2_2",
+  "girl": "myne",
+  "layer": 2,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "restless": 2,
+  "dots": [
+   [
+    3,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    4,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    4,
+    2,
+    4,
+    3
+   ],
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    2,
+    0,
+    3,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "boredom is a bug. i patch it with noise.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Không được đi thẳng quá 2 đoạn liên tiếp: phải rẽ liên tục."
+ },
+ {
+  "id": "myne_2_3",
+  "girl": "myne",
+  "layer": 2,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "restless": 1,
+  "broken": [
+   [
+    2,
+    1,
+    3,
+    1
+   ]
+  ],
+  "dots": [
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "ten tabs open. all of them important.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Không được đi thẳng quá 1 đoạn liên tiếp: phải rẽ liên tục."
+ },
+ {
+  "id": "myne_2_4",
+  "girl": "myne",
+  "layer": 2,
+  "n": 4,
+  "w": 4,
+  "h": 3,
+  "wrap": "x",
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "restless": 2,
+  "broken": [
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    3,
+    0,
+    3,
+    1
+   ]
+  ],
+  "dots": [
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "loop, turn, loop. like a speedrun.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mép trái và mép phải nối với nhau: đi ra một bên thì vào lại từ bên kia. Chấm đen phải được đi qua. Đoạn đứt không đi được. Không được đi thẳng quá 2 đoạn liên tiếp: phải rẽ liên tục. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_2_5",
+  "girl": "myne",
+  "layer": 2,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "wrap": "x",
+  "start": [
+   [
+    1,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "restless": 1,
+  "dots": [
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    1,
+    4,
+    2,
+    4
+   ],
+   [
+    1,
+    3,
+    1,
+    4
+   ],
+   [
+    0,
+    1,
+    0,
+    2
+   ],
+   [
+    0,
+    3,
+    1,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    1,
+    4
+   ],
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "if i'm loud enough nobody notices i'm fragile.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mép trái và mép phải nối với nhau: đi ra một bên thì vào lại từ bên kia. Chấm đen phải được đi qua. Đoạn đứt không đi được. Không được đi thẳng quá 1 đoạn liên tiếp: phải rẽ liên tục. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_2_6",
+  "girl": "myne",
+  "layer": 2,
+  "n": 6,
+  "w": 4,
+  "h": 3,
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "restless": 3,
+  "visitAll": true,
+  "broken": [
+   [
+    2,
+    0,
+    3,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "finish everything. right now. all of it.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Đoạn đứt không đi được. Phải đi qua mọi điểm. Không được đi thẳng quá 3 đoạn liên tiếp: phải rẽ liên tục."
+ },
+ {
+  "id": "myne_2_7",
+  "girl": "myne",
+  "layer": 2,
+  "n": 7,
+  "w": 4,
+  "h": 4,
+  "wrap": "x",
+  "start": [
+   [
+    0,
+    4
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "restless": 2,
+  "dots": [
+   [
+    3,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    1,
+    4
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    3,
+    3,
+    0,
+    3
+   ],
+   [
+    1,
+    4,
+    2,
+    4
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "keep moving or the lag catches up.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Mép trái và mép phải nối với nhau: đi ra một bên thì vào lại từ bên kia. Chấm đen phải được đi qua. Đoạn đứt không đi được. Không được đi thẳng quá 2 đoạn liên tiếp: phải rẽ liên tục. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_3_1",
+  "girl": "myne",
+  "layer": 3,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "wrap": "xy",
+  "start": [
+   [
+    0,
+    0
+   ]
+  ],
+  "exit": [
+   [
+    1,
+    1
+   ]
+  ],
+  "dots": [
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    2,
+    2,
+    2,
+    0
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "solutions": 3,
+  "belief": "the whole world is one screen. no edges anywhere.",
+  "note": "",
+  "intro": "wrapxy",
+  "why": "Bảng dạy luật mới. Bảng nối cả bốn mép (như màn hình game cũ); lối ra là vòng sáng nằm giữa bảng. Luật trên bảng: Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_3_2",
+  "girl": "myne",
+  "layer": 3,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "wrap": "xy",
+  "start": [
+   [
+    0,
+    0
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    1
+   ]
+  ],
+  "dots": [
+   [
+    2,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    0,
+    1,
+    0,
+    2
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ]
+  ],
+  "solutions": 1,
+  "belief": "if there's no edge, i can't fall off.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Bảng nối cả bốn mép (như màn hình game cũ); lối ra là vòng sáng nằm giữa bảng. Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_3_3",
+  "girl": "myne",
+  "layer": 3,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "wrap": "xy",
+  "start": [
+   [
+    1,
+    2
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "dots": [
+   [
+    2,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    2,
+    2,
+    2,
+    0
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    2,
+    2,
+    3,
+    2
+   ],
+   [
+    0,
+    2,
+    0,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "solutions": 1,
+  "belief": "walls are just level design.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Bảng nối cả bốn mép (như màn hình game cũ); lối ra là vòng sáng nằm giữa bảng. Chấm đen phải được đi qua. Đoạn đứt không đi được. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_3_4",
+  "girl": "myne",
+  "layer": 3,
+  "n": 4,
+  "w": 4,
+  "h": 4,
+  "wrap": "xy",
+  "start": [
+   [
+    0,
+    0
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    2
+   ]
+  ],
+  "restless": 2,
+  "broken": [
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    3,
+    3,
+    0,
+    3
+   ],
+   [
+    2,
+    3,
+    2,
+    0
+   ],
+   [
+    2,
+    2,
+    3,
+    2
+   ]
+  ],
+  "dots": [
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "solutions": 1,
+  "belief": "every direction is forward if you go far enough.",
+  "note": "(relaxed limits)",
+  "intro": null,
+  "why": "Luật trên bảng: Bảng nối cả bốn mép (như màn hình game cũ); lối ra là vòng sáng nằm giữa bảng. Chấm đen phải được đi qua. Đoạn đứt không đi được. Không được đi thẳng quá 2 đoạn liên tiếp: phải rẽ liên tục. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_3_5",
+  "girl": "myne",
+  "layer": 3,
+  "n": 5,
+  "w": 4,
+  "h": 3,
+  "wrap": "xy",
+  "start": [
+   [
+    0,
+    0
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    2
+   ]
+  ],
+  "visitAll": true,
+  "broken": [
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    2,
+    0,
+    3,
+    0
+   ],
+   [
+    3,
+    2,
+    3,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    2
+   ]
+  ],
+  "solutions": 1,
+  "belief": "i have to see every pixel. every one.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Bảng nối cả bốn mép (như màn hình game cũ); lối ra là vòng sáng nằm giữa bảng. Đoạn đứt không đi được. Phải đi qua mọi điểm. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_3_6",
+  "girl": "myne",
+  "layer": 3,
+  "n": 6,
+  "w": 4,
+  "h": 4,
+  "wrap": "xy",
+  "start": [
+   [
+    1,
+    1
+   ]
+  ],
+  "exit": [
+   [
+    3,
+    3
+   ]
+  ],
+  "restless": 2,
+  "dots": [
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    0,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    0,
+    2,
+    0
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    3,
+    1,
+    0,
+    1
+   ],
+   [
+    3,
+    0,
+    0,
+    0
+   ],
+   [
+    2,
+    1,
+    2,
+    2
+   ]
+  ],
+  "sol": [
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "solutions": 1,
+  "belief": "my body can't keep up. so my head runs for both.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Bảng nối cả bốn mép (như màn hình game cũ); lối ra là vòng sáng nằm giữa bảng. Chấm đen phải được đi qua. Đoạn đứt không đi được. Không được đi thẳng quá 2 đoạn liên tiếp: phải rẽ liên tục. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
+ },
+ {
+  "id": "myne_3_7",
+  "girl": "myne",
+  "layer": 3,
+  "n": 7,
+  "w": 4,
+  "h": 4,
+  "wrap": "xy",
+  "start": [
+   [
+    0,
+    3
+   ]
+  ],
+  "exit": [
+   [
+    2,
+    1
+   ]
+  ],
+  "restless": 1,
+  "broken": [
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ]
+  ],
+  "dots": [
+   [
+    3,
+    1
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "sol": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ]
+  ],
+  "solutions": 1,
+  "belief": "as long as the game is running, i get to keep playing.",
+  "note": "",
+  "intro": null,
+  "why": "Luật trên bảng: Bảng nối cả bốn mép (như màn hình game cũ); lối ra là vòng sáng nằm giữa bảng. Chấm đen phải được đi qua. Đoạn đứt không đi được. Không được đi thẳng quá 1 đoạn liên tiếp: phải rẽ liên tục. Mẹo: Đường ngắn nhất có thể là đi xuyên mép."
  }
 ]

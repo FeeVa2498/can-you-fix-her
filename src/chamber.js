@@ -10,11 +10,14 @@ const CH = (() => { try { return JSON.parse(localStorage.getItem(CH_KEY)) || {};
 CH.done = CH.done || {}; CH.opt = Object.assign({ intro: true, debug: false, mem: { tracing_paper: false, queen_piece: false } }, CH.opt || {});
 const chSave = () => { try { localStorage.setItem(CH_KEY, JSON.stringify(CH)); } catch (e) { } };
 const CH_GIRLS = [
-  { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'pencil sketch · two inks' },
-  { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'every point · counting' },
-  { g: 'paige', name: 'Paige', tag: 'Goth' }, { g: 'vel', name: 'Vel', tag: 'Gyaru' }, { g: 'myne', name: 'Myne', tag: 'Tomboy' },
+  { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'pencil · two inks · the other hand · her own shapes' },
+  { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'every point · counting · chess · proof order' },
+  { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'heart pairs · face-down cards · the lens' },
+  { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'portals · mood swings · minefield' },
+  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'looping edges · restless · no edges at all' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
+const hasLens = p => ['hearts', 'dots', 'nums', 'pieces'].some(f => (p[f] || []).some(e => { const o = e[e.length - 1]; return o && typeof o === 'object' && !Array.isArray(o) && o.lens; }));
 const CH_MEM = {
   tracing_paper: { name: 'tracing_paper.mem', ic: 'thread', desc: 'Once per panel: lay it over the board and the next few strokes of the answer show through.' },
   queen_piece: { name: 'queen_piece.mem', ic: 'queen', desc: 'Once per panel: one broken rule is forgiven (like an eraser).' },
@@ -81,7 +84,7 @@ function renderChamber(b) {
   $('#co-title', b).onclick = () => location.reload();
 }
 // tiny preview of a panel (structure only, no answer)
-function miniBoard(p) { return `<svg class="mini" viewBox="${-0.6} ${-0.6} ${p.w + 1.2} ${p.h + 1.2}" aria-hidden="true">${boardSVG(p, { mini: true })}</svg>`; }
+function miniBoard(p) { return `<svg class="mini g-${p.girl}" viewBox="${vb(p, .6)}" aria-hidden="true">${boardSVG(p, { mini: true })}</svg>`; }
 
 /* ---------------- magnifier → projector ---------------- */
 async function startPanel(id) {
@@ -92,12 +95,12 @@ async function startPanel(id) {
 }
 function magnifierIntro(p) {
   return new Promise(res => {
-    const g = p.girl, A = ART[g];
+    const g = p.girl, A = ART[g] || null;
     openWin('feedcam', { title: `Live feed · ${GIRLS[g].id}`, icon: 'feed', w: 260, h: 330, x: 30, y: 30, render: b => {
-      b.innerHTML = `<div class="cam"><div class="cam-room"><img src="${A.body}" alt="${GIRLS[g].name} on the chair"><div class="lens" id="lens"></div></div><div class="cam-cap">● REC · room 0</div></div>`;
+      b.innerHTML = `<div class="cam"><div class="cam-room">${A ? `<img src="${A.body}" alt="${GIRLS[g].name} on the chair">` : `<div class="cam-sil" aria-label="${GIRLS[g].name} on the chair"></div>`}<div class="lens" id="lens"></div></div><div class="cam-cap">● REC · room 0</div></div>`;
     } });
     openWin('magnifier', { title: 'Magnifier.exe', icon: 'img', w: 280, h: 330, x: 310, y: 40, render: b => {
-      b.innerHTML = `<div class="mag"><div class="mag-view" id="magv"><img src="${portraitURL(g, 'neutral')}" alt=""><div class="mag-tissue g-${g}"></div><div class="mag-scan"></div></div>
+      b.innerHTML = `<div class="mag"><div class="mag-view" id="magv">${PORTRAIT[g] ? `<img src="${portraitURL(g, 'neutral')}" alt="">` : '<div class="mag-sil"></div>'}<div class="mag-tissue g-${g}"></div><div class="mag-scan"></div></div>
         <div class="mag-info">region: <b>${REGION[p.layer]}</b> · layer ${p.layer}<br>focus <span id="magf">0</span>%</div>
         <div class="mag-btns"><button class="btn" id="mag-skip">Skip</button><button class="btn primary" id="mag-go" disabled>Project ▸</button></div></div>`;
     } });
@@ -130,7 +133,7 @@ function openProjector(p) {
       b.innerHTML = `<div class="pj g-${p.girl}">
         <div class="pj-top"><span>Layer ${p.layer} · ${REGION[p.layer]} · ${p.n}/${panelsOf(p.girl).filter(x => x.layer === p.layer).length}</span><span class="pj-id">${p.id}</span></div>
         <div class="pj-belief" id="pj-belief"><span>${esc(p.belief || '')}</span></div>
-        <div class="pj-stage"><svg id="pj-svg" viewBox="${-0.75} ${-0.75} ${p.w + 1.5} ${p.h + 1.5}" role="img" aria-label="Puzzle board. Draw a line from the start circle to the exit."></svg></div>
+        <div class="pj-stage"><svg id="pj-svg" viewBox="${vb(p)}" role="img" aria-label="Puzzle board. Draw a line from the start circle to the exit."></svg></div>
         <div class="pj-msg" id="pj-msg" aria-live="polite"></div>
         <div class="pj-solbox sunk" id="pj-solbox" hidden>
           <div class="sb-why"><b>Ý chính</b> ${esc(p.why || 'Chưa có giải thích cho bảng này.')}${p.solutions !== 1 ? ` <i>(Bảng có ${p.solutions} lời giải; đây là một.)</i>` : ''}</div>
@@ -142,6 +145,7 @@ function openProjector(p) {
           <button class="btn" id="pj-reset">Reset</button>
           ${CH.opt.mem.tracing_paper ? `<button class="btn" id="pj-hint" title="${esc(CH_MEM.tracing_paper.desc)}">${icon('thread')} trace</button>` : ''}
           ${CH.opt.mem.queen_piece ? `<span class="pj-tok" id="pj-erase" title="${esc(CH_MEM.queen_piece.desc)}">${icon('queen')} ready</span>` : ''}
+          ${hasLens(p) ? `<button class="btn" id="pj-lens" aria-pressed="false" title="Some symbols only show through the magnifier">${icon('img')} Lens</button>` : ''}
           <span class="sp"></span>
           <button class="btn" id="pj-sol" aria-pressed="false">Solution</button>
           <button class="btn primary" id="pj-next" hidden>Next ▸</button>
@@ -157,125 +161,11 @@ function openProjector(p) {
       $('#sb-next', b).onclick = () => solStep(1);
       $('#sb-play', b).onclick = solPlay;
       $('#pj-next', b).onclick = () => { const L = panelsOf(p.girl).sort((a, c) => a.layer - c.layer || a.n - c.n), i = L.findIndex(x => x.id === p.id); if (L[i + 1]) startPanel(L[i + 1].id); else $('#pj-back', b).click(); };
+      const ln = $('#pj-lens', b); if (ln) ln.onclick = () => { PJ.lensOn = !PJ.lensOn; ln.setAttribute('aria-pressed', String(PJ.lensOn)); ln.classList.toggle('on', PJ.lensOn); PJ.lensAt = PJ.lensAt || [PJ.p.w / 2, PJ.p.h / 2]; drawPJ(); };
       bindPJ($('#pj-svg', b));
       document.addEventListener('keydown', pjKey);
       drawPJ();
     } });
-}
-const COLS = { pink: '#ff6fb5', ink: '#0d0714' };
-function boardSVG(p, o = {}) {
-  const E = PanelEngine, br = E.brokenSet(p), sk = new Set((p.sketch || []).map(e => E.ekey(...e)));
-  const out = [];
-  out.push(`<rect class="pb-bg" x="-0.5" y="-0.5" width="${p.w + 1}" height="${p.h + 1}" rx="0.35"/>`);
-  // tracks
-  for (let y = 0; y <= p.h; y++) for (let x = 0; x <= p.w; x++) {
-    for (const [nx, ny] of [[x + 1, y], [x, y + 1]]) {
-      if (nx > p.w || ny > p.h) continue;
-      const k = E.ekey(x, y, nx, ny);
-      if (br.has(k)) { // broken: two stubs with a gap
-        const mx = (x + nx) / 2, my = (y + ny) / 2, dx = (nx - x) * .32, dy = (ny - y) * .32;
-        out.push(`<line class="pb-trk" x1="${x}" y1="${y}" x2="${mx - dx * .5}" y2="${my - dy * .5}"/><line class="pb-trk" x1="${mx + dx * .5}" y1="${my + dy * .5}" x2="${nx}" y2="${ny}"/>`);
-      } else out.push(`<line class="pb-trk" x1="${x}" y1="${y}" x2="${nx}" y2="${ny}"/>`);
-      if (sk.has(k)) { const i = p.sketch.findIndex(e => E.ekey(...e) === k); out.push(`<line class="pb-sketch${o.bad && o.bad.sketch.has(i) ? ' bad' : ''}" x1="${x}" y1="${y}" x2="${nx}" y2="${ny}"/>`); }
-    }
-  }
-  // exits
-  (p.exit || []).forEach(([x, y]) => { const [dx, dy] = E.exitDir(p, x, y); out.push(`<line class="pb-trk" x1="${x}" y1="${y}" x2="${x + dx * .38}" y2="${y + dy * .38}"/>`); });
-  // cell symbols
-  (p.squares || []).forEach(([x, y, c], i) => out.push(`<rect class="pb-sq${o.bad && o.bad.squares.has(i) ? ' bad' : ''}${o.erased === 'squares:' + i ? ' gone' : ''}" x="${x + .3}" y="${y + .3}" width=".4" height=".4" rx=".09" fill="${COLS[c]}"/>`));
-  (p.nums || []).forEach(([x, y, n], i) => out.push(`<text class="pb-num${o.bad && o.bad.nums.has(i) ? ' bad' : ''}${o.erased === 'nums:' + i ? ' gone' : ''}" x="${x + .5}" y="${y + .5}">${n}</text>`));
-  // visit-all: every node is a small ring waiting to be filled
-  if (p.visitAll) for (let y = 0; y <= p.h; y++) for (let x = 0; x <= p.w; x++) out.push(`<circle class="pb-ring${o.seen && o.seen.has(x + ',' + y) ? ' on' : ''}${o.bad && o.bad.visitAll ? ' bad' : ''}" cx="${x}" cy="${y}" r=".09"/>`);
-  (p.dots || []).forEach(([x, y], i) => out.push(`<circle class="pb-dot${o.bad && o.bad.dots.has(i) ? ' bad' : ''}" cx="${x}" cy="${y}" r=".1"/>`));
-  (p.start || []).forEach(([x, y]) => out.push(`<circle class="pb-start" cx="${x}" cy="${y}" r=".2"/>`));
-  return out.join('');
-}
-function drawPJ() {
-  if (!PJ) return; const p = PJ.p, svg = $('#pj-svg'); if (!svg) return;
-  const bad = { sketch: new Set(), squares: new Set(), nums: new Set(), dots: new Set(), visitAll: false };
-  if (PJ.state === 'fail') PJ.bad.forEach(x => x.kind === 'visitAll' ? bad.visitAll = true : bad[x.kind] && bad[x.kind].add(x.i));
-  const line = pts => pts.map(n => n.join(',')).join(' ');
-  if (PJ.solOn) { drawSol(svg, line); return; }
-  const seen = new Set(PJ.path.map(n => n.join(',')));
-  let h = boardSVG(p, { bad, seen, erased: PJ.erased });
-  if (PJ.hint) h += `<polyline class="pb-hint" points="${line(PJ.hint)}"/>`;
-  if (PJ.path.length) {
-    const last = PJ.path[PJ.path.length - 1];
-    let tail = '';
-    if (PanelEngine.isExit(p, ...last) && (PJ.state === 'win' || PJ.atExit)) { const [dx, dy] = PanelEngine.exitDir(p, ...last); tail = ` ${last[0] + dx * .38},${last[1] + dy * .38}`; }
-    h += `<polyline class="pb-line ${PJ.state}" points="${line(PJ.path)}${tail}"/><circle class="pb-start on ${PJ.state}" cx="${PJ.path[0][0]}" cy="${PJ.path[0][1]}" r=".2"/>`;
-    if (PJ.state !== 'win') h += `<circle class="pb-head ${PJ.state}" cx="${last[0]}" cy="${last[1]}" r=".11"/>`;
-  }
-  svg.innerHTML = h;
-  const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
-  const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';
-}
-// pointer → node coordinates
-function svgPt(svg, e) { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const m = svg.getScreenCTM().inverse(); const r = pt.matrixTransform(m); return [r.x, r.y]; }
-function pjCanStep(n) {
-  const p = PJ.p, last = PJ.path[PJ.path.length - 1], [x, y] = n;
-  if (x < 0 || y < 0 || x > p.w || y > p.h) return false;
-  if (PanelEngine.brokenSet(p).has(PanelEngine.ekey(...last, x, y))) return false;
-  return !PJ.path.some(q => q[0] === x && q[1] === y);
-}
-function pjFollow(fx, fy) {
-  const p = PJ.p;
-  for (let guard = 0; guard < 40; guard++) {
-    const last = PJ.path[PJ.path.length - 1], prev = PJ.path[PJ.path.length - 2];
-    // back up along the line
-    if (prev && Math.hypot(fx - prev[0], fy - prev[1]) < .45) { PJ.path.pop(); SFX.tick(); continue; }
-    const dx = fx - last[0], dy = fy - last[1];
-    PJ.atExit = PanelEngine.isExit(p, ...last) && (() => { const [ex, ey] = PanelEngine.exitDir(p, ...last); return dx * ex + dy * ey > .2; })();
-    const tryAxis = ax => { const d = ax === 'x' ? dx : dy; if (Math.abs(d) < .55) return false; const s = Math.sign(d), n = ax === 'x' ? [last[0] + s, last[1]] : [last[0], last[1] + s]; if (!pjCanStep(n)) return false; PJ.path.push(n); SFX.step(PJ.path.length); return true; };
-    const first = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
-    if (tryAxis(first) || tryAxis(first === 'x' ? 'y' : 'x')) continue;
-    break;
-  }
-}
-function bindPJ(svg) {
-  svg.addEventListener('pointerdown', e => {
-    if (!PJ || PJ.state === 'win' || PJ.solOn) return;
-    const [fx, fy] = svgPt(svg, e), p = PJ.p;
-    const last = PJ.path[PJ.path.length - 1];
-    const st = (p.start || []).find(([x, y]) => Math.hypot(fx - x, fy - y) < .4);
-    if (last && Math.hypot(fx - last[0], fy - last[1]) < .4 && PJ.state !== 'fail') { /* keep drawing from the end */ }
-    else if (st) { PJ.path = [st.slice()]; SFX.click(); }
-    else return;
-    PJ.state = 'draw'; PJ.bad = []; PJ.drawing = true; svg.setPointerCapture(e.pointerId); drawPJ();
-  });
-  svg.addEventListener('pointermove', e => { if (!PJ || !PJ.drawing) return; const [fx, fy] = svgPt(svg, e); pjFollow(fx, fy); drawPJ(); });
-  const up = () => { if (!PJ || !PJ.drawing) return; PJ.drawing = false; const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last)) pjSubmit(); else { PJ.state = 'idle'; drawPJ(); } };
-  svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
-}
-function pjKey(e) {
-  if (!PJ || !WINS.projector) return;
-  if (PJ.solOn) {
-    if (e.key === 'ArrowRight') { e.preventDefault(); solStep(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); solStep(-1); }
-    else if (e.key === ' ') { e.preventDefault(); solPlay(); } else if (e.key === 'Escape') solMode(false);
-    return;
-  }
-  if (PJ.state === 'win') return;
-  if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
-  const D = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
-  if (D) {
-    e.preventDefault();
-    if (!PJ.path.length || PJ.state === 'fail') { PJ.path = [PJ.p.start[0].slice()]; PJ.bad = []; }
-    PJ.state = 'draw';
-    const last = PJ.path[PJ.path.length - 1], prev = PJ.path[PJ.path.length - 2], n = [last[0] + D[0], last[1] + D[1]];
-    if (prev && prev[0] === n[0] && prev[1] === n[1]) PJ.path.pop(); else if (pjCanStep(n)) { PJ.path.push(n); SFX.step(PJ.path.length); }
-    drawPJ();
-  } else if (e.key === 'Enter') { const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last)) { e.preventDefault(); pjSubmit(); } }
-  else if (e.key === 'Backspace') { e.preventDefault(); if (PJ.path.length > 1) PJ.path.pop(); drawPJ(); }
-  else if (e.key === 'Escape') { PJ.path = []; PJ.state = 'idle'; drawPJ(); }
-}
-function useHint() {
-  if (!PJ || PJ.hintUsed || !PJ.p.sol) return;
-  const sol = PJ.p.sol; let k = 0;
-  while (k < PJ.path.length && k < sol.length && sol[k][0] === PJ.path[k][0] && sol[k][1] === PJ.path[k][1]) k++;
-  const from = Math.max(0, k - 1);
-  PJ.hint = sol.slice(from, from + 4); PJ.hintUsed = true; SFX.item();
-  $('#pj-msg').textContent = k < PJ.path.length ? 'The tracing paper shows where your line went wrong.' : 'The next strokes show through the tracing paper.';
-  drawPJ();
 }
 async function pjSubmit() {
   const p = PJ.p, r = PanelEngine.validate(p, PJ.path); PJ.tries++;
