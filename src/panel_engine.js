@@ -218,15 +218,17 @@ const PanelEngine = (() => {
     return rules(p, path, st);
   }
   /* every distinct solution (node paths), up to `limit` */
-  function solve(p, limit = 50) {
+  // budget: give up after this many search steps (sols.capped is then true)
+  function solve(p, limit = 50, budget = Infinity) {
     if (p.boxes) return [];
-    const C = ctx(p), sols = [], N = nodeCount(p);
+    const C = ctx(p), sols = [], N = nodeCount(p); let steps = 0; sols.capped = false;
     (p.avoid || []).forEach(e => C.avoidHard.add(ekey(e[0], e[1], e[2], e[3])));
     const starts = p.mirror ? (p.start || []).slice(0, 1) : (p.start || []);
     for (const s of starts) {
       const st = start(p, s);
       const dfs = () => {
-        if (sols.length >= limit) return;
+        if (sols.length >= limit || sols.capped) return;
+        if (++steps > budget) { sols.capped = true; return; }
         if (p.moves && st.moves > p.moves) return;
         if (canStop(p, st, C) && (!p.visitAll || st.cnt.size >= N) && rules(p, st.path, st).ok) sols.push(st.path.map(n => n.slice()));
         for (const o of options(p, st, C)) { apply(p, st, o); dfs(); undo(p, st); }

@@ -550,13 +550,14 @@ TUT('myne', 3, 4, 'trail', BX(2, 2, [{ trail: true }], EZ({ gen: { walls: .1 }, 
 /* ======================= build ======================= */
 const old = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
 const isKept = p => (p.girl === 'prim' && p.layer <= 2) || (p.girl === 'trix' && p.layer === 1);
-const keep = old.filter(p => isKept(p) || (ONLY && p.girl !== ONLY && !process.env.PART));
+const keep = old.filter(p => isKept(p) || p.edited || (ONLY && p.girl !== ONLY && !process.env.PART));   // hand-edited levels (Level editor) are never regenerated
 keep.forEach(p => p.sol && USED.add(JSON.stringify(p.sol)));
 const out = keep.slice();
 const IDS = process.env.IDS ? process.env.IDS.split(',') : null;
 for (const spec of S) {
   if (ONLY && spec.girl !== ONLY) continue;
   if (IDS && !IDS.includes(spec.id)) continue;
+  if (old.some(o => o.id === spec.id && o.edited)) { console.log('keep (hand-edited)', spec.id); continue; }
   seed = hash(spec.id) || 1;
   const t0 = Date.now(); let p;
   try { p = spec.box ? designBox(spec) : designSingle(spec); } catch (e) { console.log('SKIP', spec.id, e.message); continue; }

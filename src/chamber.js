@@ -4,7 +4,9 @@
    pick a panel, play it (with the magnifier → projector intro).
    Nothing here touches the story save.
    ========================================================= */
-const PANELS = __PANELS__;
+const PANELS_BUILTIN = __PANELS__;
+// the Level editor saves the whole list in this browser; the built-in list is the fallback
+let PANELS = edLoad() || JSON.parse(JSON.stringify(PANELS_BUILTIN));
 const CH_KEY = 'cyfh_chamber';
 const CH = (() => { try { return JSON.parse(localStorage.getItem(CH_KEY)) || {}; } catch (e) { return {}; } })();
 CH.done = CH.done || {}; CH.opt = Object.assign({ intro: true, debug: false, view3d: true, retro: true, mem: { tracing_paper: false, queen_piece: false } }, CH.opt || {});
@@ -74,7 +76,7 @@ function renderChamber(b) {
         <label><input type="checkbox" id="co-debug" ${CH.opt.debug ? 'checked' : ''}> Designer info (solution count, notes, show answer)</label>
         <label><input type="checkbox" id="co-story" ${CH.opt.story ? 'checked' : ''}> Story flow preview (her message between maps, like the real game)</label>
         <div class="chm-mem">${Object.entries(CH_MEM).map(([k, m]) => `<label title="${esc(m.desc)}"><input type="checkbox" data-mem="${k}" ${CH.opt.mem[k] ? 'checked' : ''}> ${icon(m.ic)} ${m.name}</label>`).join('')}</div>
-        <div class="chm-btns"><button class="btn" id="co-reset">Clear progress</button><button class="btn" id="co-title">Back to title</button></div>
+        <div class="chm-btns"><button class="btn primary" id="co-editor">✎ Level editor</button><button class="btn" id="co-reset">Clear progress</button><button class="btn" id="co-title">Back to title</button></div>
       </div>
     </div></div>`;
   $$('[data-g]', b).forEach(x => x.onclick = () => { SFX.click(); chGirl = x.dataset.g; renderChamber(b); });
@@ -83,6 +85,8 @@ function renderChamber(b) {
   $('#co-debug', b).onchange = e => { CH.opt.debug = e.target.checked; chSave(); };
   $('#co-story', b).onchange = e => { CH.opt.story = e.target.checked; chSave(); };
   $$('[data-mem]', b).forEach(x => x.onchange = () => { CH.opt.mem[x.dataset.mem] = x.checked; chSave(); });
+ $('#co-editor', b).onclick = () => { SFX.click(); openEditor(); };
+  $$('[data-p]', b).forEach(x => x.oncontextmenu = e => { e.preventDefault(); openEditor(x.dataset.p); });
   $('#co-reset', b).onclick = () => { CH.done = {}; chSave(); renderChamber(b); };
   $('#co-title', b).onclick = () => location.reload();
 }
@@ -242,7 +246,7 @@ function renderProjector(b, p, idx, nL) {
         <div class="pj-menu" role="menubar">
           <div class="mn"><button class="mn-b">File</button><div class="mn-d">
             <button data-m="undo"><span>Undo move</span><kbd>Z</kbd></button><button data-m="reset"><span>Reset panel</span><kbd>R</kbd></button><hr>
-            <button data-m="back"><span>Back to panels</span><kbd></kbd></button></div></div>
+            <button data-m="edit"><span>Edit this level</span><kbd></kbd></button><button data-m="back"><span>Back to panels</span><kbd></kbd></button></div></div>
           <div class="mn"><button class="mn-b">View</button><div class="mn-d">
             <button data-m="3d"><span>${CH.opt.view3d ? '☑' : '☐'} 3D projection</span><kbd></kbd></button>
             <button data-m="retro"><span>${CH.opt.retro ? '☑' : '☐'} Chunky pixels (98 mode)</span><kbd></kbd></button></div></div>
@@ -280,7 +284,7 @@ function renderProjector(b, p, idx, nL) {
       $('#pj-next', b).onclick = () => goNextPanel();
       $$('[data-m]', b).forEach(el => el.onclick = () => {
         const m = el.dataset.m; el.blur(); SFX.click();
-        if (m === 'undo') { pjUndo(); drawPJ(); } else if (m === 'reset') pjReset(); else if (m === 'back') $('#pj-back', b).click();
+        if (m === 'undo') { pjUndo(); drawPJ(); } else if (m === 'reset') pjReset(); else if (m === 'back') $('#pj-back', b).click(); else if (m === 'edit') openEditor(PANELS.some(x => x.id === p.id) ? p.id : null);
         else if (m === '3d' || m === 'retro') {
           if (m === '3d') CH.opt.view3d = !CH.opt.view3d; else CH.opt.retro = !CH.opt.retro; chSave();
           $('[data-m="3d"] span', b).textContent = `${CH.opt.view3d ? '☑' : '☐'} 3D projection`; $('[data-m=retro] span', b).textContent = `${CH.opt.retro ? '☑' : '☐'} Chunky pixels (98 mode)`;

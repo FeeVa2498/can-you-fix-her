@@ -24,6 +24,7 @@ On GitHub Pages the game reads `data/dialogue.xlsx` fresh on every load (via the
 | `src/levels.json` | Puzzle boards used by the story game (old ColorLine) |
 | `src/panel_engine.js`, `src/panels.json` | Panel engine v3: line panels (WASD or drag; holes, one-way links, portals, overpasses) and box panels (every key moves every box; dash tiles, stops, dash boxes, mirrored twin boxes, move budgets, rope boxes) + the 100 verified panels (20 per girl) played in the Test chamber |
 | `src/chamber*.js` | Title screen (Continue / New game / Test chamber), the Test chamber, panel drawing, Solution mode and `chamber_3d.js` (PROJECT3D.EXE: the panel projected as a 3D vaporwave scene; View menu switches to the flat board) |
+| `src/editor.js` | LevelEditor.exe (Test chamber → ✎ Level editor): edit, reorder, move, create and check panels in the browser; Export gives a new `panels.json` to drop into `src/` |
 | `tools/design_v3.js` | Designs and verifies panels (`node tools/design_v3.js [girl]` → `src/panels.json`); keeps Prim layers 1–2 and Trix layer 1 as they are; box panels are checked by breadth-first search |
 | `src/art/` | Character sprites |
 | `audio/projector_bgm.mp3` | Music for the projector window ("factory at night", provided by the user; re-encoded at 112 kb/s). Loaded by path, so keep it next to `index.html` |
