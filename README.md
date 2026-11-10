@@ -21,9 +21,9 @@ On GitHub Pages the game reads `data/dialogue.xlsx` fresh on every load (via the
 | `src/game.js` | Game code (with placeholders filled in by the build) |
 | `src/shell.html` | Page markup and styles |
 | `src/levels.json` | Puzzle boards used by the story game (old ColorLine) |
-| `src/panel_engine.js`, `src/panels.json` | New line-panel rules + the 100 verified panels (20 per girl) played in the Test chamber |
+| `src/panel_engine.js`, `src/panels.json` | Line-panel engine v3 (WASD moves, holes, one-way links, portals, launch pads, stops, overpasses, exact move counts, twin lines) + the 100 verified panels (20 per girl) played in the Test chamber |
 | `src/chamber*.js` | Title screen (Continue / New game / Test chamber), the Test chamber, panel drawing and Solution mode |
-| `tools/design_all.js` | Designs and verifies panels (`node tools/design_all.js [girl]` → `src/panels.json`) |
+| `tools/design_v3.js` | Designs and verifies panels (`node tools/design_v3.js [girl]` → `src/panels.json`); keeps Prim layers 1–2 and Trix layer 1 as they are |
 | `src/art/` | Character sprites |
 | `build.py` | Builds `index.html` from `src/` + `data/` (`python3 build.py`, needs openpyxl) |
 
