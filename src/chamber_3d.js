@@ -35,7 +35,7 @@ const P3 = (() => {
   // a flat thing pointing along (dx,dz)
   const yawOf = (dx, dz) => Math.atan2(-dx, -dz);
   function numTex(text, fg = '#f4e9ff') {
-    return canvasTex(128, 128, (g, w, h) => { g.fillStyle = fg; g.font = 'bold 92px "Courier New", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, w / 2, h / 2 + 4); });
+    return canvasTex(128, 128, (g, w, h) => { g.fillStyle = fg; g.font = `bold ${text.length > 2 ? 60 : 92}px "Courier New", monospace`; g.strokeStyle = '#1a1024'; g.lineWidth = 8; g.textAlign = 'center'; g.textBaseline = 'middle'; g.strokeText(text, w / 2, h / 2 + 4); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, w / 2, h / 2 + 4); });
   }
 
   /* ---------- the void ---------- */
@@ -88,6 +88,7 @@ const P3 = (() => {
     const ringMats = new Map();
     const CHX = [0x4fd8ff, 0xffa040], plates3 = [], gates3 = [];
     let symKey = '';
+    const numObjs = [];
     if (isBox) buildBoxBoard(); else buildLineBoard();
 
     function plateMats(top, side) { const s = std(side), t = std(top); return [s, s, t, s, s, s]; }
@@ -183,10 +184,10 @@ const P3 = (() => {
       gates3.forEach(gt => { gt.want = shut.has(gt.key) ? 0 : 1; });
     }
     // cell & edge symbols for line panels (rebuilt when the "bad" highlights change)
-    function buildSymbols(bad, seen) {
+    function buildSymbols(bad, seen, used) {
       const key = JSON.stringify(Object.fromEntries(Object.entries(bad).map(([k, v]) => [k, v === true ? 1 : [...v]])));
-      if (key === symKey && symbols.children.length) { refreshRings(seen); return; }
-      symKey = key; symbols.clear(); ringMats.clear();
+      if (key === symKey && symbols.children.length) { refreshRings(seen); refreshNums(used, bad); return; }
+      symKey = key; symbols.clear(); ringMats.clear(); numObjs.length = 0;
       const B = (k, i) => bad[k] && bad[k].has && bad[k].has(i);
       const dashes = (e, color, lift, i, k) => {
         const [x1, y1, x2, y2] = e, hor = x1 !== x2;
@@ -195,12 +196,23 @@ const P3 = (() => {
       (p.sketch || []).forEach((e, i) => dashes(e, 0xfff6d8, .035, i, 'sketch'));
       (p.avoid || []).forEach((e, i) => dashes(e, 0x0d0714, .035, i, 'avoid'));
       (p.squares || []).forEach(([x, y, c], i) => { const m = box(.28, .28, .28, std(B('squares', i) ? 0xff4d7a : c === 'pink' ? 0xff6fb5 : 0x140a22), x + .5, .06, y + .5); symbols.add(edges(m, B('squares', i) ? 0xff4d7a : 0xffffff, .9)); });
-      (p.nums || []).forEach(([x, y, n], i) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(.62, .62), new THREE.MeshBasicMaterial({ map: numTex(String(n), B('nums', i) ? '#ff4d7a' : '#f4e9ff'), transparent: true })); m.rotation.x = -Math.PI / 2; m.position.set(x + .5, -.075, y + .5); symbols.add(m); });
+      (p.nums || []).forEach(([x, y, n], i) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(.66, .66), new THREE.MeshBasicMaterial({ transparent: true })); m.rotation.x = -Math.PI / 2; m.position.set(x + .5, -.075, y + .5); symbols.add(m); numObjs.push({ m, x, y, n, i, key: '' }); });
       (p.dots || []).forEach(([x, y], i) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(.11, .11, .08, 6), std(B('dots', i) ? 0xff4d7a : 0x1a1024)); m.position.set(x, .04, y); symbols.add(edges(m, 0xffffff, .9)); });
       if (p.visitAll) for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) if (E.inside(p, x, y)) {
         const mat = basic(bad.visitAll ? 0xff4d7a : 0xcbb8ea), m = new THREE.Mesh(new THREE.TorusGeometry(.13, .025, 4, 12), mat); m.rotation.x = -Math.PI / 2; m.position.set(x, .03, y); symbols.add(m); ringMats.set(x + ',' + y, mat);
       }
-      refreshRings(seen);
+      refreshRings(seen); refreshNums(used, bad);
+    }
+    // edge counts: "touched/needed", green when exactly right, red when over (or broken on submit)
+    function refreshNums(used, bad) {
+      numObjs.forEach(o => {
+        const c = used ? E.cellSides(o.x, o.y).filter(k => used.has(k)).length : 0;
+        const col = (bad.nums && bad.nums.has && bad.nums.has(o.i)) || c > o.n ? '#ff4d7a' : c === o.n && used ? '#7be3a4' : '#f4e9ff';
+        const label = used ? `${c}/${o.n}` : String(o.n), k = label + col;
+        if (k === o.key) return; o.key = k;
+        if (o.m.material.map) o.m.material.map.dispose();
+        o.m.material.map = numTex(label, col); o.m.material.needsUpdate = true;
+      });
     }
     function refreshRings(seen) { if (!seen) return; ringMats.forEach((m, k) => { if (m.color.getHex() !== 0xff4d7a) m.color.setHex(seen.has(k) ? 0xff8cc6 : 0xcbb8ea); }); }
 
@@ -286,7 +298,7 @@ const P3 = (() => {
       const path = o.path && o.path.length ? o.path : [p.start[0]], jump = o.jump || [false];
       const cls = o.cls || 'draw';
       const sig = JSON.stringify([path, cls, o.hint && o.hint.path, !!o.ghost]);
-      if (sig === L.sig) { buildSymbols(o.bad || {}, o.seen); setSwitches(o.seen || new Set()); return; }
+      if (sig === L.sig) { buildSymbols(o.bad || {}, o.seen, o.used); setSwitches(o.seen || new Set()); return; }
       L.sig = sig;
       const extends_ = L.path.length && path.length > L.path.length && L.path.every((n, i) => n[0] === path[i][0] && n[1] === path[i][1]);
       const from = extends_ ? L.path.length - 1 : null;
@@ -295,7 +307,7 @@ const P3 = (() => {
       L.heads.forEach(h => { h.mat.emissiveIntensity = cls === 'win' ? .6 : .08; h.mat.color.setHex(h === L.heads[0] ? (cls === 'fail' ? 0xff4d7a : cls === 'sol' ? 0x8fdcf7 : cls === 'win' ? 0xfff1b8 : 0xff8cc6) : 0x2b1b3d); });
       if (o.ghost) { ghostMat.opacity = .28; buildRope(L.ghost, o.ghost.path, o.ghost.jump, ghostMat, ghostMat); } else L.ghost.clear();
       if (o.hint) buildRope(L.hint, o.hint.path, o.hint.jump, hintMat, hintMat); else L.hint.clear();
-      buildSymbols(o.bad || {}, o.seen);
+      buildSymbols(o.bad || {}, o.seen, o.used);
       setSwitches(o.seen || new Set()); anim.pulse.forEach(pu => { if (pu.at) pu.on = !!(o.seen && o.seen.has(pu.at)); });
       if (from !== null && !REDUCED) {
         const steps = []; for (let k = from + 1; k < path.length; k++) steps.push(k);
@@ -500,13 +512,14 @@ function draw3D() {
   const bad = {};
   if (PJ.state === 'fail') PJ.bad.forEach(x => { if (x.kind === 'visitAll') bad.visitAll = true; else (bad[x.kind] = bad[x.kind] || new Set()).add(x.i); });
   const path = pjPath(), seen = new Set((path.length ? PanelEngine.lines(p, path).flat() : []).map(n => n.join(',')));
-  V.syncLine({ path, jump: PJ.st ? PJ.st.jump : [false], cls: PJ.state === 'idle' ? 'idle' : PJ.state, hint: PJ.hint, bad, seen });
+  const jump = PJ.st ? PJ.st.jump : [false], used = PanelEngine.usedEdges(p, path, jump);
+  V.syncLine({ path, jump, cls: PJ.state === 'idle' ? 'idle' : PJ.state, hint: PJ.hint, bad, seen, used });
 }
 function drawSol3D() {
   const V = PJ.view, p = PJ.p, E = PanelEngine, k = PJ.solK;
   if (p.boxes) { V.syncBoxes(E.boxReplay(p, p.solIn.slice(0, k)), { cls: k === PJ.solData.n ? 'win' : '' }); return; }
   const { st, ends } = solMovesOf(p), upto = ends[k], pts = p.sol.slice(0, upto + 1);
-  V.syncLine({ path: pts, jump: st.jump.slice(0, upto + 1), cls: 'sol', ghost: { path: p.sol, jump: st.jump }, seen: new Set(E.lines(p, pts).flat().map(n => n.join(','))) });
+  V.syncLine({ path: pts, jump: st.jump.slice(0, upto + 1), cls: 'sol', ghost: { path: p.sol, jump: st.jump }, seen: new Set(E.lines(p, pts).flat().map(n => n.join(','))), used: E.usedEdges(p, pts, st.jump.slice(0, upto + 1)) });
 }
 // a flash over the viewport
 function pj3Flash(text, cls) {

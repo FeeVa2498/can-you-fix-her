@@ -120,7 +120,11 @@ function boardSVG(p, o = {}) {
   (p.exit || []).forEach(([x, y]) => out.push(exitSVG(p, x, y, o.mini)));
   // cells
   (p.squares || []).forEach((e, i) => out.push(`<rect class="pb-sq${B('squares', i)}${gone('squares', i)}" x="${e[0] + .3}" y="${e[1] + .3}" width=".4" height=".4" rx=".09" fill="${COLS[e[2]]}"/>`));
-  (p.nums || []).forEach((e, i) => out.push(`<text class="pb-num${B('nums', i)}${gone('nums', i)}" x="${e[0] + .5}" y="${e[1] + .5}">${e[2]}</text>`));
+  (p.nums || []).forEach((e, i) => {
+    if (!o.used) { out.push(`<text class="pb-num${B('nums', i)}${gone('nums', i)}" x="${e[0] + .5}" y="${e[1] + .5}">${e[2]}</text>`); return; }
+    const c = PanelEngine.cellSides(e[0], e[1]).filter(k => o.used.has(k)).length, st = B('nums', i) || c > e[2] ? ' bad' : c === e[2] ? ' ok' : '';
+    out.push(`<text class="pb-num live${st}${gone('nums', i)}" x="${e[0] + .5}" y="${e[1] + .5}">${c}/${e[2]}</text>`);
+  });
   // nodes
   if (p.visitAll) for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) if (E.inside(p, x, y)) out.push(`<circle class="pb-ring${o.seen && o.seen.has(x + ',' + y) ? ' on' : ''}${o.bad && o.bad.visitAll ? ' bad' : ''}" cx="${x}" cy="${y}" r=".09"/>`);
   (p.stops || []).forEach(([x, y]) => out.push(`<rect class="pb-stop" x="${x - .17}" y="${y - .17}" width=".34" height=".34" rx=".06"/>`));
@@ -178,7 +182,7 @@ function drawPJ() {
   } else {
     const path = pjPath(), lines = path.length ? PanelEngine.lines(p, path) : [];
     const seen = new Set(lines.flat().map(n => n.join(',')));
-    h = boardSVG(p, { bad, seen, erased: PJ.erased });
+    h = boardSVG(p, { bad, seen, erased: PJ.erased, used: PanelEngine.usedEdges(p, path, PJ.st ? PJ.st.jump : [false]) });
     if (PJ.hint) h += lineSVG(p, PJ.hint.path, 'hint', false, PJ.hint.jump);
     if (path.length) {
       const last = path[path.length - 1], out = PJ.state === 'win';

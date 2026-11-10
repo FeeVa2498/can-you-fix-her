@@ -74,7 +74,7 @@ function usesFeatures(p, sol, need = {}) {
 }
 
 /* ---------- clue units that agree with the intended route ---------- */
-function units(p, sol, kinds) {
+function units(p, sol, kinds, spec = {}) {
   const st = E.replay(p, sol), used = E.usedEdges(p, sol, st.jump), U = [];
   const onRoute = new Set(E.lines(p, sol).flat().map(n => n.join(',')));
   const sp = special(p);
@@ -85,7 +85,7 @@ function units(p, sol, kinds) {
     if (k === 'holes') allNodes(p).filter(n => !onRoute.has(n.join(',')) && !sp.has(n.join(','))).forEach(n => U.push({ k, add: [['holes', n]] }));
     if (k === 'dots') sol.slice(1, -1).filter(n => !sp.has(n.join(','))).forEach(n => U.push({ k, add: [['dots', n]] }));
     if (k === 'nums') cells(p).filter(([x, y]) => [[x, y], [x + 1, y], [x, y + 1], [x + 1, y + 1]].every(n => E.inside(p, ...n)))
-      .forEach(([x, y]) => U.push({ k, cells: [[x, y]], add: [['nums', [x, y, E.cellSides(x, y).filter(s => used.has(s)).length]]] }));
+      .map(([x, y]) => [x, y, E.cellSides(x, y).filter(s => used.has(s)).length]).filter(c => c[2] >= (spec.numMin || 0) && c[2] <= (spec.numMax ?? 4)).forEach(c => U.push({ k, cells: [[c[0], c[1]]], add: [['nums', c]] }));
     if (k === 'squares') {
       const reg = E.regions(p, used), side = { 0: 0 }, q = [0];
       const adj = r => { const o = new Set(); reg.list[r].forEach(([x, y]) => [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => { const t = reg.reg[(x + dx) + ',' + (y + dy)]; if (t !== undefined && t !== r) o.add(t); })); return o; };
@@ -113,7 +113,7 @@ function designSingle(spec) {
     routes.sort((a, b) => turns(b) - turns(a) || b.length - a.length);
     routes = shuffle(routes.slice(0, Math.max(6, Math.ceil(routes.length * (spec.top || .3)))));
     for (const sol of routes.slice(0, 25)) {
-      const pool = units(base, sol, kinds);
+      const pool = units(base, sol, kinds, spec);
       const lead = shuffle(pool.filter(u => (spec.lead || []).includes(u.k))), rest = shuffle(pool.filter(u => !(spec.lead || []).includes(u.k)));
       const order = lead.slice(0, spec.leadN || 3).concat(shuffle(rest.concat(lead.slice(spec.leadN || 3))));
       const chosen = [], occ = new Set();
@@ -311,15 +311,25 @@ function designBox(spec) {
       for (let i = 0; i < (g.plates || 1); i++) { const n = pick(); if (n) (p.plates = p.plates || []).push([...n, 0]); }
       if (!(p.plates || []).length) continue;
     } else addSwitches(p, g, () => pick());
+    if (g.sym) {   // a closed maze that looks the same turned upside down: the twin always mirrors the first box exactly
+      const rot = ([x, y]) => [p.w - x, p.h - y], same = (a, b) => a[0] === b[0] && a[1] === b[1];
+      const a = [p.boxes[0].x, p.boxes[0].y], b = rot(a), ga = p.exit[0], gb = rot(ga);
+      if (same(a, b) || same(ga, gb) || same(a, ga) || same(a, gb)) continue;
+      p.boxes[1].x = b[0]; p.boxes[1].y = b[1]; p.exit = [ga, gb];
+      const ks = new Set(), all = [];
+      (p.broken || []).forEach(e => [e, [...rot([e[0], e[1]]), ...rot([e[2], e[3]])]].forEach(f => { const k = E.ekey(...f); if (!ks.has(k)) { ks.add(k); all.push(f); } }));
+      p.broken = all;
+      if (p.broken.length < (g.minWalls || 0)) continue;
+    }
     if (!p.broken.length) delete p.broken;
     const c = checkBox(p, spec); if (!c) continue;
-    if (spec.tut) return finishBox(p, c);
+    if (spec.tut && !spec.pick) return finishBox(p, c);
     c.score = quality(p, c); cands.push({ p, c });
     if (cands.length >= (spec.pool || 36) || Date.now() - T0 > (spec.time || 25000)) break;
   }
   if (cands.length) {
     cands.sort((x, y) => y.c.score - x.c.score);
-    const { p, c } = pruneWalls(cands[0].p, cands[0].c, spec);
+    const { p, c } = spec.gen && spec.gen.sym ? cands[0] : pruneWalls(cands[0].p, cands[0].c, spec);
     return finishBox(p, c);
   }
   throw new Error(spec.id + ': could not design box panel');
@@ -518,7 +528,7 @@ TUT('prim', 1, 3, 'plates', { base: SE(2, 1), gen: { plates: 1, gates: 1 }, uses
 TUT('prim', 2, 1, 'avoid', { base: SE(2, 1), clues: ['avoid'], need: { avoid: 1 }, target: 2 });
 TUT('prim', 2, 3, 'mirror', { base: MIR(2, 2), clues: [], target: 3 });
 TUT('prim', 3, 2, 'swap', { base: SE(3, 1), gen: { plates: 1, gates: 1, toggle: 1 }, uses: { gate: 1, toggle: 1 }, clues: ['broken'], target: 3, intro: 'plates' });
-TUT('trix', 1, 3, 'nums', { base: SE(2, 2), clues: ['nums'], lead: ['nums'], need: { nums: 1 }, target: 3 });
+TUT('trix', 1, 3, 'nums', { base: SE(2, 2), clues: ['nums'], lead: ['nums'], need: { nums: 1 }, numMin: 1, numMax: 1, target: 3 });
 TUT('trix', 2, 2, 'ends', { base: SE(2, 2), gen: { ends: 1 }, clues: ['broken'], target: 4 });
 TUT('trix', 2, 3, 'holes', { base: SE(2, 2), gen: { holes: 1 }, clues: [], target: 6 });
 TUT('trix', 3, 3, 'oneway', { base: SE(2, 2), clues: ['oneway', 'broken'], lead: ['oneway'], need: { oneway: 1 }, target: 3 });
@@ -532,7 +542,7 @@ TUT('vel', 2, 1, 'dash', BX(2, 2, D1, EZ({ gen: { walls: .15 }, maxLen: 3 })));
 TUT('vel', 2, 4, 'plates', BX(3, 1, [{}, {}], EZ({ helpers: 1, gen: { walls: .01, guard: 1, plates: 1 }, uses: { gate: 1 }, maxLen: 5 })));
 TUT('vel', 3, 1, 'budget', BX(3, 1, [{ n: 1 }], EZ({ gen: { walls: .1 }, minLen: 2, maxLen: 4, noBind: true })));
 TUT('vel', 3, 7, 'swap', BX(3, 2, [{}, {}, {}], EZ({ helpers: 1, gen: { walls: .05, guard: 2, toggle: 1, plates: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 2, maxLen: 6, tries: 3000, intro: 'plates' })));
-TUT('myne', 1, 1, 'twin', BX(2, 2, MX, EZ({ gen: { walls: .05 }, minLen: 2, maxLen: 3, intro: 'opp' })));
+TUT('myne', 1, 1, 'twin', BX(4, 4, MX, EZ({ gen: { walls: .22, sym: 1, minWalls: 10 }, minLen: 4, maxLen: 7, maxShortest: 2, pick: 1, pool: 30, intro: 'opp' })));
 TUT('myne', 1, 2, 'nolock', BX(3, 1, MX, EZ({ gen: { walls: .1 }, leave: true, minLen: 2, maxLen: 5 })));
 TUT('myne', 2, 5, 'swap', BX(3, 2, MX, EZ({ gen: { walls: .05, guard: 2, toggle: 1, plates: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 2, maxLen: 6, tries: 3000, intro: 'plates' })));
 TUT('myne', 3, 4, 'trail', BX(2, 2, [{ trail: true }], EZ({ gen: { walls: .1 }, minLen: 2, maxLen: 4 })));
