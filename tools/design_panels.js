@@ -185,5 +185,21 @@ function pickPath(p, filter = () => true, take = 1) {
   add({ ...p, belief: "i can't stop until it's perfect.", note: 'Bảng lõi: phủ kín 25 nút + số.' });
 }
 
+
+// The "key idea" shown in the Test chamber's Solution mode. Written for the layouts the seeds above produce:
+// if a panel is regenerated with a different layout, rewrite its entry.
+const WHY = {
+  prim_1_1: 'Bảng dạy cách chơi. Mọi đoạn nét chì mờ đều phải được tô lại. Ở đây các đoạn chì nối đuôi nhau thành một bậc thang từ vòng tròn tới lối ra: chỉ cần đi theo.',
+  prim_1_2: 'Có 6 đoạn chì rời rạc và chỉ một thứ tự đi qua hết. Mẹo: đoạn chì dọc ở cột giữa phía trên chỉ tô được theo chiều từ trên xuống, vì ngay sau nó là dãy chì ở hàng giữa chạy thẳng tới lối ra. Vậy trước đó đường phải gom hết phần bên trái (chữ L bên dưới, rồi đoạn chì hàng giữa bên trái) rồi mới lên hàng trên cùng.',
+  prim_1_3: 'Bảng dạy luật mực: đường đi cắt bảng thành các vùng, mỗi vùng chỉ được chứa một màu. Ô hồng và ô đen nằm xen kẽ nhau, nên mỗi cặp hồng–đen nằm sát nhau phải bị đường đi chia cắt. Đi thẳng dọc mép không làm được, đường phải luồn vào giữa bảng. Bảng có 4 lời giải, đây là một trong số đó.',
+  prim_1_4: 'Ô đen ở hàng trên cùng bị các ô hồng vây quanh, nên đường phải khoanh riêng nó thành một vùng nhỏ. Hai ô đen bên phải phải nằm cùng phía, tách khỏi ô hồng ở góc trên bên phải. Bảng có 3 lời giải, khác nhau ở phần giữa bảng.',
+  prim_1_5: 'Bảng lõi: nét chì gợi ý một con đường nhưng không đủ, mực mới quyết định. Ô hồng ở góc trên trái có ô đen ngay dưới nên đường phải cắt ngang giữa hai ô đó, vì vậy đoạn chì ở hàng thứ ba dẫn sang trái. Sau đó đường vòng lên hàng trên, tô đoạn chì ở hàng thứ hai từ phải sang trái, đi xuống cột giữa để tách các ô hồng ở giữa khỏi các ô đen hai bên, rồi zigzag ở cột phải để khoanh ô đen bên phải.',
+  trix_1_1: 'Luật phủ kín: phải đi qua mọi điểm (các vòng tròn nhỏ sáng lên khi đi qua). Với 3×3 điểm chỉ cần đi kiểu con rắn, hết hàng này tới hàng kia. Có 2 lời giải đối xứng (theo hàng hoặc theo cột).',
+  trix_1_2: 'Hai đoạn đứt làm điểm thứ hai trong hàng thứ ba chỉ còn đúng 2 đường nối. Một điểm phải đi qua mà chỉ có 2 lối thì đường bắt buộc dùng cả hai lối đó: từ vòng tròn đi lên, rẽ phải, rồi đi xuống. Phần còn lại là đi kiểu con rắn: hết hàng dưới, lên, quay trái, lên tiếp, rồi sang phải tới lối ra.',
+  trix_1_3: 'Luật số: con số là số cạnh của ô mà đường đi chạm vào. Ô "3" ở góc dưới bên trái nghĩa là đường ôm 3 trong 4 cạnh của nó: đi lên, sang phải, rồi đi xuống. Các ô "2" bên cạnh buộc đường lượn qua lại, và ô "1" phía trên cho biết đường chỉ chạm nó đúng một cạnh.',
+  trix_1_4: 'Chỉ có một con số, nhưng kết hợp với luật phủ kín là đủ. Ô "3" ở hàng trên nghĩa là đường phải tạo hình chữ U quanh nó: đi xuống, sang phải, rồi đi lên. Muốn phủ hết 16 điểm mà vẫn tạo được chữ U đó ngay trước lối ra, đường phải đi hết hàng dưới trước, lượn rắn lên, rồi mới làm chữ U.',
+  trix_1_5: 'Bảng lõi: 25 điểm phải đi qua hết, cộng 5 con số. Mẹo 1: góc không phải điểm xuất phát hay lối ra chỉ có 2 lối, nên đường đi qua góc theo đúng 2 lối đó. Mẹo 2: ô "3" ở hàng trên lại là chữ U như bảng trước. Mẹo 3: hai ô "2" bên trái hàng thứ ba buộc đường cắt ngang giữa bảng thay vì đi thẳng lên mép trái, còn hai ô "2" bên phải buộc đường zigzag ở cột phải.',
+};
+P.forEach(p => { if (!WHY[p.id]) throw new Error('no key idea written for ' + p.id); p.why = WHY[p.id]; });
 fs.writeFileSync(path.join(__dirname, '../src/panels.json'), JSON.stringify(P, null, 1));
 console.log('wrote', P.length, 'panels');

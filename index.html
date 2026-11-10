@@ -804,6 +804,24 @@ small.dots{color:var(--pink-deep);font-style:italic}
 .pb-sketch.bad{stroke:#ff4d7a;stroke-dasharray:none}
 .gone{opacity:.15}
 @keyframes badblink{50%{opacity:.2}}
+
+.pj-solbox{display:flex;flex-direction:column;gap:6px;padding:8px 10px;max-height:220px;min-height:0;overflow:hidden;font-size:12px;line-height:1.5}
+.pj-solbox[hidden]{display:none}
+.sb-why{max-height:84px;overflow:auto}
+.sb-why b{display:inline-block;margin-right:4px;padding:0 6px;border-radius:6px;background:var(--pink);color:#fff;font-family:var(--display)}
+.sb-why i{color:var(--ink-soft)}
+.sb-ctrl{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.sb-ctrl .btn{padding:2px 10px}
+.sb-ctrl span{margin-left:auto;font-family:var(--mono);font-size:16px;color:var(--ink-soft)}
+.sb-log{margin:0;padding:0 0 0 44px;overflow:auto;flex:1;min-height:40px;font-family:var(--mono);font-size:16px;line-height:1.15;color:var(--ink-soft)}
+.sb-log li.now{color:var(--ink);background:var(--pink-hi);border-radius:4px}
+.sb-reg{opacity:.35}
+.sb-reg.pink{fill:#ff8cc6}.sb-reg.ink{fill:#000}.sb-reg.none{fill:#cbb8ea}
+.sb-traced{stroke:#8fdcf7;stroke-width:.06;stroke-linecap:round}
+.sb-numok{fill:none;stroke:#7be3a4;stroke-width:.05}
+.pb-line.sol{stroke:#8fdcf7}
+.pb-start.on.sol,.pb-head.sol{fill:#8fdcf7}
+.chm-card small i{color:#c47a00;font-style:normal}
 @media (max-width:720px){.chm{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}.chm-girls{flex-direction:row;overflow-x:auto}.chm-girl small{display:none}}
 @media (prefers-reduced-motion:reduce){.bad,.mag-scan{animation:none}.lens{transition:none}}
 </style>
@@ -2825,7 +2843,7 @@ if (typeof module !== 'undefined') module.exports = PanelEngine;
    pick a panel, play it (with the magnifier → projector intro).
    Nothing here touches the story save.
    ========================================================= */
-const PANELS = [{"id":"prim_1_1","girl":"prim","layer":1,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"sketch":[[0,3,0,2],[0,2,1,2],[1,1,2,1],[2,1,2,0]],"belief":"i only draw on top of other people's lines.","note":"D\u1ea1y c\u00e1ch v\u1ebd \u0111\u01b0\u1eddng + n\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i.","sol":[[0,3],[0,2],[1,2],[1,1],[2,1],[2,0],[3,0]],"solutions":1},{"id":"prim_1_2","girl":"prim","layer":1,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"sketch":[[3,1,4,1],[2,0,2,1],[0,1,1,1],[2,1,3,1],[1,2,0,2],[1,3,1,2]],"belief":"if i lose the line, i'll ruin the whole page.","note":"N\u00e9t ch\u00ec r\u1eddi r\u1ea1c: ph\u1ea3i t\u00ecm \u0111\u01b0\u1eddng duy nh\u1ea5t n\u1ed1i h\u1ebft c\u00e1c m\u1ea3nh.","sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[2,1],[3,1],[4,1],[4,0]],"solutions":1},{"id":"prim_1_3","girl":"prim","layer":1,"n":3,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"squares":[[2,2,"ink"],[1,1,"pink"],[2,0,"pink"],[0,1,"pink"],[2,1,"ink"],[0,2,"ink"]],"belief":"my hand and the other hand must never touch.","note":"D\u1ea1y lu\u1eadt m\u1ef1c: m\u1ed7i v\u00f9ng ch\u1ec9 \u0111\u01b0\u1ee3c m\u1ed9t m\u00e0u. V\u00e0i l\u1eddi gi\u1ea3i (b\u1ea3ng d\u1ea1y lu\u1eadt).","sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[3,1],[2,1],[2,2],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0]],"solutions":4},{"id":"prim_1_4","girl":"prim","layer":1,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"squares":[[3,1,"ink"],[1,1,"pink"],[3,0,"pink"],[3,3,"ink"],[1,3,"pink"],[1,0,"ink"],[2,1,"pink"],[0,0,"pink"],[0,3,"pink"]],"belief":"pink is mine. black is hers. i keep them apart.","note":"Ch\u1ec9 c\u00f3 m\u1ef1c, b\u1ea3ng l\u1edbn h\u01a1n: ch\u1ec9 c\u00f2n r\u1ea5t \u00edt c\u00e1ch chia.","sol":[[0,4],[0,3],[1,3],[2,3],[3,3],[3,4],[4,4],[4,3],[4,2],[4,1],[3,1],[3,2],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[4,0]],"solutions":3},{"id":"prim_1_5","girl":"prim","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"squares":[[3,2,"ink"],[2,3,"pink"],[0,0,"pink"],[2,1,"pink"],[1,2,"ink"],[1,3,"ink"],[0,1,"ink"]],"sketch":[[3,4,4,4],[3,1,2,1],[1,2,0,2],[0,4,1,4]],"belief":"i can't draw. i can only trace.","note":"B\u1ea3ng l\u00f5i: n\u00e9t ch\u00ec + m\u1ef1c. C\u1ea7n d\u00f9ng c\u1ea3 hai lu\u1eadt.","sol":[[0,4],[1,4],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0],[3,1],[2,1],[2,2],[2,3],[2,4],[3,4],[4,4],[4,3],[3,3],[3,2],[4,2],[4,1],[4,0]],"solutions":1},{"id":"trix_1_1","girl":"trix","layer":1,"n":1,"w":2,"h":2,"start":[[0,2]],"exit":[[2,0]],"visitAll":true,"belief":"every point gets visited. no exceptions.","note":"D\u1ea1y lu\u1eadt ph\u1ee7 k\u00edn: \u0111i qua m\u1ecdi n\u00fat. 2 l\u1eddi gi\u1ea3i \u0111\u1ed1i x\u1ee9ng l\u00e0 \u0111\u01b0\u1ee3c.","sol":[[0,2],[1,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0]],"solutions":2},{"id":"trix_1_2","girl":"trix","layer":1,"n":2,"w":3,"h":3,"start":[[0,3]],"exit":[[3,1]],"visitAll":true,"broken":[[1,2,2,2],[1,1,1,2]],"belief":"a gap means i failed.","note":"Ph\u1ee7 k\u00edn + \u0111\u01b0\u1eddng \u0111\u1ee9t: t\u00ecm th\u1ee9 t\u1ef1 duy nh\u1ea5t.","sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[3,1]],"solutions":1},{"id":"trix_1_3","girl":"trix","layer":1,"n":3,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"nums":[[0,2,3],[1,2,2],[1,1,2],[0,1,1]],"belief":"numbers don't lie. people do.","note":"D\u1ea1y lu\u1eadt s\u1ed1: \u0111\u01b0\u1eddng ch\u1ea1m \u0111\u00fang n c\u1ea1nh c\u1ee7a \u00f4.","sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[1,1],[1,0],[2,0],[3,0]],"solutions":1},{"id":"trix_1_4","girl":"trix","layer":1,"n":4,"w":3,"h":3,"start":[[0,3]],"exit":[[3,1]],"visitAll":true,"nums":[[1,0,3]],"belief":"if i count it twice, it is real.","note":"S\u1ed1 + ph\u1ee7 k\u00edn c\u00f9ng l\u00fac.","sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1]],"solutions":1},{"id":"trix_1_5","girl":"trix","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"visitAll":true,"nums":[[3,1,2],[1,2,2],[0,2,2],[3,3,2],[1,0,3]],"belief":"i can't stop until it's perfect.","note":"B\u1ea3ng l\u00f5i: ph\u1ee7 k\u00edn 25 n\u00fat + s\u1ed1.","sol":[[0,4],[0,3],[1,3],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[3,2],[3,3],[2,3],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1}];
+const PANELS = [{"id":"prim_1_1","girl":"prim","layer":1,"n":1,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"sketch":[[0,3,0,2],[0,2,1,2],[1,1,2,1],[2,1,2,0]],"belief":"i only draw on top of other people's lines.","note":"D\u1ea1y c\u00e1ch v\u1ebd \u0111\u01b0\u1eddng + n\u00e9t ch\u00ec m\u1edd ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i.","sol":[[0,3],[0,2],[1,2],[1,1],[2,1],[2,0],[3,0]],"solutions":1,"why":"B\u1ea3ng d\u1ea1y c\u00e1ch ch\u01a1i. M\u1ecdi \u0111o\u1ea1n n\u00e9t ch\u00ec m\u1edd \u0111\u1ec1u ph\u1ea3i \u0111\u01b0\u1ee3c t\u00f4 l\u1ea1i. \u1ede \u0111\u00e2y c\u00e1c \u0111o\u1ea1n ch\u00ec n\u1ed1i \u0111u\u00f4i nhau th\u00e0nh m\u1ed9t b\u1eadc thang t\u1eeb v\u00f2ng tr\u00f2n t\u1edbi l\u1ed1i ra: ch\u1ec9 c\u1ea7n \u0111i theo."},{"id":"prim_1_2","girl":"prim","layer":1,"n":2,"w":4,"h":3,"start":[[0,3]],"exit":[[4,0]],"sketch":[[3,1,4,1],[2,0,2,1],[0,1,1,1],[2,1,3,1],[1,2,0,2],[1,3,1,2]],"belief":"if i lose the line, i'll ruin the whole page.","note":"N\u00e9t ch\u00ec r\u1eddi r\u1ea1c: ph\u1ea3i t\u00ecm \u0111\u01b0\u1eddng duy nh\u1ea5t n\u1ed1i h\u1ebft c\u00e1c m\u1ea3nh.","sol":[[0,3],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[2,1],[3,1],[4,1],[4,0]],"solutions":1,"why":"C\u00f3 6 \u0111o\u1ea1n ch\u00ec r\u1eddi r\u1ea1c v\u00e0 ch\u1ec9 m\u1ed9t th\u1ee9 t\u1ef1 \u0111i qua h\u1ebft. M\u1eb9o: \u0111o\u1ea1n ch\u00ec d\u1ecdc \u1edf c\u1ed9t gi\u1eefa ph\u00eda tr\u00ean ch\u1ec9 t\u00f4 \u0111\u01b0\u1ee3c theo chi\u1ec1u t\u1eeb tr\u00ean xu\u1ed1ng, v\u00ec ngay sau n\u00f3 l\u00e0 d\u00e3y ch\u00ec \u1edf h\u00e0ng gi\u1eefa ch\u1ea1y th\u1eb3ng t\u1edbi l\u1ed1i ra. V\u1eady tr\u01b0\u1edbc \u0111\u00f3 \u0111\u01b0\u1eddng ph\u1ea3i gom h\u1ebft ph\u1ea7n b\u00ean tr\u00e1i (ch\u1eef L b\u00ean d\u01b0\u1edbi, r\u1ed3i \u0111o\u1ea1n ch\u00ec h\u00e0ng gi\u1eefa b\u00ean tr\u00e1i) r\u1ed3i m\u1edbi l\u00ean h\u00e0ng tr\u00ean c\u00f9ng."},{"id":"prim_1_3","girl":"prim","layer":1,"n":3,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"squares":[[2,2,"ink"],[1,1,"pink"],[2,0,"pink"],[0,1,"pink"],[2,1,"ink"],[0,2,"ink"]],"belief":"my hand and the other hand must never touch.","note":"D\u1ea1y lu\u1eadt m\u1ef1c: m\u1ed7i v\u00f9ng ch\u1ec9 \u0111\u01b0\u1ee3c m\u1ed9t m\u00e0u. V\u00e0i l\u1eddi gi\u1ea3i (b\u1ea3ng d\u1ea1y lu\u1eadt).","sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[3,1],[2,1],[2,2],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0]],"solutions":4,"why":"B\u1ea3ng d\u1ea1y lu\u1eadt m\u1ef1c: \u0111\u01b0\u1eddng \u0111i c\u1eaft b\u1ea3ng th\u00e0nh c\u00e1c v\u00f9ng, m\u1ed7i v\u00f9ng ch\u1ec9 \u0111\u01b0\u1ee3c ch\u1ee9a m\u1ed9t m\u00e0u. \u00d4 h\u1ed3ng v\u00e0 \u00f4 \u0111en n\u1eb1m xen k\u1ebd nhau, n\u00ean m\u1ed7i c\u1eb7p h\u1ed3ng\u2013\u0111en n\u1eb1m s\u00e1t nhau ph\u1ea3i b\u1ecb \u0111\u01b0\u1eddng \u0111i chia c\u1eaft. \u0110i th\u1eb3ng d\u1ecdc m\u00e9p kh\u00f4ng l\u00e0m \u0111\u01b0\u1ee3c, \u0111\u01b0\u1eddng ph\u1ea3i lu\u1ed3n v\u00e0o gi\u1eefa b\u1ea3ng. B\u1ea3ng c\u00f3 4 l\u1eddi gi\u1ea3i, \u0111\u00e2y l\u00e0 m\u1ed9t trong s\u1ed1 \u0111\u00f3."},{"id":"prim_1_4","girl":"prim","layer":1,"n":4,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"squares":[[3,1,"ink"],[1,1,"pink"],[3,0,"pink"],[3,3,"ink"],[1,3,"pink"],[1,0,"ink"],[2,1,"pink"],[0,0,"pink"],[0,3,"pink"]],"belief":"pink is mine. black is hers. i keep them apart.","note":"Ch\u1ec9 c\u00f3 m\u1ef1c, b\u1ea3ng l\u1edbn h\u01a1n: ch\u1ec9 c\u00f2n r\u1ea5t \u00edt c\u00e1ch chia.","sol":[[0,4],[0,3],[1,3],[2,3],[3,3],[3,4],[4,4],[4,3],[4,2],[4,1],[3,1],[3,2],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[4,0]],"solutions":3,"why":"\u00d4 \u0111en \u1edf h\u00e0ng tr\u00ean c\u00f9ng b\u1ecb c\u00e1c \u00f4 h\u1ed3ng v\u00e2y quanh, n\u00ean \u0111\u01b0\u1eddng ph\u1ea3i khoanh ri\u00eang n\u00f3 th\u00e0nh m\u1ed9t v\u00f9ng nh\u1ecf. Hai \u00f4 \u0111en b\u00ean ph\u1ea3i ph\u1ea3i n\u1eb1m c\u00f9ng ph\u00eda, t\u00e1ch kh\u1ecfi \u00f4 h\u1ed3ng \u1edf g\u00f3c tr\u00ean b\u00ean ph\u1ea3i. B\u1ea3ng c\u00f3 3 l\u1eddi gi\u1ea3i, kh\u00e1c nhau \u1edf ph\u1ea7n gi\u1eefa b\u1ea3ng."},{"id":"prim_1_5","girl":"prim","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"squares":[[3,2,"ink"],[2,3,"pink"],[0,0,"pink"],[2,1,"pink"],[1,2,"ink"],[1,3,"ink"],[0,1,"ink"]],"sketch":[[3,4,4,4],[3,1,2,1],[1,2,0,2],[0,4,1,4]],"belief":"i can't draw. i can only trace.","note":"B\u1ea3ng l\u00f5i: n\u00e9t ch\u00ec + m\u1ef1c. C\u1ea7n d\u00f9ng c\u1ea3 hai lu\u1eadt.","sol":[[0,4],[1,4],[1,3],[1,2],[0,2],[0,1],[1,1],[1,0],[2,0],[3,0],[3,1],[2,1],[2,2],[2,3],[2,4],[3,4],[4,4],[4,3],[3,3],[3,2],[4,2],[4,1],[4,0]],"solutions":1,"why":"B\u1ea3ng l\u00f5i: n\u00e9t ch\u00ec g\u1ee3i \u00fd m\u1ed9t con \u0111\u01b0\u1eddng nh\u01b0ng kh\u00f4ng \u0111\u1ee7, m\u1ef1c m\u1edbi quy\u1ebft \u0111\u1ecbnh. \u00d4 h\u1ed3ng \u1edf g\u00f3c tr\u00ean tr\u00e1i c\u00f3 \u00f4 \u0111en ngay d\u01b0\u1edbi n\u00ean \u0111\u01b0\u1eddng ph\u1ea3i c\u1eaft ngang gi\u1eefa hai \u00f4 \u0111\u00f3, v\u00ec v\u1eady \u0111o\u1ea1n ch\u00ec \u1edf h\u00e0ng th\u1ee9 ba d\u1eabn sang tr\u00e1i. Sau \u0111\u00f3 \u0111\u01b0\u1eddng v\u00f2ng l\u00ean h\u00e0ng tr\u00ean, t\u00f4 \u0111o\u1ea1n ch\u00ec \u1edf h\u00e0ng th\u1ee9 hai t\u1eeb ph\u1ea3i sang tr\u00e1i, \u0111i xu\u1ed1ng c\u1ed9t gi\u1eefa \u0111\u1ec3 t\u00e1ch c\u00e1c \u00f4 h\u1ed3ng \u1edf gi\u1eefa kh\u1ecfi c\u00e1c \u00f4 \u0111en hai b\u00ean, r\u1ed3i zigzag \u1edf c\u1ed9t ph\u1ea3i \u0111\u1ec3 khoanh \u00f4 \u0111en b\u00ean ph\u1ea3i."},{"id":"trix_1_1","girl":"trix","layer":1,"n":1,"w":2,"h":2,"start":[[0,2]],"exit":[[2,0]],"visitAll":true,"belief":"every point gets visited. no exceptions.","note":"D\u1ea1y lu\u1eadt ph\u1ee7 k\u00edn: \u0111i qua m\u1ecdi n\u00fat. 2 l\u1eddi gi\u1ea3i \u0111\u1ed1i x\u1ee9ng l\u00e0 \u0111\u01b0\u1ee3c.","sol":[[0,2],[1,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0]],"solutions":2,"why":"Lu\u1eadt ph\u1ee7 k\u00edn: ph\u1ea3i \u0111i qua m\u1ecdi \u0111i\u1ec3m (c\u00e1c v\u00f2ng tr\u00f2n nh\u1ecf s\u00e1ng l\u00ean khi \u0111i qua). V\u1edbi 3\u00d73 \u0111i\u1ec3m ch\u1ec9 c\u1ea7n \u0111i ki\u1ec3u con r\u1eafn, h\u1ebft h\u00e0ng n\u00e0y t\u1edbi h\u00e0ng kia. C\u00f3 2 l\u1eddi gi\u1ea3i \u0111\u1ed1i x\u1ee9ng (theo h\u00e0ng ho\u1eb7c theo c\u1ed9t)."},{"id":"trix_1_2","girl":"trix","layer":1,"n":2,"w":3,"h":3,"start":[[0,3]],"exit":[[3,1]],"visitAll":true,"broken":[[1,2,2,2],[1,1,1,2]],"belief":"a gap means i failed.","note":"Ph\u1ee7 k\u00edn + \u0111\u01b0\u1eddng \u0111\u1ee9t: t\u00ecm th\u1ee9 t\u1ef1 duy nh\u1ea5t.","sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[3,1]],"solutions":1,"why":"Hai \u0111o\u1ea1n \u0111\u1ee9t l\u00e0m \u0111i\u1ec3m th\u1ee9 hai trong h\u00e0ng th\u1ee9 ba ch\u1ec9 c\u00f2n \u0111\u00fang 2 \u0111\u01b0\u1eddng n\u1ed1i. M\u1ed9t \u0111i\u1ec3m ph\u1ea3i \u0111i qua m\u00e0 ch\u1ec9 c\u00f3 2 l\u1ed1i th\u00ec \u0111\u01b0\u1eddng b\u1eaft bu\u1ed9c d\u00f9ng c\u1ea3 hai l\u1ed1i \u0111\u00f3: t\u1eeb v\u00f2ng tr\u00f2n \u0111i l\u00ean, r\u1ebd ph\u1ea3i, r\u1ed3i \u0111i xu\u1ed1ng. Ph\u1ea7n c\u00f2n l\u1ea1i l\u00e0 \u0111i ki\u1ec3u con r\u1eafn: h\u1ebft h\u00e0ng d\u01b0\u1edbi, l\u00ean, quay tr\u00e1i, l\u00ean ti\u1ebfp, r\u1ed3i sang ph\u1ea3i t\u1edbi l\u1ed1i ra."},{"id":"trix_1_3","girl":"trix","layer":1,"n":3,"w":3,"h":3,"start":[[0,3]],"exit":[[3,0]],"nums":[[0,2,3],[1,2,2],[1,1,2],[0,1,1]],"belief":"numbers don't lie. people do.","note":"D\u1ea1y lu\u1eadt s\u1ed1: \u0111\u01b0\u1eddng ch\u1ea1m \u0111\u00fang n c\u1ea1nh c\u1ee7a \u00f4.","sol":[[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[2,2],[2,1],[1,1],[1,0],[2,0],[3,0]],"solutions":1,"why":"Lu\u1eadt s\u1ed1: con s\u1ed1 l\u00e0 s\u1ed1 c\u1ea1nh c\u1ee7a \u00f4 m\u00e0 \u0111\u01b0\u1eddng \u0111i ch\u1ea1m v\u00e0o. \u00d4 \"3\" \u1edf g\u00f3c d\u01b0\u1edbi b\u00ean tr\u00e1i ngh\u0129a l\u00e0 \u0111\u01b0\u1eddng \u00f4m 3 trong 4 c\u1ea1nh c\u1ee7a n\u00f3: \u0111i l\u00ean, sang ph\u1ea3i, r\u1ed3i \u0111i xu\u1ed1ng. C\u00e1c \u00f4 \"2\" b\u00ean c\u1ea1nh bu\u1ed9c \u0111\u01b0\u1eddng l\u01b0\u1ee3n qua l\u1ea1i, v\u00e0 \u00f4 \"1\" ph\u00eda tr\u00ean cho bi\u1ebft \u0111\u01b0\u1eddng ch\u1ec9 ch\u1ea1m n\u00f3 \u0111\u00fang m\u1ed9t c\u1ea1nh."},{"id":"trix_1_4","girl":"trix","layer":1,"n":4,"w":3,"h":3,"start":[[0,3]],"exit":[[3,1]],"visitAll":true,"nums":[[1,0,3]],"belief":"if i count it twice, it is real.","note":"S\u1ed1 + ph\u1ee7 k\u00edn c\u00f9ng l\u00fac.","sol":[[0,3],[1,3],[2,3],[3,3],[3,2],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1]],"solutions":1,"why":"Ch\u1ec9 c\u00f3 m\u1ed9t con s\u1ed1, nh\u01b0ng k\u1ebft h\u1ee3p v\u1edbi lu\u1eadt ph\u1ee7 k\u00edn l\u00e0 \u0111\u1ee7. \u00d4 \"3\" \u1edf h\u00e0ng tr\u00ean ngh\u0129a l\u00e0 \u0111\u01b0\u1eddng ph\u1ea3i t\u1ea1o h\u00ecnh ch\u1eef U quanh n\u00f3: \u0111i xu\u1ed1ng, sang ph\u1ea3i, r\u1ed3i \u0111i l\u00ean. Mu\u1ed1n ph\u1ee7 h\u1ebft 16 \u0111i\u1ec3m m\u00e0 v\u1eabn t\u1ea1o \u0111\u01b0\u1ee3c ch\u1eef U \u0111\u00f3 ngay tr\u01b0\u1edbc l\u1ed1i ra, \u0111\u01b0\u1eddng ph\u1ea3i \u0111i h\u1ebft h\u00e0ng d\u01b0\u1edbi tr\u01b0\u1edbc, l\u01b0\u1ee3n r\u1eafn l\u00ean, r\u1ed3i m\u1edbi l\u00e0m ch\u1eef U."},{"id":"trix_1_5","girl":"trix","layer":1,"n":5,"w":4,"h":4,"start":[[0,4]],"exit":[[4,0]],"visitAll":true,"nums":[[3,1,2],[1,2,2],[0,2,2],[3,3,2],[1,0,3]],"belief":"i can't stop until it's perfect.","note":"B\u1ea3ng l\u00f5i: ph\u1ee7 k\u00edn 25 n\u00fat + s\u1ed1.","sol":[[0,4],[0,3],[1,3],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[3,2],[3,3],[2,3],[2,2],[1,2],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[3,1],[4,1],[4,0]],"solutions":1,"why":"B\u1ea3ng l\u00f5i: 25 \u0111i\u1ec3m ph\u1ea3i \u0111i qua h\u1ebft, c\u1ed9ng 5 con s\u1ed1. M\u1eb9o 1: g\u00f3c kh\u00f4ng ph\u1ea3i \u0111i\u1ec3m xu\u1ea5t ph\u00e1t hay l\u1ed1i ra ch\u1ec9 c\u00f3 2 l\u1ed1i, n\u00ean \u0111\u01b0\u1eddng \u0111i qua g\u00f3c theo \u0111\u00fang 2 l\u1ed1i \u0111\u00f3. M\u1eb9o 2: \u00f4 \"3\" \u1edf h\u00e0ng tr\u00ean l\u1ea1i l\u00e0 ch\u1eef U nh\u01b0 b\u1ea3ng tr\u01b0\u1edbc. M\u1eb9o 3: hai \u00f4 \"2\" b\u00ean tr\u00e1i h\u00e0ng th\u1ee9 ba bu\u1ed9c \u0111\u01b0\u1eddng c\u1eaft ngang gi\u1eefa b\u1ea3ng thay v\u00ec \u0111i th\u1eb3ng l\u00ean m\u00e9p tr\u00e1i, c\u00f2n hai \u00f4 \"2\" b\u00ean ph\u1ea3i bu\u1ed9c \u0111\u01b0\u1eddng zigzag \u1edf c\u1ed9t ph\u1ea3i."}];
 const CH_KEY = 'cyfh_chamber';
 const CH = (() => { try { return JSON.parse(localStorage.getItem(CH_KEY)) || {}; } catch (e) { return {}; } })();
 CH.done = CH.done || {}; CH.opt = Object.assign({ intro: true, debug: false, mem: { tracing_paper: false, queen_piece: false } }, CH.opt || {});
@@ -2884,7 +2902,7 @@ function renderChamber(b) {
       <div class="chm-head"><b>${G.name}</b> <span>${esc(G.tag)}${G.rules ? ' · ' + esc(G.rules) : ''}</span></div>
       ${layers.map(L => `<div class="chm-layer"><h4>Layer ${L} · ${REGION[L]}</h4><div class="chm-cards">${list.filter(p => p.layer === L).sort((a, c) => a.n - c.n).map(p => {
         const d = CH.done[p.id];
-        return `<button class="chm-card bevel${d ? ' done' : ''}" data-p="${p.id}"><span class="no">${p.n}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}` : 'not solved<br>&nbsp;'}</small></button>`;
+        return `<button class="chm-card bevel${d ? ' done' : ''}" data-p="${p.id}"><span class="no">${p.n}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}${d.peek ? '<br><i>saw solution</i>' : ''}` : 'not solved<br>&nbsp;'}</small></button>`;
       }).join('')}</div></div>`).join('')}
       <div class="chm-opts sunk">
         <label><input type="checkbox" id="co-intro" ${CH.opt.intro ? 'checked' : ''}> Magnifier → projector intro</label>
@@ -2944,22 +2962,27 @@ function magnifierIntro(p) {
 /* ---------------- projector: the panel ---------------- */
 let PJ = null;
 function openProjector(p) {
-  PJ = { p, path: [], drawing: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null };
-  openWin('projector', { title: `Projector.exe · ${GIRLS[p.girl].name}`, icon: 'brain', w: 560, h: 600, x: CH.opt.intro ? 330 : 120, y: 10,
-    onClose: () => { PJ = null; document.removeEventListener('keydown', pjKey); },
+  PJ = { p, path: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null };
+  openWin('projector', { title: `Projector.exe · ${GIRLS[p.girl].name}`, icon: 'brain', w: 580, h: 660, x: CH.opt.intro ? 330 : 120, y: 10,
+    onClose: () => { if (PJ) clearInterval(PJ.solTimer); PJ = null; document.removeEventListener('keydown', pjKey); },
     render: b => {
       b.innerHTML = `<div class="pj g-${p.girl}">
         <div class="pj-top"><span>Layer ${p.layer} · ${REGION[p.layer]} · ${p.n}/${panelsOf(p.girl).filter(x => x.layer === p.layer).length}</span><span class="pj-id">${p.id}</span></div>
         <div class="pj-belief" id="pj-belief"><span>${esc(p.belief || '')}</span></div>
         <div class="pj-stage"><svg id="pj-svg" viewBox="${-0.75} ${-0.75} ${p.w + 1.5} ${p.h + 1.5}" role="img" aria-label="Puzzle board. Draw a line from the start circle to the exit."></svg></div>
         <div class="pj-msg" id="pj-msg" aria-live="polite"></div>
+        <div class="pj-solbox sunk" id="pj-solbox" hidden>
+          <div class="sb-why"><b>Ý chính</b> ${esc(p.why || 'Chưa có giải thích cho bảng này.')}${p.solutions !== 1 ? ` <i>(Bảng có ${p.solutions} lời giải; đây là một.)</i>` : ''}</div>
+          <div class="sb-ctrl"><button class="btn" id="sb-first" aria-label="Back to start">⏮</button><button class="btn" id="sb-prev" aria-label="Step back">◀</button><button class="btn primary" id="sb-play">▶ Play</button><button class="btn" id="sb-next" aria-label="Step forward">▶</button><span id="sb-k"></span></div>
+          <ol class="sb-log" id="sb-log"></ol>
+        </div>
         <div class="pj-bar">
           <button class="btn" id="pj-back">◂ Panels</button>
           <button class="btn" id="pj-reset">Reset</button>
           ${CH.opt.mem.tracing_paper ? `<button class="btn" id="pj-hint" title="${esc(CH_MEM.tracing_paper.desc)}">${icon('thread')} trace</button>` : ''}
           ${CH.opt.mem.queen_piece ? `<span class="pj-tok" id="pj-erase" title="${esc(CH_MEM.queen_piece.desc)}">${icon('queen')} ready</span>` : ''}
           <span class="sp"></span>
-          ${CH.opt.debug ? `<button class="btn" id="pj-sol">Show answer</button>` : ''}
+          <button class="btn" id="pj-sol" aria-pressed="false">Solution</button>
           <button class="btn primary" id="pj-next" hidden>Next ▸</button>
         </div>
         ${CH.opt.debug ? `<div class="pj-debug">solutions: ${p.solutions} · ${esc(p.note || '')}</div>` : ''}
@@ -2967,7 +2990,11 @@ function openProjector(p) {
       $('#pj-back', b).onclick = () => { closeWin('projector'); ['feedcam', 'magnifier'].forEach(closeWin); focusWin('chamber'); };
       $('#pj-reset', b).onclick = () => { PJ.path = []; PJ.state = 'idle'; PJ.bad = []; drawPJ(); };
       const h = $('#pj-hint', b); if (h) h.onclick = useHint;
-      const s = $('#pj-sol', b); if (s) s.onclick = () => { PJ.showSol = !PJ.showSol; drawPJ(); };
+      $('#pj-sol', b).onclick = () => solMode(!PJ.solOn);
+      $('#sb-first', b).onclick = () => solStep(0, true);
+      $('#sb-prev', b).onclick = () => solStep(-1);
+      $('#sb-next', b).onclick = () => solStep(1);
+      $('#sb-play', b).onclick = solPlay;
       $('#pj-next', b).onclick = () => { const L = panelsOf(p.girl).sort((a, c) => a.layer - c.layer || a.n - c.n), i = L.findIndex(x => x.id === p.id); if (L[i + 1]) startPanel(L[i + 1].id); else $('#pj-back', b).click(); };
       bindPJ($('#pj-svg', b));
       document.addEventListener('keydown', pjKey);
@@ -3006,10 +3033,10 @@ function drawPJ() {
   if (!PJ) return; const p = PJ.p, svg = $('#pj-svg'); if (!svg) return;
   const bad = { sketch: new Set(), squares: new Set(), nums: new Set(), dots: new Set(), visitAll: false };
   if (PJ.state === 'fail') PJ.bad.forEach(x => x.kind === 'visitAll' ? bad.visitAll = true : bad[x.kind] && bad[x.kind].add(x.i));
+  const line = pts => pts.map(n => n.join(',')).join(' ');
+  if (PJ.solOn) { drawSol(svg, line); return; }
   const seen = new Set(PJ.path.map(n => n.join(',')));
   let h = boardSVG(p, { bad, seen, erased: PJ.erased });
-  const line = pts => pts.map(n => n.join(',')).join(' ');
-  if (PJ.showSol && p.sol) h += `<polyline class="pb-ghost" points="${line(p.sol)}"/>`;
   if (PJ.hint) h += `<polyline class="pb-hint" points="${line(PJ.hint)}"/>`;
   if (PJ.path.length) {
     const last = PJ.path[PJ.path.length - 1];
@@ -3046,7 +3073,7 @@ function pjFollow(fx, fy) {
 }
 function bindPJ(svg) {
   svg.addEventListener('pointerdown', e => {
-    if (!PJ || PJ.state === 'win') return;
+    if (!PJ || PJ.state === 'win' || PJ.solOn) return;
     const [fx, fy] = svgPt(svg, e), p = PJ.p;
     const last = PJ.path[PJ.path.length - 1];
     const st = (p.start || []).find(([x, y]) => Math.hypot(fx - x, fy - y) < .4);
@@ -3060,7 +3087,13 @@ function bindPJ(svg) {
   svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
 }
 function pjKey(e) {
-  if (!PJ || !WINS.projector || PJ.state === 'win') return;
+  if (!PJ || !WINS.projector) return;
+  if (PJ.solOn) {
+    if (e.key === 'ArrowRight') { e.preventDefault(); solStep(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); solStep(-1); }
+    else if (e.key === ' ') { e.preventDefault(); solPlay(); } else if (e.key === 'Escape') solMode(false);
+    return;
+  }
+  if (PJ.state === 'win') return;
   if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
   const D = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
   if (D) {
@@ -3070,7 +3103,7 @@ function pjKey(e) {
     const last = PJ.path[PJ.path.length - 1], prev = PJ.path[PJ.path.length - 2], n = [last[0] + D[0], last[1] + D[1]];
     if (prev && prev[0] === n[0] && prev[1] === n[1]) PJ.path.pop(); else if (pjCanStep(n)) { PJ.path.push(n); SFX.step(PJ.path.length); }
     drawPJ();
-  } else if (e.key === 'Enter') { const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last)) pjSubmit(); }
+  } else if (e.key === 'Enter') { const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last)) { e.preventDefault(); pjSubmit(); } }
   else if (e.key === 'Backspace') { e.preventDefault(); if (PJ.path.length > 1) PJ.path.pop(); drawPJ(); }
   else if (e.key === 'Escape') { PJ.path = []; PJ.state = 'idle'; drawPJ(); }
 }
@@ -3093,7 +3126,7 @@ async function pjSubmit() {
   if (ok) {
     PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win();
     const t = performance.now() - PJ.t0, prev = CH.done[p.id];
-    CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries }; chSave();
+    CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries, peek: prev ? prev.peek && PJ.peeked : PJ.peeked }; chSave();
     $('#pj-belief').classList.add('struck');
     if (!PJ.erased) $('#pj-msg').textContent = `${fmtT(t)} · ${PJ.tries} ${PJ.tries === 1 ? 'try' : 'tries'}`;
     $('#pj-next').hidden = false; $('#pj-next').focus();
@@ -3103,6 +3136,126 @@ async function pjSubmit() {
     $('#pj-msg').textContent = '';
     setTimeout(() => { if (PJ && PJ.state === 'fail') { PJ.state = 'idle'; drawPJ(); } }, 1400);
   }
+}
+
+/* =========================================================
+   TEST CHAMBER · Solution mode
+   Replays a panel's answer step by step. Each step says what it
+   achieves (pencil traced, region cut off and its ink, number cell
+   filled), so it works for any panel; panels.json adds a hand-written
+   "key idea" (p.why).
+   ========================================================= */
+function cellRegions(p, used) {
+  const E = PanelEngine, reg = {}, list = []; let r = 0;
+  for (let y = 0; y < p.h; y++) for (let x = 0; x < p.w; x++) {
+    if (reg[x + ',' + y] !== undefined) continue;
+    const st = [[x, y]], cells = [[x, y]]; reg[x + ',' + y] = r;
+    while (st.length) {
+      const [cx, cy] = st.pop();
+      for (const [nx, ny, wall] of [[cx + 1, cy, E.ekey(cx + 1, cy, cx + 1, cy + 1)], [cx - 1, cy, E.ekey(cx, cy, cx, cy + 1)], [cx, cy + 1, E.ekey(cx, cy + 1, cx + 1, cy + 1)], [cx, cy - 1, E.ekey(cx, cy, cx + 1, cy)]]) {
+        if (nx < 0 || ny < 0 || nx >= p.w || ny >= p.h || used.has(wall) || reg[nx + ',' + ny] !== undefined) continue;
+        reg[nx + ',' + ny] = r; st.push([nx, ny]); cells.push([nx, ny]);
+      }
+    }
+    list.push(cells); r++;
+  }
+  return list;
+}
+const cellSides = (E, cx, cy) => [E.ekey(cx, cy, cx + 1, cy), E.ekey(cx, cy + 1, cx + 1, cy + 1), E.ekey(cx, cy, cx, cy + 1), E.ekey(cx + 1, cy, cx + 1, cy + 1)];
+function solEvents(p) {
+  const E = PanelEngine, sol = p.sol, ev = [['Bắt đầu ở vòng tròn.']], used = new Set();
+  const skN = (p.sketch || []).length, sk = new Set((p.sketch || []).map(e => E.ekey(...e)));
+  const sigOf = regs => regs.map(c => c.map(q => q.join(',')).sort().join('|'));
+  let traced = 0, prev = sigOf(cellRegions(p, used));
+  const closed = [];
+  for (let k = 1; k < sol.length; k++) {
+    const key = E.ekey(...sol[k - 1], ...sol[k]), out = [];
+    used.add(key);
+    if (sk.has(key)) { traced++; out.push(`Tô nét chì (${traced}/${skN}).`); }
+    (p.nums || []).forEach(([cx, cy, n]) => {
+      const sides = cellSides(E, cx, cy); if (!sides.includes(key)) return;
+      const c = sides.filter(s => used.has(s)).length;
+      out.push(c === n ? `Ô "${n}" đã đủ ${n} cạnh: không được chạm thêm cạnh nào của nó.` : `Ô "${n}": đã chạm ${c}/${n} cạnh.`);
+    });
+    if ((p.squares || []).length) {
+      const regs = cellRegions(p, used), sig = sigOf(regs);
+      if (regs.length > prev.length) {
+        // the newly separated pieces, except the biggest one (the side still open)
+        const fresh = regs.map((c, i) => ({ c, i })).filter(({ i }) => !prev.includes(sig[i]));
+        const biggest = fresh.reduce((a, b) => (b.c.length > a.c.length ? b : a), fresh[0]);
+        fresh.filter(f => f !== biggest || fresh.length === 1).forEach(({ c }) => {
+          const cols = new Set((p.squares || []).filter(([x, y]) => c.some(q => q[0] === x && q[1] === y)).map(q => q[2]));
+          closed.push({ k, cells: c, col: cols.size === 1 ? [...cols][0] : 'none' });
+          out.push(cols.size === 0 ? 'Cắt ra một vùng trống.' : cols.size === 1 ? `Cắt ra một vùng chỉ có mực ${[...cols][0] === 'pink' ? 'hồng' : 'đen'} ✓` : 'Cắt ra một vùng còn lẫn hai màu: phần sau của đường sẽ chia tiếp nó.');
+        });
+      }
+      prev = sig;
+    }
+    if (k === sol.length - 1) {
+      out.push('Tới lối ra.');
+      if ((p.squares || []).length) {
+        // finish: every region the line made, including the last big one
+        const have = new Set(closed.map(c => c.cells.map(q => q.join(',')).sort().join('|')));
+        const tally = { pink: 0, ink: 0, none: 0 };
+        cellRegions(p, used).forEach(c => {
+          const cols = new Set((p.squares || []).filter(([x, y]) => c.some(q => q[0] === x && q[1] === y)).map(q => q[2]));
+          const col = cols.size === 1 ? [...cols][0] : 'none'; tally[col]++;
+          if (!have.has(c.map(q => q.join(',')).sort().join('|'))) closed.push({ k, cells: c, col });
+        });
+        out.push(`Bảng chia thành ${tally.pink} vùng hồng, ${tally.ink} vùng đen${tally.none ? `, ${tally.none} vùng trống` : ''}: không vùng nào lẫn màu ✓`);
+      }
+      if (p.visitAll) out.push(`Đã đi qua đủ ${E.nodeCount(p)}/${E.nodeCount(p)} điểm.`);
+      if (skN) out.push(`Đã tô đủ ${skN}/${skN} nét chì.`);
+    }
+    if (!out.length) { const dx = sol[k][0] - sol[k - 1][0], dy = sol[k][1] - sol[k - 1][1]; out.push(dx > 0 ? 'Sang phải.' : dx < 0 ? 'Sang trái.' : dy > 0 ? 'Đi xuống.' : 'Đi lên.'); }
+    ev.push(out);
+  }
+  return { ev, closed };
+}
+function solMode(on) {
+  if (!PJ) return;
+  PJ.solOn = on; clearInterval(PJ.solTimer); PJ.solTimer = null;
+  const box = $('#pj-solbox'), btn = $('#pj-sol');
+  box.hidden = !on; btn.setAttribute('aria-pressed', String(on)); btn.textContent = on ? 'Back to puzzle' : 'Solution';
+  $('#sb-play').textContent = '▶ Play';
+  if (on) { PJ.peeked = true; PJ.solData = PJ.solData || solEvents(PJ.p); PJ.solK = 0; renderSolLog(); $('#pj-msg').textContent = ''; }
+  drawPJ();
+}
+function solStep(d, abs) {
+  if (!PJ || !PJ.solOn) return;
+  const n = PJ.p.sol.length - 1;
+  PJ.solK = Math.max(0, Math.min(n, abs ? d : PJ.solK + d));
+  if (PJ.solK >= n && PJ.solTimer) { clearInterval(PJ.solTimer); PJ.solTimer = null; $('#sb-play').textContent = '▶ Play'; }
+  SFX.step(PJ.solK); renderSolLog(); drawPJ();
+}
+function solPlay() {
+  if (!PJ || !PJ.solOn) return;
+  if (PJ.solTimer) { clearInterval(PJ.solTimer); PJ.solTimer = null; $('#sb-play').textContent = '▶ Play'; return; }
+  if (PJ.solK >= PJ.p.sol.length - 1) PJ.solK = 0;
+  $('#sb-play').textContent = '❚❚ Pause';
+  PJ.solTimer = setInterval(() => solStep(1), REDUCED ? 300 : 750);
+}
+function renderSolLog() {
+  const { ev } = PJ.solData, k = PJ.solK, n = PJ.p.sol.length - 1;
+  $('#sb-k').textContent = `step ${k}/${n}`;
+  const log = $('#sb-log');
+  log.innerHTML = ev.slice(0, k + 1).map((lines, i) => `<li class="${i === k ? 'now' : ''}" value="${i}">${lines.map(esc).join(' ')}</li>`).join('');
+  const now = $('li.now', log); if (now) now.scrollIntoView({ block: 'nearest' });
+}
+function drawSol(svg, line) {
+  const E = PanelEngine, p = PJ.p, k = PJ.solK, pts = p.sol.slice(0, k + 1), seen = new Set(pts.map(n => n.join(',')));
+  const used = new Set(); for (let i = 1; i < pts.length; i++) used.add(E.ekey(...pts[i - 1], ...pts[i]));
+  let h = boardSVG(p, { seen });
+  PJ.solData.closed.filter(c => c.k <= k).forEach(c => c.cells.forEach(([x, y]) => { h += `<rect class="sb-reg ${c.col}" x="${x + .06}" y="${y + .06}" width=".88" height=".88" rx=".08"/>`; }));
+  (p.sketch || []).forEach(e => { if (used.has(E.ekey(...e))) h += `<line class="sb-traced" x1="${e[0]}" y1="${e[1]}" x2="${e[2]}" y2="${e[3]}"/>`; });
+  (p.nums || []).forEach(([cx, cy, n]) => { if (cellSides(E, cx, cy).filter(s => used.has(s)).length === n) h += `<circle class="sb-numok" cx="${cx + .5}" cy="${cy + .5}" r=".3"/>`; });
+  h += `<polyline class="pb-ghost" points="${line(p.sol)}"/>`;
+  const done = k === p.sol.length - 1;
+  let tail = '';
+  if (done) { const last = p.sol[k], [dx, dy] = E.exitDir(p, ...last); tail = ` ${last[0] + dx * .38},${last[1] + dy * .38}`; }
+  h += `<polyline class="pb-line sol" points="${line(pts)}${tail}"/><circle class="pb-start on sol" cx="${pts[0][0]}" cy="${pts[0][1]}" r=".2"/>`;
+  if (!done) h += `<circle class="pb-head sol" cx="${pts[k][0]}" cy="${pts[k][1]}" r=".11"/>`;
+  svg.innerHTML = h;
 }
 
 main();

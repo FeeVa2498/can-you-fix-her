@@ -63,7 +63,7 @@ function renderChamber(b) {
       <div class="chm-head"><b>${G.name}</b> <span>${esc(G.tag)}${G.rules ? ' · ' + esc(G.rules) : ''}</span></div>
       ${layers.map(L => `<div class="chm-layer"><h4>Layer ${L} · ${REGION[L]}</h4><div class="chm-cards">${list.filter(p => p.layer === L).sort((a, c) => a.n - c.n).map(p => {
         const d = CH.done[p.id];
-        return `<button class="chm-card bevel${d ? ' done' : ''}" data-p="${p.id}"><span class="no">${p.n}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}` : 'not solved<br>&nbsp;'}</small></button>`;
+        return `<button class="chm-card bevel${d ? ' done' : ''}" data-p="${p.id}"><span class="no">${p.n}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}${d.peek ? '<br><i>saw solution</i>' : ''}` : 'not solved<br>&nbsp;'}</small></button>`;
       }).join('')}</div></div>`).join('')}
       <div class="chm-opts sunk">
         <label><input type="checkbox" id="co-intro" ${CH.opt.intro ? 'checked' : ''}> Magnifier → projector intro</label>
@@ -123,22 +123,27 @@ function magnifierIntro(p) {
 /* ---------------- projector: the panel ---------------- */
 let PJ = null;
 function openProjector(p) {
-  PJ = { p, path: [], drawing: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null };
-  openWin('projector', { title: `Projector.exe · ${GIRLS[p.girl].name}`, icon: 'brain', w: 560, h: 600, x: CH.opt.intro ? 330 : 120, y: 10,
-    onClose: () => { PJ = null; document.removeEventListener('keydown', pjKey); },
+  PJ = { p, path: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null };
+  openWin('projector', { title: `Projector.exe · ${GIRLS[p.girl].name}`, icon: 'brain', w: 580, h: 660, x: CH.opt.intro ? 330 : 120, y: 10,
+    onClose: () => { if (PJ) clearInterval(PJ.solTimer); PJ = null; document.removeEventListener('keydown', pjKey); },
     render: b => {
       b.innerHTML = `<div class="pj g-${p.girl}">
         <div class="pj-top"><span>Layer ${p.layer} · ${REGION[p.layer]} · ${p.n}/${panelsOf(p.girl).filter(x => x.layer === p.layer).length}</span><span class="pj-id">${p.id}</span></div>
         <div class="pj-belief" id="pj-belief"><span>${esc(p.belief || '')}</span></div>
         <div class="pj-stage"><svg id="pj-svg" viewBox="${-0.75} ${-0.75} ${p.w + 1.5} ${p.h + 1.5}" role="img" aria-label="Puzzle board. Draw a line from the start circle to the exit."></svg></div>
         <div class="pj-msg" id="pj-msg" aria-live="polite"></div>
+        <div class="pj-solbox sunk" id="pj-solbox" hidden>
+          <div class="sb-why"><b>Ý chính</b> ${esc(p.why || 'Chưa có giải thích cho bảng này.')}${p.solutions !== 1 ? ` <i>(Bảng có ${p.solutions} lời giải; đây là một.)</i>` : ''}</div>
+          <div class="sb-ctrl"><button class="btn" id="sb-first" aria-label="Back to start">⏮</button><button class="btn" id="sb-prev" aria-label="Step back">◀</button><button class="btn primary" id="sb-play">▶ Play</button><button class="btn" id="sb-next" aria-label="Step forward">▶</button><span id="sb-k"></span></div>
+          <ol class="sb-log" id="sb-log"></ol>
+        </div>
         <div class="pj-bar">
           <button class="btn" id="pj-back">◂ Panels</button>
           <button class="btn" id="pj-reset">Reset</button>
           ${CH.opt.mem.tracing_paper ? `<button class="btn" id="pj-hint" title="${esc(CH_MEM.tracing_paper.desc)}">${icon('thread')} trace</button>` : ''}
           ${CH.opt.mem.queen_piece ? `<span class="pj-tok" id="pj-erase" title="${esc(CH_MEM.queen_piece.desc)}">${icon('queen')} ready</span>` : ''}
           <span class="sp"></span>
-          ${CH.opt.debug ? `<button class="btn" id="pj-sol">Show answer</button>` : ''}
+          <button class="btn" id="pj-sol" aria-pressed="false">Solution</button>
           <button class="btn primary" id="pj-next" hidden>Next ▸</button>
         </div>
         ${CH.opt.debug ? `<div class="pj-debug">solutions: ${p.solutions} · ${esc(p.note || '')}</div>` : ''}
@@ -146,7 +151,11 @@ function openProjector(p) {
       $('#pj-back', b).onclick = () => { closeWin('projector'); ['feedcam', 'magnifier'].forEach(closeWin); focusWin('chamber'); };
       $('#pj-reset', b).onclick = () => { PJ.path = []; PJ.state = 'idle'; PJ.bad = []; drawPJ(); };
       const h = $('#pj-hint', b); if (h) h.onclick = useHint;
-      const s = $('#pj-sol', b); if (s) s.onclick = () => { PJ.showSol = !PJ.showSol; drawPJ(); };
+      $('#pj-sol', b).onclick = () => solMode(!PJ.solOn);
+      $('#sb-first', b).onclick = () => solStep(0, true);
+      $('#sb-prev', b).onclick = () => solStep(-1);
+      $('#sb-next', b).onclick = () => solStep(1);
+      $('#sb-play', b).onclick = solPlay;
       $('#pj-next', b).onclick = () => { const L = panelsOf(p.girl).sort((a, c) => a.layer - c.layer || a.n - c.n), i = L.findIndex(x => x.id === p.id); if (L[i + 1]) startPanel(L[i + 1].id); else $('#pj-back', b).click(); };
       bindPJ($('#pj-svg', b));
       document.addEventListener('keydown', pjKey);
@@ -185,10 +194,10 @@ function drawPJ() {
   if (!PJ) return; const p = PJ.p, svg = $('#pj-svg'); if (!svg) return;
   const bad = { sketch: new Set(), squares: new Set(), nums: new Set(), dots: new Set(), visitAll: false };
   if (PJ.state === 'fail') PJ.bad.forEach(x => x.kind === 'visitAll' ? bad.visitAll = true : bad[x.kind] && bad[x.kind].add(x.i));
+  const line = pts => pts.map(n => n.join(',')).join(' ');
+  if (PJ.solOn) { drawSol(svg, line); return; }
   const seen = new Set(PJ.path.map(n => n.join(',')));
   let h = boardSVG(p, { bad, seen, erased: PJ.erased });
-  const line = pts => pts.map(n => n.join(',')).join(' ');
-  if (PJ.showSol && p.sol) h += `<polyline class="pb-ghost" points="${line(p.sol)}"/>`;
   if (PJ.hint) h += `<polyline class="pb-hint" points="${line(PJ.hint)}"/>`;
   if (PJ.path.length) {
     const last = PJ.path[PJ.path.length - 1];
@@ -225,7 +234,7 @@ function pjFollow(fx, fy) {
 }
 function bindPJ(svg) {
   svg.addEventListener('pointerdown', e => {
-    if (!PJ || PJ.state === 'win') return;
+    if (!PJ || PJ.state === 'win' || PJ.solOn) return;
     const [fx, fy] = svgPt(svg, e), p = PJ.p;
     const last = PJ.path[PJ.path.length - 1];
     const st = (p.start || []).find(([x, y]) => Math.hypot(fx - x, fy - y) < .4);
@@ -239,7 +248,13 @@ function bindPJ(svg) {
   svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
 }
 function pjKey(e) {
-  if (!PJ || !WINS.projector || PJ.state === 'win') return;
+  if (!PJ || !WINS.projector) return;
+  if (PJ.solOn) {
+    if (e.key === 'ArrowRight') { e.preventDefault(); solStep(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); solStep(-1); }
+    else if (e.key === ' ') { e.preventDefault(); solPlay(); } else if (e.key === 'Escape') solMode(false);
+    return;
+  }
+  if (PJ.state === 'win') return;
   if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
   const D = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
   if (D) {
@@ -249,7 +264,7 @@ function pjKey(e) {
     const last = PJ.path[PJ.path.length - 1], prev = PJ.path[PJ.path.length - 2], n = [last[0] + D[0], last[1] + D[1]];
     if (prev && prev[0] === n[0] && prev[1] === n[1]) PJ.path.pop(); else if (pjCanStep(n)) { PJ.path.push(n); SFX.step(PJ.path.length); }
     drawPJ();
-  } else if (e.key === 'Enter') { const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last)) pjSubmit(); }
+  } else if (e.key === 'Enter') { const last = PJ.path[PJ.path.length - 1]; if (last && PanelEngine.isExit(PJ.p, ...last)) { e.preventDefault(); pjSubmit(); } }
   else if (e.key === 'Backspace') { e.preventDefault(); if (PJ.path.length > 1) PJ.path.pop(); drawPJ(); }
   else if (e.key === 'Escape') { PJ.path = []; PJ.state = 'idle'; drawPJ(); }
 }
@@ -272,7 +287,7 @@ async function pjSubmit() {
   if (ok) {
     PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win();
     const t = performance.now() - PJ.t0, prev = CH.done[p.id];
-    CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries }; chSave();
+    CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries, peek: prev ? prev.peek && PJ.peeked : PJ.peeked }; chSave();
     $('#pj-belief').classList.add('struck');
     if (!PJ.erased) $('#pj-msg').textContent = `${fmtT(t)} · ${PJ.tries} ${PJ.tries === 1 ? 'try' : 'tries'}`;
     $('#pj-next').hidden = false; $('#pj-next').focus();

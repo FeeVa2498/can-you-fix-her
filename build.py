@@ -10,7 +10,7 @@ P = lambda *a: os.path.join(ROOT, *a)
 CSV = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal']
 
 # game + the new panel engine + title/test chamber; main() runs last
-js = '\n'.join(open(P('src', f), encoding='utf-8').read() for f in ('game.js', 'panel_engine.js', 'chamber.js')) + '\nmain();\n'
+js = '\n'.join(open(P('src', f), encoding='utf-8').read() for f in ('game.js', 'panel_engine.js', 'chamber.js', 'chamber_solution.js')) + '\nmain();\n'
 js = js.replace('__PANELS__', json.dumps(json.load(open(P('src', 'panels.json'))), separators=(',', ':')))
 def sheet_csv(ws):
     import csv, io
