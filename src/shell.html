@@ -961,6 +961,20 @@ rect.pb-head{stroke:#fff;stroke-width:.03}
 .mg-lock .bar{flex:1;height:12px;border:2px solid var(--line);border-radius:3px;background:var(--cream);overflow:hidden}
 .mg-lock .bar i{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,var(--pink) 0 8px,var(--sky) 8px 16px)}
 @media (prefers-reduced-motion:reduce){.mg *{animation:none!important}}
+
+/* her message between maps (story flow) */
+.pj-chat{position:absolute;right:10px;bottom:10px;width:min(300px,70%);max-height:70%;display:flex;flex-direction:column;background:var(--cream);border:2px solid var(--line);border-radius:10px;box-shadow:4px 4px 0 var(--shadow);font-family:var(--ui);color:var(--ink);z-index:3;animation:pcin .25s ease-out}
+.pj-chat.out{opacity:0;transform:translateY(8px);transition:.25s}
+@keyframes pcin{from{opacity:0;transform:translateY(12px)}}
+.pc-head{display:flex;align-items:center;gap:6px;padding:4px 8px;background:var(--pink-hi);border-bottom:2px solid var(--line-soft);border-radius:8px 8px 0 0}
+.pc-head img,.pc-head i{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);background:var(--lav-hi);image-rendering:pixelated;font-style:normal;text-align:center;line-height:20px}
+.pc-head span{margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--ink-soft)}
+.pc-log{flex:1;overflow:auto;padding:6px 8px;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.pc-m{max-width:85%;padding:3px 8px;border-radius:9px;background:var(--lav-hi);border:1px solid var(--line-soft);align-self:flex-start}
+.pc-m.you{align-self:flex-end;background:var(--pink-hi)}
+.pc-m.sys{align-self:center;background:none;border:0;font-family:var(--mono);color:var(--ink-soft)}
+.pc-act{display:flex;flex-wrap:wrap;gap:4px;padding:4px 8px 8px;justify-content:flex-end}
+.pc-act:empty{display:none}
 .pj-keys{display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:15px;color:var(--ink-soft)}
 .pj-keys b{font-weight:normal;color:var(--ink)}
 .pj-keys b.bad{color:#d0305a}

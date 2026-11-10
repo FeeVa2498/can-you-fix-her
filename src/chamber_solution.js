@@ -90,7 +90,7 @@ function boxSolEvents(p) {
 }
 function solMode(on) {
   if (!PJ) return;
-  PJ.solOn = on; clearInterval(PJ.solTimer); PJ.solTimer = null;
+  PJ.solOn = on; clearInterval(PJ.solTimer); PJ.solTimer = null; clearTimeout(PJ.advT);
   const box = $('#pj-solbox'), btn = $('#pj-sol');
   box.hidden = !on; btn.setAttribute('aria-pressed', String(on)); btn.textContent = on ? 'Back to puzzle' : 'Solution';
   $('#sb-play').textContent = '▶ Play';

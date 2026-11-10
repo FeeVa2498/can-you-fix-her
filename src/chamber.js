@@ -72,6 +72,7 @@ function renderChamber(b) {
       <div class="chm-opts sunk">
         <label><input type="checkbox" id="co-intro" ${CH.opt.intro ? 'checked' : ''}> Magnifier → projector intro</label>
         <label><input type="checkbox" id="co-debug" ${CH.opt.debug ? 'checked' : ''}> Designer info (solution count, notes, show answer)</label>
+        <label><input type="checkbox" id="co-story" ${CH.opt.story ? 'checked' : ''}> Story flow preview (her message between maps, like the real game)</label>
         <div class="chm-mem">${Object.entries(CH_MEM).map(([k, m]) => `<label title="${esc(m.desc)}"><input type="checkbox" data-mem="${k}" ${CH.opt.mem[k] ? 'checked' : ''}> ${icon(m.ic)} ${m.name}</label>`).join('')}</div>
         <div class="chm-btns"><button class="btn" id="co-reset">Clear progress</button><button class="btn" id="co-title">Back to title</button></div>
       </div>
@@ -80,6 +81,7 @@ function renderChamber(b) {
   $$('[data-p]', b).forEach(x => x.onclick = () => { SFX.click(); startPanel(x.dataset.p); });
   $('#co-intro', b).onchange = e => { CH.opt.intro = e.target.checked; chSave(); };
   $('#co-debug', b).onchange = e => { CH.opt.debug = e.target.checked; chSave(); };
+  $('#co-story', b).onchange = e => { CH.opt.story = e.target.checked; chSave(); };
   $$('[data-mem]', b).forEach(x => x.onchange = () => { CH.opt.mem[x.dataset.mem] = x.checked; chSave(); });
   $('#co-reset', b).onclick = () => { CH.done = {}; chSave(); renderChamber(b); };
   $('#co-title', b).onclick = () => location.reload();
@@ -90,7 +92,8 @@ function miniBoard(p) { return `<svg class="mini g-${p.girl}" viewBox="${vb(p, .
 /* ---------------- magnifier → projector ---------------- */
 async function startPanel(id) {
   const p = PANELS.find(x => x.id === id); if (!p) return;
-  ['projector', 'feedcam', 'magnifier'].forEach(closeWin);
+  if (WINS.projector) { openProjector(p); return; }   // already projecting: swap the map in place, no new scan
+  ['feedcam', 'magnifier'].forEach(closeWin);
   if (CH.opt.intro) await magnifierIntro(p);
   openProjector(p);
 }
@@ -223,11 +226,18 @@ function bgmMute() { if (BGM.el && BGM.want) bgmRun(); }
 /* ---------------- projector: the panel ---------------- */
 let PJ = null;
 function openProjector(p) {
+  if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
+  const W = WINS.projector;
   PJ = { p, st: null, bs: p.boxes ? PanelEngine.boxStart(p) : null, bsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null, view: null };
   const inL = panelsOf(p.girl).filter(x => x.layer === p.layer).sort((a, c) => a.n - c.n), nL = inL.length, idx = inL.findIndex(x => x.id === p.id) + 1;
-  openWin('projector', { title: `PROJECT3D.EXE · ${GIRLS[p.girl].name}`, icon: 'brain', w: 600, h: 720, x: CH.opt.intro ? 320 : 120, y: 6,
-    onClose: () => { bgmOff(); if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); if (PJ.view) PJ.view.dispose(); } PJ = null; document.removeEventListener('keydown', pjKey); },
-    render: b => {
+  const title = `PROJECT3D.EXE · ${GIRLS[p.girl].name}`;
+  if (W) { W.o.title = title; W.el.querySelector('.tt').textContent = title; renderProjector(W.body, p, idx, nL); focusWin('projector'); return; }
+  openWin('projector', { title, icon: 'brain', w: 600, h: 720, x: CH.opt.intro ? 320 : 120, y: 6,
+    onClose: () => { bgmOff(); if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); } PJ = null; document.removeEventListener('keydown', pjKey); },
+    render: b => renderProjector(b, p, idx, nL) });
+}
+function renderProjector(b, p, idx, nL) {
+    {
       b.innerHTML = `<div class="pj pj3 g-${p.girl}">
         <div class="pj-menu" role="menubar">
           <div class="mn"><button class="mn-b">File</button><div class="mn-d">
@@ -267,7 +277,7 @@ function openProjector(p) {
       $('#sb-prev', b).onclick = () => solStep(-1);
       $('#sb-next', b).onclick = () => solStep(1);
       $('#sb-play', b).onclick = solPlay;
-      $('#pj-next', b).onclick = () => { const L = panelsOf(p.girl).sort((a, c) => a.layer - c.layer || a.n - c.n), i = L.findIndex(x => x.id === p.id); if (L[i + 1]) startPanel(L[i + 1].id); else $('#pj-back', b).click(); };
+      $('#pj-next', b).onclick = () => goNextPanel();
       $$('[data-m]', b).forEach(el => el.onclick = () => {
         const m = el.dataset.m; el.blur(); SFX.click();
         if (m === 'undo') { pjUndo(); drawPJ(); } else if (m === 'reset') pjReset(); else if (m === 'back') $('#pj-back', b).click();
@@ -277,10 +287,56 @@ function openProjector(p) {
           if (m === 'retro' && PJ.view) PJ.view.setRetro(CH.opt.retro); else mountStage();
         }
       });
-      document.addEventListener('keydown', pjKey);
+      document.removeEventListener('keydown', pjKey); document.addEventListener('keydown', pjKey);
       mountStage(); bgmOn();
       PJ.fpsTimer = setInterval(() => { const f = $('#pj-fps'); if (f && PJ) f.textContent = PJ.view ? (PJ.view.fps() ? `WebGL · ${PJ.view.fps()} fps` : 'WebGL') : '2D view'; }, 1000);
-    } });
+    }
+}
+/* after a win the window stays: the next map is projected in place.
+   With "story flow" on, the girl sends a message first (as the real game will do). */
+function nextPanelOf(p) { const L = panelsOf(p.girl).sort((a, c) => a.layer - c.layer || a.n - c.n); return L[L.findIndex(x => x.id === p.id) + 1] || null; }
+function goNextPanel() {
+  if (!PJ) return; clearTimeout(PJ.advT);
+  const nx = nextPanelOf(PJ.p);
+  if (nx) { SFX.click(); openProjector(nx); }
+  else $('#pj-back').click();
+}
+async function afterWin(p) {
+  const me = PJ, nx = nextPanelOf(p);
+  await wait(PJ.view && !REDUCED ? 2300 : 900);
+  if (PJ !== me || PJ.solOn || PJ.state !== 'win') return;
+  if (CH.opt.story) { await storyMessage(p); if (PJ !== me || PJ.solOn || PJ.state !== 'win') return; }
+  if (!nx) { $('#pj-msg').textContent = `Every map in ${GIRLS[p.girl].name}'s head is clear.`; $('#pj-next').textContent = '◂ Panels'; return; }
+  let k = 2; const tick = () => { if (PJ !== me || PJ.solOn || PJ.state !== 'win') return; if (k <= 0) { goNextPanel(); return; } $('#pj-msg').textContent = `next map in ${k}…`; k--; PJ.advT = setTimeout(tick, 600); };
+  tick();
+}
+// a chat strip inside the projector: her reaction lines, your choice, her reply
+function storyMessage(p) {
+  return new Promise(res => {
+    const g = p.girl, vp = $('#pj-vp'); if (!vp) { res(); return; }
+    let arr = typeof sesEntries === 'function' ? sesEntries(g, 'react', e => !e.trigger || /^(WIN|PERFECT)_/.test(e.trigger)) : [];
+    const steps = arr.length ? playSteps(pickRnd(arr).steps) : [FILLER];
+    const A = ART[g], box = document.createElement('div'); box.className = 'pj-chat';
+    box.innerHTML = `<div class="pc-head">${A ? `<img src="${A.face}" alt="">` : '<i>?</i>'}<b>${esc(GIRLS[g].name)}</b><span>Yappy Yappy · now</span></div><div class="pc-log"></div><div class="pc-act"></div>`;
+    vp.appendChild(box);
+    const log = $('.pc-log', box), act = $('.pc-act', box);
+    const say = (txt, who) => { const m = document.createElement('div'); m.className = 'pc-m ' + (who || 'her'); m.textContent = txt; log.appendChild(m); log.scrollTop = 1e6; if (who !== 'you') SFX.chime && SFX.chime(); };
+    const clean = l => Array.isArray(l) ? [l[0] === 'sys' ? 'sys' : 'her', String(l[1]).replace(/^\{\w+\}/, '')] : ['her', String(l).replace(/^\{\w+\}/, '')];
+    const done = () => { box.classList.add('out'); setTimeout(() => { box.remove(); res(); }, 250); };
+    (async () => {
+      for (const st of steps) {
+        for (const l of st.lines || []) { const [w, t] = clean(l); if (!t.trim()) continue; await wait(REDUCED ? 50 : 650); if (!box.isConnected) return; say(t, w); }
+        const ch = (st.choices || []).filter(c => !c.req || cond(c.req.cond));
+        if (ch.length) {
+          const c = await new Promise(r2 => { act.innerHTML = ''; ch.forEach(c => { const bt = document.createElement('button'); bt.className = 'btn'; bt.textContent = c.t; bt.onclick = () => { SFX.click(); r2(c); }; act.appendChild(bt); }); act.firstChild.focus(); });
+          act.innerHTML = ''; say(c.t, 'you');
+          for (const l of c.r || []) { const [w, t] = clean(l); if (!t.trim()) continue; await wait(REDUCED ? 50 : 700); say(t, w); }
+        }
+      }
+      await wait(REDUCED ? 50 : 500);
+      act.innerHTML = '<button class="btn primary">Next map ▸</button>'; act.firstChild.onclick = () => { SFX.click(); done(); }; act.firstChild.focus();
+    })();
+  });
 }
 // the projection: 3D when possible, otherwise the flat board
 function mountStage() {
@@ -307,8 +363,9 @@ async function pjSubmit() {
     const t = performance.now() - PJ.t0, prev = CH.done[p.id];
     CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries, peek: prev ? prev.peek && PJ.peeked : PJ.peeked }; chSave();
     if (!PJ.erased) $('#pj-msg').textContent = `${fmtT(t)} · ${PJ.tries} ${PJ.tries === 1 ? 'try' : 'tries'}`;
-    $('#pj-next').hidden = false; $('#pj-next').focus();
+    $('#pj-next').hidden = false;
     UPD.forEach(f => f());
+    afterWin(p);
   } else {
     PJ.state = 'fail'; PJ.bad = r.bad; drawPJ(); SFX.buzz(); if (PJ.view) pj3Flash('RULE VIOLATION', 'fail');
     $('#pj-msg').textContent = '';
