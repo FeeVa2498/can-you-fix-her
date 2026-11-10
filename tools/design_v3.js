@@ -174,9 +174,115 @@ function gateUse(p, inputs, u) {
   }
   return hit[0] >= (u.gate || 0) && hit[1] >= (u.toggle || 0);
 }
+/* The candidate checks every box panel must pass. Returns { r, best, L, luck } or null. */
+function checkBox(p, spec) {
+  const maxL = spec.maxLen || 20;
+  let r = E.boxSolve(p, maxL, 8, 200000);
+  if (!r.wins.length || r.capped) return null;
+  // move budgets: each box gets exactly the moves it makes in a shortest answer
+  if (spec.boxes.some(b => b.n)) {
+    if (!p.boxes.some(b => b.n != null)) {
+      const st = boxStats(p, r.wins[0]);
+      let bad = false;
+      spec.boxes.forEach((b, i) => { if (b.n) { if (!st.movesBy[i]) bad = true; p.boxes[i].n = st.movesBy[i]; } });
+      if (bad) return null;
+      const r0 = r; r = E.boxSolve(p, maxL, 8, 200000);
+      if (!r.wins.length || r.capped) return null;
+      if (!spec.noBind && !(r0.wins.length > r.wins.length || randomPlay({ ...p, boxes: p.boxes.map(b => ({ ...b, n: undefined })) }, r.wins[0].length * 2, 400) > 2 * randomPlay(p, r.wins[0].length * 2, 400))) return null;
+    }
+  }
+  const best = r.wins[0], L = best.length;
+  if (L < (spec.minLen || 4)) return null;
+  if (r.wins.length > (spec.maxShortest || 3)) return null;
+  const st = boxStats(p, best), tr = st.s.tracks.flat(), allJ = st.s.jumps.flat();
+  const u = spec.uses || {};
+  if (u.pads && tr.filter(n => E.padAt(p, ...n)).length < u.pads) return null;
+  if (u.stops && !tr.some(n => E.isStop(p, ...n))) return null;
+  if (u.slide && !st.s.tracks.some(t => t.some((n, i) => { if (i < 2) return false; const pd = E.padAt(p, ...t[i - 1]); return pd && n[0] - t[i - 1][0] === pd[0] && n[1] - t[i - 1][1] === pd[1]; }))) return null;
+  if (u.portals && !allJ.some(Boolean)) return null;
+  if (u.oneway && !(p.oneway || []).some(e => st.s.tracks.some(t => t.some((n, i) => i && t[i - 1][0] === e[0] && t[i - 1][1] === e[1] && n[0] === e[2] && n[1] === e[3])))) return null;
+  if (spec.helpers && !st.movesBy[spec.boxes.length - 1]) return null;
+  if ((u.gate || u.toggle) && !gateUse(p, best, u)) return null;
+  if (spec.leave && !st.left) return null;
+  if (st.desync < (spec.desync || 0)) return null;
+  const luck = randomPlay(p, L * 2, 600);
+  if (luck > (spec.luck || .03)) return null;
+  return { r, best, L, luck };
+}
+function finishBox(p, c) {
+  const luck = randomPlay(p, c.L * 2);
+  Object.assign(p, { solIn: c.best, solutions: c.r.wins.length, minMoves: c.L, luck: Math.round(luck * 1000) / 10 });
+  if (c.score !== undefined) p.quality = Math.round(c.score * 10) / 10;
+  return p;
+}
+/* How much thinking a box panel asks for:
+   - bits: along the answer, how often exactly one of several different moves keeps you on a shortest route
+   - dead: share of reachable positions from which the goals can no longer be reached (traps)
+   - greedy: how often "walk every box toward the nearest goal" solves it (bad)
+   - plus length, few answers, little clutter */
+const bkey = s => s.pos.map(q => q.join(',')).join('/') + '|' + s.left.join(',') + (s.trail.size ? '#' + [...s.trail].sort().join(';') : '');
+function graphOf(p, cap = 30000) {
+  const s0 = E.boxStart(p); s0.tracks = s0.jumps = null;
+  const G = new Map([[bkey(s0), { s: s0, succ: [], win: E.boxWon(p, s0) }]]), q = [s0];
+  let capped = false;
+  while (q.length) {
+    const s = q.shift(), node = G.get(bkey(s)); if (node.win) continue;
+    for (const ch of 'RLDU') {
+      const r = E.boxStep(p, s, E.DK[ch], false); if (!r.moved.some(Boolean)) continue;
+      const k = bkey(r.state); node.succ.push(k);
+      if (!G.has(k)) { if (G.size >= cap) { capped = true; continue; } G.set(k, { s: r.state, succ: [], win: E.boxWon(p, r.state) }); q.push(r.state); }
+    }
+  }
+  // distance to a win, backwards
+  const back = new Map(); G.forEach((n, k) => n.succ.forEach(t => { if (!back.has(t)) back.set(t, []); back.get(t).push(k); }));
+  const dist = new Map(), bq = []; G.forEach((n, k) => { if (n.win) { dist.set(k, 0); bq.push(k); } });
+  while (bq.length) { const k = bq.shift(); for (const pk of back.get(k) || []) if (!dist.has(pk)) { dist.set(pk, dist.get(k) + 1); bq.push(pk); } }
+  return { G, dist, capped, k0: bkey(s0) };
+}
+function greedyRate(p, L, tries = 24) {
+  const goals = p.exit || [], need = p.boxes.length - goals.length;
+  const h = s => goals.reduce((a, g) => a + Math.min(...s.pos.map(q => Math.abs(q[0] - g[0]) + Math.abs(q[1] - g[1]))), 0);
+  let wins = 0;
+  for (let t = 0; t < tries; t++) {
+    let s = E.boxStart(p); s.tracks = s.jumps = null; const seen = new Set([bkey(s)]);
+    for (let i = 0; i < L * 3 + 4; i++) {
+      const opts = 'RLDU'.split('').map(c => E.boxStep(p, s, E.DK[c], false)).filter(r => r.moved.some(Boolean)).map(r => ({ s: r.state, h: h(r.state) + (seen.has(bkey(r.state)) ? 3 : 0) + rnd() * .5 }));
+      if (!opts.length) break;
+      opts.sort((a, b) => a.h - b.h); s = opts[0].s; seen.add(bkey(s));
+      if (E.boxWon(p, s)) { wins++; break; }
+    }
+  }
+  return wins / tries;
+}
+function quality(p, c) {
+  const { G, dist, k0 } = graphOf(p);
+  let bits = 0, k = k0;
+  for (const ch of c.best) {
+    const node = G.get(k), d0 = dist.get(k);
+    const succ = [...new Set(node.succ)], good = succ.filter(t => dist.get(t) === d0 - 1);
+    if (succ.length >= 2 && good.length === 1) bits += Math.log2(succ.length);
+    const r = E.boxStep(p, node.s, E.DK[ch], false); k = bkey(r.state);
+  }
+  let dead = 0; G.forEach((n, kk) => { if (!dist.has(kk)) dead++; });
+  const deadR = dead / G.size, greedy = greedyRate(p, c.L);
+  const clutter = (p.broken || []).length + (p.holes || []).length * .5;
+  c.metrics = { bits: +bits.toFixed(1), dead: +deadR.toFixed(2), greedy: +greedy.toFixed(2), states: G.size };
+  return bits * 1.2 + c.L * .5 + deadR * 4 - greedy * 10 - (c.r.wins.length - 1) * 1.5 - clutter * .12 - c.luck * 25;
+}
+// take away every wall the puzzle doesn't need (keeps the same constraints, never lowers the score)
+function pruneWalls(p, c, spec) {
+  let best = { p, c };
+  for (const e of shuffle((p.broken || []).slice())) {
+    const q = clone(best.p); q.broken = (q.broken || []).filter(b => E.ekey(...b) !== E.ekey(...e)); if (!q.broken.length) delete q.broken;
+    const cc = checkBox(q, spec); if (!cc) continue;
+    cc.score = quality(q, cc);
+    if (cc.score >= best.c.score - .05) best = { p: q, c: cc };
+  }
+  return best;
+}
 function designBox(spec) {
-  const g = spec.gen || {};
-  for (let attempt = 0; attempt < (spec.tries || 800); attempt++) {
+  const g = spec.gen || {}, cands = [], T0 = Date.now();
+  for (let attempt = 0; attempt < (spec.tries || 3000); attempt++) {
     const p = { id: spec.id, girl: spec.girl, layer: spec.layer, n: spec.n, w: spec.w, h: spec.h };
     const taken = new Set(), pick = (ok = () => true) => { const n = shuffle(allNodes(p)).find(n => !taken.has(n.join(',')) && ok(n)); if (n) taken.add(n.join(',')); return n; };
     for (let i = 0; i < (g.holes || 0); i++) { const n = pick(); if (n) (p.holes = p.holes || []).push(n); }
@@ -204,37 +310,15 @@ function designBox(spec) {
       if (!(p.plates || []).length) continue;
     } else addSwitches(p, g, () => pick());
     if (!p.broken.length) delete p.broken;
-    const maxL = spec.maxLen || 20;
-    let r = E.boxSolve(p, maxL, 8, 200000);
-    if (!r.wins.length || r.capped) continue;
-    // move budgets: each box gets exactly the moves it makes in a shortest answer
-    if (spec.boxes.some(b => b.n)) {
-      const st = boxStats(p, r.wins[0]);
-      let bad = false;
-      spec.boxes.forEach((b, i) => { if (b.n) { if (!st.movesBy[i]) bad = true; p.boxes[i].n = st.movesBy[i]; } });
-      if (bad) continue;
-      const r0 = r; r = E.boxSolve(p, maxL, 8, 200000);
-      if (!r.wins.length || r.capped) continue;
-      if (!spec.noBind && !(r0.wins.length > r.wins.length || randomPlay({ ...p, boxes: p.boxes.map(b => ({ ...b, n: undefined })) }, r.wins[0].length * 2, 400) > 2 * randomPlay(p, r.wins[0].length * 2, 400))) continue;
-    }
-    const best = r.wins[0], L = best.length;
-    if (L < (spec.minLen || 4)) continue;
-    if (r.wins.length > (spec.maxShortest || 3)) continue;
-    const st = boxStats(p, best), tr = st.s.tracks.flat(), allJ = st.s.jumps.flat();
-    const u = spec.uses || {};
-    if (u.pads && tr.filter(n => E.padAt(p, ...n)).length < u.pads) continue;
-    if (u.stops && !tr.some(n => E.isStop(p, ...n))) continue;
-    if (u.slide && !st.s.tracks.some(t => t.some((n, i) => { if (i < 2) return false; const pd = E.padAt(p, ...t[i - 1]); return pd && n[0] - t[i - 1][0] === pd[0] && n[1] - t[i - 1][1] === pd[1]; }))) continue;
-    if (u.portals && !allJ.some(Boolean)) continue;
-    if (u.oneway && !(p.oneway || []).some(e => st.s.tracks.some(t => t.some((n, i) => i && t[i - 1][0] === e[0] && t[i - 1][1] === e[1] && n[0] === e[2] && n[1] === e[3])))) continue;
-    if (spec.helpers && !st.movesBy[spec.boxes.length - 1]) continue;
-    if ((u.gate || u.toggle) && !gateUse(p, best, u)) continue;
-    if (spec.leave && !st.left) continue;
-    if (st.desync < (spec.desync || 0)) continue;
-    const luck = randomPlay(p, L * 2);
-    if (luck > (spec.luck || .03)) continue;
-    Object.assign(p, { solIn: best, solutions: r.wins.length, minMoves: L, luck: Math.round(luck * 1000) / 10 });
-    return p;
+    const c = checkBox(p, spec); if (!c) continue;
+    if (spec.tut) return finishBox(p, c);
+    c.score = quality(p, c); cands.push({ p, c });
+    if (cands.length >= (spec.pool || 36) || Date.now() - T0 > (spec.time || 25000)) break;
+  }
+  if (cands.length) {
+    cands.sort((x, y) => y.c.score - x.c.score);
+    const { p, c } = pruneWalls(cands[0].p, cands[0].c, spec);
+    return finishBox(p, c);
   }
   throw new Error(spec.id + ': could not design box panel');
 }
@@ -272,7 +356,7 @@ const BRULE = {
   budget: 'Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn.',
   mx: 'Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều).',
   my: 'Hộp có vạch ngang: lên/xuống bị đảo.',
-  opp: 'Hộp có dấu chéo: đi ngược cả hai chiều.',
+  opp: 'Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống.',
   many: 'Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng.',
   nolock: 'Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp.',
   helpers: 'Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ.',
@@ -284,7 +368,7 @@ const BTIP = {
   dash: 'Hộp dash chỉ dừng cạnh tường: tìm những ô có tường phía sau theo hướng bạn đi.', budget: 'Đếm trước: mỗi nước phí là mất một số, không lấy lại được.',
   mx: 'Dùng tường để làm hai hộp lệch nhau: một hộp bị chặn đứng yên trong khi hộp kia đi tiếp.', many: 'Hộp đứng yên cũng là một bức tường cho hộp khác.',
   nolock: 'Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ.', helpers: 'Đặt hộp thừa trước, rồi mới phóng hộp chính.',
-  trail: 'Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp đi ngược nhau: tìm chỗ một hộp bị tường giữ lại.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
+  trail: 'Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
 };
 function whyBox(p, spec) {
   const r = ['goal'];
@@ -385,43 +469,43 @@ add('vel', 1, 3, BX(4, 4, B1, { gen: { walls: .2, pads: 3, stops: 1 }, uses: { p
 add('vel', 1, 4, BX(4, 4, B1, { gen: { walls: .22, pads: 4, stops: 1, holes: 2 }, uses: { pads: 2 }, minLen: 6, luck: .05, feature: 'pads', belief: 'if the road is blocked, go around. or through.' }));
 add('vel', 1, 5, BX(5, 4, B1, { gen: { walls: .2, pads: 4, stops: 1, portals: 1 }, uses: { pads: 1, portals: 1 }, minLen: 6, luck: .04, intro: 'portals', belief: 'two routes in, two routes out. always.' }));
 add('vel', 1, 6, BX(5, 5, B1, { gen: { walls: .22, pads: 5, stops: 2, holes: 3 }, uses: { pads: 3 }, minLen: 7, luck: .03, feature: 'pads', belief: "i'm fun at parties because i know where every exit is." }));
-add('vel', 2, 1, BX(3, 3, D1, { gen: { walls: .25 }, minLen: 3, luck: .15, intro: 'dash', belief: 'up, down, up. pick a lane, vel.' }));
-add('vel', 2, 2, BX(4, 4, D1, { gen: { walls: .25 }, minLen: 5, luck: .06, feature: 'dash', belief: 'yesterday i loved everyone. today i hate this font.' }));
-add('vel', 2, 3, BX(4, 4, D1, { gen: { walls: .2, stops: 2 }, uses: { stops: 1 }, minLen: 5, luck: .05, feature: 'stops', belief: "highs and lows are just terrain. i've mapped worse." }));
+add('vel', 2, 1, BX(3, 3, D1, { gen: { walls: .25 }, minLen: 4, luck: .15, intro: 'dash', belief: 'up, down, up. pick a lane, vel.' }));
+add('vel', 2, 2, BX(4, 4, D1, { gen: { walls: .25 }, minLen: 6, luck: .06, feature: 'dash', belief: 'yesterday i loved everyone. today i hate this font.' }));
+add('vel', 2, 3, BX(4, 4, D1, { gen: { walls: .2, stops: 2 }, uses: { stops: 1 }, minLen: 6, luck: .05, feature: 'stops', belief: "highs and lows are just terrain. i've mapped worse." }));
 add('vel', 2, 4, BX(4, 4, [{}, {}], { helpers: 1, gen: { walls: .18, guard: 1, plates: 1 }, uses: { gate: 1 }, minLen: 4, luck: .06, intro: 'plates', belief: 'when the floor drops, i already have a rope.' }));
-add('vel', 2, 5, BX(5, 4, [{ dash: true }, {}], { helpers: 1, gen: { walls: .2 }, minLen: 5, luck: .04, intro: 'helpers', belief: 'i write the sad chapters on the good days. just in case.' }));
-add('vel', 2, 6, BX(5, 5, [{ dash: true }, {}], { helpers: 1, gen: { walls: .2, guard: 1, plates: 1, stops: 1 }, uses: { gate: 1 }, minLen: 5, maxLen: 12, luck: .03, feature: 'plates', belief: 'stay sharp. moods are weather. weather passes.' }));
-add('vel', 2, 7, BX(5, 5, [{ dash: true }, { dash: true }], { gen: { walls: .22, stops: 1 }, minLen: 6, luck: .02, intro: 'many', belief: 'if i keep moving, the low can never catch me.' }));
+add('vel', 2, 5, BX(5, 4, [{ dash: true }, {}], { helpers: 1, gen: { walls: .2 }, minLen: 6, luck: .04, intro: 'helpers', belief: 'i write the sad chapters on the good days. just in case.' }));
+add('vel', 2, 6, BX(5, 5, [{ dash: true }, {}], { helpers: 1, gen: { walls: .2, guard: 1, plates: 1, stops: 1 }, uses: { gate: 1 }, minLen: 6, maxLen: 12, luck: .03, feature: 'plates', belief: 'stay sharp. moods are weather. weather passes.' }));
+add('vel', 2, 7, BX(5, 5, [{ dash: true }, { dash: true }], { gen: { walls: .22, stops: 1 }, minLen: 7, luck: .02, intro: 'many', belief: 'if i keep moving, the low can never catch me.' }));
 add('vel', 3, 1, BX(4, 3, [{ n: 1 }], { gen: { walls: .2, pads: 2 }, minLen: 4, luck: .06, intro: 'budget', belief: 'map the ground before you walk it.' }));
-add('vel', 3, 2, BX(4, 4, [{ dash: true, n: 1 }], { gen: { walls: .2, stops: 1 }, minLen: 5, luck: .04, feature: 'budget', belief: "you don't step where you haven't checked. ever." }));
+add('vel', 3, 2, BX(4, 4, [{ dash: true, n: 1 }], { gen: { walls: .2, stops: 1 }, minLen: 6, luck: .04, feature: 'budget', belief: "you don't step where you haven't checked. ever." }));
 add('vel', 3, 3, BX(4, 4, [{ n: 1 }, { n: 1 }], { gen: { walls: .22 }, minLen: 5, luck: .03, feature: 'budget', belief: 'a story is a minefield. i know where i buried everything.' }));
-add('vel', 3, 4, BX(5, 4, [{ dash: true, n: 1 }, { n: 1 }], { gen: { walls: .2, pads: 2 }, minLen: 5, luck: .03, feature: 'many', belief: 'swings and landmines. same drill.' }));
+add('vel', 3, 4, BX(5, 4, [{ dash: true, n: 1 }, { n: 1 }], { gen: { walls: .2, pads: 2 }, minLen: 6, luck: .03, feature: 'many', belief: 'swings and landmines. same drill.' }));
 add('vel', 3, 5, BX(5, 4, [{ n: 1 }, { dash: true }, {}], { helpers: 1, gen: { walls: .2, guard: 1, plates: 1 }, uses: { gate: 1 }, minLen: 5, luck: .03, feature: 'helpers', belief: 'i plan for the worst so nobody sees me fall.' }));
-add('vel', 3, 6, BX(5, 5, [{ dash: true, n: 1 }, { dash: true, n: 1 }], { gen: { walls: .22, pads: 2, portals: 1 }, minLen: 6, luck: .02, feature: 'budget', belief: "if i'm in control, nothing explodes." }));
+add('vel', 3, 6, BX(5, 5, [{ dash: true, n: 1 }, { dash: true, n: 1 }], { gen: { walls: .22, pads: 2, portals: 1 }, minLen: 7, luck: .02, feature: 'budget', belief: "if i'm in control, nothing explodes." }));
 add('vel', 3, 7, BX(5, 5, [{ n: 1 }, { dash: true, n: 1 }, {}], { helpers: 1, gen: { walls: .2, guard: 2, toggle: 1, plates: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 6, luck: .02, feature: 'plates', belief: 'as long as the map is mine, nobody gets left behind.' }));
 
 /* MYNE · twin boxes: every key moves both, one of them mirrored; boxes never lock in a goal */
-const MX = [{}, { m: 'mx' }];
-add('myne', 1, 1, BX(3, 2, MX, { gen: { walls: .2 }, minLen: 3, luck: .2, maxShortest: 4, intro: 'mx', belief: "two of me. one keyboard. let's go." }));
+const MX = [{}, { m: 'opp' }];   // the twin copies every key backwards: left↔right and up↔down
+add('myne', 1, 1, BX(3, 2, MX, { gen: { walls: .2 }, minLen: 3, luck: .2, maxShortest: 4, intro: 'opp', belief: "two of me. one keyboard. let's go." }));
 add('myne', 1, 2, BX(3, 3, MX, { gen: { walls: .25 }, minLen: 4, luck: .1, intro: 'nolock', leave: true, belief: 'left goes right. my brain is fine with this.' }));
-add('myne', 1, 3, BX(4, 3, MX, { gen: { walls: .25, holes: 1 }, minLen: 5, luck: .05, desync: 2, feature: 'mx', belief: 'if one of us gets stuck, the other keeps running.' }));
+add('myne', 1, 3, BX(4, 3, MX, { gen: { walls: .25, holes: 1 }, minLen: 5, luck: .05, desync: 2, feature: 'opp', belief: 'if one of us gets stuck, the other keeps running.' }));
 add('myne', 1, 4, BX(4, 4, MX, { gen: { walls: .25, holes: 2 }, minLen: 6, luck: .04, desync: 2, feature: 'nolock', belief: 'i look strong so nobody asks me to carry things.' }));
-add('myne', 1, 5, BX(4, 4, [{}, { m: 'opp' }], { gen: { walls: .25 }, minLen: 5, luck: .04, desync: 2, intro: 'opp', belief: 'co-op mode with myself. high score.' }));
+add('myne', 1, 5, BX(4, 4, [{}, { m: 'opp' }], { gen: { walls: .25 }, minLen: 5, luck: .04, desync: 2, feature: 'nolock', belief: 'co-op mode with myself. high score.' }));
 add('myne', 1, 6, BX(4, 4, MX, { gen: { walls: .28, holes: 2 }, minLen: 7, luck: .02, desync: 3, leave: true, feature: 'nolock', belief: 'if i stop moving, everyone sees how tired i am.' }));
-add('myne', 2, 1, BX(3, 3, [{ n: 1 }, { m: 'mx', n: 1 }], { gen: { walls: .2 }, minLen: 4, luck: .06, intro: 'budget', belief: "can't. sit. still." }));
+add('myne', 2, 1, BX(3, 3, [{ n: 1 }, { m: 'opp', n: 1 }], { gen: { walls: .2 }, minLen: 4, luck: .06, intro: 'budget', belief: "can't. sit. still." }));
 add('myne', 2, 2, BX(4, 3, MX, { gen: { walls: .2, oneway: 2 }, uses: { oneway: 1 }, minLen: 5, luck: .04, desync: 2, intro: 'oneway', belief: 'boredom is a bug. i patch it with noise.' }));
-add('myne', 2, 3, BX(4, 4, [{}, { m: 'mx' }, { m: 'my' }], { gen: { walls: .22 }, minLen: 5, luck: .03, desync: 2, intro: 'my', belief: 'ten tabs open. all of them important.' }));
+add('myne', 2, 3, BX(4, 4, [{}, { m: 'opp' }, { m: 'opp' }], { gen: { walls: .22 }, minLen: 5, luck: .03, desync: 2, intro: 'many', belief: 'ten tabs open. all of them important.' }));
 add('myne', 2, 4, BX(4, 4, MX, { gen: { walls: .2, plates: 1, gates: 2 }, uses: { gate: 1 }, minLen: 5, luck: .03, intro: 'plates', belief: 'one-way streets? speedrun route.' }));
 add('myne', 2, 5, BX(4, 4, MX, { gen: { walls: .18, guard: 2, toggle: 1, plates: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 5, maxLen: 12, luck: .03, feature: 'plates', belief: "if i'm loud enough nobody notices i'm fragile." }));
-add('myne', 2, 6, BX(5, 4, [{ n: 1 }, { m: 'mx', n: 1 }], { gen: { walls: .2, guard: 2, toggle: 1, plates: 1, holes: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 6, luck: .02, feature: 'budget', belief: 'finish everything. right now. all of it.' }));
-add('myne', 2, 7, BX(5, 4, [{}, { m: 'mx' }, { m: 'opp' }], { gen: { walls: .2, guard: 2, toggle: 1, plates: 1, oneway: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 6, luck: .02, feature: 'many', belief: 'keep moving or the lag catches up.' }));
-add('myne', 3, 1, BX(4, 3, [{ dash: true }, { m: 'mx', dash: true }], { gen: { walls: .25 }, minLen: 4, luck: .08, intro: 'dash', belief: 'boost pads! zoom!' }));
+add('myne', 2, 6, BX(5, 4, [{ n: 1 }, { m: 'opp', n: 1 }], { gen: { walls: .2, guard: 2, toggle: 1, plates: 1, holes: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 6, luck: .02, feature: 'budget', belief: 'finish everything. right now. all of it.' }));
+add('myne', 2, 7, BX(5, 4, [{}, { m: 'opp' }, { m: 'opp' }], { gen: { walls: .2, guard: 2, toggle: 1, plates: 1, oneway: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 6, luck: .02, feature: 'many', belief: 'keep moving or the lag catches up.' }));
+add('myne', 3, 1, BX(4, 3, [{ dash: true }, { m: 'opp', dash: true }], { gen: { walls: .25 }, minLen: 5, luck: .08, intro: 'dash', belief: 'boost pads! zoom!' }));
 add('myne', 3, 2, BX(4, 4, MX, { gen: { walls: .2, pads: 3, stops: 1 }, uses: { pads: 1 }, minLen: 5, luck: .04, intro: 'pads', belief: "my body can't keep up. so my head runs for both." }));
-add('myne', 3, 3, BX(4, 4, [{ dash: true }, { m: 'mx' }], { gen: { walls: .22, portals: 1 }, uses: { portals: 1 }, minLen: 5, luck: .03, intro: 'portals', belief: 'warp, dash, park. combo.' }));
-add('myne', 3, 4, BX(4, 4, [{ trail: true }, { m: 'mx' }], { gen: { walls: .2 }, minLen: 6, luck: .03, desync: 1, intro: 'trail', belief: 'every direction is forward if you go fast enough.' }));
-add('myne', 3, 5, BX(4, 4, [{ dash: true }, { m: 'mx' }], { gen: { walls: .18, guard: 2, toggle: 1, plates: 1, pads: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 5, luck: .02, feature: 'plates', belief: 'i have to see every pixel. every one.' }));
-add('myne', 3, 6, BX(5, 4, [{ trail: true }, { m: 'mx' }], { gen: { walls: .15, guard: 1, plates: 1 }, uses: { gate: 1 }, minLen: 6, luck: .02, feature: 'trail', belief: 'two players, one heart rate.' }));
-add('myne', 3, 7, BX(5, 5, [{ n: 1 }, { m: 'mx', dash: true }, { m: 'opp' }], { gen: { walls: .2, guard: 2, toggle: 1, plates: 1, portals: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 7, luck: .02, feature: 'many', belief: 'as long as the game is running, i get to keep playing.' }));
+add('myne', 3, 3, BX(4, 4, [{ dash: true }, { m: 'opp' }], { gen: { walls: .22, portals: 1 }, uses: { portals: 1 }, minLen: 6, luck: .03, intro: 'portals', belief: 'warp, dash, park. combo.' }));
+add('myne', 3, 4, BX(4, 4, [{ trail: true }, { m: 'opp' }], { gen: { walls: .2 }, minLen: 6, luck: .03, desync: 1, intro: 'trail', belief: 'every direction is forward if you go fast enough.' }));
+add('myne', 3, 5, BX(4, 4, [{ dash: true }, { m: 'opp' }], { gen: { walls: .18, guard: 2, toggle: 1, plates: 1, pads: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 6, luck: .02, feature: 'plates', belief: 'i have to see every pixel. every one.' }));
+add('myne', 3, 6, BX(5, 4, [{ trail: true }, { m: 'opp' }], { gen: { walls: .15, guard: 1, plates: 1 }, uses: { gate: 1 }, minLen: 6, luck: .02, feature: 'trail', belief: 'two players, one heart rate.' }));
+add('myne', 3, 7, BX(5, 5, [{ n: 1 }, { m: 'opp', dash: true }, { m: 'opp' }], { gen: { walls: .2, guard: 2, toggle: 1, plates: 1, portals: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 7, luck: .02, feature: 'many', belief: 'as long as the game is running, i get to keep playing.' }));
 
 /* TUTORIALS · one tiny, very easy panel right before each mechanic first shows up (id <girl>_<layer>_t<n>) */
 const TUT = (girl, layer, before, teach, o, k = 0) => S.push({ id: `${girl}_${layer}_t${before}${k ? 'b' : ''}`, girl, layer, n: before - .6 + k * .3, tut: teach, intro: o.intro || teach, belief: o.belief || '', ...o });
@@ -446,10 +530,8 @@ TUT('vel', 2, 1, 'dash', BX(2, 2, D1, EZ({ gen: { walls: .15 }, maxLen: 3 })));
 TUT('vel', 2, 4, 'plates', BX(3, 1, [{}, {}], EZ({ helpers: 1, gen: { walls: .01, guard: 1, plates: 1 }, uses: { gate: 1 }, maxLen: 5 })));
 TUT('vel', 3, 1, 'budget', BX(3, 1, [{ n: 1 }], EZ({ gen: { walls: .1 }, minLen: 2, maxLen: 4, noBind: true })));
 TUT('vel', 3, 7, 'swap', BX(3, 2, [{}, {}, {}], EZ({ helpers: 1, gen: { walls: .05, guard: 2, toggle: 1, plates: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 2, maxLen: 6, tries: 3000, intro: 'plates' })));
-TUT('myne', 1, 1, 'twin', BX(2, 1, MX, EZ({ gen: { walls: .01 }, maxLen: 3, intro: 'mx' })));
+TUT('myne', 1, 1, 'twin', BX(2, 2, MX, EZ({ gen: { walls: .05 }, minLen: 2, maxLen: 3, intro: 'opp' })));
 TUT('myne', 1, 2, 'nolock', BX(3, 1, MX, EZ({ gen: { walls: .1 }, leave: true, minLen: 2, maxLen: 5 })));
-TUT('myne', 1, 5, 'opp', BX(2, 2, [{}, { m: 'opp' }], EZ({ gen: { walls: .1 }, desync: 1, maxLen: 4 })));
-TUT('myne', 2, 3, 'my', BX(2, 2, [{}, { m: 'my' }], EZ({ gen: { walls: .1 }, desync: 1, maxLen: 4 })));
 TUT('myne', 2, 5, 'swap', BX(3, 2, MX, EZ({ gen: { walls: .05, guard: 2, toggle: 1, plates: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 2, maxLen: 6, tries: 3000, intro: 'plates' })));
 TUT('myne', 3, 4, 'trail', BX(2, 2, [{ trail: true }], EZ({ gen: { walls: .1 }, minLen: 2, maxLen: 4 })));
 
@@ -470,7 +552,7 @@ for (const spec of S) {
   p.why = p.boxes ? whyBox(p, spec) : whyFor(p, spec);
   out.push(p);
   const f = ['holes', 'broken', 'oneway', 'pads', 'stops', 'portals', 'bridges', 'plates', 'gates', 'dots', 'nums', 'sketch', 'avoid', 'squares'].filter(k => (p[k] || []).length).map(k => `${k} ${p[k].length}`).join(', ');
-  console.log(`${p.id.padEnd(10)} ${p.w}x${p.h}${p.boxes ? ' boxes ' + p.boxes.length : ''}${p.mirror ? ' mirror' : ''}${p.visitAll ? ' all' : ''}${p.moves ? ' moves=' + p.moves : ''}  ${p.boxes ? `shortest ${p.minMoves} (${p.solutions} ways, luck ${p.luck}%)` : `sols ${p.solutions} · ${p.minMoves} moves`}  ${f}  (${Date.now() - t0}ms)`);
+  console.log(`${p.id.padEnd(10)} ${p.w}x${p.h}${p.boxes ? ' boxes ' + p.boxes.length : ''}${p.mirror ? ' mirror' : ''}${p.visitAll ? ' all' : ''}${p.moves ? ' moves=' + p.moves : ''}  ${p.boxes ? `shortest ${p.minMoves} (${p.solutions} ways, luck ${p.luck}%${p.quality !== undefined ? ', q ' + p.quality : ''})` : `sols ${p.solutions} · ${p.minMoves} moves`}  ${f}  (${Date.now() - t0}ms)`);
 }
 const ord = { prim: 0, trix: 1, paige: 2, vel: 3, myne: 4 };
 out.sort((a, b) => ord[a.girl] - ord[b.girl] || a.layer - b.layer || a.n - b.n);
