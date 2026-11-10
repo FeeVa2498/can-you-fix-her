@@ -7,7 +7,7 @@
 const PANELS = __PANELS__;
 const CH_KEY = 'cyfh_chamber';
 const CH = (() => { try { return JSON.parse(localStorage.getItem(CH_KEY)) || {}; } catch (e) { return {}; } })();
-CH.done = CH.done || {}; CH.opt = Object.assign({ intro: true, debug: false, mem: { tracing_paper: false, queen_piece: false } }, CH.opt || {});
+CH.done = CH.done || {}; CH.opt = Object.assign({ intro: true, debug: false, view3d: true, retro: true, mem: { tracing_paper: false, queen_piece: false } }, CH.opt || {});
 const chSave = () => { try { localStorage.setItem(CH_KEY, JSON.stringify(CH)); } catch (e) { } };
 const CH_GIRLS = [
   { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'pencil · two inks · the other hand' },
@@ -125,15 +125,25 @@ function magnifierIntro(p) {
 /* ---------------- projector: the panel ---------------- */
 let PJ = null;
 function openProjector(p) {
-  PJ = { p, st: null, bs: p.boxes ? PanelEngine.boxStart(p) : null, bsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null };
-  openWin('projector', { title: `Projector.exe · ${GIRLS[p.girl].name}`, icon: 'brain', w: 580, h: 660, x: CH.opt.intro ? 330 : 120, y: 10,
-    onClose: () => { if (PJ) clearInterval(PJ.solTimer); PJ = null; document.removeEventListener('keydown', pjKey); },
+  PJ = { p, st: null, bs: p.boxes ? PanelEngine.boxStart(p) : null, bsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null, view: null };
+  const nL = panelsOf(p.girl).filter(x => x.layer === p.layer).length;
+  openWin('projector', { title: `PROJECT3D.EXE · ${GIRLS[p.girl].name}`, icon: 'brain', w: 600, h: 720, x: CH.opt.intro ? 320 : 120, y: 6,
+    onClose: () => { if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); if (PJ.view) PJ.view.dispose(); } PJ = null; document.removeEventListener('keydown', pjKey); },
     render: b => {
-      b.innerHTML = `<div class="pj g-${p.girl}">
-        <div class="pj-top"><span>Layer ${p.layer} · ${REGION[p.layer]} · ${p.n}/${panelsOf(p.girl).filter(x => x.layer === p.layer).length}</span><span class="pj-id">${p.id}</span></div>
+      b.innerHTML = `<div class="pj pj3 g-${p.girl}">
+        <div class="pj-menu" role="menubar">
+          <div class="mn"><button class="mn-b">File</button><div class="mn-d">
+            <button data-m="undo"><span>Undo move</span><kbd>Z</kbd></button><button data-m="reset"><span>Reset panel</span><kbd>R</kbd></button><hr>
+            <button data-m="back"><span>Back to panels</span><kbd></kbd></button></div></div>
+          <div class="mn"><button class="mn-b">View</button><div class="mn-d">
+            <button data-m="3d"><span>${CH.opt.view3d ? '☑' : '☐'} 3D projection</span><kbd></kbd></button>
+            <button data-m="retro"><span>${CH.opt.retro ? '☑' : '☐'} Chunky pixels (98 mode)</span><kbd></kbd></button></div></div>
+          <div class="mn"><button class="mn-b">Help</button><div class="mn-d"><div class="mn-help">
+            <b>W A S D</b> or arrows: move (W goes away from you)<br><b>Z</b> undo · <b>R</b> reset${p.boxes ? '' : ' · <b>Enter</b> finish · or drag the little box'}<br>${p.boxes ? 'Every key moves every box. Fill all goals at the same time.' : 'Walk the box out through the glowing gate.'}</div></div></div>
+          <span class="pj-id">${p.id}</span>
+        </div>
         <div class="pj-belief" id="pj-belief"><span>${esc(p.belief || '')}</span></div>
-        <div class="pj-stage"><svg id="pj-svg" viewBox="${vb(p)}" role="img" aria-label="Puzzle board. Move with WASD or the arrow keys."></svg></div>
-        <div class="pj-keys"><span>${p.boxes ? 'WASD moves every box' : 'WASD / drag'} · Z undo · R reset${p.boxes ? '' : ' · Enter ends'}</span><b id="pj-moves"></b></div>
+        <div class="pj-stage pj-vp" id="pj-vp"></div>
         <div class="pj-msg" id="pj-msg" aria-live="polite"></div>
         <div class="pj-solbox sunk" id="pj-solbox" hidden>
           <div class="sb-why"><b>Ý chính</b> ${esc(p.why || 'Chưa có giải thích cho bảng này.')}${p.solutions !== 1 ? ` <i>(Bảng có ${p.solutions} lời giải${p.boxes ? ' ngắn nhất' : ''}; đây là một.)</i>` : ''}</div>
@@ -149,6 +159,7 @@ function openProjector(p) {
           <button class="btn" id="pj-sol" aria-pressed="false">Solution</button>
           <button class="btn primary" id="pj-next" hidden>Next ▸</button>
         </div>
+        <div class="pj-status"><span id="pj-st1">Ready</span><span>Layer ${p.layer} · ${REGION[p.layer]} · ${p.n}/${nL}</span><span id="pj-moves"></span><span id="pj-fps"></span></div>
         ${CH.opt.debug ? `<div class="pj-debug">solutions: ${p.solutions} · fewest moves ${p.minMoves || '?'}${p.boxes ? ` · random-play wins ${p.luck}% · answer ${p.solIn}` : ''}</div>` : ''}
       </div>`;
       $('#pj-back', b).onclick = () => { closeWin('projector'); ['feedcam', 'magnifier'].forEach(closeWin); focusWin('chamber'); };
@@ -160,10 +171,32 @@ function openProjector(p) {
       $('#sb-next', b).onclick = () => solStep(1);
       $('#sb-play', b).onclick = solPlay;
       $('#pj-next', b).onclick = () => { const L = panelsOf(p.girl).sort((a, c) => a.layer - c.layer || a.n - c.n), i = L.findIndex(x => x.id === p.id); if (L[i + 1]) startPanel(L[i + 1].id); else $('#pj-back', b).click(); };
-      bindPJ($('#pj-svg', b));
+      $$('[data-m]', b).forEach(el => el.onclick = () => {
+        const m = el.dataset.m; el.blur(); SFX.click();
+        if (m === 'undo') { pjUndo(); drawPJ(); } else if (m === 'reset') pjReset(); else if (m === 'back') $('#pj-back', b).click();
+        else if (m === '3d' || m === 'retro') {
+          if (m === '3d') CH.opt.view3d = !CH.opt.view3d; else CH.opt.retro = !CH.opt.retro; chSave();
+          $('[data-m="3d"] span', b).textContent = `${CH.opt.view3d ? '☑' : '☐'} 3D projection`; $('[data-m=retro] span', b).textContent = `${CH.opt.retro ? '☑' : '☐'} Chunky pixels (98 mode)`;
+          if (m === 'retro' && PJ.view) PJ.view.setRetro(CH.opt.retro); else mountStage();
+        }
+      });
       document.addEventListener('keydown', pjKey);
-      drawPJ();
+      mountStage();
+      PJ.fpsTimer = setInterval(() => { const f = $('#pj-fps'); if (f && PJ) f.textContent = PJ.view ? (PJ.view.fps() ? `WebGL · ${PJ.view.fps()} fps` : 'WebGL') : '2D view'; }, 1000);
     } });
+}
+// the projection: 3D when possible, otherwise the flat board
+function mountStage() {
+  const vp = $('#pj-vp'); if (!vp || !PJ) return;
+  if (PJ.view) { PJ.view.dispose(); PJ.view = null; }
+  vp.innerHTML = ''; vp.classList.toggle('flat', true);
+  if (CH.opt.view3d && P3.has()) {
+    try { PJ.view = P3.create(vp, PJ.p); PJ.view.setRetro(!!CH.opt.retro); bindPJ(PJ.view.canvas, PJ.view.toBoard); vp.classList.remove('flat'); vp.insertAdjacentHTML('beforeend', `<div class="pj3-hud">◉ DIVE·PROJ 3D <i>${PJ.p.boxes ? 'BOX' : 'LINE'} MODE</i></div>`); }
+    catch (e) { console.warn('3D projection failed, using the flat board', e); if (PJ.view) PJ.view.dispose(); PJ.view = null; vp.innerHTML = ''; }
+  }
+  if (!PJ.view) { vp.innerHTML = `<svg id="pj-svg" viewBox="${vb(PJ.p)}" role="img" aria-label="Puzzle board. Move with WASD or the arrow keys."></svg>`; bindPJ($('#pj-svg')); }
+  const f = $('#pj-fps'); if (f) f.textContent = PJ.view ? 'WebGL' : '2D view';
+  drawPJ();
 }
 async function pjSubmit() {
   const p = PJ.p, r = p.boxes ? { ok: PanelEngine.boxWon(p, PJ.bs), bad: [{ kind: 'path' }] } : PanelEngine.validate(p, pjPath()); PJ.tries++;
@@ -173,7 +206,7 @@ async function pjSubmit() {
     $('#pj-msg').textContent = 'The queen took one rule off the board.';
   }
   if (ok) {
-    PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win();
+    PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win(); if (PJ.view) pj3Flash('◆ BELIEF ERASED ◆', 'win');
     const t = performance.now() - PJ.t0, prev = CH.done[p.id];
     CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries, peek: prev ? prev.peek && PJ.peeked : PJ.peeked }; chSave();
     $('#pj-belief').classList.add('struck');
@@ -181,7 +214,7 @@ async function pjSubmit() {
     $('#pj-next').hidden = false; $('#pj-next').focus();
     UPD.forEach(f => f());
   } else {
-    PJ.state = 'fail'; PJ.bad = r.bad; drawPJ(); SFX.buzz();
+    PJ.state = 'fail'; PJ.bad = r.bad; drawPJ(); SFX.buzz(); if (PJ.view) pj3Flash('RULE VIOLATION', 'fail');
     $('#pj-msg').textContent = '';
     setTimeout(() => { if (PJ && PJ.state === 'fail') { PJ.state = 'idle'; drawPJ(); } }, 1400);
   }

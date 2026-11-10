@@ -147,8 +147,17 @@ function pjMovesText() {
   const p = PJ.p, n = p.boxes ? (PJ.bs ? PJ.bs.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0);
   return p.moves ? `moves ${n}/${p.moves}` : `moves ${n}`;
 }
+function pjChrome() {
+  const mv = $('#pj-moves'); if (mv) { mv.textContent = pjMovesText(); mv.classList.toggle('bad', PJ.state === 'fail' && PJ.bad.some(b => b.kind === 'moves')); }
+  const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
+  const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';
+  const st = $('#pj-st1'); if (st) st.textContent = PJ.solOn ? 'Replaying solution' : PJ.state === 'win' ? 'Belief erased' : PJ.state === 'fail' ? 'Rule violation' : PJ.state === 'draw' ? 'Projecting…' : 'Ready';
+}
 function drawPJ() {
-  if (!PJ) return; const p = PJ.p, svg = $('#pj-svg'); if (!svg) return;
+  if (!PJ) return; const p = PJ.p;
+  pjChrome();
+  if (PJ.view) { if (PJ.solOn) drawSol3D(); else draw3D(); return; }
+  const svg = $('#pj-svg'); if (!svg) return;
   if (PJ.solOn) { drawSol(svg); return; }
   const bad = {};
   if (PJ.state === 'fail') PJ.bad.forEach(x => { if (x.kind === 'visitAll') bad.visitAll = true; else (bad[x.kind] = bad[x.kind] || new Set()).add(x.i); });
@@ -169,9 +178,6 @@ function drawPJ() {
     }
   }
   svg.innerHTML = h;
-  const mv = $('#pj-moves'); if (mv) { mv.textContent = pjMovesText(); mv.classList.toggle('bad', !!(bad.moves)); }
-  const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
-  const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';
 }
 function pjReset() {
   if (!PJ) return;
@@ -245,10 +251,10 @@ function pjFollow(fx, fy) {
     break;
   }
 }
-function bindPJ(svg) {
+function bindPJ(svg, toPt = e => svgPt(svg, e)) {
   svg.addEventListener('pointerdown', e => {
     if (!PJ || PJ.state === 'win' || PJ.solOn || PJ.p.boxes) return;
-    const [fx, fy] = svgPt(svg, e), p = PJ.p, path = pjPath();
+    const [fx, fy] = toPt(e), p = PJ.p, path = pjPath();
     const last = path[path.length - 1];
     const st = (p.start || []).slice(0, 1).find(([x, y]) => Math.hypot(fx - x, fy - y) < .4);
     if (last && Math.hypot(fx - last[0], fy - last[1]) < .4 && PJ.state !== 'fail') { /* keep drawing from the end */ }
@@ -257,7 +263,7 @@ function bindPJ(svg) {
     PJ.state = 'draw'; PJ.bad = []; PJ.drawing = true; svg.setPointerCapture(e.pointerId); drawPJ();
   });
   svg.addEventListener('pointermove', e => {
-    if (!PJ || !PJ.drawing) return; const [fx, fy] = svgPt(svg, e);
+    if (!PJ || !PJ.drawing) return; const [fx, fy] = toPt(e);
     pjFollow(fx, fy); drawPJ();
   });
   const up = () => {
@@ -309,7 +315,7 @@ function useHint() {
 
 // slide the boxes along this press's route (cosmetic; input is never blocked)
 function boxAnim(prev, next) {
-  if (REDUCED) { PJ.animAt = null; return; }
+  if (REDUCED || PJ.view) { PJ.animAt = null; return; }
   const routes = next.tracks.map((t, i) => ({ pts: t.slice(prev.tracks[i].length - 1), J: next.jumps[i].slice(prev.tracks[i].length - 1) }));
   const steps = Math.max(...routes.map(r => r.pts.length - 1)); if (steps < 1) return;
   PJ.animPrev = prev.tracks.map(t => t.length);

@@ -10,7 +10,7 @@ P = lambda *a: os.path.join(ROOT, *a)
 CSV = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal']
 
 # game + the new panel engine + title/test chamber; main() runs last
-js = '\n'.join(open(P('src', f), encoding='utf-8').read() for f in ('game.js', 'panel_engine.js', 'chamber.js', 'chamber_board.js', 'chamber_solution.js')) + '\nmain();\n'
+js = '\n'.join(open(P('src', f), encoding='utf-8').read() for f in ('game.js', 'panel_engine.js', 'chamber.js', 'chamber_board.js', 'chamber_solution.js', 'chamber_3d.js')) + '\nmain();\n'
 js = js.replace('__PANELS__', json.dumps(json.load(open(P('src', 'panels.json'))), separators=(',', ':')))
 def sheet_csv(ws):
     import csv, io
@@ -39,6 +39,9 @@ for key, f in [('__PRIM_BODY__', 'jirai_body.png'), ('__PRIM_FACE__', 'jirai_fac
 
 shell = open(P('src', 'shell.html'), encoding='utf-8').read()
 page = shell.replace('/*GAME*/', js)
+# three.js (MIT, vendor/three.min.js) for the 3D projector, in its own script tag before the game
+three = open(P('vendor', 'three.min.js'), encoding='utf-8').read()
+page = page.replace('<script>', '<script>' + three + '</script>\n<script>', 1)
 i = page.index('</style>') + len('</style>')
 out = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
@@ -47,7 +50,7 @@ open(P('index.html'), 'w', encoding='utf-8').write(out)
 
 # syntax check when node is available
 try:
-    s = out[out.index('<script>') + 8:out.rindex('</script>')]
+    s = out[out.rindex('<script>') + 8:out.rindex('</script>')]
     tmp = P('.build_check.js'); open(tmp, 'w', encoding='utf-8').write(s)
     r = subprocess.run(['node', '--check', tmp], capture_output=True, text=True); os.remove(tmp)
     if r.returncode: print(r.stderr); sys.exit(1)
