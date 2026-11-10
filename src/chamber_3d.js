@@ -80,12 +80,13 @@ const P3 = (() => {
     const cx = (d.cols - 1) / 2, cz = (d.rows - 1) / 2;
     const bg = backdrop(scene, cx, cz);
     const world = new THREE.Group(), dyn = new THREE.Group(); scene.add(world, dyn);
-    const anim = { spin: [], pulse: [], flow: [], flames: [] };
+    const anim = { spin: [], pulse: [], flow: [], flames: [], breathe: [] };
     let retro = true, alive = true, t0 = performance.now();
 
     /* static board */
     const symbols = new THREE.Group(); world.add(symbols);
     const ringMats = new Map();
+    const CHX = [0x4fd8ff, 0xffa040], plates3 = [], gates3 = [];
     let symKey = '';
     if (isBox) buildBoxBoard(); else buildLineBoard();
 
@@ -100,15 +101,10 @@ const P3 = (() => {
         if (pads.has(k)) { const [dx, dz] = pads.get(k); [-.14, .14].forEach((o, i) => { const c = chevron(0x7be3a4, .15); c.position.set(x + dx * o, .012, y + dz * o); c.rotation.y = yawOf(dx, dz); world.add(c); anim.flow.push({ m: c, i }); }); }
         if (stops.has(k)) world.add(box(.5, .05, .12, basic(0xff9f5a), x, .02, y));
       }
-      (p.exit || []).forEach(([x, y]) => {
-        const f = new THREE.Group(); f.position.set(x, .015, y);
-        [[0, -.36, .74, .07], [0, .36, .74, .07], [-.36, 0, .07, .74], [.36, 0, .07, .74]].forEach(([a, b, w, h]) => f.add(box(w, .03, h, basic(0xffd86e), a, 0, b)));
-        world.add(f);
-        const beam = new THREE.Mesh(new THREE.CylinderGeometry(.42, .46, 2.2, 4, 1, true), additive(0xffd86e, .18)); beam.rotation.y = Math.PI / 4; beam.position.set(x, 1.1, y);
-        world.add(beam); anim.pulse.push({ m: beam, base: .18, at: x + ',' + y });
-      });
+      (p.exit || []).forEach(([x, y]) => world.add(goalTile(x, y, .96)));
       walls(true);
       portals();
+      switches(true);
     }
     function buildLineBoard() {
       for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) if (E.inside(p, x, y)) world.add(box(1, .5, 1, plateMats(0x34204f, 0x1c0f30), x, -.33, y));
@@ -126,6 +122,7 @@ const P3 = (() => {
       }
       walls(false);
       portals();
+      switches(false);
       (p.bridges || []).forEach(([x, y]) => { const b = box(.36, .16, .36, std(0xf4e9ff), x, .04, y); b.rotation.y = Math.PI / 4; world.add(edges(b, 0x2b1b3d)); });
       (p.exit || []).forEach(([x, y]) => world.add(exitGate(x, y)));
       buildSymbols({});
@@ -149,24 +146,41 @@ const P3 = (() => {
         world.add(ring, disc, halo); anim.spin.push(halo);
       }));
     }
-    function exitGate(x, y) {
-      const g = new THREE.Group(), dir = E.exitDir(p, x, y), gold = basic(0xffd86e);
-      if (dir) {
-        const [dx, dz] = dir; g.position.set(x, 0, y); g.rotation.y = yawOf(dx, dz);
-        // local -z = out of the board: a runway with flowing chevrons, then a goal pad with a beam of light
-        g.add(box(.46, .14, 1.0, std(0x2b1b3d), 0, -.1, -.6));
-        const run = new THREE.Mesh(new THREE.PlaneGeometry(.36, .95), additive(0xffd86e, .22)); run.rotation.x = -Math.PI / 2; run.position.set(0, -.025, -.6); g.add(run);
-        for (let i = 0; i < 3; i++) { const c = chevron(0xfff1b8, .11); c.position.set(0, -.02, -.3 - i * .26); g.add(c); anim.flow.push({ m: c, i }); }
-        const pad = box(.86, .2, .86, std(0x5c3d2a, { emissive: 0xffb02e, emissiveIntensity: .25 }), 0, -.12, -1.45); g.add(pad);
-        [[0, -1.08, .8, .07], [0, -1.82, .8, .07], [-.37, -1.45, .07, .8], [.37, -1.45, .07, .8]].forEach(([a, b2, w, h]) => g.add(box(w, .04, h, gold, a, .0, b2)));
-        const beam = new THREE.Mesh(new THREE.CylinderGeometry(.44, .5, 2.6, 4, 1, true), additive(0xffd86e, .22)); beam.rotation.y = Math.PI / 4; beam.position.set(0, 1.3, -1.45); g.add(beam); anim.pulse.push({ m: beam, base: .22 });
-        const gem = new THREE.Mesh(new THREE.OctahedronGeometry(.18), std(0xffd86e, { emissive: 0xffb02e, emissiveIntensity: .7 })); gem.position.set(0, .6, -1.45); g.add(gem); anim.spin.push(gem);
-      } else {
-        const ring = new THREE.Mesh(new THREE.TorusGeometry(.3, .05, 6, 20), gold); ring.rotation.x = -Math.PI / 2; ring.position.set(x, .04, y); g.add(ring);
-        const beam = new THREE.Mesh(new THREE.CylinderGeometry(.3, .3, 2, 16, 1, true), additive(0xffd86e, .2)); beam.position.set(x, 1, y); g.add(beam); anim.pulse.push({ m: beam, base: .2 });
-        const halo = new THREE.Mesh(new THREE.TorusGeometry(.18, .025, 4, 12), gold); halo.position.set(x, .6, y); g.add(halo); anim.spin.push(halo);
-      }
+    // a goal: a gold-framed tile with a soft glow that breathes, brighter while something stands on it
+    function goalTile(x, y, size) {
+      const g = new THREE.Group(); g.position.set(x, .012, y);
+      const glow = new THREE.Mesh(new THREE.PlaneGeometry(size * .9, size * .9), additive(0xffd86e, .25)); glow.rotation.x = -Math.PI / 2; g.add(glow);
+      const fr = size * .38, t = size * .07;
+      [[0, -fr, fr * 2 + t, t], [0, fr, fr * 2 + t, t], [-fr, 0, t, fr * 2], [fr, 0, t, fr * 2]].forEach(([a, b2, w, h]) => g.add(box(w, .04, h, basic(0xffd86e), a, .01, b2)));
+      const ring = new THREE.Group(); ring.position.y = .02;
+      const r2 = size * .26, t2 = size * .04;
+      [[0, -r2, r2 * 2 + t2, t2], [0, r2, r2 * 2 + t2, t2], [-r2, 0, t2, r2 * 2], [r2, 0, t2, r2 * 2]].forEach(([a, b2, w, h]) => ring.add(box(w, .02, h, additive(0xfff1b8, .8), a, 0, b2)));
+      g.add(ring);
+      anim.pulse.push({ m: glow, base: .25, at: x + ',' + y }); anim.breathe.push(ring);
       return g;
+    }
+    function exitGate(x, y) { return goalTile(x, y, .78); }
+    // pressure plates and gates
+    function switches(isTiles) {
+      (p.plates || []).forEach(([x, y, c]) => {
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(isTiles ? .36 : .22, isTiles ? .38 : .24, .05, 20), std(0x1a1024)); base.position.set(x, isTiles ? .02 : .03, y);
+        const btn = new THREE.Mesh(new THREE.CylinderGeometry(isTiles ? .28 : .16, isTiles ? .3 : .17, .1, 20), std(CHX[c], { emissive: CHX[c], emissiveIntensity: .2 })); btn.position.set(x, (isTiles ? .02 : .03) + .07, y);
+        world.add(base, edges(btn, 0xffffff, .6)); plates3.push({ k: x + ',' + y, btn, y0: btn.position.y });
+      });
+      (p.gates || []).forEach(([x1, y1, x2, y2, c, inv]) => {
+        const hor = x1 !== x2, mx = (x1 + x2) / 2, my = (y1 + y2) / 2, L = isTiles ? 1.0 : .5, H = isTiles ? .62 : .34;
+        const mat = std(CHX[c], { emissive: CHX[c], emissiveIntensity: .45, transparent: true, opacity: .85 });
+        const g = new THREE.Group(); g.position.set(mx, 0, my);
+        const bar = box(hor ? .12 : L, H, hor ? L : .12, mat, 0, H / 2, 0); g.add(edges(bar, 0xffffff, .8));
+        if (inv) for (let i = -1; i <= 1; i++) g.add(box(hor ? .13 : .06, H * .9, hor ? .06 : .13, basic(0x1a1024), hor ? 0 : i * L * .3, H / 2, hor ? i * L * .3 : 0));
+        world.add(g); gates3.push({ g, key: E.ekey(x1, y1, x2, y2), H, cur: 0, want: 0 });
+      });
+    }
+    function setSwitches(on) {
+      if (!plates3.length) return;
+      const shut = E.gateClosed(p, k => on.has(k));
+      plates3.forEach(pl => { const pr = on.has(pl.k); pl.btn.position.y = pl.y0 - (pr ? .06 : 0); pl.btn.material.emissiveIntensity = pr ? .9 : .2; });
+      gates3.forEach(gt => { gt.want = shut.has(gt.key) ? 0 : 1; });
     }
     // cell & edge symbols for line panels (rebuilt when the "bad" highlights change)
     function buildSymbols(bad, seen) {
@@ -268,10 +282,11 @@ const P3 = (() => {
       return pieces;
     }
     function syncLine(o) {
+      if (fx && o.cls !== 'win') { restore(); L.sig = null; }
       const path = o.path && o.path.length ? o.path : [p.start[0]], jump = o.jump || [false];
       const cls = o.cls || 'draw';
       const sig = JSON.stringify([path, cls, o.hint && o.hint.path, !!o.ghost]);
-      if (sig === L.sig) { buildSymbols(o.bad || {}, o.seen); return; }
+      if (sig === L.sig) { buildSymbols(o.bad || {}, o.seen); setSwitches(o.seen || new Set()); return; }
       L.sig = sig;
       const extends_ = L.path.length && path.length > L.path.length && L.path.every((n, i) => n[0] === path[i][0] && n[1] === path[i][1]);
       const from = extends_ ? L.path.length - 1 : null;
@@ -281,6 +296,7 @@ const P3 = (() => {
       if (o.ghost) { ghostMat.opacity = .28; buildRope(L.ghost, o.ghost.path, o.ghost.jump, ghostMat, ghostMat); } else L.ghost.clear();
       if (o.hint) buildRope(L.hint, o.hint.path, o.hint.jump, hintMat, hintMat); else L.hint.clear();
       buildSymbols(o.bad || {}, o.seen);
+      setSwitches(o.seen || new Set()); anim.pulse.forEach(pu => { if (pu.at) pu.on = !!(o.seen && o.seen.has(pu.at)); });
       if (from !== null && !REDUCED) {
         const steps = []; for (let k = from + 1; k < path.length; k++) steps.push(k);
         L.anim = { steps, t: performance.now(), dur: steps.length > 1 ? 70 : 140 };
@@ -321,6 +337,7 @@ const P3 = (() => {
     }
     const ropeMatB = BOXHEX.map(c => std(c, { emissive: c, emissiveIntensity: .25 }));
     function syncBoxes(s, o = {}) {
+      if (fx && o.cls !== 'win') { restore(); Bx.last = null; }
       if (s === Bx.last && (o.cls || '') === Bx.cls) return;
       if (s === Bx.last) { Bx.cls = o.cls || ''; Bx.cubes.forEach(cu => { cu.mat.emissiveIntensity = o.cls === 'win' ? .7 : cu.mat.emissiveIntensity; }); return; }
       const prev = Bx.last;
@@ -340,6 +357,7 @@ const P3 = (() => {
         cu.mat.transparent = left === 0; cu.mat.opacity = left === 0 ? .55 : 1;
       });
       const occupied = new Set(s.pos.map(q => q.join(',')));
+      setSwitches(new Set([...occupied, ...s.trail]));
       anim.pulse.forEach(pu => { if (pu.at) pu.on = occupied.has(pu.at); });
       if (fwd && !REDUCED) {
         // ticks per box: every plain step is one tick; a portal jump rides along in the same tick
@@ -388,6 +406,34 @@ const P3 = (() => {
       });
     }
 
+    /* ---------- win: the pieces shoot up into the sky, then the level breaks apart ---------- */
+    let fx = null;
+    function winFx() {
+      if (fx || REDUCED) return;
+      const flyers = isBox ? Bx.cubes.map(c => c.g) : L.heads.map(h => h.g);
+      const parts = [...world.children, ...dyn.children.filter(o => !flyers.includes(o))].map(o => ({ o, p0: o.position.clone(), r0: o.rotation.clone(), s0: o.scale.clone(),
+        v: new THREE.Vector3((o.position.x - cx) * .9 + (Math.random() - .5) * 2, 1.5 + Math.random() * 3, (o.position.z - cz) * .9 + (Math.random() - .5) * 2),
+        w: new THREE.Vector3(Math.random() - .5, Math.random() - .5, Math.random() - .5).multiplyScalar(6), delay: .45 + Math.random() * .25 + Math.hypot(o.position.x - cx, o.position.z - cz) * .04 }));
+      fx = { t0: performance.now(), flyers: flyers.map(o => ({ o, p0: o.position.clone(), r0: o.rotation.clone() })), parts };
+    }
+    function stepFx(now) {
+      const t = (now - fx.t0) / 1000;
+      fx.flyers.forEach((f, i) => { const u = Math.max(0, t - i * .06); f.o.position.y = f.p0.y + (u < .12 ? -u * .8 : 8 * Math.pow(u - .12, 2) * 3); f.o.rotation.y = f.r0.y + u * 9; });
+      fx.parts.forEach(q => {
+        const u = t - q.delay; if (u <= 0) return;
+        q.o.position.set(q.p0.x + q.v.x * u, q.p0.y + q.v.y * u - 9 * u * u, q.p0.z + q.v.z * u);
+        q.o.rotation.set(q.r0.x + q.w.x * u, q.r0.y + q.w.y * u, q.r0.z + q.w.z * u);
+        const k = Math.max(.001, 1 - u * .45); q.o.scale.set(q.s0.x * k, q.s0.y * k, q.s0.z * k);
+      });
+      if (t > 3.2) { fx.parts.forEach(q => q.o.visible = false); fx.flyers.forEach(f => f.o.visible = false); fx.done = true; }
+    }
+    function restore() {
+      if (!fx) return;
+      fx.parts.forEach(q => { q.o.position.copy(q.p0); q.o.rotation.copy(q.r0); q.o.scale.copy(q.s0); q.o.visible = true; });
+      fx.flyers.forEach(f => { f.o.position.copy(f.p0); f.o.rotation.copy(f.r0); f.o.visible = true; });
+      fx = null;
+    }
+
     /* ---------- camera, size, loop ---------- */
     // fit the whole platform (and anything standing on it) inside the viewport, straight up the grid
     function fit() {
@@ -396,7 +442,6 @@ const P3 = (() => {
       renderer.setSize(W, H, false); cv.style.width = W + 'px'; cv.style.height = H + 'px';
       cam.aspect = W / H; cam.updateProjectionMatrix();
       const pitch = 58 * Math.PI / 180, pts = [], bx = [-.55, d.cols - .45], bz = [-.55, d.rows - .45];
-      if (!isBox) (p.exit || []).forEach(([x, y]) => { const r = E.exitDir(p, x, y); if (!r) return; if (r[0] < 0) bx[0] = -2; if (r[0] > 0) bx[1] = d.cols + 1; if (r[1] < 0) bz[0] = -2; if (r[1] > 0) bz[1] = d.rows + 1; });
       for (const x of bx) for (const z of bz) for (const y of [0, isBox ? .85 : .5]) pts.push(new THREE.Vector3(x, y, z));
       let dist = 12, tz = cz;
       const place = () => { cam.position.set(cx, dist * Math.sin(pitch), tz + dist * Math.cos(pitch)); cam.lookAt(cx, 0, tz); cam.updateMatrixWorld(); };
@@ -416,6 +461,9 @@ const P3 = (() => {
       bg.grid.position.z = cz + (t * .8) % 2;
       anim.spin.forEach(m => { if (m.userData.y0 === undefined) m.userData.y0 = m.position.y; m.rotation.y = t * 2; m.position.y = m.userData.y0 + Math.sin(t * 2.4) * .06; });
       anim.pulse.forEach(pu => { pu.m.material.opacity = (pu.on ? pu.base * 2.6 : pu.base) * (.75 + .35 * Math.sin(t * 3.2)); });
+      anim.breathe.forEach((r, i) => { const k = (t * .7 + i * .37) % 1; r.scale.set(1 + k * .55, 1, 1 + k * .55); r.children.forEach(c => c.material.opacity = .8 * (1 - k)); });
+      gates3.forEach(gt => { gt.cur += (gt.want - gt.cur) * .2; gt.g.position.y = -gt.cur * (gt.H + .05); gt.g.visible = gt.cur < .88; });
+      if (fx) stepFx(now);
       anim.flow.forEach(f => { f.m.mat.opacity = .35 + .65 * Math.max(0, Math.sin(t * 4 - f.i * 1.1)); });
       anim.flames.forEach(f => { if (f.visible) f.scale.set(1, .7 + Math.random() * .6, 1); });
       stepLine(now); stepBoxes(now);
@@ -433,7 +481,7 @@ const P3 = (() => {
       return ray.ray.intersectPlane(plane, hit) ? [hit.x, hit.z] : [-99, -99];
     }
     return {
-      canvas: cv, isBox, toBoard,
+      canvas: cv, isBox, toBoard, winFx, restore, get exploding() { return !!fx; },
       syncLine, syncBoxes,
       busy: () => !!(L.anim || Bx.anim),
       fps: () => fps,

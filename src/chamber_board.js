@@ -24,14 +24,22 @@ const arrowAt = (x, y, dx, dy, s, cls) => {   // a small chevron pointing (dx,dy
   const px = -dy, py = dx;
   return `<path class="${cls}" d="M${x - dx * s * .6 + px * s} ${y - dy * s * .6 + py * s} L${x + dx * s * .7} ${y + dy * s * .7} L${x - dx * s * .6 - px * s} ${y - dy * s * .6 - py * s}"/>`;
 };
+// the exit is a goal tile on its node (same look as box goals)
 function exitSVG(p, x, y, mini) {
-  const dir = PanelEngine.exitDir(p, x, y);
-  if (dir) {
-    const [dx, dy] = dir, px = -dy, py = dx, ch = k => { const cx = x + dx * (.62 + k * .2), cy = y + dy * (.62 + k * .2); return `<path class="chev c${k}" d="M${cx - dx * .08 + px * .13} ${cy - dy * .08 + py * .13}L${cx + dx * .08} ${cy + dy * .08}L${cx - dx * .08 - px * .13} ${cy - dy * .08 - py * .13}"/>`; };
-    const L = 1.08, gx = Math.min(x, x + dx * L) - (dx ? 0 : .24), gy = Math.min(y, y + dy * L) - (dy ? 0 : .24);
-    return `<g class="pb-exit"><rect class="gate" x="${gx}" y="${gy}" width="${dx ? L : .48}" height="${dy ? L : .48}" rx=".24"/><circle class="halo" cx="${x + dx * .34}" cy="${y + dy * .34}" r=".26"/><line class="stub" x1="${x}" y1="${y}" x2="${x + dx * .48}" y2="${y + dy * .48}"/>${mini ? '' : ch(0) + ch(1) + ch(2)}</g>`;
-  }
-  return `<g class="pb-exit in"><circle class="halo" cx="${x}" cy="${y}" r=".36"/><circle class="ring" cx="${x}" cy="${y}" r=".3"/><circle class="ring2" cx="${x}" cy="${y}" r=".19"/></g>`;
+  return `<g class="pbx-goal line"><rect class="glow" x="${x - .4}" y="${y - .4}" width=".8" height=".8" rx=".12"/><rect class="frame" x="${x - .31}" y="${y - .31}" width=".62" height=".62" rx=".09"/>${mini ? '' : `<rect class="pulse" x="${x - .31}" y="${y - .31}" width=".62" height=".62" rx=".09"/>`}</g>`;
+}
+// pressure plates and gates (gates drawn open/closed for what stands on the plates now)
+const CHC = ['#4fd8ff', '#ffa040'];
+function switchSVG(p, on, tiles) {
+  if (!(p.plates || []).length) return '';
+  const E = PanelEngine, shut = E.gateClosed(p, k => on.has(k)), out = [];
+  (p.plates || []).forEach(([x, y, c]) => out.push(`<circle class="pb-plate${on.has(x + ',' + y) ? ' on' : ''}" cx="${x}" cy="${y}" r="${tiles ? .3 : .19}" style="stroke:${CHC[c]};fill:${on.has(x + ',' + y) ? CHC[c] : 'none'}"/>`));
+  (p.gates || []).forEach(([x1, y1, x2, y2, c, inv]) => {
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, hor = x1 !== x2, L = tiles ? .5 : .26, open = !shut.has(E.ekey(x1, y1, x2, y2));
+    const seg = hor ? [mx, my - L, mx, my + L] : [mx - L, my, mx + L, my];
+    out.push(`<line class="pb-gate${open ? ' open' : ''}${inv ? ' inv' : ''}" x1="${seg[0]}" y1="${seg[1]}" x2="${seg[2]}" y2="${seg[3]}" style="stroke:${CHC[c]}"/>`);
+  });
+  return out.join('');
 }
 /* box panels: tiles instead of tracks; walls sit between tiles */
 function boxBoardSVG(p, o = {}) {
@@ -49,6 +57,7 @@ function boxBoardSVG(p, o = {}) {
     out.push(x1 !== x2 ? segLine('pbx-wall', [mx, my - .5, mx, my + .5]) : segLine('pbx-wall', [mx - .5, my, mx + .5, my]));
   });
   (p.oneway || []).forEach(e => out.push(`<g class="pbx-ow">${arrowAt((e[0] + e[2]) / 2, (e[1] + e[3]) / 2, e[2] - e[0], e[3] - e[1], .13, '')}</g>`));
+  out.push(switchSVG(p, o.boxAt || new Set((p.boxes || []).map(b => b.x + ',' + b.y)), true));
   if (!o.noBoxes) out.push(boxesSVG(p, E.boxStart(p), { mini: o.mini }));
   return out.join('');
 }
@@ -118,6 +127,7 @@ function boardSVG(p, o = {}) {
   (p.pads || []).forEach(([x, y, dx, dy]) => out.push(`<g class="pb-pad"><circle cx="${x}" cy="${y}" r=".22"/>${arrowAt(x, y, dx, dy, .12, '')}</g>`));
   (p.bridges || []).forEach(([x, y]) => out.push(`<g class="pb-bridge"><rect x="${x - .2}" y="${y - .2}" width=".4" height=".4" rx=".05" transform="rotate(45 ${x} ${y})"/><path d="M${x - .1} ${y}H${x + .1}M${x} ${y - .1}V${y + .1}"/></g>`));
   (p.portals || []).forEach((q, i) => [[q[0], q[1]], [q[2], q[3]]].forEach(([x, y]) => out.push(`<circle class="pb-portal" cx="${x}" cy="${y}" r=".21" stroke="${PORTAL[i % 3]}"/><circle cx="${x}" cy="${y}" r=".09" fill="${PORTAL[i % 3]}"/>`)));
+  out.push(switchSVG(p, o.seen || new Set(), false));
   (p.dots || []).forEach((e, i) => out.push(`<circle class="pb-dot${B('dots', i)}" cx="${e[0]}" cy="${e[1]}" r=".1"/>`));
   (p.start || []).forEach(([x, y], i) => out.push(`<circle class="pb-start${p.mirror && i ? ' other' : ''}" cx="${x}" cy="${y}" r=".2"/>`));
   return out.join('');
@@ -163,7 +173,7 @@ function drawPJ() {
   if (PJ.state === 'fail') PJ.bad.forEach(x => { if (x.kind === 'visitAll') bad.visitAll = true; else (bad[x.kind] = bad[x.kind] || new Set()).add(x.i); });
   let h;
   if (p.boxes) {
-    const bs = PJ.bs, boxAt = new Set(bs.pos.map(q => q.join(',')));
+    const bs = PJ.bs, boxAt = new Set([...bs.pos.map(q => q.join(',')), ...bs.trail]);
     h = boxBoardSVG(p, { boxAt, noBoxes: true }) + boxesSVG(p, bs, { at: PJ.animAt, ropeLen: PJ.animAt && PJ.animPrev, cls: PJ.state === 'win' ? 'win' : '' });
   } else {
     const path = pjPath(), lines = path.length ? PanelEngine.lines(p, path) : [];
@@ -222,6 +232,8 @@ function pjMove(d) {
   if (st.pend) { while (st.path.length > before) E.undo(p, st); SFX.tick(); return false; }   // a portal or bridge with no way out
   SFX.step(st.path.length);
   if (st.path.length - before > 1) SFX.link();
+  // stepping onto the exit tile is the attempt: a correct line wins at once, a wrong one shows what's broken
+  if (E.canStop(p, st, C)) setTimeout(() => { if (PJ && PJ.st === st && PJ.state === 'draw' && E.canStop(p, st, E.ctx(p))) pjSubmit(); }, PJ.view ? 160 : 0);
   return true;
 }
 function pjUndo() {

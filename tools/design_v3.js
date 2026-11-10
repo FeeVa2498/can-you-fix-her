@@ -29,7 +29,7 @@ const cells = p => { const o = []; for (let y = 0; y < p.h; y++) for (let x = 0;
 const borderNodes = p => allNodes(p).filter(([x, y]) => x === 0 || y === 0 || x === p.w || y === p.h);
 
 /* ---------- random map features ---------- */
-function special(p) { return new Set([...(p.start || []), ...(p.exit || []), ...(p.pads || []), ...(p.stops || []), ...(p.bridges || []), ...(p.portals || []).flatMap(q => [[q[0], q[1]], [q[2], q[3]]])].map(n => n[0] + ',' + n[1])); }
+function special(p) { return new Set([...(p.start || []), ...(p.exit || []), ...(p.pads || []), ...(p.stops || []), ...(p.bridges || []), ...(p.portals || []).flatMap(q => [[q[0], q[1]], [q[2], q[3]]]), ...(p.plates || [])].map(n => n[0] + ',' + n[1])); }
 function features(spec, base) {
   const p = clone(base), g = spec.gen || {};
   const free = () => shuffle(allNodes(p).filter(n => !special(p).has(n.join(','))));
@@ -43,8 +43,20 @@ function features(spec, base) {
   for (let i = 0; i < (g.bridges || 0); i++) { const n = free().find(([x, y]) => x > 0 && y > 0 && x < p.w && y < p.h); if (n) (p.bridges = p.bridges || []).push(n); }
   for (let i = 0; i < (g.pads || 0); i++) { const n = free()[0]; const d = [[1, 0], [-1, 0], [0, 1], [0, -1]][ri(4)]; if (n) (p.pads = p.pads || []).push([...n, ...d]); }
   for (let i = 0; i < (g.stops || 0); i++) { const n = free()[0]; if (n) (p.stops = p.stops || []).push(n); }
+  addSwitches(p, g, () => free()[0]);
   return p;
 }
+// plates and gates. g.plates (count), g.gates (normal gates), g.toggle (inverted gates), g.ch (channels)
+function addSwitches(p, g, pickNode) {
+  const ch = g.ch || 1;
+  for (let i = 0; i < (g.plates || 0); i++) { const n = pickNode(); if (n) (p.plates = p.plates || []).push([...n, i % ch]); }
+  if (!(p.plates || []).length) return;
+  const used = new Set([...(p.broken || []), ...(p.gates || [])].map(e => E.ekey(e[0], e[1], e[2], e[3])));
+  const add = inv => { const e = shuffle(allEdges(p)).find(e => !used.has(E.ekey(...e))); if (!e) return; used.add(E.ekey(...e)); (p.gates = p.gates || []).push([...e, ri(ch), inv]); };
+  for (let i = 0; i < (g.gates || 0); i++) add(0);
+  for (let i = 0; i < (g.toggle || 0); i++) add(1);
+}
+const gateSet = p => new Set((p.gates || []).map(e => E.ekey(e[0], e[1], e[2], e[3])));
 // the route actually uses what the panel is about
 function usesFeatures(p, sol, need = {}) {
   const st = E.replay(p, sol); if (!st) return false;
@@ -53,6 +65,11 @@ function usesFeatures(p, sol, need = {}) {
   if (need.slides && st.forced.filter((f, i) => f && !st.jump[i]).length < need.slides) return false;
   if (need.bridges && !(p.bridges || []).some(b => sol.filter(n => n[0] === b[0] && n[1] === b[1]).length === 2)) return false;
   if (need.stops && !sol.some(n => E.isStop(p, ...n))) return false;
+  if (need.gate || need.toggle) {
+    const kinds = new Map((p.gates || []).map(e => [E.ekey(e[0], e[1], e[2], e[3]), e[5]])), hit = { 0: 0, 1: 0 };
+    for (let i = 1; i < sol.length; i++) { if (st.jump[i]) continue; const k = kinds.get(E.ekey(...sol[i - 1], ...sol[i])); if (k !== undefined) hit[k ? 1 : 0]++; }
+    if (hit[0] < (need.gate || 0) || hit[1] < (need.toggle || 0)) return false;
+  }
   return true;
 }
 
@@ -63,7 +80,7 @@ function units(p, sol, kinds) {
   const sp = special(p);
   for (const k of kinds) {
     if (k === 'sketch') allEdges(p).filter(e => used.has(E.ekey(...e))).forEach(e => U.push({ k, add: [['sketch', e]] }));
-    if (k === 'avoid' || k === 'broken') allEdges(p).filter(e => !used.has(E.ekey(...e)) && (onRoute.has(e[0] + ',' + e[1]) || onRoute.has(e[2] + ',' + e[3]))).forEach(e => U.push({ k, add: [[k, e]] }));
+    if (k === 'avoid' || k === 'broken') allEdges(p).filter(e => !used.has(E.ekey(...e)) && !gateSet(p).has(E.ekey(...e)) && (onRoute.has(e[0] + ',' + e[1]) || onRoute.has(e[2] + ',' + e[3]))).forEach(e => U.push({ k, add: [[k, e]] }));
     if (k === 'oneway') for (let i = 1; i < sol.length; i++) if (!st.jump[i] && !st.forced[i]) U.push({ k, add: [['oneway', [...sol[i - 1], ...sol[i]]]] });
     if (k === 'holes') allNodes(p).filter(n => !onRoute.has(n.join(',')) && !sp.has(n.join(','))).forEach(n => U.push({ k, add: [['holes', n]] }));
     if (k === 'dots') sol.slice(1, -1).filter(n => !sp.has(n.join(','))).forEach(n => U.push({ k, add: [['dots', n]] }));
@@ -145,6 +162,18 @@ function boxStats(p, inputs) {
   }
   return { s, desync, left, movesBy };
 }
+// did the answer walk through a gate that starts shut (u.gate) and through an inverted gate (u.toggle)?
+function gateUse(p, inputs, u) {
+  let s = E.boxStart(p);
+  const kinds = new Map((p.gates || []).map(e => [E.ekey(e[0], e[1], e[2], e[3]), e[5]])), hit = { 0: 0, 1: 0 };
+  const shut0 = E.gateClosed(p, k => s.pos.some(q => q.join(',') === k));
+  for (const c of inputs) {
+    const before = s.tracks.map(t => t.length), r = E.boxStep(p, s, E.DK[c]);
+    r.state.tracks.forEach((t, i) => { for (let k = before[i]; k < t.length; k++) { if (r.state.jumps[i][k]) continue; const ek = E.ekey(...t[k - 1], ...t[k]), kd = kinds.get(ek); if (kd === undefined) continue; if (kd ? true : shut0.has(ek)) hit[kd ? 1 : 0]++; } });
+    s = r.state;
+  }
+  return hit[0] >= (u.gate || 0) && hit[1] >= (u.toggle || 0);
+}
 function designBox(spec) {
   const g = spec.gen || {};
   for (let attempt = 0; attempt < (spec.tries || 800); attempt++) {
@@ -162,6 +191,18 @@ function designBox(spec) {
     for (let i = 0; i < (g.stops || 0); i++) { const n = pick(); if (n) (p.stops = p.stops || []).push(n); }
     for (let i = 0; i < (g.portals || 0); i++) { const a = pick(), b = a && pick(n => Math.abs(n[0] - a[0]) + Math.abs(n[1] - a[1]) >= 3); if (b) (p.portals = p.portals || []).push([...a, ...b]); }
     for (let i = 0; i < (g.oneway || 0); i++) { const e = shuffle(allEdges(p)).find(e => !p.broken.some(b => E.ekey(...b) === E.ekey(...e))); if (e) (p.oneway = p.oneway || []).push(rnd() < .5 ? e : [e[2], e[3], e[0], e[1]]); }
+    if (g.guard) {   // the first goals sit in walled bays whose only door is a gate (the 2nd one inverted when g.toggle)
+      const brokenK = new Set(p.broken.map(e => E.ekey(...e)));
+      p.exit.slice(0, g.guard).forEach((gl, gi) => {
+        const links = shuffle([[1, 0], [-1, 0], [0, 1], [0, -1]].map(([dx, dy]) => [gl[0], gl[1], gl[0] + dx, gl[1] + dy]).filter(e => E.inside(p, e[2], e[3])));
+        if (!links.length) return;
+        links.slice(1).forEach(e => { if (!brokenK.has(E.ekey(...e))) { p.broken.push(e); brokenK.add(E.ekey(...e)); } });
+        p.broken = p.broken.filter(e => E.ekey(...e) !== E.ekey(...links[0]));
+        (p.gates = p.gates || []).push([...links[0], 0, g.toggle && gi === 1 ? 1 : 0]);
+      });
+      for (let i = 0; i < (g.plates || 1); i++) { const n = pick(); if (n) (p.plates = p.plates || []).push([...n, 0]); }
+      if (!(p.plates || []).length) continue;
+    } else addSwitches(p, g, () => pick());
     if (!p.broken.length) delete p.broken;
     const maxL = spec.maxLen || 20;
     let r = E.boxSolve(p, maxL, 8, 200000);
@@ -186,6 +227,7 @@ function designBox(spec) {
     if (u.portals && !allJ.some(Boolean)) continue;
     if (u.oneway && !(p.oneway || []).some(e => st.s.tracks.some(t => t.some((n, i) => i && t[i - 1][0] === e[0] && t[i - 1][1] === e[1] && n[0] === e[2] && n[1] === e[3])))) continue;
     if (spec.helpers && !st.movesBy[spec.boxes.length - 1]) continue;
+    if ((u.gate || u.toggle) && !gateUse(p, best, u)) continue;
     if (spec.leave && !st.left) continue;
     if (st.desync < (spec.desync || 0)) continue;
     const luck = randomPlay(p, L * 2);
@@ -205,16 +247,19 @@ const RULE = {
   bridges: 'Cầu vượt: được đi qua hai lần, một lần ngang một lần dọc, luôn đi thẳng qua.', pads: 'Bệ phóng: giẫm lên là trượt theo mũi tên tới khi bị chặn.',
   stops: 'Ô phanh: đang trượt thì dừng lại ở đây.', moves: n => `Phải tới đích bằng đúng ${n} nước (mỗi lần ấn phím là một nước, cả cú trượt tính một nước).`,
   ends: 'Điểm xuất phát và đích có thể nằm ở bất kỳ đâu.',
+  plates: 'Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại).',
   twin: 'Hai đường song sinh: ấn trái thì đường hồng sang trái, đường tím sang phải (lên/xuống thì cùng chiều). Đường bị chặn thì đứng yên, đường kia vẫn đi. Mỗi đường tới đích của mình thì đỗ lại; thắng khi cả hai đã đỗ.',
 };
 const TIP = {
   nums: 'Ô "0" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.', sketch: 'Tìm đoạn chì chỉ nối được theo một cách.', squares: 'Hai ô khác màu nằm sát nhau buộc đường đi qua cạnh chung.',
   mirror: 'Coi trục giữa như tường.', portals: 'Coi hai cổng như một điểm.', bridges: 'Cầu vượt là chỗ duy nhất đường được cắt qua chính nó: dùng nó để quay lại vùng đã đi.',
+  plates: 'Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó.',
   pads: 'Tính trước bệ phóng sẽ đưa bạn tới đâu; đôi khi phải tự tạo "tường" bằng chính đường đã vẽ để cú trượt dừng đúng chỗ.', moves: 'Đếm nước: cú trượt dài chỉ tính một nước, nên đường dài chưa chắc tốn nhiều nước.',
   twin: 'Dùng tường để làm hai đường lệch nhịp: một đường bị chặn đứng yên trong khi đường kia đi tiếp.', oneway: 'Mũi tên chặn đường quay lại: tính thứ tự trước khi đi.',
   visitAll: 'Góc chỉ có 2 lối nên đường đi qua góc theo đúng 2 lối đó.',
 };
 const BRULE = {
+  plates: 'Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím.',
   goal: 'Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên.',
   pads: 'Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại.',
   stops: 'Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây.',
@@ -232,6 +277,7 @@ const BRULE = {
   trail: 'Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái "đường" ở các bảng khác chính là một hộp như thế.',
 };
 const BTIP = {
+  plates: 'Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai.',
   pads: 'Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?', stops: 'Ô phanh là chỗ duy nhất giữa đường mà hộp đang lướt chịu dừng.',
   dash: 'Hộp dash chỉ dừng cạnh tường: tìm những ô có tường phía sau theo hướng bạn đi.', budget: 'Đếm trước: mỗi nước phí là mất một số, không lấy lại được.',
   mx: 'Dùng tường để làm hai hộp lệch nhau: một hộp bị chặn đứng yên trong khi hộp kia đi tiếp.', many: 'Hộp đứng yên cũng là một bức tường cho hộp khác.',
@@ -240,7 +286,7 @@ const BTIP = {
 };
 function whyBox(p, spec) {
   const r = ['goal'];
-  for (const f of ['pads', 'stops', 'portals', 'oneway', 'holes']) if ((p[f] || []).length) r.push(f);
+  for (const f of ['pads', 'stops', 'portals', 'oneway', 'holes', 'plates']) if ((p[f] || []).length) r.push(f);
   if (p.boxes.some(b => b.dash)) r.push('dash');
   if (p.boxes.some(b => b.n != null)) r.push('budget');
   for (const m of ['mx', 'my', 'opp']) if (p.boxes.some(b => b.m === m)) r.push(m);
@@ -256,7 +302,7 @@ function whyBox(p, spec) {
 function whyFor(p, spec) {
   const r = [];
   if (p.twin) r.push('twin');
-  for (const f of ['pads', 'stops', 'portals', 'bridges', 'oneway', 'holes', 'sketch', 'avoid', 'squares', 'nums', 'dots', 'broken']) if ((p[f] || []).length) r.push(f);
+  for (const f of ['pads', 'stops', 'portals', 'bridges', 'plates', 'oneway', 'holes', 'sketch', 'avoid', 'squares', 'nums', 'dots', 'broken']) if ((p[f] || []).length) r.push(f);
   if (p.mirror) r.push('mirror'); if (p.visitAll) r.push('visitAll'); if (p.moves) r.push('moves');
   const t = k => typeof RULE[k] === 'function' ? RULE[k](p.moves) : RULE[k];
   let s = spec.intro ? `Bảng dạy luật mới. ${t(spec.intro)} ` : '';
@@ -271,14 +317,23 @@ const add = (girl, layer, n, o) => S.push({ id: `${girl}_${layer}_${n}`, girl, l
 const SE = (w, h) => ({ w, h, start: [[0, h]], exit: [[w, 0]] });
 const MIR = (w, h) => ({ w, h, start: [[0, h], [w, h]], exit: [[0, 0], [w, 0]], mirror: 'x' });
 
+/* PRIM · layers 1–2 replacements for the old ink panels: pressure plates and gates */
+add('prim', 1, 3, { base: SE(3, 3), gen: { plates: 1, gates: 1 }, uses: { gate: 1 }, clues: ['broken'], target: 2, intro: 'plates', belief: 'i only draw what someone drew first.' });
+add('prim', 1, 4, { base: SE(4, 3), gen: { plates: 1, gates: 1 }, uses: { gate: 1 }, clues: ['sketch', 'broken'], lead: ['sketch'], need: { sketch: 2 }, feature: 'plates', belief: 'if i trace it, it can\'t be wrong.' });
+add('prim', 1, 5, { base: SE(4, 4), gen: { plates: 1, gates: 2 }, uses: { gate: 1 }, clues: ['sketch', 'broken'], lead: ['sketch'], need: { sketch: 2 }, feature: 'plates', belief: "i can't draw. i can only trace." });
+add('prim', 1, 6, { base: SE(4, 4), gen: { plates: 2, gates: 2, ch: 2 }, uses: { gate: 2 }, clues: ['sketch', 'broken'], lead: ['sketch'], feature: 'plates', belief: "if i copy, i can't be wrong." });
+add('prim', 2, 5, { base: MIR(4, 4), gen: { plates: 1, gates: 1 }, uses: { gate: 1 }, clues: ['sketch', 'avoid'], feature: 'mirror', belief: "we never touch. we can't." });
+add('prim', 2, 6, { base: SE(4, 4), gen: { plates: 1, gates: 1 }, uses: { gate: 1 }, clues: ['avoid', 'broken'], lead: ['avoid'], need: { avoid: 1 }, feature: 'plates', belief: 'the wrong line is worse than no line.' });
+add('prim', 2, 7, { base: MIR(4, 4), clues: ['sketch', 'avoid', 'broken'], need: { sketch: 1, avoid: 1 }, feature: 'mirror', belief: 'the other hand always knows where i am going.' });
+
 /* PRIM · layer 3: the rules she already has, harder (no new rule) */
 add('prim', 3, 1, { base: SE(4, 4), clues: ['sketch', 'avoid', 'broken'], lead: ['sketch'], need: { sketch: 2, avoid: 1 }, feature: 'sketch', belief: 'what if i drew something of my own?' });
-add('prim', 3, 2, { base: SE(4, 4), clues: ['squares', 'avoid', 'broken'], lead: ['squares'], need: { squares: 3 }, feature: 'squares', belief: "it doesn't look like anything. it's mine." });
+add('prim', 3, 2, { base: SE(4, 4), gen: { plates: 1, gates: 1, toggle: 1 }, uses: { gate: 1, toggle: 1 }, clues: ['sketch', 'avoid', 'broken'], lead: ['sketch'], feature: 'plates', belief: "it doesn't look like anything. it's mine." });
 add('prim', 3, 3, { base: MIR(4, 4), clues: ['sketch', 'avoid'], need: { sketch: 1, avoid: 1 }, feature: 'mirror', belief: 'my colours. my lines.' });
-add('prim', 3, 4, { base: SE(5, 4), clues: ['sketch', 'squares', 'broken'], lead: ['squares'], need: { squares: 2, sketch: 1 }, feature: 'squares', belief: 'no pencil to follow. not really.' });
-add('prim', 3, 5, { base: MIR(4, 4), clues: ['squares', 'broken'], need: { squares: 2 }, feature: 'mirror', belief: 'even the other hand draws my way now.' });
-add('prim', 3, 6, { base: SE(5, 4), clues: ['sketch', 'avoid', 'squares', 'broken'], lead: ['avoid'], need: { avoid: 2, squares: 2 }, feature: 'squares', belief: "i don't need the pencil anymore." });
-add('prim', 3, 7, { base: MIR(4, 4), clues: ['sketch', 'avoid', 'squares'], need: { squares: 1, sketch: 1 }, feature: 'mirror', belief: 'i trace so she can draw. that is why i am here.' });
+add('prim', 3, 4, { base: SE(5, 4), gen: { plates: 2, gates: 2, toggle: 1, ch: 2 }, uses: { gate: 2 }, clues: ['sketch', 'avoid', 'broken'], lead: ['sketch'], need: { sketch: 1 }, feature: 'plates', belief: 'no pencil to follow. not really.' });
+add('prim', 3, 5, { base: MIR(4, 4), gen: { plates: 1, gates: 1, toggle: 1 }, uses: { gate: 1 }, clues: ['sketch', 'avoid'], feature: 'mirror', belief: 'even the other hand draws my way now.' });
+add('prim', 3, 6, { base: SE(5, 4), gen: { plates: 2, gates: 2, toggle: 1, ch: 2 }, uses: { gate: 1, toggle: 1 }, clues: ['sketch', 'avoid', 'broken'], lead: ['avoid'], need: { sketch: 2 }, feature: 'plates', belief: "i don't need the pencil anymore." });
+add('prim', 3, 7, { base: MIR(4, 4), gen: { plates: 1, gates: 2, toggle: 1 }, uses: { gate: 1 }, clues: ['sketch', 'avoid', 'broken'], need: { sketch: 1 }, feature: 'mirror', belief: 'i trace so she can draw. that is why i am here.' });
 
 /* TRIX · layers 2–3: edge-count numbers, made harder with walls, holes, any start/exit, visit-all, one-way */
 add('trix', 2, 1, { base: SE(4, 3), clues: ['nums', 'broken'], lead: ['nums'], leadN: 4, need: { nums: 3 }, feature: 'nums', belief: 'a number is a promise. i keep promises.' });
@@ -331,17 +386,17 @@ add('vel', 1, 6, BX(5, 5, B1, { gen: { walls: .22, pads: 5, stops: 2, holes: 3 }
 add('vel', 2, 1, BX(3, 3, D1, { gen: { walls: .25 }, minLen: 3, luck: .15, intro: 'dash', belief: 'up, down, up. pick a lane, vel.' }));
 add('vel', 2, 2, BX(4, 4, D1, { gen: { walls: .25 }, minLen: 5, luck: .06, feature: 'dash', belief: 'yesterday i loved everyone. today i hate this font.' }));
 add('vel', 2, 3, BX(4, 4, D1, { gen: { walls: .2, stops: 2 }, uses: { stops: 1 }, minLen: 5, luck: .05, feature: 'stops', belief: "highs and lows are just terrain. i've mapped worse." }));
-add('vel', 2, 4, BX(4, 4, D1, { gen: { walls: .2, oneway: 3 }, uses: { oneway: 1 }, minLen: 5, luck: .05, intro: 'oneway', belief: 'when the floor drops, i already have a rope.' }));
+add('vel', 2, 4, BX(4, 4, [{}, {}], { helpers: 1, gen: { walls: .18, guard: 1, plates: 1 }, uses: { gate: 1 }, minLen: 4, luck: .06, intro: 'plates', belief: 'when the floor drops, i already have a rope.' }));
 add('vel', 2, 5, BX(5, 4, [{ dash: true }, {}], { helpers: 1, gen: { walls: .2 }, minLen: 5, luck: .04, intro: 'helpers', belief: 'i write the sad chapters on the good days. just in case.' }));
-add('vel', 2, 6, BX(5, 5, D1, { gen: { walls: .22, holes: 3, stops: 1, pads: 2 }, uses: { pads: 1 }, minLen: 6, luck: .03, feature: 'dash', belief: 'stay sharp. moods are weather. weather passes.' }));
+add('vel', 2, 6, BX(5, 5, [{ dash: true }, {}], { helpers: 1, gen: { walls: .2, guard: 1, plates: 1, stops: 1 }, uses: { gate: 1 }, minLen: 5, maxLen: 12, luck: .03, feature: 'plates', belief: 'stay sharp. moods are weather. weather passes.' }));
 add('vel', 2, 7, BX(5, 5, [{ dash: true }, { dash: true }], { gen: { walls: .22, stops: 1 }, minLen: 6, luck: .02, intro: 'many', belief: 'if i keep moving, the low can never catch me.' }));
 add('vel', 3, 1, BX(4, 3, [{ n: 1 }], { gen: { walls: .2, pads: 2 }, minLen: 4, luck: .06, intro: 'budget', belief: 'map the ground before you walk it.' }));
 add('vel', 3, 2, BX(4, 4, [{ dash: true, n: 1 }], { gen: { walls: .2, stops: 1 }, minLen: 5, luck: .04, feature: 'budget', belief: "you don't step where you haven't checked. ever." }));
 add('vel', 3, 3, BX(4, 4, [{ n: 1 }, { n: 1 }], { gen: { walls: .22 }, minLen: 5, luck: .03, feature: 'budget', belief: 'a story is a minefield. i know where i buried everything.' }));
 add('vel', 3, 4, BX(5, 4, [{ dash: true, n: 1 }, { n: 1 }], { gen: { walls: .2, pads: 2 }, minLen: 5, luck: .03, feature: 'many', belief: 'swings and landmines. same drill.' }));
-add('vel', 3, 5, BX(5, 4, [{ n: 1 }, { dash: true }, {}], { helpers: 1, gen: { walls: .2, stops: 1 }, minLen: 5, luck: .03, feature: 'helpers', belief: 'i plan for the worst so nobody sees me fall.' }));
+add('vel', 3, 5, BX(5, 4, [{ n: 1 }, { dash: true }, {}], { helpers: 1, gen: { walls: .2, guard: 1, plates: 1 }, uses: { gate: 1 }, minLen: 5, luck: .03, feature: 'helpers', belief: 'i plan for the worst so nobody sees me fall.' }));
 add('vel', 3, 6, BX(5, 5, [{ dash: true, n: 1 }, { dash: true, n: 1 }], { gen: { walls: .22, pads: 2, portals: 1 }, minLen: 6, luck: .02, feature: 'budget', belief: "if i'm in control, nothing explodes." }));
-add('vel', 3, 7, BX(5, 5, [{ n: 1 }, { dash: true, n: 1 }, {}], { helpers: 1, gen: { walls: .22, stops: 1, pads: 2 }, minLen: 6, luck: .02, feature: 'many', belief: 'as long as the map is mine, nobody gets left behind.' }));
+add('vel', 3, 7, BX(5, 5, [{ n: 1 }, { dash: true, n: 1 }, {}], { helpers: 1, gen: { walls: .2, guard: 2, toggle: 1, plates: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 6, luck: .02, feature: 'plates', belief: 'as long as the map is mine, nobody gets left behind.' }));
 
 /* MYNE · twin boxes: every key moves both, one of them mirrored; boxes never lock in a goal */
 const MX = [{}, { m: 'mx' }];
@@ -354,17 +409,17 @@ add('myne', 1, 6, BX(4, 4, MX, { gen: { walls: .28, holes: 2 }, minLen: 7, luck:
 add('myne', 2, 1, BX(3, 3, [{ n: 1 }, { m: 'mx', n: 1 }], { gen: { walls: .2 }, minLen: 4, luck: .06, intro: 'budget', belief: "can't. sit. still." }));
 add('myne', 2, 2, BX(4, 3, MX, { gen: { walls: .2, oneway: 2 }, uses: { oneway: 1 }, minLen: 5, luck: .04, desync: 2, intro: 'oneway', belief: 'boredom is a bug. i patch it with noise.' }));
 add('myne', 2, 3, BX(4, 4, [{}, { m: 'mx' }, { m: 'my' }], { gen: { walls: .22 }, minLen: 5, luck: .03, desync: 2, intro: 'my', belief: 'ten tabs open. all of them important.' }));
-add('myne', 2, 4, BX(4, 4, [{ n: 1 }, { m: 'opp', n: 1 }], { gen: { walls: .22, oneway: 2, holes: 1 }, minLen: 5, luck: .03, feature: 'budget', belief: 'one-way streets? speedrun route.' }));
-add('myne', 2, 5, BX(4, 4, [{}, { m: 'mx' }, {}], { helpers: 1, gen: { walls: .22 }, minLen: 6, luck: .03, desync: 2, feature: 'helpers', belief: "if i'm loud enough nobody notices i'm fragile." }));
-add('myne', 2, 6, BX(5, 4, [{ n: 1 }, { m: 'mx', n: 1 }, { m: 'my' }], { gen: { walls: .22, holes: 1 }, minLen: 6, luck: .02, feature: 'budget', belief: 'finish everything. right now. all of it.' }));
-add('myne', 2, 7, BX(5, 4, [{}, { m: 'mx' }, { m: 'opp' }], { gen: { walls: .22, oneway: 2, holes: 2 }, minLen: 7, luck: .02, desync: 3, feature: 'many', belief: 'keep moving or the lag catches up.' }));
+add('myne', 2, 4, BX(4, 4, MX, { gen: { walls: .2, plates: 1, gates: 2 }, uses: { gate: 1 }, minLen: 5, luck: .03, intro: 'plates', belief: 'one-way streets? speedrun route.' }));
+add('myne', 2, 5, BX(4, 4, MX, { gen: { walls: .18, guard: 2, toggle: 1, plates: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 5, maxLen: 12, luck: .03, feature: 'plates', belief: "if i'm loud enough nobody notices i'm fragile." }));
+add('myne', 2, 6, BX(5, 4, [{ n: 1 }, { m: 'mx', n: 1 }], { gen: { walls: .2, guard: 2, toggle: 1, plates: 1, holes: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 6, luck: .02, feature: 'budget', belief: 'finish everything. right now. all of it.' }));
+add('myne', 2, 7, BX(5, 4, [{}, { m: 'mx' }, { m: 'opp' }], { gen: { walls: .2, guard: 2, toggle: 1, plates: 1, oneway: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 6, luck: .02, feature: 'many', belief: 'keep moving or the lag catches up.' }));
 add('myne', 3, 1, BX(4, 3, [{ dash: true }, { m: 'mx', dash: true }], { gen: { walls: .25 }, minLen: 4, luck: .08, intro: 'dash', belief: 'boost pads! zoom!' }));
 add('myne', 3, 2, BX(4, 4, MX, { gen: { walls: .2, pads: 3, stops: 1 }, uses: { pads: 1 }, minLen: 5, luck: .04, intro: 'pads', belief: "my body can't keep up. so my head runs for both." }));
 add('myne', 3, 3, BX(4, 4, [{ dash: true }, { m: 'mx' }], { gen: { walls: .22, portals: 1 }, uses: { portals: 1 }, minLen: 5, luck: .03, intro: 'portals', belief: 'warp, dash, park. combo.' }));
 add('myne', 3, 4, BX(4, 4, [{ trail: true }, { m: 'mx' }], { gen: { walls: .2 }, minLen: 6, luck: .03, desync: 1, intro: 'trail', belief: 'every direction is forward if you go fast enough.' }));
-add('myne', 3, 5, BX(4, 4, [{ trail: true }, { m: 'mx', dash: true }], { gen: { walls: .18, pads: 2 }, minLen: 6, luck: .02, feature: 'trail', belief: 'i have to see every pixel. every one.' }));
-add('myne', 3, 6, BX(5, 4, [{ trail: true }, { m: 'mx', trail: true }], { gen: { walls: .15, holes: 1 }, minLen: 6, luck: .02, feature: 'trail', belief: 'two players, one heart rate.' }));
-add('myne', 3, 7, BX(5, 5, [{ trail: true, n: 1 }, { m: 'mx', dash: true }, { m: 'opp' }], { gen: { walls: .2, portals: 1, pads: 2 }, minLen: 7, luck: .02, feature: 'many', belief: 'as long as the game is running, i get to keep playing.' }));
+add('myne', 3, 5, BX(4, 4, [{ dash: true }, { m: 'mx' }], { gen: { walls: .18, guard: 2, toggle: 1, plates: 1, pads: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 5, luck: .02, feature: 'plates', belief: 'i have to see every pixel. every one.' }));
+add('myne', 3, 6, BX(5, 4, [{ trail: true }, { m: 'mx' }], { gen: { walls: .15, guard: 1, plates: 1 }, uses: { gate: 1 }, minLen: 6, luck: .02, feature: 'trail', belief: 'two players, one heart rate.' }));
+add('myne', 3, 7, BX(5, 5, [{ n: 1 }, { m: 'mx', dash: true }, { m: 'opp' }], { gen: { walls: .2, guard: 2, toggle: 1, plates: 1, portals: 1 }, uses: { gate: 1, toggle: 1 }, minLen: 7, luck: .02, feature: 'many', belief: 'as long as the game is running, i get to keep playing.' }));
 
 /* ======================= build ======================= */
 const old = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
@@ -372,19 +427,22 @@ const isKept = p => (p.girl === 'prim' && p.layer <= 2) || (p.girl === 'trix' &&
 const keep = old.filter(p => isKept(p) || (ONLY && p.girl !== ONLY && !process.env.PART));
 keep.forEach(p => p.sol && USED.add(JSON.stringify(p.sol)));
 const out = keep.slice();
+const IDS = process.env.IDS ? process.env.IDS.split(',') : null;
 for (const spec of S) {
   if (ONLY && spec.girl !== ONLY) continue;
+  if (IDS && !IDS.includes(spec.id)) continue;
   seed = hash(spec.id) || 1;
   const t0 = Date.now(); let p;
   try { p = spec.box ? designBox(spec) : designSingle(spec); } catch (e) { console.log('SKIP', spec.id, e.message); continue; }
   Object.assign(p, { belief: spec.belief, intro: spec.intro || null });
   p.why = p.boxes ? whyBox(p, spec) : whyFor(p, spec);
   out.push(p);
-  const f = ['holes', 'broken', 'oneway', 'pads', 'stops', 'portals', 'bridges', 'dots', 'nums', 'sketch', 'avoid', 'squares'].filter(k => (p[k] || []).length).map(k => `${k} ${p[k].length}`).join(', ');
+  const f = ['holes', 'broken', 'oneway', 'pads', 'stops', 'portals', 'bridges', 'plates', 'gates', 'dots', 'nums', 'sketch', 'avoid', 'squares'].filter(k => (p[k] || []).length).map(k => `${k} ${p[k].length}`).join(', ');
   console.log(`${p.id.padEnd(10)} ${p.w}x${p.h}${p.boxes ? ' boxes ' + p.boxes.length : ''}${p.mirror ? ' mirror' : ''}${p.visitAll ? ' all' : ''}${p.moves ? ' moves=' + p.moves : ''}  ${p.boxes ? `shortest ${p.minMoves} (${p.solutions} ways, luck ${p.luck}%)` : `sols ${p.solutions} · ${p.minMoves} moves`}  ${f}  (${Date.now() - t0}ms)`);
 }
 const ord = { prim: 0, trix: 1, paige: 2, vel: 3, myne: 4 };
 out.sort((a, b) => ord[a.girl] - ord[b.girl] || a.layer - b.layer || a.n - b.n);
-if (process.env.PART) fs.writeFileSync(process.env.PART, JSON.stringify(out.filter(p => p.girl === ONLY), null, 1));
+if (IDS) fs.writeFileSync(process.env.PART, JSON.stringify(out.filter(p => IDS.includes(p.id)), null, 1));
+else if (process.env.PART) fs.writeFileSync(process.env.PART, JSON.stringify(out.filter(p => p.girl === ONLY), null, 1));
 else fs.writeFileSync(OUT, JSON.stringify(out, null, 1));
 console.log('wrote', process.env.PART ? out.filter(p => p.girl === ONLY).length : out.length, 'panels');

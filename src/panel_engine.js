@@ -22,6 +22,15 @@
      stops   [[x,y]]            a slide stops here
      bridges [[x,y]]            overpass: crossed twice, once across and once
                                 along, always straight through
+   Switches
+     plates  [[x,y,ch]]                 a pressure plate on channel ch (0, 1)
+     gates   [[x1,y1,x2,y2,ch,inv]]     a gate on a link: open while something stands
+                                        on a plate of its channel (inv=1: the other way
+                                        round, so the two kinds swap when a plate is pressed).
+                                        The line counts as standing on every node it covers;
+                                        boxes count while they are on the plate (and a rope
+                                        lying on it). Box panels read the gates at the start
+                                        of each key press.
    Rules
      sketch  edges that must be used           avoid  edges that must not be used
      dots    nodes that must be visited        visitAll
@@ -70,9 +79,16 @@ const PanelEngine = (() => {
   // a link is usable in this direction?
   function linkOk(p, C, a, b) {
     const k = ekey(a[0], a[1], b[0], b[1]);
-    if (C.broken.has(k) || C.avoidHard.has(k)) return false;
+    if (C.broken.has(k) || C.avoidHard.has(k) || (C.closed && C.closed.has(k))) return false;
     const ow = C.oneway.get(k); if (ow && !(ow[0] === a[0] && ow[1] === a[1])) return false;
     return true;
+  }
+  // the gates that are closed when onKey('x,y') says what is standing on each plate
+  function gateClosed(p, onKey) {
+    const out = new Set(); if (!(p.gates || []).length) return out;
+    const act = {}; (p.plates || []).forEach(([x, y, ch]) => { if (onKey(key(x, y))) act[ch] = true; });
+    p.gates.forEach(([a, b, c, d, ch, inv]) => { if (!!act[ch] === !!inv) out.add(ekey(a, b, c, d)); });
+    return out;
   }
   function ctx(p) {
     const ow = new Map(); (p.oneway || []).forEach(e => ow.set(ekey(e[0], e[1], e[2], e[3]), [e[0], e[1]]));
@@ -101,6 +117,7 @@ const PanelEngine = (() => {
   // the moves available now: [{to, dir, jump, forced}]
   function options(p, st, C = ctx(p)) {
     const at = st.path[st.path.length - 1];
+    if ((p.gates || []).length) C.closed = gateClosed(p, k => st.cnt.has(k));
     if (st.pend === 'jump') { const t = twin(p, ...at); return t && canEnter(p, C, st, at, t, null, true) ? [{ to: t, dir: st.slide, jump: true, forced: true }] : []; }
     if (st.pend === 'straight') { const d = st.lastDir, to = norm(p, at[0] + d[0], at[1] + d[1]); return canEnter(p, C, st, at, to, d, false) ? [{ to, dir: d, jump: false, forced: true }] : []; }
     if (st.slide) { const d = st.slide, to = norm(p, at[0] + d[0], at[1] + d[1]); if (canEnter(p, C, st, at, to, d, false)) return [{ to, dir: d, jump: false, forced: true }]; }
@@ -235,6 +252,7 @@ const PanelEngine = (() => {
   // one key press; returns { state, moved: [bool…] } (a new state; rec=false skips the drawing tracks)
   function boxStep(p, s0, d, rec = true) {
     const C = ctx(p), n = p.boxes.length;
+    if ((p.gates || []).length) C.closed = gateClosed(p, k => s0.pos.some(q => key(...q) === k) || s0.trail.has(k));
     const s = { pos: s0.pos.map(q => q.slice()), left: s0.left.slice(), trail: new Set(s0.trail), inputs: s0.inputs + dirKey(d),
       tracks: rec && s0.tracks ? s0.tracks.map(t => t.map(q => q.slice())) : null, jumps: rec && s0.jumps ? s0.jumps.map(j => j.slice()) : null };
     const act = p.boxes.map((b, i) => s.left[i] === null || s.left[i] > 0);
@@ -302,7 +320,7 @@ const PanelEngine = (() => {
     }
     return { wins, explored, capped: false };
   }
-  return { validate, solve, replay, options, apply, undo, start, canStop, rules, ctx, neighbors, brokenSet, isStart, isExit, exitDir, key, ekey, nodeCount, dims, norm, inside, twin, jumps, mirrorOf, lines, regions, cellSides, edgeSet, padAt, isStop, isBridge, holeSet, usedEdges,
+  return { gateClosed, validate, solve, replay, options, apply, undo, start, canStop, rules, ctx, neighbors, brokenSet, isStart, isExit, exitDir, key, ekey, nodeCount, dims, norm, inside, twin, jumps, mirrorOf, lines, regions, cellSides, edgeSet, padAt, isStop, isBridge, holeSet, usedEdges,
     boxStart, boxStep, boxWon, boxReplay, boxSolve, boxDir, DK, dirKey };
 })();
 if (typeof module !== 'undefined') module.exports = PanelEngine;

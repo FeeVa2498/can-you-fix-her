@@ -10,11 +10,11 @@ const CH = (() => { try { return JSON.parse(localStorage.getItem(CH_KEY)) || {};
 CH.done = CH.done || {}; CH.opt = Object.assign({ intro: true, debug: false, view3d: true, retro: true, mem: { tracing_paper: false, queen_piece: false } }, CH.opt || {});
 const chSave = () => { try { localStorage.setItem(CH_KEY, JSON.stringify(CH)); } catch (e) { } };
 const CH_GIRLS = [
-  { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'pencil · two inks · the other hand' },
+  { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'pencil · black pencil · the other hand · switches' },
   { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'edge counts · holes · goals anywhere · one-way · every point' },
   { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'portals · overpasses · broken maps' },
-  { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'boxes · dash tiles · dash boxes · move budgets' },
-  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'twin boxes · no locking · rope boxes' },
+  { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'boxes · dash tiles · dash boxes · switches · move budgets' },
+  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'twin boxes · no locking · switch & swap gates · rope boxes' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
 const CH_MEM = {
@@ -98,16 +98,13 @@ function magnifierIntro(p) {
     openWin('feedcam', { title: `Live feed · ${GIRLS[g].id}`, icon: 'feed', w: 260, h: 330, x: 30, y: 30, render: b => {
       b.innerHTML = `<div class="cam"><div class="cam-room">${A ? `<img src="${A.body}" alt="${GIRLS[g].name} on the chair">` : `<div class="cam-sil" aria-label="${GIRLS[g].name} on the chair"></div>`}<div class="lens" id="lens"></div></div><div class="cam-cap">● REC · room 0</div></div>`;
     } });
-    openWin('magnifier', { title: 'Magnifier.exe', icon: 'img', w: 280, h: 330, x: 310, y: 40, render: b => {
-      b.innerHTML = `<div class="mag"><div class="mag-view" id="magv">${PORTRAIT[g] ? `<img src="${portraitURL(g, 'neutral')}" alt="">` : '<div class="mag-sil"></div>'}<div class="mag-tissue g-${g}"></div><div class="mag-scan"></div></div>
-        <div class="mag-info">region: <b>${REGION[p.layer]}</b> · layer ${p.layer}<br>focus <span id="magf">0</span>%</div>
-        <div class="mag-btns"><button class="btn" id="mag-skip">Skip</button><button class="btn primary" id="mag-go" disabled>Project ▸</button></div></div>`;
-    } });
-    const lens = $('#lens'), f = $('#magf'), go = $('#mag-go'), v = $('#magv');
-    requestAnimationFrame(() => lens.classList.add('on'));
-    let k = 0; const iv = setInterval(() => { k = Math.min(100, k + 4); f.textContent = k; v.style.setProperty('--z', 1 + k / 60); v.style.setProperty('--t', k / 100); if (k >= 100) { clearInterval(iv); go.disabled = false; go.focus(); SFX.chime(); } }, REDUCED ? 5 : 45);
+    openWin('magnifier', { title: 'Magnifier.exe · neural scan', icon: 'img', w: 560, h: 470, x: 300, y: 24, render: b => { b.innerHTML = magDashHTML(p); } });
+    const stop = magDashRun(p);
+    const f = $('#magf'), go = $('#mag-go'), bar = $('#magbar'), lens = $('#lens');
+    requestAnimationFrame(() => lens && lens.classList.add('on'));
+    let k = 0; const iv = setInterval(() => { k = Math.min(100, k + 2); f.textContent = k; bar.style.width = k + '%'; if (k >= 100) { clearInterval(iv); go.disabled = false; go.focus(); SFX.chime(); $('#mg-state').textContent = 'LOCKED'; } }, REDUCED ? 5 : 45);
     const finish = async beam => {
-      clearInterval(iv);
+      clearInterval(iv); stop();
       if (beam && !REDUCED) {
         SFX.link();
         const r = WINS.magnifier.el.getBoundingClientRect(), d = $('#desktop').getBoundingClientRect();
@@ -120,6 +117,77 @@ function magnifierIntro(p) {
     $('#mag-go').onclick = () => finish(true);
     $('#mag-skip').onclick = () => finish(false);
   });
+}
+
+/* ---------------- Magnifier.exe: a neural-scan dashboard (all for show) ---------------- */
+const MG_REG = { 1: { name: 'HIPPOCAMPUS', at: [104, 92] }, 2: { name: 'AMYGDALA', at: [74, 96] }, 3: { name: 'PREFRONTAL', at: [46, 62] } };
+function magDashHTML(p) {
+  const g = p.girl, R = MG_REG[p.layer];
+  const labels = [['PREFRONTAL', 46, 62, 8, 18], ['AMYGDALA', 74, 96, 6, 138], ['HIPPOCAMPUS', 104, 92, 120, 140], ['THALAMUS', 100, 70, 150, 40], ['VISUAL', 160, 80, 168, 112]];
+  const call = labels.map(([n, x, y, lx, ly], i) => `<g class="mg-call${n === R.name ? ' hot' : ''}"><circle cx="${x}" cy="${y}" r="3"/><polyline points="${x},${y} ${lx + (lx < x ? 34 : 0)},${ly} ${lx + (lx < x ? 0 : 34)},${ly}"/><text x="${lx}" y="${ly - 3}">${n}</text><text class="v" id="mgv${i}" x="${lx}" y="${ly + 9}">0.00</text></g>`).join('');
+  return `<div class="mg">
+    <div class="mg-head"><span>SUBJECT · ${esc(GIRLS[g].name.toUpperCase())}</span><span>REGION · ${REGION[p.layer].toUpperCase()} · L${p.layer}</span><span class="rec">● <i id="mg-state">SCANNING</i></span></div>
+    <div class="mg-body">
+      <div class="mg-p mg-brain"><svg viewBox="0 0 200 160" aria-label="Brain scan of ${esc(GIRLS[g].name)}">
+        <defs><radialGradient id="mgglow"><stop offset="0" stop-color="#ff4fd8" stop-opacity=".9"/><stop offset="1" stop-color="#ff4fd8" stop-opacity="0"/></radialGradient>
+          <clipPath id="mgclip"><path d="M30 92 C18 60 40 26 82 22 C120 18 160 30 176 58 C188 80 180 104 160 112 C150 128 128 128 120 120 C108 132 84 132 76 120 C56 124 36 112 30 92 Z"/></clipPath></defs>
+        <g clip-path="url(#mgclip)"><rect width="200" height="160" fill="#1b0a33"/>
+          <g class="mg-gyri"><path d="M40 70 C60 50 80 64 96 48 C112 34 136 46 150 40"/><path d="M36 92 C58 80 70 96 92 82 C112 70 132 86 168 74"/><path d="M60 110 C76 100 96 112 116 102 C132 94 148 104 168 96"/><path d="M70 36 C80 52 74 70 90 80"/><path d="M120 28 C116 50 128 64 120 84"/><path d="M150 46 C142 60 152 76 144 92"/></g>
+          <circle class="mg-hot" cx="${R.at[0]}" cy="${R.at[1]}" r="26" fill="url(#mgglow)"/>
+          <rect class="mg-sweep" x="0" y="0" width="14" height="160"/></g>
+        <path class="mg-outline" d="M30 92 C18 60 40 26 82 22 C120 18 160 30 176 58 C188 80 180 104 160 112 C150 128 128 128 120 120 C108 132 84 132 76 120 C56 124 36 112 30 92 Z"/>
+        <path class="mg-outline" d="M112 124 C116 136 118 146 126 152"/>
+        ${call}
+      </svg></div>
+      <div class="mg-col">
+        <div class="mg-p mg-heat"><canvas id="mg-heat" width="48" height="30"></canvas><label>CORTICAL HEAT</label></div>
+        <div class="mg-p mg-bars" id="mg-bars">${['δ', 'θ', 'α', 'β', 'γ', 'σ', 'μ', 'κ'].map(c => `<div><i style="height:30%"></i><b>${c}</b></div>`).join('')}</div>
+      </div>
+      <div class="mg-p mg-eeg"><canvas id="mg-eeg" width="320" height="58"></canvas><label>EEG · CH1–3</label></div>
+      <div class="mg-p mg-nums">${[['BPM', 'mgn0'], ['SpO₂', 'mgn1'], ['SYNC', 'mgn2'], ['NOISE', 'mgn3'], ['DEPTH', 'mgn4'], ['ANOMALY', 'mgn5']].map(([l, id]) => `<div><b id="${id}">--</b><small>${l}</small></div>`).join('')}</div>
+    </div>
+    <div class="mg-foot"><span class="mg-lock">LOCK <span class="bar"><i id="magbar"></i></span> <b id="magf">0</b>%</span><button class="btn" id="mag-skip">Skip</button><button class="btn primary" id="mag-go" disabled>Project ▸</button></div>
+  </div>`;
+}
+function magDashRun(p) {
+  const heat = $('#mg-heat'), hg = heat.getContext('2d'), eeg = $('#mg-eeg'), eg = eeg.getContext('2d'), bars = $$('#mg-bars i');
+  const R = MG_REG[p.layer], hx = R.at[0] / 200 * 48, hy = R.at[1] / 160 * 30;
+  const nums = { 0: 72, 1: 98, 2: 60, 3: .12, 4: 2.4, 5: 0 };
+  const pal = v => { v = Math.max(0, Math.min(1, v)); const c = [[27, 10, 51], [107, 31, 143], [255, 79, 216], [255, 180, 107], [255, 243, 160]], k = v * 4, i = Math.min(3, Math.floor(k)), w = k - i; return c[i].map((a, j) => Math.round(a + (c[i + 1][j] - a) * w)); };
+  const img = hg.createImageData(48, 30);
+  let t = 0, last = performance.now(), ph = [0, 0, 0], ey = [29, 29, 29], alive = true, acc = 0;
+  eg.fillStyle = '#12062b'; eg.fillRect(0, 0, 320, 58);
+  const frame = now => {
+    if (!alive || !WINS.magnifier) return;
+    const dt = Math.min(.05, (now - last) / 1000); last = now; t += dt; acc += dt;
+    // heat map: drifting blobs, one hot spot on the region being scanned
+    for (let y = 0; y < 30; y++) for (let x = 0; x < 48; x++) {
+      let v = .18 + .12 * Math.sin(x * .3 + t * 1.3) * Math.cos(y * .4 - t);
+      v += .5 * Math.exp(-((x - hx) ** 2 + (y - hy) ** 2) / (18 + 8 * Math.sin(t * 3)));
+      v += .25 * Math.exp(-((x - 24 - 14 * Math.sin(t * .7)) ** 2 + (y - 15 - 6 * Math.cos(t * .9)) ** 2) / 30);
+      const [r, g, b] = pal(v), i = (y * 48 + x) * 4; img.data[i] = r; img.data[i + 1] = g; img.data[i + 2] = b; img.data[i + 3] = 255;
+    }
+    hg.putImageData(img, 0, 0);
+    // EEG: scroll left, draw three traces
+    const sp = 2; eg.drawImage(eeg, -sp, 0); eg.fillStyle = '#12062b'; eg.fillRect(320 - sp, 0, sp, 58);
+    ['#ff4fd8', '#8fdcf7', '#ffd86e'].forEach((c, i) => {
+      ph[i] += dt * (6 + i * 3);
+      const spike = Math.random() < .02 ? (Math.random() - .5) * 30 : 0;
+      const y = 10 + i * 18 + Math.sin(ph[i]) * 4 + Math.sin(ph[i] * 2.7) * 2 + (Math.random() - .5) * 3 + spike;
+      eg.strokeStyle = c; eg.lineWidth = 1.2; eg.beginPath(); eg.moveTo(320 - sp - 1, ey[i]); eg.lineTo(319, y); eg.stroke(); ey[i] = y;
+    });
+    if (acc > .12) {
+      acc = 0;
+      bars.forEach((b, i) => b.style.height = Math.round(20 + 70 * Math.abs(Math.sin(t * (1 + i * .37) + i)) * (.6 + Math.random() * .4)) + '%');
+      nums[0] += (Math.random() - .5) * 3; nums[1] = 96 + Math.random() * 3; nums[2] = Math.min(99, nums[2] + Math.random() * 1.2); nums[3] = Math.max(.01, nums[3] + (Math.random() - .5) * .03); nums[4] += .02 + Math.random() * .03; nums[5] = .5 + .5 * Math.sin(t * 2);
+      const set = (id, v) => { const el = $('#' + id); if (el) el.textContent = v; };
+      set('mgn0', Math.round(nums[0])); set('mgn1', nums[1].toFixed(1) + '%'); set('mgn2', nums[2].toFixed(0) + '%'); set('mgn3', nums[3].toFixed(2)); set('mgn4', nums[4].toFixed(1) + 'm'); set('mgn5', (nums[5] * 100).toFixed(0));
+      for (let i = 0; i < 5; i++) set('mgv' + i, (Math.random() * .4 + (i === [2, 1, 0][p.layer - 1] ? .55 : .1)).toFixed(2));
+    }
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+  return () => { alive = false; };
 }
 
 /* ---------------- projector: the panel ---------------- */
@@ -139,10 +207,9 @@ function openProjector(p) {
             <button data-m="3d"><span>${CH.opt.view3d ? '☑' : '☐'} 3D projection</span><kbd></kbd></button>
             <button data-m="retro"><span>${CH.opt.retro ? '☑' : '☐'} Chunky pixels (98 mode)</span><kbd></kbd></button></div></div>
           <div class="mn"><button class="mn-b">Help</button><div class="mn-d"><div class="mn-help">
-            <b>W A S D</b> or arrows: move (W goes away from you)<br><b>Z</b> undo · <b>R</b> reset${p.boxes ? '' : ' · <b>Enter</b> finish · or drag the little box'}<br>${p.boxes ? 'Every key moves every box. Fill all goals at the same time.' : 'Walk the box out through the glowing gate.'}</div></div></div>
+            <b>W A S D</b> or arrows: move (W goes away from you)<br><b>Z</b> undo · <b>R</b> reset${p.boxes ? '' : ' · <b>Enter</b> finish · or drag the little box'}<br>${p.boxes ? 'Every key moves every box. Fill all goals at the same time.' : 'Reach the gold goal tile.'}${(p.plates || []).length ? '<br>Round button: while something stands on it, gates of its colour open (striped gates close).' : ''}</div></div></div>
           <span class="pj-id">${p.id}</span>
         </div>
-        <div class="pj-belief" id="pj-belief"><span>${esc(p.belief || '')}</span></div>
         <div class="pj-stage pj-vp" id="pj-vp"></div>
         <div class="pj-msg" id="pj-msg" aria-live="polite"></div>
         <div class="pj-solbox sunk" id="pj-solbox" hidden>
@@ -206,10 +273,9 @@ async function pjSubmit() {
     $('#pj-msg').textContent = 'The queen took one rule off the board.';
   }
   if (ok) {
-    PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win(); if (PJ.view) pj3Flash('◆ BELIEF ERASED ◆', 'win');
+    PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win(); if (PJ.view) { const v = PJ.view; setTimeout(() => { if (PJ && PJ.view === v && PJ.state === 'win' && !PJ.solOn) v.winFx(); }, 380); setTimeout(() => { if (PJ && PJ.view === v && PJ.state === 'win') pj3Flash('◆ BELIEF ERASED ◆', 'win'); }, 1300); }
     const t = performance.now() - PJ.t0, prev = CH.done[p.id];
     CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries, peek: prev ? prev.peek && PJ.peeked : PJ.peeked }; chSave();
-    $('#pj-belief').classList.add('struck');
     if (!PJ.erased) $('#pj-msg').textContent = `${fmtT(t)} · ${PJ.tries} ${PJ.tries === 1 ? 'try' : 'tries'}`;
     $('#pj-next').hidden = false; $('#pj-next').focus();
     UPD.forEach(f => f());

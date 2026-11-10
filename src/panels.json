@@ -210,40 +210,73 @@
     0
    ]
   ],
-  "squares": [
-   [
-    2,
-    2,
-    "ink"
-   ],
+  "plates": [
    [
     1,
     1,
-    "pink"
-   ],
-   [
-    2,
-    0,
-    "pink"
-   ],
-   [
-    0,
-    1,
-    "pink"
-   ],
-   [
-    2,
-    1,
-    "ink"
-   ],
-   [
-    0,
-    2,
-    "ink"
+    0
    ]
   ],
-  "belief": "my hand and the other hand must never touch.",
-  "note": "Dạy luật mực: mỗi vùng chỉ được một màu. Vài lời giải (bảng dạy luật).",
+  "gates": [
+   [
+    1,
+    0,
+    1,
+    1,
+    0,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    2,
+    3,
+    3,
+    3
+   ]
+  ],
   "sol": [
    [
     0,
@@ -258,36 +291,12 @@
     3
    ],
    [
-    3,
-    3
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    3,
-    1
-   ],
-   [
-    2,
-    1
-   ],
-   [
     2,
     2
    ],
    [
     1,
     2
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    0,
-    1
    ],
    [
     1,
@@ -300,14 +309,25 @@
    [
     2,
     0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
    ],
    [
     3,
     0
    ]
   ],
-  "solutions": 4,
-  "why": "Bảng dạy luật mực: đường đi cắt bảng thành các vùng, mỗi vùng chỉ được chứa một màu. Ô hồng và ô đen nằm xen kẽ nhau, nên mỗi cặp hồng–đen nằm sát nhau phải bị đường đi chia cắt. Đi thẳng dọc mép không làm được, đường phải luồn vào giữa bảng. Bảng có 4 lời giải, đây là một trong số đó."
+  "solutions": 2,
+  "minMoves": 10,
+  "belief": "i only draw what someone drew first.",
+  "intro": "plates",
+  "why": "Bảng dạy luật mới. Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Luật trên bảng: Đoạn đứt không đi được. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
   "id": "prim_1_4",
@@ -315,11 +335,11 @@
   "layer": 1,
   "n": 4,
   "w": 4,
-  "h": 4,
+  "h": 3,
   "start": [
    [
     0,
-    4
+    3
    ]
   ],
   "exit": [
@@ -328,107 +348,83 @@
     0
    ]
   ],
-  "squares": [
+  "plates": [
    [
-    3,
-    1,
-    "ink"
-   ],
-   [
-    1,
-    1,
-    "pink"
-   ],
-   [
-    3,
     0,
-    "pink"
-   ],
-   [
-    3,
-    3,
-    "ink"
-   ],
-   [
     1,
-    3,
-    "pink"
-   ],
+    0
+   ]
+  ],
+  "gates": [
    [
+    4,
     1,
+    4,
+    2,
     0,
-    "ink"
+    0
+   ]
+  ],
+  "sketch": [
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    0,
+    0,
+    1,
+    0
    ],
    [
     2,
-    1,
-    "pink"
+    2,
+    3,
+    2
    ],
    [
-    0,
-    0,
-    "pink"
-   ],
-   [
+    3,
     0,
     3,
-    "pink"
+    1
+   ],
+   [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    2,
+    3,
+    3,
+    3
+   ],
+   [
+    1,
+    0,
+    1,
+    1
    ]
   ],
-  "belief": "pink is mine. black is hers. i keep them apart.",
-  "note": "Chỉ có mực, bảng lớn hơn: chỉ còn rất ít cách chia.",
+  "broken": [
+   [
+    1,
+    2,
+    2,
+    2
+   ]
+  ],
   "sol": [
    [
     0,
-    4
-   ],
-   [
-    0,
     3
    ],
    [
     1,
     3
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    3,
-    4
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    4,
-    3
-   ],
-   [
-    4,
-    2
-   ],
-   [
-    4,
-    1
-   ],
-   [
-    3,
-    1
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    2,
-    2
    ],
    [
     1,
@@ -465,14 +461,49 @@
    [
     3,
     0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
    ],
    [
     4,
     0
    ]
   ],
-  "solutions": 3,
-  "why": "Ô đen ở hàng trên cùng bị các ô hồng vây quanh, nên đường phải khoanh riêng nó thành một vùng nhỏ. Hai ô đen bên phải phải nằm cùng phía, tách khỏi ô hồng ở góc trên bên phải. Bảng có 3 lời giải, khác nhau ở phần giữa bảng."
+  "solutions": 1,
+  "minMoves": 19,
+  "belief": "if i trace it, it can't be wrong.",
+  "intro": null,
+  "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì mờ phải được tô lại. Đoạn đứt không đi được. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
   "id": "prim_1_5",
@@ -493,79 +524,97 @@
     0
    ]
   ],
-  "squares": [
+  "plates": [
    [
     3,
-    2,
-    "ink"
+    3,
+    0
+   ]
+  ],
+  "gates": [
+   [
+    3,
+    0,
+    3,
+    1,
+    0,
+    0
    ],
    [
+    2,
+    2,
     2,
     3,
-    "pink"
-   ],
-   [
     0,
-    0,
-    "pink"
-   ],
-   [
-    2,
-    1,
-    "pink"
-   ],
-   [
-    1,
-    2,
-    "ink"
-   ],
-   [
-    1,
-    3,
-    "ink"
-   ],
-   [
-    0,
-    1,
-    "ink"
+    0
    ]
   ],
   "sketch": [
    [
-    3,
-    4,
-    4,
-    4
-   ],
-   [
-    3,
+    0,
     1,
-    2,
+    1,
     1
    ],
    [
-    1,
     2,
-    0,
-    2
+    1,
+    3,
+    1
    ],
    [
     0,
-    4,
+    3,
     1,
-    4
+    3
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    3,
+    3,
+    4,
+    3
    ]
   ],
-  "belief": "i can't draw. i can only trace.",
-  "note": "Bảng lõi: nét chì + mực. Cần dùng cả hai luật.",
+  "broken": [
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    2,
+    2,
+    3,
+    2
+   ]
+  ],
   "sol": [
    [
     0,
     4
    ],
    [
-    1,
-    4
+    0,
+    3
    ],
    [
     1,
@@ -573,19 +622,51 @@
    ],
    [
     1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
     2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
    ],
    [
     0,
-    2
+    1
    ],
    [
     0,
-    1
-   ],
-   [
-    1,
-    1
+    0
    ],
    [
     1,
@@ -596,52 +677,12 @@
     0
    ],
    [
-    3,
-    0
-   ],
-   [
-    3,
-    1
-   ],
-   [
     2,
     1
    ],
    [
-    2,
-    2
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    2,
-    4
-   ],
-   [
     3,
-    4
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    4,
-    3
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    4,
-    2
+    1
    ],
    [
     4,
@@ -653,7 +694,10 @@
    ]
   ],
   "solutions": 1,
-  "why": "Bảng lõi: nét chì gợi ý một con đường nhưng không đủ, mực mới quyết định. Ô hồng ở góc trên trái có ô đen ngay dưới nên đường phải cắt ngang giữa hai ô đó, vì vậy đoạn chì ở hàng thứ ba dẫn sang trái. Sau đó đường vòng lên hàng trên, tô đoạn chì ở hàng thứ hai từ phải sang trái, đi xuống cột giữa để tách các ô hồng ở giữa khỏi các ô đen hai bên, rồi zigzag ở cột phải để khoanh ô đen bên phải."
+  "minMoves": 20,
+  "belief": "i can't draw. i can only trace.",
+  "intro": null,
+  "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì mờ phải được tô lại. Đoạn đứt không đi được. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
   "id": "prim_1_6",
@@ -661,11 +705,11 @@
   "layer": 1,
   "n": 6,
   "w": 4,
-  "h": 3,
+  "h": 4,
   "start": [
    [
     0,
-    3
+    4
    ]
   ],
   "exit": [
@@ -674,68 +718,150 @@
     0
    ]
   ],
-  "squares": [
-   [
-    2,
-    2,
-    "pink"
-   ],
+  "plates": [
    [
     2,
     1,
-    "ink"
-   ],
-   [
-    2,
-    0,
-    "pink"
+    0
    ],
    [
     3,
-    2,
-    "pink"
-   ],
+    1,
+    1
+   ]
+  ],
+  "gates": [
    [
+    2,
+    0,
     3,
     0,
-    "ink"
+    0,
+    0
    ],
    [
     0,
     2,
-    "ink"
+    1,
+    2,
+    1,
+    0
    ]
   ],
   "sketch": [
    [
-    0,
-    0,
-    0,
-    1
+    2,
+    2,
+    3,
+    2
+   ],
+   [
+    3,
+    3,
+    3,
+    4
    ],
    [
     0,
+    3,
     1,
+    3
+   ],
+   [
+    3,
+    3,
+    4,
+    3
+   ],
+   [
+    0,
+    2,
     1,
-    1
+    2
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    3,
+    2,
+    3
    ]
   ],
   "sol": [
    [
     0,
+    4
+   ],
+   [
+    0,
     3
    ],
    [
     1,
     3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
    ],
    [
     1,
     2
    ],
    [
-    1,
-    1
+    0,
+    2
    ],
    [
     0,
@@ -756,30 +882,6 @@
    [
     3,
     0
-   ],
-   [
-    3,
-    1
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    4,
-    2
-   ],
-   [
-    4,
-    1
    ],
    [
     4,
@@ -787,10 +889,10 @@
    ]
   ],
   "solutions": 1,
+  "minMoves": 22,
   "belief": "if i copy, i can't be wrong.",
-  "note": "",
   "intro": null,
-  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Mẹo: Tìm đoạn chì chỉ có một cách nối hợp lý với vòng tròn hoặc lối ra, rồi lần dần vào giữa."
+  "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì mờ phải được tô lại. Đoạn đứt không đi được. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
   "id": "prim_2_1",
@@ -1229,40 +1331,50 @@
   ],
   "exit": [
    [
-    1,
+    0,
     0
    ],
    [
-    3,
+    4,
     0
    ]
   ],
   "mirror": "x",
-  "squares": [
+  "plates": [
    [
-    2,
     3,
-    "pink"
-   ],
+    2,
+    0
+   ]
+  ],
+  "gates": [
    [
     0,
     1,
-    "ink"
-   ],
-   [
-    3,
-    3,
-    "ink"
-   ],
-   [
-    0,
-    0,
-    "pink"
-   ],
-   [
     0,
     2,
-    "pink"
+    0,
+    0
+   ]
+  ],
+  "avoid": [
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    4,
+    3,
+    4,
+    4
+   ],
+   [
+    3,
+    1,
+    4,
+    1
    ]
   ],
   "sol": [
@@ -1279,20 +1391,12 @@
     3
    ],
    [
-    0,
-    3
-   ],
-   [
-    0,
-    2
-   ],
-   [
     1,
     2
    ],
    [
-    1,
-    1
+    0,
+    2
    ],
    [
     0,
@@ -1300,18 +1404,14 @@
    ],
    [
     0,
-    0
-   ],
-   [
-    1,
     0
    ]
   ],
   "solutions": 1,
+  "minMoves": 6,
   "belief": "we never touch. we can't.",
-  "note": "",
   "intro": null,
-  "why": "Luật trên bảng: Mực hồng và mực đen phải nằm ở các vùng khác nhau. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Hai ô khác màu nằm sát nhau buộc đường phải đi qua cạnh chung của chúng."
+  "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì đen không được đi lên. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Coi trục giữa như tường."
  },
  {
   "id": "prim_2_6",
@@ -1332,7 +1432,36 @@
     0
    ]
   ],
+  "plates": [
+   [
+    4,
+    1,
+    0
+   ]
+  ],
+  "gates": [
+   [
+    3,
+    0,
+    4,
+    0,
+    0,
+    0
+   ]
+  ],
   "avoid": [
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    2,
+    2,
+    3,
+    2
+   ],
    [
     0,
     1,
@@ -1340,66 +1469,42 @@
     1
    ],
    [
-    3,
+    0,
     4,
-    4,
+    1,
     4
    ],
    [
-    3,
+    1,
     0,
-    4,
+    2,
     0
    ],
    [
-    1,
-    2,
-    1,
-    3
-   ],
-   [
-    0,
-    2,
-    1,
-    2
-   ],
-   [
+    4,
     0,
     4,
-    1,
-    4
+    1
+   ],
+   [
+    3,
+    0,
+    3,
+    1
    ]
   ],
-  "squares": [
+  "broken": [
    [
-    3,
+    2,
     1,
-    "ink"
-   ],
-   [
-    2,
-    2,
-    "ink"
-   ],
-   [
-    2,
-    0,
-    "pink"
+    3,
+    1
    ],
    [
     1,
-    0,
-    "ink"
-   ],
-   [
-    2,
-    3,
-    "pink"
-   ],
-   [
-    3,
-    3,
-    "ink"
+    1,
+    1,
+    2
    ]
   ],
   "sol": [
@@ -1428,44 +1533,76 @@
     4
    ],
    [
-    3,
+    4,
+    4
+   ],
+   [
+    4,
     3
    ],
    [
-    2,
-    3
-   ],
-   [
-    2,
+    4,
     2
-   ],
-   [
-    1,
-    2
-   ],
-   [
-    1,
-    1
-   ],
-   [
-    1,
-    0
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    3,
-    1
    ],
    [
     4,
     1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
    ],
    [
     4,
@@ -1473,10 +1610,10 @@
    ]
   ],
   "solutions": 1,
-  "belief": "pink is mine. the black was never mine.",
-  "note": "",
+  "minMoves": 24,
+  "belief": "the wrong line is worse than no line.",
   "intro": null,
-  "why": "Luật trên bảng: Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Mẹo: Nét chì đen chặn đường như tường: xem chúng tạo thành hành lang nào."
+  "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì đen không được đi lên. Đoạn đứt không đi được. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
   "id": "prim_2_7",
@@ -1506,38 +1643,34 @@
    ]
   ],
   "mirror": "x",
-  "squares": [
+  "broken": [
    [
+    1,
     3,
-    2,
-    "ink"
-   ],
-   [
     1,
-    1,
-    "pink"
+    4
    ]
   ],
   "sketch": [
    [
-    0,
+    3,
     1,
-    0,
+    3,
     2
+   ],
+   [
+    0,
+    0,
+    0,
+    1
    ]
   ],
   "avoid": [
    [
-    0,
     4,
-    1,
-    4
-   ],
-   [
-    3,
-    0,
+    2,
     4,
-    0
+    3
    ]
   ],
   "sol": [
@@ -1558,8 +1691,8 @@
     2
    ],
    [
-    0,
-    2
+    1,
+    1
    ],
    [
     0,
@@ -1571,10 +1704,10 @@
    ]
   ],
   "solutions": 1,
+  "minMoves": 6,
   "belief": "the other hand always knows where i am going.",
-  "note": "",
   "intro": null,
-  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Nét chì đen là của \"bàn tay kia\": không được đi lên nó. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Tìm đoạn chì chỉ có một cách nối hợp lý với vòng tròn hoặc lối ra, rồi lần dần vào giữa."
+  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Nét chì đen không được đi lên. Đoạn đứt không đi được. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Coi trục giữa như tường."
  },
  {
   "id": "prim_3_1",
@@ -1766,45 +1899,42 @@
     0
    ]
   ],
-  "squares": [
+  "plates": [
    [
-    0,
-    3,
-    "pink"
-   ],
-   [
-    3,
-    2,
-    "pink"
-   ],
-   [
-    3,
-    3,
-    "ink"
-   ],
-   [
-    1,
-    0,
-    "pink"
+    4,
+    4,
+    0
    ]
   ],
-  "avoid": [
+  "gates": [
    [
+    3,
+    3,
+    4,
+    3,
+    0,
+    0
+   ],
+   [
+    0,
     3,
     1,
     3,
+    0,
+    1
+   ]
+  ],
+  "sketch": [
+   [
+    1,
+    1,
+    1,
     2
    ],
    [
     4,
-    2,
-    4,
-    3
-   ],
-   [
     1,
-    2,
-    2,
+    4,
     2
    ],
    [
@@ -1814,30 +1944,50 @@
     4
    ],
    [
-    1,
     0,
-    1,
+    0,
+    0,
     1
+   ],
+   [
+    3,
+    4,
+    4,
+    4
+   ],
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    0,
+    3,
+    1,
+    3
    ]
   ],
   "broken": [
    [
-    1,
-    1,
+    2,
+    0,
     2,
     1
-   ],
+   ]
+  ],
+  "avoid": [
    [
     0,
     1,
-    1,
-    1
-   ],
-   [
-    4,
     0,
-    4,
-    1
+    2
    ]
   ],
   "sol": [
@@ -1850,8 +2000,64 @@
     3
    ],
    [
-    0,
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
     2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
    ],
    [
     0,
@@ -1868,62 +2074,6 @@
    [
     2,
     0
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    1,
-    3
-   ],
-   [
-    1,
-    4
-   ],
-   [
-    2,
-    4
-   ],
-   [
-    3,
-    4
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    4,
-    3
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    4,
-    2
-   ],
-   [
-    4,
-    1
-   ],
-   [
-    3,
-    1
    ],
    [
     3,
@@ -1938,7 +2088,7 @@
   "minMoves": 22,
   "belief": "it doesn't look like anything. it's mine.",
   "intro": null,
-  "why": "Luật trên bảng: Nét chì đen không được đi lên. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Đoạn đứt không đi được. Mẹo: Hai ô khác màu nằm sát nhau buộc đường đi qua cạnh chung."
+  "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì mờ phải được tô lại. Nét chì đen không được đi lên. Đoạn đứt không đi được. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
   "id": "prim_3_3",
@@ -2059,43 +2209,119 @@
     0
    ]
   ],
-  "squares": [
-   [
-    3,
-    2,
-    "ink"
-   ],
+  "plates": [
    [
     2,
-    2,
-    "ink"
+    4,
+    0
    ],
+   [
+    1,
+    2,
+    1
+   ]
+  ],
+  "gates": [
    [
     3,
     1,
-    "pink"
+    3,
+    2,
+    0,
+    0
+   ],
+   [
+    1,
+    2,
+    1,
+    3,
+    1,
+    0
    ],
    [
     4,
     0,
-    "ink"
-   ],
-   [
-    3,
-    3,
-    "pink"
-   ],
-   [
+    4,
     1,
-    1,
-    "pink"
+    0,
+    1
    ]
   ],
   "sketch": [
    [
-    5,
+    1,
+    1,
     2,
+    1
+   ],
+   [
+    2,
+    0,
+    3,
+    0
+   ],
+   [
+    2,
+    3,
+    2,
+    4
+   ],
+   [
     5,
+    1,
+    5,
+    2
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    4,
+    2,
+    4,
+    3
+   ],
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    3,
+    3,
+    3,
+    4
+   ]
+  ],
+  "avoid": [
+   [
+    0,
+    4,
+    1,
+    4
+   ],
+   [
+    4,
+    3,
+    5,
+    3
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    3,
+    2,
     3
    ],
    [
@@ -2103,56 +2329,6 @@
     0,
     3,
     1
-   ],
-   [
-    1,
-    1,
-    1,
-    2
-   ],
-   [
-    0,
-    0,
-    1,
-    0
-   ],
-   [
-    0,
-    2,
-    0,
-    3
-   ]
-  ],
-  "broken": [
-   [
-    2,
-    2,
-    3,
-    2
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
-    4,
-    3,
-    5,
-    3
-   ],
-   [
-    0,
-    4,
-    1,
-    4
-   ],
-   [
-    4,
-    2,
-    4,
-    3
    ]
   ],
   "sol": [
@@ -2174,15 +2350,71 @@
    ],
    [
     1,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    5,
     1
    ],
    [
-    0,
+    4,
     1
    ],
    [
-    0,
-    0
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    1
    ],
    [
     1,
@@ -2193,68 +2425,12 @@
     0
    ],
    [
-    2,
-    1
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    4,
-    3
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    5,
-    4
-   ],
-   [
-    5,
-    3
-   ],
-   [
-    5,
-    2
-   ],
-   [
-    4,
-    2
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    3,
-    1
-   ],
-   [
     3,
     0
    ],
    [
     4,
     0
-   ],
-   [
-    4,
-    1
-   ],
-   [
-    5,
-    1
    ],
    [
     5,
@@ -2265,7 +2441,7 @@
   "minMoves": 25,
   "belief": "no pencil to follow. not really.",
   "intro": null,
-  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Đoạn đứt không đi được. Mẹo: Hai ô khác màu nằm sát nhau buộc đường đi qua cạnh chung."
+  "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì mờ phải được tô lại. Nét chì đen không được đi lên. Đoạn đứt không đi được. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
   "id": "prim_3_5",
@@ -2295,38 +2471,56 @@
    ]
   ],
   "mirror": "x",
-  "squares": [
+  "plates": [
    [
-    0,
     3,
-    "pink"
-   ],
-   [
-    0,
-    1,
-    "ink"
-   ],
+    4,
+    0
+   ]
+  ],
+  "gates": [
    [
     0,
     2,
-    "pink"
-   ],
-   [
+    0,
     3,
     0,
-    "pink"
+    0
    ],
    [
-    3,
     1,
-    "ink"
+    4,
+    2,
+    4,
+    0,
+    1
    ]
   ],
-  "broken": [
+  "sketch": [
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    3,
+    0,
+    3,
+    1
+   ],
    [
     0,
-    4,
+    3,
     1,
+    3
+   ]
+  ],
+  "avoid": [
+   [
+    4,
+    3,
+    4,
     4
    ]
   ],
@@ -2334,6 +2528,14 @@
    [
     0,
     4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
    ],
    [
     0,
@@ -2352,8 +2554,8 @@
     1
    ],
    [
-    0,
-    1
+    1,
+    0
    ],
    [
     0,
@@ -2361,10 +2563,10 @@
    ]
   ],
   "solutions": 1,
-  "minMoves": 6,
+  "minMoves": 8,
   "belief": "even the other hand draws my way now.",
   "intro": null,
-  "why": "Luật trên bảng: Mực hồng và mực đen phải nằm ở các vùng khác nhau. Đoạn đứt không đi được. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Coi trục giữa như tường."
+  "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì mờ phải được tô lại. Nét chì đen không được đi lên. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Coi trục giữa như tường."
  },
  {
   "id": "prim_3_6",
@@ -2385,64 +2587,94 @@
     0
    ]
   ],
-  "avoid": [
+  "plates": [
    [
-    0,
-    3,
-    1,
-    3
-   ],
-   [
-    0,
-    3,
-    0,
-    4
-   ],
-   [
-    1,
-    3,
-    2,
-    3
-   ],
-   [
-    1,
     4,
-    2,
-    4
-   ]
-  ],
-  "broken": [
-   [
-    0,
-    1,
-    1,
-    1
-   ],
-   [
-    3,
-    2,
-    4,
-    2
-   ]
-  ],
-  "sketch": [
-   [
-    0,
-    0,
     1,
     0
    ],
    [
+    2,
+    2,
+    1
+   ]
+  ],
+  "gates": [
+   [
+    0,
+    4,
+    1,
+    4,
+    1,
+    0
+   ],
+   [
+    2,
+    1,
+    3,
+    1,
+    1,
+    0
+   ],
+   [
+    2,
+    4,
+    3,
+    4,
+    0,
+    1
+   ]
+  ],
+  "avoid": [
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    4,
+    3,
+    4,
+    4
+   ],
+   [
+    4,
+    0,
+    5,
+    0
+   ],
+   [
+    4,
+    3,
+    5,
+    3
+   ]
+  ],
+  "sketch": [
+   [
     3,
     0,
     3,
     1
    ],
    [
+    3,
     2,
+    3,
+    3
+   ],
+   [
     0,
-    2,
+    1,
+    1,
     1
+   ],
+   [
+    3,
+    3,
+    4,
+    3
    ],
    [
     2,
@@ -2451,22 +2683,10 @@
     1
    ],
    [
+    1,
+    1,
     2,
-    2,
-    3,
-    2
-   ]
-  ],
-  "squares": [
-   [
-    2,
-    3,
-    "ink"
-   ],
-   [
-    4,
-    0,
-    "ink"
+    1
    ]
   ],
   "sol": [
@@ -2475,80 +2695,16 @@
     4
    ],
    [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
     1,
     4
-   ],
-   [
-    1,
-    3
-   ],
-   [
-    1,
-    2
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    0,
-    1
-   ],
-   [
-    0,
-    0
-   ],
-   [
-    1,
-    0
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    3,
-    1
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    4,
-    0
-   ],
-   [
-    4,
-    1
-   ],
-   [
-    4,
-    2
-   ],
-   [
-    4,
-    3
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    2,
-    3
    ],
    [
     2,
@@ -2573,6 +2729,62 @@
    [
     5,
     2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    4,
+    1
    ],
    [
     5,
@@ -2584,10 +2796,10 @@
    ]
   ],
   "solutions": 1,
-  "minMoves": 27,
+  "minMoves": 25,
   "belief": "i don't need the pencil anymore.",
   "intro": null,
-  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Nét chì đen không được đi lên. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Đoạn đứt không đi được. Mẹo: Hai ô khác màu nằm sát nhau buộc đường đi qua cạnh chung."
+  "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì mờ phải được tô lại. Nét chì đen không được đi lên. Mẹo: Tìm cổng chắn lối duy nhất tới đích, rồi tính đường đi qua công tắc trước đó."
  },
  {
   "id": "prim_3_7",
@@ -2617,37 +2829,58 @@
    ]
   ],
   "mirror": "x",
-  "squares": [
-   [
-    1,
-    2,
-    "ink"
-   ],
+  "plates": [
    [
     0,
     3,
-    "pink"
+    0
+   ]
+  ],
+  "gates": [
+   [
+    0,
+    3,
+    1,
+    3,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    2,
+    4,
+    3,
+    4,
+    0,
+    1
    ]
   ],
   "avoid": [
+   [
+    4,
+    0,
+    4,
+    1
+   ],
    [
     3,
     2,
     4,
     2
-   ],
-   [
-    0,
-    0,
-    0,
-    1
    ]
   ],
   "sketch": [
    [
-    4,
-    2,
-    4,
+    0,
+    3,
+    1,
     3
    ]
   ],
@@ -2657,24 +2890,16 @@
     4
    ],
    [
-    1,
-    4
+    0,
+    3
    ],
    [
     1,
     3
    ],
    [
-    0,
-    3
-   ],
-   [
-    0,
+    1,
     2
-   ],
-   [
-    0,
-    1
    ],
    [
     1,
@@ -2690,10 +2915,10 @@
    ]
   ],
   "solutions": 1,
-  "minMoves": 8,
+  "minMoves": 6,
   "belief": "i trace so she can draw. that is why i am here.",
   "intro": null,
-  "why": "Luật trên bảng: Nét chì mờ phải được tô lại. Nét chì đen không được đi lên. Mực hồng và mực đen phải nằm ở các vùng khác nhau. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Coi trục giữa như tường."
+  "why": "Luật trên bảng: Công tắc: khi đường đã phủ lên nút tròn, các cổng cùng màu mở ra (cổng có sọc thì ngược lại: đóng lại). Nét chì mờ phải được tô lại. Nét chì đen không được đi lên. Bàn tay kia tự vẽ một đường đối xứng; hai đường không được chạm nhau. Mẹo: Coi trục giữa như tường."
  },
  {
   "id": "trix_1_1",
@@ -10334,88 +10559,70 @@
   "h": 4,
   "broken": [
    [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ],
+   [
+    2,
     0,
     1,
-    1,
-    1
+    0
    ],
    [
-    1,
-    1,
+    2,
+    0,
     2,
     1
-   ],
-   [
-    1,
-    1,
-    1,
-    2
-   ],
-   [
-    3,
-    1,
-    3,
-    2
-   ],
-   [
-    4,
-    1,
-    4,
-    2
-   ],
-   [
-    2,
-    2,
-    3,
-    2
-   ],
-   [
-    3,
-    3,
-    4,
-    3
    ]
   ],
   "boxes": [
    {
     "x": 1,
-    "y": 1,
-    "dash": true
+    "y": 0
+   },
+   {
+    "x": 0,
+    "y": 0
    }
   ],
   "exit": [
    [
-    4,
-    4
+    2,
+    0
    ]
   ],
-  "oneway": [
+  "gates": [
    [
+    2,
     0,
     3,
     0,
-    2
-   ],
-   [
-    3,
-    4,
-    4,
-    4
-   ],
-   [
-    2,
-    2,
-    2,
-    1
+    0,
+    0
    ]
   ],
-  "solIn": "ULDRDR",
+  "plates": [
+   [
+    3,
+    0,
+    0
+   ]
+  ],
+  "solIn": "DRRUL",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 1.3,
+  "minMoves": 5,
+  "luck": 1.7,
   "belief": "when the floor drops, i already have a rope.",
-  "intro": "oneway",
-  "why": "Bảng dạy luật mới. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Mẹo: Khe một chiều không cho quay lại: tính thứ tự trước khi đi."
+  "intro": "plates",
+  "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "vel_2_5",
@@ -10548,68 +10755,42 @@
   "n": 6,
   "w": 5,
   "h": 5,
-  "holes": [
-   [
-    2,
-    4
-   ],
-   [
-    1,
-    4
-   ],
-   [
-    4,
-    2
-   ]
-  ],
   "broken": [
    [
-    1,
-    0,
     2,
-    0
-   ],
-   [
-    3,
     0,
-    4,
+    3,
     0
    ],
    [
-    1,
-    1,
+    2,
+    0,
     2,
     1
    ],
    [
-    2,
-    1,
-    2,
-    2
-   ],
-   [
-    3,
-    1,
-    3,
-    2
-   ],
-   [
     4,
+    0,
+    5,
+    0
+   ],
+   [
+    0,
+    1,
+    0,
+    2
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    5,
     1,
     5,
-    1
-   ],
-   [
-    0,
-    2,
-    1,
     2
-   ],
-   [
-    0,
-    2,
-    0,
-    3
    ],
    [
     1,
@@ -10618,55 +10799,57 @@
     3
    ],
    [
+    2,
+    2,
     3,
-    4,
-    3,
-    5
+    2
    ],
    [
-    5,
     4,
+    2,
     5,
-    5
-   ],
-   [
-    0,
-    5,
-    1,
-    5
+    2
    ],
    [
     2,
-    5,
     3,
+    3,
+    3
+   ],
+   [
+    4,
+    3,
+    5,
+    3
+   ],
+   [
+    3,
+    5,
+    4,
+    5
+   ],
+   [
+    3,
+    5,
+    2,
     5
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 3,
+    "x": 3,
+    "y": 2,
     "dash": true
+   },
+   {
+    "x": 0,
+    "y": 3
    }
   ],
   "exit": [
    [
     3,
-    0
-   ]
-  ],
-  "pads": [
-   [
-    3,
-    5,
-    0,
-    1
-   ],
-   [
-    2,
-    0,
-    1,
-    0
+    5
    ]
   ],
   "stops": [
@@ -10675,13 +10858,30 @@
     4
    ]
   ],
-  "solIn": "RULDLU",
+  "gates": [
+   [
+    3,
+    5,
+    3,
+    4,
+    0,
+    0
+   ]
+  ],
+  "plates": [
+   [
+    4,
+    2,
+    0
+   ]
+  ],
+  "solIn": "DDURRRD",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 1.2,
+  "minMoves": 7,
+  "luck": 0,
   "belief": "stay sharp. moods are weather. weather passes.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Chỗ trống trên map không đi được. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Mẹo: Hộp dash chỉ dừng cạnh tường: tìm những ô có tường phía sau theo hướng bạn đi."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "vel_2_7",
@@ -11193,99 +11393,104 @@
   "h": 4,
   "broken": [
    [
-    0,
-    0,
-    1,
-    0
-   ],
-   [
-    0,
-    0,
-    0,
-    1
-   ],
-   [
-    2,
-    0,
-    3,
-    0
-   ],
-   [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
-    2,
-    2,
-    2,
-    3
-   ],
-   [
-    0,
-    3,
-    0,
-    4
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
     4,
+    0,
+    4,
+    1
+   ],
+   [
+    5,
+    0,
+    5,
+    1
+   ],
+   [
+    5,
+    1,
+    5,
+    2
+   ],
+   [
+    2,
+    2,
     3,
+    2
+   ],
+   [
+    5,
+    2,
     5,
     3
    ],
    [
-    2,
-    4,
     3,
+    3,
+    4,
+    3
+   ],
+   [
+    5,
+    3,
+    5,
+    4
+   ],
+   [
+    4,
+    4,
+    5,
     4
    ]
   ],
   "boxes": [
    {
     "x": 5,
-    "y": 0,
-    "n": 6
+    "y": 3,
+    "n": 2
    },
    {
-    "x": 5,
-    "y": 2,
+    "x": 3,
+    "y": 0,
     "dash": true
    },
    {
-    "x": 1,
+    "x": 4,
     "y": 3
    }
   ],
   "exit": [
    [
-    1,
-    4
+    5,
+    0
    ],
    [
-    0,
+    3,
     1
    ]
   ],
-  "stops": [
+  "gates": [
    [
+    5,
+    0,
     4,
-    2
+    0,
+    0,
+    0
    ]
   ],
-  "solIn": "DLLLLLR",
-  "solutions": 1,
-  "minMoves": 7,
+  "plates": [
+   [
+    1,
+    0,
+    0
+   ]
+  ],
+  "solIn": "DLLLRURUU",
+  "solutions": 2,
+  "minMoves": 9,
   "luck": 0.3,
   "belief": "i plan for the worst so nobody sees me fall.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đặt hộp thừa trước, rồi mới phóng hộp chính."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đặt hộp thừa trước, rồi mới phóng hộp chính."
  },
  {
   "id": "vel_3_6",
@@ -11473,102 +11678,119 @@
   "h": 5,
   "broken": [
    [
-    1,
+    5,
     0,
-    1,
-    1
-   ],
-   [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
-    0,
-    1,
-    1,
-    1
-   ],
-   [
-    4,
-    1,
     5,
     1
    ],
    [
-    4,
-    2,
-    5,
+    3,
+    1,
+    3,
     2
    ],
    [
     2,
     3,
-    2,
+    3,
+    3
+   ],
+   [
+    3,
+    3,
+    3,
     4
    ],
    [
-    2,
+    4,
     5,
+    5,
+    5
+   ],
+   [
     3,
+    2,
+    4,
+    2
+   ],
+   [
+    3,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    5,
+    1,
+    4
+   ],
+   [
+    1,
+    5,
+    2,
     5
    ]
   ],
   "boxes": [
    {
     "x": 5,
-    "y": 5,
-    "n": 5
+    "y": 0,
+    "n": 12
    },
    {
-    "x": 4,
-    "y": 3,
+    "x": 0,
+    "y": 0,
     "dash": true,
-    "n": 5
+    "n": 4
    },
    {
-    "x": 3,
+    "x": 5,
     "y": 2
    }
   ],
   "exit": [
    [
-    0,
-    0
+    3,
+    2
    ],
    [
-    3,
-    0
+    1,
+    5
    ]
   ],
-  "pads": [
-   [
-    0,
-    2,
-    0,
-    -1
-   ],
+  "gates": [
    [
     3,
+    2,
+    3,
+    3,
+    0,
+    0
+   ],
+   [
     1,
+    5,
+    0,
+    5,
     0,
     1
    ]
   ],
-  "stops": [
+  "plates": [
    [
+    1,
     4,
     0
    ]
   ],
-  "solIn": "LUURRL",
-  "solutions": 1,
-  "minMoves": 6,
+  "solIn": "RLLDLDRLDDU",
+  "solutions": 2,
+  "minMoves": 11,
   "luck": 0,
   "belief": "as long as the map is mine, nobody gets left behind.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "myne_1_1",
@@ -12294,100 +12516,85 @@
   "n": 4,
   "w": 4,
   "h": 4,
-  "holes": [
-   [
-    2,
-    1
-   ]
-  ],
   "broken": [
    [
-    2,
-    0,
-    3,
-    0
-   ],
-   [
-    1,
-    1,
-    1,
-    2
-   ],
-   [
-    1,
-    2,
-    2,
-    2
-   ],
-   [
-    3,
-    2,
     4,
+    0,
+    4,
+    1
+   ],
+   [
+    2,
+    1,
+    2,
     2
    ],
    [
     0,
-    3,
+    2,
     1,
-    3
-   ],
-   [
-    0,
-    3,
-    0,
-    4
+    2
    ],
    [
     3,
+    2,
     3,
-    4,
     3
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 1,
-    "n": 3
+    "x": 0,
+    "y": 2
    },
    {
-    "x": 1,
-    "y": 4,
-    "m": "opp",
-    "n": 4
+    "x": 4,
+    "y": 3,
+    "m": "mx"
    }
   ],
   "exit": [
    [
-    4,
+    2,
     3
    ],
    [
-    1,
+    2,
     2
    ]
   ],
-  "oneway": [
+  "plates": [
    [
     3,
-    1,
-    4,
-    1
-   ],
-   [
-    4,
-    0,
-    3,
+    2,
     0
    ]
   ],
-  "solIn": "LLLDR",
+  "gates": [
+   [
+    1,
+    3,
+    2,
+    3,
+    0,
+    0
+   ],
+   [
+    0,
+    3,
+    1,
+    3,
+    0,
+    0
+   ]
+  ],
+  "solIn": "URDDR",
   "solutions": 1,
   "minMoves": 5,
-  "luck": 0.5,
+  "luck": 0.9,
   "belief": "one-way streets? speedrun route.",
-  "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Chỗ trống trên map không đi được. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp có dấu chéo: đi ngược cả hai chiều. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
+  "intro": "plates",
+  "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "myne_2_5",
@@ -12398,110 +12605,95 @@
   "h": 4,
   "broken": [
    [
+    2,
     0,
+    3,
+    0
+   ],
+   [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    3,
+    4,
+    4,
+    4
+   ],
+   [
+    2,
     0,
     1,
     0
    ],
    [
-    0,
-    1,
-    0,
-    2
-   ],
-   [
-    1,
-    1,
-    2,
-    1
-   ],
-   [
-    3,
-    1,
-    4,
-    1
-   ],
-   [
-    0,
-    2,
-    1,
-    2
-   ],
-   [
-    3,
-    2,
-    3,
-    3
-   ],
-   [
-    4,
-    2,
-    4,
-    3
-   ],
-   [
-    1,
-    3,
-    2,
-    3
-   ],
-   [
-    2,
-    3,
-    3,
-    3
-   ],
-   [
-    3,
     3,
     4,
-    3
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
     2,
-    4,
-    3,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 4,
-    "y": 4
+    "x": 1,
+    "y": 3
    },
    {
-    "x": 0,
-    "y": 0,
+    "x": 2,
+    "y": 1,
     "m": "mx"
-   },
-   {
-    "x": 3,
-    "y": 1
    }
   ],
   "exit": [
    [
-    0,
-    4
+    2,
+    0
    ],
    [
-    2,
-    2
+    3,
+    4
    ]
   ],
-  "solIn": "LDDDLDL",
-  "solutions": 1,
-  "minMoves": 7,
-  "luck": 0.2,
+  "gates": [
+   [
+    2,
+    0,
+    2,
+    1,
+    0,
+    0
+   ],
+   [
+    3,
+    4,
+    3,
+    3,
+    0,
+    1
+   ]
+  ],
+  "plates": [
+   [
+    1,
+    0,
+    0
+   ]
+  ],
+  "solIn": "RUUURDLLLDDD",
+  "solutions": 2,
+  "minMoves": 12,
+  "luck": 0,
   "belief": "if i'm loud enough nobody notices i'm fragile.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đặt hộp thừa trước, rồi mới phóng hộp chính."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "myne_2_6",
@@ -12512,44 +12704,32 @@
   "h": 4,
   "holes": [
    [
-    2,
+    5,
     4
    ]
   ],
   "broken": [
    [
-    0,
-    0,
     1,
+    0,
+    2,
     0
    ],
    [
-    2,
-    0,
-    2,
+    3,
+    1,
+    4,
     1
    ],
    [
+    5,
     1,
-    1,
-    1,
+    5,
     2
    ],
    [
     1,
     2,
-    2,
-    2
-   ],
-   [
-    3,
-    2,
-    3,
-    3
-   ],
-   [
-    0,
-    3,
     1,
     3
    ],
@@ -12560,51 +12740,97 @@
     4
    ],
    [
+    2,
+    3,
+    3,
+    3
+   ],
+   [
+    2,
+    4,
+    3,
+    4
+   ],
+   [
+    4,
     0,
     4,
+    1
+   ],
+   [
+    4,
+    0,
+    3,
+    0
+   ],
+   [
+    0,
     1,
-    4
+    1,
+    1
+   ],
+   [
+    0,
+    1,
+    0,
+    0
    ]
   ],
   "boxes": [
    {
     "x": 5,
-    "y": 4,
-    "n": 9
+    "y": 2,
+    "n": 5
    },
    {
-    "x": 5,
+    "x": 4,
     "y": 3,
     "m": "mx",
-    "n": 11
-   },
-   {
-    "x": 2,
-    "y": 0,
-    "m": "my"
+    "n": 12
    }
   ],
   "exit": [
    [
     4,
-    4
-   ],
-   [
-    1,
     0
    ],
    [
     0,
+    1
+   ]
+  ],
+  "gates": [
+   [
+    4,
+    0,
+    5,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    1,
+    0,
+    2,
+    0,
+    1
+   ]
+  ],
+  "plates": [
+   [
+    2,
+    1,
     0
    ]
   ],
-  "solIn": "LLULUULLUDDRDD",
-  "solutions": 3,
-  "minMoves": 14,
+  "solIn": "RLURRULRRDRU",
+  "solutions": 1,
+  "minMoves": 12,
   "luck": 0,
   "belief": "finish everything. right now. all of it.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp có vạch ngang: lên/xuống bị đảo. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
  },
  {
   "id": "myne_2_7",
@@ -12613,16 +12839,6 @@
   "n": 7,
   "w": 5,
   "h": 4,
-  "holes": [
-   [
-    0,
-    4
-   ],
-   [
-    4,
-    1
-   ]
-  ],
   "broken": [
    [
     0,
@@ -12643,87 +12859,142 @@
     0
    ],
    [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
     4,
     0,
     5,
     0
    ],
    [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    3,
+    2,
+    4,
+    2
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    0,
+    3,
+    1,
+    3
+   ],
+   [
+    4,
+    3,
+    4,
+    4
+   ],
+   [
+    2,
+    4,
+    3,
+    4
+   ],
+   [
+    4,
+    4,
+    5,
+    4
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    1,
+    2,
+    1,
+    1
+   ],
+   [
     1,
     2,
     2,
     2
-   ],
-   [
-    1,
-    2,
-    1,
-    3
-   ],
-   [
-    2,
-    2,
-    2,
-    3
    ]
   ],
   "boxes": [
    {
     "x": 2,
-    "y": 1
+    "y": 4
    },
    {
-    "x": 0,
-    "y": 3,
+    "x": 5,
+    "y": 2,
     "m": "mx"
    },
    {
-    "x": 1,
-    "y": 2,
+    "x": 4,
+    "y": 1,
     "m": "opp"
    }
   ],
   "exit": [
    [
     1,
+    2
+   ],
+   [
+    4,
     0
    ],
    [
-    3,
-    0
-   ],
-   [
-    5,
-    1
+    2,
+    3
    ]
   ],
   "oneway": [
    [
     2,
+    1,
     2,
-    3,
-    2
+    0
+   ]
+  ],
+  "gates": [
+   [
+    1,
+    2,
+    0,
+    2,
+    0,
+    0
    ],
    [
     4,
+    0,
     4,
-    4,
-    3
+    1,
+    0,
+    1
    ]
   ],
-  "solIn": "DLDLLLULUU",
-  "solutions": 2,
-  "minMoves": 10,
+  "plates": [
+   [
+    5,
+    4,
+    0
+   ]
+  ],
+  "solIn": "RUUULDLDRURRR",
+  "solutions": 1,
+  "minMoves": 13,
   "luck": 0,
   "belief": "keep moving or the lag catches up.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Chỗ trống trên map không đi được. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp có dấu chéo: đi ngược cả hai chiều. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp có dấu chéo: đi ngược cả hai chiều. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "myne_3_1",
@@ -13088,51 +13359,74 @@
    [
     2,
     0,
+    2,
+    1
+   ],
+   [
+    2,
+    1,
     3,
-    0
-   ],
-   [
-    2,
-    0,
-    2,
     1
    ],
    [
-    0,
+    3,
     1,
-    1,
-    1
+    3,
+    2
    ],
    [
+    3,
     2,
+    4,
+    2
+   ],
+   [
+    3,
     2,
+    3,
+    3
+   ],
+   [
+    0,
+    3,
+    0,
+    4
+   ],
+   [
+    1,
+    3,
     2,
     3
    ],
    [
     1,
-    4,
-    2,
-    4
+    0,
+    1,
+    1
+   ],
+   [
+    1,
+    0,
+    0,
+    0
    ]
   ],
   "boxes": [
    {
     "x": 2,
-    "y": 2,
-    "trail": true
+    "y": 0,
+    "dash": true
    },
    {
     "x": 3,
-    "y": 1,
-    "m": "mx",
-    "dash": true
+    "y": 4,
+    "m": "mx"
    }
   ],
   "exit": [
    [
-    3,
-    2
+    1,
+    0
    ],
    [
     0,
@@ -13142,24 +13436,43 @@
   "pads": [
    [
     1,
+    2,
     1,
-    -1,
+    0
+   ]
+  ],
+  "gates": [
+   [
+    1,
+    0,
+    2,
+    0,
+    0,
     0
    ],
    [
-    1,
-    3,
     0,
-    -1
+    4,
+    1,
+    4,
+    0,
+    1
    ]
   ],
-  "solIn": "LRURRD",
+  "plates": [
+   [
+    0,
+    2,
+    0
+   ]
+  ],
+  "solIn": "RRURULRDDRR",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 0.2,
+  "minMoves": 11,
+  "luck": 0,
   "belief": "i have to see every pixel. every one.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái \"đường\" ở các bảng khác chính là một hộp như thế. Mẹo: Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "myne_3_6",
@@ -13168,12 +13481,6 @@
   "n": 6,
   "w": 5,
   "h": 4,
-  "holes": [
-   [
-    5,
-    1
-   ]
-  ],
   "broken": [
    [
     1,
@@ -13182,72 +13489,94 @@
     0
    ],
    [
+    3,
     0,
-    1,
-    1,
+    3,
     1
    ],
    [
     0,
-    2,
     1,
-    2
-   ],
-   [
-    2,
-    2,
-    3,
+    0,
     2
    ],
    [
     1,
-    4,
     2,
-    4
+    1,
+    3
    ],
    [
+    2,
     3,
+    3,
+    3
+   ],
+   [
+    2,
     4,
-    4,
+    3,
     4
    ],
    [
+    1,
     4,
-    4,
-    5,
+    0,
     4
+   ],
+   [
+    1,
+    4,
+    1,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 4,
-    "y": 1,
+    "x": 5,
+    "y": 2,
     "trail": true
    },
    {
-    "x": 5,
-    "y": 2,
-    "m": "mx",
-    "trail": true
+    "x": 0,
+    "y": 0,
+    "m": "mx"
    }
   ],
   "exit": [
    [
-    4,
-    0
+    1,
+    4
    ],
    [
-    2,
-    4
+    3,
+    1
    ]
   ],
-  "solIn": "RRDRDU",
-  "solutions": 1,
-  "minMoves": 6,
-  "luck": 0.5,
+  "gates": [
+   [
+    1,
+    4,
+    2,
+    4,
+    0,
+    0
+   ]
+  ],
+  "plates": [
+   [
+    3,
+    3,
+    0
+   ]
+  ],
+  "solIn": "LDLULRDDL",
+  "solutions": 2,
+  "minMoves": 9,
+  "luck": 0,
   "belief": "two players, one heart rate.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái \"đường\" ở các bảng khác chính là một hộp như thế. Mẹo: Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái \"đường\" ở các bảng khác chính là một hộp như thế. Mẹo: Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác."
  },
  {
   "id": "myne_3_7",
@@ -13258,33 +13587,27 @@
   "h": 5,
   "broken": [
    [
-    1,
-    0,
-    2,
-    0
-   ],
-   [
-    1,
-    0,
-    1,
-    1
-   ],
-   [
-    2,
-    0,
-    3,
-    0
-   ],
-   [
     3,
     0,
     4,
     0
    ],
    [
+    4,
     0,
+    5,
+    0
+   ],
+   [
+    3,
     1,
+    3,
+    2
+   ],
+   [
+    4,
     1,
+    5,
     1
    ],
    [
@@ -13294,27 +13617,27 @@
     2
    ],
    [
-    0,
-    2,
     1,
+    2,
+    2,
     2
    ],
    [
-    1,
-    2,
-    1,
-    3
-   ],
-   [
-    5,
-    2,
-    5,
-    3
-   ],
-   [
-    1,
     3,
-    1,
+    2,
+    3,
+    3
+   ],
+   [
+    4,
+    2,
+    5,
+    2
+   ],
+   [
+    0,
+    3,
+    0,
     4
    ],
    [
@@ -13324,79 +13647,125 @@
     4
    ],
    [
-    5,
+    0,
+    4,
+    1,
+    4
+   ],
+   [
+    1,
+    4,
+    1,
+    5
+   ],
+   [
     3,
-    5,
+    4,
+    4,
     4
    ],
    [
     3,
     4,
     3,
+    5
+   ],
+   [
+    4,
+    4,
+    4,
+    5
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    1,
+    5,
+    2,
     5
    ]
   ],
   "boxes": [
    {
-    "x": 1,
+    "x": 4,
     "y": 3,
-    "trail": true,
-    "n": 8
+    "n": 13
    },
    {
-    "x": 4,
-    "y": 1,
+    "x": 1,
+    "y": 0,
     "m": "mx",
     "dash": true
    },
    {
-    "x": 1,
-    "y": 1,
+    "x": 5,
+    "y": 3,
     "m": "opp"
    }
   ],
   "exit": [
    [
-    3,
+    0,
     1
    ],
    [
-    5,
-    3
-   ],
-   [
-    0,
+    1,
     5
-   ]
-  ],
-  "pads": [
+   ],
    [
     4,
-    3,
-    0,
-    1
-   ],
-   [
-    3,
-    2,
-    0,
-    1
+    2
    ]
   ],
   "portals": [
    [
+    0,
     5,
     5,
+    5
+   ]
+  ],
+  "gates": [
+   [
+    0,
+    1,
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    1,
     5,
+    0,
+    5,
+    0,
     1
    ]
   ],
-  "solIn": "LLLDRRRRUR",
+  "plates": [
+   [
+    0,
+    3,
+    0
+   ]
+  ],
+  "solIn": "LLLUUDRDRRRUDUL",
   "solutions": 1,
-  "minMoves": 10,
+  "minMoves": 15,
   "luck": 0,
   "belief": "as long as the game is running, i get to keep playing.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp có dấu chéo: đi ngược cả hai chiều. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái \"đường\" ở các bảng khác chính là một hộp như thế. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp có dấu chéo: đi ngược cả hai chiều. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  }
 ]
