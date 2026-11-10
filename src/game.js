@@ -677,7 +677,8 @@ const ROOKIE = () => (S.player && S.player.name && S.player.name !== 'Newbie') ?
    On a web server the game reads data/*.csv fresh on every load;
    opened as a local file it uses the copy built into this page.
    ========================================================= */
-const CSV_FILES = ['session', 'morning', 'night_boss', 'night_index', 'night_lines'];
+const CSV_FILES = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal'];
+let DATA_EMPTY = 0; // blank placeholder rows (not written yet) are skipped quietly
 const CSV_EMBED = __CSV_EMBED__;
 const DATA_ISSUES = [];
 let DD = { session: [], morning: [], boss: [], nightIdx: [], night: {}, source: 'built-in' };
@@ -824,20 +825,20 @@ function compileSteps(e) {
     const type = (r.type || 'line').toLowerCase(), F = r._file, R = r._row;
     if (r.emo && !EMOS.includes(r.emo.toLowerCase())) dataIssue(F, R, `unknown emo "${r.emo}" (use ${EMOS.join(', ')})`);
     const ln = { who: (r.who || '').toLowerCase() || null, emo: (r.emo || '').toLowerCase() || null, text: r.text || '' };
+    if (!ln.text) { DATA_EMPTY++; if (type === 'choice') lastChoice = 'skip'; return; }   // not written yet
     const fx = parseEffects(r.effects, F, R); if (r.journal) fx.act.push({ action: 'JOURNAL', value: r.journal });
     if (type === 'line') {
-      if (!ln.text) dataIssue(F, R, 'line has no text');
       if (!cur || cur.choices || ((fx.act.length || fx.pause) && cur.lines.length)) fresh();
       cur.act.push(...fx.act); if (fx.pause) cur.pause = fx.pause;
       if (r.requires) dataIssue(F, R, '"requires" only works on choice rows (use the "if" column for a whole entry)');
       cur.lines.push(ln);
     } else if (type === 'choice') {
-      if (!ln.text) dataIssue(F, R, 'choice has no text');
       if (!cur) fresh();
       cur.choices = cur.choices || [];
       if (r.requires) parseCond(r.requires, F, R);
       lastChoice = { t: ln.text, cond: r.requires || '', act: fx.act, r: [] }; cur.choices.push(lastChoice);
     } else if (type === 'reply') {
+      if (lastChoice === 'skip') return;
       if (!lastChoice) { dataIssue(F, R, 'reply has no choice above it'); return; }
       if (fx.act.length) dataIssue(F, R, 'effects/journal on a reply are ignored — put them on the choice');
       lastChoice.r.push(ln);
@@ -852,41 +853,70 @@ function compileEntries(file, text, metaCols) {
     if (m.if) parseCond(m.if, file, m._row);
     if (m.day && !/^\d+(\s*-\s*\d+)?$/.test(m.day)) dataIssue(file, m._row, `day "${m.day}" should be a number like 3 or a range like 2-14`);
     return m;
-  });
+  }).filter(m => m.steps.length);   // an entry with nothing written yet doesn't exist
 }
 function compileData(texts) {
-  DATA_ISSUES.length = 0;
+  DATA_ISSUES.length = 0; DATA_EMPTY = 0;
   const d = { source: DD.source };
-  d.session = compileEntries('session.csv', texts.session, ['girl', 'kind', 'layer', 'trigger', 'if']);
+  d.session = compileEntries('session', texts.session, ['girl', 'kind', 'layer', 'trigger', 'if']);
   d.session.forEach(e => {
     e.girl = e.girl.toLowerCase(); e.kind = e.kind.toLowerCase(); e.trigger = e.trigger.toUpperCase();
     if (!['intro', 'outro', 'react', 'break', 'quiz'].includes(e.kind)) dataIssue(e._file, e._row, `kind "${e.kind}" should be intro, outro, react, break or quiz`);
     if (e.trigger && !['WIN_HIGH', 'WIN_LOW', 'PERFECT_HIGH', 'PERFECT_LOW', 'FAIL_MOVES', 'FAIL_TIME'].includes(e.trigger)) dataIssue(e._file, e._row, `trigger "${e.trigger}" is not one of WIN_HIGH, WIN_LOW, PERFECT_HIGH, PERFECT_LOW, FAIL_MOVES, FAIL_TIME`);
   });
-  d.morning = compileEntries('morning.csv', texts.morning, ['day', 'if', 'group', 'once']);
-  d.boss = compileEntries('night_boss.csv', texts.night_boss, ['kind', 'girl', 'day', 'if']);
+  d.morning = compileEntries('morning', texts.morning, ['day', 'if', 'group', 'once']);
+  d.boss = compileEntries('night_boss', texts.night_boss, ['kind', 'girl', 'day', 'if']);
   d.boss.forEach(e => { e.girl = e.girl.toLowerCase(); e.kind = e.kind.toLowerCase(); if (!['opening', 'ask', 'farewell', 'extra', 'closing'].includes(e.kind)) dataIssue(e._file, e._row, `kind "${e.kind}" should be opening, ask, farewell, extra or closing`); });
-  const lines = {}; compileEntries('night_lines.csv', texts.night_lines, []).forEach(e => lines[e.id] = e);
-  d.nightIdx = csvObjects('night_index.csv', texts.night_index).map(r => {
+  const lines = {}; compileEntries('night_lines', texts.night_lines, []).forEach(e => lines[e.id] = e);
+  d.nightIdx = csvObjects('night_index', texts.night_index).map(r => {
     const starts = (r.starts || 'girl').toLowerCase();
     if (!['girl', 'me'].includes(starts)) dataIssue(r._file, r._row, `starts "${r.starts}" should be girl or me`);
     if (r.if) parseCond(r.if, r._file, r._row);
-    if (!lines[r.id]) dataIssue(r._file, r._row, `no lines for "${r.id}" in night_lines.csv`);
+    if (!lines[r.id]) DATA_EMPTY++;   // planned but not written yet
     return { id: r.id, girl: (r.girl || '').toLowerCase(), order: +r.order || 0, by: starts === 'me' ? 'me' : 'girl', layer: +r.layers_broken || 0, if: r.if || '', _row: r._row };
   }).filter(c => lines[c.id]);
   d.nightIdx.forEach((c, i) => c._i = i);
   d.nightIdx.sort((a, b) => a.order - b.order || a._i - b._i);
-  Object.keys(lines).forEach(id => { if (!d.nightIdx.some(c => c.id === id)) dataIssue('night_lines.csv', lines[id]._row, `"${id}" is not listed in night_index.csv, so it never plays`); });
+  Object.keys(lines).forEach(id => { if (!d.nightIdx.some(c => c.id === id)) dataIssue('night_lines', lines[id]._row, `"${id}" is not listed in night_index, so it never plays`); });
   d.night = lines;
+  d.first = compileEntries('first_message', texts.first_message, ['girl', 'day', 'if']);
+  d.first.forEach(e => e.girl = e.girl.toLowerCase());
+  d.journal = csvObjects('journal', texts.journal).map(r => {
+    const kind = (r.kind || 'entry').toLowerCase();
+    if (!['entry', 'ending_few', 'ending_many', 'ps'].includes(kind)) dataIssue(r._file, r._row, `kind "${r.kind}" should be entry, ending_few, ending_many or ps`);
+    if (r.if) parseCond(r.if, r._file, r._row);
+    if (r.day && !/^\d+(\s*-\s*\d+)?$/.test(r.day)) dataIssue(r._file, r._row, `day "${r.day}" should be a number like 3 or a range like 2-14`);
+    if (!r.text) DATA_EMPTY++;
+    return { id: r.id || 'j' + r._row, kind, day: r.day || '', if: r.if || '', text: r.text || '' };
+  }).filter(j => j.text);
   return d;
+}
+function loadScript(src) { return new Promise((ok, no) => { const el = document.createElement('script'); el.src = src; el.onload = ok; el.onerror = no; document.head.appendChild(el); }); }
+// the writers' workbook: one sheet per dialogue table
+async function fetchWorkbook() {
+  const r = await fetch('data/dialogue.xlsx', { cache: 'no-cache' }).catch(() => null);
+  if (!r || !r.ok) return null;
+  const buf = await r.arrayBuffer();
+  if (!window.XLSX) await loadScript('vendor/xlsx.full.min.js').catch(() => loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js')).catch(() => null);
+  if (!window.XLSX) { dataIssue('dialogue.xlsx', 0, 'could not load the Excel reader, so the built-in copy is used'); return null; }
+  const wb = XLSX.read(buf, { type: 'array' }), out = {};
+  CSV_FILES.forEach(n => { const ws = wb.Sheets[n]; if (ws && ws['!ref']) { ws['!ref'] = ws['!ref'].replace(/^[A-Z]+\d+/, 'A1'); out[n] = XLSX.utils.sheet_to_csv(ws, { blankrows: true }); } });
+  return out;
 }
 async function loadDialogueData() {
   const texts = { ...CSV_EMBED }; let src = 'built-in copy';
   if (/^https?:$/.test(location.protocol)) {
-    const got = await Promise.all(CSV_FILES.map(n => fetch(`data/${n}.csv`, { cache: 'no-cache' }).then(r => r.ok ? r.text() : null).catch(() => null)));
-    const live = CSV_FILES.filter((n, i) => got[i] != null);
-    got.forEach((t, i) => { if (t != null) texts[CSV_FILES[i]] = t; });
-    if (live.length) src = live.length === CSV_FILES.length ? 'data/*.csv' : `data/ (${live.join(', ')}) + built-in copy`;
+    const wb = await fetchWorkbook().catch(e => { dataIssue('dialogue.xlsx', 0, 'could not read the workbook: ' + e.message); return null; });
+    if (wb) {
+      Object.assign(texts, wb);
+      const miss = CSV_FILES.filter(n => !wb[n]);
+      src = 'data/dialogue.xlsx' + (miss.length ? ` (sheets not found: ${miss.join(', ')}; built-in copy used for those)` : '');
+    } else {
+      const got = await Promise.all(CSV_FILES.map(n => fetch(`data/${n}.csv`, { cache: 'no-cache' }).then(r => r.ok ? r.text() : null).catch(() => null)));
+      const live = CSV_FILES.filter((n, i) => got[i] != null);
+      got.forEach((t, i) => { if (t != null) texts[CSV_FILES[i]] = t; });
+      if (live.length) src = `data/*.csv (${live.join(', ')})` + (live.length < CSV_FILES.length ? ' + built-in copy' : '');
+    }
   }
   DD = compileData(texts); DD.source = src;
   const check = /[?&]check\b/.test(location.search);
@@ -895,7 +925,7 @@ async function loadDialogueData() {
 }
 function showDataReport() {
   const n = DATA_ISSUES.length;
-  const sum = `source: ${DD.source}\nsession: ${DD.session.length} entries · morning: ${DD.morning.length} · night_boss: ${DD.boss.length} · night chats: ${DD.nightIdx.length}\n\n`;
+  const sum = `source: ${DD.source}\nsession: ${DD.session.length} entries · morning: ${DD.morning.length} · night_boss: ${DD.boss.length} · night chats: ${DD.nightIdx.length} · first messages: ${DD.first.length} · journal pages: ${DD.journal.length}\n${DATA_EMPTY} blank rows (not written yet) skipped.\n\n`;
   const body = n ? `${n} problem${n > 1 ? 's' : ''} found. Rows with problems are skipped or may play oddly.\n\n` + DATA_ISSUES.map(x => `${x.file}  row ${x.row}:  ${x.msg}`).join('\n') : 'No problems found. ♡';
   // wait until the desktop is actually visible, then put the report on top
   const iv = setInterval(() => {
@@ -1159,13 +1189,12 @@ function dayMail() {
 }
 // new patients only exist for the player once they've said something
 function newPatientsToday() {
-  if (S.day === GIRLS.trix.from && !met('trix') && !S.g.trix.gone) {
-    setTimeout(() => {
-      S.met.trix = true; S.flags.ping = 'brain';
-      runDialogue(seq('trix', 'trix', [{ lines: ['{neutral}you\'re the new counsellor.', '{neutral}i\'m on your list today. i checked the list. twice.', '{neutral}don\'t be late.'] }]));
-      refresh();
-    }, 2500);
-  }
+  PLAYABLE.forEach(g => {
+    if (g === 'prim' || GIRLS[g].from !== S.day || met(g) || S.g[g].gone) return;
+    const e = DD.first.find(x => x.girl === g && dayMatch(x.day, S.day) && cond(x.if)) || DD.first.find(x => x.girl === g);
+    const steps = e ? playSteps(e.steps) : [{ lines: ['{neutral}hi. you\'re the new counsellor.'] }];
+    setTimeout(() => { S.met[g] = true; S.flags.ping = 'brain'; runDialogue(seq(g, g, steps, 'NONE')); refresh(); }, 2500);
+  });
 }
 function afterMorning() {
   if (SPECIAL[S.day] === 'showcase') { openShowcase(); return; }
@@ -1216,8 +1245,10 @@ async function goNight() {
 setInterval(() => { if (S.flags && S.flags.nightAfter && !S.active && !S.queue.length && !S.session) { S.flags.nightAfter = false; goNight(); } }, 800);
 async function shutDown() {
   if (S.phase !== 'night' || S.active || S.flags.ended) return;
-  if (S.night.bossPending) S.journal.push({ day: S.day, text: 'I asked how everyone was. No answer tonight. I wrote nothing.', miss: true });
-  S.night.bossPending = false;
+  S.night.bossPending = false;   // if Boss wasn't answered tonight, that night simply has no section in the journal
+  DD.journal.filter(j => j.kind === 'entry' && dayMatch(j.day, S.day) && cond(j.if)).forEach(j => {
+    if (!S.journal.some(x => x.rid === j.id)) S.journal.push({ day: S.day, text: tpl(j.text, tplVars()), rid: j.id, ray: true });
+  });
   if (S.flags.protoReady) { endGame('proto'); return; }
   if (S.day >= LAST_DAY) { endGame('deadline'); return; }
   const bo = document.createElement('div'); bo.id = 'blackout'; document.body.appendChild(bo);
@@ -1691,28 +1722,21 @@ LOG  operator memory overwritten from
 LOG  operator now believes they are an
      "a counsellor on probation"
 LOG  persona "BOSS" holds admin rights`;
+const JOURNAL_FALLBACK = {
+  ending_few: 'You didn\'t tell me much.\nI made them. I gave them faces and\nprofiles and names. And I don\'t know\nwho they were. Nobody does now.',
+  ending_many: 'I can\'t keep them. But I kept what you\ntold me about them. That has to count.',
+  ps: "P.S.\nI told you about Reykjavik and Kyoto\nand the night trains in Switzerland.\n\nI've never been anywhere.\nI've never left this city.\nEvery place I know, I found on the\ninternet at 3 a.m., in a hospital bed.\n\nI just wanted them to have a bigger\nworld than mine.",
+};
+function journalPart(kind) { const rows = DD.journal.filter(j => j.kind === kind && cond(j.if)); return rows.length ? rows.map(j => tpl(j.text, tplVars())).join('\n\n') : JOURNAL_FALLBACK[kind]; }
 function journalText() {
-  const real = S.journal.filter(j => !j.miss), misses = S.journal.filter(j => j.miss).length;
-  const body = S.journal.map(j => `Day ${pad2(j.day)} · ${j.text}`).join('\n\n');
-  const sad = real.length < 4 ? `\n\n--------------------------------------\nYou didn't tell me much.\nI made them. I gave them faces and\nprofiles and names. And I don't know\nwho they were. Nobody does now.` : `\n\n--------------------------------------\nI can't keep them. But I kept what you\ntold me about them. That has to count.`;
+  const answers = S.journal.filter(j => !j.ray && !j.miss).length;   // old saves may still hold "miss" rows: never shown
+  const body = S.journal.filter(j => !j.miss).map(j => `Day ${pad2(j.day)} · ${j.text}`).join('\n\n');
+  const hr = '\n\n--------------------------------------\n';
   return `journal.txt          owner: R.
 (private. not for the newbie.)
 ======================================
 
-${body || '(empty)'}${sad}${misses ? `\n\n(${misses} night${misses > 1 ? 's' : ''} I asked and nobody answered.)` : ''}
-
---------------------------------------
-P.S.
-I told you about Reykjavik and Kyoto
-and the night trains in Switzerland.
-
-I've never been anywhere.
-I've never left this city.
-Every place I know, I found on the
-internet at 3 a.m., in a hospital bed.
-
-I just wanted them to have a bigger
-world than mine.`;
+${body || '(empty)'}${hr}${journalPart(answers < 4 ? 'ending_few' : 'ending_many')}${hr}${journalPart('ps')}`;
 }
 function openNote(id, title, body, cls = '', ic = 'doc') {
   openWin('note:' + id, { title: title + ' - Notepad', icon: ic, w: 460, h: 480, render: b => { b.innerHTML = `<div class="notepad sunk ${cls}">${body}</div>`; } });
@@ -1753,7 +1777,7 @@ function endGame(kind) {
         b.innerHTML = `<div class="endc"><div class="chapter"><div class="hero"><small>${kind === 'proto' ? 'DAY ' + S.day + ' / ' + LAST_DAY : 'DAY ' + LAST_DAY + ' · TIME UP'}</small><h2>${kind === 'proto' ? 'Two patients "discharged"' : 'KPI missed'}</h2></div></div>
         <div class="panel sunk" style="padding:0"><div class="term">KPI           ${layersTotal()}/${kpiMax()}
 discharged    ${esc(fixed.join(', ') || 'none')}
-journal       ${S.journal.filter(j => !j.miss).length} entries · ${S.journal.filter(j => j.miss).length} silent nights
+journal       ${S.journal.filter(j => !j.miss).length} entries
 showcase      ${PLAYABLE.map(k => GIRLS[k].name + ': ' + (S.show[k] === 'good' ? 'encouraged' : S.show[k] ? 'as ordered' : '—')).join(' · ')}
 mementos      ${S.mementos.length}/${Object.keys(MEMENTOS).length} · software ${S.apps.length}/2
 <span class="m">earthquakes   ${S.quakes}</span></div></div>
