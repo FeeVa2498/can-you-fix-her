@@ -10493,58 +10493,59 @@
    [
     1,
     0,
-    2,
-    0
+    1,
+    1
    ],
    [
-    1,
-    1,
+    0,
+    2,
     1,
     2
    ],
    [
     1,
     2,
-    1,
-    3
+    2,
+    2
    ],
    [
+    0,
     3,
-    2,
-    3,
+    1,
     3
    ]
   ],
   "boxes": [
    {
     "x": 1,
-    "y": 0
+    "y": 3
    }
   ],
   "exit": [
    [
-    3,
-    0
+    0,
+    3
    ]
   ],
   "pads": [
    [
-    3,
-    1,
-    1,
+    0,
+    2,
+    -1,
     0
    ],
    [
-    2,
+    3,
     1,
     1,
     0
    ]
   ],
-  "solIn": "DRU",
+  "solIn": "UULDD",
   "solutions": 1,
-  "minMoves": 3,
-  "luck": 7.7,
+  "minMoves": 5,
+  "luck": 1.5,
+  "quality": 1.1,
   "belief": "omg a launch pad!! ...trajectory confirmed.",
   "intro": "pads",
   "why": "Bảng dạy luật mới. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
@@ -10558,38 +10559,26 @@
   "h": 3,
   "broken": [
    [
+    0,
+    1,
+    0,
+    2
+   ],
+   [
     2,
-    0,
-    2,
-    1
-   ],
-   [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
-    0,
     1,
-    1,
+    3,
     1
    ],
    [
     3,
     1,
+    3,
+    2
+   ],
+   [
     4,
-    1
-   ],
-   [
     1,
-    2,
-    1,
-    3
-   ],
-   [
-    3,
-    2,
     4,
     2
    ],
@@ -10602,40 +10591,41 @@
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 1
+    "x": 1,
+    "y": 3
    }
   ],
   "exit": [
    [
     4,
-    2
+    1
    ]
   ],
   "pads": [
    [
     2,
-    0,
-    1,
-    0
-   ],
-   [
-    1,
-    1,
+    2,
     -1,
     0
    ],
    [
+    4,
     0,
+    0,
+    -1
+   ],
+   [
     3,
     0,
-    1
+    0,
+    -1
    ]
   ],
-  "solIn": "LURDD",
-  "solutions": 1,
-  "minMoves": 5,
-  "luck": 2.4,
+  "solIn": "UURURRD",
+  "solutions": 2,
+  "minMoves": 7,
+  "luck": 0.7,
+  "quality": 6,
   "belief": "always have two exits. that's basic.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
@@ -10697,15 +10687,9 @@
     0
    ],
    [
-    1,
+    3,
     0,
-    1,
-    1
-   ],
-   [
-    0,
-    1,
-    1,
+    3,
     1
    ],
    [
@@ -10721,69 +10705,45 @@
     2
    ],
    [
+    1,
     2,
     2,
-    3,
     2
    ],
    [
+    1,
     3,
     2,
-    4,
-    2
-   ],
-   [
-    2,
-    3,
-    3,
     3
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
-    2,
-    4,
-    3,
-    4
-   ],
-   [
-    3,
-    4,
-    4,
-    4
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 0
+    "x": 0,
+    "y": 2
    }
   ],
   "exit": [
    [
-    1,
+    3,
     0
    ]
   ],
   "pads": [
    [
+    2,
     0,
-    2,
-    -1,
-    0
+    0,
+    1
    ],
    [
     2,
-    4,
-    -1,
-    0
+    1,
+    0,
+    -1
    ],
    [
-    3,
+    0,
     4,
     0,
     -1
@@ -10791,14 +10751,15 @@
   ],
   "stops": [
    [
-    2,
-    1
+    1,
+    2
    ]
   ],
-  "solIn": "DDLLUUR",
+  "solIn": "RDDRUUUR",
   "solutions": 1,
-  "minMoves": 7,
-  "luck": 0.5,
+  "minMoves": 8,
+  "luck": 0.2,
+  "quality": 15.6,
   "belief": "cute outfit, full tactical plan underneath.",
   "intro": "stops",
   "why": "Bảng dạy luật mới. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Mẹo: Ô phanh là chỗ duy nhất giữa đường mà hộp đang lướt chịu dừng."
@@ -10812,49 +10773,31 @@
   "h": 4,
   "holes": [
    [
-    2,
-    4
+    0,
+    3
    ],
    [
-    3,
-    0
+    1,
+    1
    ]
   ],
   "broken": [
    [
+    2,
     0,
-    0,
-    1,
+    3,
     0
    ],
    [
+    2,
     0,
-    0,
-    0,
+    2,
     1
    ],
    [
-    0,
-    1,
-    0,
-    2
-   ],
-   [
-    1,
-    2,
-    1,
-    3
-   ],
-   [
     3,
     2,
     3,
-    3
-   ],
-   [
-    0,
-    3,
-    1,
     3
    ],
    [
@@ -10866,58 +10809,65 @@
    [
     3,
     3,
+    3,
+    4
+   ],
+   [
+    2,
+    4,
     3,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 4
+    "x": 4,
+    "y": 0
    }
   ],
   "exit": [
    [
-    3,
-    4
+    1,
+    3
    ]
   ],
   "pads": [
    [
-    0,
-    2,
+    3,
+    1,
     -1,
     0
    ],
    [
     1,
-    3,
-    0,
-    1
+    2,
+    -1,
+    0
    ],
    [
     3,
-    3,
+    4,
     0,
     -1
    ],
    [
-    4,
-    4,
+    2,
     1,
+    -1,
     0
    ]
   ],
   "stops": [
    [
-    4,
-    0
+    2,
+    2
    ]
   ],
-  "solIn": "LUURRRRDDL",
+  "solIn": "LDDDDLU",
   "solutions": 1,
-  "minMoves": 10,
-  "luck": 0.1,
+  "minMoves": 7,
+  "luck": 0.8,
+  "quality": 9.5,
   "belief": "if the road is blocked, go around. or through.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Chỗ trống trên map không đi được. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
@@ -10975,81 +10925,39 @@
   "h": 4,
   "broken": [
    [
-    2,
-    0,
-    2,
-    1
-   ],
-   [
-    3,
-    0,
     4,
+    0,
+    5,
     0
    ],
    [
-    3,
+    4,
     0,
+    4,
+    1
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
     3,
+    1,
+    4,
     1
    ],
    [
     2,
-    1,
+    2,
     3,
-    1
-   ],
-   [
-    3,
-    1,
-    4,
-    1
-   ],
-   [
-    4,
-    1,
-    5,
-    1
-   ],
-   [
-    5,
-    1,
-    5,
     2
-   ],
-   [
-    2,
-    2,
-    2,
-    3
-   ],
-   [
-    1,
-    3,
-    2,
-    3
-   ],
-   [
-    4,
-    3,
-    4,
-    4
-   ],
-   [
-    3,
-    4,
-    4,
-    4
-   ],
-   [
-    4,
-    4,
-    5,
-    4
    ]
   ],
   "boxes": [
    {
-    "x": 2,
+    "x": 0,
     "y": 0
    }
   ],
@@ -11061,48 +10969,49 @@
   ],
   "pads": [
    [
-    0,
+    1,
     2,
-    -1,
+    1,
     0
    ],
    [
-    2,
-    4,
-    0,
-    -1
-   ],
-   [
-    0,
-    0,
-    0,
-    -1
+    3,
+    1,
+    1,
+    0
    ],
    [
     3,
     0,
-    0,
-    1
+    1,
+    0
+   ],
+   [
+    1,
+    4,
+    1,
+    0
    ]
   ],
   "stops": [
    [
-    4,
+    5,
     4
    ]
   ],
   "portals": [
    [
-    0,
-    4,
-    4,
-    0
+    1,
+    3,
+    2,
+    1
    ]
   ],
-  "solIn": "LLDDDDR",
+  "solIn": "RRDDUUUU",
   "solutions": 1,
-  "minMoves": 7,
-  "luck": 1.3,
+  "minMoves": 8,
+  "luck": 0.6,
+  "quality": 18.2,
   "belief": "two routes in, two routes out. always.",
   "intro": "portals",
   "why": "Bảng dạy luật mới. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Mẹo: Coi hai cổng như một ô."
@@ -11130,18 +11039,6 @@
   ],
   "broken": [
    [
-    0,
-    0,
-    0,
-    1
-   ],
-   [
-    2,
-    0,
-    3,
-    0
-   ],
-   [
     2,
     1,
     2,
@@ -11154,21 +11051,9 @@
     2
    ],
    [
-    0,
-    2,
-    0,
-    3
-   ],
-   [
     2,
     2,
     3,
-    2
-   ],
-   [
-    3,
-    2,
-    4,
     2
    ],
    [
@@ -11238,10 +11123,11 @@
     4
    ]
   ],
-  "solIn": "RRDDLDDLLUU",
+  "solIn": "DDRDDLLUU",
   "solutions": 1,
-  "minMoves": 11,
-  "luck": 0.2,
+  "minMoves": 9,
+  "luck": 0,
+  "quality": 14,
   "belief": "i'm fun at parties because i know where every exit is.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Chỗ trống trên map không đi được. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
@@ -11316,28 +11202,16 @@
     2
    ],
    [
-    1,
-    1,
-    1,
-    2
-   ],
-   [
-    3,
-    1,
-    3,
-    2
-   ],
-   [
-    0,
     2,
-    0,
+    1,
+    2,
+    2
+   ],
+   [
+    2,
+    3,
+    3,
     3
-   ],
-   [
-    1,
-    2,
-    2,
-    2
    ]
   ],
   "boxes": [
@@ -11349,14 +11223,15 @@
   ],
   "exit": [
    [
-    1,
-    1
+    2,
+    2
    ]
   ],
-  "solIn": "LURD",
+  "solIn": "LURDRU",
   "solutions": 1,
-  "minMoves": 4,
-  "luck": 5.6,
+  "minMoves": 6,
+  "luck": 1.6,
+  "quality": 10.5,
   "belief": "up, down, up. pick a lane, vel.",
   "intro": "dash",
   "why": "Bảng dạy luật mới. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mẹo: Hộp dash chỉ dừng cạnh tường: tìm những ô có tường phía sau theo hướng bạn đi."
@@ -11370,9 +11245,9 @@
   "h": 4,
   "broken": [
    [
-    2,
     0,
-    3,
+    0,
+    1,
     0
    ],
    [
@@ -11382,47 +11257,60 @@
     1
    ],
    [
-    0,
     1,
     1,
-    1
+    1,
+    2
    ],
    [
-    0,
-    2,
-    0,
-    3
-   ],
-   [
-    4,
-    2,
-    4,
-    3
-   ],
-   [
-    2,
-    4,
     3,
+    1,
+    3,
+    2
+   ],
+   [
+    2,
+    2,
+    3,
+    2
+   ],
+   [
+    3,
+    2,
+    4,
+    2
+   ],
+   [
+    4,
+    2,
+    4,
+    3
+   ],
+   [
+    0,
+    4,
+    1,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 0,
+    "x": 3,
     "y": 3,
     "dash": true
    }
   ],
   "exit": [
    [
-    2,
+    1,
     0
    ]
   ],
-  "solIn": "DRULUR",
+  "solIn": "DLURURUL",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 1.6,
+  "minMoves": 8,
+  "luck": 0.3,
+  "quality": 18,
   "belief": "yesterday i loved everyone. today i hate this font.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Mẹo: Hộp dash chỉ dừng cạnh tường: tìm những ô có tường phía sau theo hướng bạn đi."
@@ -11436,15 +11324,9 @@
   "h": 4,
   "broken": [
    [
-    0,
-    0,
-    0,
-    1
-   ],
-   [
-    2,
-    0,
     3,
+    0,
+    4,
     0
    ],
    [
@@ -11454,53 +11336,41 @@
     2
    ],
    [
-    1,
-    1,
-    2,
-    1
-   ],
-   [
-    0,
     2,
     1,
+    2,
     2
    ],
    [
     4,
-    2,
-    4,
-    3
-   ],
-   [
-    2,
-    3,
-    3,
-    3
-   ],
-   [
     1,
     4,
-    2,
+    2
+   ],
+   [
+    4,
+    3,
+    4,
     4
    ],
    [
-    2,
+    0,
     4,
-    3,
+    1,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 4,
+    "x": 0,
+    "y": 3,
     "dash": true
    }
   ],
   "exit": [
    [
     4,
-    3
+    0
    ]
   ],
   "stops": [
@@ -11509,14 +11379,15 @@
     2
    ],
    [
-    3,
-    0
+    4,
+    4
    ]
   ],
-  "solIn": "URDRULDRU",
+  "solIn": "URDLULDRU",
   "solutions": 1,
   "minMoves": 9,
   "luck": 0.3,
+  "quality": 17.3,
   "belief": "highs and lows are just terrain. i've mapped worse.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Mẹo: Ô phanh là chỗ duy nhất giữa đường mà hộp đang lướt chịu dừng."
@@ -11593,52 +11464,58 @@
   "h": 4,
   "broken": [
    [
+    3,
+    0,
+    3,
+    1
+   ],
+   [
+    3,
+    1,
+    4,
+    1
+   ],
+   [
     1,
     2,
     1,
     3
    ],
    [
+    4,
     2,
-    2,
-    2,
-    3
+    3,
+    2
    ],
    [
+    4,
     2,
-    0,
-    1,
-    0
-   ],
-   [
-    2,
-    0,
-    2,
+    4,
     1
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 0
+    "x": 2,
+    "y": 4
    },
    {
-    "x": 0,
-    "y": 0
+    "x": 2,
+    "y": 2
    }
   ],
   "exit": [
    [
-    2,
-    0
+    4,
+    2
    ]
   ],
   "gates": [
    [
+    4,
     2,
-    0,
+    4,
     3,
-    0,
     0,
     0
    ]
@@ -11646,14 +11523,15 @@
   "plates": [
    [
     3,
-    0,
+    4,
     0
    ]
   ],
-  "solIn": "DRRUL",
+  "solIn": "RRLDLUURDRU",
   "solutions": 1,
-  "minMoves": 5,
-  "luck": 1.7,
+  "minMoves": 11,
+  "luck": 0,
+  "quality": 27.4,
   "belief": "when the floor drops, i already have a rope.",
   "intro": "plates",
   "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
@@ -11667,15 +11545,21 @@
   "h": 4,
   "broken": [
    [
+    3,
     0,
-    0,
-    1,
+    4,
     0
    ],
    [
+    3,
     0,
+    3,
+    1
+   ],
+   [
+    4,
     0,
-    0,
+    4,
     1
    ],
    [
@@ -11685,24 +11569,12 @@
     1
    ],
    [
-    0,
-    1,
-    0,
-    2
-   ],
-   [
-    3,
-    1,
     4,
+    1,
+    5,
     1
    ],
    [
-    3,
-    1,
-    3,
-    2
-   ],
-   [
     1,
     2,
     1,
@@ -11711,43 +11583,25 @@
    [
     3,
     2,
-    3,
-    3
-   ],
-   [
-    5,
-    2,
-    5,
-    3
-   ],
-   [
-    0,
-    3,
-    1,
-    3
-   ],
-   [
-    0,
-    3,
-    0,
-    4
-   ],
-   [
-    2,
-    3,
     3,
     3
    ],
    [
     4,
-    3,
+    2,
     4,
-    4
+    3
    ],
    [
     1,
-    4,
+    3,
     2,
+    3
+   ],
+   [
+    0,
+    4,
+    1,
     4
    ],
    [
@@ -11759,25 +11613,26 @@
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 0,
+    "x": 0,
+    "y": 1,
     "dash": true
    },
    {
-    "x": 2,
-    "y": 3
+    "x": 5,
+    "y": 0
    }
   ],
   "exit": [
    [
-    5,
-    4
+    0,
+    3
    ]
   ],
-  "solIn": "URRDRD",
+  "solIn": "RDRDLULDLUL",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 0.9,
+  "minMoves": 11,
+  "luck": 0,
+  "quality": 23.9,
   "belief": "i write the sad chapters on the good days. just in case.",
   "intro": "helpers",
   "why": "Bảng dạy luật mới. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đặt hộp thừa trước, rồi mới phóng hộp chính."
@@ -11791,10 +11646,10 @@
   "h": 5,
   "broken": [
    [
-    2,
     0,
-    3,
-    0
+    0,
+    0,
+    1
    ],
    [
     2,
@@ -11803,27 +11658,15 @@
     1
    ],
    [
-    4,
-    0,
-    5,
-    0
-   ],
-   [
     0,
     1,
     0,
     2
    ],
    [
-    3,
+    0,
+    2,
     1,
-    3,
-    2
-   ],
-   [
-    5,
-    1,
-    5,
     2
    ],
    [
@@ -11834,37 +11677,7 @@
    ],
    [
     2,
-    2,
-    3,
-    2
-   ],
-   [
     4,
-    2,
-    5,
-    2
-   ],
-   [
-    2,
-    3,
-    3,
-    3
-   ],
-   [
-    4,
-    3,
-    5,
-    3
-   ],
-   [
-    3,
-    5,
-    4,
-    5
-   ],
-   [
-    3,
-    5,
     2,
     5
    ]
@@ -11872,47 +11685,48 @@
   "boxes": [
    {
     "x": 3,
-    "y": 2,
+    "y": 3,
     "dash": true
    },
    {
-    "x": 0,
-    "y": 3
+    "x": 3,
+    "y": 1
    }
   ],
   "exit": [
    [
-    3,
-    5
+    0,
+    1
    ]
   ],
   "stops": [
    [
     4,
-    4
+    5
    ]
   ],
   "gates": [
    [
-    3,
-    5,
-    3,
-    4,
+    0,
+    1,
+    1,
+    1,
     0,
     0
    ]
   ],
   "plates": [
    [
-    4,
     2,
+    3,
     0
    ]
   ],
-  "solIn": "DDURRRD",
+  "solIn": "DULDRDDULL",
   "solutions": 1,
-  "minMoves": 7,
+  "minMoves": 10,
   "luck": 0,
+  "quality": 29.2,
   "belief": "stay sharp. moods are weather. weather passes.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
@@ -11926,52 +11740,40 @@
   "h": 5,
   "broken": [
    [
+    2,
     0,
-    0,
-    1,
+    3,
     0
    ],
    [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
-    4,
-    0,
-    4,
-    1
-   ],
-   [
-    2,
     1,
-    3,
-    1
-   ],
-   [
-    2,
     1,
-    2,
+    1,
     2
    ],
    [
+    2,
     1,
-    2,
-    2,
+    3,
+    1
+   ],
+   [
+    4,
+    1,
+    4,
     2
    ],
    [
-    0,
     3,
-    0,
-    4
+    2,
+    3,
+    3
    ],
    [
     3,
     3,
-    3,
-    4
+    4,
+    3
    ],
    [
     0,
@@ -11980,22 +11782,16 @@
     4
    ],
    [
-    1,
+    2,
+    4,
+    3,
+    4
+   ],
+   [
+    2,
     4,
     2,
-    4
-   ],
-   [
-    3,
-    4,
-    4,
-    4
-   ],
-   [
-    4,
-    4,
-    5,
-    4
+    5
    ],
    [
     3,
@@ -12006,36 +11802,37 @@
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 2,
+    "x": 1,
+    "y": 5,
     "dash": true
    },
    {
-    "x": 3,
-    "y": 3,
+    "x": 0,
+    "y": 4,
     "dash": true
    }
   ],
   "exit": [
    [
-    1,
-    0
+    3,
+    1
    ],
    [
-    0,
-    4
+    4,
+    5
    ]
   ],
   "stops": [
    [
-    2,
+    4,
     1
    ]
   ],
-  "solIn": "RDLURUL",
-  "solutions": 1,
-  "minMoves": 7,
-  "luck": 1.4,
+  "solIn": "URDLURURULLRDL",
+  "solutions": 2,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 28.4,
   "belief": "if i keep moving, the low can never catch me.",
   "intro": "many",
   "why": "Bảng dạy luật mới. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
@@ -12092,55 +11889,68 @@
   "h": 3,
   "broken": [
    [
-    2,
+    0,
+    0,
     1,
-    2,
+    0
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    3,
+    1,
+    3,
     2
    ],
    [
-    1,
+    3,
     2,
-    2,
+    4,
     2
    ],
    [
-    4,
-    2,
-    4,
+    0,
+    3,
+    1,
     3
    ]
   ],
   "boxes": [
    {
-    "x": 1,
+    "x": 0,
     "y": 2,
-    "n": 4
+    "n": 6
    }
   ],
   "exit": [
    [
-    4,
-    0
+    3,
+    1
    ]
   ],
   "pads": [
    [
-    3,
-    3,
     0,
-    -1
+    3,
+    1,
+    0
    ],
    [
-    4,
     2,
     1,
+    -1,
     0
    ]
   ],
-  "solIn": "DRRR",
+  "solIn": "RUURRD",
   "solutions": 1,
-  "minMoves": 4,
-  "luck": 1.1,
+  "minMoves": 6,
+  "luck": 0.3,
+  "quality": 17.4,
   "belief": "map the ground before you walk it.",
   "intro": "budget",
   "why": "Bảng dạy luật mới. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
@@ -12154,90 +11964,67 @@
   "h": 4,
   "broken": [
    [
-    2,
     0,
-    3,
-    0
-   ],
-   [
-    3,
-    0,
-    4,
-    0
-   ],
-   [
     1,
-    1,
-    2,
-    1
-   ],
-   [
     0,
-    2,
-    0,
-    3
-   ],
-   [
-    1,
-    2,
-    2,
     2
    ],
    [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    0,
     2,
+    0,
+    3
+   ],
+   [
+    1,
+    3,
+    1,
+    4
+   ],
+   [
     2,
-    2,
+    3,
+    3,
     3
    ],
    [
     0,
-    3,
+    4,
     1,
-    3
-   ],
-   [
-    2,
-    3,
-    2,
-    4
-   ],
-   [
-    3,
-    3,
-    4,
-    3
-   ],
-   [
-    3,
-    4,
-    4,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 2,
+    "x": 1,
+    "y": 3,
     "dash": true,
-    "n": 5
+    "n": 6
    }
   ],
   "exit": [
    [
-    1,
-    0
+    0,
+    2
    ]
   ],
   "stops": [
    [
     3,
-    3
+    2
    ]
   ],
-  "solIn": "ULDRU",
+  "solIn": "RDRULL",
   "solutions": 1,
-  "minMoves": 5,
-  "luck": 0.9,
+  "minMoves": 6,
+  "luck": 0.1,
+  "quality": 16.6,
   "belief": "you don't step where you haven't checked. ever.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
@@ -12251,9 +12038,9 @@
   "h": 4,
   "broken": [
    [
-    1,
+    2,
     0,
-    1,
+    2,
     1
    ],
    [
@@ -12263,80 +12050,69 @@
     0
    ],
    [
-    2,
+    0,
     1,
-    2,
+    0,
     2
    ],
    [
-    3,
     1,
-    4,
+    1,
+    2,
     1
    ],
    [
-    1,
+    0,
     2,
-    2,
-    2
-   ],
-   [
-    1,
-    2,
-    1,
-    3
-   ],
-   [
-    4,
-    2,
-    4,
+    0,
     3
    ],
    [
     2,
     3,
-    2,
-    4
-   ],
-   [
     3,
-    3,
-    3,
-    4
+    3
    ],
    [
     4,
     3,
+    4,
+    4
+   ],
+   [
+    3,
+    4,
     4,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 4,
-    "y": 0,
-    "n": 9
+    "x": 0,
+    "y": 1,
+    "n": 7
    },
    {
-    "x": 4,
-    "y": 3,
-    "n": 4
+    "x": 0,
+    "y": 4,
+    "n": 6
    }
   ],
   "exit": [
    [
-    2,
-    3
+    4,
+    0
    ],
    [
-    0,
+    1,
     1
    ]
   ],
-  "solIn": "DDLULDLL",
+  "solIn": "RDRURRULU",
   "solutions": 1,
-  "minMoves": 8,
-  "luck": 0.4,
+  "minMoves": 9,
+  "luck": 0,
+  "quality": 27.9,
   "belief": "a story is a minefield. i know where i buried everything.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
@@ -12351,112 +12127,89 @@
   "broken": [
    [
     0,
-    0,
-    0,
-    1
-   ],
-   [
-    1,
-    0,
-    1,
-    1
-   ],
-   [
-    5,
-    0,
-    5,
-    1
-   ],
-   [
-    0,
     1,
     1,
     1
    ],
    [
-    3,
     1,
+    2,
+    2,
+    2
+   ],
+   [
+    2,
+    2,
     3,
     2
    ],
    [
     0,
-    2,
+    3,
     0,
-    3
-   ],
-   [
-    2,
-    2,
-    2,
-    3
-   ],
-   [
-    3,
-    2,
-    3,
-    3
-   ],
-   [
-    5,
-    2,
-    5,
-    3
-   ],
-   [
-    3,
-    3,
-    3,
     4
    ],
    [
     1,
-    4,
+    3,
     2,
+    3
+   ],
+   [
+    2,
+    3,
+    2,
+    4
+   ],
+   [
+    4,
+    3,
+    4,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 2,
+    "x": 0,
     "y": 4,
     "dash": true,
-    "n": 5
+    "n": 3
    },
    {
-    "x": 4,
-    "y": 4,
-    "n": 5
+    "x": 5,
+    "y": 2,
+    "n": 10
    }
   ],
   "exit": [
    [
-    1,
+    0,
     1
    ],
    [
-    4,
-    1
+    0,
+    0
    ]
   ],
   "pads": [
    [
-    0,
     3,
-    -1,
+    2,
+    1,
     0
    ],
    [
-    2,
-    2,
-    0,
-    -1
+    1,
+    1,
+    1,
+    0
    ]
   ],
-  "solIn": "ULDRUU",
-  "solutions": 2,
-  "minMoves": 6,
+  "solIn": "LDLDLLURULU",
+  "solutions": 1,
+  "minMoves": 11,
   "luck": 0,
+  "quality": 26.4,
   "belief": "swings and landmines. same drill.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
@@ -12470,101 +12223,102 @@
   "h": 4,
   "broken": [
    [
-    4,
-    0,
-    4,
-    1
-   ],
-   [
-    5,
-    0,
-    5,
-    1
-   ],
-   [
-    5,
     1,
-    5,
-    2
+    0,
+    2,
+    0
    ],
    [
     2,
-    2,
+    1,
     3,
-    2
+    1
    ],
    [
-    5,
     2,
-    5,
+    2,
+    2,
     3
    ],
    [
+    2,
     3,
     3,
-    4,
     3
    ],
    [
-    5,
+    2,
+    4,
     3,
-    5,
     4
    ],
    [
-    4,
-    4,
-    5,
-    4
+    1,
+    2,
+    0,
+    2
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    2,
+    1,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 5,
-    "y": 3,
-    "n": 2
+    "x": 4,
+    "y": 4,
+    "n": 6
    },
    {
-    "x": 3,
+    "x": 0,
     "y": 0,
     "dash": true
    },
    {
-    "x": 4,
-    "y": 3
+    "x": 5,
+    "y": 0
    }
   ],
   "exit": [
    [
-    5,
-    0
+    1,
+    2
    ],
    [
-    3,
-    1
+    1,
+    3
    ]
   ],
   "gates": [
    [
-    5,
-    0,
-    4,
-    0,
+    1,
+    2,
+    1,
+    1,
     0,
     0
    ]
   ],
   "plates": [
    [
+    3,
     1,
-    0,
     0
    ]
   ],
-  "solIn": "DLLLRURUU",
-  "solutions": 2,
-  "minMoves": 9,
-  "luck": 0.3,
+  "solIn": "LLLRDDLULLDDR",
+  "solutions": 1,
+  "minMoves": 13,
+  "luck": 0,
+  "quality": 35.1,
   "belief": "i plan for the worst so nobody sees me fall.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đặt hộp thừa trước, rồi mới phóng hộp chính."
@@ -12578,138 +12332,54 @@
   "h": 5,
   "broken": [
    [
-    2,
     0,
     2,
-    1
-   ],
-   [
-    3,
     0,
-    4,
-    0
+    3
    ],
    [
     5,
-    0,
+    2,
     5,
-    1
-   ],
-   [
-    0,
-    1,
-    0,
-    2
-   ],
-   [
-    1,
-    1,
-    2,
-    1
-   ],
-   [
-    3,
-    1,
-    4,
-    1
-   ],
-   [
-    3,
-    1,
-    3,
-    2
-   ],
-   [
-    0,
-    2,
-    1,
-    2
-   ],
-   [
-    2,
-    2,
-    2,
     3
    ],
    [
-    4,
-    2,
-    4,
-    3
-   ],
-   [
-    2,
     3,
     3,
-    3
-   ],
-   [
-    2,
     3,
-    2,
     4
    ],
    [
-    3,
-    3,
-    4,
-    3
-   ],
-   [
-    4,
-    3,
-    4,
-    4
-   ],
-   [
+    2,
     5,
     3,
-    5,
-    4
-   ],
-   [
-    1,
-    4,
-    1,
     5
    ],
    [
-    2,
-    4,
-    3,
-    4
-   ],
-   [
-    3,
-    4,
-    4,
-    4
-   ],
-   [
-    4,
     4,
     5,
-    4
+    5,
+    5
    ]
   ],
   "boxes": [
    {
-    "x": 3,
+    "x": 2,
     "y": 4,
     "dash": true,
-    "n": 5
+    "n": 8
    },
    {
-    "x": 2,
-    "y": 2,
+    "x": 3,
+    "y": 3,
     "dash": true,
-    "n": 4
+    "n": 5
    }
   ],
   "exit": [
    [
-    0,
-    2
+    3,
+    4
    ],
    [
     5,
@@ -12718,30 +12388,31 @@
   ],
   "pads": [
    [
-    4,
-    3,
+    1,
+    1,
     0,
-    1
+    -1
    ],
    [
+    1,
     5,
-    4,
-    -1,
-    0
+    0,
+    1
    ]
   ],
   "portals": [
    [
-    0,
     4,
-    2,
-    3
+    1,
+    1,
+    4
    ]
   ],
-  "solIn": "RDLURLU",
-  "solutions": 2,
-  "minMoves": 7,
-  "luck": 0.2,
+  "solIn": "DRDLLURDLU",
+  "solutions": 1,
+  "minMoves": 10,
+  "luck": 0,
+  "quality": 25.3,
   "belief": "if i'm in control, nothing explodes.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
@@ -12852,24 +12523,6 @@
     2
    ],
    [
-    2,
-    3,
-    3,
-    3
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
-    4,
-    5,
-    5,
-    5
-   ],
-   [
     3,
     2,
     4,
@@ -12880,12 +12533,6 @@
     2,
     2,
     2
-   ],
-   [
-    1,
-    5,
-    1,
-    4
    ],
    [
     1,
@@ -12946,10 +12593,11 @@
     0
    ]
   ],
-  "solIn": "RLLDLDRLDDU",
-  "solutions": 2,
+  "solIn": "LDRUDLLLDLU",
+  "solutions": 1,
   "minMoves": 11,
   "luck": 0,
+  "quality": 35.1,
   "belief": "as long as the map is mine, nobody gets left behind.",
   "intro": null,
   "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
@@ -12960,36 +12608,50 @@
   "layer": 1,
   "n": 0.4,
   "w": 2,
-  "h": 1,
+  "h": 2,
+  "broken": [
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    0,
+    1,
+    0,
+    2
+   ]
+  ],
   "boxes": [
    {
-    "x": 0,
-    "y": 1
+    "x": 1,
+    "y": 2
    },
    {
-    "x": 1,
+    "x": 0,
     "y": 1,
-    "m": "mx"
+    "m": "opp"
    }
   ],
   "exit": [
    [
-    2,
-    0
+    1,
+    1
    ],
    [
     0,
     0
    ]
   ],
-  "solIn": "LU",
+  "solIn": "UUL",
   "solutions": 2,
-  "minMoves": 2,
-  "luck": 39.1,
+  "minMoves": 3,
+  "luck": 8.3,
   "belief": "",
-  "intro": "mx",
+  "intro": "opp",
   "tut": "twin",
-  "why": "Bảng dạy luật mới. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Dùng tường để làm hai hộp lệch nhau: một hộp bị chặn đứng yên trong khi hộp kia đi tiếp."
+  "why": "Bảng dạy luật mới. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "myne_1_1",
@@ -13000,52 +12662,47 @@
   "h": 2,
   "broken": [
    [
-    3,
+    2,
     0,
     3,
-    1
+    0
    ],
    [
     0,
     1,
     0,
-    2
-   ],
-   [
-    3,
-    1,
-    3,
     2
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 1
+    "x": 2,
+    "y": 2
    },
    {
     "x": 1,
-    "y": 2,
-    "m": "mx"
+    "y": 1,
+    "m": "opp"
    }
   ],
   "exit": [
    [
-    1,
-    0
+    2,
+    1
    ],
    [
-    2,
-    2
+    3,
+    1
    ]
   ],
-  "solIn": "LLUR",
-  "solutions": 1,
-  "minMoves": 4,
-  "luck": 4.3,
+  "solIn": "LLDRRU",
+  "solutions": 2,
+  "minMoves": 6,
+  "luck": 1,
+  "quality": 10.4,
   "belief": "two of me. one keyboard. let's go.",
-  "intro": "mx",
-  "why": "Bảng dạy luật mới. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Dùng tường để làm hai hộp lệch nhau: một hộp bị chặn đứng yên trong khi hộp kia đi tiếp."
+  "intro": "opp",
+  "why": "Bảng dạy luật mới. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "myne_1_t2",
@@ -13056,41 +12713,41 @@
   "h": 1,
   "broken": [
    [
-    1,
-    1,
     2,
-    1
+    0,
+    3,
+    0
    ]
   ],
   "boxes": [
    {
-    "x": 3,
-    "y": 1
+    "x": 2,
+    "y": 0
    },
    {
     "x": 2,
     "y": 1,
-    "m": "mx"
+    "m": "opp"
    }
   ],
   "exit": [
    [
-    2,
+    1,
     0
    ],
    [
     1,
-    0
+    1
    ]
   ],
-  "solIn": "URRL",
+  "solIn": "RRL",
   "solutions": 1,
-  "minMoves": 4,
-  "luck": 7.3,
+  "minMoves": 3,
+  "luck": 10.4,
   "belief": "",
   "intro": "nolock",
   "tut": "nolock",
-  "why": "Bảng dạy luật mới. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
+  "why": "Bảng dạy luật mới. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
  },
  {
   "id": "myne_1_2",
@@ -13101,64 +12758,53 @@
   "h": 3,
   "broken": [
    [
-    1,
-    1,
-    2,
-    1
-   ],
-   [
     0,
-    2,
+    0,
     1,
-    2
+    0
    ],
    [
-    1,
-    2,
-    2,
-    2
-   ],
-   [
-    1,
-    2,
-    1,
-    3
-   ],
-   [
-    2,
-    2,
-    2,
-    3
-   ]
-  ],
-  "boxes": [
-   {
-    "x": 0,
-    "y": 1
-   },
-   {
-    "x": 1,
-    "y": 3,
-    "m": "mx"
-   }
-  ],
-  "exit": [
-   [
-    1,
+    3,
+    0,
+    3,
     1
    ],
    [
+    2,
+    2,
     3,
     2
    ]
   ],
-  "solIn": "RDLLLU",
+  "boxes": [
+   {
+    "x": 1,
+    "y": 1
+   },
+   {
+    "x": 1,
+    "y": 0,
+    "m": "opp"
+   }
+  ],
+  "exit": [
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "solIn": "RRDLLUR",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 1.1,
+  "minMoves": 7,
+  "luck": 0.1,
+  "quality": 18.1,
   "belief": "left goes right. my brain is fine with this.",
   "intro": "nolock",
-  "why": "Bảng dạy luật mới. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
+  "why": "Bảng dạy luật mới. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
  },
  {
   "id": "myne_1_3",
@@ -13169,70 +12815,65 @@
   "h": 3,
   "holes": [
    [
-    1,
-    0
+    3,
+    3
    ]
   ],
   "broken": [
    [
-    3,
-    0,
-    4,
-    0
-   ],
-   [
     0,
     1,
-    0,
+    1,
+    1
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    3,
+    1,
+    3,
     2
    ],
    [
-    2,
     1,
     2,
-    2
-   ],
-   [
-    3,
     2,
-    3,
-    3
-   ],
-   [
-    3,
-    3,
-    4,
-    3
+    2
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 0
+    "x": 2,
+    "y": 2
    },
    {
-    "x": 3,
-    "y": 2,
-    "m": "mx"
+    "x": 1,
+    "y": 0,
+    "m": "opp"
    }
   ],
   "exit": [
    [
-    2,
-    2
+    4,
+    3
    ],
    [
-    3,
+    1,
     1
    ]
   ],
-  "solIn": "LDRURR",
+  "solIn": "RUUURDLD",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 0.7,
+  "minMoves": 8,
+  "luck": 0,
+  "quality": 20.9,
   "belief": "if one of us gets stuck, the other keeps running.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Dùng tường để làm hai hộp lệch nhau: một hộp bị chặn đứng yên trong khi hộp kia đi tiếp."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "myne_1_4",
@@ -13243,31 +12884,31 @@
   "h": 4,
   "holes": [
    [
-    0,
-    0
-   ],
-   [
-    2,
+    4,
     2
+   ],
+   [
+    0,
+    1
    ]
   ],
   "broken": [
    [
-    1,
-    1,
+    0,
     2,
-    1
+    1,
+    2
    ],
    [
     2,
-    1,
+    2,
     3,
-    1
+    2
    ],
    [
-    1,
     2,
-    1,
+    2,
+    2,
     3
    ],
    [
@@ -13275,12 +12916,6 @@
     2,
     3,
     3
-   ],
-   [
-    4,
-    3,
-    4,
-    4
    ],
    [
     0,
@@ -13292,76 +12927,32 @@
   "boxes": [
    {
     "x": 3,
-    "y": 1
+    "y": 0
    },
-   {
-    "x": 3,
-    "y": 2,
-    "m": "mx"
-   }
-  ],
-  "exit": [
-   [
-    4,
-    3
-   ],
-   [
-    0,
-    3
-   ]
-  ],
-  "solIn": "ULLDLDD",
-  "solutions": 1,
-  "minMoves": 7,
-  "luck": 0.6,
-  "belief": "i look strong so nobody asks me to carry things.",
-  "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
- },
- {
-  "id": "myne_1_t5",
-  "girl": "myne",
-  "layer": 1,
-  "n": 4.4,
-  "w": 2,
-  "h": 2,
-  "broken": [
-   [
-    0,
-    0,
-    0,
-    1
-   ]
-  ],
-  "boxes": [
    {
     "x": 0,
-    "y": 2
-   },
-   {
-    "x": 1,
-    "y": 2,
+    "y": 4,
     "m": "opp"
    }
   ],
   "exit": [
    [
     0,
-    1
+    0
    ],
    [
     1,
-    1
+    0
    ]
   ],
-  "solIn": "DDU",
+  "solIn": "LLLDLDDD",
   "solutions": 1,
-  "minMoves": 3,
-  "luck": 5.5,
-  "belief": "",
-  "intro": "opp",
-  "tut": "opp",
-  "why": "Bảng dạy luật mới. Hộp có dấu chéo: đi ngược cả hai chiều. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hai hộp đi ngược nhau: tìm chỗ một hộp bị tường giữ lại."
+  "minMoves": 8,
+  "luck": 0.1,
+  "quality": 19.7,
+  "belief": "i look strong so nobody asks me to carry things.",
+  "intro": null,
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
  },
  {
   "id": "myne_1_5",
@@ -13372,100 +12963,53 @@
   "h": 4,
   "broken": [
    [
+    3,
     0,
-    0,
-    1,
-    0
-   ],
-   [
-    1,
-    0,
-    2,
-    0
-   ],
-   [
-    2,
-    0,
-    2,
+    3,
     1
    ],
    [
-    4,
+    0,
     1,
-    4,
-    2
+    1,
+    1
    ],
    [
     0,
     2,
     1,
     2
-   ],
-   [
-    2,
-    2,
-    3,
-    2
-   ],
-   [
-    3,
-    2,
-    3,
-    3
-   ],
-   [
-    1,
-    3,
-    1,
-    4
-   ],
-   [
-    2,
-    3,
-    3,
-    3
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
-    1,
-    4,
-    2,
-    4
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 1
+    "x": 1,
+    "y": 2
    },
    {
-    "x": 1,
+    "x": 0,
     "y": 4,
     "m": "opp"
    }
   ],
   "exit": [
    [
-    4,
-    3
+    0,
+    0
    ],
    [
-    3,
-    4
+    0,
+    3
    ]
   ],
-  "solIn": "RRRDRUDLLULLR",
-  "solutions": 2,
-  "minMoves": 13,
-  "luck": 0,
+  "solIn": "RUURDDLLLU",
+  "solutions": 1,
+  "minMoves": 10,
+  "luck": 0.1,
+  "quality": 24.8,
   "belief": "co-op mode with myself. high score.",
-  "intro": "opp",
-  "why": "Bảng dạy luật mới. Hộp có dấu chéo: đi ngược cả hai chiều. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hai hộp đi ngược nhau: tìm chỗ một hộp bị tường giữ lại."
+  "intro": null,
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
  },
  {
   "id": "myne_1_6",
@@ -13476,74 +13020,63 @@
   "h": 4,
   "holes": [
    [
-    0,
-    3
+    4,
+    2
    ],
    [
-    3,
-    0
+    0,
+    3
    ]
   ],
   "broken": [
    [
+    2,
+    2,
+    2,
+    3
+   ],
+   [
     1,
-    0,
-    2,
-    0
-   ],
-   [
-    2,
-    0,
-    2,
-    1
-   ],
-   [
     3,
+    2,
+    3
+   ],
+   [
     1,
     4,
-    1
-   ],
-   [
-    1,
     2,
-    2,
-    2
-   ],
-   [
-    3,
-    3,
-    3,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 1
+    "x": 3,
+    "y": 2
    },
    {
-    "x": 2,
-    "y": 1,
-    "m": "mx"
+    "x": 3,
+    "y": 4,
+    "m": "opp"
    }
   ],
   "exit": [
    [
-    2,
+    1,
     4
    ],
    [
     0,
-    0
+    4
    ]
   ],
-  "solIn": "DDDRRUULL",
-  "solutions": 2,
-  "minMoves": 9,
+  "solIn": "LLDRDRRRLUU",
+  "solutions": 1,
+  "minMoves": 11,
   "luck": 0.1,
+  "quality": 30.2,
   "belief": "if i stop moving, everyone sees how tired i am.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
  },
  {
   "id": "myne_2_1",
@@ -13555,18 +13088,6 @@
   "broken": [
    [
     0,
-    0,
-    0,
-    1
-   ],
-   [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
-    0,
     1,
     0,
     2
@@ -13578,48 +13099,43 @@
     2
    ],
    [
-    3,
+    0,
     2,
-    3,
-    3
-   ],
-   [
     1,
-    3,
-    2,
-    3
+    2
    ]
   ],
   "boxes": [
    {
     "x": 0,
-    "y": 3,
-    "n": 6
+    "y": 2,
+    "n": 4
    },
    {
-    "x": 2,
-    "y": 3,
-    "m": "mx",
-    "n": 5
+    "x": 0,
+    "y": 1,
+    "m": "opp",
+    "n": 4
    }
   ],
   "exit": [
    [
-    2,
-    1
+    3,
+    3
    ],
    [
     1,
-    1
+    2
    ]
   ],
-  "solIn": "LRUURU",
+  "solIn": "LLURDRRR",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 1.7,
+  "minMoves": 8,
+  "luck": 0.1,
+  "quality": 19.5,
   "belief": "can't. sit. still.",
   "intro": "budget",
-  "why": "Bảng dạy luật mới. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
+  "why": "Bảng dạy luật mới. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
  },
  {
   "id": "myne_2_2",
@@ -13630,91 +13146,33 @@
   "h": 3,
   "broken": [
    [
-    0,
+    3,
     1,
-    0,
+    3,
     2
    ],
    [
-    1,
+    0,
     2,
-    1,
-    3
-   ],
-   [
-    3,
-    3,
-    4,
-    3
-   ]
-  ],
-  "boxes": [
-   {
-    "x": 0,
-    "y": 2
-   },
-   {
-    "x": 3,
-    "y": 1,
-    "m": "mx"
-   }
-  ],
-  "exit": [
-   [
-    3,
-    3
-   ],
-   [
-    1,
-    1
-   ]
-  ],
-  "oneway": [
-   [
-    3,
-    1,
-    4,
-    1
-   ],
-   [
-    2,
-    1,
-    1,
-    1
-   ]
-  ],
-  "solIn": "LDRURR",
-  "solutions": 2,
-  "minMoves": 6,
-  "luck": 1.1,
-  "belief": "boredom is a bug. i patch it with noise.",
-  "intro": "oneway",
-  "why": "Bảng dạy luật mới. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Khe một chiều không cho quay lại: tính thứ tự trước khi đi."
- },
- {
-  "id": "myne_2_t3",
-  "girl": "myne",
-  "layer": 2,
-  "n": 2.4,
-  "w": 2,
-  "h": 2,
-  "broken": [
-   [
-    1,
-    1,
     1,
     2
+   ],
+   [
+    0,
+    3,
+    1,
+    3
    ]
   ],
   "boxes": [
    {
     "x": 1,
-    "y": 0
+    "y": 1
    },
    {
-    "x": 2,
+    "x": 0,
     "y": 2,
-    "m": "my"
+    "m": "opp"
    }
   ],
   "exit": [
@@ -13724,17 +13182,31 @@
    ],
    [
     0,
-    1
+    3
    ]
   ],
-  "solIn": "LD",
+  "oneway": [
+   [
+    3,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    0,
+    2,
+    0
+   ]
+  ],
+  "solIn": "RDDRUUULL",
   "solutions": 1,
-  "minMoves": 2,
-  "luck": 8.3,
-  "belief": "",
-  "intro": "my",
-  "tut": "my",
-  "why": "Bảng dạy luật mới. Hộp có vạch ngang: lên/xuống bị đảo. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ."
+  "minMoves": 9,
+  "luck": 0,
+  "quality": 21.4,
+  "belief": "boredom is a bug. i patch it with noise.",
+  "intro": "oneway",
+  "why": "Bảng dạy luật mới. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Khe một chiều không cho quay lại: tính thứ tự trước khi đi."
  },
  {
   "id": "myne_2_3",
@@ -13745,103 +13217,62 @@
   "h": 4,
   "broken": [
    [
-    3,
-    0,
-    4,
-    0
-   ],
-   [
-    3,
-    0,
-    3,
+    1,
+    1,
+    2,
     1
    ],
    [
     0,
-    1,
-    1,
-    1
-   ],
-   [
-    2,
-    1,
-    2,
-    2
-   ],
-   [
-    4,
-    1,
-    4,
-    2
-   ],
-   [
-    0,
     2,
     1,
     2
    ],
    [
     2,
-    2,
-    2,
+    3,
+    3,
     3
-   ],
-   [
-    4,
-    2,
-    4,
-    3
-   ],
-   [
-    0,
-    4,
-    1,
-    4
-   ],
-   [
-    1,
-    4,
-    2,
-    4
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 0
+    "x": 2,
+    "y": 2
    },
    {
-    "x": 0,
-    "y": 2,
-    "m": "mx"
-   },
-   {
-    "x": 0,
+    "x": 3,
     "y": 4,
-    "m": "my"
+    "m": "opp"
+   },
+   {
+    "x": 4,
+    "y": 3,
+    "m": "opp"
    }
   ],
   "exit": [
    [
     1,
-    0
-   ],
-   [
-    3,
-    2
+    3
    ],
    [
     0,
     1
+   ],
+   [
+    1,
+    4
    ]
   ],
-  "solIn": "UDRDRUUR",
+  "solIn": "DRRURRDLLR",
   "solutions": 1,
-  "minMoves": 8,
-  "luck": 0.1,
+  "minMoves": 10,
+  "luck": 0,
+  "quality": 28.9,
   "belief": "ten tabs open. all of them important.",
-  "intro": "my",
-  "why": "Bảng dạy luật mới. Hộp có vạch ngang: lên/xuống bị đảo. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "intro": "many",
+  "why": "Bảng dạy luật mới. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "myne_2_4",
@@ -13852,9 +13283,21 @@
   "h": 4,
   "broken": [
    [
-    4,
+    1,
     0,
-    4,
+    2,
+    0
+   ],
+   [
+    2,
+    0,
+    3,
+    0
+   ],
+   [
+    1,
+    1,
+    2,
     1
    ],
    [
@@ -13864,9 +13307,9 @@
     2
    ],
    [
-    0,
-    2,
+    4,
     1,
+    4,
     2
    ],
    [
@@ -13874,61 +13317,68 @@
     2,
     3,
     3
+   ],
+   [
+    3,
+    4,
+    4,
+    4
    ]
   ],
   "boxes": [
    {
-    "x": 0,
+    "x": 2,
     "y": 2
    },
    {
-    "x": 4,
-    "y": 3,
-    "m": "mx"
+    "x": 2,
+    "y": 0,
+    "m": "opp"
    }
   ],
   "exit": [
    [
     2,
-    3
+    4
    ],
    [
-    2,
-    2
+    3,
+    4
    ]
   ],
   "plates": [
    [
     3,
-    2,
+    3,
     0
    ]
   ],
   "gates": [
    [
-    1,
     3,
-    2,
     3,
+    3,
+    4,
     0,
     0
    ],
    [
-    0,
+    2,
+    2,
     3,
-    1,
-    3,
+    2,
     0,
     0
    ]
   ],
-  "solIn": "URDDR",
+  "solIn": "DRURLURLDUU",
   "solutions": 1,
-  "minMoves": 5,
-  "luck": 0.9,
+  "minMoves": 11,
+  "luck": 0.3,
+  "quality": 29.7,
   "belief": "one-way streets? speedrun route.",
   "intro": "plates",
-  "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
+  "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "myne_2_t5",
@@ -13939,9 +13389,15 @@
   "h": 2,
   "broken": [
    [
+    1,
+    1,
     0,
-    0,
-    0,
+    1
+   ],
+   [
+    1,
+    1,
+    2,
     1
    ],
    [
@@ -13951,52 +13407,46 @@
     2
    ],
    [
+    3,
     0,
-    1,
-    1,
-    1
-   ],
-   [
-    1,
-    1,
-    2,
+    3,
     1
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 0
+    "x": 1,
+    "y": 2
    },
    {
     "x": 2,
-    "y": 2,
-    "m": "mx"
+    "y": 0,
+    "m": "opp"
    }
   ],
   "exit": [
    [
-    0,
+    1,
     1
    ],
    [
-    1,
-    1
+    3,
+    0
    ]
   ],
   "gates": [
    [
-    0,
+    1,
+    1,
     1,
     0,
-    2,
     0,
     0
    ],
    [
-    1,
-    1,
-    1,
+    3,
+    0,
+    2,
     0,
     0,
     1
@@ -14005,18 +13455,18 @@
   "plates": [
    [
     2,
-    0,
+    2,
     0
    ]
   ],
-  "solIn": "RRULD",
+  "solIn": "RUUR",
   "solutions": 1,
-  "minMoves": 5,
-  "luck": 0.3,
+  "minMoves": 4,
+  "luck": 1.9,
   "belief": "",
   "intro": "plates",
   "tut": "swap",
-  "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
+  "why": "Bảng dạy luật mới. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "myne_2_5",
@@ -14027,95 +13477,102 @@
   "h": 4,
   "broken": [
    [
-    2,
+    4,
     0,
-    3,
-    0
+    4,
+    1
    ],
    [
-    4,
+    0,
     1,
-    4,
+    0,
     2
    ],
    [
-    0,
+    1,
+    1,
     2,
-    0,
+    1
+   ],
+   [
+    4,
+    2,
+    4,
+    3
+   ],
+   [
+    4,
+    3,
+    4,
+    4
+   ],
+   [
+    3,
+    2,
+    3,
     3
    ],
    [
     3,
-    4,
-    4,
-    4
-   ],
-   [
     2,
-    0,
-    1,
-    0
-   ],
-   [
-    3,
-    4,
     2,
-    4
+    2
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 3
+    "x": 2,
+    "y": 1
    },
    {
-    "x": 2,
+    "x": 1,
     "y": 1,
-    "m": "mx"
+    "m": "opp"
    }
   ],
   "exit": [
    [
-    2,
-    0
+    4,
+    4
    ],
    [
     3,
-    4
+    2
    ]
   ],
   "gates": [
    [
-    2,
-    0,
-    2,
-    1,
+    4,
+    4,
+    3,
+    4,
     0,
     0
    ],
    [
     3,
-    4,
+    2,
     3,
-    3,
+    1,
     0,
     1
    ]
   ],
   "plates": [
    [
-    1,
+    2,
     0,
     0
    ]
   ],
-  "solIn": "RUUURDLLLDDD",
-  "solutions": 2,
+  "solIn": "UUUDLLULRDRD",
+  "solutions": 1,
   "minMoves": 12,
   "luck": 0,
+  "quality": 31.7,
   "belief": "if i'm loud enough nobody notices i'm fragile.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "myne_2_6",
@@ -14126,133 +13583,98 @@
   "h": 4,
   "holes": [
    [
-    5,
+    3,
     4
    ]
   ],
   "broken": [
    [
     1,
-    0,
-    2,
-    0
-   ],
-   [
-    3,
     1,
-    4,
+    2,
     1
    ],
    [
-    5,
+    2,
     1,
-    5,
+    3,
+    1
+   ],
+   [
+    4,
+    1,
+    4,
     2
    ],
    [
-    1,
-    2,
-    1,
-    3
-   ],
-   [
     0,
-    3,
-    0,
+    4,
+    1,
     4
    ],
    [
     2,
-    3,
-    3,
-    3
-   ],
-   [
+    1,
     2,
-    4,
-    3,
-    4
-   ],
-   [
-    4,
-    0,
-    4,
-    1
-   ],
-   [
-    4,
-    0,
-    3,
-    0
-   ],
-   [
-    0,
-    1,
-    1,
-    1
-   ],
-   [
-    0,
-    1,
-    0,
-    0
+    2
    ]
   ],
   "boxes": [
    {
-    "x": 5,
-    "y": 2,
-    "n": 5
+    "x": 1,
+    "y": 4,
+    "n": 6
    },
    {
-    "x": 4,
-    "y": 3,
-    "m": "mx",
-    "n": 12
+    "x": 1,
+    "y": 1,
+    "m": "opp",
+    "n": 9
    }
   ],
   "exit": [
    [
-    4,
-    0
+    2,
+    1
    ],
    [
-    0,
-    1
+    5,
+    0
    ]
   ],
   "gates": [
    [
-    4,
-    0,
-    5,
+    2,
+    1,
+    2,
     0,
     0,
     0
    ],
    [
+    5,
     0,
-    1,
+    4,
     0,
-    2,
     0,
     1
    ]
   ],
   "plates": [
    [
-    2,
-    1,
+    3,
+    0,
     0
    ]
   ],
-  "solIn": "RLURRULRRDRU",
+  "solIn": "DLLLUUUURDDLL",
   "solutions": 1,
-  "minMoves": 12,
+  "minMoves": 13,
   "luck": 0,
+  "quality": 37.7,
   "belief": "finish everything. right now. all of it.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Chỗ trống trên map không đi được. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Đếm trước: mỗi nước phí là mất một số, không lấy lại được."
  },
  {
   "id": "myne_2_7",
@@ -14263,114 +13685,60 @@
   "h": 4,
   "broken": [
    [
-    0,
-    0,
-    0,
-    1
-   ],
-   [
     1,
-    0,
     2,
-    0
+    1,
+    3
    ],
    [
     3,
-    0,
     4,
-    0
+    4,
+    4
    ],
    [
+    1,
+    4,
+    1,
+    3
+   ],
+   [
+    1,
     4,
     0,
+    4
+   ],
+   [
     5,
-    0
-   ],
-   [
-    4,
-    1,
-    4,
-    2
-   ],
-   [
-    3,
-    2,
-    4,
-    2
-   ],
-   [
-    3,
-    2,
-    3,
-    3
-   ],
-   [
-    0,
-    3,
-    1,
-    3
-   ],
-   [
-    4,
-    3,
-    4,
-    4
-   ],
-   [
-    2,
-    4,
-    3,
-    4
-   ],
-   [
-    4,
     4,
     5,
-    4
-   ],
-   [
-    1,
-    2,
-    1,
     3
-   ],
-   [
-    1,
-    2,
-    1,
-    1
-   ],
-   [
-    1,
-    2,
-    2,
-    2
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 4
+    "x": 3,
+    "y": 0
    },
    {
-    "x": 5,
-    "y": 2,
-    "m": "mx"
+    "x": 1,
+    "y": 3,
+    "m": "opp"
    },
    {
     "x": 4,
-    "y": 1,
+    "y": 2,
     "m": "opp"
    }
   ],
   "exit": [
    [
     1,
-    2
+    4
    ],
    [
-    4,
-    0
+    5,
+    4
    ],
    [
     2,
@@ -14379,44 +13747,45 @@
   ],
   "oneway": [
    [
-    2,
+    0,
     1,
-    2,
-    0
+    1,
+    1
    ]
   ],
   "gates": [
    [
     1,
+    4,
     2,
-    0,
-    2,
+    4,
     0,
     0
    ],
    [
+    5,
     4,
-    0,
     4,
-    1,
+    4,
     0,
     1
    ]
   ],
   "plates": [
    [
-    5,
-    4,
+    1,
+    2,
     0
    ]
   ],
-  "solIn": "RUUULDLDRURRR",
+  "solIn": "DDDDRDLLURUUUL",
   "solutions": 1,
-  "minMoves": 13,
+  "minMoves": 14,
   "luck": 0,
+  "quality": 40.9,
   "belief": "keep moving or the lag catches up.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp có dấu chéo: đi ngược cả hai chiều. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "myne_3_1",
@@ -14439,12 +13808,6 @@
     0
    ],
    [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
     0,
     2,
     0,
@@ -14460,7 +13823,7 @@
    {
     "x": 3,
     "y": 2,
-    "m": "mx",
+    "m": "opp",
     "dash": true
    }
   ],
@@ -14474,13 +13837,14 @@
     0
    ]
   ],
-  "solIn": "ULRULUR",
+  "solIn": "URDLDRUL",
   "solutions": 1,
-  "minMoves": 7,
-  "luck": 1.4,
+  "minMoves": 8,
+  "luck": 1.1,
+  "quality": 17.3,
   "belief": "boost pads! zoom!",
   "intro": "dash",
-  "why": "Bảng dạy luật mới. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hộp dash chỉ dừng cạnh tường: tìm những ô có tường phía sau theo hướng bạn đi."
+  "why": "Bảng dạy luật mới. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Hộp dash chỉ dừng cạnh tường: tìm những ô có tường phía sau theo hướng bạn đi."
  },
  {
   "id": "myne_3_2",
@@ -14492,9 +13856,9 @@
   "broken": [
    [
     0,
+    0,
     1,
-    1,
-    1
+    0
    ],
    [
     1,
@@ -14509,66 +13873,54 @@
     3
    ],
    [
-    1,
     2,
-    1,
-    3
-   ],
-   [
-    1,
+    2,
     3,
-    1,
-    4
+    2
    ],
    [
     0,
-    4,
-    1,
-    4
-   ],
-   [
-    2,
-    4,
     3,
-    4
+    1,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 1,
+    "x": 4,
     "y": 1
    },
    {
-    "x": 3,
-    "y": 1,
-    "m": "mx"
+    "x": 0,
+    "y": 0,
+    "m": "opp"
    }
   ],
   "exit": [
    [
-    0,
-    4
+    3,
+    1
    ],
    [
-    2,
-    4
+    3,
+    0
    ]
   ],
   "pads": [
    [
     0,
+    4,
     1,
+    0
+   ],
+   [
+    4,
+    0,
     -1,
     0
    ],
    [
-    4,
-    4,
-    1,
-    0
-   ],
-   [
-    1,
+    2,
     2,
     0,
     -1
@@ -14576,17 +13928,18 @@
   ],
   "stops": [
    [
-    2,
-    0
+    3,
+    2
    ]
   ],
-  "solIn": "DRDDDLLD",
+  "solIn": "DULDLDURUL",
   "solutions": 1,
-  "minMoves": 8,
+  "minMoves": 10,
   "luck": 0.1,
+  "quality": 26.7,
   "belief": "my body can't keep up. so my head runs for both.",
   "intro": "pads",
-  "why": "Bảng dạy luật mới. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+  "why": "Bảng dạy luật mới. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô phanh (vuông cam): hộp đang lướt dừng lại ở đây. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
   "id": "myne_3_3",
@@ -14607,12 +13960,6 @@
     0,
     4,
     0
-   ],
-   [
-    3,
-    0,
-    3,
-    1
    ],
    [
     0,
@@ -14654,7 +14001,7 @@
    {
     "x": 0,
     "y": 2,
-    "m": "mx"
+    "m": "opp"
    }
   ],
   "exit": [
@@ -14675,13 +14022,14 @@
     4
    ]
   ],
-  "solIn": "LURDUL",
+  "solIn": "UUDRULRDDDUL",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 0.1,
+  "minMoves": 12,
+  "luck": 0,
+  "quality": 29.4,
   "belief": "warp, dash, park. combo.",
   "intro": "portals",
-  "why": "Bảng dạy luật mới. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Coi hai cổng như một ô."
+  "why": "Bảng dạy luật mới. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Coi hai cổng như một ô."
  },
  {
   "id": "myne_3_t4",
@@ -14729,83 +14077,54 @@
   "h": 4,
   "broken": [
    [
-    0,
-    0,
     1,
-    0
-   ],
-   [
     1,
-    0,
     2,
-    0
-   ],
-   [
-    1,
-    0,
-    1,
     1
    ],
    [
     2,
-    0,
+    1,
     3,
-    0
-   ],
-   [
-    0,
-    1,
-    1,
     1
    ],
    [
-    4,
+    1,
     2,
-    4,
+    1,
     3
-   ],
-   [
-    2,
-    3,
-    2,
-    4
-   ],
-   [
-    3,
-    3,
-    3,
-    4
    ]
   ],
   "boxes": [
    {
     "x": 1,
-    "y": 1,
+    "y": 0,
     "trail": true
    },
    {
-    "x": 0,
+    "x": 2,
     "y": 0,
-    "m": "mx"
+    "m": "opp"
    }
   ],
   "exit": [
    [
-    1,
-    2
+    0,
+    3
    ],
    [
     1,
     4
    ]
   ],
-  "solIn": "RDDLDU",
+  "solIn": "ULUURDDDU",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 0.3,
+  "minMoves": 9,
+  "luck": 0.2,
+  "quality": 27.5,
   "belief": "every direction is forward if you go fast enough.",
   "intro": "trail",
-  "why": "Bảng dạy luật mới. Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái \"đường\" ở các bảng khác chính là một hộp như thế. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác."
+  "why": "Bảng dạy luật mới. Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái \"đường\" ở các bảng khác chính là một hộp như thế. Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác."
  },
  {
   "id": "myne_3_5",
@@ -14816,103 +14135,97 @@
   "h": 4,
   "broken": [
    [
-    2,
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    1,
     0,
     2,
+    0
+   ],
+   [
+    3,
+    0,
+    3,
     1
    ],
    [
-    2,
-    1,
-    3,
-    1
-   ],
-   [
-    3,
-    1,
-    3,
-    2
-   ],
-   [
-    3,
-    2,
     4,
+    0,
+    4,
+    1
+   ],
+   [
+    1,
+    1,
+    1,
     2
    ],
    [
+    4,
     3,
-    2,
-    3,
-    3
+    4,
+    4
    ],
    [
-    0,
-    3,
+    1,
+    4,
     0,
     4
    ],
    [
     1,
-    3,
+    4,
     2,
-    3
-   ],
-   [
-    1,
-    0,
-    1,
-    1
-   ],
-   [
-    1,
-    0,
-    0,
-    0
+    4
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 0,
+    "x": 1,
+    "y": 1,
     "dash": true
    },
    {
-    "x": 3,
-    "y": 4,
-    "m": "mx"
+    "x": 2,
+    "y": 1,
+    "m": "opp"
    }
   ],
   "exit": [
    [
     1,
-    0
+    4
    ],
    [
-    0,
+    4,
     4
    ]
   ],
   "pads": [
    [
-    1,
-    2,
-    1,
-    0
+    0,
+    3,
+    0,
+    1
    ]
   ],
   "gates": [
    [
     1,
-    0,
-    2,
-    0,
+    4,
+    1,
+    3,
     0,
     0
    ],
    [
-    0,
     4,
-    1,
+    4,
+    3,
     4,
     0,
     1
@@ -14920,18 +14233,19 @@
   ],
   "plates": [
    [
-    0,
-    2,
+    3,
+    4,
     0
    ]
   ],
-  "solIn": "RRURULRDDRR",
+  "solIn": "DRURLUUUDRUDLR",
   "solutions": 1,
-  "minMoves": 11,
+  "minMoves": 14,
   "luck": 0,
+  "quality": 36.1,
   "belief": "i have to see every pixel. every one.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Ô dash (mũi tên xanh): hộp đi vào là bị phóng theo mũi tên tới khi đụng chướng ngại. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Mẹo: Một hộp giữ công tắc, hộp kia đi qua cổng; rồi đổi vai."
  },
  {
   "id": "myne_3_6",
@@ -14942,100 +14256,95 @@
   "h": 4,
   "broken": [
    [
-    1,
-    0,
     2,
-    0
-   ],
-   [
-    3,
-    0,
+    1,
     3,
     1
    ],
    [
-    0,
+    2,
     1,
-    0,
+    2,
     2
    ],
    [
-    1,
-    2,
-    1,
-    3
-   ],
-   [
     2,
     3,
-    3,
-    3
-   ],
-   [
     2,
-    4,
-    3,
     4
    ],
    [
     1,
     4,
-    0,
+    2,
     4
    ],
    [
-    1,
+    3,
+    2,
     4,
-    1,
+    2
+   ],
+   [
+    3,
+    2,
+    3,
     3
+   ],
+   [
+    3,
+    2,
+    3,
+    1
    ]
   ],
   "boxes": [
    {
-    "x": 5,
-    "y": 2,
+    "x": 4,
+    "y": 1,
     "trail": true
    },
    {
     "x": 0,
-    "y": 0,
-    "m": "mx"
+    "y": 2,
+    "m": "opp"
    }
   ],
   "exit": [
    [
-    1,
-    4
+    3,
+    2
    ],
    [
-    3,
-    1
+    0,
+    3
    ]
   ],
   "gates": [
    [
-    1,
-    4,
+    3,
     2,
-    4,
+    2,
+    2,
     0,
     0
    ]
   ],
   "plates": [
    [
-    3,
-    3,
+    2,
+    4,
     0
    ]
   ],
-  "solIn": "LDLULRDDL",
+  "solIn": "LULLDDURRLDRRR",
   "solutions": 2,
-  "minMoves": 9,
+  "minMoves": 14,
   "luck": 0,
+  "quality": 33.8,
   "belief": "two players, one heart rate.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái \"đường\" ở các bảng khác chính là một hộp như thế. Mẹo: Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Hộp kéo dây: nó để lại sợi dây phía sau, không hộp nào đi qua dây (kể cả chính nó). Cái \"đường\" ở các bảng khác chính là một hộp như thế. Mẹo: Dây cũng là tường: vẽ dây để tạo chỗ dừng cho hộp khác."
  },
  {
   "id": "myne_3_7",
@@ -15046,185 +14355,132 @@
   "h": 5,
   "broken": [
    [
-    3,
-    0,
-    4,
-    0
-   ],
-   [
-    4,
-    0,
     5,
-    0
-   ],
-   [
-    3,
-    1,
-    3,
-    2
-   ],
-   [
-    4,
-    1,
+    0,
     5,
     1
    ],
    [
+    3,
+    1,
+    4,
+    1
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
     4,
     1,
     4,
     2
    ],
    [
+    5,
     1,
-    2,
-    2,
+    5,
     2
    ],
    [
+    0,
+    5,
+    1,
+    5
+   ],
+   [
+    1,
     3,
-    2,
-    3,
+    0,
     3
    ],
    [
-    4,
-    2,
-    5,
+    1,
+    3,
+    1,
     2
    ],
    [
-    0,
-    3,
-    0,
-    4
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
-    0,
-    4,
     1,
-    4
-   ],
-   [
-    1,
-    4,
-    1,
-    5
-   ],
-   [
     3,
-    4,
-    4,
-    4
-   ],
-   [
-    3,
-    4,
-    3,
-    5
-   ],
-   [
-    4,
-    4,
-    4,
-    5
-   ],
-   [
-    0,
-    1,
-    1,
-    1
-   ],
-   [
-    0,
-    1,
-    0,
-    0
-   ],
-   [
-    1,
-    5,
     2,
-    5
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 4,
+    "x": 0,
     "y": 3,
-    "n": 13
+    "n": 7
    },
    {
-    "x": 1,
-    "y": 0,
-    "m": "mx",
+    "x": 2,
+    "y": 5,
+    "m": "opp",
     "dash": true
    },
    {
-    "x": 5,
-    "y": 3,
+    "x": 0,
+    "y": 4,
     "m": "opp"
    }
   ],
   "exit": [
    [
-    0,
-    1
+    1,
+    3
    ],
    [
-    1,
-    5
+    2,
+    3
    ],
    [
     4,
-    2
+    1
    ]
   ],
   "portals": [
    [
-    0,
-    5,
-    5,
-    5
+    1,
+    4,
+    2,
+    1
    ]
   ],
   "gates": [
    [
-    0,
     1,
-    0,
-    2,
+    3,
+    1,
+    4,
     0,
     0
    ],
    [
-    1,
-    5,
-    0,
-    5,
+    2,
+    3,
+    2,
+    2,
     0,
     1
    ]
   ],
   "plates": [
    [
+    2,
     0,
-    3,
     0
    ]
   ],
-  "solIn": "LLLUUDRDRRRUDUL",
+  "solIn": "LULRDDDRDLLLDU",
   "solutions": 1,
-  "minMoves": 15,
+  "minMoves": 14,
   "luck": 0,
+  "quality": 43.6,
   "belief": "as long as the game is running, i get to keep playing.",
   "intro": null,
-  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp có vạch dọc là hộp song sinh: trái/phải bị đảo (lên/xuống vẫn cùng chiều). Hộp có dấu chéo: đi ngược cả hai chiều. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Đưa hộp vào ô goal (ô sáng). Mỗi phím di chuyển mọi hộp cùng lúc; hộp bị chặn thì đứng yên. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang lướt thì lướt tiếp). Công tắc: hộp đứng trên nút tròn thì cổng cùng màu mở; hộp rời đi thì cổng đóng lại. Cổng có sọc làm ngược lại, nên hai loại luôn đổi chỗ cho nhau. Cổng đổi trạng thái sau mỗi lần ấn phím. Hộp dash (có sọc): mỗi lần ấn, nó lướt tới khi đụng chướng ngại. Số trên hộp = số nước nó còn được đi; về 0 là hộp đứng im luôn. Hộp có dấu chéo là hộp song sinh: nó làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  }
 ]

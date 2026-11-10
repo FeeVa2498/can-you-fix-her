@@ -175,8 +175,10 @@ function gateUse(p, inputs, u) {
   return hit[0] >= (u.gate || 0) && hit[1] >= (u.toggle || 0);
 }
 /* The candidate checks every box panel must pass. Returns { r, best, L, luck } or null. */
+// how long the answer may be, by position: early panels stay short, the curve climbs through the layers
+const capLen = spec => spec.maxLen || (spec.tut ? 6 : ({ 1: 4, 2: 6, 3: 8 }[spec.layer] + Math.ceil(spec.n * 1.1)));
 function checkBox(p, spec) {
-  const maxL = spec.maxLen || 20;
+  const maxL = capLen(spec);
   let r = E.boxSolve(p, maxL, 8, 200000);
   if (!r.wins.length || r.capped) return null;
   // move budgets: each box gets exactly the moves it makes in a shortest answer
@@ -258,7 +260,7 @@ function quality(p, c) {
   const { G, dist, k0 } = graphOf(p);
   let bits = 0, k = k0;
   for (const ch of c.best) {
-    const node = G.get(k), d0 = dist.get(k);
+    const node = G.get(k); if (!node) break; const d0 = dist.get(k);
     const succ = [...new Set(node.succ)], good = succ.filter(t => dist.get(t) === d0 - 1);
     if (succ.length >= 2 && good.length === 1) bits += Math.log2(succ.length);
     const r = E.boxStep(p, node.s, E.DK[ch], false); k = bkey(r.state);
@@ -267,7 +269,7 @@ function quality(p, c) {
   const deadR = dead / G.size, greedy = greedyRate(p, c.L);
   const clutter = (p.broken || []).length + (p.holes || []).length * .5;
   c.metrics = { bits: +bits.toFixed(1), dead: +deadR.toFixed(2), greedy: +greedy.toFixed(2), states: G.size };
-  return bits * 1.2 + c.L * .5 + deadR * 4 - greedy * 10 - (c.r.wins.length - 1) * 1.5 - clutter * .12 - c.luck * 25;
+  return bits * 1.4 + c.L * .25 + deadR * 4 - greedy * 10 - (c.r.wins.length - 1) * 1.5 - clutter * .12 - c.luck * 25;
 }
 // take away every wall the puzzle doesn't need (keeps the same constraints, never lowers the score)
 function pruneWalls(p, c, spec) {

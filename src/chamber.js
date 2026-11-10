@@ -14,7 +14,7 @@ const CH_GIRLS = [
   { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'edge counts · holes · goals anywhere · one-way · every point' },
   { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'portals · overpasses · broken maps' },
   { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'boxes · dash tiles · dash boxes · switches · move budgets' },
-  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'twin boxes · no locking · switch & swap gates · rope boxes' },
+  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'twin boxes (every key mirrored) · no locking · swap gates · rope boxes' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
 // what each tutorial panel teaches (shown as a NEW tag)
