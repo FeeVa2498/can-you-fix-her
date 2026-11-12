@@ -101,11 +101,15 @@ function boxBoardSVG(p, o = {}) {
     const got = s.stamp ? s.stamp.get(x + ',' + y) : undefined;
     out.push(`<g class="pbx-dt${got === undefined ? '' : got === v ? ' ok' : ' bad'}"><rect x="${x - .42}" y="${y - .42}" width=".84" height=".84" rx=".1"/>${got === undefined ? '' : pipsSVG(x, y, got, .3)}</g>`);
   });
-  // sensor blocks: nothing enters them; their screen counts the rope pieces touching their sides
+  // number tiles: a raised plate nothing can enter; the big number = how many of its four side tiles the rope must cover.
+  // A lamp on each side lights when the tile on that side has rope.
   const tneed = new Map(N.touch.map(q => [q.i, q.c]));
+  const ropeAt = k => s.trail && s.trail.has(k) || (s.pos || []).some((q, b) => p.boxes[b] && p.boxes[b].trail && q[0] + ',' + q[1] === k);
   (p.touch || []).forEach(([x, y, n], i) => {
     const c = tneed.has(i) ? tneed.get(i) : n, cls = c === n ? ' ok' : c > n ? ' bad' : '';
-    out.push(`<g class="pbx-touch${cls}"><rect class="blk" x="${x - .4}" y="${y - .4}" width=".8" height=".8" rx=".08"/><rect class="scr" x="${x - .3}" y="${y - .22}" width=".6" height=".4" rx=".05"/><path class="ticks" d="M${x} ${y - .46}v.08M${x} ${y + .38}v.08M${x - .46} ${y}h.08M${x + .38} ${y}h.08"/><text x="${x}" y="${y - .015}">${c}/${n}</text></g>`);
+    const lamp = [[0, -1, `M${x - .17} ${y - .33}h.34`], [1, 0, `M${x + .33} ${y - .17}v.34`], [0, 1, `M${x - .17} ${y + .33}h.34`], [-1, 0, `M${x - .33} ${y - .17}v.34`]]
+      .map(([dx, dy, d]) => `<path class="lamp${ropeAt((x + dx) + ',' + (y + dy)) ? ' on' : ''}" d="${d}"/>`).join('');
+    out.push(`<g class="pbx-touch${cls}"><rect class="sh" x="${x - .43}" y="${y - .37}" width=".86" height=".86" rx=".12"/><rect class="blk" x="${x - .43}" y="${y - .43}" width=".86" height=".86" rx=".12"/><rect class="in" x="${x - .25}" y="${y - .25}" width=".5" height=".5" rx=".06"/>${lamp}<text x="${x}" y="${y + .01}">${n}</text></g>`);
   });
   if (!o.noBoxes) out.push(boxesSVG(p, s, { mini: o.mini }));
   return out.join('');

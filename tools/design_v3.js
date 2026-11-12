@@ -550,7 +550,7 @@ const BRULE = {
   trail: 'Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại).',
   lights: 'Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng.',
   nums: 'Ô số cạnh: ô vuông viền đứt nối tâm bốn ô xung quanh, số ở giữa. Dây phải đi đúng ngần ấy cạnh của ô vuông đó (x/y cho biết đã có bao nhiêu; viền xanh khi đúng, đỏ khi thừa).',
-  touch: 'Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa).',
+  touch: 'Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ.',
   switches: 'Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu.',
   dbl: 'Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia.',
   cracks: 'Ô nứt: hộp rời đi là ô sụp thành lỗ.',
@@ -575,7 +575,7 @@ const BTIP = {
   mx: 'Dùng tường để làm hai hộp lệch nhau.', many: 'Hộp đứng yên cũng là một bức tường cho hộp khác.',
   nolock: 'Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ.', helpers: 'Đặt hộp thừa trước, rồi mới phóng hộp chính.',
   trail: 'Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
-  lights: 'Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.', lightAll: 'Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn.', touch: 'Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng.', nums: 'Ô "1" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.',
+  lights: 'Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.', lightAll: 'Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn.', touch: 'Ô số 3 gần như bị dây bao quanh; ô số 1 chỉ cho dây chạm một bên: bắt đầu từ chúng.', nums: 'Ô "1" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.',
   switches: 'Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó.', dbl: 'Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ.',
   cracks: 'Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước.', paints: 'Có khi hộp phải đi vòng qua ô sơn trước khi về goal.', colors: 'Mỗi màu một goal: xem hộp nào phải đi trước hộp nào.',
 };

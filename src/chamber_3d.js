@@ -130,10 +130,10 @@ const P3 = (() => {
         const glow = new THREE.Mesh(new THREE.CircleGeometry(.42, 20), additive(0xffd86e, 0)); glow.rotation.x = -Math.PI / 2; glow.position.set(x, .016, y);
         world.add(base, edges(bulb, 0xfff1b8, .5), glow); lights3.push({ mat, glow });
       });
-      (p.touch || []).forEach(([x, y, n]) => {   // sensor blocks: a squat console with a screen on top
-        const blk = box(.78, .46, .78, std(0x1a1024, { emissive: 0x0b2a3a, emissiveIntensity: .6 }), x, .23, y); world.add(edges(blk, 0x4fd8ff, .9));
-        const scr = new THREE.Mesh(new THREE.PlaneGeometry(.66, .66), new THREE.MeshBasicMaterial({ transparent: true })); scr.rotation.x = -Math.PI / 2; scr.position.set(x, .465, y); world.add(scr);
-        touch3.push({ scr, n, key: '' });
+      (p.touch || []).forEach(([x, y, n]) => {   // number tiles: a low brass plate; big number on top, a lamp per side
+        const blk = box(.84, .16, .84, std(0x3a2410, { emissive: 0x2a1404, emissiveIntensity: .5 }), x, .08, y); world.add(edges(blk, 0xffc94d, .9));
+        const scr = new THREE.Mesh(new THREE.PlaneGeometry(.84, .84), new THREE.MeshBasicMaterial({ transparent: true })); scr.rotation.x = -Math.PI / 2; scr.position.set(x, .162, y); world.add(scr);
+        touch3.push({ scr, n, x, y, key: '' });
       });
       (p.dice || []).forEach(([x, y, v]) => {
         const m = new THREE.Mesh(new THREE.PlaneGeometry(.88, .88), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false })); m.rotation.x = -Math.PI / 2; m.position.set(x, .015, y); m.renderOrder = 2; world.add(m);
@@ -495,10 +495,19 @@ const P3 = (() => {
       });
       const N = E.boxNeed(p, s), dark = new Set(N.lights);
       { const tn = new Map(N.touch.map(q => [q.i, q.c]));
+        const ropeAt = k => s.trail.has(k) || s.pos.some((q, b) => p.boxes[b].trail && q[0] + ',' + q[1] === k);
         touch3.forEach((t, i) => {
-          const c = tn.has(i) ? tn.get(i) : t.n, col = c === t.n ? '#7be3a4' : c > t.n ? '#ff4d5e' : '#c8f2ff', k = c + '/' + t.n + col; if (k === t.key) return; t.key = k;
+          const c = tn.has(i) ? tn.get(i) : t.n, col = c === t.n ? '#7be3a4' : c > t.n ? '#ff4d5e' : '#ffd65e', frame = c === t.n ? '#7be3a4' : c > t.n ? '#ff4d5e' : '#ffc94d';
+          const on = [[0, -1], [1, 0], [0, 1], [-1, 0]].map(([dx, dy]) => ropeAt((t.x + dx) + ',' + (t.y + dy)));
+          const k = col + on.join(); if (k === t.key) return; t.key = k;
           if (t.scr.material.map) t.scr.material.map.dispose();
-          t.scr.material.map = canvasTex(128, 128, (g, w, h) => { g.fillStyle = '#0b2a3a'; g.fillRect(0, 0, w, h); g.strokeStyle = col; g.lineWidth = 6; g.strokeRect(6, 6, w - 12, h - 12); g.fillStyle = col; g.font = 'bold 54px "Courier New", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(c + '/' + t.n, w / 2, h / 2 + 4); });
+          t.scr.material.map = canvasTex(128, 128, (g, w, h) => {
+            g.fillStyle = '#3a2410'; g.fillRect(0, 0, w, h); g.strokeStyle = frame; g.lineWidth = 6; g.strokeRect(4, 4, w - 8, h - 8);
+            g.fillStyle = '#170c05'; g.fillRect(34, 34, 60, 60);
+            g.lineCap = 'round'; g.lineWidth = 9;
+            [[44, 20, 84, 20], [108, 44, 108, 84], [44, 108, 84, 108], [20, 44, 20, 84]].forEach(([a, b, c2, d], j) => { g.strokeStyle = on[j] ? (c === t.n ? '#7be3a4' : c > t.n ? '#ff4d5e' : '#ffe27a') : '#5a4020'; g.beginPath(); g.moveTo(a, b); g.lineTo(c2, d); g.stroke(); });
+            g.fillStyle = col; g.font = 'bold 58px "Courier New", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(t.n), w / 2, h / 2 + 3);
+          });
           t.scr.material.needsUpdate = true;
         }); }
       lights3.forEach((l, i) => { const on = !dark.has(i); l.mat.emissiveIntensity = on ? 1.2 : 0; l.mat.color.setHex(on ? 0xfff1b8 : 0x6a5a3a); l.glow.material.opacity = on ? .45 : 0; });

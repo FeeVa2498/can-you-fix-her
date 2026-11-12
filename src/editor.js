@@ -76,7 +76,7 @@ const ED_TOOLS = {
     ['gate0', 'Gate ▮', 'edge', 'Cổng xanh (bấm lại = cổng đảo, lần 3 xoá)'], ['gate1', 'Gate ▮', 'edge', 'Cổng cam (bấm lại = cổng đảo, lần 3 xoá)'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
   box: [['box', 'Box', 'node', 'Đặt hộp; bấm hộp có sẵn để chọn và chỉnh thuộc tính (màu, dây, tên lửa, song sinh, đếm ngược)'],
     ['goal', 'Goal', 'node', 'Ô goal: bấm lại để đổi: nhận mọi hộp → hồng → đỏ → tím → vàng → xanh, rồi xoá'], ['wall', 'Wall', 'edge', 'Tường giữa hai ô: bấm vào khe giữa hai ô; bấm lại để xoá'], ['hole', 'Hole', 'node', 'Khoét ô thành lỗ (xoá ô khỏi map); bấm lại vào lỗ để trả ô về'],
-    ['light', 'Light', 'node', 'Ô đèn: hộp nào bước lên là bật (dây nằm trên cũng tính); bấm lại để xoá'], ['touch', 'Sensor', 'node', 'Khối cảm biến: dây phải chạm đúng ngần ấy cạnh (bấm lại để tăng 1→4, rồi xoá)'],
+    ['light', 'Light', 'node', 'Ô đèn: hộp nào bước lên là bật (dây nằm trên cũng tính); bấm lại để xoá'], ['touch', 'Number tile', 'node', 'Ô số: không đi vào được; dây phải phủ đúng ngần ấy ô sát 4 cạnh của nó (bấm lại để tăng 1→4, rồi xoá)'],
     ['pad', 'Arrow tile', 'node', 'Ô mũi tên (bấm lại để xoay →↓←↑, lần 5 xoá)'], ['oneway', 'One-way', 'edge', 'Khe một chiều (bấm lại để đảo chiều)'],
     ['portal', 'Portal', 'node', 'Bấm 2 ô để tạo cặp'],
     ['switch', 'Switch', 'node', 'Ô chốt: bấm lại để đổi màu xanh → vàng → đỏ, rồi thành công tắc hai màu xanh/vàng → vàng/đỏ → đỏ/xanh (màu đầu dựng sẵn, màu sau hạ sẵn), rồi xoá'],
