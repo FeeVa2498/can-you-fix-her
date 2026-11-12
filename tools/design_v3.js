@@ -442,7 +442,7 @@ const BRULE = {
   lights: 'Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng.',
   nums: 'Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu).',
   switches: 'Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu.',
-  dbl: 'Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia.',
+  dbl: 'Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia.',
   cracks: 'Ô nứt: hộp rời đi là ô sụp thành lỗ.',
   paints: 'Ô sơn: hộp đi vào bị đổi sang màu của ô.',
   pads: 'Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường.',
@@ -465,7 +465,7 @@ const BTIP = {
   nolock: 'Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ.', helpers: 'Đặt hộp thừa trước, rồi mới phóng hộp chính.',
   trail: 'Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
   lights: 'Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.', nums: 'Ô "1" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.',
-  switches: 'Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó.', dbl: 'Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau.',
+  switches: 'Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó.', dbl: 'Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ.',
   cracks: 'Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước.', paints: 'Có khi hộp phải đi vòng qua ô sơn trước khi về goal.', colors: 'Mỗi màu một goal: xem hộp nào phải đi trước hộp nào.',
 };
 function boxRules(p) {

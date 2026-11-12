@@ -145,7 +145,7 @@ B = [
     ('Ô mũi tên (arrow tile)', 'Ô xanh có mũi tên: hộp đi vào bị đẩy trượt theo mũi tên tới cuối đường. Mũi tên nhấp nháy chạy.', '1 (code xoay 4 hướng) + 2 frame sáng', 3, '256×256', 'P1'),
     ('Ô phanh (stop)', 'Ô cam có vạch: hộp đang trượt dừng lại ở đây.', '1', 1, '256×256', 'P1'),
     ('Ô chốt (switch)', 'Nút tròn lớn trên ô, màu hồng / xanh / lục: hộp đi vào là mở hẳn mọi cửa cùng màu (nút lún xuống, sáng).', '3 màu × (chưa mở + đã mở)', 6, 'concept 256×256', 'P1'),
-    ('Ô chốt đôi', 'Nút ở giữa = màu sẽ mở lần tới, vòng ngoài = màu kia, có ký hiệu mũi tên xoay. Mỗi lần có hộp đi vào: mở màu đang hiện, đóng màu kia, rồi đổi màu.', '3 cặp màu', 3, 'concept 256×256', 'P1'),
+    ('Công tắc hai màu', 'Nút ở giữa = màu tường đang dựng (giẫm vào sẽ hạ), vòng ngoài = màu kia, có ký hiệu mũi tên xoay. Giẫm vào: tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia.', '3 cặp màu', 3, 'concept 256×256', 'P1'),
     ('Cửa khoá (door)', 'Tấm chắn giữa hai ô, màu hồng / xanh / lục, có 2 sọc đen để khác tường. Mở = chìm xuống sàn (2D: nét đứt mờ).', '3 màu × (đóng + mở)', 6, 'concept 256×256', 'P1'),
     ('Ô nứt (crack)', 'Ô có vết nứt; hộp rời khỏi là ô sụp xuống thành lỗ (rơi xuống khoảng không).', 'Nứt + đang sụp (3–4 frame) + lỗ', 6, '256×256', 'P1'),
     ('Ô sơn (paint)', 'Vệt sơn loang trên ô: hộp đi vào bị đổi sang màu đó.', '3 màu', 3, '256×256', 'P1'),
@@ -164,7 +164,7 @@ for (nm, d, v, n, sz, *pr), fn in zip(B, BF):
 
 # ---------------- 10. Mechanic icons (tutorials) ----------------
 G = '10. Icon mechanic (tutorial & danh sách level)'
-MECH = [('basic', 'Hộp dây tới ô goal'), ('boxes', 'Mọi phím điều khiển mọi hộp'), ('lights', 'Ô đèn'), ('nums', 'Số cạnh'), ('switches', 'Ô chốt & cửa khoá'), ('dbl', 'Ô chốt đôi'),
+MECH = [('basic', 'Hộp dây tới ô goal'), ('boxes', 'Mọi phím điều khiển mọi hộp'), ('lights', 'Ô đèn'), ('nums', 'Số cạnh'), ('switches', 'Ô chốt & cửa khoá'), ('dbl', 'Công tắc hai màu'),
         ('colors', 'Hộp màu & goal màu'), ('paints', 'Ô sơn'), ('cracks', 'Ô nứt'), ('ends', 'Goal ở bất kỳ đâu'), ('holes', 'Map có lỗ'), ('oneway', 'Một chiều'),
         ('portals', 'Portal'), ('pads', 'Ô mũi tên'), ('stops', 'Ô phanh'), ('dash', 'Hộp tên lửa'), ('helpers', 'Hộp chắn (thừa)'),
         ('many', 'Nhiều hộp'), ('budget', 'Hộp ôm bom'), ('twin', 'Hộp song sinh ngược'), ('twinrope', 'Hai hộp dây song sinh'), ('nolock', 'Hộp không bị khoá ở goal'), ('trail', 'Hộp dây')]

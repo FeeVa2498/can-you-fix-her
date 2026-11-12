@@ -157,7 +157,7 @@ const P3 = (() => {
     function setLocks(s) {
       sw3.forEach((q, i) => {
         if (q.c2 == null) { const on = !!(s.open & (1 << q.c)); q.btn.position.y = q.y0 - (on ? .06 : 0); q.btn.material.emissiveIntensity = on ? .9 : .25; return; }
-        const cur = s.sw[i], oth = cur === q.c ? q.c2 : q.c;
+        const cur = E.swUp([0, 0, q.c, q.c2], s.open), oth = cur === q.c ? q.c2 : q.c;
         q.btn.material.color.setHex(HUEX[cur]); q.btn.material.emissive.setHex(HUEX[cur]); q.ring.material.color.setHex(HUEX[oth]); q.ring.material.emissive.setHex(HUEX[oth]);
       });
       gates3.forEach(gt => { if (gt.c !== undefined) gt.want = s.open & (1 << gt.c) ? 1 : 0; });

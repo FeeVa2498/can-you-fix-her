@@ -1605,7 +1605,7 @@
   "belief": "",
   "intro": "dbl",
   "tut": "dbl",
-  "why": "Bảng dạy luật mới. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
+  "why": "Bảng dạy luật mới. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ."
  },
  {
   "id": "prim_3_2",
@@ -1618,94 +1618,88 @@
    [
     0,
     0,
-    1,
-    0
-   ],
-   [
-    0,
-    0,
     0,
     1
    ],
    [
     1,
-    0,
-    1,
-    1
+    3,
+    2,
+    3
    ],
    [
-    4,
     1,
-    4,
-    0
-   ],
-   [
-    4,
-    1,
-    4,
-    2
-   ],
-   [
-    0,
     3,
     0,
+    3
+   ],
+   [
+    4,
+    2,
+    3,
     2
+   ],
+   [
+    4,
+    2,
+    4,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 1,
+    "x": 0,
+    "y": 0,
     "trail": true
    },
    {
     "x": 2,
-    "y": 2
+    "y": 3
    }
   ],
   "exit": [
    [
-    4,
-    1
+    1,
+    3
    ],
    [
-    0,
-    3
+    4,
+    2
    ]
   ],
   "doors": [
    [
-    4,
     1,
     3,
     1,
+    2,
     1
    ],
    [
-    0,
-    3,
+    4,
+    2,
+    4,
     1,
-    3,
     2
    ]
   ],
   "switches": [
    [
     3,
-    1,
+    0,
     1,
     2
    ]
   ],
-  "solIn": "LRRUDUDLRUR",
+  "solIn": "RDDUUUDURDD",
   "solutions": 1,
   "minMoves": 11,
   "luck": 0,
-  "quality": 30.3,
+  "quality": 29.3,
   "belief": "it doesn't look like anything. it's mine.",
   "intro": null,
   "feature": "dbl",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ."
  },
  {
   "id": "prim_3_3",
@@ -1822,27 +1816,9 @@
   "h": 4,
   "broken": [
    [
-    2,
-    0,
-    3,
-    0
-   ],
-   [
-    0,
     1,
-    1,
-    1
-   ],
-   [
     3,
     2,
-    4,
-    2
-   ],
-   [
-    0,
-    3,
-    1,
     3
    ],
    [
@@ -1852,59 +1828,65 @@
     4
    ],
    [
-    0,
-    1,
-    0,
-    0
+    4,
+    2,
+    4,
+    1
    ],
    [
-    3,
-    0,
-    4,
-    0
+    2,
+    2,
+    2,
+    1
+   ],
+   [
+    2,
+    2,
+    2,
+    3
    ]
   ],
   "boxes": [
    {
     "x": 3,
-    "y": 3,
+    "y": 2,
     "trail": true
    },
    {
-    "x": 0,
-    "y": 3
+    "x": 1,
+    "y": 1
    }
   ],
   "exit": [
    [
-    0,
-    1
+    4,
+    2
    ],
    [
-    3,
-    0
+    2,
+    2
    ]
   ],
   "doors": [
    [
-    0,
-    1,
-    0,
+    4,
     2,
+    4,
+    3,
     1
    ],
    [
-    3,
-    0,
-    3,
+    2,
+    2,
     1,
+    2,
     2
    ]
   ],
   "switches": [
    [
     1,
-    4,
+    0,
     1,
     2
    ]
@@ -1912,18 +1894,18 @@
   "lights": [
    [
     3,
-    2
+    4
    ]
   ],
-  "solIn": "URDDUDUDUULU",
+  "solIn": "DDRUUUDUDDR",
   "solutions": 1,
-  "minMoves": 12,
+  "minMoves": 11,
   "luck": 0,
-  "quality": 35.4,
+  "quality": 32.9,
   "belief": "no pencil to follow. not really.",
   "intro": null,
   "feature": "dbl",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ."
  },
  {
   "id": "prim_3_5",
@@ -2179,132 +2161,132 @@
   "h": 4,
   "broken": [
    [
+    0,
+    1,
+    0,
+    2
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    0,
     2,
     0,
+    3
+   ],
+   [
+    0,
     3,
-    0
+    1,
+    3
+   ],
+   [
+    1,
+    3,
+    1,
+    4
    ],
    [
     3,
-    1,
+    2,
+    3,
+    3
+   ],
+   [
+    3,
+    2,
     4,
+    2
+   ],
+   [
+    3,
+    2,
+    3,
     1
    ],
    [
-    4,
-    1,
-    4,
-    2
-   ],
-   [
-    0,
-    2,
-    0,
-    3
-   ],
-   [
     1,
     2,
     2,
     2
-   ],
-   [
-    0,
-    3,
-    1,
-    3
-   ],
-   [
-    2,
-    3,
-    2,
-    4
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
-    4,
-    3,
-    4,
-    4
-   ],
-   [
-    0,
-    0,
-    1,
-    0
    ]
   ],
   "boxes": [
    {
     "x": 0,
-    "y": 4,
+    "y": 2,
     "trail": true
    },
    {
-    "x": 3,
+    "x": 1,
     "y": 0,
     "m": "opp",
     "trail": true
    },
    {
-    "x": 3,
-    "y": 1
+    "x": 0,
+    "y": 4
    }
   ],
   "exit": [
    [
-    0,
-    0
+    3,
+    2
    ],
    [
-    2,
-    4
+    1,
+    2
    ]
   ],
   "doors": [
    [
-    0,
-    0,
-    0,
-    1,
+    3,
+    2,
+    2,
+    2,
     1
    ],
    [
-    2,
-    4,
     1,
-    4,
+    2,
+    1,
+    3,
     2
    ]
   ],
   "switches": [
    [
-    4,
-    3,
+    2,
+    2,
     1,
     2
    ]
   ],
   "lights": [
    [
-    2,
-    2
+    3,
+    3
    ]
   ],
-  "solIn": "DURUURDURRDLLLDR",
-  "solutions": 1,
-  "minMoves": 16,
+  "solIn": "LLRRUULUDURRRDR",
+  "solutions": 2,
+  "minMoves": 15,
   "luck": 0,
-  "quality": 35.9,
+  "quality": 35.8,
   "belief": "i trace so she can draw. that is why i am here.",
   "intro": null,
   "feature": "dbl",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ."
  },
  {
   "id": "trix_1_1",
@@ -8909,7 +8891,7 @@
   "belief": "",
   "intro": "dbl",
   "tut": "dbl",
-  "why": "Bảng dạy luật mới. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
+  "why": "Bảng dạy luật mới. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ."
  },
  {
   "id": "vel_3_7",
@@ -8920,51 +8902,57 @@
   "h": 5,
   "broken": [
    [
+    1,
+    0,
+    2,
+    0
+   ],
+   [
     2,
     0,
     2,
     1
    ],
    [
-    2,
     1,
-    3,
+    1,
+    2,
     1
    ],
    [
-    5,
+    0,
     2,
-    5,
-    3
+    1,
+    2
    ],
    [
+    2,
     4,
-    4,
-    4,
+    2,
     5
    ],
    [
-    3,
     1,
     4,
-    1
+    1,
+    3
    ],
    [
-    4,
-    4,
+    1,
     5,
-    4
+    2,
+    5
    ],
    [
-    4,
-    4,
-    3,
-    4
+    1,
+    5,
+    0,
+    5
    ]
   ],
   "boxes": [
    {
-    "x": 5,
+    "x": 3,
     "y": 4,
     "n": 13
    },
@@ -8975,53 +8963,53 @@
     "n": 13
    },
    {
-    "x": 0,
-    "y": 4
+    "x": 2,
+    "y": 0
    }
   ],
   "exit": [
    [
-    3,
-    1
+    1,
+    4
    ],
    [
-    4,
-    4
+    1,
+    5
    ]
   ],
   "doors": [
    [
-    3,
     1,
-    3,
-    0,
+    4,
+    2,
+    4,
     1
    ],
    [
+    1,
+    5,
+    1,
     4,
-    4,
-    4,
-    3,
     2
    ]
   ],
   "switches": [
    [
-    5,
+    1,
     2,
     1,
     2
    ]
   ],
-  "solIn": "ULUUURURRDDUD",
+  "solIn": "RDDULLDLDLDR",
   "solutions": 1,
-  "minMoves": 13,
+  "minMoves": 12,
   "luck": 0,
-  "quality": 34.3,
+  "quality": 36.5,
   "belief": "as long as the map is mine, nobody gets left behind.",
   "intro": null,
   "feature": "dbl",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ."
  },
  {
   "id": "vel_3_8",
@@ -10071,7 +10059,7 @@
   "belief": "",
   "intro": "dbl",
   "tut": "dbl",
-  "why": "Bảng dạy luật mới. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
+  "why": "Bảng dạy luật mới. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ."
  },
  {
   "id": "myne_2_5",
@@ -10082,22 +10070,28 @@
   "h": 4,
   "broken": [
    [
-    3,
+    2,
     1,
-    3,
+    2,
+    2
+   ],
+   [
+    4,
+    1,
+    4,
     2
    ],
    [
     1,
-    4,
     2,
-    4
+    2,
+    2
    ],
    [
+    3,
+    0,
     4,
-    2,
-    4,
-    1
+    0
    ],
    [
     4,
@@ -10109,57 +10103,57 @@
   "boxes": [
    {
     "x": 4,
-    "y": 4
+    "y": 3
    },
    {
-    "x": 0,
+    "x": 2,
     "y": 3,
     "m": "opp"
    }
   ],
   "exit": [
    [
-    4,
-    2
+    3,
+    0
    ],
    [
-    1,
-    4
+    4,
+    2
    ]
   ],
   "doors": [
    [
-    4,
-    2,
     3,
+    0,
     2,
+    0,
     1
    ],
    [
-    1,
     4,
-    1,
+    2,
     3,
+    2,
     2
    ]
   ],
   "switches": [
    [
-    1,
+    3,
     1,
     1,
     2
    ]
   ],
-  "solIn": "LDDLLUURRUUU",
+  "solIn": "DLDRLLDRUURD",
   "solutions": 1,
   "minMoves": 12,
   "luck": 0,
-  "quality": 33.3,
+  "quality": 28.6,
   "belief": "if i'm loud enough nobody notices i'm fragile.",
   "intro": null,
   "feature": "dbl",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ."
  },
  {
   "id": "myne_2_6",
@@ -10170,104 +10164,86 @@
   "h": 4,
   "holes": [
    [
-    2,
-    3
+    0,
+    1
    ]
   ],
   "broken": [
    [
-    2,
-    1,
+    0,
     3,
-    1
-   ],
-   [
-    3,
-    2,
-    4,
+    0,
     2
    ],
    [
+    0,
+    3,
     1,
-    4,
-    2,
-    4
+    3
    ],
    [
     4,
-    1,
-    4,
-    2
-   ],
-   [
-    4,
-    1,
-    4,
+    0,
+    3,
     0
-   ],
-   [
-    4,
-    1,
-    5,
-    1
    ]
   ],
   "boxes": [
    {
-    "x": 4,
-    "y": 4,
-    "n": 13
+    "x": 1,
+    "y": 2,
+    "n": 14
    },
    {
     "x": 3,
-    "y": 4,
+    "y": 1,
     "m": "opp",
-    "n": 13
+    "n": 14
    }
   ],
   "exit": [
    [
-    4,
-    1
+    0,
+    3
    ],
    [
-    1,
-    3
+    4,
+    0
    ]
   ],
   "doors": [
    [
-    4,
-    1,
+    0,
     3,
-    1,
+    0,
+    4,
     1
    ],
    [
+    4,
+    0,
+    4,
     1,
-    3,
-    1,
-    2,
     2
    ]
   ],
   "switches": [
    [
-    4,
-    3,
+    1,
+    1,
     1,
     2
    ]
   ],
-  "solIn": "DDDDURLLULLD",
-  "solutions": 2,
+  "solIn": "UDDDLURRLLLD",
+  "solutions": 1,
   "minMoves": 12,
   "luck": 0,
-  "quality": 36.3,
+  "quality": 37,
   "belief": "finish everything. right now. all of it.",
   "intro": null,
   "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Bom đếm từng lần ấn phím, kể cả phím chỉ làm hộp khác đi: không có nước nào để phí."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Bom đếm từng lần ấn phím, kể cả phím chỉ làm hộp khác đi: không có nước nào để phí."
  },
  {
   "id": "myne_2_7",
@@ -10278,119 +10254,131 @@
   "h": 4,
   "broken": [
    [
+    2,
     0,
-    0,
-    0,
-    1
-   ],
-   [
     3,
-    0,
-    4,
     0
    ],
    [
-    3,
-    1,
-    4,
-    1
-   ],
-   [
+    2,
     0,
     2,
-    1,
-    2
-   ],
-   [
-    5,
-    0,
-    5,
     1
    ],
    [
-    5,
+    2,
+    2,
+    2,
+    3
+   ],
+   [
+    0,
     3,
-    5,
-    2
+    0,
+    4
+   ],
+   [
+    1,
+    3,
+    1,
+    4
+   ],
+   [
+    3,
+    3,
+    4,
+    3
    ],
    [
     5,
     3,
     5,
     4
+   ],
+   [
+    5,
+    2,
+    4,
+    2
+   ],
+   [
+    5,
+    2,
+    5,
+    1
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 1
+    "x": 2,
+    "y": 2
    },
    {
-    "x": 1,
-    "y": 4,
+    "x": 3,
+    "y": 0,
     "m": "opp"
    },
    {
-    "x": 5,
-    "y": 2,
+    "x": 2,
+    "y": 3,
     "m": "opp"
    }
   ],
   "exit": [
    [
     5,
-    0
-   ],
-   [
-    5,
     3
    ],
    [
-    4,
+    5,
     2
+   ],
+   [
+    0,
+    4
    ]
   ],
   "oneway": [
    [
-    3,
     1,
-    3,
+    1,
+    1,
     0
    ]
   ],
   "doors": [
    [
     5,
-    0,
+    3,
     4,
-    0,
+    3,
     1
    ],
    [
     5,
-    3,
-    4,
+    2,
+    5,
     3,
     2
    ]
   ],
   "switches": [
    [
+    2,
     4,
-    1,
     1,
     2
    ]
   ],
-  "solIn": "RDLLRDRRRUDLLL",
+  "solIn": "RLUUURLRDLRRDR",
   "solutions": 1,
   "minMoves": 14,
   "luck": 0,
-  "quality": 37.4,
+  "quality": 38.7,
   "belief": "keep moving or the lag catches up.",
   "intro": null,
   "feature": "many",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "myne_3_1",
@@ -10740,111 +10728,111 @@
   "h": 4,
   "broken": [
    [
-    2,
     0,
-    3,
-    0
-   ],
-   [
-    0,
-    2,
-    0,
-    3
-   ],
-   [
-    2,
-    2,
-    2,
-    3
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
-    3,
-    4,
-    4,
-    4
-   ],
-   [
-    2,
-    2,
     1,
+    0,
     2
    ],
    [
+    1,
+    1,
     2,
-    2,
+    1
+   ],
+   [
+    0,
     3,
+    0,
+    4
+   ],
+   [
+    1,
+    4,
+    2,
+    4
+   ],
+   [
+    1,
+    4,
+    0,
+    4
+   ],
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    1,
+    3,
+    1,
     2
    ]
   ],
   "boxes": [
    {
     "x": 1,
-    "y": 2,
+    "y": 0,
     "dash": true
    },
    {
     "x": 0,
-    "y": 0,
+    "y": 1,
     "m": "opp"
    }
   ],
   "exit": [
    [
-    0,
-    2
+    1,
+    4
    ],
    [
-    2,
-    2
+    1,
+    3
    ]
   ],
   "pads": [
    [
     0,
-    1,
-    0,
-    -1
+    2,
+    -1,
+    0
    ]
   ],
   "doors": [
    [
-    0,
-    2,
     1,
-    2,
+    4,
+    1,
+    3,
     1
    ],
    [
-    2,
-    2,
-    2,
     1,
+    3,
+    0,
+    3,
     2
    ]
   ],
   "switches": [
    [
-    0,
-    3,
+    1,
+    1,
     1,
     2
    ]
   ],
-  "solIn": "LLURUURUDLRLDR",
+  "solIn": "DLUDLRUUDURUL",
   "solutions": 1,
-  "minMoves": 14,
+  "minMoves": 13,
   "luck": 0,
-  "quality": 33.6,
+  "quality": 30.2,
   "belief": "i have to see every pixel. every one.",
   "intro": null,
   "feature": "dbl",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ."
  },
  {
   "id": "myne_3_6",
@@ -10976,135 +10964,129 @@
   "h": 5,
   "broken": [
    [
-    2,
+    1,
     0,
     2,
+    0
+   ],
+   [
+    1,
+    1,
+    2,
     1
+   ],
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    4,
+    5,
+    5,
+    5
+   ],
+   [
+    3,
+    1,
+    3,
+    0
+   ],
+   [
+    3,
+    1,
+    4,
+    1
+   ],
+   [
+    3,
+    1,
+    3,
+    2
    ],
    [
     3,
     0,
     4,
     0
-   ],
-   [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
-    0,
-    2,
-    0,
-    3
-   ],
-   [
-    5,
-    2,
-    5,
-    3
-   ],
-   [
-    4,
-    3,
-    4,
-    4
-   ],
-   [
-    5,
-    3,
-    5,
-    4
-   ],
-   [
-    0,
-    4,
-    1,
-    4
-   ],
-   [
-    2,
-    5,
-    3,
-    5
-   ],
-   [
-    0,
-    4,
-    0,
-    5
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 2,
-    "n": 11
+    "x": 5,
+    "y": 0,
+    "n": 12
    },
    {
-    "x": 1,
-    "y": 4,
+    "x": 0,
+    "y": 5,
     "m": "opp",
     "dash": true
    },
    {
-    "x": 3,
-    "y": 5,
+    "x": 0,
+    "y": 1,
     "m": "opp"
    }
   ],
   "exit": [
    [
-    2,
-    5
+    3,
+    1
    ],
    [
-    0,
-    4
+    3,
+    0
    ]
   ],
   "portals": [
    [
-    2,
-    0,
-    4,
-    5
+    5,
+    5,
+    1,
+    0
    ]
   ],
   "doors": [
    [
-    2,
-    5,
+    3,
     1,
-    5,
+    2,
+    1,
     1
    ],
    [
-    0,
-    4,
-    0,
     3,
+    0,
+    2,
+    0,
     2
    ]
   ],
   "switches": [
    [
     5,
-    3,
+    2,
     1,
     2
    ]
   ],
-  "solIn": "ULDRLRRRDRU",
-  "solutions": 2,
-  "minMoves": 11,
+  "solIn": "ULDLDRDLLLUR",
+  "solutions": 1,
+  "minMoves": 12,
   "luck": 0,
-  "quality": 30.8,
+  "quality": 33.8,
   "belief": "as long as the game is running, i get to keep playing.",
   "intro": null,
   "feature": "many",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "myne_3_t8",

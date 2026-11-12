@@ -79,7 +79,7 @@ const ED_TOOLS = {
     ['light', 'Light', 'node', 'Ô đèn: dây phải nằm trên đó'], ['num', 'Number', 'cell', 'Số giữa bốn ô: số cạnh dây phải đi (bấm lại để tăng 1→4, rồi xoá)'],
     ['pad', 'Arrow tile', 'node', 'Ô mũi tên (bấm lại để xoay →↓←↑, lần 5 xoá)'], ['stop', 'Stop', 'node', 'Ô phanh'], ['oneway', 'One-way', 'edge', 'Khe một chiều (bấm lại để đảo chiều)'],
     ['portal', 'Portal', 'node', 'Bấm 2 ô để tạo cặp'],
-    ['switch', 'Switch', 'node', 'Ô chốt: bấm lại để đổi màu hồng → xanh → lục, rồi thành chốt đôi hồng/xanh → xanh/lục → lục/hồng, rồi xoá'],
+    ['switch', 'Switch', 'node', 'Ô chốt: bấm lại để đổi màu hồng → xanh → lục, rồi thành công tắc hai màu hồng/xanh → xanh/lục → lục/hồng (màu đầu dựng sẵn, màu sau hạ sẵn), rồi xoá'],
     ['door', 'Door', 'edge', 'Cửa khoá giữa hai ô: bấm lại để đổi màu hồng → xanh → lục, rồi xoá'],
     ['crack', 'Crack', 'node', 'Ô nứt: hộp rời đi là sụp'], ['paint', 'Paint', 'node', 'Ô sơn: bấm lại để đổi màu, rồi xoá'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
 };

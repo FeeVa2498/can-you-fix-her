@@ -69,7 +69,7 @@ function boxBoardSVG(p, o = {}) {
   // switches: one colour, or two (the one it opens next is the big one)
   (p.switches || []).forEach(([x, y, c, c2], i) => {
     if (c2 == null) { out.push(`<g class="pbx-sw${s.open & (1 << c) ? ' on' : ''}" style="--sc:${HUE[c]}"><circle class="base" cx="${x}" cy="${y}" r=".32"/><circle class="btn" cx="${x}" cy="${y}" r=".2"/></g>`); return; }
-    const cur = s.sw[i], oth = cur === c ? c2 : c;
+    const cur = E.swUp([x, y, c, c2], s.open), oth = cur === c ? c2 : c;
     out.push(`<g class="pbx-sw dbl" style="--sc:${HUE[cur]};--so:${HUE[oth]}"><circle class="base" cx="${x}" cy="${y}" r=".34"/><circle class="ring" cx="${x}" cy="${y}" r=".27"/><circle class="btn" cx="${x}" cy="${y}" r=".17"/><path class="flip" d="M${x - .08} ${y - .02}a.09 .09 0 1 1 .16 .05m0 0l.03-.07m-.03 .07l-.07-.02"/></g>`);
   });
   // walls between tiles, and one-way gaps

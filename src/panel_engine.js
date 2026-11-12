@@ -250,7 +250,8 @@ const PanelEngine = (() => {
      p.lights   [[x,y]] light tiles: lit while a rope lies on them (or a rope box stands there)
      p.nums     [[cx,cy,n]] the ropes must use exactly n sides of this square (between four tiles)
      p.switches [[x,y,c,c2?]] a box entering opens every door of colour c for good.
-                Double switch (c2): opens its current colour, shuts the other one, then shows the other colour
+                Two-colour switch (c2): at the start the c walls are up and the c2 walls are down. Stepping on it
+                lowers the colour it shows and raises the other one, and the switch now shows that other colour
      p.doors    [[x1,y1,x2,y2,c]] a door between two tiles: shut until a switch of its colour opens it
      p.cracks   [[x,y]] a cracked tile falls away once the box on it leaves (then it's a hole)
      p.paints   [[x,y,c]] a box entering takes colour c
@@ -268,9 +269,11 @@ const PanelEngine = (() => {
   }
   function boxStart(p) {
     return { pos: p.boxes.map(b => [b.x, b.y]), left: p.boxes.map(b => b.n == null ? null : b.n), col: p.boxes.map(b => b.c || 0),
-      open: 0, sw: (p.switches || []).map(q => q[2]), crk: new Set(), trail: new Set(), rope: new Set(), dead: -1, inputs: '',
+      open: (p.switches || []).reduce((o, q) => q[3] != null ? o | (1 << q[3]) : o, 0), sw: [], crk: new Set(), trail: new Set(), rope: new Set(), dead: -1, inputs: '',
       tracks: p.boxes.map(b => [[b.x, b.y]]), jumps: p.boxes.map(() => [false]) };
   }
+  // a two-colour switch shows the colour whose walls are up now; stepping on it lowers those and raises the other colour
+  const swUp = (q, open) => !(open & (1 << q[2])) ? q[2] : !(open & (1 << q[3])) ? q[3] : q[2];
   const doorShut = (X, open, k) => { const c = X.door.get(k); return c !== undefined && !(open & (1 << c)); };
   // a box arrives on tile k: switches and paint
   function enterTile(p, X, s, i, k) {
@@ -278,7 +281,7 @@ const PanelEngine = (() => {
     if (si !== undefined) {
       const q = p.switches[si];
       if (q[3] == null) s.open |= 1 << q[2];
-      else { const cur = s.sw[si], oth = cur === q[2] ? q[3] : q[2]; s.open = (s.open | (1 << cur)) & ~(1 << oth); s.sw[si] = oth; }
+      else { const up = swUp(q, s.open), oth = up === q[2] ? q[3] : q[2]; s.open = (s.open | (1 << up)) & ~(1 << oth); }
     }
     const pc = X.paint.get(k); if (pc !== undefined) s.col[i] = pc;
   }
@@ -381,6 +384,6 @@ const PanelEngine = (() => {
     return { wins, explored, capped: false };
   }
   return { gateClosed, validate, solve, replay, options, apply, undo, start, canStop, rules, ctx, neighbors, brokenSet, isStart, isExit, exitDir, key, ekey, nodeCount, dims, norm, inside, twin, jumps, mirrorOf, lines, regions, cellSides, edgeSet, padAt, isStop, isBridge, holeSet, usedEdges,
-    boxStart, boxStep, boxWon, boxNeed, boxReplay, boxSolve, boxDir, boxCtx, boxKey, DK, dirKey };
+    boxStart, boxStep, boxWon, boxNeed, boxReplay, boxSolve, boxDir, boxCtx, boxKey, swUp, DK, dirKey };
 })();
 if (typeof module !== 'undefined') module.exports = PanelEngine;
