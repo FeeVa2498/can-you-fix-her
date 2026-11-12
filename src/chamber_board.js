@@ -47,6 +47,8 @@ function switchSVG(p, on, tiles) {
 // A box without a colour wears the colour of the girl the panel belongs to. Switches and doors use 1 blue, 2 yellow, 3 red.
 const HUE5 = ['#ff7eb6', '#ff4d5e', '#a46bff', '#ffd23f', '#4fa8ff'];
 const LOCK_HUE = [null, HUE5[4], HUE5[3], HUE5[1]];
+const PIPS = { 1: [[0, 0]], 2: [[-1, -1], [1, 1]], 3: [[-1, -1], [0, 0], [1, 1]], 4: [[-1, -1], [1, -1], [-1, 1], [1, 1]], 5: [[-1, -1], [1, -1], [0, 0], [-1, 1], [1, 1]], 6: [[-1, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [1, 1]] };
+const pipsSVG = (x, y, v, r) => (PIPS[v] || []).map(([a, b]) => `<circle class="pip" cx="${x + a * r * .55}" cy="${y + b * r * .55}" r="${r * .17}"/>`).join('');
 const boxHue = (p, c) => HUE5[c != null ? c : PanelEngine.girlHue(p)];
 function boxBoardSVG(p, o = {}) {
   const E = PanelEngine, d = E.dims(p), out = [], br = E.brokenSet(p), s = o.s || E.boxStart(p);
@@ -91,6 +93,11 @@ function boxBoardSVG(p, o = {}) {
     const c = need.has(i) ? need.get(i) : n;
     out.push(`<g class="pbx-num${live ? (c === n ? ' ok' : c > n ? ' bad' : '') : ''}"><rect x="${x + .5 - .2}" y="${y + .5 - .15}" width=".4" height=".3" rx=".07"/><text x="${x + .5}" y="${y + .51}">${live ? c + '/' + n : n}</text></g>`);
   });
+  // dice targets: the pips wanted (dashed), or the pips printed there (green right / red wrong)
+  (p.dice || []).forEach(([x, y, v]) => {
+    const got = s.stamp ? s.stamp.get(x + ',' + y) : undefined;
+    out.push(`<g class="pbx-dt${got === undefined ? '' : got === v ? ' ok' : ' bad'}"><rect x="${x - .36}" y="${y - .36}" width=".72" height=".72" rx=".08"/>${pipsSVG(x, y, got === undefined ? v : got, .3)}</g>`);
+  });
   if (!o.noBoxes) out.push(boxesSVG(p, s, { mini: o.mini }));
   return out.join('');
 }
@@ -115,7 +122,8 @@ function boxesSVG(p, s, o = {}) {
     if (b.m === 'my') g += `<path class="mark" d="M${x - .3} ${y}H${x + .3}"/>`;
     if (b.m === 'opp') g += `<path class="mark" d="M${x - .26} ${y - .26}L${x + .26} ${y + .26}M${x + .26} ${y - .26}L${x - .26} ${y + .26}"/>`;
     if (b.trail) g += `<path class="coil" d="M${x - .32} ${y - .08}h.64M${x - .32} ${y + .04}h.64M${x - .32} ${y + .16}h.64" />`;
-    if (left != null && !o.mini) g += `<g class="bomb${left <= 1 ? ' hot' : ''}"><path class="fuse" d="M${x + .1} ${y - .52}q.06-.1 .14-.08"/><circle class="spark" cx="${x + .25}" cy="${y - .6}" r=".05"/><circle class="ball" cx="${x}" cy="${y - .42}" r=".17"/><text x="${x}" y="${y - .415}">${left}</text></g>`;
+    if (s.dice && s.dice[i]) g += `<g class="die">${pipsSVG(x, y, s.dice[i][0], .32)}</g><g class="under"><rect x="${x - .17}" y="${y + .33}" width=".34" height=".22" rx=".05"/><text x="${x}" y="${y + .445}">▼${7 - s.dice[i][0]}</text></g>`;
+    if (left != null && !o.mini) g += `<g class="bomb${left === 0 ? ' hot' : ''}"><circle class="ball" cx="${x}" cy="${y - .42}" r=".18"/><circle class="spark" cx="${x + .13}" cy="${y - .55}" r=".045"/><text x="${x}" y="${y - .415}">${left}</text></g>`;
     out.push(g + '</g>');
   });
   return out.join('');
@@ -239,14 +247,14 @@ const sameDir = (a, b) => a && b && a[0] === b[0] && a[1] === b[1];
 /* one key press. Returns true if something moved. */
 function pjMove(d) {
   const E = PanelEngine, p = PJ.p;
-  if (p.boxes && PJ.bs.dead >= 0) { SFX.tick(); $('#pj-msg').textContent = 'Hộp đã nổ. Ấn Z để lùi hoặc R để chơi lại.'; return false; }
+  if (p.boxes && PJ.bs.dead >= 0) { SFX.tick(); $('#pj-msg').textContent = 'Mìn đã nổ. Ấn Z để lùi hoặc R để chơi lại.'; return false; }
   if (PJ.state === 'fail') { PJ.state = 'draw'; PJ.bad = []; }
   if (p.boxes) {
     const r = E.boxStep(p, PJ.bs, d);
     if (r.dead >= 0) {   // a countdown ran out: the box blows up and the level is lost (Z brings it back)
       PJ.bsHist.push(PJ.bs); PJ.bs = r.state; PJ.animAt = null; PJ.state = 'fail'; PJ.bad = [{ kind: 'boom', i: r.dead }];
       SFX.glitch(.45); SFX.buzz(); if (PJ.view) pj3Flash('✹ BOOM ✹', 'fail');
-      $('#pj-msg').textContent = 'Bom nổ! Ấn Z để lùi hoặc R để chơi lại.';
+      $('#pj-msg').textContent = 'Mìn nổ! Ấn Z để lùi hoặc R để chơi lại.';
       return true;
     }
     if (!r.moved.some(Boolean)) { SFX.tick(); return false; }

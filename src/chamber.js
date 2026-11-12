@@ -12,15 +12,15 @@ const CH = (() => { try { return JSON.parse(localStorage.getItem(CH_KEY)) || {};
 CH.done = CH.done || {}; CH.opt = Object.assign({ intro: true, debug: false, view3d: true, retro: true, mem: { tracing_paper: false, queen_piece: false } }, CH.opt || {});
 const chSave = () => { try { localStorage.setItem(CH_KEY, JSON.stringify(CH)); } catch (e) { } };
 const CH_GIRLS = [
-  { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'rope box · light tiles · twin ropes · locks & double locks' },
-  { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'rope box · edge counts · light every tile · one-way · bomb ropes' },
-  { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'portals · cracked tiles · broken maps · rope among boxes' },
-  { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'arrow tiles · rocket boxes · locks · colours · bomb boxes' },
-  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'reverse twins · no locking · double locks · paint · rope boxes' },
+  { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'landmines (exact moves) · walls · portals' },
+  { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'rope boxes · edge numbers · light tiles' },
+  { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'dice: print the numbers · arrow tiles · portals' },
+  { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'arrow tiles · rocket boxes · locks · colours' },
+  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'reverse twins · no locking · two-colour switches · paint · rope boxes' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
 // what each tutorial panel teaches (shown as a NEW tag)
-const TEACH = { basic: 'roll to the gold tile', sketch: 'trace the pencil', plates: 'switches open gates', avoid: 'black pencil: keep off', mirror: 'the other hand', swap: 'striped gates swap', nums: 'edge count', ends: 'goal anywhere', holes: 'holes in the map', oneway: 'one-way', portals: 'portals', bridges: 'overpass', boxes: 'every key moves the box', pads: 'dash tiles', stops: 'brake tiles', dash: 'rocket box', budget: 'bomb countdown', twin: 'twin boxes', nolock: 'goals never lock', opp: 'opposite twin', my: 'up/down twin', trail: 'rope box', switches: 'locks & doors', dbl: 'two-colour switch', colors: 'colour goals', paints: 'paint tiles', cracks: 'cracked tiles', lights: 'light tiles', twinrope: 'two ropes, one reversed', goal: 'every key moves every box' };
+const TEACH = { basic: 'roll to the gold tile', sketch: 'trace the pencil', plates: 'switches open gates', avoid: 'black pencil: keep off', mirror: 'the other hand', swap: 'striped gates swap', nums: 'edge count', ends: 'goal anywhere', holes: 'holes in the map', oneway: 'one-way', portals: 'portals', bridges: 'overpass', boxes: 'every key moves the box', pads: 'dash tiles', stops: 'brake tiles', dash: 'rocket box', budget: 'landmine: exact moves', dice: 'dice: print the numbers', many: 'more boxes', twin: 'twin boxes', nolock: 'goals never lock', opp: 'opposite twin', my: 'up/down twin', trail: 'rope box', switches: 'locks & doors', dbl: 'two-colour switch', colors: 'colour goals', paints: 'paint tiles', cracks: 'cracked tiles', lights: 'light tiles', twinrope: 'two ropes, one reversed', goal: 'every key moves every box' };
 const CH_MEM = {
   tracing_paper: { name: 'tracing_paper.mem', ic: 'thread', desc: 'Once per panel: lay it over the board and the next few strokes of the answer show through.' },
   queen_piece: { name: 'queen_piece.mem', ic: 'queen', desc: 'Once per panel: one broken rule is forgiven (like an eraser).' },

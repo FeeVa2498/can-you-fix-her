@@ -64,7 +64,7 @@ const HUE_NAME = ['hồng', 'đỏ', 'tím', 'vàng', 'xanh'];
 const LOCK_NAME = ['', 'xanh', 'vàng', 'đỏ'];
 const hueName = (p, c) => HUE_NAME[c];
 function boxName(p, s, i) {
-  const b = p.boxes[i], kind = b.trail ? 'Hộp dây' : b.dash ? 'Hộp tên lửa' : 'Hộp';
+  const b = p.boxes[i], kind = b.trail ? 'Hộp dây' : b.dash ? 'Hộp tên lửa' : b.die ? 'Xúc xắc' : b.n != null ? 'Hộp mìn' : 'Hộp';
   if (p.boxes.length === 1) return kind;
   const same = p.boxes.filter((q, j) => (q.trail ? 1 : q.dash ? 2 : 0) === (b.trail ? 1 : b.dash ? 2 : 0) && s.col[j] === s.col[i] && (q.m || '') === (b.m || '')).length;
   const coloured = (p.exit || []).some(g => g[2] != null) || p.boxes.some(q => q.c != null && q.c !== PanelEngine.girlHue(p));
@@ -87,6 +87,8 @@ function boxSolEvents(p) {
       if (jumps) msg += ', qua cổng';
       if (steps > 1 && E.isStop(p, ...ns.pos[i])) msg += ', dừng ở ô phanh';
       if (ns.col[i] !== s.col[i]) msg += `, bị sơn thành màu ${hueName(p, ns.col[i])}`;
+      if (ns.dice[i]) { msg += `, mặt úp xuống là ${7 - ns.dice[i][0]}`; const k = ns.pos[i].join(','), t = (p.dice || []).find(q => q[0] === ns.pos[i][0] && q[1] === ns.pos[i][1]); if (t) msg += ` (in ${7 - ns.dice[i][0]} lên ô cần ${t[2]})`; }
+      if (ns.left[i] != null) msg += `, mìn còn ${ns.left[i]} nước`;
       
       msg += '.';
       const g = goalAt(ns.pos[i]);
@@ -103,7 +105,7 @@ function boxSolEvents(p) {
   }
   const last = ev[ev.length - 1];
   if ((p.nums || []).length) last.push('Mọi con số đều đúng.');
-  last.push('Mọi goal có hộp đúng màu' + ((p.lights || []).length ? ', mọi đèn đều sáng' : '') + ': xong.');
+  last.push('Mọi goal có hộp đúng màu' + ((p.lights || []).length ? ', mọi đèn đều sáng' : '') + ((p.dice || []).length ? ', mọi ô số đã in đúng' : '') + (p.boxes.some(b => b.n != null) ? ', mọi mìn về 0 trên goal' : '') + ': xong.');
   return { ev, n: inp.length };
 }
 function solMode(on) {

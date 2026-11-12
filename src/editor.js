@@ -81,9 +81,9 @@ const ED_TOOLS = {
     ['portal', 'Portal', 'node', 'Bấm 2 ô để tạo cặp'],
     ['switch', 'Switch', 'node', 'Ô chốt: bấm lại để đổi màu xanh → vàng → đỏ, rồi thành công tắc hai màu xanh/vàng → vàng/đỏ → đỏ/xanh (màu đầu dựng sẵn, màu sau hạ sẵn), rồi xoá'],
     ['door', 'Door', 'edge', 'Cửa khoá giữa hai ô: bấm lại để đổi màu xanh → vàng → đỏ, rồi xoá'],
-    ['crack', 'Crack', 'node', 'Ô nứt: hộp rời đi là sụp'], ['paint', 'Paint', 'node', 'Ô sơn: hồng → đỏ → tím → vàng → xanh, rồi xoá'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
+    ['dicet', 'Dice target', 'node', 'Ô số cho xúc xắc: bấm lại để đổi 1 → 6, rồi xoá'], ['crack', 'Crack', 'node', 'Ô nứt: hộp rời đi là sụp'], ['paint', 'Paint', 'node', 'Ô sơn: hồng → đỏ → tím → vàng → xanh, rồi xoá'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
 };
-const ED_TAGS = ['', 'basic', 'trail', 'boxes', 'lights', 'nums', 'switches', 'dbl', 'colors', 'paints', 'cracks', 'ends', 'holes', 'oneway', 'portals', 'pads', 'dash', 'helpers', 'many', 'budget', 'twin', 'twinrope', 'nolock', 'plates', 'swap'];
+const ED_TAGS = ['', 'basic', 'trail', 'boxes', 'lights', 'nums', 'switches', 'dbl', 'colors', 'paints', 'cracks', 'ends', 'holes', 'oneway', 'portals', 'pads', 'dash', 'helpers', 'many', 'budget', 'twin', 'twinrope', 'nolock', 'dice', 'portals2', 'plates', 'swap'];
 let ED = null;
 const edClone = o => JSON.parse(JSON.stringify(o));
 const edSame = (a, b) => a && b && a[0] === b[0] && a[1] === b[1];
@@ -206,6 +206,11 @@ function edApply(tg) {
         break;
       }
       case 'light': edToggle(L('lights'), v.slice(), a => atN(a, v)); break;
+      case 'dicet': {
+        const i = L('dice').findIndex(a => atN(a, v));
+        if (i < 0) p.dice.push([v[0], v[1], 1]); else if (p.dice[i][2] < 6) p.dice[i][2]++; else p.dice.splice(i, 1);
+        break;
+      }
       case 'crack': edToggle(L('cracks'), v.slice(), a => atN(a, v)); break;
       case 'paint': {
         const i = L('paints').findIndex(a => atN(a, v));
@@ -246,7 +251,7 @@ function edApply(tg) {
         p.boxes.push({ x: v[0], y: v[1] }); ED.selBox = p.boxes.length - 1; break;
       }
       case 'erase': {
-        ['exit', 'holes', 'dots', 'bridges', 'stops', 'lights', 'cracks', 'paints', 'switches'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => !atN(a, v)); });
+        ['exit', 'holes', 'dots', 'bridges', 'stops', 'lights', 'cracks', 'paints', 'switches', 'dice'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => !atN(a, v)); });
         ['plates', 'pads'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => !atN(a, v)); });
         if (p.portals) p.portals = p.portals.filter(q => !atN(q, v) && !(q[2] === v[0] && q[3] === v[1]));
         if (p.boxes && p.boxes.length > 1) { p.boxes = p.boxes.filter(b => !(b.x === v[0] && b.y === v[1])); ED.selBox = null; }
@@ -294,8 +299,8 @@ function edInvalidate() { ['sol', 'solIn', 'solutions', 'minMoves', 'luck', 'qua
 function edNorm(src) {
   const p = edClone(src), E = PanelEngine, inB = ([x, y]) => x >= 0 && y >= 0 && x <= p.w && y <= p.h;
   const nodesOk = a => inB(a) && !(p.holes || []).some(h => h[0] === a[0] && h[1] === a[1]);
-  ['exit', 'dots', 'bridges', 'stops', 'holes', 'lights', 'cracks', 'paints', 'switches'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => inB(a)); });
-  ['exit', 'dots', 'bridges', 'stops', 'lights', 'cracks', 'paints', 'switches'].forEach(k => { if (p[k]) p[k] = p[k].filter(nodesOk); });
+  ['exit', 'dots', 'bridges', 'stops', 'holes', 'lights', 'cracks', 'paints', 'switches', 'dice'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => inB(a)); });
+  ['exit', 'dots', 'bridges', 'stops', 'lights', 'cracks', 'paints', 'switches', 'dice'].forEach(k => { if (p[k]) p[k] = p[k].filter(nodesOk); });
   ['plates', 'pads'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => nodesOk(a)); });
   if (p.portals) p.portals = p.portals.filter(q => nodesOk([q[0], q[1]]) && nodesOk([q[2], q[3]]));
   ['broken', 'sketch', 'avoid', 'oneway', 'gates', 'doors'].forEach(k => { if (p[k]) p[k] = p[k].filter(e => nodesOk([e[0], e[1]]) && nodesOk([e[2], e[3]])); });
@@ -418,7 +423,8 @@ function edProps() {
       <label><input type="checkbox" id="eb-rope" ${sb.trail ? 'checked' : ''}> Rope box</label>
       <label><input type="checkbox" id="eb-dash" ${sb.dash ? 'checked' : ''}> Rocket box</label>
       <label><input type="checkbox" id="eb-twin" ${sb.m === 'opp' ? 'checked' : ''}> Reverse twin</label>
-      <label>Bomb (presses) <input id="eb-n" type="number" min="0" max="30" placeholder="none" value="${sb.n ?? ''}"></label>
+      <label><input type="checkbox" id="eb-die" ${sb.die ? 'checked' : ''}> Die</label>
+      <label>Landmine (exact moves) <input id="eb-n" type="number" min="0" max="30" placeholder="none" value="${sb.n ?? ''}"></label>
       <button class="btn" id="eb-del" ${p.boxes.length < 2 ? 'disabled' : ''}>Remove box</button></fieldset>` : box ? '<div class="ed-hint">Box tool: click a box to edit it.</div>' : ''}
     <label class="col">Belief (story) <textarea id="ep-belief" rows="2">${esc(p.belief || '')}</textarea></label>
     <label class="col">Key idea (Solution mode) <textarea id="ep-why" rows="3">${esc(p.why || '')}</textarea></label>
@@ -441,6 +447,7 @@ function edProps() {
   ['belief', 'why'].forEach(k => { const el = $('#ep-' + k, b); el.oninput = () => { p[k] = el.value; ED.dirty = true; const d = $('.ed-id', b); if (d && !d.querySelector('.bad')) d.insertAdjacentHTML('beforeend', ' <b class="bad">●</b>'); }; });
   if (sb) {
     ch('#eb-twin', el => { if (el.checked) sb.m = 'opp'; else delete sb.m; });
+    ch('#eb-die', el => { if (el.checked) sb.die = true; else delete sb.die; });
     ch('#eb-c', el => { if (el.value !== '') sb.c = +el.value; else delete sb.c; });
     ch('#eb-dash', el => { if (el.checked) sb.dash = true; else delete sb.dash; });
     ch('#eb-rope', el => { if (el.checked) sb.trail = true; else delete sb.trail; });

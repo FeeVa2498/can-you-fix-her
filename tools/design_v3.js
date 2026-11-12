@@ -207,13 +207,13 @@ function checkBox(p, spec) {
   const maxL = capLen(spec);
   let r = E.boxSolve(p, maxL, 8, 200000);
   if (!r.wins.length || r.capped) return null;
-  // bombs: the moves that box makes in a shortest answer, plus a little slack early on (tutorials 2, layer 1: 2, layer 2: 1, layer 3: 0)
+  // landmines (Prim): each mine must make exactly n moves; n = its moves in a free shortest answer + a detour from spec.extra
   if (spec.boxes.some(b => b.n) && !p.boxes.some(b => b.n != null)) {
-    const slack = spec.slack ?? (spec.tut ? 2 : { 1: 2, 2: 1, 3: 0 }[spec.layer]), mv = boxStats(p, r.wins[0]).movesBy;
+    const mv = boxStats(p, r.wins[0]).movesBy, ex = spec.extra || [0, 2];
     if (spec.boxes.some((b, i) => b.n && !mv[i])) return null;
-    // a bomb whose box stops moving before the winning press would sit at 0 and blow: give it one more
-    { let s = E.boxStart(p); const W = r.wins[0], last = p.boxes.map(() => -1); [...W].forEach((c, k) => { const q = E.boxStep(p, s, E.DK[c]); q.moved.forEach((m, i) => { if (m) last[i] = k; }); s = q.state; }); last.forEach((l, i) => { if (l < W.length - 1) mv[i]++; }); }
-    spec.boxes.forEach((b, i) => { if (b.n) p.boxes[i].n = mv[i] + slack; });
+    spec.boxes.forEach((b, i) => { if (b.n) p.boxes[i].n = mv[i] + ex[ri(ex.length)]; });
+    const ns = p.boxes.filter(b => b.n != null).map(b => b.n);
+    if (spec.distinct && new Set(ns).size < ns.length) return null;
     r = E.boxSolve(p, maxL, 8, 200000);
     if (!r.wins.length || r.capped) return null;
   }
@@ -354,9 +354,42 @@ function clueCover(p, spec) {
   return p;
 }
 const D4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+function connected(p) {
+  const all = allNodes(p); if (!all.length) return false;
+  const seen = new Set([all[0].join(',')]), q = [all[0]];
+  while (q.length) { const [x, y] = q.pop(); for (const [dx, dy] of D4) { const k = (x + dx) + ',' + (y + dy); if (!seen.has(k) && E.inside(p, x + dx, y + dy)) { seen.add(k); q.push([x + dx, y + dy]); } } }
+  return seen.size === all.length;
+}
+/* Dice (Paige): roll the dice at random for a while; where they stop become the goals, and some of the tiles they
+   stamped on the way become targets ("this tile must end up showing a 4"). More targets are added until only a few
+   shortest answers are left. */
+function diceCover(p, spec) {
+  const g = spec.gen || {}, maxL = capLen(spec), Lw = Math.max(spec.minLen || 4, maxL - 2 - ri(3));
+  const q = { ...p, diceAll: true, exit: [] }, X = E.boxCtx(q);
+  let s = E.boxStart(q); s.tracks = s.jumps = null; let last = null;
+  for (let k = 0; k < Lw; k++) {
+    const opts = 'RLDU'.split('').filter(c => c !== last).map(c => ({ c, r: E.boxStep(q, s, E.DK[c], false, X) })).filter(o => o.r.moved.some(Boolean));
+    if (!opts.length) return null;
+    const o = opts[ri(opts.length)]; s = o.r.state; last = { R: 'L', L: 'R', U: 'D', D: 'U' }[o.c];
+  }
+  if (s.pos.some((q2, i) => q2[0] === p.boxes[i].x && q2[1] === p.boxes[i].y)) return null;
+  p.exit = s.pos.map((q2, i) => p.boxes.length > 1 ? [...q2, s.col[i]] : q2.slice());
+  const sp = new Set([...p.exit, ...p.boxes.map(b => [b.x, b.y]), ...(p.pads || []), ...(p.portals || []).flatMap(t => [[t[0], t[1]], [t[2], t[3]]])].map(n => n[0] + ',' + n[1]));
+  const cand = shuffle([...s.stamp].filter(([k]) => !sp.has(k)).map(([k, v]) => [...k.split(',').map(Number), v]));
+  if (cand.length < (g.dice || 1)) return null;
+  p.dice = cand.splice(0, g.dice || 1);
+  for (let extra = 0; extra <= (g.diceMore ?? 2); extra++) {
+    const r = E.boxSolve(p, maxL, 8, 150000);
+    if (!r.wins.length || r.capped) return null;
+    if (r.wins.length <= (spec.maxShortest || 3) && r.wins[0].length >= (spec.minLen || 4)) return p;
+    if (!cand.length) return null;
+    p.dice.push(cand.shift());
+  }
+  return null;
+}
 /* Specs write colours relative to the girl: 0 = her own colour, 1..3 = another girl's colour in this order.
    Panels store the real colour (0 pink Prim, 1 red Trix, 2 purple Paige, 3 yellow Vel, 4 blue Myne). */
-const GI = { prim: 0, trix: 1, paige: 2, vel: 3, myne: 4 }, ALT = { prim: [2, 4, 3], trix: [4, 3, 2], paige: [0, 3, 4], vel: [2, 4, 0], myne: [3, 0, 1] };
+const GI = { prim: 0, trix: 1, paige: 2, vel: 3, myne: 4 }, ALT = { prim: [2, 4, 3], trix: [4, 3, 2], paige: [4, 3, 1], vel: [2, 4, 1], myne: [3, 1, 2] };   // pink stays Prim's (landmines)
 const absHue = (girl, k) => k ? ALT[girl][k - 1] : GI[girl];
 function absColors(p) {
   p.boxes.forEach(b => { if (b.c != null) { if (b.c) b.c = absHue(p.girl, b.c); else delete b.c; } });
@@ -371,9 +404,20 @@ function designBox(spec) {
     const p = { id: spec.id, girl: spec.girl, layer: spec.layer, n: spec.n, w: spec.w, h: spec.h };
     const taken = new Set(), pick = (ok = () => true) => { const n = shuffle(allNodes(p)).find(n => !taken.has(n.join(',')) && ok(n)); if (n) taken.add(n.join(',')); return n; };
     for (let i = 0; i < (g.holes || 0); i++) { const n = pick(); if (n) (p.holes = p.holes || []).push(n); }
+    // bites: chunks taken out of the outline so maps get odd shapes
+    for (let i = 0; i < (g.bites || 0); i++) {
+      const border = allNodes(p).filter(([x, y]) => (x === 0 || y === 0 || x === p.w || y === p.h) && !taken.has(x + ',' + y));
+      let n = border[ri(border.length)]; if (!n) break;
+      for (let k = 0; k < 1 + ri(3) && n; k++) {
+        taken.add(n.join(',')); (p.holes = p.holes || []).push(n);
+        const nb = D4.map(([dx, dy]) => [n[0] + dx, n[1] + dy]).filter(q => E.inside(p, ...q) && !taken.has(q.join(',')));
+        n = rnd() < .6 ? nb[ri(nb.length)] : null;
+      }
+    }
+    if ((p.holes || []).length && !connected(p)) continue;
     taken.clear();
     p.broken = allEdges(p).filter(() => rnd() < (g.walls || .2));
-    const boxes = spec.boxes.map(b => { const n = pick(); return n && { x: n[0], y: n[1], ...(b.m && b.m !== 'same' ? { m: b.m } : {}), ...(b.dash ? { dash: true } : {}), ...(b.trail ? { trail: true } : {}), ...(b.c ? { c: b.c } : {}) }; });
+    const boxes = spec.boxes.map(b => { const n = pick(); return n && { x: n[0], y: n[1], ...(b.m && b.m !== 'same' ? { m: b.m } : {}), ...(b.dash ? { dash: true } : {}), ...(b.trail ? { trail: true } : {}), ...(b.die ? { die: true } : {}), ...(b.c ? { c: b.c } : {}) }; });
     if (boxes.some(b => !b)) continue;
     p.boxes = boxes;
     const ng = spec.boxes.length - (spec.helpers || 0);
@@ -415,6 +459,7 @@ function designBox(spec) {
     }
     if (!p.broken.length) delete p.broken;
     if (g.lights || g.nums) { if (!clueCover(p, spec)) continue; }
+    if (g.dice) { if (!diceCover(p, spec)) continue; }
     const c = checkBox(p, spec); if (!c) continue;
     if (spec.tut && !spec.pick) return finishBox(p, c);
     c.score = quality(p, c); cands.push({ p, c });
@@ -452,7 +497,7 @@ const TIP = {
 const BRULE = {
   goal: 'Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal.',
   colors: 'Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được.',
-  trail: 'Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi).',
+  trail: 'Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại).',
   lights: 'Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng.',
   nums: 'Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu).',
   switches: 'Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu.',
@@ -465,7 +510,8 @@ const BRULE = {
   oneway: 'Mũi tên trên khe: chỉ đi qua được theo chiều đó.',
   holes: 'Chỗ trống trên map không đi được.',
   dash: 'Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng.',
-  budget: 'Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại).',
+  budget: 'Hộp mìn (hồng): số trên hộp là số nước nó PHẢI đi, không hơn không kém. Mỗi lần nó thật sự di chuyển thì số giảm 1. Về 0 mà không đứng trên goal, hoặc đã về 0 mà còn bị bắt đi tiếp, là mìn nổ, thua bàn.',
+  dice: 'Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt.',
   mx: 'Hộp có vạch dọc: trái/phải bị đảo.', my: 'Hộp có vạch ngang: lên/xuống bị đảo.',
   opp: 'Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống.',
   many: 'Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng.',
@@ -474,7 +520,7 @@ const BRULE = {
 };
 const BTIP = {
   pads: 'Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?', stops: 'Ô phanh là chỗ duy nhất giữa đường mà hộp đang trượt chịu dừng.',
-  dash: 'Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi.', budget: 'Bom chỉ đếm khi hộp ôm bom nhúc nhích: dựa nó vào tường để những hộp khác đi trước.',
+  dash: 'Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi.', budget: 'Mìn phải đi đúng số nước: đếm khoảng cách tới goal, phần dư phải đốt bằng một đường vòng (lẻ thì cần portal để đổi nhịp).', dice: 'Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?',
   mx: 'Dùng tường để làm hai hộp lệch nhau.', many: 'Hộp đứng yên cũng là một bức tường cho hộp khác.',
   nolock: 'Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ.', helpers: 'Đặt hộp thừa trước, rồi mới phóng hộp chính.',
   trail: 'Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
@@ -490,6 +536,7 @@ function boxRules(p) {
   if ((p.switches || []).some(q => q[3] == null)) r.push('switches');
   if ((p.switches || []).some(q => q[3] != null)) r.push('dbl');
   if (p.boxes.some(b => b.dash)) r.push('dash');
+  if (p.boxes.some(b => b.die)) r.push('dice');
   if (p.boxes.some(b => b.n != null)) r.push('budget');
   for (const m of ['mx', 'my', 'opp']) if (p.boxes.some(b => b.m === m)) r.push(m);
   if (p.boxes.length > 1) r.push('nolock');
@@ -523,31 +570,13 @@ const SE = (w, h) => ({ w, h, start: [[0, h]], exit: [[w, 0]] });
 const MIR = (w, h) => ({ w, h, start: [[0, h], [w, h]], exit: [[0, 0], [w, 0]], mirror: 'x' });
 
 /* PRIM · layers 1–2 replacements for the old ink panels: pressure plates and gates */
-add('prim', 1, 3, { base: SE(3, 3), gen: { plates: 1, gates: 1 }, uses: { gate: 1 }, clues: ['broken'], target: 2, intro: 'plates', belief: 'i only draw what someone drew first.' });
-add('prim', 1, 4, { base: SE(4, 3), gen: { plates: 1, gates: 1 }, uses: { gate: 1 }, clues: ['sketch', 'broken'], lead: ['sketch'], need: { sketch: 2 }, feature: 'plates', belief: 'if i trace it, it can\'t be wrong.' });
-add('prim', 1, 5, { base: SE(4, 4), gen: { plates: 1, gates: 2 }, uses: { gate: 1 }, clues: ['sketch', 'broken'], lead: ['sketch'], need: { sketch: 2 }, feature: 'plates', belief: "i can't draw. i can only trace." });
-add('prim', 1, 6, { base: SE(4, 4), gen: { plates: 2, gates: 2, ch: 2 }, uses: { gate: 2 }, clues: ['sketch', 'broken'], lead: ['sketch'], feature: 'plates', belief: "if i copy, i can't be wrong." });
 
 /* PRIM · layer 3: the rules she already has, harder (no new rule) */
-add('prim', 3, 1, { base: SE(4, 4), clues: ['sketch', 'avoid', 'broken'], lead: ['sketch'], need: { sketch: 2, avoid: 1 }, feature: 'sketch', belief: 'what if i drew something of my own?' });
 
 /* TRIX · layers 2–3: edge-count numbers, made harder with walls, holes, any start/exit, visit-all, one-way */
-add('trix', 3, 1, { base: { ...SE(4, 3), visitAll: true }, clues: ['nums', 'broken'], lead: ['nums'], need: { nums: 2 }, feature: 'visitAll', belief: 'the whole board. no gaps.' });
-add('trix', 3, 2, { base: { ...SE(4, 4), visitAll: true }, gen: { holes: 2 }, clues: ['nums', 'broken'], lead: ['nums'], need: { nums: 2 }, feature: 'nums', belief: 'i finish what i start. all of it.' });
-add('trix', 3, 3, { base: SE(4, 4), clues: ['oneway', 'nums', 'broken'], lead: ['oneway'], need: { oneway: 2, nums: 2 }, intro: 'oneway', feature: 'oneway', belief: 'some roads only go one way. like me.' });
-add('trix', 3, 4, { base: SE(5, 4), gen: { ends: 1 }, clues: ['nums', 'oneway', 'broken'], lead: ['nums'], need: { nums: 3, oneway: 1 }, feature: 'nums', belief: 'i count the moves before i make them.' });
-add('trix', 3, 5, { base: { ...SE(4, 4), visitAll: true }, gen: { ends: 1, holes: 1 }, clues: ['nums', 'broken'], lead: ['nums'], need: { nums: 2 }, feature: 'visitAll', belief: 'a perfect game has no wasted moves.' });
-add('trix', 3, 6, { base: SE(5, 5), gen: { holes: 3 }, clues: ['nums', 'oneway', 'broken'], lead: ['nums'], leadN: 5, need: { nums: 5 }, feature: 'nums', belief: 'perfect is the minimum.' });
-add('trix', 3, 7, { base: SE(5, 5), gen: { ends: 1, holes: 2 }, clues: ['nums', 'oneway', 'broken'], lead: ['nums'], leadN: 5, need: { nums: 5 }, feature: 'nums', belief: "i exist to be the one who's never wrong." });
 
 /* PAIGE · portals, overpasses, maps with holes, goals anywhere */
 const PG = o => ({ clues: ['broken', 'dots'], lead: ['broken'], walls: 10, ...o });
-add('paige', 1, 1, PG({ base: SE(3, 3), gen: { portals: 1 }, uses: { portals: 1 }, target: 3, intro: 'portals', belief: 'nobody should be alone in the dark.' }));
-add('paige', 1, 2, PG({ base: SE(4, 3), gen: { portals: 1, ends: 1 }, uses: { portals: 1 }, intro: 'ends', feature: 'portals', belief: "two of a kind. that's the safest hand." }));
-add('paige', 1, 3, PG({ base: SE(4, 4), gen: { portals: 1, holes: 2 }, uses: { portals: 1 }, intro: 'holes', feature: 'portals', belief: "if they're going to leave, i leave first." }));
-add('paige', 1, 4, PG({ base: SE(4, 4), gen: { portals: 2 }, uses: { portals: 2 }, feature: 'portals', belief: 'some doors are already closed.' }));
-add('paige', 1, 5, PG({ base: SE(5, 4), gen: { portals: 2, ends: 1, holes: 2 }, uses: { portals: 1 }, feature: 'portals', belief: 'i keep everyone close. too close.' }));
-add('paige', 1, 6, PG({ base: SE(5, 4), gen: { portals: 2, holes: 3 }, uses: { portals: 2 }, feature: 'portals', belief: "stay. please. i'll raise the stakes." }));
 
 /* VEL · boxes: dash tiles and stops, then the dash box, then move budgets and several boxes */
 const BX = (w, h, boxes, o) => ({ box: true, w, h, boxes, ...o });
@@ -573,16 +602,9 @@ add('myne', 3, 4, BX(4, 4, [{ trail: true }, { m: 'opp' }], { gen: { walls: .2 }
 /* TUTORIALS · one tiny, very easy panel right before each mechanic first shows up (id <girl>_<layer>_t<n>) */
 const TUT = (girl, layer, before, teach, o, k = 0) => S.push({ id: `${girl}_${layer}_t${before}${k ? 'b' : ''}`, girl, layer, n: before - .6 + k * .3, tut: teach, intro: o.intro || teach, belief: o.belief || '', ...o });
 const EZ = o => ({ luck: 1, maxShortest: 6, minLen: 1, ...o });
-TUT('prim', 1, 1, 'basic', { base: SE(2, 1), clues: [], target: 99, intro: 'basic' });
-TUT('prim', 1, 1, 'sketch', { base: SE(2, 1), clues: ['sketch'], need: { sketch: 2 }, target: 2 }, 1);
-TUT('prim', 1, 3, 'plates', { base: SE(2, 1), gen: { plates: 1, gates: 1 }, uses: { gate: 1 }, clues: ['broken'], target: 3 });
-TUT('trix', 1, 3, 'nums', { base: SE(2, 2), clues: ['nums'], lead: ['nums'], need: { nums: 1 }, numMin: 1, numMax: 1, target: 3 });
-TUT('trix', 3, 3, 'oneway', { base: SE(2, 2), clues: ['oneway', 'broken'], lead: ['oneway'], need: { oneway: 1 }, target: 3 });
-TUT('paige', 1, 1, 'portals', { base: SE(2, 2), gen: { portals: 1 }, uses: { portals: 1 }, clues: ['broken'], target: 3 });
 TUT('vel', 1, 1, 'boxes', BX(2, 1, [{}], EZ({ gen: { walls: .01 }, minLen: 2, intro: 'goal' })));
 TUT('vel', 1, 1, 'pads', BX(3, 1, [{}], EZ({ gen: { walls: .05, pads: 1 }, uses: { pads: 1, slide: 1 }, maxLen: 3 })), 1);
 TUT('vel', 1, 5, 'portals', BX(3, 2, [{}], EZ({ gen: { walls: .05, portals: 1 }, uses: { portals: 1 }, maxLen: 4 })));
-TUT('vel', 3, 1, 'budget', BX(3, 1, [{ n: 1 }], EZ({ gen: { walls: .1 }, minLen: 2, maxLen: 4, noBind: true })));
 TUT('myne', 3, 4, 'trail', BX(2, 2, [{ trail: true }], EZ({ gen: { walls: .1 }, minLen: 2, maxLen: 4 })));
 
 
@@ -591,20 +613,7 @@ TUT('myne', 3, 4, 'trail', BX(2, 2, [{ trail: true }], EZ({ gen: { walls: .1 }, 
    mirror lines or inverted gates, and every box panel that used the old pressure plates. */
 const R = { trail: true }, RO = { trail: true, m: 'opp' };
 /* PRIM · the other hand (twin ropes), locks and double locks, light tiles */
-add('prim', 3, 2, BX(4, 3, [R, {}], { gen: { walls: .18, guard: 2, two: 1, dbl: 1 }, uses: { dbl: 2 }, minLen: 6, luck: .03, feature: 'dbl' }));
-add('prim', 3, 3, BX(4, 4, [R, RO], { gen: { walls: .2, lights: 3, guard: 1 }, uses: { door: 1 }, minLen: 6, luck: .03, feature: 'opp' }));
-add('prim', 3, 4, BX(4, 4, [R, {}], { gen: { walls: .2, guard: 2, two: 1, dbl: 1, lights: 2 }, uses: { dbl: 2 }, minLen: 7, luck: .02, feature: 'dbl' }));
-add('prim', 3, 5, BX(4, 4, [R, RO], { gen: { walls: .2, guard: 2, two: 1, lights: 1 }, uses: { door: 2 }, minLen: 6, luck: .02, feature: 'switches' }));
-add('prim', 3, 6, BX(5, 4, [R, {}], { gen: { walls: .2, lights: 3, guard: 1, doors: 1 }, uses: { door: 2 }, minLen: 7, luck: .02, feature: 'lights' }));
-add('prim', 3, 7, BX(4, 4, [R, RO, {}], { helpers: 1, gen: { walls: .2, guard: 2, two: 1, dbl: 1, lights: 2 }, uses: { dbl: 2 }, minLen: 7, luck: .02, feature: 'dbl' }));
 /* PAIGE · layer 2: cracked tiles (burnt bridges); layer 3: a rope box among other boxes, portals and cracks */
-add('paige', 3, 1, BX(4, 3, [R, {}], { gen: { walls: .18, cracks: 2, portals: 1 }, uses: { crack: 1, portals: 1 }, minLen: 6, luck: .03, feature: 'trail' }));
-add('paige', 3, 2, BX(4, 4, [R, {}], { gen: { walls: .18, cracks: 3, lights: 2 }, uses: { crack: 1 }, minLen: 6, luck: .03, feature: 'cracks' }));
-add('paige', 3, 3, BX(4, 4, [R, {}], { gen: { walls: .18, portals: 1, cracks: 2, lights: 2 }, uses: { portals: 1, crack: 1 }, minLen: 7, luck: .02, feature: 'portals' }));
-add('paige', 3, 4, BX(5, 4, [R, {}], { gen: { walls: .18, portals: 2, cracks: 3 }, uses: { portals: 1, crack: 2 }, minLen: 7, luck: .02, feature: 'portals' }));
-add('paige', 3, 5, BX(4, 3, [R, {}, {}], { helpers: 1, gen: { walls: .18, cracks: 3 }, uses: { crack: 1 }, minLen: 7, luck: .02, feature: 'helpers' }));
-add('paige', 3, 6, BX(5, 4, [R, {}], { gen: { walls: .2, portals: 1, cracks: 3, lights: 3, holes: 2 }, uses: { portals: 1, crack: 1 }, minLen: 8, luck: .02, feature: 'cracks' }));
-add('paige', 3, 7, BX(5, 4, [R, {}], { gen: { walls: .2, portals: 2, cracks: 4, lights: 2 }, uses: { portals: 1, crack: 2 }, minLen: 8, luck: .02, feature: 'portals' }));
 /* VEL · locks instead of plates, colours, countdowns that explode */
 add('vel', 3, 5, BX(5, 4, [{ n: 1 }, { dash: true }, {}], { helpers: 1, gen: { walls: .2, guard: 1 }, uses: { door: 1 }, minLen: 5, luck: .03, feature: 'helpers' }));
 add('vel', 3, 7, BX(5, 5, [{ n: 1 }, { dash: true, n: 1 }, {}], { helpers: 1, gen: { walls: .2, guard: 2, two: 1, dbl: 1 }, uses: { dbl: 2 }, minLen: 6, luck: .02, feature: 'dbl' }));
@@ -616,13 +625,9 @@ add('myne', 3, 7, BX(5, 5, [{ n: 1 }, { m: 'opp', dash: true }, { m: 'opp' }], {
 add('myne', 3, 8, BX(4, 4, [{ c: 1, goal: 2 }, { m: 'opp', c: 2, goal: 1 }], { gen: { walls: .2, paints: [2, 1] }, uses: { paint: 1 }, minLen: 6, luck: .03, feature: 'paints', belief: 'new skin, same player.' }));
 add('myne', 3, 9, BX(4, 4, [{ c: 1 }, { m: 'opp', c: 2, goal: 1 }], { gen: { walls: .2, paints: [1] }, uses: { paint: 1 }, minLen: 6, luck: .02, feature: 'colors', belief: 'if i change fast enough, nobody sees the old me.' }));
 /* TRIX · the rope box gets a countdown: count every move */
-add('trix', 3, 8, BX(4, 3, [{ trail: true, n: 1 }], { gen: { walls: .15, nums: 3 }, minLen: 6, luck: .03, noBind: true, feature: 'budget', belief: 'i know exactly how many moves i have. always.' }));
-add('trix', 3, 9, BX(4, 4, [{ trail: true, n: 1 }, {}], { gen: { walls: .18, nums: 3 }, minLen: 7, luck: .02, noBind: true, feature: 'nums', belief: 'one wrong count and it all goes up in smoke.' }));
 
-TUT('prim', 3, 2, 'dbl', BX(3, 2, [R, {}], EZ({ gen: { walls: .05, guard: 2, two: 1, dbl: 1 }, uses: { dbl: 2 }, minLen: 2, maxLen: 7, tries: 3000 })));
 TUT('vel', 3, 7, 'dbl', BX(3, 2, [{}, {}], EZ({ gen: { walls: .05, guard: 2, two: 1, dbl: 1 }, uses: { dbl: 2 }, minLen: 2, maxLen: 7, tries: 3000 })));
 TUT('myne', 3, 8, 'paints', BX(3, 1, [{ c: 1, goal: 2 }], EZ({ gen: { walls: .05, paints: [2] }, uses: { paint: 1 }, minLen: 2, maxLen: 5 })));
-TUT('trix', 3, 8, 'budget', BX(2, 2, [{ trail: true, n: 1 }], EZ({ gen: { walls: .1 }, minLen: 3, maxLen: 5, noBind: true })));
 
 
 /* ======================= v5 · one box in layer 1, other selves from layer 2 =======================
@@ -635,41 +640,13 @@ add('vel', 1, 5, BX(5, 4, [P0], { gen: { walls: .2, pads: 2, portals: 1 }, uses:
 add('myne', 1, 1, BX(3, 3, [P0], { gen: { walls: .28, holes: 1 }, minLen: 5, luck: .08 }));
 TUT('myne', 1, 2, 'oneway', BX(3, 1, [P0], EZ({ gen: { walls: .05, oneway: 1 }, uses: { oneway: 1 }, minLen: 2, maxLen: 5 })));
 add('myne', 1, 2, BX(3, 3, [P0], { gen: { walls: .22, oneway: 2 }, uses: { oneway: 1 }, minLen: 6, luck: .06, feature: 'oneway' }));
-TUT('myne', 1, 3, 'budget', BX(3, 2, [{ n: 1 }], EZ({ gen: { walls: .1 }, minLen: 3, maxLen: 5 })));
 add('myne', 1, 3, BX(4, 3, [{ n: 1 }], { gen: { walls: .22, holes: 1 }, minLen: 6, luck: .05, feature: 'budget' }));
 add('myne', 1, 4, BX(4, 4, [{ n: 1 }], { gen: { walls: .22, oneway: 2 }, uses: { oneway: 1 }, minLen: 7, luck: .04, feature: 'budget' }));
 add('myne', 1, 5, BX(4, 4, [P0], { gen: { walls: .22, oneway: 3, holes: 2 }, uses: { oneway: 2 }, minLen: 8, luck: .03, feature: 'oneway' }));
 add('myne', 1, 6, BX(5, 4, [{ n: 1 }], { gen: { walls: .22, oneway: 2, holes: 1 }, uses: { oneway: 1 }, minLen: 9, luck: .03, feature: 'budget' }));
 /* PRIM · layer 2: two ropes (her and another self), the reversed rope, lights, locks */
-TUT('prim', 2, 1, 'colors', BX(3, 1, [R0, R1], EZ(CL({ gen: { walls: .05 }, minLen: 2, maxLen: 6 }))));
-add('prim', 2, 1, BX(3, 3, [R0, R1], CL({ gen: { walls: .15, lights: 2 }, minLen: 6, luck: .04, feature: 'colors' })));
-add('prim', 2, 2, BX(3, 3, [R0, R1], CL({ gen: { walls: .15, guard: 1 }, uses: { door: 1 }, minLen: 6, luck: .04, feature: 'switches' })));
-TUT('prim', 2, 3, 'twinrope', BX(3, 3, [R0, RT1], EZ(CL({ gen: { walls: .2, sym: 1, minWalls: 6 }, minLen: 3, maxLen: 7, maxShortest: 2, pick: 1, pool: 20, intro: 'opp' }))));
-add('prim', 2, 3, BX(3, 3, [R0, RT1], CL({ gen: { walls: .2, lights: 2 }, minLen: 6, luck: .04, feature: 'opp' })));
-add('prim', 2, 4, BX(4, 3, [R0, R1], CL({ gen: { walls: .18, lights: 2, guard: 1 }, uses: { door: 1 }, minLen: 8, luck: .03, feature: 'lights' })));
-add('prim', 2, 5, BX(4, 3, [R0, RT1], CL({ gen: { walls: .2, guard: 1 }, uses: { door: 1 }, minLen: 8, luck: .03, feature: 'opp' })));
-add('prim', 2, 6, BX(4, 4, [R0, R1], CL({ gen: { walls: .2, lights: 3, guard: 1 }, uses: { door: 1 }, minLen: 10, luck: .02, feature: 'switches' })));
-add('prim', 2, 7, BX(4, 4, [R0, RT1], CL({ gen: { walls: .2, guard: 1, lights: 1 }, uses: { door: 1 }, minLen: 10, luck: .02, feature: 'opp' })));
 /* TRIX · layer 2: two ropes, numbers, one-way gaps, holes */
-TUT('trix', 2, 1, 'colors', BX(2, 2, [R0, R1], EZ(CL({ gen: { walls: .1 }, minLen: 3, maxLen: 6 }))));
-add('trix', 2, 1, BX(3, 3, [R0, R1], CL({ gen: { walls: .12, nums: 2 }, minLen: 6, luck: .04, feature: 'nums' })));
-TUT('trix', 2, 2, 'oneway', BX(2, 2, [R0], EZ({ gen: { walls: .1, oneway: 1 }, uses: { oneway: 1 }, minLen: 3, maxLen: 6 })));
-add('trix', 2, 2, BX(3, 3, [R0], { gen: { walls: .12, oneway: 2, nums: 2 }, uses: { oneway: 1 }, minLen: 7, luck: .04, feature: 'oneway' }));
-add('trix', 2, 3, BX(4, 3, [R0, R1], CL({ gen: { walls: .12, nums: 3, holes: 1 }, minLen: 8, luck: .03, feature: 'nums' })));
-add('trix', 2, 4, BX(4, 3, [R0, R1], CL({ gen: { walls: .12, oneway: 2, nums: 2 }, uses: { oneway: 1 }, minLen: 9, luck: .03, feature: 'oneway' })));
-add('trix', 2, 5, BX(4, 4, [R0], { gen: { walls: .12, nums: 3, oneway: 2, holes: 2 }, uses: { oneway: 1 }, minLen: 10, luck: .02, feature: 'nums' }));
-add('trix', 2, 6, BX(4, 4, [R0, R1], CL({ gen: { walls: .15, nums: 3, holes: 1 }, minLen: 10, luck: .02, feature: 'nums' })));
-add('trix', 2, 7, BX(4, 4, [R0, R1], CL({ gen: { walls: .15, nums: 3, oneway: 2 }, uses: { oneway: 1 }, minLen: 11, luck: .02, feature: 'nums' })));
 /* PAIGE · layer 2: plain boxes, cracked tiles, portals, two selves */
-TUT('paige', 2, 1, 'cracks', BX(3, 1, [P0], EZ({ gen: { walls: .05, cracks: 1 }, uses: { crack: 1 }, minLen: 2, maxLen: 4 })));
-add('paige', 2, 1, BX(3, 3, [P0], { gen: { walls: .18, cracks: 3, portals: 1 }, uses: { crack: 2, portals: 1 }, minLen: 6, luck: .05, feature: 'cracks' }));
-TUT('paige', 2, 2, 'colors', BX(3, 1, [P0, A1], EZ(CL({ gen: { walls: .05 }, minLen: 2, maxLen: 6 }))));
-add('paige', 2, 2, BX(3, 3, [P0, A1], CL({ gen: { walls: .18, cracks: 2 }, uses: { crack: 1 }, minLen: 7, luck: .04, feature: 'cracks' })));
-add('paige', 2, 3, BX(4, 3, [P0, A1], CL({ gen: { walls: .18, portals: 1, cracks: 2 }, uses: { crack: 1, portals: 1 }, minLen: 8, luck: .03, feature: 'portals' })));
-add('paige', 2, 4, BX(4, 4, [P0, A1], CL({ gen: { walls: .18, cracks: 4, holes: 1 }, uses: { crack: 2 }, minLen: 9, luck: .03, feature: 'cracks' })));
-add('paige', 2, 5, BX(4, 4, [P0, A1], CL({ gen: { walls: .18, portals: 1, cracks: 3 }, uses: { crack: 2, portals: 1 }, minLen: 10, luck: .02, feature: 'portals' })));
-add('paige', 2, 6, BX(4, 4, [P0, A1, { c: 2 }], CL({ helpers: 1, gen: { walls: .18, cracks: 3 }, uses: { crack: 2 }, minLen: 10, luck: .02, feature: 'helpers' })));
-add('paige', 2, 7, BX(5, 4, [P0, A1], CL({ gen: { walls: .2, portals: 2, cracks: 4 }, uses: { crack: 2, portals: 1 }, minLen: 11, luck: .02, feature: 'cracks' })));
 /* VEL · layer 2: rocket box, arrows, stops, two selves, a lock */
 TUT('vel', 2, 1, 'dash', BX(2, 2, [{ dash: true }], EZ({ gen: { walls: .1 }, minLen: 2, maxLen: 4 })));
 add('vel', 2, 1, BX(3, 3, [{ dash: true }], { gen: { walls: .2 }, minLen: 5, luck: .05, feature: 'dash' }));
@@ -690,6 +667,83 @@ add('myne', 2, 4, BX(4, 4, [{ n: 1 }, { m: 'opp', c: 1, n: 1 }], CL({ gen: { wal
 add('myne', 2, 5, BX(4, 4, [P0, T1], CL({ gen: { walls: .18, guard: 1, oneway: 1 }, uses: { door: 1 }, minLen: 9, luck: .02, feature: 'switches' })));
 add('myne', 2, 6, BX(4, 4, [{ goal: 1 }, { m: 'opp', c: 1, goal: 0 }], CL({ gen: { walls: .2, paints: [1, 0], oneway: 1 }, uses: { paint: 2 }, minLen: 10, luck: .02, feature: 'paints' })));
 add('myne', 2, 7, BX(5, 4, [{ n: 1 }, T1], CL({ gen: { walls: .2, guard: 1 }, uses: { door: 1 }, minLen: 10, luck: .02, feature: 'budget' })));
+
+/* ======================= v6 · Prim: landmines · Trix: ropes & edge numbers · Paige: dice =======================
+   Prim's pink boxes are landmines: exactly n moves, then sit on a goal. Walls, portals and odd-shaped maps only. */
+const M = { n: 1 }, DIE = { die: true }, DIE1 = { die: true, c: 1 };
+TUT('prim', 1, 1, 'budget', BX(3, 1, [M], EZ({ gen: { walls: .02 }, extra: [2], minLen: 3, maxLen: 7 })));
+add('prim', 1, 1, BX(3, 2, [M], { gen: { walls: 0.18, bites: 1 }, extra: [2], minLen: 4, luck: 0.1, feature: 'budget' }));
+add('prim', 1, 2, BX(3, 3, [M], { gen: { walls: 0.18, bites: 2 }, extra: [2, 4], minLen: 5, luck: 0.08, feature: 'budget' }));
+add('prim', 1, 3, BX(4, 3, [M], { gen: { walls: 0.2, bites: 2, holes: 1 }, extra: [2, 4], minLen: 6, luck: 0.06, feature: 'budget' }));
+TUT('prim', 1, 4, 'portals', BX(3, 2, [M], EZ({ gen: { walls: .05, portals: 1 }, uses: { portals: 1 }, extra: [1, 3], minLen: 3, maxLen: 7 })));
+add('prim', 1, 4, BX(4, 3, [M], { gen: { walls: 0.18, portals: 1, bites: 2 }, uses: { portals: 1 }, extra: [1, 2, 3], minLen: 6, luck: 0.05, feature: 'budget' }));
+add('prim', 1, 5, BX(4, 4, [M], { gen: { walls: 0.2, portals: 1, bites: 3 }, uses: { portals: 1 }, extra: [2, 3, 4], minLen: 7, luck: 0.04, feature: 'budget' }));
+add('prim', 1, 6, BX(5, 4, [M], { gen: { walls: 0.2, portals: 1, bites: 3, holes: 1 }, uses: { portals: 1 }, extra: [2, 4, 5], minLen: 8, luck: 0.03, feature: 'budget' }));
+TUT('prim', 2, 1, 'many', BX(3, 2, [M, M], EZ({ gen: { walls: .05 }, extra: [0, 2], distinct: 1, minLen: 3, maxLen: 8 })));
+add('prim', 2, 1, BX(3, 3, [M, M], { gen: { walls: 0.2, bites: 1 }, extra: [0, 2], distinct: 1, minLen: 6, luck: .03, feature: 'budget' }));
+add('prim', 2, 2, BX(4, 3, [M, M], { gen: { walls: 0.2, bites: 2 }, extra: [0, 2, 4], distinct: 1, minLen: 7, luck: .03, feature: 'budget' }));
+add('prim', 2, 3, BX(4, 3, [M, M], { gen: { walls: 0.2, portals: 1, bites: 2 }, uses: { portals: 1 }, extra: [0, 1, 2, 3], distinct: 1, minLen: 8, luck: .03, feature: 'budget' }));
+add('prim', 2, 4, BX(4, 4, [M, M], { gen: { walls: 0.2, bites: 3, holes: 1 }, extra: [0, 2, 4], distinct: 1, minLen: 9, luck: .03, feature: 'budget' }));
+add('prim', 2, 5, BX(5, 3, [M, M], { gen: { walls: 0.2, portals: 1, bites: 2 }, uses: { portals: 1 }, extra: [1, 2, 3], distinct: 1, minLen: 9, luck: .03, feature: 'budget' }));
+add('prim', 2, 6, BX(4, 4, [M, M], { gen: { walls: 0.22, portals: 2, bites: 3 }, uses: { portals: 1 }, extra: [0, 2, 3, 4], distinct: 1, minLen: 10, luck: .03, feature: 'budget' }));
+add('prim', 2, 7, BX(5, 4, [M, M], { gen: { walls: 0.22, portals: 1, bites: 3, holes: 1 }, uses: { portals: 1 }, extra: [2, 3, 4, 5], distinct: 1, minLen: 11, luck: .03, feature: 'budget' }));
+add('prim', 3, 1, BX(4, 3, [M, M, M], { gen: { walls: 0.2, bites: 1 }, extra: [0, 2], distinct: 1, minLen: 8, luck: .02, feature: 'budget', cap: 120000 }));
+add('prim', 3, 2, BX(4, 4, [M, M, M], { gen: { walls: 0.2, bites: 2 }, extra: [0, 2, 4], distinct: 1, minLen: 9, luck: .02, feature: 'budget', cap: 120000 }));
+add('prim', 3, 3, BX(4, 4, [M, M, M], { gen: { walls: 0.2, portals: 1, bites: 2 }, uses: { portals: 1 }, extra: [0, 1, 2, 3], distinct: 1, minLen: 10, luck: .02, feature: 'budget', cap: 120000 }));
+add('prim', 3, 4, BX(5, 4, [M, M, M], { gen: { walls: 0.2, bites: 3, holes: 1 }, extra: [0, 2, 4], distinct: 1, minLen: 10, luck: .02, feature: 'budget', cap: 120000 }));
+add('prim', 3, 5, BX(5, 4, [M, M, M], { gen: { walls: 0.2, portals: 1, bites: 3 }, uses: { portals: 1 }, extra: [1, 2, 3, 4], distinct: 1, minLen: 11, luck: .02, feature: 'budget', cap: 120000 }));
+add('prim', 3, 6, BX(5, 5, [M, M, M], { gen: { walls: 0.22, portals: 2, bites: 4 }, uses: { portals: 1 }, extra: [0, 2, 3, 4], distinct: 1, minLen: 12, luck: .02, feature: 'budget', cap: 120000 }));
+add('prim', 3, 7, BX(5, 4, [M, M, M], { gen: { walls: 0.22, portals: 2, bites: 4, holes: 1 }, uses: { portals: 1 }, extra: [1, 2, 3, 4, 5], distinct: 1, minLen: 13, luck: .02, feature: 'budget', cap: 120000, time: 60000 }));
+/* Trix: rope boxes and edge numbers (+ a few lights); two ropes from layer 2 */
+TUT('trix', 1, 1, 'trail', BX(2, 1, [R0], EZ({ gen: { walls: .05 }, minLen: 3, maxLen: 6 })));
+add('trix', 1, 1, BX(3, 2, [R0], { gen: { walls: .15, bites: 1 }, minLen: 5, luck: .06, feature: 'trail' }));
+TUT('trix', 1, 2, 'nums', BX(2, 2, [R0], EZ({ gen: { walls: .05, nums: 1 }, numMin: 1, numMax: 2, minLen: 3, maxLen: 7 })));
+add('trix', 1, 2, BX(3, 3, [R0], { gen: { walls: 0.12, nums: 2, bites: 1 }, minLen: 6, luck: .04, feature: 'nums' }));
+add('trix', 1, 3, BX(4, 3, [R0], { gen: { walls: 0.12, nums: 3, bites: 2 }, minLen: 8, luck: .04, feature: 'nums' }));
+TUT('trix', 1, 4, 'lights', BX(2, 2, [R0], EZ({ gen: { walls: .05, lights: 1 }, minLen: 3, maxLen: 7 })));
+add('trix', 1, 4, BX(3, 3, [R0], { gen: { walls: 0.12, lights: 2, bites: 1 }, minLen: 6, luck: .03, feature: 'lights' }));
+add('trix', 1, 5, BX(4, 3, [R0], { gen: { walls: 0.12, nums: 2, lights: 1, bites: 2 }, minLen: 8, luck: .03, feature: 'nums' }));
+add('trix', 1, 6, BX(4, 4, [R0], { gen: { walls: 0.12, nums: 3, lights: 1, bites: 3 }, minLen: 10, luck: .03, feature: 'nums' }));
+TUT('trix', 2, 1, 'colors', BX(2, 2, [R0, R1], EZ(CL({ gen: { walls: .1 }, minLen: 3, maxLen: 7 }))));
+add('trix', 2, 1, BX(3, 3, [R0, R1], CL({ gen: { walls: 0.12, nums: 2, bites: 1 }, minLen: 6, luck: .02, feature: 'nums', cap: 80000 })));
+add('trix', 2, 2, BX(4, 3, [R0, R1], CL({ gen: { walls: 0.12, lights: 2, bites: 1 }, minLen: 7, luck: .02, feature: 'nums', cap: 80000 })));
+add('trix', 2, 3, BX(4, 3, [R0, R1], CL({ gen: { walls: 0.12, nums: 2, lights: 1, bites: 2 }, minLen: 8, luck: .02, feature: 'nums', cap: 80000 })));
+add('trix', 2, 4, BX(4, 4, [R0, R1], CL({ gen: { walls: 0.12, nums: 3, bites: 3 }, minLen: 9, luck: .02, feature: 'nums', cap: 80000 })));
+add('trix', 2, 5, BX(4, 4, [R0, R1], CL({ gen: { walls: 0.12, nums: 2, lights: 2, bites: 2 }, minLen: 10, luck: .02, feature: 'nums', cap: 80000 })));
+add('trix', 2, 6, BX(5, 4, [R0, R1], CL({ gen: { walls: 0.12, nums: 3, bites: 3 }, minLen: 10, luck: .02, feature: 'nums', cap: 80000 })));
+add('trix', 2, 7, BX(5, 4, [R0, R1], CL({ gen: { walls: 0.12, nums: 3, lights: 1, bites: 3 }, minLen: 11, luck: .02, feature: 'nums', cap: 80000 })));
+add('trix', 3, 1, BX(4, 4, [R0, R1], CL({ gen: { walls: 0.1, nums: 3, bites: 3, holes: 1 }, minLen: 10, luck: .02, feature: 'nums', cap: 150000, time: 40000 })));
+add('trix', 3, 2, BX(5, 4, [R0, R1], CL({ gen: { walls: 0.1, nums: 3, lights: 1, bites: 4 }, minLen: 11, luck: .02, feature: 'nums', cap: 150000, time: 40000 })));
+add('trix', 3, 3, BX(5, 4, [R0, R1], CL({ gen: { walls: 0.1, nums: 4, bites: 3, holes: 1 }, minLen: 12, luck: .02, feature: 'nums', cap: 150000, time: 40000 })));
+add('trix', 3, 4, BX(5, 5, [R0, R1], CL({ gen: { walls: 0.1, nums: 3, lights: 2, bites: 3 }, minLen: 13, luck: .02, feature: 'nums', cap: 150000, time: 40000 })));
+add('trix', 3, 5, BX(5, 5, [R0, R1], CL({ gen: { walls: 0.1, nums: 4, bites: 4, holes: 1 }, minLen: 14, luck: .02, feature: 'nums', cap: 150000, time: 40000 })));
+add('trix', 3, 6, BX(6, 4, [R0, R1], CL({ gen: { walls: 0.1, nums: 4, lights: 1, bites: 3 }, minLen: 14, luck: .02, feature: 'nums', cap: 150000, time: 40000 })));
+add('trix', 3, 7, BX(6, 5, [R0, R1], CL({ gen: { walls: 0.1, nums: 4, lights: 2, bites: 4, holes: 1 }, minLen: 15, luck: .02, feature: 'nums', cap: 150000, time: 40000 })));
+/* Paige: a die to print the right numbers, arrow tiles that slide it without turning, portals; two dice in layer 3 */
+TUT('paige', 1, 1, 'dice', BX(3, 1, [DIE], EZ({ gen: { walls: .02, dice: 1, diceMore: 0 }, minLen: 2, maxLen: 6 })));
+add('paige', 1, 1, BX(3, 2, [DIE], { gen: { walls: 0.1, dice: 1 }, minLen: 4, luck: .04, feature: 'dice' }));
+add('paige', 1, 2, BX(3, 3, [DIE], { gen: { walls: 0.12, dice: 2, bites: 1 }, minLen: 5, luck: .04, feature: 'dice' }));
+add('paige', 1, 3, BX(4, 3, [DIE], { gen: { walls: 0.12, dice: 2, bites: 2 }, minLen: 6, luck: .04, feature: 'dice' }));
+TUT('paige', 1, 4, 'pads', BX(3, 2, [DIE], EZ({ gen: { walls: .05, pads: 1, dice: 1 }, uses: { pads: 1 }, minLen: 2, maxLen: 6 })));
+add('paige', 1, 4, BX(4, 3, [DIE], { gen: { walls: 0.12, pads: 1, dice: 2, bites: 1 }, uses: { pads: 1 }, minLen: 6, luck: .04, feature: 'dice' }));
+add('paige', 1, 5, BX(4, 4, [DIE], { gen: { walls: 0.12, pads: 2, dice: 2, bites: 2 }, uses: { pads: 1 }, minLen: 7, luck: .04, feature: 'dice' }));
+add('paige', 1, 6, BX(5, 4, [DIE], { gen: { walls: 0.12, pads: 2, dice: 3, bites: 3 }, uses: { pads: 1 }, minLen: 8, luck: .04, feature: 'dice' }));
+TUT('paige', 2, 1, 'portals', BX(3, 2, [DIE], EZ({ gen: { walls: .05, portals: 1, dice: 1 }, uses: { portals: 1 }, minLen: 3, maxLen: 7 })));
+add('paige', 2, 1, BX(4, 3, [DIE], { gen: { walls: 0.12, portals: 1, dice: 2, bites: 1 }, uses: { portals: 1 }, minLen: 7, luck: .03, feature: 'dice' }));
+add('paige', 2, 2, BX(4, 3, [DIE], { gen: { walls: 0.12, pads: 2, dice: 3, bites: 2 }, uses: { pads: 1 }, minLen: 8, luck: .03, feature: 'dice' }));
+add('paige', 2, 3, BX(4, 4, [DIE], { gen: { walls: 0.12, portals: 1, pads: 1, dice: 2, bites: 2 }, uses: { portals: 1 }, minLen: 9, luck: .03, feature: 'dice' }));
+add('paige', 2, 4, BX(4, 4, [DIE], { gen: { walls: 0.12, pads: 2, dice: 3, bites: 3 }, uses: { pads: 1 }, minLen: 9, luck: .03, feature: 'dice' }));
+add('paige', 2, 5, BX(5, 4, [DIE], { gen: { walls: 0.12, portals: 1, pads: 2, dice: 3, bites: 2 }, uses: { portals: 1, pads: 1 }, minLen: 10, luck: .03, feature: 'dice' }));
+add('paige', 2, 6, BX(5, 4, [DIE], { gen: { walls: 0.12, pads: 3, dice: 4, bites: 3 }, uses: { pads: 2 }, minLen: 11, luck: .03, feature: 'dice' }));
+add('paige', 2, 7, BX(5, 5, [DIE], { gen: { walls: 0.12, portals: 1, pads: 2, dice: 4, bites: 4 }, uses: { portals: 1, pads: 1 }, minLen: 12, luck: .03, feature: 'dice' }));
+TUT('paige', 3, 1, 'colors', BX(3, 2, [DIE, DIE1], EZ(CL({ gen: { walls: .05, dice: 1 }, minLen: 3, maxLen: 8 }))));
+add('paige', 3, 1, BX(4, 3, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 2, bites: 1 }, minLen: 8, luck: .02, feature: 'dice' })));
+add('paige', 3, 2, BX(4, 4, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 2, pads: 1, bites: 2 }, minLen: 9, luck: .02, feature: 'dice' })));
+add('paige', 3, 3, BX(4, 4, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 3, portals: 1, bites: 2 }, minLen: 10, luck: .02, feature: 'dice' })));
+add('paige', 3, 4, BX(5, 4, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 3, pads: 2, bites: 3 }, minLen: 10, luck: .02, feature: 'dice' })));
+add('paige', 3, 5, BX(5, 4, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 3, portals: 1, pads: 1, bites: 3 }, minLen: 11, luck: .02, feature: 'dice' })));
+add('paige', 3, 6, BX(5, 5, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 4, pads: 2, bites: 4 }, minLen: 12, luck: .02, feature: 'dice' })));
+add('paige', 3, 7, BX(5, 5, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 4, portals: 1, pads: 2, bites: 4 }, minLen: 13, luck: .02, feature: 'dice' })));
 
 /* ======================= build =======================
    Never rebuilds the whole set by itself (hand-tuned and converted panels stay as they are):
@@ -725,7 +779,7 @@ else if (ONLY === 'merge') {
     if (spec.feature) p.feature = spec.feature;
     retext(p);
     out.push(p);
-    const f = ['holes', 'broken', 'oneway', 'pads', 'stops', 'portals', 'lights', 'nums', 'switches', 'doors', 'cracks', 'paints'].filter(k => (p[k] || []).length).map(k => `${k} ${p[k].length}`).join(', ');
+    const f = ['holes', 'broken', 'oneway', 'pads', 'stops', 'portals', 'lights', 'nums', 'switches', 'doors', 'cracks', 'paints', 'dice'].filter(k => (p[k] || []).length).map(k => `${k} ${p[k].length}`).join(', ');
     console.log(`${p.id.padEnd(10)} ${p.w}x${p.h} boxes ${p.boxes.map(b => (b.trail ? 'R' : 'B') + (b.m ? '~' : '') + (b.dash ? '>' : '') + (b.c != null ? b.c : '') + (b.n != null ? '#' + b.n : '')).join(' ')}  shortest ${p.minMoves} (${p.solutions} ways, luck ${p.luck}%${p.quality !== undefined ? ', q ' + p.quality : ''})  ${f}  (${Date.now() - t0}ms)`);
   }
   fs.writeFileSync(process.env.PART || OUT + '.part', JSON.stringify(out, null, 1));

@@ -92,7 +92,7 @@ const P3 = (() => {
     const CHX = [0x4fd8ff, 0xffa040], plates3 = [], gates3 = [];
     let symKey = '';
     const numObjs = [];
-    const tiles3 = new Map(), lights3 = [], sw3 = [];
+    const tiles3 = new Map(), lights3 = [], sw3 = [], dice3 = [];
     if (isBox) buildBoxBoard(); else buildLineBoard();
 
     function plateMats(top, side) { const s = std(side), t = std(top); return [s, s, t, s, s, s]; }
@@ -129,6 +129,10 @@ const P3 = (() => {
         const mat = std(0x6a5a3a, { emissive: 0xffd86e, emissiveIntensity: 0 }), bulb = new THREE.Mesh(new THREE.SphereGeometry(.15, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat); bulb.position.set(x, .05, y);
         const glow = new THREE.Mesh(new THREE.CircleGeometry(.42, 20), additive(0xffd86e, 0)); glow.rotation.x = -Math.PI / 2; glow.position.set(x, .016, y);
         world.add(base, edges(bulb, 0xfff1b8, .5), glow); lights3.push({ mat, glow });
+      });
+      (p.dice || []).forEach(([x, y, v]) => {
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(.8, .8), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false })); m.rotation.x = -Math.PI / 2; m.position.set(x, .015, y); m.renderOrder = 2; world.add(m);
+        dice3.push({ m, x, y, v, key: '' });
       });
       walls(true);
       portals();
@@ -297,11 +301,11 @@ const P3 = (() => {
       // the move budget floats above the box as a badge that always faces you
       if (num == null) { if (cu.badge) cu.badge.visible = false; return; }
       if (!cu.badge) { cu.badge = new THREE.Sprite(new THREE.SpriteMaterial({ depthTest: false, transparent: true })); cu.badge.scale.set(.5, .5, 1); cu.badge.renderOrder = 5; cu.g.add(cu.badge); }
-      cu.badge.position.set(0, cu.size + (cu.bomb ? .78 : .38), 0); cu.badge.visible = true;
+      cu.badge.position.set(0, cu.size + (cu.bomb ? .5 : .38), 0); cu.badge.visible = true;
       if (cu.badge.material.map) cu.badge.material.map.dispose();
       cu.badge.material.map = canvasTex(64, 64, (g, w, h) => {
-        g.fillStyle = num > 1 ? '#fff8fc' : '#ff4d7a'; g.strokeStyle = '#1a1024'; g.lineWidth = 5; g.beginPath(); g.roundRect ? g.roundRect(4, 4, w - 8, h - 8, 12) : g.rect(4, 4, w - 8, h - 8); g.fill(); g.stroke();
-        g.fillStyle = num > 1 ? '#1a1024' : '#fff'; g.font = 'bold 44px "Courier New", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(num), w / 2, h / 2 + 3);
+        g.fillStyle = num !== 0 ? '#fff8fc' : '#ff4d7a'; g.strokeStyle = '#1a1024'; g.lineWidth = 5; g.beginPath(); g.roundRect ? g.roundRect(4, 4, w - 8, h - 8, 12) : g.rect(4, 4, w - 8, h - 8); g.fill(); g.stroke();
+        g.fillStyle = num !== 0 ? '#1a1024' : '#fff'; g.font = (String(num).length > 1 ? 'bold 30px' : 'bold 44px') + ' "Courier New", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(num), w / 2, h / 2 + 3);
       });
       cu.badge.material.map.magFilter = THREE.NearestFilter; cu.badge.material.needsUpdate = true;
     }
@@ -399,13 +403,16 @@ const P3 = (() => {
     if (isBox) {
       p.boxes.forEach((b, i) => {
         const c0 = b.c != null ? b.c : E.girlHue(p), cu = makeCube(.78, HUEX[c0]); cu.b = b; cu.col = c0; if (b.dash) addRocket(cu); dyn.add(cu.g); Bx.cubes.push(cu);
-        if (b.n != null) {   // bomb boxes carry a bomb on top: black ball, fuse, flickering spark
-          const bomb = new THREE.Group(); bomb.position.y = cu.size + .2;
-          const ball = new THREE.Mesh(new THREE.SphereGeometry(.2, 12, 10), std(0x1a1024, { roughness: .35, metalness: .3 })); bomb.add(edges(ball, 0x6a4a9a, .5));
-          const cap = new THREE.Mesh(new THREE.CylinderGeometry(.07, .07, .07, 8), std(0x9a8ab8)); cap.position.y = .2; bomb.add(cap);
-          const fuse = new THREE.Mesh(new THREE.CylinderGeometry(.018, .018, .16, 5), std(0xd8c49a)); fuse.position.set(.04, .28, 0); fuse.rotation.z = -.5; bomb.add(fuse);
-          const spark = new THREE.Mesh(new THREE.SphereGeometry(.06, 8, 6), additive(0xffa040, .95)); spark.position.set(.09, .35, 0); bomb.add(spark);
+        if (b.n != null) {   // landmine boxes carry a mine on top: a flat dark disc with studs and a blinking red light
+          const bomb = new THREE.Group(); bomb.position.y = cu.size + .06;
+          const disc = new THREE.Mesh(new THREE.CylinderGeometry(.26, .3, .1, 16), std(0x2a2034, { roughness: .4, metalness: .5 })); bomb.add(edges(disc, 0xff7eb6, .6));
+          for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2, st = new THREE.Mesh(new THREE.CylinderGeometry(.03, .04, .06, 6), std(0x9a8ab8)); st.position.set(Math.cos(a) * .2, .07, Math.sin(a) * .2); bomb.add(st); }
+          const spark = new THREE.Mesh(new THREE.SphereGeometry(.06, 8, 6), additive(0xff3050, .95)); spark.position.set(0, .08, 0); bomb.add(spark);
           anim.flames.push(spark); spark.visible = true; cu.g.add(bomb); cu.bomb = bomb;
+        }
+        if (b.die) {   // a die: each face shows its pips
+          const c = cu.body.children[0]; cu.dieMats = [0, 1, 2, 3, 4, 5].map(() => std(0xffffff, { emissive: HUEX[c0], emissiveIntensity: .06 }));
+          c.material = cu.dieMats; cu.dieKey = '';
         }
         if (b.trail) {   // rope boxes wear a coil of their rope round the middle
           cu.coil = std(ROPEX(cu.col), { emissive: ROPEX(cu.col), emissiveIntensity: .4 });
@@ -447,14 +454,26 @@ const P3 = (() => {
       const prevSegs = p.boxes.map((b, i) => b.trail && prev && prev.ropes ? E.ropeSegs(prev, i).length : 0);
       Bx.cubes.forEach((cu, i) => {
         const left = s.left[i], col = s.col[i], onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1] && (g[2] == null || g[2] === col));
-        if (cu.col !== col) { cu.col = col; cu.mat.color.setHex(HUEX[col]); cu.mat.emissive.setHex(HUEX[col]); if (cu.coil) { cu.coil.color.setHex(ROPEX(col)); cu.coil.emissive.setHex(ROPEX(col)); } }
-        setDecal(cu, cu.b.m && cu.b.m !== 'same' ? cu.b.m : '', left);
+        if (cu.col !== col && !cu.dieMats) { cu.col = col; cu.mat.color.setHex(HUEX[col]); cu.mat.emissive.setHex(HUEX[col]); if (cu.coil) { cu.coil.color.setHex(ROPEX(col)); cu.coil.emissive.setHex(ROPEX(col)); } }
+        setDecal(cu, cu.b.m && cu.b.m !== 'same' ? cu.b.m : '', left != null ? left : s.dice && s.dice[i] ? '▼' + (7 - s.dice[i][0]) : null);
         cu.mat.emissiveIntensity = o.cls === 'win' ? .7 : onG ? .35 : .08;
         if (s.dead === i) { if (cu.g.visible && !(prev && prev.dead === i)) boom(i, s.pos[i]); cu.g.visible = false; } else cu.g.visible = true;
       });
       const occupied = new Set(s.pos.map(q => q.join(',')));
       anim.pulse.forEach(pu => { if (pu.at) pu.on = occupied.has(pu.at); });
       setLocks(s);
+      // dice targets: the number wanted (faint), or the number printed there (green when right, red when wrong)
+      dice3.forEach(t => {
+        const got = s.stamp ? s.stamp.get(t.x + ',' + t.y) : undefined, k = got === undefined ? 'w' + t.v : (got === t.v ? 'ok' : 'bad' + got);
+        if (k === t.key) return; t.key = k;
+        const v = got === undefined ? t.v : got, fg = got === undefined ? 'rgba(244,233,255,.55)' : got === t.v ? '#7be3a4' : '#ff4d5e', P = { 1: [[.5, .5]], 2: [[.3, .3], [.7, .7]], 3: [[.3, .3], [.5, .5], [.7, .7]], 4: [[.3, .3], [.7, .3], [.3, .7], [.7, .7]], 5: [[.3, .3], [.7, .3], [.5, .5], [.3, .7], [.7, .7]], 6: [[.3, .27], [.7, .27], [.3, .5], [.7, .5], [.3, .73], [.7, .73]] }[v];
+        if (t.m.material.map) t.m.material.map.dispose();
+        t.m.material.map = canvasTex(128, 128, (g, w, h) => {
+          g.strokeStyle = fg; g.lineWidth = 6; g.setLineDash(got === undefined ? [10, 8] : []); g.strokeRect(10, 10, w - 20, h - 20);
+          g.fillStyle = fg; P.forEach(([a, b2]) => { g.beginPath(); g.arc(a * w, b2 * h, 11, 0, 7); g.fill(); });
+        });
+        t.m.material.needsUpdate = true;
+      });
       const N = E.boxNeed(p, s), dark = new Set(N.lights);
       lights3.forEach((l, i) => { const on = !dark.has(i); l.mat.emissiveIntensity = on ? 1.2 : 0; l.mat.color.setHex(on ? 0xfff1b8 : 0x6a5a3a); l.glow.material.opacity = on ? .45 : 0; });
       refreshNums(s.rope.size ? s.rope : null, {});
@@ -477,7 +496,19 @@ const P3 = (() => {
       }
       Bx.anim = null; placeBoxes(s);
     }
+    // pip textures in the die's colour, made once per value
+    const pipTex = {};
+    function pipMap(v, col) {
+      const k = v + '|' + col; if (pipTex[k]) return pipTex[k];
+      const hex = '#' + col.toString(16).padStart(6, '0'), P = { 1: [[.5, .5]], 2: [[.27, .27], [.73, .73]], 3: [[.27, .27], [.5, .5], [.73, .73]], 4: [[.27, .27], [.73, .27], [.27, .73], [.73, .73]], 5: [[.27, .27], [.73, .27], [.5, .5], [.27, .73], [.73, .73]], 6: [[.27, .25], [.73, .25], [.27, .5], [.73, .5], [.27, .75], [.73, .75]] }[v];
+      return (pipTex[k] = canvasTex(128, 128, (g, w, h) => { g.fillStyle = hex; g.fillRect(0, 0, w, h); g.fillStyle = '#1a1024'; P.forEach(([a, b2]) => { g.beginPath(); g.arc(a * w, b2 * h, 12, 0, 7); g.fill(); }); }));
+    }
+    function setDie(cu, d) {
+      if (!cu.dieMats || !d) return; const k = d.join(''); if (k === cu.dieKey) return; cu.dieKey = k;
+      [d[2], 7 - d[2], d[0], 7 - d[0], d[1], 7 - d[1]].forEach((v, f) => { cu.dieMats[f].map = pipMap(v, HUEX[cu.col]); cu.dieMats[f].color.setHex(0xffffff); cu.dieMats[f].needsUpdate = true; });
+    }
     function placeBoxes(s) {
+      Bx.cubes.forEach((cu, i) => setDie(cu, s.dice && s.dice[i]));
       Bx.cubes.forEach((cu, i) => { const q = s.pos[i]; cu.g.visible = s.dead !== i; cu.g.position.set(q[0], 0, q[1]); cu.body.quaternion.identity(); cu.body.position.y = cu.size / 2; cu.body.scale.setScalar(1); cu.body.rotation.z = 0; if (cu.flames) cu.flames.forEach(f => f.visible = false); });
     }
     const fallers = [];
