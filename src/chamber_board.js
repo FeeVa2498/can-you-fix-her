@@ -93,7 +93,8 @@ function boxBoardSVG(p, o = {}) {
   const live = !!o.s && s.rope.size, need = new Map(N.nums.map(q => [q.i, q.c]));
   (p.nums || []).forEach(([x, y, n], i) => {
     const c = need.has(i) ? need.get(i) : n;
-    out.push(`<g class="pbx-num${live ? (c === n ? ' ok' : c > n ? ' bad' : '') : ''}"><rect x="${x + .5 - .2}" y="${y + .5 - .15}" width=".4" height=".3" rx=".07"/><text x="${x + .5}" y="${y + .51}">${live ? c + '/' + n : n}</text></g>`);
+    // the square through the four tile centres around it: the rope pieces on its sides are what the number counts
+    out.push(`<g class="pbx-num${live ? (c === n ? ' ok' : c > n ? ' bad' : '') : ''}"><rect class="sq" x="${x}" y="${y}" width="1" height="1"/><rect x="${x + .5 - .2}" y="${y + .5 - .15}" width=".4" height=".3" rx=".07"/><text x="${x + .5}" y="${y + .51}">${live ? c + '/' + n : n}</text></g>`);
   });
   // dice: white canvas tiles. The wanted numbers are only on the brief beside the board; here you see what got printed
   (p.dice || []).forEach(([x, y, v]) => {

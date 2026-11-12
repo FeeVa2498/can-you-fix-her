@@ -142,7 +142,13 @@ const P3 = (() => {
       walls(true);
       portals();
       locks();
-      (p.nums || []).forEach(([x, y, n], i) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(.62, .62), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false })); m.rotation.x = -Math.PI / 2; m.position.set(x + .5, .05, y + .5); m.renderOrder = 3; world.add(m); numObjs.push({ m, x, y, n, i, key: '' }); });
+      // edge numbers: a square drawn through the centres of the four tiles around it (the rope pieces that count), number in the middle
+      (p.nums || []).forEach(([x, y, n], i) => {
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(.62, .62), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false })); m.rotation.x = -Math.PI / 2; m.position.set(x + .5, .05, y + .5); m.renderOrder = 3; world.add(m);
+        const fm = new THREE.MeshBasicMaterial({ color: 0xf4e9ff, transparent: true, opacity: .55, depthWrite: false });
+        [[x + .5, y, 1, .05], [x + .5, y + 1, 1, .05], [x, y + .5, .05, 1], [x + 1, y + .5, .05, 1]].forEach(([cx, cz, w, d]) => { const b = new THREE.Mesh(new THREE.PlaneGeometry(w, d), fm); b.rotation.x = -Math.PI / 2; b.position.set(cx, .022, cz); b.renderOrder = 2; world.add(b); });
+        numObjs.push({ m, x, y, n, i, key: '', fm });
+      });
     }
     // switches (a button in its colour; a double one shows the colour it opens next, ringed by the other) and doors
     function locks() {
@@ -276,6 +282,7 @@ const P3 = (() => {
         if (k === o.key) return; o.key = k;
         if (o.m.material.map) o.m.material.map.dispose();
         o.m.material.map = numTex(label, col, isBox); o.m.material.needsUpdate = true;
+        if (o.fm) { o.fm.color.set(col); o.fm.opacity = col === '#f4e9ff' ? .55 : .95; }
       });
     }
     function refreshRings(seen) { if (!seen) return; ringMats.forEach((m, k) => { if (m.color.getHex() !== 0xff4d7a) m.color.setHex(seen.has(k) ? 0xff8cc6 : 0xcbb8ea); }); }
