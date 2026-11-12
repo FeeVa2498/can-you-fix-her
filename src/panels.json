@@ -720,7 +720,7 @@
     "x": 3,
     "y": 1,
     "trail": true,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
@@ -732,7 +732,7 @@
    [
     3,
     0,
-    1
+    2
    ]
   ],
   "solIn": "LDRUR",
@@ -742,7 +742,7 @@
   "belief": "",
   "intro": "colors",
   "tut": "colors",
-  "why": "Bảng dạy luật mới. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Bảng dạy luật mới. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  },
  {
   "id": "prim_2_1",
@@ -775,7 +775,7 @@
     "x": 0,
     "y": 3,
     "trail": true,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
@@ -787,7 +787,7 @@
    [
     0,
     2,
-    1
+    2
    ]
   ],
   "lights": [
@@ -804,7 +804,7 @@
   "belief": "the black lines aren't mine. i won't touch them.",
   "intro": null,
   "feature": "colors",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  },
  {
   "id": "prim_2_2",
@@ -831,7 +831,7 @@
     "x": 1,
     "y": 2,
     "trail": true,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
@@ -843,7 +843,7 @@
    [
     1,
     0,
-    1
+    2
    ]
   ],
   "doors": [
@@ -870,7 +870,7 @@
   "belief": "i know which lines are mine. i think.",
   "intro": null,
   "feature": "switches",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó."
  },
  {
   "id": "prim_2_t3",
@@ -940,7 +940,7 @@
     "y": 0,
     "m": "opp",
     "trail": true,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
@@ -952,7 +952,7 @@
    [
     3,
     2,
-    1
+    2
    ]
   ],
   "solIn": "RUUULD",
@@ -963,7 +963,7 @@
   "belief": "",
   "intro": "opp",
   "tut": "twinrope",
-  "why": "Bảng dạy luật mới. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
+  "why": "Bảng dạy luật mới. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "prim_2_3",
@@ -991,7 +991,7 @@
     "y": 2,
     "m": "opp",
     "trail": true,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
@@ -1003,7 +1003,7 @@
    [
     0,
     0,
-    1
+    2
    ]
   ],
   "lights": [
@@ -1020,7 +1020,7 @@
   "belief": "when i draw, the other hand draws too.",
   "intro": null,
   "feature": "opp",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "prim_2_4",
@@ -1065,7 +1065,7 @@
     "x": 0,
     "y": 3,
     "trail": true,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
@@ -1077,7 +1077,7 @@
    [
     0,
     2,
-    1
+    2
    ]
   ],
   "doors": [
@@ -1114,7 +1114,7 @@
   "belief": "it copies everything i do.",
   "intro": null,
   "feature": "lights",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "prim_2_5",
@@ -1160,7 +1160,7 @@
     "y": 3,
     "m": "opp",
     "trail": true,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
@@ -1172,7 +1172,7 @@
    [
     3,
     2,
-    1
+    2
    ]
   ],
   "doors": [
@@ -1199,7 +1199,7 @@
   "belief": "we never touch. we can't.",
   "intro": null,
   "feature": "opp",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "prim_2_6",
@@ -1256,7 +1256,7 @@
     "x": 0,
     "y": 4,
     "trail": true,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
@@ -1268,7 +1268,7 @@
    [
     3,
     4,
-    1
+    2
    ]
   ],
   "doors": [
@@ -1301,7 +1301,7 @@
   "belief": "the wrong line is worse than no line.",
   "intro": null,
   "feature": "switches",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó."
  },
  {
   "id": "prim_2_7",
@@ -1347,7 +1347,7 @@
     "y": 0,
     "m": "opp",
     "trail": true,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
@@ -1359,7 +1359,7 @@
    [
     2,
     3,
-    1
+    2
    ]
   ],
   "doors": [
@@ -1392,7 +1392,7 @@
   "belief": "the other hand always knows where i am going.",
   "intro": null,
   "feature": "opp",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "prim_3_1",
@@ -2850,19 +2850,19 @@
     "x": 0,
     "y": 0,
     "trail": true,
-    "c": 1
+    "c": 4
    }
   ],
   "exit": [
    [
     0,
     2,
-    0
+    1
    ],
    [
     2,
     1,
-    1
+    4
    ]
   ],
   "solIn": "DRRDLU",
@@ -2872,7 +2872,7 @@
   "belief": "",
   "intro": "colors",
   "tut": "colors",
-  "why": "Bảng dạy luật mới. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Bảng dạy luật mới. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  },
  {
   "id": "trix_2_1",
@@ -2899,19 +2899,19 @@
     "x": 2,
     "y": 2,
     "trail": true,
-    "c": 1
+    "c": 4
    }
   ],
   "exit": [
    [
     0,
     0,
-    0
+    1
    ],
    [
     2,
     1,
-    1
+    4
    ]
   ],
   "nums": [
@@ -2934,7 +2934,7 @@
   "belief": "a number is a promise. i keep promises.",
   "intro": null,
   "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_t2",
@@ -3077,19 +3077,19 @@
     "x": 2,
     "y": 1,
     "trail": true,
-    "c": 1
+    "c": 4
    }
   ],
   "exit": [
    [
     4,
     1,
-    0
+    1
    ],
    [
     1,
     0,
-    1
+    4
    ]
   ],
   "nums": [
@@ -3107,7 +3107,7 @@
   "belief": "three sides. not two. not four. three.",
   "intro": null,
   "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_4",
@@ -3134,19 +3134,19 @@
     "x": 1,
     "y": 3,
     "trail": true,
-    "c": 1
+    "c": 4
    }
   ],
   "exit": [
    [
     1,
     2,
-    0
+    1
    ],
    [
     1,
     1,
-    1
+    4
    ]
   ],
   "oneway": [
@@ -3178,7 +3178,7 @@
   "belief": "if the count is wrong, everything is wrong.",
   "intro": null,
   "feature": "oneway",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Mũi tên trên khe: chỉ đi qua được theo chiều đó. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khe một chiều không cho quay lại: tính thứ tự trước khi đi."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Mũi tên trên khe: chỉ đi qua được theo chiều đó. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khe một chiều không cho quay lại: tính thứ tự trước khi đi."
  },
  {
   "id": "trix_2_5",
@@ -3303,19 +3303,19 @@
     "x": 4,
     "y": 2,
     "trail": true,
-    "c": 1
+    "c": 4
    }
   ],
   "exit": [
    [
     1,
     1,
-    0
+    1
    ],
    [
     0,
     0,
-    1
+    4
    ]
   ],
   "nums": [
@@ -3333,7 +3333,7 @@
   "belief": "i don't guess. guessing is for people who can't count.",
   "intro": null,
   "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_7",
@@ -3378,19 +3378,19 @@
     "x": 2,
     "y": 3,
     "trail": true,
-    "c": 1
+    "c": 4
    }
   ],
   "exit": [
    [
     0,
     3,
-    0
+    1
    ],
    [
     3,
     1,
-    1
+    4
    ]
   ],
   "oneway": [
@@ -3422,7 +3422,7 @@
   "belief": "every square answers to me.",
   "intro": null,
   "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Mũi tên trên khe: chỉ đi qua được theo chiều đó. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Mũi tên trên khe: chỉ đi qua được theo chiều đó. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
  },
  {
   "id": "trix_3_1",
@@ -5284,19 +5284,19 @@
    {
     "x": 0,
     "y": 1,
-    "c": 1
+    "c": 0
    }
   ],
   "exit": [
    [
     2,
     1,
-    0
+    2
    ],
    [
     1,
     1,
-    1
+    0
    ]
   ],
   "solIn": "RRL",
@@ -5306,7 +5306,7 @@
   "belief": "",
   "intro": "colors",
   "tut": "colors",
-  "why": "Bảng dạy luật mới. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Bảng dạy luật mới. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  },
  {
   "id": "paige_2_2",
@@ -5337,19 +5337,19 @@
    {
     "x": 3,
     "y": 3,
-    "c": 1
+    "c": 0
    }
   ],
   "exit": [
    [
     0,
     3,
-    0
+    2
    ],
    [
     1,
     2,
-    1
+    0
    ]
   ],
   "cracks": [
@@ -5370,7 +5370,7 @@
   "belief": "every hand is a gamble.",
   "intro": null,
   "feature": "cracks",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước."
  },
  {
   "id": "paige_2_3",
@@ -5401,19 +5401,19 @@
    {
     "x": 0,
     "y": 0,
-    "c": 1
+    "c": 0
    }
   ],
   "exit": [
    [
     2,
     0,
-    0
+    2
    ],
    [
     0,
     1,
-    1
+    0
    ]
   ],
   "portals": [
@@ -5442,7 +5442,7 @@
   "belief": "i always bet on the worst outcome. it pays.",
   "intro": null,
   "feature": "portals",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Coi hai cổng như một ô."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Coi hai cổng như một ô."
  },
  {
   "id": "paige_2_4",
@@ -5485,19 +5485,19 @@
    {
     "x": 3,
     "y": 1,
-    "c": 1
+    "c": 0
    }
   ],
   "exit": [
    [
     2,
     1,
-    0
+    2
    ],
    [
     3,
     0,
-    1
+    0
    ]
   ],
   "cracks": [
@@ -5526,7 +5526,7 @@
   "belief": "the house always wins. i am the house.",
   "intro": null,
   "feature": "cracks",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Chỗ trống trên map không đi được. Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Chỗ trống trên map không đi được. Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước."
  },
  {
   "id": "paige_2_5",
@@ -5569,19 +5569,19 @@
    {
     "x": 2,
     "y": 0,
-    "c": 1
+    "c": 0
    }
   ],
   "exit": [
    [
     0,
     4,
-    0
+    2
    ],
    [
     4,
     1,
-    1
+    0
    ]
   ],
   "portals": [
@@ -5614,7 +5614,7 @@
   "belief": "i count the exits in every room.",
   "intro": null,
   "feature": "portals",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Coi hai cổng như một ô."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Coi hai cổng như một ô."
  },
  {
   "id": "paige_2_6",
@@ -5669,24 +5669,24 @@
    {
     "x": 1,
     "y": 3,
-    "c": 1
+    "c": 0
    },
    {
     "x": 4,
     "y": 2,
-    "c": 2
+    "c": 3
    }
   ],
   "exit": [
    [
     4,
     4,
-    0
+    2
    ],
    [
     1,
     0,
-    1
+    0
    ]
   ],
   "cracks": [
@@ -5711,7 +5711,7 @@
   "belief": "if i lose everything, at least it was my choice.",
   "intro": null,
   "feature": "helpers",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đặt hộp thừa trước, rồi mới phóng hộp chính."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đặt hộp thừa trước, rồi mới phóng hộp chính."
  },
  {
   "id": "paige_2_7",
@@ -5784,19 +5784,19 @@
    {
     "x": 2,
     "y": 1,
-    "c": 1
+    "c": 0
    }
   ],
   "exit": [
    [
     4,
     1,
-    0
+    2
    ],
    [
     4,
     3,
-    1
+    0
    ]
   ],
   "portals": [
@@ -5839,7 +5839,7 @@
   "belief": "i'd rather lose than be left.",
   "intro": null,
   "feature": "cracks",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Ô nứt: hộp rời đi là ô sụp thành lỗ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước."
  },
  {
   "id": "paige_3_1",
@@ -7412,19 +7412,19 @@
    {
     "x": 3,
     "y": 1,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
    [
     0,
     0,
-    0
+    3
    ],
    [
     3,
     0,
-    1
+    2
    ]
   ],
   "solIn": "LU",
@@ -7434,7 +7434,7 @@
   "belief": "",
   "intro": "colors",
   "tut": "colors",
-  "why": "Bảng dạy luật mới. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Bảng dạy luật mới. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  },
  {
   "id": "vel_2_3",
@@ -7459,19 +7459,19 @@
    {
     "x": 2,
     "y": 2,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
    [
     1,
     2,
-    0
+    3
    ],
    [
     4,
     3,
-    1
+    2
    ]
   ],
   "pads": [
@@ -7496,7 +7496,7 @@
   "belief": "highs and lows are just terrain. i've mapped worse.",
   "intro": null,
   "feature": "colors",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  },
  {
   "id": "vel_2_4",
@@ -7540,19 +7540,19 @@
    {
     "x": 0,
     "y": 4,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
    [
     1,
     3,
-    0
+    3
    ],
    [
     3,
     3,
-    1
+    2
    ]
   ],
   "stops": [
@@ -7569,7 +7569,7 @@
   "belief": "when the floor drops, i already have a rope.",
   "intro": null,
   "feature": "dash",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
  },
  {
   "id": "vel_2_5",
@@ -7636,19 +7636,19 @@
    {
     "x": 1,
     "y": 4,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
    [
     0,
     0,
-    0
+    3
    ],
    [
     4,
     3,
-    1
+    2
    ]
   ],
   "pads": [
@@ -7683,7 +7683,7 @@
   "belief": "i write the sad chapters on the good days. just in case.",
   "intro": null,
   "feature": "switches",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó."
  },
  {
   "id": "vel_2_6",
@@ -7752,19 +7752,19 @@
     "x": 3,
     "y": 4,
     "dash": true,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
    [
     4,
     3,
-    0
+    3
    ],
    [
     0,
     0,
-    1
+    2
    ]
   ],
   "stops": [
@@ -7785,7 +7785,7 @@
   "belief": "stay sharp. moods are weather. weather passes.",
   "intro": null,
   "feature": "dash",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
  },
  {
   "id": "vel_2_7",
@@ -7835,19 +7835,19 @@
    {
     "x": 2,
     "y": 0,
-    "c": 1
+    "c": 2
    }
   ],
   "exit": [
    [
     3,
     1,
-    0
+    3
    ],
    [
     2,
     3,
-    1
+    2
    ]
   ],
   "pads": [
@@ -7882,7 +7882,7 @@
   "belief": "if i keep moving, the low can never catch me.",
   "intro": null,
   "feature": "switches",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó."
  },
  {
   "id": "vel_3_t1",
@@ -8705,36 +8705,36 @@
    {
     "x": 1,
     "y": 0,
-    "c": 1,
+    "c": 2,
     "n": 9
    },
    {
     "x": 5,
     "y": 0,
     "dash": true,
-    "c": 2
+    "c": 4
    },
    {
     "x": 4,
     "y": 3,
-    "c": 3
+    "c": 0
    }
   ],
   "exit": [
    [
     2,
     1,
-    1
+    2
    ],
    [
     0,
     1,
-    2
+    4
    ],
    [
     1,
     2,
-    3
+    0
    ]
   ],
   "stops": [
@@ -8751,7 +8751,7 @@
   "belief": "three plans. three colours. zero surprises.",
   "intro": null,
   "feature": "colors",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  },
  {
   "id": "myne_1_1",
@@ -9362,19 +9362,19 @@
     "x": 3,
     "y": 2,
     "m": "opp",
-    "c": 1
+    "c": 3
    }
   ],
   "exit": [
    [
     0,
     3,
-    0
+    4
    ],
    [
     3,
     0,
-    1
+    3
    ]
   ],
   "solIn": "RDDL",
@@ -9385,7 +9385,7 @@
   "belief": "",
   "intro": "opp",
   "tut": "twin",
-  "why": "Bảng dạy luật mới. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
+  "why": "Bảng dạy luật mới. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "myne_2_1",
@@ -9417,19 +9417,19 @@
     "x": 0,
     "y": 1,
     "m": "opp",
-    "c": 1
+    "c": 3
    }
   ],
   "exit": [
    [
     2,
     2,
-    0
+    4
    ],
    [
     2,
     1,
-    1
+    3
    ]
   ],
   "solIn": "LLLURDR",
@@ -9440,7 +9440,7 @@
   "belief": "can't. sit. still.",
   "intro": null,
   "feature": "opp",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "myne_2_2",
@@ -9484,19 +9484,19 @@
     "x": 4,
     "y": 0,
     "m": "opp",
-    "c": 1
+    "c": 3
    }
   ],
   "exit": [
    [
     0,
     2,
-    0
+    4
    ],
    [
     4,
     2,
-    1
+    3
    ]
   ],
   "oneway": [
@@ -9521,7 +9521,7 @@
   "belief": "boredom is a bug. i patch it with noise.",
   "intro": null,
   "feature": "oneway",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Khe một chiều không cho quay lại: tính thứ tự trước khi đi."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Khe một chiều không cho quay lại: tính thứ tự trước khi đi."
  },
  {
   "id": "myne_2_t3",
@@ -9540,14 +9540,14 @@
    [
     0,
     0,
-    1
+    3
    ]
   ],
   "paints": [
    [
     3,
     0,
-    1
+    3
    ]
   ],
   "solIn": "RRLLL",
@@ -9557,7 +9557,7 @@
   "belief": "",
   "intro": "paints",
   "tut": "paints",
-  "why": "Bảng dạy luật mới. Ô sơn: hộp đi vào bị đổi sang màu của ô. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Mẹo: Có khi hộp phải đi vòng qua ô sơn trước khi về goal."
+  "why": "Bảng dạy luật mới. Ô sơn: hộp đi vào bị đổi sang màu của ô. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Mẹo: Có khi hộp phải đi vòng qua ô sơn trước khi về goal."
  },
  {
   "id": "myne_2_3",
@@ -9607,26 +9607,26 @@
     "x": 3,
     "y": 3,
     "m": "opp",
-    "c": 1
+    "c": 3
    }
   ],
   "exit": [
    [
     0,
     2,
-    0
+    4
    ],
    [
     3,
     1,
-    0
+    4
    ]
   ],
   "paints": [
    [
     4,
     1,
-    0
+    4
    ]
   ],
   "solIn": "UUDLDURRDL",
@@ -9637,7 +9637,7 @@
   "belief": "ten tabs open. all of them important.",
   "intro": null,
   "feature": "paints",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô sơn: hộp đi vào bị đổi sang màu của ô. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Có khi hộp phải đi vòng qua ô sơn trước khi về goal."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô sơn: hộp đi vào bị đổi sang màu của ô. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Có khi hộp phải đi vòng qua ô sơn trước khi về goal."
  },
  {
   "id": "myne_2_4",
@@ -9682,7 +9682,7 @@
     "x": 3,
     "y": 0,
     "m": "opp",
-    "c": 1,
+    "c": 3,
     "n": 8
    }
   ],
@@ -9690,12 +9690,12 @@
    [
     3,
     1,
-    0
+    4
    ],
    [
     0,
     4,
-    1
+    3
    ]
   ],
   "solIn": "RUUUULLLRR",
@@ -9706,7 +9706,7 @@
   "belief": "one-way streets? speedrun route.",
   "intro": null,
   "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Chỗ trống trên map không đi được. Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại). Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Bom chỉ đếm khi hộp ôm bom nhúc nhích: dựa nó vào tường để những hộp khác đi trước."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Chỗ trống trên map không đi được. Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại). Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Bom chỉ đếm khi hộp ôm bom nhúc nhích: dựa nó vào tường để những hộp khác đi trước."
  },
  {
   "id": "myne_2_5",
@@ -9744,19 +9744,19 @@
     "x": 1,
     "y": 0,
     "m": "opp",
-    "c": 1
+    "c": 3
    }
   ],
   "exit": [
    [
     0,
     3,
-    0
+    4
    ],
    [
     2,
     3,
-    1
+    3
    ]
   ],
   "oneway": [
@@ -9791,7 +9791,7 @@
   "belief": "if i'm loud enough nobody notices i'm fragile.",
   "intro": null,
   "feature": "switches",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó."
  },
  {
   "id": "myne_2_6",
@@ -9847,31 +9847,31 @@
     "x": 2,
     "y": 1,
     "m": "opp",
-    "c": 1
+    "c": 3
    }
   ],
   "exit": [
    [
     4,
     2,
-    1
+    3
    ],
    [
     1,
     1,
-    0
+    4
    ]
   ],
   "paints": [
    [
     1,
     3,
-    1
+    3
    ],
    [
     2,
     2,
-    0
+    4
    ]
   ],
   "oneway": [
@@ -9890,7 +9890,7 @@
   "belief": "finish everything. right now. all of it.",
   "intro": null,
   "feature": "paints",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Ô sơn: hộp đi vào bị đổi sang màu của ô. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Có khi hộp phải đi vòng qua ô sơn trước khi về goal."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Mũi tên trên khe: chỉ đi qua được theo chiều đó. Ô sơn: hộp đi vào bị đổi sang màu của ô. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Có khi hộp phải đi vòng qua ô sơn trước khi về goal."
  },
  {
   "id": "myne_2_7",
@@ -9941,19 +9941,19 @@
     "x": 0,
     "y": 2,
     "m": "opp",
-    "c": 1
+    "c": 3
    }
   ],
   "exit": [
    [
     1,
     4,
-    0
+    4
    ],
    [
     1,
     3,
-    1
+    3
    ]
   ],
   "doors": [
@@ -9980,7 +9980,7 @@
   "belief": "keep moving or the lag catches up.",
   "intro": null,
   "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại). Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Bom chỉ đếm khi hộp ôm bom nhúc nhích: dựa nó vào tường để những hộp khác đi trước."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại). Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Bom chỉ đếm khi hộp ôm bom nhúc nhích: dựa nó vào tường để những hộp khác đi trước."
  },
  {
   "id": "myne_3_1",
@@ -10707,21 +10707,21 @@
    {
     "x": 3,
     "y": 0,
-    "c": 1
+    "c": 3
    }
   ],
   "exit": [
    [
     2,
     1,
-    2
+    0
    ]
   ],
   "paints": [
    [
     3,
     1,
-    2
+    0
    ]
   ],
   "solIn": "DL",
@@ -10731,7 +10731,7 @@
   "belief": "",
   "intro": "paints",
   "tut": "paints",
-  "why": "Bảng dạy luật mới. Ô sơn: hộp đi vào bị đổi sang màu của ô. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Mẹo: Có khi hộp phải đi vòng qua ô sơn trước khi về goal."
+  "why": "Bảng dạy luật mới. Ô sơn: hộp đi vào bị đổi sang màu của ô. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Mẹo: Có khi hộp phải đi vòng qua ô sơn trước khi về goal."
  },
  {
   "id": "myne_3_8",
@@ -10770,37 +10770,37 @@
    {
     "x": 1,
     "y": 4,
-    "c": 1
+    "c": 3
    },
    {
     "x": 2,
     "y": 1,
     "m": "opp",
-    "c": 2
+    "c": 0
    }
   ],
   "exit": [
    [
     3,
     1,
-    2
+    0
    ],
    [
     4,
     1,
-    1
+    3
    ]
   ],
   "paints": [
    [
     2,
     4,
-    2
+    0
    ],
    [
     0,
     0,
-    1
+    3
    ]
   ],
   "solIn": "DRUUUDRUULLLLD",
@@ -10811,7 +10811,7 @@
   "belief": "new skin, same player.",
   "intro": null,
   "feature": "paints",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô sơn: hộp đi vào bị đổi sang màu của ô. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Có khi hộp phải đi vòng qua ô sơn trước khi về goal."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô sơn: hộp đi vào bị đổi sang màu của ô. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Có khi hộp phải đi vòng qua ô sơn trước khi về goal."
  },
  {
   "id": "myne_3_9",
@@ -10868,32 +10868,32 @@
    {
     "x": 0,
     "y": 4,
-    "c": 1
+    "c": 3
    },
    {
     "x": 0,
     "y": 2,
     "m": "opp",
-    "c": 2
+    "c": 0
    }
   ],
   "exit": [
    [
     3,
     4,
-    1
+    3
    ],
    [
     4,
     1,
-    1
+    3
    ]
   ],
   "paints": [
    [
     0,
     3,
-    1
+    3
    ]
   ],
   "solIn": "DLURRURDLLUULLR",
@@ -10904,6 +10904,6 @@
   "belief": "if i change fast enough, nobody sees the old me.",
   "intro": null,
   "feature": "colors",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được. Ô sơn: hộp đi vào bị đổi sang màu của ô. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô sơn: hộp đi vào bị đổi sang màu của ô. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  }
 ]

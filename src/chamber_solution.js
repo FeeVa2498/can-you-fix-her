@@ -60,14 +60,14 @@ function solEvents(p) {
   }
   return { ev, ends, n: ends.length - 1 };
 }
-const HUE_NAME = { prim: ['hồng', 'trắng', 'bạc hà', 'vàng'], trix: ['đỏ', 'trắng', 'xanh', 'lục'], paige: ['tím', 'trắng', 'cam', 'bạc hà'], vel: ['vàng', 'trắng', 'hồng', 'xanh'], myne: ['xanh', 'trắng', 'vàng', 'hồng'] };
-const LOCK_NAME = ['', 'xanh', 'cam', 'lục'];
-const hueName = (p, c) => (HUE_NAME[p.girl] || HUE_NAME.prim)[c || 0];
+const HUE_NAME = ['hồng', 'đỏ', 'tím', 'vàng', 'xanh'];
+const LOCK_NAME = ['', 'xanh', 'vàng', 'đỏ'];
+const hueName = (p, c) => HUE_NAME[c];
 function boxName(p, s, i) {
   const b = p.boxes[i], kind = b.trail ? 'Hộp dây' : b.dash ? 'Hộp tên lửa' : 'Hộp';
   if (p.boxes.length === 1) return kind;
   const same = p.boxes.filter((q, j) => (q.trail ? 1 : q.dash ? 2 : 0) === (b.trail ? 1 : b.dash ? 2 : 0) && s.col[j] === s.col[i] && (q.m || '') === (b.m || '')).length;
-  const coloured = (p.exit || []).some(g => g[2] != null) || p.boxes.some(q => q.c);
+  const coloured = (p.exit || []).some(g => g[2] != null) || p.boxes.some(q => q.c != null && q.c !== PanelEngine.girlHue(p));
   return `${kind}${coloured ? ' ' + hueName(p, s.col[i]) : ''}${b.m === 'opp' ? ' song sinh' : ''}${same > 1 ? ' #' + (i + 1) : ''}`;
 }
 function boxSolEvents(p) {

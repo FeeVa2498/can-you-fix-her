@@ -43,13 +43,11 @@ function switchSVG(p, on, tiles) {
 }
 /* box panels: tiles instead of tracks; walls sit between tiles.
    o.s: the current state (lights, doors, switches, cracks, numbers are drawn live from it) */
-// every girl's boxes wear her colour (0); 1..3 are her other selves. Locks (switches, doors) keep their own colours.
-const GIRL_HUE = {
-  prim: ['#ff7eb6', '#f2ecff', '#6fe0c8', '#ffd23f'], trix: ['#ff4d5e', '#f2ecff', '#4fd8ff', '#9cf06a'], paige: ['#a46bff', '#f2ecff', '#ff9f5a', '#6fe0c8'],
-  vel: ['#ffd23f', '#f2ecff', '#ff6fb5', '#4fd8ff'], myne: ['#4fa8ff', '#f2ecff', '#ffd23f', '#ff6fb5'],
-};
-const LOCK_HUE = [null, '#4fd8ff', '#ff9f5a', '#9cf06a'];
-const boxHue = (p, c) => (GIRL_HUE[p.girl] || GIRL_HUE.prim)[c || 0];
+// five colours in the whole game, one per girl: 0 pink (Prim), 1 red (Trix), 2 purple (Paige), 3 yellow (Vel), 4 blue (Myne).
+// A box without a colour wears the colour of the girl the panel belongs to. Switches and doors use 1 blue, 2 yellow, 3 red.
+const HUE5 = ['#ff7eb6', '#ff4d5e', '#a46bff', '#ffd23f', '#4fa8ff'];
+const LOCK_HUE = [null, HUE5[4], HUE5[3], HUE5[1]];
+const boxHue = (p, c) => HUE5[c != null ? c : PanelEngine.girlHue(p)];
 function boxBoardSVG(p, o = {}) {
   const E = PanelEngine, d = E.dims(p), out = [], br = E.brokenSet(p), s = o.s || E.boxStart(p);
   const at = new Map(s.pos.map((q, i) => [q.join(','), i]));
@@ -108,7 +106,7 @@ function boxesSVG(p, s, o = {}) {
     segs.forEach(([a, z]) => out.push(`<line class="pbx-rope" x1="${a[0]}" y1="${a[1]}" x2="${z[0]}" y2="${z[1]}" style="stroke:${hue}"/>`));
   });
   p.boxes.forEach((b, i) => {
-    const [x, y] = at[i], col = s.col ? s.col[i] : (b.c || 0), c = boxHue(p, col), left = s.left ? s.left[i] : b.n;
+    const [x, y] = at[i], col = s.col ? s.col[i] : b.c, c = boxHue(p, col), left = s.left ? s.left[i] : b.n;
     if (s.dead === i) { out.push(`<g class="pbx-boom"><path d="M${x} ${y - .46}L${x + .12} ${y - .14}L${x + .44} ${y - .2}L${x + .2} ${y + .04}L${x + .36} ${y + .36}L${x + .04} ${y + .2}L${x - .2} ${y + .44}L${x - .16} ${y + .12}L${x - .46} ${y}L${x - .16} ${y - .12}z"/></g>`); return; }
     const onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1] && (g[2] == null || g[2] === col));
     let g = `<g class="pbx-box${onG ? ' on' : ''}${o.cls ? ' ' + o.cls : ''}"><rect x="${x - .32}" y="${y - .32}" width=".64" height=".64" rx=".13" fill="${c}"/>`;

@@ -197,7 +197,7 @@ function boxStats(p, inputs) {
   }
   hit.dbl = Math.max(0, ...(p.switches || []).map((q, i) => q[3] != null ? swHits[i] : 0));
   // painted boxes that end on a goal of their new colour
-  hit.paintGoal = s.col.filter((c2, i) => c2 !== (p.boxes[i].c || 0) && (p.exit || []).some(g => g[2] === c2 && g[0] === s.pos[i][0] && g[1] === s.pos[i][1])).length;
+  const c0 = E.boxStart(p).col; hit.paintGoal = s.col.filter((c2, i) => c2 !== c0[i] && (p.exit || []).some(g => g[2] === c2 && g[0] === s.pos[i][0] && g[1] === s.pos[i][1])).length;
   return { s, desync, left, movesBy, hit };
 }
 /* The candidate checks every box panel must pass. Returns { r, best, L, luck } or null. */
@@ -354,6 +354,16 @@ function clueCover(p, spec) {
   return p;
 }
 const D4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+/* Specs write colours relative to the girl: 0 = her own colour, 1..3 = another girl's colour in this order.
+   Panels store the real colour (0 pink Prim, 1 red Trix, 2 purple Paige, 3 yellow Vel, 4 blue Myne). */
+const GI = { prim: 0, trix: 1, paige: 2, vel: 3, myne: 4 }, ALT = { prim: [2, 4, 3], trix: [4, 3, 2], paige: [0, 3, 4], vel: [2, 4, 0], myne: [3, 0, 1] };
+const absHue = (girl, k) => k ? ALT[girl][k - 1] : GI[girl];
+function absColors(p) {
+  p.boxes.forEach(b => { if (b.c != null) { if (b.c) b.c = absHue(p.girl, b.c); else delete b.c; } });
+  (p.exit || []).forEach(g => { if (g[2] != null) g[2] = absHue(p.girl, g[2]); });
+  (p.paints || []).forEach(q => { q[2] = absHue(p.girl, q[2]); });
+  return p;
+}
 function designBox(spec) {
   const g = spec.gen || {}, cands = [], T0 = Date.now();
   for (let attempt = 0; attempt < (spec.tries || 3000); attempt++) {
@@ -374,6 +384,7 @@ function designBox(spec) {
     for (let i = 0; i < (g.cracks || 0); i++) { const n = pick(); if (n) (p.cracks = p.cracks || []).push(n); }
     for (const c of g.paints || []) { const n = pick(); if (n) (p.paints = p.paints || []).push([...n, c]); }
     for (let i = 0; i < (g.oneway || 0); i++) { const e = shuffle(allEdges(p)).find(e => !p.broken.some(b => E.ekey(...b) === E.ekey(...e))); if (e) (p.oneway = p.oneway || []).push(rnd() < .5 ? e : [e[2], e[3], e[0], e[1]]); }
+    absColors(p);
     if (g.guard) {   // the first goals sit in walled bays whose only way in is a door (colour 1, or 1 and 2 with g.two)
       const brokenK = new Set(p.broken.map(e => E.ekey(...e)));
       let fail = false;
@@ -440,7 +451,7 @@ const TIP = {
 };
 const BRULE = {
   goal: 'Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal.',
-  colors: 'Mỗi màu là một nhân cách của cô ấy: hộp màu nào phải vào goal màu đó; goal trắng nhận hộp nào cũng được.',
+  colors: 'Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được.',
   trail: 'Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi).',
   lights: 'Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng.',
   nums: 'Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu).',
@@ -473,7 +484,7 @@ const BTIP = {
 };
 function boxRules(p) {
   const r = ['goal'];
-  if (p.boxes.some(b => b.c) || (p.exit || []).some(g => g[2] != null)) r.push('colors');
+  if (p.boxes.some(b => b.c != null && b.c !== E.girlHue(p)) || (p.exit || []).some(g => g[2] != null)) r.push('colors');
   if (p.boxes.some(b => b.trail)) r.push('trail');
   for (const f of ['lights', 'nums', 'pads', 'stops', 'portals', 'oneway', 'holes', 'cracks', 'paints']) if ((p[f] || []).length) r.push(f);
   if ((p.switches || []).some(q => q[3] == null)) r.push('switches');
@@ -716,7 +727,7 @@ else if (ONLY === 'merge') {
     retext(p);
     out.push(p);
     const f = ['holes', 'broken', 'oneway', 'pads', 'stops', 'portals', 'lights', 'nums', 'switches', 'doors', 'cracks', 'paints'].filter(k => (p[k] || []).length).map(k => `${k} ${p[k].length}`).join(', ');
-    console.log(`${p.id.padEnd(10)} ${p.w}x${p.h} boxes ${p.boxes.map(b => (b.trail ? 'R' : 'B') + (b.m ? '~' : '') + (b.dash ? '>' : '') + (b.c || '') + (b.n != null ? '#' + b.n : '')).join(' ')}  shortest ${p.minMoves} (${p.solutions} ways, luck ${p.luck}%${p.quality !== undefined ? ', q ' + p.quality : ''})  ${f}  (${Date.now() - t0}ms)`);
+    console.log(`${p.id.padEnd(10)} ${p.w}x${p.h} boxes ${p.boxes.map(b => (b.trail ? 'R' : 'B') + (b.m ? '~' : '') + (b.dash ? '>' : '') + (b.c != null ? b.c : '') + (b.n != null ? '#' + b.n : '')).join(' ')}  shortest ${p.minMoves} (${p.solutions} ways, luck ${p.luck}%${p.quality !== undefined ? ', q ' + p.quality : ''})  ${f}  (${Date.now() - t0}ms)`);
   }
   fs.writeFileSync(process.env.PART || OUT + '.part', JSON.stringify(out, null, 1));
   console.log('wrote', out.length, 'panels');

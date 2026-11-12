@@ -246,8 +246,9 @@ const PanelEngine = (() => {
               keeps its number); at 0 the bomb explodes and the level fails (unless that very move won it)
        trail  rope box: leaves a rope behind; ropes block every box (its own too), except that a rope box may step
               back onto the end of its own rope, which reels that piece of rope back in
-       c      colour: 0 (default) = the girl's own colour, 1..3 = her other selves
-     p.exit     goals [[x,y,c?]]: with c (0..3) it wants a box of that colour; without, it takes any box
+       c      colour, one of the five girls' colours: 0 pink (Prim), 1 red (Trix), 2 purple (Paige), 3 yellow (Vel),
+              4 blue (Myne). Without c the box wears the colour of the girl the panel belongs to
+     p.exit     goals [[x,y,c?]]: with c it wants a box of that colour; without, it takes any box
      p.lights   [[x,y]] light tiles: lit while a rope lies on them (or a rope box stands there)
      p.nums     [[cx,cy,n]] the ropes must use exactly n sides of this square (between four tiles)
      p.switches [[x,y,c,c2?]] a box entering opens every door of colour c for good.
@@ -268,8 +269,10 @@ const PanelEngine = (() => {
     (p.doors || []).forEach(q => X.door.set(ekey(q[0], q[1], q[2], q[3]), q[4]));
     return X;
   }
+  const GIRL_HUE_I = { prim: 0, trix: 1, paige: 2, vel: 3, myne: 4 };
+  const girlHue = p => GIRL_HUE_I[p.girl] ?? 0;
   function boxStart(p) {
-    return { pos: p.boxes.map(b => [b.x, b.y]), left: p.boxes.map(b => b.n == null ? null : b.n), col: p.boxes.map(b => b.c || 0),
+    return { pos: p.boxes.map(b => [b.x, b.y]), left: p.boxes.map(b => b.n == null ? null : b.n), col: p.boxes.map(b => b.c != null ? b.c : girlHue(p)),
       open: (p.switches || []).reduce((o, q) => q[3] != null ? o | (1 << q[3]) : o, 0), sw: [], crk: new Set(), trail: new Set(), rope: new Set(), ropes: p.boxes.map(() => []), dead: -1, inputs: '',
       tracks: p.boxes.map(b => [[b.x, b.y]]), jumps: p.boxes.map(() => [false]) };
   }
@@ -396,6 +399,6 @@ const PanelEngine = (() => {
     return { wins, explored, capped: false };
   }
   return { gateClosed, validate, solve, replay, options, apply, undo, start, canStop, rules, ctx, neighbors, brokenSet, isStart, isExit, exitDir, key, ekey, nodeCount, dims, norm, inside, twin, jumps, mirrorOf, lines, regions, cellSides, edgeSet, padAt, isStop, isBridge, holeSet, usedEdges,
-    boxStart, boxStep, boxWon, boxNeed, boxReplay, boxSolve, boxDir, boxCtx, boxKey, swUp, ropeSegs, DK, dirKey };
+    boxStart, boxStep, boxWon, boxNeed, boxReplay, boxSolve, boxDir, boxCtx, boxKey, swUp, girlHue, ropeSegs, DK, dirKey };
 })();
 if (typeof module !== 'undefined') module.exports = PanelEngine;

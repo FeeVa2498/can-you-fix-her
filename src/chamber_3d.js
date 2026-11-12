@@ -10,7 +10,7 @@
 const P3 = (() => {
   const has = () => { try { if (!window.THREE) return false; const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } };
   const BOXHEX = [0xff8cc6, 0xb48cff, 0x7be3a4, 0xffd86e];
-  const LOCKX = [0, 0x4fd8ff, 0xff9f5a, 0x9cf06a];   // switch / door colours 1..3
+  const LOCKX = [0, 0x4fa8ff, 0xffd23f, 0xff4d5e];   // switch / door colours 1..3 (blue, yellow, red)
   const PORTALHEX = [0xffd86e, 0x8fdcf7, 0x7be3a4];
   const GIRL = { prim: 0x8d6fbf, trix: 0x6f8fcf, paige: 0x9a7cc8, vel: 0xc58bd8, myne: 0x7fb6c8 };
 
@@ -75,7 +75,7 @@ const P3 = (() => {
 
   /* ---------- the view ---------- */
   function create(host, p) {
-    const HUEX = (typeof GIRL_HUE !== 'undefined' ? (GIRL_HUE[p.girl] || GIRL_HUE.prim) : ['#ff7eb6', '#f2ecff', '#6fe0c8', '#ffd23f']).map(h => parseInt(h.slice(1), 16)), ROPEX = c => HUEX[c || 0];
+    const HUEX = (typeof HUE5 !== 'undefined' ? HUE5 : ['#ff7eb6', '#ff4d5e', '#a46bff', '#ffd23f', '#4fa8ff']).map(h => parseInt(h.slice(1), 16)), ROPEX = c => HUEX[c];
     const E = PanelEngine, d = E.dims(p), isBox = !!p.boxes;
     const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'low-power' });
     const cv = renderer.domElement; cv.className = 'pj3-canvas'; host.appendChild(cv);
@@ -185,11 +185,11 @@ const P3 = (() => {
     }
     function walls(isTiles) {
       if (isTiles) {
-        const br = E.brokenSet(p), glass = std(0x6a3fd8, { emissive: 0x5a2fc8, emissiveIntensity: .45, transparent: true, opacity: .82 });
+        const br = E.brokenSet(p), glass = std(0xd8d0f0, { emissive: 0x8a82a8, emissiveIntensity: .35, transparent: true, opacity: .55 });
         for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) for (const [nx, ny] of [[x + 1, y], [x, y + 1]]) {
           if (!E.inside(p, x, y) || !E.inside(p, nx, ny) || !br.has(E.ekey(x, y, nx, ny))) continue;
           const w = nx !== x ? box(.1, .62, 1.02, glass, (x + nx) / 2, .31, y) : box(1.02, .62, .1, glass, x, .31, (y + ny) / 2);
-          world.add(edges(w, 0xcbb8ea, .9));
+          world.add(edges(w, 0xffffff, .9));
         }
       }
       (p.oneway || []).forEach(e => { const c = chevron(0xffd86e, isTiles ? .17 : .12); c.position.set((e[0] + e[2]) / 2, isTiles ? .02 : .04, (e[1] + e[3]) / 2); c.rotation.y = yawOf(e[2] - e[0], e[3] - e[1]); world.add(c); });
@@ -398,7 +398,7 @@ const P3 = (() => {
     const Bx = { cubes: [], ropes: [], last: null, anim: null };
     if (isBox) {
       p.boxes.forEach((b, i) => {
-        const cu = makeCube(.78, HUEX[b.c || 0]); cu.b = b; cu.col = b.c || 0; if (b.dash) addRocket(cu); dyn.add(cu.g); Bx.cubes.push(cu);
+        const c0 = b.c != null ? b.c : E.girlHue(p), cu = makeCube(.78, HUEX[c0]); cu.b = b; cu.col = c0; if (b.dash) addRocket(cu); dyn.add(cu.g); Bx.cubes.push(cu);
         if (b.n != null) {   // bomb boxes carry a bomb on top: black ball, fuse, flickering spark
           const bomb = new THREE.Group(); bomb.position.y = cu.size + .2;
           const ball = new THREE.Mesh(new THREE.SphereGeometry(.2, 12, 10), std(0x1a1024, { roughness: .35, metalness: .3 })); bomb.add(edges(ball, 0x6a4a9a, .5));
@@ -414,7 +414,7 @@ const P3 = (() => {
         const rg = new THREE.Group(); dyn.add(rg); Bx.ropes.push(rg);
       });
     }
-    const ropeMatB = [0, 1, 2, 3].map(c => std(ROPEX(c), { emissive: ROPEX(c), emissiveIntensity: .3 }));
+    const ropeMatB = [0, 1, 2, 3, 4].map(c => std(ROPEX(c), { emissive: ROPEX(c), emissiveIntensity: .3 }));
     const booms = [];
     // a countdown ran out: the box bursts into glowing bits
     function boom(i, q) {
