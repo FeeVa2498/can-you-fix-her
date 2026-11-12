@@ -237,7 +237,7 @@ function openProjector(p) {
   const title = `PROJECT3D.EXE · ${GIRLS[p.girl].name}`;
   if (W) { W.o.title = title; W.el.querySelector('.tt').textContent = title; renderProjector(W.body, p, idx, nL); focusWin('projector'); return; }
   openWin('projector', { title, icon: 'brain', w: 600, h: 720, x: CH.opt.intro ? 320 : 120, y: 6,
-    onClose: () => { bgmOff(); if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); } PJ = null; document.removeEventListener('keydown', pjKey); },
+    onClose: () => { bgmOff(); if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); if (PJ.die3) PJ.die3.dispose(); } PJ = null; document.removeEventListener('keydown', pjKey); },
     render: b => renderProjector(b, p, idx, nL) });
 }
 function renderProjector(b, p, idx, nL) {
@@ -347,14 +347,14 @@ function mountStage() {
   const vp = $('#pj-vp'); if (!vp || !PJ) return;
   if (PJ.view) { PJ.view.dispose(); PJ.view = null; }
   vp.innerHTML = ''; vp.classList.toggle('flat', true);
-  // dice panels keep a column on the right for the brief and the practice die; the board lives in its own host
+  // dice panels float the brief and the practice die over the right side; the board shifts left to make room
   const side = (PJ.p.dice || []).length > 0; vp.classList.toggle('has-side', side);
-  const host = side ? (vp.insertAdjacentHTML('beforeend', '<div class="pj-host" id="pj-host"></div>'), $('#pj-host')) : vp;
+  const host = vp;
   if (CH.opt.view3d && P3.has()) {
     try { PJ.view = P3.create(host, PJ.p); PJ.view.setRetro(!!CH.opt.retro); bindPJ(PJ.view.canvas, PJ.view.toBoard); vp.classList.remove('flat'); vp.insertAdjacentHTML('beforeend', `<div class="pj3-hud">◉ DIVE·PROJ 3D <i>${PJ.p.boxes ? 'BOX' : 'LINE'} MODE</i>${PJ.p.tut ? `<b class="tut">NEW · ${esc(TEACH[PJ.p.tut] || PJ.p.tut)}</b>` : ''}</div>`); }
     catch (e) { console.warn('3D projection failed, using the flat board', e); if (PJ.view) PJ.view.dispose(); PJ.view = null; host.innerHTML = ''; }
   }
-  if (!PJ.view) { host.innerHTML = `<svg id="pj-svg" viewBox="${vb(PJ.p)}" role="img" aria-label="Puzzle board. Move with WASD or the arrow keys."></svg>`; bindPJ($('#pj-svg')); }
+  if (!PJ.view) { host.innerHTML = `<svg id="pj-svg" viewBox="${side ? vbSide(PJ.p) : vb(PJ.p)}" role="img" aria-label="Puzzle board. Move with WASD or the arrow keys."></svg>`; bindPJ($('#pj-svg')); }
   vp.insertAdjacentHTML('beforeend', pjSideHTML(PJ.p)); pjSideBind();
   const f = $('#pj-fps'); if (f) f.textContent = PJ.view ? 'WebGL' : '2D view';
   drawPJ();

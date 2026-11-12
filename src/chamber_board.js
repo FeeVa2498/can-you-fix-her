@@ -10,6 +10,8 @@ const PORTAL = ['#ffd86e', '#8fdcf7', '#7be3a4'];
 const BOXC = ['#ff8cc6', '#b48cff', '#7be3a4', '#ffd86e'];
 function vb(p, pad) {
   if (pad === undefined) pad = p.boxes ? .62 : 1.12; const d = PanelEngine.dims(p); return `${-pad} ${-pad} ${d.cols - 1 + pad * 2} ${d.rows - 1 + pad * 2}`; }
+// the same board with room on the right for the dice brief
+function vbSide(p) { const [x, y, w, h] = vb(p).split(' ').map(Number), W = Math.max(w + 3.2, h * 1.25); return `${x} ${y} ${W} ${Math.max(h, 1)}`; }
 function allEdgesOf(p) {
   const E = PanelEngine, d = E.dims(p), out = [];
   for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) {
@@ -128,7 +130,7 @@ function boxesSVG(p, s, o = {}) {
     if (b.m === 'my') g += `<path class="mark" d="M${x - .3} ${y}H${x + .3}"/>`;
     if (b.m === 'opp') g += `<path class="mark" d="M${x - .26} ${y - .26}L${x + .26} ${y + .26}M${x + .26} ${y - .26}L${x - .26} ${y + .26}"/>`;
     if (b.trail) g += `<path class="coil" d="M${x - .32} ${y - .08}h.64M${x - .32} ${y + .04}h.64M${x - .32} ${y + .16}h.64" />`;
-    if (s.dice && s.dice[i]) g += `<g class="die">${pipsSVG(x, y, s.dice[i][0], .32)}</g><g class="under"><rect x="${x - .17}" y="${y + .33}" width=".34" height=".22" rx=".05"/><text x="${x}" y="${y + .445}">▼${7 - s.dice[i][0]}</text></g>`;
+    if (s.dice && s.dice[i]) g += `<g class="die">${pipsSVG(x, y, s.dice[i][0], .32)}</g>`;
     if (left != null && !o.mini) g += `<g class="bomb${left === 0 ? ' hot' : ''}"><circle class="ball" cx="${x}" cy="${y - .42}" r=".18"/><circle class="spark" cx="${x + .13}" cy="${y - .55}" r=".045"/><text x="${x}" y="${y - .415}">${left}</text></g>`;
     out.push(g + '</g>');
   });
@@ -210,35 +212,54 @@ function pjMovesText() {
   const p = PJ.p, n = p.boxes ? (PJ.bs ? PJ.bs.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0);
   return p.moves ? `moves ${n}/${p.moves}` : `moves ${n}`;
 }
-/* Dice panels: the brief (which number each white tile must show) and a practice die you can turn by hand.
-   The practice die follows the real one after every move; its arrows only turn the copy. */
+/* Dice panels: the brief (which number each white tile must show) and a practice die: a little 3D die you can
+   spin with the mouse. It snaps back to the real die's faces after every move (double-click does it too). */
 function pjSideHTML(p) {
   if (!(p.dice || []).length) return '';
   return `<div class="pj-side"><div class="ps-h">ĐỀ BÀI</div><svg class="ps-map" id="ps-map" viewBox="${vb(p)}"></svg>
-    <div class="ps-h">XÚC XẮC NHÁP</div><div class="ps-die"><div class="ps-cube" id="ps-cube"></div><div class="ps-under" id="ps-under"></div></div>
-    <div class="ps-ctrl"><button data-r="U" title="lăn lên">▲</button><button data-r="L" title="lăn trái">◀</button><button data-r="R" title="lăn phải">▶</button><button data-r="D" title="lăn xuống">▼</button><button data-r="S" title="khớp với xúc xắc thật">⟲</button></div>
-    <div class="ps-tip">Mặt <b>▼</b> (úp xuống) là số được in.</div></div>`;
-}
-function pjSideBind() {
-  const box = document.querySelector('.pj-side'); if (!box) return;
-  box.querySelectorAll('[data-r]').forEach(b => b.onclick = e => { e.stopPropagation(); SFX.click();
-    if (b.dataset.r === 'S') PJ.practice = null; else { const d = PanelEngine.DK[b.dataset.r]; PJ.practice = PanelEngine.roll(pjPracticeDie(), d[0], d[1]); }
-    pjSide(true); });
+    <div class="ps-h">XÚC XẮC NHÁP</div><div class="ps-die" id="ps-die" title="Kéo chuột để xoay · nháy đúp để trả về"></div></div>`;
 }
 const pjRealDie = () => { const i = PJ.p.boxes.findIndex(b => b.die); return i >= 0 && PJ.bs ? PJ.bs.dice[i] : [1, 2, 3]; };
-const pjPracticeDie = () => PJ.practice || pjRealDie();
-function pjSide(turned) {
+function pjSideBind() {
+  const host = $('#ps-die'); if (!host || !PJ) return;
+  if (PJ.die3) { PJ.die3.dispose(); PJ.die3 = null; }
+  try { if (window.THREE) PJ.die3 = practiceDie(host, HUE5[PJ.p.boxes.find(b => b.die).c ?? PanelEngine.girlHue(PJ.p)]); } catch (e) { PJ.die3 = null; }
+  if (!PJ.die3) host.innerHTML = '<div class="ps-nogl">3D không chạy được ở đây</div>';
+}
+function practiceDie(host, hex) {
+  const T = THREE, W = host.clientWidth || 120, H = host.clientHeight || 120;
+  const r = new T.WebGLRenderer({ antialias: true, alpha: true }); r.setPixelRatio(Math.min(2, window.devicePixelRatio || 1)); r.setSize(W, H); host.appendChild(r.domElement);
+  const scene = new T.Scene(), cam = new T.PerspectiveCamera(32, W / H, .1, 50); cam.position.set(1.7, 2.3, 3.4); cam.lookAt(0, 0, 0);
+  scene.add(new T.AmbientLight(0xffffff, .75)); const dl = new T.DirectionalLight(0xffffff, .6); dl.position.set(2, 4, 3); scene.add(dl);
+  const P = { 1: [[.5, .5]], 2: [[.27, .27], [.73, .73]], 3: [[.27, .27], [.5, .5], [.73, .73]], 4: [[.27, .27], [.73, .27], [.27, .73], [.73, .73]], 5: [[.27, .27], [.73, .27], [.5, .5], [.27, .73], [.73, .73]], 6: [[.27, .25], [.73, .25], [.27, .5], [.73, .5], [.27, .75], [.73, .75]] };
+  const tex = {}, face = v => tex[v] || (tex[v] = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
+    g.fillStyle = hex; g.fillRect(0, 0, 128, 128); g.strokeStyle = 'rgba(255,255,255,.9)'; g.lineWidth = 8; g.strokeRect(4, 4, 120, 120); g.fillStyle = '#1a1024';
+    P[v].forEach(([a, b]) => { g.beginPath(); g.arc(a * 128, b * 128, 12, 0, 7); g.fill(); }); const t = new T.CanvasTexture(c); t.magFilter = T.NearestFilter; return t; })());
+  const mats = [0, 1, 2, 3, 4, 5].map(() => new T.MeshLambertMaterial({ color: 0xffffff }));
+  const cube = new T.Mesh(new T.BoxGeometry(1, 1, 1), mats); scene.add(cube);
+  let key = '', alive = true, raf = 0;
+  const draw = () => { if (alive) r.render(scene, cam); };
+  const set = d => { const k = d.join(''); if (k !== key) { key = k; [d[2], 7 - d[2], d[0], 7 - d[0], d[1], 7 - d[1]].forEach((v, f) => { mats[f].map = face(v); mats[f].needsUpdate = true; }); } };
+  const home = () => { cube.quaternion.identity(); draw(); };
+  // drag to spin: horizontal drags turn it about the vertical axis, vertical drags tip it towards you
+  let drag = null; const qa = new T.Quaternion(), ax = new T.Vector3();
+  const down = e => { drag = { x: e.clientX, y: e.clientY }; host.setPointerCapture && host.setPointerCapture(e.pointerId); e.stopPropagation(); };
+  const move = e => { if (!drag) return; const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag = { x: e.clientX, y: e.clientY };
+    qa.setFromAxisAngle(ax.set(0, 1, 0), dx * .012); cube.quaternion.premultiply(qa);
+    qa.setFromAxisAngle(ax.set(1, 0, 0), dy * .012); cube.quaternion.premultiply(qa); cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); e.stopPropagation(); };
+  const up = e => { drag = null; e.stopPropagation(); };
+  host.addEventListener('pointerdown', down); host.addEventListener('pointermove', move); host.addEventListener('pointerup', up); host.addEventListener('pointercancel', up);
+  host.addEventListener('dblclick', e => { e.stopPropagation(); home(); });
+  return { sync(d) { set(d); home(); }, dispose() { alive = false; r.dispose(); host.innerHTML = ''; } };
+}
+function pjSide() {
   const p = PJ.p, map = $('#ps-map'); if (!map) return;
   const E = PanelEngine, d = E.dims(p), s = PJ.bs, out = [];
   for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) if (E.inside(p, x, y)) out.push(`<rect class="t" x="${x - .45}" y="${y - .45}" width=".9" height=".9" rx=".12"/>`);
   (p.dice || []).forEach(([x, y, v]) => { const got = s && s.stamp.get(x + ',' + y); out.push(`<g class="w${got === v ? ' ok' : ''}"><rect x="${x - .42}" y="${y - .42}" width=".84" height=".84" rx=".1"/>${pipsSVG(x, y, v, .32)}</g>`); });
   (p.exit || []).forEach(([x, y]) => out.push(`<rect class="g" x="${x - .36}" y="${y - .36}" width=".72" height=".72" rx=".1"/>`));
   map.innerHTML = out.join('');
-  const [t, so, e] = pjPracticeDie(), face = (cls, v) => `<div class="f ${cls}">${(PIPS[v] || []).map(([a, b]) => `<i style="left:${50 + a * 28}%;top:${50 + b * 28}%"></i>`).join('')}<b>${v}</b></div>`;
-  const cube = $('#ps-cube'); if (!cube) return;
-  cube.innerHTML = face('top', t) + face('front', so) + face('right', e);
-  const un = $('#ps-under'); if (un) un.textContent = '▼ ' + (7 - t);
-  if (turned) { cube.classList.remove('bump'); void cube.offsetWidth; cube.classList.add('bump'); }
+  if (PJ.die3) PJ.die3.sync(pjRealDie());
 }
 function pjChrome() {
   const mv = $('#pj-moves'); if (mv) { mv.textContent = pjMovesText(); mv.classList.toggle('bad', PJ.state === 'fail' && PJ.bad.some(b => b.kind === 'moves')); }
@@ -249,7 +270,7 @@ function pjChrome() {
 function drawPJ() {
   if (!PJ) return; const p = PJ.p;
   pjChrome();
-  if ((p.dice || []).length) { if (!PJ.practiceAt || PJ.practiceAt !== (PJ.bs && PJ.bs.inputs)) { PJ.practice = null; PJ.practiceAt = PJ.bs && PJ.bs.inputs; } pjSide(); }
+  if ((p.dice || []).length && PJ.sideAt !== (PJ.bs && PJ.bs.inputs)) { PJ.sideAt = PJ.bs && PJ.bs.inputs; pjSide(); }
   if (PJ.view) { if (PJ.solOn) drawSol3D(); else draw3D(); return; }
   const svg = $('#pj-svg'); if (!svg) return;
   if (PJ.solOn) { drawSol(svg); return; }

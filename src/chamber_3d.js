@@ -460,7 +460,7 @@ const P3 = (() => {
       Bx.cubes.forEach((cu, i) => {
         const left = s.left[i], col = s.col[i], onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1] && (g[2] == null || g[2] === col));
         if (cu.col !== col && !cu.dieMats) { cu.col = col; cu.mat.color.setHex(HUEX[col]); cu.mat.emissive.setHex(HUEX[col]); if (cu.coil) { cu.coil.color.setHex(ROPEX(col)); cu.coil.emissive.setHex(ROPEX(col)); } }
-        setDecal(cu, cu.b.m && cu.b.m !== 'same' ? cu.b.m : '', left != null ? left : s.dice && s.dice[i] ? '▼' + (7 - s.dice[i][0]) : null);
+        setDecal(cu, cu.b.m && cu.b.m !== 'same' ? cu.b.m : '', left);
         cu.mat.emissiveIntensity = o.cls === 'win' ? .7 : onG ? .35 : .08;
         if (s.dead === i) { if (cu.g.visible && !(prev && prev.dead === i)) boom(i, s.pos[i]); cu.g.visible = false; } else cu.g.visible = true;
       });
@@ -589,7 +589,9 @@ const P3 = (() => {
       const W = host.clientWidth || 400, H = host.clientHeight || 300;
       renderer.setPixelRatio(retro ? .65 : Math.min(2, window.devicePixelRatio || 1));
       renderer.setSize(W, H, false); cv.style.width = W + 'px'; cv.style.height = H + 'px';
-      cam.aspect = W / H; cam.updateProjectionMatrix();
+      // dice panels: the brief floats on the right, so the board is fitted into the rest of the view
+      const side = host.classList.contains('has-side') ? Math.min(170, W * .3) : 0, Wf = W - side;
+      cam.clearViewOffset(); cam.aspect = Wf / H; cam.updateProjectionMatrix();
       const pitch = 58 * Math.PI / 180, pts = [], bx = [-.55, d.cols - .45], bz = [-.55, d.rows - .45];
       for (const x of bx) for (const z of bz) for (const y of [0, isBox ? .85 : .5]) pts.push(new THREE.Vector3(x, y, z));
       let dist = 12, tz = cz;
@@ -601,6 +603,7 @@ const P3 = (() => {
         dist *= Math.max(mx, (y1 - y0) / 2) / .86;
       }
       place();
+      if (side) { cam.setViewOffset(Wf, H, 0, 0, W, H); cam.updateProjectionMatrix(); }
     }
     const ro = new ResizeObserver(fit); ro.observe(host); fit();
     let fps = 0, frames = 0, fpsT = performance.now();

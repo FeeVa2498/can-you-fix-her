@@ -87,7 +87,7 @@ function boxSolEvents(p) {
       if (jumps) msg += ', qua cổng';
       if (steps > 1 && E.isStop(p, ...ns.pos[i])) msg += ', dừng ở ô phanh';
       if (ns.col[i] !== s.col[i]) msg += `, bị sơn thành màu ${hueName(p, ns.col[i])}`;
-      if (ns.dice[i]) { msg += `, mặt úp xuống là ${7 - ns.dice[i][0]}`; const k = ns.pos[i].join(','), t = (p.dice || []).find(q => q[0] === ns.pos[i][0] && q[1] === ns.pos[i][1]); if (t) msg += ` (in ${7 - ns.dice[i][0]} lên ô cần ${t[2]})`; }
+      if (ns.dice[i]) { msg += ``; const k = ns.pos[i].join(','), t = (p.dice || []).find(q => q[0] === ns.pos[i][0] && q[1] === ns.pos[i][1]); if (t) msg += ` (in ${7 - ns.dice[i][0]} lên ô cần ${t[2]})`; }
       if (ns.left[i] != null) msg += `, mìn còn ${ns.left[i]} nước`;
       
       msg += '.';

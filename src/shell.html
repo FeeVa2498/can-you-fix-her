@@ -888,32 +888,22 @@ rect.pb-head{stroke:#fff;stroke-width:.03}
 .pbx-boom path{fill:#ffa040;stroke:#ffd86e;stroke-width:.05;animation:boom .5s ease-out}
 @keyframes boom{0%{transform:scale(.2);opacity:0}60%{opacity:1}100%{transform:scale(1)}}
 .pbx-boom{transform-box:fill-box;transform-origin:center}
-.pj-host{position:absolute;top:0;left:0;bottom:0;right:150px}
-.pj-vp.flat .pj-host{top:6px;left:6px;bottom:6px}
-.pj-host>svg{width:100%;height:100%}
-.pj-side{position:absolute;top:8px;right:8px;z-index:4;width:132px;padding:8px;background:rgba(26,16,36,.88);border:2px solid;border-color:#f5eeff #3a2554 #3a2554 #f5eeff;color:#f4e9ff;font:11px/1.3 var(--mono);display:flex;flex-direction:column;gap:5px}
-.pj-side .ps-h{font-weight:bold;letter-spacing:.08em;color:#ffd23f}
-.ps-map{width:100%;height:auto;max-height:120px}
-.ps-map .t{fill:#3b2560}
+.pj-side{position:absolute;top:10px;right:12px;z-index:4;width:150px;color:#f4e9ff;font:11px/1.3 var(--mono);display:flex;flex-direction:column;gap:6px;pointer-events:none;text-shadow:0 1px 0 rgba(0,0,0,.5)}
+.pj-vp.flat .pj-side{color:#3a2554;text-shadow:none}
+.pj-side .ps-map,.pj-side .ps-die{pointer-events:auto}
+.pj-side .ps-h{font-weight:bold;letter-spacing:.12em;opacity:.85}
+.ps-map{width:100%;height:auto;max-height:130px;cursor:default}
+.ps-die{position:relative;width:150px;height:130px;cursor:grab;touch-action:none}
+.pj-vp .ps-die canvas{position:static;inset:auto}
+.ps-die:active{cursor:grabbing}
+.ps-nogl{opacity:.7}
+.ps-map .t{fill:rgba(203,184,234,.28)}
+.pj-vp.flat .ps-map .t{fill:#4a3570}
+.pj-vp.flat .ps-map .g{stroke:#3a2554}
 .ps-map .w rect{fill:#f8f4ff}
 .ps-map .w .pip{fill:#1a1024}
 .ps-map .w.ok rect{fill:#c9f5dc}
 .ps-map .g{fill:none;stroke:#fff4fb;stroke-width:.07}
-.ps-die{position:relative;height:92px;perspective:420px;display:grid;place-items:center}
-.ps-cube{position:relative;width:44px;height:44px;transform-style:preserve-3d;transform:rotateX(-30deg) rotateY(-40deg)}
-.ps-cube.bump{animation:psbump .25s ease-out}
-@keyframes psbump{0%{transform:rotateX(-30deg) rotateY(-40deg) scale(.82)}100%{transform:rotateX(-30deg) rotateY(-40deg) scale(1)}}
-.ps-cube .f{position:absolute;inset:0;background:#a46bff;border:2px solid #f8f4ff;border-radius:6px;backface-visibility:hidden}
-.ps-cube .top{transform:rotateX(90deg) translateZ(22px);filter:brightness(1.15)}
-.ps-cube .front{transform:translateZ(22px)}
-.ps-cube .right{transform:rotateY(90deg) translateZ(22px);filter:brightness(.85)}
-.ps-cube .f i{position:absolute;width:8px;height:8px;border-radius:50%;background:#1a1024;transform:translate(-50%,-50%)}
-.ps-cube .f b{display:none}
-.ps-under{position:absolute;bottom:0;left:0;right:0;text-align:center;color:#ffd23f;font-weight:bold}
-.ps-ctrl{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
-.ps-ctrl button{font:inherit;padding:2px 0;background:#3b2560;color:#f4e9ff;border:1px solid #cbb8ea;cursor:pointer}
-.ps-ctrl button:hover{background:#5a3a8a}
-.ps-tip{opacity:.8}
 .pbx-dt rect{fill:#f8f4ff;stroke:#cbb8ea;stroke-width:.03}
 .pbx-dt .pip{fill:#1a1024}
 .pbx-dt.ok rect{stroke:#7be3a4;stroke-width:.07}
