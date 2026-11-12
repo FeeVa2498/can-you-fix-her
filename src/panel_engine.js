@@ -242,12 +242,12 @@ const PanelEngine = (() => {
      p.boxes [{x,y, m, dash, n, trail, c}]
        m      'opp': reverse twin, every key backwards (left↔right, up↔down). ('mx'/'my' still read: one axis)
        dash   rocket box: one press = slide until a wall, a box, a rope or a closed door stops it
-       n      bomb countdown: every key press that moves anything takes one off; at 0 the bomb explodes and the
-              level fails (unless that very press won it)
+       n      bomb countdown: one off each time this box actually moves (pressed against a wall it stays put and
+              keeps its number); at 0 the bomb explodes and the level fails (unless that very move won it)
        trail  rope box: leaves a rope behind; ropes block every box (its own too), except that a rope box may step
               back onto the end of its own rope, which reels that piece of rope back in
-       c      colour 1..3 (0/none = plain)
-     p.exit     goals [[x,y,c?]]: a goal with a colour wants a box of that colour; a plain goal takes any box
+       c      colour: 0 (default) = the girl's own colour, 1..3 = her other selves
+     p.exit     goals [[x,y,c?]]: with c (0..3) it wants a box of that colour; without, it takes any box
      p.lights   [[x,y]] light tiles: lit while a rope lies on them (or a rope box stands there)
      p.nums     [[cx,cy,n]] the ropes must use exactly n sides of this square (between four tiles)
      p.switches [[x,y,c,c2?]] a box entering opens every door of colour c for good.
@@ -347,19 +347,17 @@ const PanelEngine = (() => {
       // cracked tiles fall once nobody stands on them
       if (X.crack.size) for (const k of left) if (X.crack.has(k) && !s.pos.some(q => key(...q) === k)) s.crk.add(k);
     }
-    // bombs: every key press that does something burns one second off every bomb; at 0 it goes off unless that press won the panel
-    if (moved.some(Boolean)) {
-      for (let i = 0; i < n; i++) if (s.left[i] !== null) s.left[i]--;
-      const z = s.left.findIndex(l => l === 0);
-      if (z >= 0) { const N = boxNeed(p, s); if (N.goals.length || N.lights.length || N.nums.length) s.dead = z; }
-    }
+    // bombs: one off for each box that really moved; at 0 it goes off unless that press won the panel
+    let z = -1;
+    for (let i = 0; i < n; i++) if (moved[i] && s.left[i] !== null && --s.left[i] === 0 && z < 0) z = i;
+    if (z >= 0) { const N = boxNeed(p, s); if (N.goals.length || N.lights.length || N.nums.length) s.dead = z; }
     return { state: s, moved, dead: s.dead };
   }
   // what's still missing: { goals: [i…], lights: [i…], nums: [{i,c}…] }
   function boxNeed(p, s) {
     const at = new Map(s.pos.map((q, i) => [key(...q), i]));
     const goals = [], lights = [], nums = [];
-    (p.exit || []).forEach((g, i) => { const b = at.get(key(g[0], g[1])); if (b === undefined || (g[2] && s.col[b] !== g[2])) goals.push(i); });
+    (p.exit || []).forEach((g, i) => { const b = at.get(key(g[0], g[1])); if (b === undefined || (g[2] != null && s.col[b] !== g[2])) goals.push(i); });
     (p.lights || []).forEach(([x, y], i) => { const k = key(x, y), b = at.get(k); if (!s.trail.has(k) && !(b !== undefined && p.boxes[b].trail)) lights.push(i); });
     (p.nums || []).forEach(([cx, cy, n], i) => { const c = cellSides(cx, cy).filter(k => s.rope.has(k)).length; if (c !== n) nums.push({ i, c }); });
     return { goals, lights, nums };

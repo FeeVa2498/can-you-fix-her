@@ -10,8 +10,7 @@
 const P3 = (() => {
   const has = () => { try { if (!window.THREE) return false; const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } };
   const BOXHEX = [0xff8cc6, 0xb48cff, 0x7be3a4, 0xffd86e];
-  const HUEX = [0xe9defa, 0xff6fb5, 0x4fd8ff, 0x9cf06a];   // plain, then colours 1..3 (boxes, goals, locks, paint)
-  const ROPEX = c => c ? HUEX[c] : 0xff5fa8;
+  const LOCKX = [0, 0x4fd8ff, 0xff9f5a, 0x9cf06a];   // switch / door colours 1..3
   const PORTALHEX = [0xffd86e, 0x8fdcf7, 0x7be3a4];
   const GIRL = { prim: 0x8d6fbf, trix: 0x6f8fcf, paige: 0x9a7cc8, vel: 0xc58bd8, myne: 0x7fb6c8 };
 
@@ -76,6 +75,7 @@ const P3 = (() => {
 
   /* ---------- the view ---------- */
   function create(host, p) {
+    const HUEX = (typeof GIRL_HUE !== 'undefined' ? (GIRL_HUE[p.girl] || GIRL_HUE.prim) : ['#ff7eb6', '#f2ecff', '#6fe0c8', '#ffd23f']).map(h => parseInt(h.slice(1), 16)), ROPEX = c => HUEX[c || 0];
     const E = PanelEngine, d = E.dims(p), isBox = !!p.boxes;
     const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'low-power' });
     const cv = renderer.domElement; cv.className = 'pj3-canvas'; host.appendChild(cv);
@@ -115,7 +115,7 @@ const P3 = (() => {
         if (pads.has(k)) { const [dx, dz] = pads.get(k); [-.14, .14].forEach((o, i) => { const c = chevron(0x7be3a4, .15); c.position.set(x + dx * o, .012, y + dz * o); c.rotation.y = yawOf(dx, dz); world.add(c); anim.flow.push({ m: c, i }); }); }
         if (stops.has(k)) world.add(box(.5, .05, .12, basic(0xff9f5a), x, .02, y));
       }
-      (p.exit || []).forEach(([x, y, c]) => world.add(goalTile(x, y, .96, c ? HUEX[c] : 0xffd86e)));
+      (p.exit || []).forEach(([x, y, c]) => world.add(goalTile(x, y, .96, c != null ? HUEX[c] : 0xfff4fb)));
       (p.paints || []).forEach(([x, y, c]) => {
         const col = '#' + HUEX[c].toString(16).padStart(6, '0');
         const m = new THREE.Mesh(new THREE.PlaneGeometry(.8, .8), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, map: canvasTex(128, 128, (g, w, h) => {
@@ -139,15 +139,15 @@ const P3 = (() => {
     function locks() {
       (p.switches || []).forEach(([x, y, c, c2]) => {
         const base = new THREE.Mesh(new THREE.CylinderGeometry(.36, .38, .05, 20), std(0x1a1024)); base.position.set(x, .02, y);
-        const btn = new THREE.Mesh(new THREE.CylinderGeometry(c2 == null ? .26 : .19, c2 == null ? .28 : .21, .1, 20), std(HUEX[c], { emissive: HUEX[c], emissiveIntensity: .25 })); btn.position.set(x, .09, y);
+        const btn = new THREE.Mesh(new THREE.CylinderGeometry(c2 == null ? .26 : .19, c2 == null ? .28 : .21, .1, 20), std(LOCKX[c], { emissive: LOCKX[c], emissiveIntensity: .25 })); btn.position.set(x, .09, y);
         world.add(base, edges(btn, 0xffffff, .6));
         let ring = null;
-        if (c2 != null) { ring = new THREE.Mesh(new THREE.TorusGeometry(.28, .045, 6, 24), std(HUEX[c2], { emissive: HUEX[c2], emissiveIntensity: .35 })); ring.rotation.x = -Math.PI / 2; ring.position.set(x, .07, y); world.add(ring); }
+        if (c2 != null) { ring = new THREE.Mesh(new THREE.TorusGeometry(.28, .045, 6, 24), std(LOCKX[c2], { emissive: LOCKX[c2], emissiveIntensity: .35 })); ring.rotation.x = -Math.PI / 2; ring.position.set(x, .07, y); world.add(ring); }
         sw3.push({ btn, ring, c, c2, y0: btn.position.y });
       });
       (p.doors || []).forEach(([x1, y1, x2, y2, c]) => {
         const hor = x1 !== x2, mx = (x1 + x2) / 2, my = (y1 + y2) / 2, L = 1.0, H = .62;
-        const mat = std(HUEX[c], { emissive: HUEX[c], emissiveIntensity: .45, transparent: true, opacity: .88 });
+        const mat = std(LOCKX[c], { emissive: LOCKX[c], emissiveIntensity: .45, transparent: true, opacity: .88 });
         const g = new THREE.Group(); g.position.set(mx, 0, my);
         const bar = box(hor ? .12 : L, H, hor ? L : .12, mat, 0, H / 2, 0); g.add(edges(bar, 0xffffff, .8));
         for (let i = -1; i <= 1; i += 2) g.add(box(hor ? .14 : .05, H * .9, hor ? .05 : .14, basic(0x1a1024), hor ? 0 : i * L * .25, H / 2, hor ? i * L * .25 : 0));
@@ -158,7 +158,7 @@ const P3 = (() => {
       sw3.forEach((q, i) => {
         if (q.c2 == null) { const on = !!(s.open & (1 << q.c)); q.btn.position.y = q.y0 - (on ? .06 : 0); q.btn.material.emissiveIntensity = on ? .9 : .25; return; }
         const cur = E.swUp([0, 0, q.c, q.c2], s.open), oth = cur === q.c ? q.c2 : q.c;
-        q.btn.material.color.setHex(HUEX[cur]); q.btn.material.emissive.setHex(HUEX[cur]); q.ring.material.color.setHex(HUEX[oth]); q.ring.material.emissive.setHex(HUEX[oth]);
+        q.btn.material.color.setHex(LOCKX[cur]); q.btn.material.emissive.setHex(LOCKX[cur]); q.ring.material.color.setHex(LOCKX[oth]); q.ring.material.emissive.setHex(LOCKX[oth]);
       });
       gates3.forEach(gt => { if (gt.c !== undefined) gt.want = s.open & (1 << gt.c) ? 1 : 0; });
     }
@@ -446,7 +446,7 @@ const P3 = (() => {
       });
       const prevSegs = p.boxes.map((b, i) => b.trail && prev && prev.ropes ? E.ropeSegs(prev, i).length : 0);
       Bx.cubes.forEach((cu, i) => {
-        const left = s.left[i], col = s.col[i], onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1] && (!g[2] || g[2] === col));
+        const left = s.left[i], col = s.col[i], onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1] && (g[2] == null || g[2] === col));
         if (cu.col !== col) { cu.col = col; cu.mat.color.setHex(HUEX[col]); cu.mat.emissive.setHex(HUEX[col]); if (cu.coil) { cu.coil.color.setHex(ROPEX(col)); cu.coil.emissive.setHex(ROPEX(col)); } }
         setDecal(cu, cu.b.m && cu.b.m !== 'same' ? cu.b.m : '', left);
         cu.mat.emissiveIntensity = o.cls === 'win' ? .7 : onG ? .35 : .08;

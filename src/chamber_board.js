@@ -43,9 +43,13 @@ function switchSVG(p, on, tiles) {
 }
 /* box panels: tiles instead of tracks; walls sit between tiles.
    o.s: the current state (lights, doors, switches, cracks, numbers are drawn live from it) */
-const HUE = ['#e9defa', '#ff6fb5', '#4fd8ff', '#9cf06a'];   // plain, then box / goal / lock colours 1..3
-const HUE_DIM = ['#6b4a2c', '#6a2a50', '#1f4f66', '#3d5f2a'];
-const ropeHue = c => c ? HUE[c] : '#ff5fa8';
+// every girl's boxes wear her colour (0); 1..3 are her other selves. Locks (switches, doors) keep their own colours.
+const GIRL_HUE = {
+  prim: ['#ff7eb6', '#f2ecff', '#6fe0c8', '#ffd23f'], trix: ['#ff4d5e', '#f2ecff', '#4fd8ff', '#9cf06a'], paige: ['#a46bff', '#f2ecff', '#ff9f5a', '#6fe0c8'],
+  vel: ['#ffd23f', '#f2ecff', '#ff6fb5', '#4fd8ff'], myne: ['#4fa8ff', '#f2ecff', '#ffd23f', '#ff6fb5'],
+};
+const LOCK_HUE = [null, '#4fd8ff', '#ff9f5a', '#9cf06a'];
+const boxHue = (p, c) => (GIRL_HUE[p.girl] || GIRL_HUE.prim)[c || 0];
 function boxBoardSVG(p, o = {}) {
   const E = PanelEngine, d = E.dims(p), out = [], br = E.brokenSet(p), s = o.s || E.boxStart(p);
   const at = new Map(s.pos.map((q, i) => [q.join(','), i]));
@@ -57,20 +61,20 @@ function boxBoardSVG(p, o = {}) {
   }
   (p.exit || []).forEach(([x, y, c]) => {
     const b = at.get(x + ',' + y), on = b !== undefined && (!c || s.col[b] === c);
-    out.push(`<g class="pbx-goal${on ? ' on' : ''}${c ? ' col' : ''}" style="--gc:${c ? HUE[c] : '#ffd86e'};--gd:${HUE_DIM[c || 0]}"><rect class="glow" x="${x - .47}" y="${y - .47}" width=".94" height=".94" rx=".14"/><rect class="frame" x="${x - .36}" y="${y - .36}" width=".72" height=".72" rx=".1"/>${o.mini ? '' : `<rect class="pulse" x="${x - .36}" y="${y - .36}" width=".72" height=".72" rx=".1"/>`}</g>`);
+    out.push(`<g class="pbx-goal${on ? ' on' : ''}${c != null ? ' col' : ''}" style="--gc:${c != null ? boxHue(p, c) : '#fff4fb'};--gd:${c != null ? boxHue(p, c) + '44' : '#5a4a6a'}"><rect class="glow" x="${x - .47}" y="${y - .47}" width=".94" height=".94" rx=".14"/><rect class="frame" x="${x - .36}" y="${y - .36}" width=".72" height=".72" rx=".1"/>${o.mini ? '' : `<rect class="pulse" x="${x - .36}" y="${y - .36}" width=".72" height=".72" rx=".1"/>`}</g>`);
   });
   (p.pads || []).forEach(([x, y, dx, dy]) => out.push(`<g class="pbx-pad"><rect x="${x - .4}" y="${y - .4}" width=".8" height=".8" rx=".12"/>${arrowAt(x - dx * .12, y - dy * .12, dx, dy, .14, '')}${arrowAt(x + dx * .1, y + dy * .1, dx, dy, .14, '')}</g>`));
   (p.stops || []).forEach(([x, y]) => out.push(`<g class="pbx-stop"><rect x="${x - .34}" y="${y - .34}" width=".68" height=".68" rx=".1"/><path d="M${x - .16} ${y}H${x + .16}"/></g>`));
   (p.portals || []).forEach((q, i) => [[q[0], q[1]], [q[2], q[3]]].forEach(([x, y]) => out.push(`<circle class="pb-portal" cx="${x}" cy="${y}" r=".3" stroke="${PORTAL[i % 3]}"/><circle cx="${x}" cy="${y}" r=".14" fill="${PORTAL[i % 3]}" opacity=".7"/>`)));
-  (p.paints || []).forEach(([x, y, c]) => out.push(`<g class="pbx-paint" style="--pc:${HUE[c]}"><path d="M${x - .26} ${y + .02}c.02-.2 .2-.3 .32-.22c.14-.12 .26 .04 .2 .14c.12 .1 .02 .3-.14 .26c-.08 .14-.3 .1-.3-.02c-.14-.02-.16-.12-.08-.16z"/><circle cx="${x + .26}" cy="${y - .24}" r=".05"/><circle cx="${x - .28}" cy="${y + .26}" r=".04"/></g>`));
+  (p.paints || []).forEach(([x, y, c]) => out.push(`<g class="pbx-paint" style="--pc:${boxHue(p, c)}"><path d="M${x - .26} ${y + .02}c.02-.2 .2-.3 .32-.22c.14-.12 .26 .04 .2 .14c.12 .1 .02 .3-.14 .26c-.08 .14-.3 .1-.3-.02c-.14-.02-.16-.12-.08-.16z"/><circle cx="${x + .26}" cy="${y - .24}" r=".05"/><circle cx="${x - .28}" cy="${y + .26}" r=".04"/></g>`));
   // light tiles: a bulb, lit while a rope lies on it
   const N = E.boxNeed(p, s), dark = new Set(N.lights);
   (p.lights || []).forEach(([x, y], i) => out.push(`<g class="pbx-light${dark.has(i) ? '' : ' on'}"><circle class="halo" cx="${x}" cy="${y}" r=".34"/><circle class="bulb" cx="${x}" cy="${y}" r=".15"/><path class="rays" d="M${x} ${y - .3}v.08M${x} ${y + .3}v-.08M${x - .3} ${y}h.08M${x + .3} ${y}h-.08"/></g>`));
   // switches: one colour, or two (the one it opens next is the big one)
   (p.switches || []).forEach(([x, y, c, c2], i) => {
-    if (c2 == null) { out.push(`<g class="pbx-sw${s.open & (1 << c) ? ' on' : ''}" style="--sc:${HUE[c]}"><circle class="base" cx="${x}" cy="${y}" r=".32"/><circle class="btn" cx="${x}" cy="${y}" r=".2"/></g>`); return; }
+    if (c2 == null) { out.push(`<g class="pbx-sw${s.open & (1 << c) ? ' on' : ''}" style="--sc:${LOCK_HUE[c]}"><circle class="base" cx="${x}" cy="${y}" r=".32"/><circle class="btn" cx="${x}" cy="${y}" r=".2"/></g>`); return; }
     const cur = E.swUp([x, y, c, c2], s.open), oth = cur === c ? c2 : c;
-    out.push(`<g class="pbx-sw dbl" style="--sc:${HUE[cur]};--so:${HUE[oth]}"><circle class="base" cx="${x}" cy="${y}" r=".34"/><circle class="ring" cx="${x}" cy="${y}" r=".27"/><circle class="btn" cx="${x}" cy="${y}" r=".17"/><path class="flip" d="M${x - .08} ${y - .02}a.09 .09 0 1 1 .16 .05m0 0l.03-.07m-.03 .07l-.07-.02"/></g>`);
+    out.push(`<g class="pbx-sw dbl" style="--sc:${LOCK_HUE[cur]};--so:${LOCK_HUE[oth]}"><circle class="base" cx="${x}" cy="${y}" r=".34"/><circle class="ring" cx="${x}" cy="${y}" r=".27"/><circle class="btn" cx="${x}" cy="${y}" r=".17"/><path class="flip" d="M${x - .08} ${y - .02}a.09 .09 0 1 1 .16 .05m0 0l.03-.07m-.03 .07l-.07-.02"/></g>`);
   });
   // walls between tiles, and one-way gaps
   allEdgesOf(p).forEach(([x1, y1, x2, y2]) => {
@@ -80,7 +84,7 @@ function boxBoardSVG(p, o = {}) {
   });
   (p.doors || []).forEach(([x1, y1, x2, y2, c]) => {
     const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, open = !!(s.open & (1 << c));
-    out.push(`<g class="pbx-door${open ? ' open' : ''}" style="--dc:${HUE[c]}">${x1 !== x2 ? segLine('', [mx, my - .44, mx, my + .44]) : segLine('', [mx - .44, my, mx + .44, my])}</g>`);
+    out.push(`<g class="pbx-door${open ? ' open' : ''}" style="--dc:${LOCK_HUE[c]}">${x1 !== x2 ? segLine('', [mx, my - .44, mx, my + .44]) : segLine('', [mx - .44, my, mx + .44, my])}</g>`);
   });
   (p.oneway || []).forEach(e => out.push(`<g class="pbx-ow">${arrowAt((e[0] + e[2]) / 2, (e[1] + e[3]) / 2, e[2] - e[0], e[3] - e[1], .13, '')}</g>`));
   // numbers between four tiles: "rope sides so far / needed"
@@ -100,19 +104,19 @@ function boxesSVG(p, s, o = {}) {
     // while a move animates, draw the rope as it was plus a piece to where the box is now
     const src = o.prev || s, segs = PanelEngine.ropeSegs(src, i).slice();
     if (o.prev && at[i]) segs.push([o.prev.pos[i], at[i]]);
-    const hue = ropeHue(s.col ? s.col[i] : b.c);
+    const hue = boxHue(p, s.col ? s.col[i] : b.c);
     segs.forEach(([a, z]) => out.push(`<line class="pbx-rope" x1="${a[0]}" y1="${a[1]}" x2="${z[0]}" y2="${z[1]}" style="stroke:${hue}"/>`));
   });
   p.boxes.forEach((b, i) => {
-    const [x, y] = at[i], col = s.col ? s.col[i] : (b.c || 0), c = HUE[col], left = s.left ? s.left[i] : b.n;
+    const [x, y] = at[i], col = s.col ? s.col[i] : (b.c || 0), c = boxHue(p, col), left = s.left ? s.left[i] : b.n;
     if (s.dead === i) { out.push(`<g class="pbx-boom"><path d="M${x} ${y - .46}L${x + .12} ${y - .14}L${x + .44} ${y - .2}L${x + .2} ${y + .04}L${x + .36} ${y + .36}L${x + .04} ${y + .2}L${x - .2} ${y + .44}L${x - .16} ${y + .12}L${x - .46} ${y}L${x - .16} ${y - .12}z"/></g>`); return; }
-    const onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1] && (!g[2] || g[2] === col));
+    const onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1] && (g[2] == null || g[2] === col));
     let g = `<g class="pbx-box${onG ? ' on' : ''}${o.cls ? ' ' + o.cls : ''}"><rect x="${x - .32}" y="${y - .32}" width=".64" height=".64" rx=".13" fill="${c}"/>`;
     if (b.dash) g += `<path class="dash" d="M${x - .2} ${y - .14}h.16M${x - .24} ${y}h.2M${x - .2} ${y + .14}h.16"/>`;
     if (b.m === 'mx') g += `<path class="mark" d="M${x} ${y - .3}V${y + .3}"/>`;
     if (b.m === 'my') g += `<path class="mark" d="M${x - .3} ${y}H${x + .3}"/>`;
     if (b.m === 'opp') g += `<path class="mark" d="M${x - .26} ${y - .26}L${x + .26} ${y + .26}M${x + .26} ${y - .26}L${x - .26} ${y + .26}"/>`;
-    if (b.trail) g += `<path class="coil" d="M${x - .32} ${y - .08}h.64M${x - .32} ${y + .04}h.64M${x - .32} ${y + .16}h.64" style="stroke:${ropeHue(col)}"/>`;
+    if (b.trail) g += `<path class="coil" d="M${x - .32} ${y - .08}h.64M${x - .32} ${y + .04}h.64M${x - .32} ${y + .16}h.64" />`;
     if (left != null && !o.mini) g += `<g class="bomb${left <= 1 ? ' hot' : ''}"><path class="fuse" d="M${x + .1} ${y - .52}q.06-.1 .14-.08"/><circle class="spark" cx="${x + .25}" cy="${y - .6}" r=".05"/><circle class="ball" cx="${x}" cy="${y - .42}" r=".17"/><text x="${x}" y="${y - .415}">${left}</text></g>`;
     out.push(g + '</g>');
   });

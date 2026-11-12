@@ -75,13 +75,13 @@ const ED_TOOLS = {
     ['bridge', 'Overpass', 'node', 'Cầu vượt'], ['plate0', 'Plate ●', 'node', 'Công tắc xanh'], ['plate1', 'Plate ●', 'node', 'Công tắc cam'],
     ['gate0', 'Gate ▮', 'edge', 'Cổng xanh (bấm lại = cổng đảo, lần 3 xoá)'], ['gate1', 'Gate ▮', 'edge', 'Cổng cam (bấm lại = cổng đảo, lần 3 xoá)'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
   box: [['box', 'Box', 'node', 'Đặt hộp; bấm hộp có sẵn để chọn và chỉnh thuộc tính (màu, dây, tên lửa, song sinh, đếm ngược)'],
-    ['goal', 'Goal', 'node', 'Ô goal: bấm lại để đổi màu (trắng → hồng → xanh → lục), lần 5 xoá'], ['wall', 'Wall', 'edge', 'Tường giữa hai ô'], ['hole', 'Hole', 'node', 'Lỗ trên map'],
+    ['goal', 'Goal', 'node', 'Ô goal: bấm lại để đổi: nhận mọi hộp → màu của cô gái → nhân cách 1 → 2 → 3, rồi xoá'], ['wall', 'Wall', 'edge', 'Tường giữa hai ô'], ['hole', 'Hole', 'node', 'Lỗ trên map'],
     ['light', 'Light', 'node', 'Ô đèn: dây phải nằm trên đó'], ['num', 'Number', 'cell', 'Số giữa bốn ô: số cạnh dây phải đi (bấm lại để tăng 1→4, rồi xoá)'],
     ['pad', 'Arrow tile', 'node', 'Ô mũi tên (bấm lại để xoay →↓←↑, lần 5 xoá)'], ['stop', 'Stop', 'node', 'Ô phanh'], ['oneway', 'One-way', 'edge', 'Khe một chiều (bấm lại để đảo chiều)'],
     ['portal', 'Portal', 'node', 'Bấm 2 ô để tạo cặp'],
-    ['switch', 'Switch', 'node', 'Ô chốt: bấm lại để đổi màu hồng → xanh → lục, rồi thành công tắc hai màu hồng/xanh → xanh/lục → lục/hồng (màu đầu dựng sẵn, màu sau hạ sẵn), rồi xoá'],
-    ['door', 'Door', 'edge', 'Cửa khoá giữa hai ô: bấm lại để đổi màu hồng → xanh → lục, rồi xoá'],
-    ['crack', 'Crack', 'node', 'Ô nứt: hộp rời đi là sụp'], ['paint', 'Paint', 'node', 'Ô sơn: bấm lại để đổi màu, rồi xoá'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
+    ['switch', 'Switch', 'node', 'Ô chốt: bấm lại để đổi màu xanh → cam → lục, rồi thành công tắc hai màu xanh/cam → cam/lục → lục/xanh (màu đầu dựng sẵn, màu sau hạ sẵn), rồi xoá'],
+    ['door', 'Door', 'edge', 'Cửa khoá giữa hai ô: bấm lại để đổi màu xanh → cam → lục, rồi xoá'],
+    ['crack', 'Crack', 'node', 'Ô nứt: hộp rời đi là sụp'], ['paint', 'Paint', 'node', 'Ô sơn: màu cô gái → nhân cách 1 → 2 → 3, rồi xoá'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
 };
 const ED_TAGS = ['', 'basic', 'trail', 'boxes', 'lights', 'nums', 'switches', 'dbl', 'colors', 'paints', 'cracks', 'ends', 'holes', 'oneway', 'portals', 'pads', 'stops', 'dash', 'helpers', 'many', 'budget', 'twin', 'twinrope', 'nolock', 'plates', 'swap'];
 let ED = null;
@@ -201,14 +201,15 @@ function edApply(tg) {
       case 'exit': edToggle(L('exit'), v.slice(), a => atN(a, v)); break;
       case 'goal': {
         const i = L('exit').findIndex(a => atN(a, v));
-        if (i < 0) p.exit.push(v.slice()); else { const c = p.exit[i][2] || 0; if (c >= 3) p.exit.splice(i, 1); else p.exit[i] = [v[0], v[1], c + 1]; }
+        // any box → her own colour → other selves 1..3 → gone
+        if (i < 0) p.exit.push(v.slice()); else { const c = p.exit[i][2]; if (c === 3) p.exit.splice(i, 1); else p.exit[i] = [v[0], v[1], c == null ? 0 : c + 1]; }
         break;
       }
       case 'light': edToggle(L('lights'), v.slice(), a => atN(a, v)); break;
       case 'crack': edToggle(L('cracks'), v.slice(), a => atN(a, v)); break;
       case 'paint': {
         const i = L('paints').findIndex(a => atN(a, v));
-        if (i < 0) p.paints.push([v[0], v[1], 1]); else if (p.paints[i][2] < 3) p.paints[i][2]++; else p.paints.splice(i, 1);
+        if (i < 0) p.paints.push([v[0], v[1], 0]); else if (p.paints[i][2] < 3) p.paints[i][2]++; else p.paints.splice(i, 1);
         break;
       }
       case 'switch': {
@@ -413,7 +414,7 @@ function edProps() {
     ${box ? '' : `<label><input type="checkbox" id="ep-mirror" ${p.mirror ? 'checked' : ''}> Mirror line (other hand)</label><label><input type="checkbox" id="ep-all" ${p.visitAll ? 'checked' : ''}> Visit every point</label>`}
     <label>Tutorial tag <select id="ep-tut">${ED_TAGS.map(t => `<option value="${t}"${(p.tut || '') === t ? ' selected' : ''}>${t || '—'}</option>`).join('')}</select></label>
     ${sb ? `<fieldset class="ed-box"><legend>Selected box</legend>
-      <label>Colour <select id="eb-c">${['plain', 'pink', 'blue', 'green'].map((nm, c) => `<option value="${c}"${(sb.c || 0) === c ? ' selected' : ''}>${nm}</option>`).join('')}</select></label>
+      <label>Colour <select id="eb-c">${['her colour', 'other self 1', 'other self 2', 'other self 3'].map((nm, c) => `<option value="${c}"${(sb.c || 0) === c ? ' selected' : ''}>${nm}</option>`).join('')}</select></label>
       <label><input type="checkbox" id="eb-rope" ${sb.trail ? 'checked' : ''}> Rope box</label>
       <label><input type="checkbox" id="eb-dash" ${sb.dash ? 'checked' : ''}> Rocket box</label>
       <label><input type="checkbox" id="eb-twin" ${sb.m === 'opp' ? 'checked' : ''}> Reverse twin</label>

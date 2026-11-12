@@ -60,12 +60,15 @@ function solEvents(p) {
   }
   return { ev, ends, n: ends.length - 1 };
 }
-const HUEN = ['trắng', 'hồng', 'xanh', 'lục'];
+const HUE_NAME = { prim: ['hồng', 'trắng', 'bạc hà', 'vàng'], trix: ['đỏ', 'trắng', 'xanh', 'lục'], paige: ['tím', 'trắng', 'cam', 'bạc hà'], vel: ['vàng', 'trắng', 'hồng', 'xanh'], myne: ['xanh', 'trắng', 'vàng', 'hồng'] };
+const LOCK_NAME = ['', 'xanh', 'cam', 'lục'];
+const hueName = (p, c) => (HUE_NAME[p.girl] || HUE_NAME.prim)[c || 0];
 function boxName(p, s, i) {
   const b = p.boxes[i], kind = b.trail ? 'Hộp dây' : b.dash ? 'Hộp tên lửa' : 'Hộp';
   if (p.boxes.length === 1) return kind;
   const same = p.boxes.filter((q, j) => (q.trail ? 1 : q.dash ? 2 : 0) === (b.trail ? 1 : b.dash ? 2 : 0) && s.col[j] === s.col[i] && (q.m || '') === (b.m || '')).length;
-  return `${kind}${s.col[i] ? ' ' + HUEN[s.col[i]] : ''}${b.m === 'opp' ? ' song sinh' : ''}${same > 1 ? ' #' + (i + 1) : ''}`;
+  const coloured = (p.exit || []).some(g => g[2] != null) || p.boxes.some(q => q.c);
+  return `${kind}${coloured ? ' ' + hueName(p, s.col[i]) : ''}${b.m === 'opp' ? ' song sinh' : ''}${same > 1 ? ' #' + (i + 1) : ''}`;
 }
 function boxSolEvents(p) {
   const E = PanelEngine, inp = p.solIn, n = p.boxes.length, X = E.boxCtx(p);
@@ -83,16 +86,16 @@ function boxSolEvents(p) {
       if (t.slice(1).some(q => E.padAt(p, ...q))) msg += ', bị ô mũi tên đẩy đi';
       if (jumps) msg += ', qua cổng';
       if (steps > 1 && E.isStop(p, ...ns.pos[i])) msg += ', dừng ở ô phanh';
-      if (ns.col[i] !== s.col[i]) msg += `, bị sơn thành màu ${HUEN[ns.col[i]]}`;
+      if (ns.col[i] !== s.col[i]) msg += `, bị sơn thành màu ${hueName(p, ns.col[i])}`;
       
       msg += '.';
       const g = goalAt(ns.pos[i]);
-      if (g && (!g[2] || g[2] === ns.col[i])) msg += ' Đang đứng trong goal.';
+      if (g && (g[2] == null || g[2] === ns.col[i])) msg += ' Đang đứng trong goal.';
       else if (goalAt(s.pos[i])) msg += ' Rời khỏi goal (hộp không bị khoá).';
       out.push(msg);
     });
     const bombs = ns.left.filter(l => l != null); if (bombs.length) out.push(`Bom còn ${[...new Set(bombs)].join('/')}.`);
-    if (ns.open !== s.open) [1, 2, 3].forEach(cc => { const was = s.open & (1 << cc), now = ns.open & (1 << cc); if (now && !was) out.push(`Cửa ${HUEN[cc]} mở.`); if (was && !now) out.push(`Cửa ${HUEN[cc]} đóng lại.`); });
+    if (ns.open !== s.open) [1, 2, 3].forEach(cc => { const was = s.open & (1 << cc), now = ns.open & (1 << cc); if (now && !was) out.push(`Tường ${LOCK_NAME[cc]} hạ xuống.`); if (was && !now) out.push(`Tường ${LOCK_NAME[cc]} trồi lên.`); });
     if (ns.crk.size > s.crk.size) out.push('Ô nứt sụp xuống thành lỗ.');
     const lit = l => (p.lights || []).length - E.boxNeed(p, l).lights.length;
     if ((p.lights || []).length && lit(ns) !== lit(s)) out.push(`Đèn sáng ${lit(ns)}/${p.lights.length}.`);
