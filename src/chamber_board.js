@@ -96,11 +96,12 @@ function boxBoardSVG(p, o = {}) {
 function boxesSVG(p, s, o = {}) {
   const out = [], at = o.at || s.pos;
   p.boxes.forEach((b, i) => {
-    if (!b.trail || !s.tracks) return;
-    const keep = o.ropeLen ? o.ropeLen[i] : s.tracks[i].length, t = s.tracks[i].slice(0, keep), J = s.jumps[i], polys = [[t[0]]];
-    for (let k = 1; k < t.length; k++) { if (J[k]) polys.push([t[k]]); else polys[polys.length - 1].push(t[k]); }
-    polys[polys.length - 1].push(at[i]);
-    polys.forEach(pl => out.push(`<polyline class="pbx-rope" points="${pl.map(n => n.join(',')).join(' ')}" style="stroke:${ropeHue(s.col ? s.col[i] : b.c)}"/>`));
+    if (!b.trail || !s.ropes) return;
+    // while a move animates, draw the rope as it was plus a piece to where the box is now
+    const src = o.prev || s, segs = PanelEngine.ropeSegs(src, i).slice();
+    if (o.prev && at[i]) segs.push([o.prev.pos[i], at[i]]);
+    const hue = ropeHue(s.col ? s.col[i] : b.c);
+    segs.forEach(([a, z]) => out.push(`<line class="pbx-rope" x1="${a[0]}" y1="${a[1]}" x2="${z[0]}" y2="${z[1]}" style="stroke:${hue}"/>`));
   });
   p.boxes.forEach((b, i) => {
     const [x, y] = at[i], col = s.col ? s.col[i] : (b.c || 0), c = HUE[col], left = s.left ? s.left[i] : b.n;
@@ -210,7 +211,7 @@ function drawPJ() {
   let h;
   if (p.boxes) {
     const bs = PJ.bs;
-    h = boxBoardSVG(p, { s: bs, noBoxes: true }) + boxesSVG(p, bs, { at: PJ.animAt, ropeLen: PJ.animAt && PJ.animPrev, cls: PJ.state === 'win' ? 'win' : '' });
+    h = boxBoardSVG(p, { s: bs, noBoxes: true }) + boxesSVG(p, bs, { at: PJ.animAt, prev: PJ.animAt && PJ.animPrevS, cls: PJ.state === 'win' ? 'win' : '' });
   } else {
     const path = pjPath(), lines = path.length ? PanelEngine.lines(p, path) : [];
     const seen = new Set(lines.flat().map(n => n.join(',')));
@@ -374,7 +375,7 @@ function boxAnim(prev, next) {
   if (REDUCED || PJ.view) { PJ.animAt = null; return; }
   const routes = next.tracks.map((t, i) => ({ pts: t.slice(prev.tracks[i].length - 1), J: next.jumps[i].slice(prev.tracks[i].length - 1) }));
   const steps = Math.max(...routes.map(r => r.pts.length - 1)); if (steps < 1) return;
-  PJ.animPrev = prev.tracks.map(t => t.length);
+  PJ.animPrevS = prev;
   const dur = Math.min(420, 70 + steps * 45), t0 = performance.now(), tok = PJ.animTok = {};
   const frame = now => {
     if (!PJ || PJ.animTok !== tok || PJ.bs !== next) return;

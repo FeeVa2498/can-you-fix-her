@@ -438,7 +438,7 @@ const TIP = {
 const BRULE = {
   goal: 'Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal.',
   colors: 'Hộp màu phải vào goal cùng màu; goal không màu nhận hộp nào cũng được.',
-  trail: 'Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó.',
+  trail: 'Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp. Hộp dây lùi lại đúng đường vừa đi thì cuộn dây về (dây mất đi).',
   lights: 'Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng.',
   nums: 'Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu).',
   switches: 'Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu.',

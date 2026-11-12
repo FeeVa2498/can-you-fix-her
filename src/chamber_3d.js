@@ -442,10 +442,9 @@ const P3 = (() => {
       // ropes
       Bx.pieces = p.boxes.map((b, i) => {
         const rg = Bx.ropes[i]; rg.clear(); if (!b.trail) return [];
-        const t = s.tracks[i], J = s.jumps[i], out = [];
-        for (let k = 1; k < t.length; k++) { if (J[k]) { out[k] = null; continue; } const m = ropePiece(t[k - 1], t[k], ropeMatB[s.col[i]], .2, .1, .05); rg.add(m); out[k] = m; }
-        return out;
+        return E.ropeSegs(s, i).map(([a, z]) => { const m = ropePiece(a, z, ropeMatB[s.col[i]], .2, .1, .05); rg.add(m); return m; });
       });
+      const prevSegs = p.boxes.map((b, i) => b.trail && prev && prev.ropes ? E.ropeSegs(prev, i).length : 0);
       Bx.cubes.forEach((cu, i) => {
         const left = s.left[i], col = s.col[i], onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1] && (!g[2] || g[2] === col));
         if (cu.col !== col) { cu.col = col; cu.mat.color.setHex(HUEX[col]); cu.mat.emissive.setHex(HUEX[col]); if (cu.coil) { cu.coil.color.setHex(ROPEX(col)); cu.coil.emissive.setHex(ROPEX(col)); } }
@@ -464,12 +463,12 @@ const P3 = (() => {
         // ticks per box: every plain step is one tick; a portal jump rides along in the same tick
         const ticks = s.tracks.map((t, i) => {
           const from = prev.tracks[i].length - 1, J = s.jumps[i], out = [];
-          for (let k = from + 1; k < t.length; k++) { if (J[k]) { if (out.length) out[out.length - 1].warp = t[k]; continue; } out.push({ a: t[k - 1], b: t[k], k }); }
+          for (let k = from + 1; k < t.length; k++) { if (J[k]) { if (out.length) out[out.length - 1].warp = t[k]; continue; } out.push({ a: t[k - 1], b: t[k], k: prevSegs[i] + out.length }); }
           return out;
         });
         const n = Math.max(...ticks.map(t => t.length));
         if (n > 0) {
-          Bx.anim = { ticks, n, t: performance.now(), dur: n > 1 ? 85 : 170, from: prev.tracks.map(t => t.length) };
+          Bx.anim = { ticks, n, t: performance.now(), dur: n > 1 ? 85 : 170, from: prevSegs };
           Bx.pieces.forEach((ps, i) => ps.forEach((m, k) => { if (m && k >= Bx.anim.from[i]) m.visible = false; }));
           // rockets turn to face their flight
           Bx.cubes.forEach((cu, i) => { const tk = ticks[i][0]; if (cu.pack && tk) cu.pack.rotation.y = yawOf(tk.b[0] - tk.a[0], tk.b[1] - tk.a[1]); });

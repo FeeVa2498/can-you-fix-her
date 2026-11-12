@@ -244,7 +244,8 @@ const PanelEngine = (() => {
        dash   rocket box: one press = slide until a wall, a box, a rope or a closed door stops it
        n      bomb countdown: every key press that moves anything takes one off; at 0 the bomb explodes and the
               level fails (unless that very press won it)
-       trail  rope box: leaves a rope behind; ropes block every box (its own too)
+       trail  rope box: leaves a rope behind; ropes block every box (its own too), except that a rope box may step
+              back onto the end of its own rope, which reels that piece of rope back in
        c      colour 1..3 (0/none = plain)
      p.exit     goals [[x,y,c?]]: a goal with a colour wants a box of that colour; a plain goal takes any box
      p.lights   [[x,y]] light tiles: lit while a rope lies on them (or a rope box stands there)
@@ -269,7 +270,7 @@ const PanelEngine = (() => {
   }
   function boxStart(p) {
     return { pos: p.boxes.map(b => [b.x, b.y]), left: p.boxes.map(b => b.n == null ? null : b.n), col: p.boxes.map(b => b.c || 0),
-      open: (p.switches || []).reduce((o, q) => q[3] != null ? o | (1 << q[3]) : o, 0), sw: [], crk: new Set(), trail: new Set(), rope: new Set(), dead: -1, inputs: '',
+      open: (p.switches || []).reduce((o, q) => q[3] != null ? o | (1 << q[3]) : o, 0), sw: [], crk: new Set(), trail: new Set(), rope: new Set(), ropes: p.boxes.map(() => []), dead: -1, inputs: '',
       tracks: p.boxes.map(b => [[b.x, b.y]]), jumps: p.boxes.map(() => [false]) };
   }
   // a two-colour switch shows the colour whose walls are up now; stepping on it lowers those and raises the other colour
@@ -289,7 +290,7 @@ const PanelEngine = (() => {
   function boxStep(p, s0, d, rec = true, X = boxCtx(p)) {
     const n = p.boxes.length, C = X.C;
     const s = { pos: s0.pos.map(q => q.slice()), left: s0.left.slice(), col: s0.col.slice(), open: s0.open, sw: s0.sw.slice(), crk: new Set(s0.crk),
-      trail: new Set(s0.trail), rope: new Set(s0.rope), dead: s0.dead, inputs: s0.inputs + dirKey(d),
+      trail: new Set(s0.trail), rope: new Set(s0.rope), ropes: s0.ropes.map(r => r.slice()), dead: s0.dead, inputs: s0.inputs + dirKey(d),
       tracks: rec && s0.tracks ? s0.tracks.map(t => t.map(q => q.slice())) : null, jumps: rec && s0.jumps ? s0.jumps.map(j => j.slice()) : null };
     const moved = Array(n).fill(false);
     if (s0.dead >= 0) return { state: s, moved, dead: s0.dead };
@@ -298,10 +299,13 @@ const PanelEngine = (() => {
     const push = (i, q, j) => { if (s.tracks) { s.tracks[i].push(q.slice()); s.jumps[i].push(j); } };
     for (let tick = 0; tick < 200 && act.some(Boolean); tick++) {
       const occ = new Map(s.pos.map((q, i) => [key(...q), i]));
+      const back = Array(n).fill(false);
       const want = s.pos.map((q, i) => {
         if (!act[i]) return null;
-        const to = [q[0] + dir[i][0], q[1] + dir[i][1]], tk = key(...to);
-        return inside(p, ...to) && linkOk(p, C, q, to) && !doorShut(X, s.open, ekey(q[0], q[1], to[0], to[1])) && !s.trail.has(tk) && !s.crk.has(tk) ? to : null;
+        const to = [q[0] + dir[i][0], q[1] + dir[i][1]], tk = key(...to), ek = ekey(q[0], q[1], to[0], to[1]), r = s.ropes[i];
+        // stepping back onto the end of its own rope reels it in
+        back[i] = !!(p.boxes[i].trail && r.length && r[r.length - 1] === tk && s.rope.has(ek));
+        return inside(p, ...to) && linkOk(p, C, q, to) && !doorShut(X, s.open, ek) && (!s.trail.has(tk) || back[i]) && !s.crk.has(tk) ? to : null;
       });
       const ok = want.map(Boolean);
       for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (ok[i] && ok[j] && want[i][0] === want[j][0] && want[i][1] === want[j][1]) ok[i] = ok[j] = false;
@@ -317,7 +321,11 @@ const PanelEngine = (() => {
       for (let i = 0; i < n; i++) {
         if (!ok[i]) { act[i] = false; continue; }
         const from = s.pos[i];
-        if (p.boxes[i].trail) { s.trail.add(key(...from)); s.rope.add(ekey(from[0], from[1], want[i][0], want[i][1])); }
+        if (p.boxes[i].trail) {
+          const ek = ekey(from[0], from[1], want[i][0], want[i][1]);
+          if (back[i]) { s.ropes[i].pop(); s.trail.delete(key(...want[i])); s.rope.delete(ek); }
+          else { s.ropes[i].push(key(...from)); s.trail.add(key(...from)); s.rope.add(ek); }
+        }
         left.push(key(...from));
         s.pos[i] = want[i]; moved[i] = true; push(i, want[i], false);
       }
@@ -328,7 +336,7 @@ const PanelEngine = (() => {
         if (t) {
           const busy = s.pos.some((q, j) => j !== i && q[0] === t[0] && q[1] === t[1]) || s.trail.has(key(...t)) || s.crk.has(key(...t));
           if (busy) { act[i] = false; continue; }
-          if (p.boxes[i].trail) s.trail.add(key(...at));
+          if (p.boxes[i].trail) { s.trail.add(key(...at)); s.ropes[i].push(key(...at)); }
           s.pos[i] = t.slice(); at = t; push(i, t, true);
         }
         enterTile(p, X, s, i, key(...at));
@@ -360,9 +368,15 @@ const PanelEngine = (() => {
     if (s.dead >= 0) return false;
     const N = boxNeed(p, s); return !N.goals.length && !N.lights.length && !N.nums.length;
   }
+  // the rope pieces to draw for box i: [[a,b]…] (a portal jump leaves a gap), ending at the box
+  function ropeSegs(s, i) {
+    const r = s.ropes[i].map(k => k.split(',').map(Number)).concat([s.pos[i]]), out = [];
+    for (let k = 1; k < r.length; k++) if (s.rope.has(ekey(r[k - 1][0], r[k - 1][1], r[k][0], r[k][1]))) out.push([r[k - 1], r[k]]);
+    return out;
+  }
   function boxReplay(p, inputs) { let s = boxStart(p); const X = boxCtx(p); for (const c of inputs) s = boxStep(p, s, DK[c], true, X).state; return s; }
   const boxKey = s => s.pos.map(q => key(...q)).join('/') + '|' + s.left.join(',') + '|' + s.col.join('') + '|' + s.open + s.sw.join('')
-    + (s.crk.size ? '~' + [...s.crk].sort().join(';') : '') + (s.trail.size ? '#' + [...s.trail].sort().join(';') + '#' + [...s.rope].sort().join(';') : '');
+    + (s.crk.size ? '~' + [...s.crk].sort().join(';') : '') + (s.trail.size ? '#' + s.ropes.map(r => r.join(';')).join('#') : '');
   // breadth-first: the shortest key sequences that win (up to `limit`)
   function boxSolve(p, maxDepth = 40, limit = 20, maxStates = 400000) {
     const X = boxCtx(p);
@@ -384,6 +398,6 @@ const PanelEngine = (() => {
     return { wins, explored, capped: false };
   }
   return { gateClosed, validate, solve, replay, options, apply, undo, start, canStop, rules, ctx, neighbors, brokenSet, isStart, isExit, exitDir, key, ekey, nodeCount, dims, norm, inside, twin, jumps, mirrorOf, lines, regions, cellSides, edgeSet, padAt, isStop, isBridge, holeSet, usedEdges,
-    boxStart, boxStep, boxWon, boxNeed, boxReplay, boxSolve, boxDir, boxCtx, boxKey, swUp, DK, dirKey };
+    boxStart, boxStep, boxWon, boxNeed, boxReplay, boxSolve, boxDir, boxCtx, boxKey, swUp, ropeSegs, DK, dirKey };
 })();
 if (typeof module !== 'undefined') module.exports = PanelEngine;
