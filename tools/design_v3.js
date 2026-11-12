@@ -203,7 +203,13 @@ function boxStats(p, inputs) {
 /* The candidate checks every box panel must pass. Returns { r, best, L, luck } or null. */
 // how long the answer may be, by position: early panels stay short, the curve climbs through the layers
 const capLen = spec => spec.maxLen || (spec.tut ? 6 : ({ 1: 4, 2: 6, 3: 8 }[spec.layer] + Math.ceil(spec.n * 1.1)));
+// a goal is a tile of its own: never on a portal, arrow tile, light, switch, crack, paint, white tile or sensor
+function goalAlone(p) {
+  const sp = new Set([...(p.portals || []).flatMap(q => [[q[0], q[1]], [q[2], q[3]]]), ...(p.pads || []), ...(p.lights || []), ...(p.switches || []), ...(p.cracks || []), ...(p.paints || []), ...(p.dice || []), ...(p.touch || []), ...(p.stops || [])].map(n => n[0] + ',' + n[1]));
+  return (p.exit || []).every(g => !sp.has(g[0] + ',' + g[1]));
+}
 function checkBox(p, spec) {
+  if (!goalAlone(p)) return null;
   const maxL = capLen(spec);
   let r = E.boxSolve(p, maxL, 8, 200000);
   if (!r.wins.length || r.capped) return null;
@@ -769,7 +775,7 @@ add('paige', 3, 3, BX(4, 4, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 3, porta
 add('paige', 3, 4, BX(5, 4, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 3, pads: 2, bites: 3 }, minLen: 10, luck: .02, feature: 'dice' })));
 add('paige', 3, 5, BX(5, 4, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 3, portals: 1, pads: 1, bites: 3 }, minLen: 11, luck: .02, feature: 'dice' })));
 add('paige', 3, 6, BX(5, 5, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 4, pads: 2, bites: 4 }, minLen: 12, luck: .02, feature: 'dice' })));
-add('paige', 3, 7, BX(5, 5, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 4, portals: 1, pads: 2, bites: 4 }, minLen: 13, luck: .02, feature: 'dice' })));
+add('paige', 3, 7, BX(5, 5, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 4, portals: 1, pads: 2, bites: 3 }, minLen: 13, luck: .02, feature: 'dice', time: 50000, tries: 6000 })));
 
 /* ======================= build =======================
    Never rebuilds the whole set by itself (hand-tuned and converted panels stay as they are):

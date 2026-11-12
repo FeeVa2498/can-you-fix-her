@@ -329,6 +329,8 @@ function edCheck(cb) {
   if (!(p.exit || []).length) probs.push('no goal');
   if (p.boxes && !p.boxes.length) probs.push('no box');
   if (p.boxes && p.exit.length > p.boxes.length) probs.push('more goals than boxes');
+  { const sp = new Set([...(p.portals || []).flatMap(q => [[q[0], q[1]], [q[2], q[3]]]), ...(p.pads || []), ...(p.lights || []), ...(p.switches || []), ...(p.cracks || []), ...(p.paints || []), ...(p.dice || []), ...(p.touch || [])].map(n => n[0] + ',' + n[1]));
+    if ((p.exit || []).some(g => sp.has(g[0] + ',' + g[1]))) probs.push('a goal sits on another special tile (goals must be tiles of their own)'); }
   if (probs.length) { edMsg('Cannot check: ' + probs.join(', ') + '.', 'bad'); return; }
   edMsg('Solving…');
   setTimeout(() => {
