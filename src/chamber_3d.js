@@ -10,6 +10,8 @@
 const P3 = (() => {
   const has = () => { try { if (!window.THREE) return false; const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } };
   const BOXHEX = [0xff8cc6, 0xb48cff, 0x7be3a4, 0xffd86e];
+  const HUEX = [0xe9defa, 0xff6fb5, 0x4fd8ff, 0x9cf06a];   // plain, then colours 1..3 (boxes, goals, locks, paint)
+  const ROPEX = c => c ? HUEX[c] : 0xff5fa8;
   const PORTALHEX = [0xffd86e, 0x8fdcf7, 0x7be3a4];
   const GIRL = { prim: 0x8d6fbf, trix: 0x6f8fcf, paige: 0x9a7cc8, vel: 0xc58bd8, myne: 0x7fb6c8 };
 
@@ -34,8 +36,9 @@ const P3 = (() => {
   }
   // a flat thing pointing along (dx,dz)
   const yawOf = (dx, dz) => Math.atan2(-dx, -dz);
-  function numTex(text, fg = '#f4e9ff') {
-    return canvasTex(128, 128, (g, w, h) => { g.fillStyle = fg; g.font = `bold ${text.length > 2 ? 60 : 92}px "Courier New", monospace`; g.strokeStyle = '#1a1024'; g.lineWidth = 8; g.textAlign = 'center'; g.textBaseline = 'middle'; g.strokeText(text, w / 2, h / 2 + 4); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, w / 2, h / 2 + 4); });
+  function numTex(text, fg = '#f4e9ff', plate = false) {
+    return canvasTex(128, 128, (g, w, h) => {
+      if (plate) { g.fillStyle = 'rgba(20,10,34,.88)'; g.strokeStyle = fg; g.lineWidth = 5; g.beginPath(); g.roundRect ? g.roundRect(6, 24, w - 12, h - 48, 16) : g.rect(6, 24, w - 12, h - 48); g.fill(); g.stroke(); } g.fillStyle = fg; g.font = `bold ${text.length > 2 ? 60 : 92}px "Courier New", monospace`; g.strokeStyle = '#1a1024'; g.lineWidth = 8; g.textAlign = 'center'; g.textBaseline = 'middle'; g.strokeText(text, w / 2, h / 2 + 4); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, w / 2, h / 2 + 4); });
   }
 
   /* ---------- the void ---------- */
@@ -89,23 +92,75 @@ const P3 = (() => {
     const CHX = [0x4fd8ff, 0xffa040], plates3 = [], gates3 = [];
     let symKey = '';
     const numObjs = [];
+    const tiles3 = new Map(), lights3 = [], sw3 = [];
     if (isBox) buildBoxBoard(); else buildLineBoard();
 
     function plateMats(top, side) { const s = std(side), t = std(top); return [s, s, t, s, s, s]; }
     function buildBoxBoard() {
-      const goals = new Set((p.exit || []).map(g => g.join(','))), pads = new Map((p.pads || []).map(q => [q[0] + ',' + q[1], [q[2], q[3]]])), stops = new Set((p.stops || []).map(q => q.join(',')));
+      const pads = new Map((p.pads || []).map(q => [q[0] + ',' + q[1], [q[2], q[3]]])), stops = new Set((p.stops || []).map(q => q.join(',')));
+      const goals = new Map((p.exit || []).map(g => [g[0] + ',' + g[1], g[2] || 0])), cracks = new Set((p.cracks || []).map(q => q[0] + ',' + q[1]));
       for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) {
         if (!E.inside(p, x, y)) continue;
-        const k = x + ',' + y, top = goals.has(k) ? 0x5c3d2a : pads.has(k) ? 0x24503a : stops.has(k) ? 0x5a2f3a : 0x3b2560;
+        const k = x + ',' + y, top = goals.has(k) ? 0x5c3d2a : pads.has(k) ? 0x24503a : stops.has(k) ? 0x5a2f3a : cracks.has(k) ? 0x4a3550 : 0x3b2560;
         const t = box(.96, .7, .96, plateMats(top, 0x1c0f30), x, -.35, y);
-        world.add(edges(t, 0xff6fd8, .35));
+        world.add(edges(t, 0xff6fd8, .35)); tiles3.set(k, t);
+        if (cracks.has(k)) {
+          const dec = new THREE.Mesh(new THREE.PlaneGeometry(.9, .9), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, map: canvasTex(128, 128, (g, w, h) => {
+            g.strokeStyle = '#140a22'; g.lineWidth = 7; g.lineCap = 'round'; g.lineJoin = 'round'; g.beginPath();
+            g.moveTo(14, 40); g.lineTo(52, 66); g.lineTo(42, 112); g.moveTo(52, 66); g.lineTo(88, 54); g.lineTo(116, 82); g.moveTo(88, 54); g.lineTo(80, 12); g.stroke();
+            g.strokeStyle = 'rgba(255,111,216,.55)'; g.lineWidth = 2; g.stroke();
+          }) }));
+          dec.rotation.x = -Math.PI / 2; dec.position.y = .351; t.add(dec);
+        }
         if (pads.has(k)) { const [dx, dz] = pads.get(k); [-.14, .14].forEach((o, i) => { const c = chevron(0x7be3a4, .15); c.position.set(x + dx * o, .012, y + dz * o); c.rotation.y = yawOf(dx, dz); world.add(c); anim.flow.push({ m: c, i }); }); }
         if (stops.has(k)) world.add(box(.5, .05, .12, basic(0xff9f5a), x, .02, y));
       }
-      (p.exit || []).forEach(([x, y]) => world.add(goalTile(x, y, .96)));
+      (p.exit || []).forEach(([x, y, c]) => world.add(goalTile(x, y, .96, c ? HUEX[c] : 0xffd86e)));
+      (p.paints || []).forEach(([x, y, c]) => {
+        const col = '#' + HUEX[c].toString(16).padStart(6, '0');
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(.8, .8), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, map: canvasTex(128, 128, (g, w, h) => {
+          g.fillStyle = col; g.beginPath(); for (let i = 0; i < 14; i++) { const a = i / 14 * Math.PI * 2, r = (i % 2 ? 30 : 46) + Math.sin(i * 3.1) * 6; g.lineTo(64 + Math.cos(a) * r, 64 + Math.sin(a) * r); } g.fill();
+          [[18, 22, 7], [108, 30, 5], [100, 106, 8], [24, 100, 5]].forEach(([a, b2, r]) => { g.beginPath(); g.arc(a, b2, r, 0, 7); g.fill(); });
+        }) }));
+        m.rotation.x = -Math.PI / 2; m.position.set(x, .014, y); world.add(m);
+      });
+      (p.lights || []).forEach(([x, y]) => {
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(.2, .24, .05, 12), std(0x1a1024)); base.position.set(x, .025, y);
+        const mat = std(0x6a5a3a, { emissive: 0xffd86e, emissiveIntensity: 0 }), bulb = new THREE.Mesh(new THREE.SphereGeometry(.15, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat); bulb.position.set(x, .05, y);
+        const glow = new THREE.Mesh(new THREE.CircleGeometry(.42, 20), additive(0xffd86e, 0)); glow.rotation.x = -Math.PI / 2; glow.position.set(x, .016, y);
+        world.add(base, edges(bulb, 0xfff1b8, .5), glow); lights3.push({ mat, glow });
+      });
       walls(true);
       portals();
-      switches(true);
+      locks();
+      (p.nums || []).forEach(([x, y, n], i) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(.62, .62), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false })); m.rotation.x = -Math.PI / 2; m.position.set(x + .5, .05, y + .5); m.renderOrder = 3; world.add(m); numObjs.push({ m, x, y, n, i, key: '' }); });
+    }
+    // switches (a button in its colour; a double one shows the colour it opens next, ringed by the other) and doors
+    function locks() {
+      (p.switches || []).forEach(([x, y, c, c2]) => {
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(.36, .38, .05, 20), std(0x1a1024)); base.position.set(x, .02, y);
+        const btn = new THREE.Mesh(new THREE.CylinderGeometry(c2 == null ? .26 : .19, c2 == null ? .28 : .21, .1, 20), std(HUEX[c], { emissive: HUEX[c], emissiveIntensity: .25 })); btn.position.set(x, .09, y);
+        world.add(base, edges(btn, 0xffffff, .6));
+        let ring = null;
+        if (c2 != null) { ring = new THREE.Mesh(new THREE.TorusGeometry(.28, .045, 6, 24), std(HUEX[c2], { emissive: HUEX[c2], emissiveIntensity: .35 })); ring.rotation.x = -Math.PI / 2; ring.position.set(x, .07, y); world.add(ring); }
+        sw3.push({ btn, ring, c, c2, y0: btn.position.y });
+      });
+      (p.doors || []).forEach(([x1, y1, x2, y2, c]) => {
+        const hor = x1 !== x2, mx = (x1 + x2) / 2, my = (y1 + y2) / 2, L = 1.0, H = .62;
+        const mat = std(HUEX[c], { emissive: HUEX[c], emissiveIntensity: .45, transparent: true, opacity: .88 });
+        const g = new THREE.Group(); g.position.set(mx, 0, my);
+        const bar = box(hor ? .12 : L, H, hor ? L : .12, mat, 0, H / 2, 0); g.add(edges(bar, 0xffffff, .8));
+        for (let i = -1; i <= 1; i += 2) g.add(box(hor ? .14 : .05, H * .9, hor ? .05 : .14, basic(0x1a1024), hor ? 0 : i * L * .25, H / 2, hor ? i * L * .25 : 0));
+        world.add(g); gates3.push({ g, c, H, cur: 0, want: 0 });
+      });
+    }
+    function setLocks(s) {
+      sw3.forEach((q, i) => {
+        if (q.c2 == null) { const on = !!(s.open & (1 << q.c)); q.btn.position.y = q.y0 - (on ? .06 : 0); q.btn.material.emissiveIntensity = on ? .9 : .25; return; }
+        const cur = s.sw[i], oth = cur === q.c ? q.c2 : q.c;
+        q.btn.material.color.setHex(HUEX[cur]); q.btn.material.emissive.setHex(HUEX[cur]); q.ring.material.color.setHex(HUEX[oth]); q.ring.material.emissive.setHex(HUEX[oth]);
+      });
+      gates3.forEach(gt => { if (gt.c !== undefined) gt.want = s.open & (1 << gt.c) ? 1 : 0; });
     }
     function buildLineBoard() {
       for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) if (E.inside(p, x, y)) world.add(box(1, .5, 1, plateMats(0x34204f, 0x1c0f30), x, -.33, y));
@@ -130,11 +185,11 @@ const P3 = (() => {
     }
     function walls(isTiles) {
       if (isTiles) {
-        const br = E.brokenSet(p), glass = std(0xff4fa3, { emissive: 0xff2f93, emissiveIntensity: .55, transparent: true, opacity: .78 });
+        const br = E.brokenSet(p), glass = std(0x6a3fd8, { emissive: 0x5a2fc8, emissiveIntensity: .45, transparent: true, opacity: .82 });
         for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) for (const [nx, ny] of [[x + 1, y], [x, y + 1]]) {
           if (!E.inside(p, x, y) || !E.inside(p, nx, ny) || !br.has(E.ekey(x, y, nx, ny))) continue;
           const w = nx !== x ? box(.1, .62, 1.02, glass, (x + nx) / 2, .31, y) : box(1.02, .62, .1, glass, x, .31, (y + ny) / 2);
-          world.add(edges(w, 0xffd0ec, .9));
+          world.add(edges(w, 0xcbb8ea, .9));
         }
       }
       (p.oneway || []).forEach(e => { const c = chevron(0xffd86e, isTiles ? .17 : .12); c.position.set((e[0] + e[2]) / 2, isTiles ? .02 : .04, (e[1] + e[3]) / 2); c.rotation.y = yawOf(e[2] - e[0], e[3] - e[1]); world.add(c); });
@@ -148,11 +203,11 @@ const P3 = (() => {
       }));
     }
     // a goal: a gold-framed tile with a soft glow that breathes, brighter while something stands on it
-    function goalTile(x, y, size) {
+    function goalTile(x, y, size, col = 0xffd86e) {
       const g = new THREE.Group(); g.position.set(x, .012, y);
-      const glow = new THREE.Mesh(new THREE.PlaneGeometry(size * .9, size * .9), additive(0xffd86e, .25)); glow.rotation.x = -Math.PI / 2; g.add(glow);
+      const glow = new THREE.Mesh(new THREE.PlaneGeometry(size * .9, size * .9), additive(col, .25)); glow.rotation.x = -Math.PI / 2; g.add(glow);
       const fr = size * .38, t = size * .07;
-      [[0, -fr, fr * 2 + t, t], [0, fr, fr * 2 + t, t], [-fr, 0, t, fr * 2], [fr, 0, t, fr * 2]].forEach(([a, b2, w, h]) => g.add(box(w, .04, h, basic(0xffd86e), a, .01, b2)));
+      [[0, -fr, fr * 2 + t, t], [0, fr, fr * 2 + t, t], [-fr, 0, t, fr * 2], [fr, 0, t, fr * 2]].forEach(([a, b2, w, h]) => g.add(box(w, .04, h, basic(col), a, .01, b2)));
       const ring = new THREE.Group(); ring.position.y = .02;
       const r2 = size * .26, t2 = size * .04;
       [[0, -r2, r2 * 2 + t2, t2], [0, r2, r2 * 2 + t2, t2], [-r2, 0, t2, r2 * 2], [r2, 0, t2, r2 * 2]].forEach(([a, b2, w, h]) => ring.add(box(w, .02, h, additive(0xfff1b8, .8), a, 0, b2)));
@@ -211,7 +266,7 @@ const P3 = (() => {
         const label = used ? `${c}/${o.n}` : String(o.n), k = label + col;
         if (k === o.key) return; o.key = k;
         if (o.m.material.map) o.m.material.map.dispose();
-        o.m.material.map = numTex(label, col); o.m.material.needsUpdate = true;
+        o.m.material.map = numTex(label, col, isBox); o.m.material.needsUpdate = true;
       });
     }
     function refreshRings(seen) { if (!seen) return; ringMats.forEach((m, k) => { if (m.color.getHex() !== 0xff4d7a) m.color.setHex(seen.has(k) ? 0xff8cc6 : 0xcbb8ea); }); }
@@ -343,11 +398,32 @@ const P3 = (() => {
     const Bx = { cubes: [], ropes: [], last: null, anim: null };
     if (isBox) {
       p.boxes.forEach((b, i) => {
-        const cu = makeCube(.78, BOXHEX[i % 4]); cu.b = b; if (b.dash) addRocket(cu); dyn.add(cu.g); Bx.cubes.push(cu);
+        const cu = makeCube(.78, HUEX[b.c || 0]); cu.b = b; cu.col = b.c || 0; if (b.dash) addRocket(cu); dyn.add(cu.g); Bx.cubes.push(cu);
+        if (b.trail) {   // rope boxes wear a coil of their rope round the middle
+          cu.coil = std(ROPEX(cu.col), { emissive: ROPEX(cu.col), emissiveIntensity: .4 });
+          [-.12, .02, .16].forEach(yy => { const r = box(.82, .07, .82, cu.coil, 0, yy, 0); cu.body.add(r); });
+        }
         const rg = new THREE.Group(); dyn.add(rg); Bx.ropes.push(rg);
       });
     }
-    const ropeMatB = BOXHEX.map(c => std(c, { emissive: c, emissiveIntensity: .25 }));
+    const ropeMatB = [0, 1, 2, 3].map(c => std(ROPEX(c), { emissive: ROPEX(c), emissiveIntensity: .3 }));
+    const booms = [];
+    // a countdown ran out: the box bursts into glowing bits
+    function boom(i) {
+      const cu = Bx.cubes[i]; cu.g.visible = false; if (REDUCED) return;
+      const at = cu.g.position.clone(), bits = [];
+      for (let k = 0; k < 26; k++) { const m = box(.12, .12, .12, basic(k % 3 ? HUEX[cu.col] : 0xffa040), at.x, .4, at.z); dyn.add(m); bits.push({ m, v: new THREE.Vector3((Math.random() - .5) * 5, 2 + Math.random() * 4, (Math.random() - .5) * 5) }); }
+      const flash = new THREE.Mesh(new THREE.SphereGeometry(.5, 12, 8), additive(0xffd86e, .9)); flash.position.set(at.x, .4, at.z); dyn.add(flash);
+      booms.push({ bits, flash, t0: performance.now(), i });
+    }
+    function stepBooms(now) {
+      for (let j = booms.length - 1; j >= 0; j--) {
+        const b = booms[j], t = (now - b.t0) / 1000;
+        b.bits.forEach(q => { q.m.position.x += q.v.x * .016; q.m.position.z += q.v.z * .016; q.m.position.y = Math.max(.05, .4 + q.v.y * t - 6 * t * t); q.m.rotation.x += .2; q.m.rotation.y += .15; });
+        b.flash.scale.setScalar(1 + t * 4); b.flash.material.opacity = Math.max(0, .9 - t * 2.2);
+        if (t > 1.6) { b.bits.forEach(q => dyn.remove(q.m)); dyn.remove(b.flash); booms.splice(j, 1); }
+      }
+    }
     function syncBoxes(s, o = {}) {
       if (fx && o.cls !== 'win') { restore(); Bx.last = null; }
       if (s === Bx.last && (o.cls || '') === Bx.cls) return;
@@ -359,18 +435,23 @@ const P3 = (() => {
       Bx.pieces = p.boxes.map((b, i) => {
         const rg = Bx.ropes[i]; rg.clear(); if (!b.trail) return [];
         const t = s.tracks[i], J = s.jumps[i], out = [];
-        for (let k = 1; k < t.length; k++) { if (J[k]) { out[k] = null; continue; } const m = ropePiece(t[k - 1], t[k], ropeMatB[i % 4], .2, .1, .05); rg.add(m); out[k] = m; }
+        for (let k = 1; k < t.length; k++) { if (J[k]) { out[k] = null; continue; } const m = ropePiece(t[k - 1], t[k], ropeMatB[s.col[i]], .2, .1, .05); rg.add(m); out[k] = m; }
         return out;
       });
       Bx.cubes.forEach((cu, i) => {
-        const left = s.left[i], onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1]);
+        const left = s.left[i], col = s.col[i], onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1] && (!g[2] || g[2] === col));
+        if (cu.col !== col) { cu.col = col; cu.mat.color.setHex(HUEX[col]); cu.mat.emissive.setHex(HUEX[col]); if (cu.coil) { cu.coil.color.setHex(ROPEX(col)); cu.coil.emissive.setHex(ROPEX(col)); } }
         setDecal(cu, cu.b.m && cu.b.m !== 'same' ? cu.b.m : '', left);
         cu.mat.emissiveIntensity = o.cls === 'win' ? .7 : onG ? .35 : .08;
-        cu.mat.transparent = left === 0; cu.mat.opacity = left === 0 ? .55 : 1;
+        if (s.dead === i) { if (cu.g.visible && !(prev && prev.dead === i)) boom(i); cu.g.visible = false; } else cu.g.visible = true;
       });
       const occupied = new Set(s.pos.map(q => q.join(',')));
-      setSwitches(new Set([...occupied, ...s.trail]));
       anim.pulse.forEach(pu => { if (pu.at) pu.on = occupied.has(pu.at); });
+      setLocks(s);
+      const N = E.boxNeed(p, s), dark = new Set(N.lights);
+      lights3.forEach((l, i) => { const on = !dark.has(i); l.mat.emissiveIntensity = on ? 1.2 : 0; l.mat.color.setHex(on ? 0xfff1b8 : 0x6a5a3a); l.glow.material.opacity = on ? .45 : 0; });
+      refreshNums(s.rope.size ? s.rope : null, {});
+      tiles3.forEach((t, k) => { const gone = s.crk.has(k); if (gone && !t.userData.gone) { t.userData.gone = performance.now(); fallers.push(t); } if (!gone && t.userData.gone) { t.userData.gone = 0; t.visible = true; t.position.y = -.35; } });
       if (fwd && !REDUCED) {
         // ticks per box: every plain step is one tick; a portal jump rides along in the same tick
         const ticks = s.tracks.map((t, i) => {
@@ -390,7 +471,12 @@ const P3 = (() => {
       Bx.anim = null; placeBoxes(s);
     }
     function placeBoxes(s) {
-      Bx.cubes.forEach((cu, i) => { const q = s.pos[i]; cu.g.position.set(q[0], 0, q[1]); cu.body.quaternion.identity(); cu.body.position.y = cu.size / 2; cu.body.scale.setScalar(1); cu.body.rotation.z = 0; if (cu.flames) cu.flames.forEach(f => f.visible = false); });
+      Bx.cubes.forEach((cu, i) => { const q = s.pos[i]; cu.g.visible = s.dead !== i; cu.g.position.set(q[0], 0, q[1]); cu.body.quaternion.identity(); cu.body.position.y = cu.size / 2; cu.body.scale.setScalar(1); cu.body.rotation.z = 0; if (cu.flames) cu.flames.forEach(f => f.visible = false); });
+    }
+    const fallers = [];
+    function stepFall(now) {
+      for (let j = fallers.length - 1; j >= 0; j--) { const t = fallers[j]; if (!t.userData.gone) { fallers.splice(j, 1); continue; } const u = (now - t.userData.gone) / 1000; t.position.y = -.35 - 6 * u * u; t.rotation.z = u * .8; if (u > .7) { t.visible = false; t.rotation.z = 0; fallers.splice(j, 1); } }
+      tiles3.forEach(t => { if (t.userData.gone && !fallers.includes(t)) { t.visible = false; } else if (!t.userData.gone) t.rotation.z = 0; });
     }
     function stepBoxes(now) {
       const A = Bx.anim; if (!A) return;
@@ -475,10 +561,11 @@ const P3 = (() => {
       anim.pulse.forEach(pu => { pu.m.material.opacity = (pu.on ? pu.base * 2.6 : pu.base) * (.75 + .35 * Math.sin(t * 3.2)); });
       anim.breathe.forEach((r, i) => { const k = (t * .7 + i * .37) % 1; r.scale.set(1 + k * .55, 1, 1 + k * .55); r.children.forEach(c => c.material.opacity = .8 * (1 - k)); });
       gates3.forEach(gt => { gt.cur += (gt.want - gt.cur) * .2; gt.g.position.y = -gt.cur * (gt.H + .05); gt.g.visible = gt.cur < .88; });
+      lights3.forEach(l => { if (l.glow.material.opacity > 0) l.glow.material.opacity = .35 + .15 * Math.sin(t * 3); });
       if (fx) stepFx(now);
       anim.flow.forEach(f => { f.m.mat.opacity = .35 + .65 * Math.max(0, Math.sin(t * 4 - f.i * 1.1)); });
       anim.flames.forEach(f => { if (f.visible) f.scale.set(1, .7 + Math.random() * .6, 1); });
-      stepLine(now); stepBoxes(now);
+      stepLine(now); stepBoxes(now); stepBooms(now); stepFall(now);
       renderer.render(scene, cam);
       frames++; if (now - fpsT > 1000) { fps = Math.round(frames * 1000 / (now - fpsT)); frames = 0; fpsT = now; }
       requestAnimationFrame(loop);

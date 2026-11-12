@@ -238,34 +238,66 @@ const PanelEngine = (() => {
     return sols;
   }
 
-  /* ---------------- boxes: every key moves every box ----------------
-     p.boxes [{x,y, m:'same'|'mx'|'my'|'opp', dash, n, trail}]
-       m      how the box reads the key: same, mx (left/right swapped), my (up/down swapped), opp (both)
-       dash   one press = slide until blocked
-       n      moves this box may still make (shown on the box); at 0 it is stuck
-       trail  the box pulls a rope behind it that nothing can cross (the "line" is such a box)
-     p.exit   goal tiles. Boxes never lock: the panel is solved the moment every goal holds a box.
-     Map tiles: pads (dash tiles), stops, portals, holes, broken (walls), oneway. */
+  /* ---------------- boxes: every key moves every box (the whole game, v4) ----------------
+     p.boxes [{x,y, m, dash, n, trail, c}]
+       m      'opp': reverse twin, every key backwards (left↔right, up↔down). ('mx'/'my' still read: one axis)
+       dash   rocket box: one press = slide until a wall, a box, a rope or a closed door stops it
+       n      countdown: moves this box may still make. A box at 0 that has to move explodes: the level fails
+       trail  rope box: leaves a rope behind; ropes block every box (its own too)
+       c      colour 1..3 (0/none = plain)
+     p.exit     goals [[x,y,c?]]: a goal with a colour wants a box of that colour; a plain goal takes any box
+     p.lights   [[x,y]] light tiles: lit while a rope lies on them (or a rope box stands there)
+     p.nums     [[cx,cy,n]] the ropes must use exactly n sides of this square (between four tiles)
+     p.switches [[x,y,c,c2?]] a box entering opens every door of colour c for good.
+                Double switch (c2): opens its current colour, shuts the other one, then shows the other colour
+     p.doors    [[x1,y1,x2,y2,c]] a door between two tiles: shut until a switch of its colour opens it
+     p.cracks   [[x,y]] a cracked tile falls away once the box on it leaves (then it's a hole)
+     p.paints   [[x,y,c]] a box entering takes colour c
+     Map tiles as before: pads (arrow tiles: slide on to the end), stops, portals, holes, broken (walls), oneway.
+     Boxes never lock: the panel is won the moment every goal holds a box of its colour, every light is lit
+     and every number is right. */
   function boxDir(b, d) { const m = b.m || 'same'; return m === 'mx' ? [-d[0], d[1]] : m === 'my' ? [d[0], -d[1]] : m === 'opp' ? [-d[0], -d[1]] : d; }
+  function boxCtx(p) {
+    const X = { C: ctx(p), sw: new Map(), paint: new Map(), crack: new Set(), door: new Map() };
+    (p.switches || []).forEach((q, i) => X.sw.set(key(q[0], q[1]), i));
+    (p.paints || []).forEach(q => X.paint.set(key(q[0], q[1]), q[2]));
+    (p.cracks || []).forEach(q => X.crack.add(key(q[0], q[1])));
+    (p.doors || []).forEach(q => X.door.set(ekey(q[0], q[1], q[2], q[3]), q[4]));
+    return X;
+  }
   function boxStart(p) {
-    return { pos: p.boxes.map(b => [b.x, b.y]), left: p.boxes.map(b => b.n == null ? null : b.n), trail: new Set(), inputs: '',
+    return { pos: p.boxes.map(b => [b.x, b.y]), left: p.boxes.map(b => b.n == null ? null : b.n), col: p.boxes.map(b => b.c || 0),
+      open: 0, sw: (p.switches || []).map(q => q[2]), crk: new Set(), trail: new Set(), rope: new Set(), dead: -1, inputs: '',
       tracks: p.boxes.map(b => [[b.x, b.y]]), jumps: p.boxes.map(() => [false]) };
   }
-  // one key press; returns { state, moved: [bool…] } (a new state; rec=false skips the drawing tracks)
-  function boxStep(p, s0, d, rec = true) {
-    const C = ctx(p), n = p.boxes.length;
-    if ((p.gates || []).length) C.closed = gateClosed(p, k => s0.pos.some(q => key(...q) === k) || s0.trail.has(k));
-    const s = { pos: s0.pos.map(q => q.slice()), left: s0.left.slice(), trail: new Set(s0.trail), inputs: s0.inputs + dirKey(d),
+  const doorShut = (X, open, k) => { const c = X.door.get(k); return c !== undefined && !(open & (1 << c)); };
+  // a box arrives on tile k: switches and paint
+  function enterTile(p, X, s, i, k) {
+    const si = X.sw.get(k);
+    if (si !== undefined) {
+      const q = p.switches[si];
+      if (q[3] == null) s.open |= 1 << q[2];
+      else { const cur = s.sw[si], oth = cur === q[2] ? q[3] : q[2]; s.open = (s.open | (1 << cur)) & ~(1 << oth); s.sw[si] = oth; }
+    }
+    const pc = X.paint.get(k); if (pc !== undefined) s.col[i] = pc;
+  }
+  // one key press; returns { state, moved: [bool…], dead } (a new state; rec=false skips the drawing tracks)
+  function boxStep(p, s0, d, rec = true, X = boxCtx(p)) {
+    const n = p.boxes.length, C = X.C;
+    const s = { pos: s0.pos.map(q => q.slice()), left: s0.left.slice(), col: s0.col.slice(), open: s0.open, sw: s0.sw.slice(), crk: new Set(s0.crk),
+      trail: new Set(s0.trail), rope: new Set(s0.rope), dead: s0.dead, inputs: s0.inputs + dirKey(d),
       tracks: rec && s0.tracks ? s0.tracks.map(t => t.map(q => q.slice())) : null, jumps: rec && s0.jumps ? s0.jumps.map(j => j.slice()) : null };
-    const act = p.boxes.map((b, i) => s.left[i] === null || s.left[i] > 0);
-    const dir = p.boxes.map(b => boxDir(b, d)), dash = p.boxes.map(b => !!b.dash), moved = Array(n).fill(false);
+    const moved = Array(n).fill(false);
+    if (s0.dead >= 0) return { state: s, moved, dead: s0.dead };
+    const act = Array(n).fill(true);
+    const dir = p.boxes.map(b => boxDir(b, d)), dash = p.boxes.map(b => !!b.dash);
     const push = (i, q, j) => { if (s.tracks) { s.tracks[i].push(q.slice()); s.jumps[i].push(j); } };
     for (let tick = 0; tick < 200 && act.some(Boolean); tick++) {
       const occ = new Map(s.pos.map((q, i) => [key(...q), i]));
       const want = s.pos.map((q, i) => {
         if (!act[i]) return null;
-        const to = [q[0] + dir[i][0], q[1] + dir[i][1]];
-        return inside(p, ...to) && linkOk(p, C, q, to) && !s.trail.has(key(...to)) ? to : null;
+        const to = [q[0] + dir[i][0], q[1] + dir[i][1]], tk = key(...to);
+        return inside(p, ...to) && linkOk(p, C, q, to) && !doorShut(X, s.open, ekey(q[0], q[1], to[0], to[1])) && !s.trail.has(tk) && !s.crk.has(tk) ? to : null;
       });
       const ok = want.map(Boolean);
       for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (ok[i] && ok[j] && want[i][0] === want[j][0] && want[i][1] === want[j][1]) ok[i] = ok[j] = false;
@@ -277,9 +309,14 @@ const PanelEngine = (() => {
           if (!ok[j] || (want[j][0] === s.pos[i][0] && want[j][1] === s.pos[i][1])) { ok[i] = false; changed = true; }
         }
       }
+      // countdown: a box with nothing left that has to move blows up
+      for (let i = 0; i < n; i++) if (ok[i] && !moved[i] && s.left[i] === 0) { s.dead = i; return { state: s, moved, dead: i }; }
+      const left = [];
       for (let i = 0; i < n; i++) {
         if (!ok[i]) { act[i] = false; continue; }
-        if (p.boxes[i].trail) s.trail.add(key(...s.pos[i]));
+        const from = s.pos[i];
+        if (p.boxes[i].trail) { s.trail.add(key(...from)); s.rope.add(ekey(from[0], from[1], want[i][0], want[i][1])); }
+        left.push(key(...from));
         s.pos[i] = want[i]; moved[i] = true; push(i, want[i], false);
       }
       for (let i = 0; i < n; i++) {
@@ -287,24 +324,41 @@ const PanelEngine = (() => {
         let at = s.pos[i];
         const t = twin(p, ...at);
         if (t) {
-          const busy = s.pos.some((q, j) => j !== i && q[0] === t[0] && q[1] === t[1]) || s.trail.has(key(...t));
+          const busy = s.pos.some((q, j) => j !== i && q[0] === t[0] && q[1] === t[1]) || s.trail.has(key(...t)) || s.crk.has(key(...t));
           if (busy) { act[i] = false; continue; }
           if (p.boxes[i].trail) s.trail.add(key(...at));
           s.pos[i] = t.slice(); at = t; push(i, t, true);
         }
+        enterTile(p, X, s, i, key(...at));
         const pd = padAt(p, ...at);
         if (pd) { dir[i] = pd; dash[i] = true; } else if (isStop(p, ...at)) dash[i] = false;
         if (!dash[i]) act[i] = false;
       }
+      // cracked tiles fall once nobody stands on them
+      if (X.crack.size) for (const k of left) if (X.crack.has(k) && !s.pos.some(q => key(...q) === k)) s.crk.add(k);
     }
     for (let i = 0; i < n; i++) if (moved[i] && s.left[i] !== null) s.left[i]--;
-    return { state: s, moved };
+    return { state: s, moved, dead: -1 };
   }
-  const boxWon = (p, s) => (p.exit || []).every(g => s.pos.some(q => q[0] === g[0] && q[1] === g[1]));
-  function boxReplay(p, inputs) { let s = boxStart(p); for (const c of inputs) s = boxStep(p, s, DK[c]).state; return s; }
-  const boxKey = s => s.pos.map(q => key(...q)).join('/') + '|' + s.left.join(',') + (s.trail.size ? '#' + [...s.trail].sort().join(';') : '');
+  // what's still missing: { goals: [i…], lights: [i…], nums: [{i,c}…] }
+  function boxNeed(p, s) {
+    const at = new Map(s.pos.map((q, i) => [key(...q), i]));
+    const goals = [], lights = [], nums = [];
+    (p.exit || []).forEach((g, i) => { const b = at.get(key(g[0], g[1])); if (b === undefined || (g[2] && s.col[b] !== g[2])) goals.push(i); });
+    (p.lights || []).forEach(([x, y], i) => { const k = key(x, y), b = at.get(k); if (!s.trail.has(k) && !(b !== undefined && p.boxes[b].trail)) lights.push(i); });
+    (p.nums || []).forEach(([cx, cy, n], i) => { const c = cellSides(cx, cy).filter(k => s.rope.has(k)).length; if (c !== n) nums.push({ i, c }); });
+    return { goals, lights, nums };
+  }
+  function boxWon(p, s) {
+    if (s.dead >= 0) return false;
+    const N = boxNeed(p, s); return !N.goals.length && !N.lights.length && !N.nums.length;
+  }
+  function boxReplay(p, inputs) { let s = boxStart(p); const X = boxCtx(p); for (const c of inputs) s = boxStep(p, s, DK[c], true, X).state; return s; }
+  const boxKey = s => s.pos.map(q => key(...q)).join('/') + '|' + s.left.join(',') + '|' + s.col.join('') + '|' + s.open + s.sw.join('')
+    + (s.crk.size ? '~' + [...s.crk].sort().join(';') : '') + (s.trail.size ? '#' + [...s.trail].sort().join(';') + '#' + [...s.rope].sort().join(';') : '');
   // breadth-first: the shortest key sequences that win (up to `limit`)
   function boxSolve(p, maxDepth = 40, limit = 20, maxStates = 400000) {
+    const X = boxCtx(p);
     let s0 = boxStart(p); s0.tracks = s0.jumps = null;
     if (boxWon(p, s0)) return { wins: [''], explored: 0, capped: false };
     let frontier = [s0], wins = [], explored = 0;
@@ -312,7 +366,7 @@ const PanelEngine = (() => {
     for (let depth = 0; depth < maxDepth && frontier.length && !wins.length; depth++) {
       const next = [];
       for (const s of frontier) for (const c of 'RLDU') {
-        const r = boxStep(p, s, DK[c], false); if (!r.moved.some(Boolean)) continue;
+        const r = boxStep(p, s, DK[c], false, X); if (!r.moved.some(Boolean) || r.dead >= 0) continue;
         if (boxWon(p, r.state)) { if (wins.length < limit) wins.push(r.state.inputs); continue; }
         const k = boxKey(r.state); if (seen.has(k)) continue;
         seen.add(k); next.push(r.state); explored++;
@@ -323,6 +377,6 @@ const PanelEngine = (() => {
     return { wins, explored, capped: false };
   }
   return { gateClosed, validate, solve, replay, options, apply, undo, start, canStop, rules, ctx, neighbors, brokenSet, isStart, isExit, exitDir, key, ekey, nodeCount, dims, norm, inside, twin, jumps, mirrorOf, lines, regions, cellSides, edgeSet, padAt, isStop, isBridge, holeSet, usedEdges,
-    boxStart, boxStep, boxWon, boxReplay, boxSolve, boxDir, DK, dirKey };
+    boxStart, boxStep, boxWon, boxNeed, boxReplay, boxSolve, boxDir, boxCtx, boxKey, DK, dirKey };
 })();
 if (typeof module !== 'undefined') module.exports = PanelEngine;

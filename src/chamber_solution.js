@@ -60,32 +60,46 @@ function solEvents(p) {
   }
   return { ev, ends, n: ends.length - 1 };
 }
-const BOXN = ['hồng', 'tím', 'xanh', 'vàng'];
+const HUEN = ['trắng', 'hồng', 'xanh', 'lục'];
+function boxName(p, s, i) {
+  const b = p.boxes[i], kind = b.trail ? 'Hộp dây' : b.dash ? 'Hộp tên lửa' : 'Hộp';
+  if (p.boxes.length === 1) return kind;
+  const same = p.boxes.filter((q, j) => (q.trail ? 1 : q.dash ? 2 : 0) === (b.trail ? 1 : b.dash ? 2 : 0) && s.col[j] === s.col[i] && (q.m || '') === (b.m || '')).length;
+  return `${kind}${s.col[i] ? ' ' + HUEN[s.col[i]] : ''}${b.m === 'opp' ? ' song sinh' : ''}${same > 1 ? ' #' + (i + 1) : ''}`;
+}
 function boxSolEvents(p) {
-  const E = PanelEngine, inp = p.solIn, n = p.boxes.length;
-  const ev = [[n === 1 ? 'Hộp bắt đầu ở đây.' : `${n} hộp bắt đầu ở đây; mỗi phím di chuyển cả ${n}.`]];
-  const onG = q => (p.exit || []).some(g => g[0] === q[0] && g[1] === q[1]);
+  const E = PanelEngine, inp = p.solIn, n = p.boxes.length, X = E.boxCtx(p);
+  const ev = [[n === 1 ? 'Hộp bắt đầu ở đây.' : `${n} hộp bắt đầu ở đây; mỗi phím điều khiển cả ${n}.`]];
+  const goalAt = q => (p.exit || []).find(g => g[0] === q[0] && g[1] === q[1]);
   let s = E.boxStart(p);
   for (let k = 0; k < inp.length; k++) {
-    const c = inp[k], r = E.boxStep(p, s, E.DK[c]), out = [`Ấn ${KEYN[c]}.`];
+    const c = inp[k], r = E.boxStep(p, s, E.DK[c], true, X), ns = r.state, out = [`Ấn ${KEYN[c]}.`];
     p.boxes.forEach((b, i) => {
-      const nm = n === 1 ? 'Hộp' : `Hộp ${BOXN[i % 4]}`;
-      if (!r.moved[i]) { out.push(s.left[i] === 0 ? `${nm} hết nước, đứng im.` : `${nm} bị chặn, đứng yên.`); return; }
-      const t = r.state.tracks[i].slice(s.tracks[i].length - 1), J = r.state.jumps[i].slice(s.tracks[i].length - 1);
+      const nm = boxName(p, s, i);
+      if (!r.moved[i]) { out.push(s.left[i] === 0 ? `${nm} đã về 0 nhưng bị chặn sẵn nên không nổ.` : `${nm} bị chặn, đứng yên.`); return; }
+      const t = ns.tracks[i].slice(s.tracks[i].length - 1), J = ns.jumps[i].slice(s.tracks[i].length - 1);
       const d = E.boxDir(b, E.DK[c]), jumps = J.filter(Boolean).length, steps = t.length - 1 - jumps;
       let msg = `${nm} đi ${ARW[E.dirKey(d)]}${steps > 1 ? ` ${steps} ô` : ''}`;
-      if (t.slice(1).some(q => E.padAt(p, ...q))) msg += ', bị ô dash phóng đi';
+      if (t.slice(1).some(q => E.padAt(p, ...q))) msg += ', bị ô mũi tên đẩy đi';
       if (jumps) msg += ', qua cổng';
-      if (steps > 1 && E.isStop(p, ...r.state.pos[i])) msg += ', dừng ở ô phanh';
-      if (r.state.left[i] != null) msg += ` (còn ${r.state.left[i]} nước)`;
+      if (steps > 1 && E.isStop(p, ...ns.pos[i])) msg += ', dừng ở ô phanh';
+      if (ns.col[i] !== s.col[i]) msg += `, bị sơn thành màu ${HUEN[ns.col[i]]}`;
+      if (ns.left[i] != null) msg += ` (còn ${ns.left[i]} nước)`;
       msg += '.';
-      if (onG(r.state.pos[i])) msg += ' Đang đứng trong goal.';
-      else if (onG(s.pos[i])) msg += ' Rời khỏi goal (hộp không bị khoá).';
+      const g = goalAt(ns.pos[i]);
+      if (g && (!g[2] || g[2] === ns.col[i])) msg += ' Đang đứng trong goal.';
+      else if (goalAt(s.pos[i])) msg += ' Rời khỏi goal (hộp không bị khoá).';
       out.push(msg);
     });
-    s = r.state; ev.push(out);
+    if (ns.open !== s.open) [1, 2, 3].forEach(cc => { const was = s.open & (1 << cc), now = ns.open & (1 << cc); if (now && !was) out.push(`Cửa ${HUEN[cc]} mở.`); if (was && !now) out.push(`Cửa ${HUEN[cc]} đóng lại.`); });
+    if (ns.crk.size > s.crk.size) out.push('Ô nứt sụp xuống thành lỗ.');
+    const lit = l => (p.lights || []).length - E.boxNeed(p, l).lights.length;
+    if ((p.lights || []).length && lit(ns) !== lit(s)) out.push(`Đèn sáng ${lit(ns)}/${p.lights.length}.`);
+    s = ns; ev.push(out);
   }
-  ev[ev.length - 1].push('Mọi goal cùng có hộp: xong.');
+  const last = ev[ev.length - 1];
+  if ((p.nums || []).length) last.push('Mọi con số đều đúng.');
+  last.push('Mọi goal có hộp đúng màu' + ((p.lights || []).length ? ', mọi đèn đều sáng' : '') + ': xong.');
   return { ev, n: inp.length };
 }
 function solMode(on) {
@@ -123,7 +137,7 @@ function drawSol(svg) {
   let h;
   if (p.boxes) {
     const s = E.boxReplay(p, p.solIn.slice(0, k));
-    svg.innerHTML = boxBoardSVG(p, { boxAt: new Set(s.pos.map(q => q.join(','))), noBoxes: true }) + boxesSVG(p, s, { cls: 'sol' });
+    svg.innerHTML = boxBoardSVG(p, { s, noBoxes: true }) + boxesSVG(p, s, { cls: 'sol' });
     return;
   }
   const { st, ends } = solMovesOf(p), upto = ends[k], pts = p.sol.slice(0, upto + 1), J = st.jump.slice(0, upto + 1), lines = E.lines(p, pts);

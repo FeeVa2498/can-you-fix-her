@@ -6,12 +6,19 @@
    Edits are saved in this browser (localStorage). Export panels.json
    to make them permanent (replace src/panels.json and rebuild).
    ========================================================= */
+// v4: every panel is boxes. Edits saved by an older build keep only their hand-edited box panels, laid over the new built-in set.
+
 function edLoad() {
-  try { const s = JSON.parse(localStorage.getItem('cyfh_level_edits')); return s && Array.isArray(s.panels) && s.panels.length ? s.panels : null; } catch (e) { return null; }
+  try {
+    const s = JSON.parse(localStorage.getItem('cyfh_level_edits')); if (!s || !Array.isArray(s.panels) || !s.panels.length) return null;
+    if (s.v === 4) return s.panels;
+    const keep = s.panels.filter(p => p.edited && p.boxes);
+    return keep.length ? edMerge(PANELS_BUILTIN, keep, null) : null;
+  } catch (e) { return null; }
 }
 function edPersist() {
   edSync();
-  try { localStorage.setItem('cyfh_level_edits', JSON.stringify({ panels: PANELS, t: Date.now() })); return true; }
+  try { localStorage.setItem('cyfh_level_edits', JSON.stringify({ v: 4, panels: PANELS, t: Date.now() })); return true; }
   catch (e) { edMsg('Could not save in this browser (storage full or blocked). Use Export to keep your work.', 'bad'); return false; }
 }
 /* When the game runs as a claude.ai artifact, edits are also kept in the artifact's shared
@@ -37,13 +44,13 @@ async function edDbInit() {
   try {
     const timeout = new Promise((_, rj) => setTimeout(() => rj(new Error('timeout')), 10000));
     const [ls, meta] = await Promise.race([Promise.all([db.collection('levels').get(), db.doc('levelmeta/order').get()]), timeout]);
-    const docs = ls.docs.map(d => d.data()).filter(p => p && p.id);
+    const docs = ls.docs.map(d => d.data()).filter(p => p && p.id && p.boxes);
     const m = meta && meta.data ? meta.data() : null;
     docs.forEach(p => EDB.sent[p.id] = JSON.stringify(p));
     if (m) EDB.sentOrder = JSON.stringify(m);
     if (!docs.length && !m) { if (PANELS.some(p => p.edited)) edSync(); return; }   // first run: upload what this browser already has
     PANELS = edMerge(PANELS_BUILTIN, docs, m);
-    try { localStorage.setItem('cyfh_level_edits', JSON.stringify({ panels: PANELS, t: Date.now() })); } catch (e) { }
+    try { localStorage.setItem('cyfh_level_edits', JSON.stringify({ v: 4, panels: PANELS, t: Date.now() })); } catch (e) { }
     UPD.forEach(f => f()); if (WINS.editor) edRender();
   } catch (e) { console.warn('level edits: shared database unavailable', e); }
 }
@@ -67,12 +74,16 @@ const ED_TOOLS = {
     ['dot', 'Dot', 'node', 'Chấm bắt buộc'], ['oneway', 'One-way', 'edge', 'Một chiều (bấm lại để đảo chiều, lần 3 xoá)'], ['portal', 'Portal', 'node', 'Bấm 2 điểm để tạo cặp; bấm cổng có sẵn để xoá cặp'],
     ['bridge', 'Overpass', 'node', 'Cầu vượt'], ['plate0', 'Plate ●', 'node', 'Công tắc xanh'], ['plate1', 'Plate ●', 'node', 'Công tắc cam'],
     ['gate0', 'Gate ▮', 'edge', 'Cổng xanh (bấm lại = cổng đảo, lần 3 xoá)'], ['gate1', 'Gate ▮', 'edge', 'Cổng cam (bấm lại = cổng đảo, lần 3 xoá)'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
-  box: [['box', 'Box', 'node', 'Đặt hộp; bấm hộp có sẵn để chọn và chỉnh thuộc tính'], ['goal', 'Goal', 'node', 'Ô goal'], ['wall', 'Wall', 'edge', 'Tường giữa hai ô'], ['hole', 'Hole', 'node', 'Lỗ trên map'],
-    ['pad', 'Dash tile', 'node', 'Ô dash (bấm lại để xoay →↓←↑, lần 5 xoá)'], ['stop', 'Stop', 'node', 'Ô phanh'], ['oneway', 'One-way', 'edge', 'Khe một chiều (bấm lại để đảo chiều)'],
-    ['portal', 'Portal', 'node', 'Bấm 2 ô để tạo cặp'], ['plate0', 'Plate ●', 'node', 'Công tắc xanh'], ['plate1', 'Plate ●', 'node', 'Công tắc cam'],
-    ['gate0', 'Gate ▮', 'edge', 'Cổng xanh (bấm lại = cổng đảo)'], ['gate1', 'Gate ▮', 'edge', 'Cổng cam (bấm lại = cổng đảo)'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
+  box: [['box', 'Box', 'node', 'Đặt hộp; bấm hộp có sẵn để chọn và chỉnh thuộc tính (màu, dây, tên lửa, song sinh, đếm ngược)'],
+    ['goal', 'Goal', 'node', 'Ô goal: bấm lại để đổi màu (trắng → hồng → xanh → lục), lần 5 xoá'], ['wall', 'Wall', 'edge', 'Tường giữa hai ô'], ['hole', 'Hole', 'node', 'Lỗ trên map'],
+    ['light', 'Light', 'node', 'Ô đèn: dây phải nằm trên đó'], ['num', 'Number', 'cell', 'Số giữa bốn ô: số cạnh dây phải đi (bấm lại để tăng 1→4, rồi xoá)'],
+    ['pad', 'Arrow tile', 'node', 'Ô mũi tên (bấm lại để xoay →↓←↑, lần 5 xoá)'], ['stop', 'Stop', 'node', 'Ô phanh'], ['oneway', 'One-way', 'edge', 'Khe một chiều (bấm lại để đảo chiều)'],
+    ['portal', 'Portal', 'node', 'Bấm 2 ô để tạo cặp'],
+    ['switch', 'Switch', 'node', 'Ô chốt: bấm lại để đổi màu hồng → xanh → lục, rồi thành chốt đôi hồng/xanh → xanh/lục → lục/hồng, rồi xoá'],
+    ['door', 'Door', 'edge', 'Cửa khoá giữa hai ô: bấm lại để đổi màu hồng → xanh → lục, rồi xoá'],
+    ['crack', 'Crack', 'node', 'Ô nứt: hộp rời đi là sụp'], ['paint', 'Paint', 'node', 'Ô sơn: bấm lại để đổi màu, rồi xoá'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
 };
-const ED_TAGS = ['', 'basic', 'sketch', 'avoid', 'mirror', 'plates', 'swap', 'nums', 'visitAll', 'ends', 'holes', 'oneway', 'portals', 'bridges', 'boxes', 'pads', 'stops', 'dash', 'helpers', 'many', 'budget', 'twin', 'nolock', 'trail'];
+const ED_TAGS = ['', 'basic', 'trail', 'boxes', 'lights', 'nums', 'switches', 'dbl', 'colors', 'paints', 'cracks', 'ends', 'holes', 'oneway', 'portals', 'pads', 'stops', 'dash', 'helpers', 'many', 'budget', 'twin', 'twinrope', 'nolock', 'plates', 'swap'];
 let ED = null;
 const edClone = o => JSON.parse(JSON.stringify(o));
 const edSame = (a, b) => a && b && a[0] === b[0] && a[1] === b[1];
@@ -122,7 +133,7 @@ function edTree() {
   const list = PANELS.filter(p => p.girl === ED.girl);
   t.innerHTML = [1, 2, 3].map(L => {
     const rows = list.filter(p => p.layer === L).sort((a, c) => a.n - c.n);
-    return `<div class="ed-layer"><div class="ed-lh"><b>Layer ${L} · ${REGION[L]}</b><button class="btn ed-mini" data-new="${L}" title="Thêm level mới vào layer này">＋ line</button><button class="btn ed-mini" data-newb="${L}" title="Thêm level hộp mới">＋ box</button></div>
+    return `<div class="ed-layer"><div class="ed-lh"><b>Layer ${L} · ${REGION[L]}</b><button class="btn ed-mini" data-new="${L}" title="Level mới với một hộp dây">＋ rope</button><button class="btn ed-mini" data-newb="${L}" title="Level mới với một hộp thường">＋ box</button></div>
       ${rows.map((p, i) => `<div class="ed-row${ED.id === p.id ? ' sel' : ''}" data-id="${p.id}"><span class="no">${i + 1}</span><span class="nm">${esc(p.id)}</span>${p.tut ? '<i class="tg tut">TUT</i>' : ''}${p.edited ? '<i class="tg ed">✎</i>' : ''}${p.unsolved ? '<i class="tg bad" title="Chưa có lời giải">!</i>' : ''}<span class="mv"><button class="btn ed-mini" data-up="${p.id}" ${i ? '' : 'disabled'} aria-label="Move up">▲</button><button class="btn ed-mini" data-dn="${p.id}" ${i < rows.length - 1 ? '' : 'disabled'} aria-label="Move down">▼</button></span></div>`).join('') || '<div class="ed-empty">no levels</div>'}</div>`;
   }).join('');
   $$('.ed-row', t).forEach(r => r.onclick = e => { if (e.target.closest('button')) return; edSelect(r.dataset.id); });
@@ -149,7 +160,7 @@ function edSelect(id, force) {
 function edNew(layer, box) {
   const id = `${ED.girl}_${layer}_c${Date.now().toString(36).slice(-5)}`;
   const n = Math.max(0, ...PANELS.filter(p => p.girl === ED.girl && p.layer === layer).map(p => p.n)) + 1;
-  const p = box ? { id, girl: ED.girl, layer, n, w: 3, h: 3, boxes: [{ x: 0, y: 3 }], exit: [[3, 0]] } : { id, girl: ED.girl, layer, n, w: 3, h: 3, start: [[0, 3]], exit: [[3, 0]] };
+  const p = { id, girl: ED.girl, layer, n, w: 3, h: 3, boxes: [box ? { x: 0, y: 3 } : { x: 0, y: 3, trail: true }], exit: [[3, 0]] };
   Object.assign(p, { belief: '', why: '', edited: true, unsolved: true });
   PANELS.push(p); edPersist(); UPD.forEach(f => f());
   edSelect(id, true); edMsg('New level added at the end of layer ' + layer + '. Draw it, then Check and Save.', 'ok');
@@ -172,7 +183,7 @@ function edTarget(fx, fy, kind) {
       .map(e => ({ t: 'edge', v: e, d: Math.hypot(fx - (e[0] + e[2]) / 2, fy - (e[1] + e[3]) / 2) })).sort((a, b) => a.d - b.d)[0];
     return c && c.d < .4 ? c : null;
   };
-  const cell = () => { const x = Math.floor(fx), y = Math.floor(fy); return !p.boxes && x >= 0 && y >= 0 && x < p.w && y < p.h ? { t: 'cell', v: [x, y], d: Math.hypot(fx - x - .5, fy - y - .5) } : null; };
+  const cell = () => { const x = Math.floor(fx), y = Math.floor(fy); return x >= 0 && y >= 0 && x < p.w && y < p.h ? { t: 'cell', v: [x, y], d: Math.hypot(fx - x - .5, fy - y - .5) } : null; };
   if (kind === 'node') return node();
   if (kind === 'edge') return edge();
   if (kind === 'cell') return cell();
@@ -187,7 +198,26 @@ function edApply(tg) {
     const v = tg.v;
     switch (tool) {
       case 'start': p.start = [v.slice()]; break;
-      case 'exit': case 'goal': edToggle(L('exit'), v.slice(), a => atN(a, v)); break;
+      case 'exit': edToggle(L('exit'), v.slice(), a => atN(a, v)); break;
+      case 'goal': {
+        const i = L('exit').findIndex(a => atN(a, v));
+        if (i < 0) p.exit.push(v.slice()); else { const c = p.exit[i][2] || 0; if (c >= 3) p.exit.splice(i, 1); else p.exit[i] = [v[0], v[1], c + 1]; }
+        break;
+      }
+      case 'light': edToggle(L('lights'), v.slice(), a => atN(a, v)); break;
+      case 'crack': edToggle(L('cracks'), v.slice(), a => atN(a, v)); break;
+      case 'paint': {
+        const i = L('paints').findIndex(a => atN(a, v));
+        if (i < 0) p.paints.push([v[0], v[1], 1]); else if (p.paints[i][2] < 3) p.paints[i][2]++; else p.paints.splice(i, 1);
+        break;
+      }
+      case 'switch': {
+        const seq = [[1], [2], [3], [1, 2], [2, 3], [3, 1]], i = L('switches').findIndex(a => atN(a, v));
+        if (i < 0) { p.switches.push([v[0], v[1], 1]); break; }
+        const cur = p.switches[i], k = seq.findIndex(q => q[0] === cur[2] && (q[1] ?? null) === (cur[3] ?? null));
+        if (k < 0 || k === seq.length - 1) p.switches.splice(i, 1); else p.switches[i] = [v[0], v[1], ...seq[k + 1]];
+        break;
+      }
       case 'hole': edToggle(L('holes'), v.slice(), a => atN(a, v)); break;
       case 'dot': edToggle(L('dots'), v.slice(), a => atN(a, v)); break;
       case 'bridge': edToggle(L('bridges'), v.slice(), a => atN(a, v)); break;
@@ -215,7 +245,7 @@ function edApply(tg) {
         p.boxes.push({ x: v[0], y: v[1] }); ED.selBox = p.boxes.length - 1; break;
       }
       case 'erase': {
-        ['exit', 'holes', 'dots', 'bridges', 'stops'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => !atN(a, v)); });
+        ['exit', 'holes', 'dots', 'bridges', 'stops', 'lights', 'cracks', 'paints', 'switches'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => !atN(a, v)); });
         ['plates', 'pads'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => !atN(a, v)); });
         if (p.portals) p.portals = p.portals.filter(q => !atN(q, v) && !(q[2] === v[0] && q[3] === v[1]));
         if (p.boxes && p.boxes.length > 1) { p.boxes = p.boxes.filter(b => !(b.x === v[0] && b.y === v[1])); ED.selBox = null; }
@@ -241,12 +271,18 @@ function edApply(tg) {
         else if (!p.gates[i][5]) p.gates[i][5] = 1; else p.gates.splice(i, 1);
         break;
       }
-      case 'erase': ['broken', 'sketch', 'avoid', 'oneway', 'gates'].forEach(kk => { if (p[kk]) p[kk] = p[kk].filter(a => !at(a)); }); break;
+      case 'door': {
+        const i = L('doors').findIndex(at);
+        if (i < 0) p.doors.push([...e, 1]); else if (p.doors[i][4] < 3) p.doors[i][4]++; else p.doors.splice(i, 1);
+        if (p.broken) p.broken = p.broken.filter(a => !at(a));
+        break;
+      }
+      case 'erase': ['broken', 'sketch', 'avoid', 'oneway', 'gates', 'doors'].forEach(kk => { if (p[kk]) p[kk] = p[kk].filter(a => !at(a)); }); break;
       default: return;
     }
   } else if (tg.t === 'cell') {
     const [x, y] = tg.v, i = (p.nums || []).findIndex(a => a[0] === x && a[1] === y);
-    if (ED.tool === 'num') { if (i < 0) L('nums').push([x, y, 0]); else if (p.nums[i][2] < 4) p.nums[i][2]++; else p.nums.splice(i, 1); }
+    if (ED.tool === 'num') { if (i < 0) L('nums').push([x, y, p.boxes ? 1 : 0]); else if (p.nums[i][2] < 4) p.nums[i][2]++; else p.nums.splice(i, 1); }
     else if (ED.tool === 'erase') { if (i >= 0) p.nums.splice(i, 1); if (p.squares) p.squares = p.squares.filter(a => !(a[0] === x && a[1] === y)); }
     else return;
   }
@@ -257,11 +293,11 @@ function edInvalidate() { ['sol', 'solIn', 'solutions', 'minMoves', 'luck', 'qua
 function edNorm(src) {
   const p = edClone(src), E = PanelEngine, inB = ([x, y]) => x >= 0 && y >= 0 && x <= p.w && y <= p.h;
   const nodesOk = a => inB(a) && !(p.holes || []).some(h => h[0] === a[0] && h[1] === a[1]);
-  ['exit', 'dots', 'bridges', 'stops', 'holes'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => inB(a)); });
-  ['exit', 'dots', 'bridges', 'stops'].forEach(k => { if (p[k]) p[k] = p[k].filter(nodesOk); });
+  ['exit', 'dots', 'bridges', 'stops', 'holes', 'lights', 'cracks', 'paints', 'switches'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => inB(a)); });
+  ['exit', 'dots', 'bridges', 'stops', 'lights', 'cracks', 'paints', 'switches'].forEach(k => { if (p[k]) p[k] = p[k].filter(nodesOk); });
   ['plates', 'pads'].forEach(k => { if (p[k]) p[k] = p[k].filter(a => nodesOk(a)); });
   if (p.portals) p.portals = p.portals.filter(q => nodesOk([q[0], q[1]]) && nodesOk([q[2], q[3]]));
-  ['broken', 'sketch', 'avoid', 'oneway', 'gates'].forEach(k => { if (p[k]) p[k] = p[k].filter(e => nodesOk([e[0], e[1]]) && nodesOk([e[2], e[3]])); });
+  ['broken', 'sketch', 'avoid', 'oneway', 'gates', 'doors'].forEach(k => { if (p[k]) p[k] = p[k].filter(e => nodesOk([e[0], e[1]]) && nodesOk([e[2], e[3]])); });
   if (p.nums) p.nums = p.nums.filter(([x, y]) => x < p.w && y < p.h);
   if (p.boxes) { p.boxes = p.boxes.filter(b => nodesOk([b.x, b.y])); delete p.start; delete p.mirror; delete p.visitAll; }
   else {
@@ -377,10 +413,11 @@ function edProps() {
     ${box ? '' : `<label><input type="checkbox" id="ep-mirror" ${p.mirror ? 'checked' : ''}> Mirror line (other hand)</label><label><input type="checkbox" id="ep-all" ${p.visitAll ? 'checked' : ''}> Visit every point</label>`}
     <label>Tutorial tag <select id="ep-tut">${ED_TAGS.map(t => `<option value="${t}"${(p.tut || '') === t ? ' selected' : ''}>${t || '—'}</option>`).join('')}</select></label>
     ${sb ? `<fieldset class="ed-box"><legend>Selected box</legend>
-      <label><input type="checkbox" id="eb-twin" ${sb.m === 'opp' ? 'checked' : ''}> Twin (mirrors every key)</label>
-      <label><input type="checkbox" id="eb-dash" ${sb.dash ? 'checked' : ''}> Dash (slides until blocked)</label>
-      <label><input type="checkbox" id="eb-rope" ${sb.trail ? 'checked' : ''}> Rope (leaves a rope)</label>
-      <label>Move budget <input id="eb-n" type="number" min="0" max="30" placeholder="none" value="${sb.n ?? ''}"></label>
+      <label>Colour <select id="eb-c">${['plain', 'pink', 'blue', 'green'].map((nm, c) => `<option value="${c}"${(sb.c || 0) === c ? ' selected' : ''}>${nm}</option>`).join('')}</select></label>
+      <label><input type="checkbox" id="eb-rope" ${sb.trail ? 'checked' : ''}> Rope box</label>
+      <label><input type="checkbox" id="eb-dash" ${sb.dash ? 'checked' : ''}> Rocket box</label>
+      <label><input type="checkbox" id="eb-twin" ${sb.m === 'opp' ? 'checked' : ''}> Reverse twin</label>
+      <label>Countdown <input id="eb-n" type="number" min="0" max="30" placeholder="none" value="${sb.n ?? ''}"></label>
       <button class="btn" id="eb-del" ${p.boxes.length < 2 ? 'disabled' : ''}>Remove box</button></fieldset>` : box ? '<div class="ed-hint">Box tool: click a box to edit it.</div>' : ''}
     <label class="col">Belief (story) <textarea id="ep-belief" rows="2">${esc(p.belief || '')}</textarea></label>
     <label class="col">Key idea (Solution mode) <textarea id="ep-why" rows="3">${esc(p.why || '')}</textarea></label>
@@ -403,6 +440,7 @@ function edProps() {
   ['belief', 'why'].forEach(k => { const el = $('#ep-' + k, b); el.oninput = () => { p[k] = el.value; ED.dirty = true; const d = $('.ed-id', b); if (d && !d.querySelector('.bad')) d.insertAdjacentHTML('beforeend', ' <b class="bad">●</b>'); }; });
   if (sb) {
     ch('#eb-twin', el => { if (el.checked) sb.m = 'opp'; else delete sb.m; });
+    ch('#eb-c', el => { if (+el.value) sb.c = +el.value; else delete sb.c; });
     ch('#eb-dash', el => { if (el.checked) sb.dash = true; else delete sb.dash; });
     ch('#eb-rope', el => { if (el.checked) sb.trail = true; else delete sb.trail; });
     ch('#eb-n', el => { if (el.value === '') delete sb.n; else sb.n = Math.max(0, +el.value); });

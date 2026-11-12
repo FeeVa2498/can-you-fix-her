@@ -127,73 +127,57 @@ add(G, 'Hiệu ứng thắng / thua', 'Chữ "RULE VIOLATION"', 'Chữ hiện kh
 add(G, 'Hiệu ứng thắng / thua', 'Vệt bay lên & mảnh vỡ', 'Khối bay thẳng lên trời để lại vệt sáng; bàn chơi vỡ thành mảnh. Code đã làm chuyển động, artist vẽ vệt sáng + tia lấp lánh.', 'Vệt sáng + 4–6 frame lấp lánh', 7, '64×256 / 32×32', 'PNG', 'fx_flyup_trail.png, fx_sparkle_sheet.png', 'P2')
 add(G, 'Chat trong máy chiếu', 'Khung chat giữa các map', 'Khung Yappy Yappy nhỏ góc dưới màn chiếu (avatar + tên + bong bóng + nút "Next map ▸"), dùng ở chế độ cốt truyện.', 'Khung + đầu khung', 2, '9-slice', 'PNG', 'ui_pj_chat.png', 'P2')
 
-# ---------------- 9. Gameplay: line panels ----------------
-G = '9. Gameplay – bảng ĐƯỜNG (Prim, Trix, Paige)'
+# ---------------- 9. Gameplay: the box board (every girl) ----------------
+G = '9. Gameplay – bàn chơi HỘP (mọi cô gái)'
 note3d = 'Game render 3D bằng code. Artist giao: concept nhìn trên + nhìn nghiêng, và texture mặt trên. Dev dựng hình khối đơn giản theo concept.'
-L = [
-    ('Sàn bàn chơi', 'Mặt sàn tím than dưới lưới đường ray, có độ dày (khối nổi trong không gian). Map có lỗ (holes): sàn khuyết đúng chỗ đó.', 'Texture mặt trên + mặt bên', 2, '256×256'),
-    ('Đường ray', 'Thanh ray nối các điểm, màu theo cô gái (Prim tím, Trix xanh dương…). Ray đứt (broken): hai đoạn cụt có khe ở giữa.', 'Ray thường + ray đứt, ×5 màu cô gái', 10, '128×32'),
-    ('Khối đầu đường (head)', 'Khối lập phương nhỏ màu hồng lăn từng điểm, kéo theo sợi dây sáng. Đây chính là "người chơi".', 'Khối chính + khối gương (tay kia, màu đen tím) · thường/thắng/thua', 6, 'concept 256×256'),
-    ('Sợi dây sáng (rope)', 'Dây phát sáng phía sau khối. Các trạng thái: đang vẽ (hồng), thắng (vàng), sai (đỏ), lời giải (xanh dương), gợi ý tracing paper (trắng mờ), đường ghost của lời giải (xanh nhạt nét đứt).', '6 màu/trạng thái', 6, 'texture 64×16 tile'),
-    ('Ô đích (exit goal)', 'Ô vàng có viền, toả sáng nhịp thở, sáng hơn khi khối đứng lên.', 'Thường + đang đứng lên', 2, '256×256'),
-    ('Nét chì (sketch)', 'Đoạn ray có nét chì kem đứt khúc: đường bắt buộc phải tô qua.', 'Thường + đã tô + sai (đỏ)', 3, '128×32'),
-    ('Chì đen (avoid)', 'Đoạn ray có nét chì đen: không được đi lên.', 'Thường + sai (đỏ)', 2, '128×32'),
-    ('Ô số cạnh (nums)', 'Số trong ô hiện "đã chạm/cần" (ví dụ 1/3). Màu trắng = chưa đủ, xanh lá = đúng, đỏ = thừa/sai. Cần bộ chữ số pixel 0–4 và dấu "/".', 'Bộ số 0–4 + "/" × 3 màu', 18, '64×64 mỗi ký tự'),
-    ('Chấm bắt buộc (dots)', 'Chấm đen viền trắng trên điểm: phải đi qua.', 'Thường + sai', 2, '64×64'),
-    ('Vòng "đi qua mọi điểm"', 'Vòng nhỏ trên mỗi điểm, sáng hồng khi đã đi qua.', 'Tắt + bật + sai', 3, '64×64'),
-    ('Portal (cổng dịch chuyển)', 'Cặp cổng cùng màu: vòng tròn nằm sàn + đĩa sáng + vòng nhỏ lơ lửng xoay. 3 màu cặp: vàng, xanh trời, xanh mint.', '3 màu', 3, 'concept + texture 256×256'),
-    ('Cầu vượt (overpass)', 'Điểm cho phép đường đi qua 2 lần (1 ngang, 1 dọc): khối thoi nhỏ màu sáng; khi đã vượt qua có vòng đánh dấu.', 'Thường + đã vượt', 2, 'concept 256×256'),
-    ('Mũi tên một chiều (one-way)', 'Mũi tên vàng trên đoạn ray: chỉ đi theo chiều đó.', '1 (code xoay)', 1, '64×64'),
-    ('Công tắc (plate)', 'Nút tròn nằm trên điểm, 2 màu kênh: xanh cyan và cam. Khi bị đè thì lún xuống và sáng.', '2 kênh × (nhả + nhấn)', 4, 'concept 256×256'),
-    ('Cổng chắn (gate)', 'Thanh chắn ngang đoạn ray, màu theo kênh. Mở = chìm xuống sàn. Cổng đảo (swap) có sọc đen để phân biệt.', '2 kênh × (thường + đảo)', 4, 'concept 256×256'),
-]
-LF = ['line_floor_{top,side}.png', 'line_rail_{girl}.png, line_rail_broken_{girl}.png', 'line_head.png, line_head_mirror.png (+_win, _fail)', 'line_rope_{draw,win,fail,sol,hint,ghost}.png',
-      'line_goal.png, line_goal_on.png', 'line_sketch.png (+_done, _bad)', 'line_avoid.png (+_bad)', 'num_{0-4}_{white,green,red}.png, num_slash_*.png', 'line_dot.png (+_bad)',
-      'line_ring_{off,on,bad}.png', 'portal_{yellow,sky,mint}.png', 'line_bridge.png (+_crossed)', 'arrow_oneway.png', 'plate_{cyan,orange}_{up,down}.png', 'gate_{cyan,orange}.png, gate_{cyan,orange}_swap.png']
-for (nm, d, v, n, sz), fn in zip(L, LF):
-    add(G, 'Bảng đường', nm, d, v, n, sz, 'PNG', fn, 'P1' if nm not in ('Cầu vượt (overpass)', 'Portal (cổng dịch chuyển)') else 'P2', note3d)
-
-# ---------------- 10. Gameplay: box panels ----------------
-G = '10. Gameplay – bảng HỘP (Vel, Myne)'
 B = [
     ('Ô sàn (tile)', 'Ô vuông nổi có độ dày, viền neon hồng mờ (giống các khối trong ảnh tham khảo isometric).', 'Mặt trên + mặt bên', 2, '256×256', 'P1'),
-    ('Ô goal', 'Ô vàng viền sáng, nhịp thở; sáng mạnh khi có hộp đứng trong.', 'Thường + có hộp', 2, '256×256', 'P1'),
-    ('Tường kính', 'Tấm kính hồng phát sáng đứng giữa hai ô.', '1', 1, 'texture 256×128', 'P1'),
-    ('Hộp (box)', 'Khối lập phương lăn từng ô. 4 màu để phân biệt nhiều hộp: hồng, tím, mint, vàng.', '4 màu', 4, 'concept 256×256 + texture 6 mặt', 'P1'),
-    ('Hộp song sinh (twin)', 'Hộp làm ngược mọi phím (trái↔phải, lên↔xuống). Hiện có dấu X trên nóc; artist có thể thiết kế ký hiệu khác dễ hiểu hơn (ví dụ hai mũi tên ngược).', 'Ký hiệu nóc hộp', 1, '128×128', 'P1'),
-    ('Hộp dash + tên lửa', 'Hộp có cụm 2 tên lửa phía sau; ấn phím thì quay về hướng bay, phun lửa và bay tới khi đụng vật cản. Có sọc trắng trên thân.', 'Concept + lửa phụt (4–6 frame)', 7, 'concept 256×256 / lửa 64×128', 'P1'),
-    ('Hộp kéo dây (rope)', 'Hộp để lại sợi dây sau lưng, không gì đi qua được dây. Cần ký hiệu nút thắt dây + texture dây theo 4 màu hộp.', 'Ký hiệu + dây × 4 màu', 5, '128×128 / dây 64×16', 'P2'),
-    ('Nhãn số nước (budget)', 'Nhãn nổi trên đầu hộp ghi số nước còn lại (0–9). Hết nước (0) thì nhãn đỏ và hộp mờ đi.', 'Khung nhãn thường + hết nước + số 0–9', 12, '64×64', 'P1'),
-    ('Ô dash (pad)', 'Ô xanh có mũi tên: hộp đi vào bị phóng theo hướng mũi tên tới khi đụng vật cản. Mũi tên nhấp nháy chạy.', '1 (code xoay 4 hướng) + 2 frame sáng', 3, '256×256', 'P1'),
-    ('Ô phanh (stop)', 'Ô cam có vạch: hộp đang lướt dừng lại ở đây.', '1', 1, '256×256', 'P1'),
+    ('Ô goal', 'Ô có khung sáng, nhịp thở; sáng mạnh khi có hộp đúng màu đứng trong. Goal không màu = vàng; goal có màu = hồng / xanh / lục.', '4 màu × (thường + có hộp)', 8, '256×256', 'P1'),
+    ('Tường kính', 'Tấm kính tím phát sáng đứng giữa hai ô (khác màu với cửa khoá).', '1', 1, 'texture 256×128', 'P1'),
+    ('Hộp thường', 'Khối lập phương lăn từng ô. Hộp không màu = trắng tím nhạt; hộp màu: hồng, xanh, lục (phải vào goal cùng màu).', '4 màu', 4, 'concept 256×256 + texture 6 mặt', 'P1'),
+    ('Hộp dây (rope)', 'Hộp để lại sợi dây sau lưng; dây là tường với mọi hộp, kể cả chính nó. Hiện quấn 3 vòng dây quanh thân. Dây sáng: hồng (hộp không màu) hoặc màu của hộp.', 'Concept + vòng dây + texture dây × 4 màu', 6, '256×256 / dây 64×16', 'P1'),
+    ('Hộp song sinh ngược', 'Hộp làm ngược mọi phím (trái↔phải, lên↔xuống). Hiện có dấu X trên nóc; artist có thể thiết kế ký hiệu dễ hiểu hơn (ví dụ hai mũi tên ngược).', 'Ký hiệu nóc hộp', 1, '128×128', 'P1'),
+    ('Hộp tên lửa', 'Hộp có cụm 2 tên lửa phía sau; ấn phím thì quay về hướng bay, phun lửa và trượt tới khi đụng tường, hộp, dây hoặc cửa đóng.', 'Concept + lửa phụt (4–6 frame)', 7, 'concept 256×256 / lửa 64×128', 'P1'),
+    ('Nhãn đếm ngược', 'Nhãn nổi trên đầu hộp ghi số nước còn lại (0–30). Về 0 thì nhãn đỏ: nếu hộp còn bị bắt đi tiếp là nổ.', 'Khung nhãn thường + nhãn 0 (đỏ) + số 0–9', 12, '64×64', 'P1'),
+    ('Hộp nổ', 'Hộp hết nước mà vẫn phải đi: nổ tung thành mảnh vụn + chớp sáng, chữ "✹ BOOM ✹".', 'Chớp sáng 6 frame + mảnh vụn + chữ', 8, '256×256 / 720×120', 'P1'),
+    ('Ô đèn (light)', 'Bóng đèn nhỏ trên ô: tối khi chưa có dây; sáng vàng có quầng khi dây nằm trên đó. Thắng cần mọi đèn sáng.', 'Tắt + sáng (+ quầng)', 3, '256×256', 'P1'),
+    ('Số cạnh (number)', 'Bảng số nhỏ nằm giữa bốn ô: số cạnh của ô vuông đó mà dây phải đi. Hiện "đã có/cần" (ví dụ 1/3): trắng = chưa đủ, xanh lá = đúng, đỏ = thừa. Cần bộ chữ số pixel 0–4 và dấu "/".', 'Khung + số 0–4 + "/" × 3 màu', 19, '64×64 mỗi ký tự'),
+    ('Ô mũi tên (arrow tile)', 'Ô xanh có mũi tên: hộp đi vào bị đẩy trượt theo mũi tên tới cuối đường. Mũi tên nhấp nháy chạy.', '1 (code xoay 4 hướng) + 2 frame sáng', 3, '256×256', 'P1'),
+    ('Ô phanh (stop)', 'Ô cam có vạch: hộp đang trượt dừng lại ở đây.', '1', 1, '256×256', 'P1'),
+    ('Ô chốt (switch)', 'Nút tròn lớn trên ô, màu hồng / xanh / lục: hộp đi vào là mở hẳn mọi cửa cùng màu (nút lún xuống, sáng).', '3 màu × (chưa mở + đã mở)', 6, 'concept 256×256', 'P1'),
+    ('Ô chốt đôi', 'Nút ở giữa = màu sẽ mở lần tới, vòng ngoài = màu kia, có ký hiệu mũi tên xoay. Mỗi lần có hộp đi vào: mở màu đang hiện, đóng màu kia, rồi đổi màu.', '3 cặp màu', 3, 'concept 256×256', 'P1'),
+    ('Cửa khoá (door)', 'Tấm chắn giữa hai ô, màu hồng / xanh / lục, có 2 sọc đen để khác tường. Mở = chìm xuống sàn (2D: nét đứt mờ).', '3 màu × (đóng + mở)', 6, 'concept 256×256', 'P1'),
+    ('Ô nứt (crack)', 'Ô có vết nứt; hộp rời khỏi là ô sụp xuống thành lỗ (rơi xuống khoảng không).', 'Nứt + đang sụp (3–4 frame) + lỗ', 6, '256×256', 'P1'),
+    ('Ô sơn (paint)', 'Vệt sơn loang trên ô: hộp đi vào bị đổi sang màu đó.', '3 màu', 3, '256×256', 'P1'),
     ('Khe một chiều', 'Mũi tên vàng giữa hai ô: chỉ đi qua theo chiều đó.', '1', 1, '64×64', 'P2'),
-    ('Portal (hộp)', 'Giống portal của bảng đường nhưng to bằng ô.', '3 màu', 3, '256×256', 'P2'),
-    ('Công tắc (plate)', 'Nút tròn lớn trên ô, 2 kênh màu; lún xuống khi có hộp/dây đè lên.', '2 kênh × (nhả + nhấn)', 4, 'concept 256×256', 'P1'),
-    ('Cổng chắn (gate)', 'Tấm chắn giữa hai ô theo màu kênh, chìm xuống sàn khi mở. Cổng đảo có sọc đen.', '2 kênh × (thường + đảo)', 4, 'concept 256×256', 'P1'),
+    ('Portal', 'Cặp cổng cùng màu: vòng tròn nằm sàn + đĩa sáng + vòng nhỏ lơ lửng xoay. 3 màu cặp: vàng, xanh trời, xanh mint.', '3 màu', 3, '256×256', 'P2'),
     ('Lỗ trên map (holes)', 'Ô bị khuyết, nhìn xuống khoảng không (có thể có viền mép vỡ).', 'Viền mép', 1, '256×256', 'P3'),
+    ('Dây lời giải / gợi ý', 'Dây ở chế độ lời giải (xanh dương), thắng (vàng).', '2 trạng thái', 2, 'texture 64×16 tile', 'P2'),
 ]
-BF = ['tile_{top,side}.png', 'tile_goal.png, tile_goal_on.png', 'wall_glass.png', 'box_{pink,violet,mint,yellow}.png', 'box_mark_twin.png', 'box_rocket_concept.png, fx_flame_sheet.png',
-      'box_mark_rope.png, rope_{pink,violet,mint,yellow}.png', 'badge_budget.png, badge_budget_empty.png, budget_{0-9}.png', 'tile_dash.png, tile_dash_glow_sheet.png', 'tile_stop.png',
-      'arrow_oneway_gap.png', 'tile_portal_{yellow,sky,mint}.png', 'plate_big_{cyan,orange}_{up,down}.png', 'gate_wall_{cyan,orange}.png, gate_wall_{cyan,orange}_swap.png', 'hole_edge.png']
-for (nm, d, v, n, sz, pr), fn in zip(B, BF):
-    add(G, 'Bảng hộp', nm, d, v, n, sz, 'PNG', fn, pr, note3d)
+BF = ['tile_{top,side}.png', 'tile_goal_{gold,pink,blue,green}.png (+_on)', 'wall_glass.png', 'box_{plain,pink,blue,green}.png', 'box_rope_concept.png, box_rope_coil.png, rope_{pink,blue,green,plain}.png',
+      'box_mark_twin.png', 'box_rocket_concept.png, fx_flame_sheet.png', 'badge_count.png, badge_count_zero.png, count_{0-9}.png', 'fx_boom_sheet.png, fx_boom_bits.png, txt_boom.png',
+      'tile_light_{off,on}.png, fx_light_halo.png', 'num_plate.png, num_{0-4}_{white,green,red}.png, num_slash_*.png', 'tile_arrow.png, tile_arrow_glow_sheet.png', 'tile_stop.png',
+      'switch_{pink,blue,green}_{up,down}.png', 'switch_double_{pink-blue,blue-green,green-pink}.png', 'door_{pink,blue,green}.png (+_open)', 'tile_crack.png, tile_crack_fall_sheet.png, hole_fallen.png',
+      'tile_paint_{pink,blue,green}.png', 'arrow_oneway_gap.png', 'tile_portal_{yellow,sky,mint}.png', 'hole_edge.png', 'rope_{sol,win}.png']
+for (nm, d, v, n, sz, *pr), fn in zip(B, BF):
+    add(G, 'Bàn chơi', nm, d, v, n, sz, 'PNG', fn, pr[0] if pr else 'P1', note3d)
 
-# ---------------- 11. Mechanic icons (tutorials) ----------------
-G = '11. Icon mechanic (tutorial & danh sách level)'
-MECH = [('basic', 'Đi tới ô đích'), ('sketch', 'Nét chì phải tô'), ('avoid', 'Chì đen không được đi'), ('mirror', 'Bàn tay kia (đường gương)'), ('plates', 'Công tắc & cổng'),
-        ('swap', 'Cổng đảo'), ('nums', 'Số cạnh'), ('visitAll', 'Đi qua mọi điểm'), ('ends', 'Đích ở bất kỳ đâu'), ('holes', 'Map có lỗ'), ('oneway', 'Một chiều'),
-        ('portals', 'Portal'), ('bridges', 'Cầu vượt'), ('boxes', 'Hộp'), ('pads', 'Ô dash'), ('stops', 'Ô phanh'), ('dash', 'Hộp dash'), ('helpers', 'Hộp chắn (thừa)'),
-        ('many', 'Nhiều hộp'), ('budget', 'Số nước của hộp'), ('twin', 'Hộp song sinh'), ('nolock', 'Hộp không bị khoá ở goal'), ('trail', 'Hộp kéo dây')]
+# ---------------- 10. Mechanic icons (tutorials) ----------------
+G = '10. Icon mechanic (tutorial & danh sách level)'
+MECH = [('basic', 'Hộp dây tới ô goal'), ('boxes', 'Mọi phím điều khiển mọi hộp'), ('lights', 'Ô đèn'), ('nums', 'Số cạnh'), ('switches', 'Ô chốt & cửa khoá'), ('dbl', 'Ô chốt đôi'),
+        ('colors', 'Hộp màu & goal màu'), ('paints', 'Ô sơn'), ('cracks', 'Ô nứt'), ('ends', 'Goal ở bất kỳ đâu'), ('holes', 'Map có lỗ'), ('oneway', 'Một chiều'),
+        ('portals', 'Portal'), ('pads', 'Ô mũi tên'), ('stops', 'Ô phanh'), ('dash', 'Hộp tên lửa'), ('helpers', 'Hộp chắn (thừa)'),
+        ('many', 'Nhiều hộp'), ('budget', 'Đếm ngược (nổ)'), ('twin', 'Hộp song sinh ngược'), ('twinrope', 'Hai hộp dây song sinh'), ('nolock', 'Hộp không bị khoá ở goal'), ('trail', 'Hộp dây')]
 for k, vi in MECH:
     add(G, 'Icon mechanic', f'Icon mechanic "{k}"', f'{vi}. Hiện ở tag "NEW · …" khi gặp mechanic mới và có thể dùng trong danh sách level.', '1', 1, '32×32', 'PNG nền trong', f'ic_mech_{k}.png', 'P2')
 
-# ---------------- 12. Test chamber ----------------
-G = '12. Test chamber (công cụ nội bộ)'
+# ---------------- 11. Test chamber ----------------
+G = '11. Test chamber (công cụ nội bộ)'
 add(G, 'Test chamber', 'Thẻ level', 'Thẻ trong danh sách level: số thứ tự, ảnh thu nhỏ bàn chơi (code vẽ), trạng thái đã giải/chưa giải/đã xem lời giải, dấu tutorial.', '3 trạng thái + dấu tutorial', 4, '100×110 9-slice', 'PNG', 'ui_chamber_card_*.png', 'P3', 'Chỉ dùng nội bộ, ưu tiên thấp')
 add(G, 'Test chamber', 'Avatar chưa có art', 'Ô "?" cho cô gái chưa có hình.', '1', 1, '64×64', 'PNG', 'ui_unknown_face.png', 'P3')
 
-# ---------------- 13. Old story board ----------------
-G = '13. Bảng nối màu cũ (story hiện tại)'
+# ---------------- 12. Old story board ----------------
+G = '12. Bảng nối màu cũ (story hiện tại)'
 add(G, 'Fix-it · board', 'Bảng nối cặp màu', 'Bảng chơi cũ trong cốt truyện (nối các cặp chấm cùng màu, không cắt nhau). Sẽ được thay bằng máy chiếu 3D: chỉ vẽ nếu bản cũ còn được giữ.', 'Ô lưới + chấm (8 màu) + đoạn đường + huy hiệu S/A/B/C + thanh thời gian', 16, '64×64', 'PNG', 'old_board_*.png', 'P3', 'Hỏi lại trước khi vẽ')
 
 # ================= workbook =================
@@ -321,8 +305,9 @@ PAL = [
     ('Đỏ cảnh báo', 'FF4D7A', 'Sai luật, lỗi'), ('Mực chữ', '4A2D6E', 'Chữ chính'), ('Chữ phụ', '8A6FB0', 'Chữ mờ'), ('Kem', 'FFF8FC', 'Nền khung nổi'),
     ('3D · trời trên', '12062B', 'Không gian ảo'), ('3D · tím', '3B1063', 'Không gian ảo'), ('3D · magenta', 'A2287F', 'Chân trời'), ('3D · hồng neon', 'FF6FB5', 'Chân trời, tường kính'),
     ('3D · cam', 'FFB36B', 'Đường chân trời'), ('3D · lưới', 'FF4FD8', 'Sàn lưới neon'), ('3D · ô sàn', '3B2560', 'Mặt ô'), ('3D · mép ô', '1C0F30', 'Mặt bên ô'),
-    ('Hộp 1 · hồng', 'FF8CC6', 'Hộp chính'), ('Hộp 2 · tím', 'B48CFF', 'Hộp thứ hai / song sinh'), ('Hộp 3 · mint', '7BE3A4', 'Hộp thứ ba'), ('Hộp 4 · vàng', 'FFD86E', 'Hộp thứ tư'),
-    ('Kênh công tắc 1', '4FD8FF', 'Công tắc & cổng cyan'), ('Kênh công tắc 2', 'FFA040', 'Công tắc & cổng cam'), ('Ô dash', '7BE3A4', 'Mũi tên ô dash'), ('Ô phanh', 'FF9F5A', 'Ô phanh'),
+    ('Hộp không màu', 'E9DEFA', 'Hộp thường / hộp dây không màu'), ('Màu 1 · hồng', 'FF6FB5', 'Hộp, goal, ô chốt, cửa, ô sơn màu 1'), ('Màu 2 · xanh', '4FD8FF', 'Hộp, goal, ô chốt, cửa, ô sơn màu 2'),
+    ('Màu 3 · lục', '9CF06A', 'Hộp, goal, ô chốt, cửa, ô sơn màu 3'), ('Dây (hộp không màu)', 'FF5FA8', 'Dây của hộp dây không màu'), ('Tường kính', '6A3FD8', 'Tường giữa hai ô (3D)'),
+    ('Đèn sáng', 'FFD86E', 'Ô đèn đã sáng'), ('Ô mũi tên', '7BE3A4', 'Mũi tên ô mũi tên'), ('Ô phanh', 'FF9F5A', 'Ô phanh'), ('Nổ', 'FFA040', 'Hiệu ứng hộp nổ'),
 ]
 for i, (n, hx, use) in enumerate(PAL, 2):
     pl.cell(i, 1, n).font = Font(name=F, size=10)

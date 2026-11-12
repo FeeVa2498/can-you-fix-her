@@ -860,10 +860,12 @@ rect.pb-head{stroke:#fff;stroke-width:.03}
 @keyframes exitflow{0%{opacity:.35}30%{opacity:1}60%,100%{opacity:.35}}
 @keyframes exitspin{to{transform:rotate(360deg)}}
 .pbx-tile{fill:#4a3168;stroke:#5d4282;stroke-width:.03}
-.pbx-goal .glow{fill:#6b4a2c}
-.pbx-goal .frame{fill:none;stroke:#ffd86e;stroke-width:.07;filter:drop-shadow(0 0 .1px #ffd86e)}
-.pbx-goal .pulse{fill:none;stroke:#ffd86e;stroke-width:.05;transform-box:fill-box;transform-origin:center;animation:goalpulse 1.5s ease-out infinite}
+.pbx-goal .glow{fill:var(--gd,#6b4a2c)}
+.pbx-goal .frame{fill:none;stroke:var(--gc,#ffd86e);stroke-width:.07;filter:drop-shadow(0 0 .1px var(--gc,#ffd86e))}
+.pbx-goal .pulse{fill:none;stroke:var(--gc,#ffd86e);stroke-width:.05;transform-box:fill-box;transform-origin:center;animation:goalpulse 1.5s ease-out infinite}
 .pbx-goal.on .glow{fill:#a5793a}
+.pbx-goal.col.on .glow{fill:var(--gc);opacity:.55}
+.pbx-goal.col .frame{stroke-width:.09}
 .pbx-goal.on .frame{stroke:#fff1b8}
 @keyframes goalpulse{0%{transform:scale(.7);opacity:.9}100%{transform:scale(1.25);opacity:0}}
 .pbx-pad rect{fill:#2f5a3a}
@@ -875,7 +877,34 @@ rect.pb-head{stroke:#fff;stroke-width:.03}
 .pbx-rope{fill:none;stroke-width:.1;stroke-linecap:round;stroke-linejoin:round;opacity:.85;stroke-dasharray:.16 .05}
 .pbx-box rect{stroke:#fff;stroke-width:.04;filter:drop-shadow(0 .04px 0 #1a1024)}
 .pbx-box.on rect{filter:drop-shadow(0 0 .14px #ffd86e)}
-.pbx-box.dead rect{opacity:.45}
+.pbx-box.zero .cd rect{fill:#ff4d7a}
+.pbx-box.zero .cd text{fill:#fff}
+.pbx-box .cd rect{fill:#fff8fc;stroke:#1a1024;stroke-width:.03}
+.pbx-box .cd text{fill:#1a1024;font-family:var(--mono);font-size:.22px;text-anchor:middle;dominant-baseline:central;font-weight:bold}
+.pbx-boom path{fill:#ffa040;stroke:#ffd86e;stroke-width:.05;animation:boom .5s ease-out}
+@keyframes boom{0%{transform:scale(.2);opacity:0}60%{opacity:1}100%{transform:scale(1)}}
+.pbx-boom{transform-box:fill-box;transform-origin:center}
+.pbx-fallen{fill:#0f0818;stroke:#2a1840;stroke-width:.03;stroke-dasharray:.06 .05}
+.pbx-crack{fill:none;stroke:#140a22;stroke-width:.05;stroke-linecap:round;stroke-linejoin:round}
+.pbx-paint path,.pbx-paint circle{fill:var(--pc);opacity:.85}
+.pbx-light .bulb{fill:#4a3a2a;stroke:#fff1b8;stroke-width:.03}
+.pbx-light .halo{fill:none}
+.pbx-light .rays{stroke:#fff1b8;stroke-width:.03;stroke-linecap:round;opacity:.35}
+.pbx-light.on .bulb{fill:#ffe98a;filter:drop-shadow(0 0 .12px #ffd86e)}
+.pbx-light.on .halo{fill:#ffd86e;opacity:.18}
+.pbx-light.on .rays{opacity:1;stroke:#ffd86e}
+.pbx-sw .base{fill:#1a1024;stroke:var(--sc);stroke-width:.04}
+.pbx-sw .btn{fill:var(--sc);opacity:.75}
+.pbx-sw.on .btn{opacity:1;filter:drop-shadow(0 0 .1px var(--sc))}
+.pbx-sw.dbl .ring{fill:none;stroke:var(--so);stroke-width:.07}
+.pbx-sw .flip{fill:none;stroke:#1a1024;stroke-width:.035;stroke-linecap:round}
+.pbx-door line{stroke:var(--dc);stroke-width:.16;stroke-linecap:round;filter:drop-shadow(0 0 .06px var(--dc))}
+.pbx-door.open line{opacity:.22;stroke-dasharray:.06 .08;filter:none}
+.pbx-num rect{fill:#1a1024;opacity:.8}
+.pbx-num text{fill:#f4e9ff;font-family:var(--mono);font-size:.2px;text-anchor:middle;dominant-baseline:central;font-weight:bold}
+.pbx-num.ok text{fill:#7be3a4}
+.pbx-num.bad text{fill:#ff4d7a}
+.pbx-box .coil{stroke-width:.06;fill:none;stroke:#1a1024!important;opacity:.4}
 .pbx-box.win rect{stroke:#fff1b8;stroke-width:.07}
 .pbx-box .dash{stroke:#fff;stroke-width:.05;stroke-linecap:round;opacity:.9}
 .pbx-box .mark{stroke:#1a1024;stroke-width:.05;opacity:.55}
