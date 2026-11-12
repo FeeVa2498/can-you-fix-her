@@ -143,7 +143,6 @@ B = [
     ('Ô đèn (light)', 'Bóng đèn nhỏ trên ô: tối khi chưa có dây; sáng vàng có quầng khi dây nằm trên đó. Thắng cần mọi đèn sáng.', 'Tắt + sáng (+ quầng)', 3, '256×256', 'P1'),
     ('Số cạnh (number)', 'Bảng số nhỏ nằm giữa bốn ô: số cạnh của ô vuông đó mà dây phải đi. Hiện "đã có/cần" (ví dụ 1/3): trắng = chưa đủ, xanh lá = đúng, đỏ = thừa. Cần bộ chữ số pixel 0–4 và dấu "/".', 'Khung + số 0–4 + "/" × 3 màu', 19, '64×64 mỗi ký tự'),
     ('Ô mũi tên (arrow tile)', 'Ô xanh có mũi tên: hộp đi vào bị đẩy trượt theo mũi tên tới cuối đường. Mũi tên nhấp nháy chạy.', '1 (code xoay 4 hướng) + 2 frame sáng', 3, '256×256', 'P1'),
-    ('Ô phanh (stop)', 'Ô cam có vạch: hộp đang trượt dừng lại ở đây.', '1', 1, '256×256', 'P1'),
     ('Ô chốt (switch)', 'Nút tròn lớn trên ô, màu xanh / vàng / đỏ: hộp đi vào là mở hẳn mọi cửa cùng màu (nút lún xuống, sáng).', '3 màu × (chưa mở + đã mở)', 6, 'concept 256×256', 'P1'),
     ('Công tắc hai màu', 'Nút ở giữa = màu tường đang dựng (giẫm vào sẽ hạ), vòng ngoài = màu kia, có ký hiệu mũi tên xoay. Giẫm vào: tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia.', '3 cặp màu', 3, 'concept 256×256', 'P1'),
     ('Cửa khoá (door)', 'Tấm chắn giữa hai ô, màu xanh / vàng / đỏ, có 2 sọc đen để khác tường. Mở = chìm xuống sàn (2D: nét đứt mờ).', '3 màu × (đóng + mở)', 6, 'concept 256×256', 'P1'),
@@ -156,7 +155,7 @@ B = [
 ]
 BF = ['tile_{top,side}.png', 'tile_goal_{gold,pink,blue,green}.png (+_on)', 'wall_glass.png', 'box_{plain,pink,blue,green}.png', 'box_rope_concept.png, box_rope_coil.png, rope_{pink,blue,green,plain}.png',
       'box_mark_twin.png', 'box_rocket_concept.png, fx_flame_sheet.png', 'box_bomb.png, box_bomb_hot.png, fx_fuse_spark_sheet.png, count_{0-9}.png', 'fx_boom_sheet.png, fx_boom_bits.png, txt_boom.png',
-      'tile_light_{off,on}.png, fx_light_halo.png', 'num_plate.png, num_{0-4}_{white,green,red}.png, num_slash_*.png', 'tile_arrow.png, tile_arrow_glow_sheet.png', 'tile_stop.png',
+      'tile_light_{off,on}.png, fx_light_halo.png', 'num_plate.png, num_{0-4}_{white,green,red}.png, num_slash_*.png', 'tile_arrow.png, tile_arrow_glow_sheet.png',
       'switch_{pink,blue,green}_{up,down}.png', 'switch_double_{pink-blue,blue-green,green-pink}.png', 'door_{pink,blue,green}.png (+_open)', 'tile_crack.png, tile_crack_fall_sheet.png, hole_fallen.png',
       'tile_paint_{pink,blue,green}.png', 'arrow_oneway_gap.png', 'tile_portal_{yellow,sky,mint}.png', 'hole_edge.png', 'rope_{sol,win}.png']
 for (nm, d, v, n, sz, *pr), fn in zip(B, BF):
@@ -166,7 +165,7 @@ for (nm, d, v, n, sz, *pr), fn in zip(B, BF):
 G = '10. Icon mechanic (tutorial & danh sách level)'
 MECH = [('basic', 'Hộp dây tới ô goal'), ('boxes', 'Mọi phím điều khiển mọi hộp'), ('lights', 'Ô đèn'), ('nums', 'Số cạnh'), ('switches', 'Ô chốt & cửa khoá'), ('dbl', 'Công tắc hai màu'),
         ('colors', 'Hộp màu & goal màu'), ('paints', 'Ô sơn'), ('cracks', 'Ô nứt'), ('ends', 'Goal ở bất kỳ đâu'), ('holes', 'Map có lỗ'), ('oneway', 'Một chiều'),
-        ('portals', 'Portal'), ('pads', 'Ô mũi tên'), ('stops', 'Ô phanh'), ('dash', 'Hộp tên lửa'), ('helpers', 'Hộp chắn (thừa)'),
+        ('portals', 'Portal'), ('pads', 'Ô mũi tên'), ('dash', 'Hộp tên lửa'), ('helpers', 'Hộp chắn (thừa)'),
         ('many', 'Nhiều hộp'), ('budget', 'Hộp ôm bom'), ('twin', 'Hộp song sinh ngược'), ('twinrope', 'Hai hộp dây song sinh'), ('nolock', 'Hộp không bị khoá ở goal'), ('trail', 'Hộp dây')]
 for k, vi in MECH:
     add(G, 'Icon mechanic', f'Icon mechanic "{k}"', f'{vi}. Hiện ở tag "NEW · …" khi gặp mechanic mới và có thể dùng trong danh sách level.', '1', 1, '32×32', 'PNG nền trong', f'ic_mech_{k}.png', 'P2')
@@ -307,7 +306,7 @@ PAL = [
     ('3D · cam', 'FFB36B', 'Đường chân trời'), ('3D · lưới', 'FF4FD8', 'Sàn lưới neon'), ('3D · ô sàn', '3B2560', 'Mặt ô'), ('3D · mép ô', '1C0F30', 'Mặt bên ô'),
     ('Hồng · Prim', 'FF7EB6', 'Hộp / dây / goal / ô sơn màu hồng'), ('Đỏ · Trix', 'FF4D5E', 'Hộp / dây / goal / ô sơn màu đỏ; tường & công tắc đỏ'), ('Tím · Paige', 'A46BFF', 'Hộp / dây / goal / ô sơn màu tím'),
     ('Vàng · Vel', 'FFD23F', 'Hộp / dây / goal / ô sơn màu vàng; tường & công tắc vàng'), ('Xanh · Myne', '4FA8FF', 'Hộp / dây / goal / ô sơn màu xanh; tường & công tắc xanh'), ('Goal nhận mọi hộp', 'FFF4FB', 'Viền goal trắng'), ('Tường kính', 'D8D0F0', 'Tường thường giữa hai ô (kính trắng trung tính)'),
-    ('Đèn sáng', 'FFD86E', 'Ô đèn đã sáng'), ('Ô mũi tên', '7BE3A4', 'Mũi tên ô mũi tên'), ('Ô phanh', 'FF9F5A', 'Ô phanh'), ('Nổ', 'FFA040', 'Hiệu ứng hộp nổ'),
+    ('Đèn sáng', 'FFD86E', 'Ô đèn đã sáng'), ('Ô mũi tên', '7BE3A4', 'Mũi tên ô mũi tên'), ('Nổ', 'FFA040', 'Hiệu ứng hộp nổ'),
 ]
 for i, (n, hx, use) in enumerate(PAL, 2):
     pl.cell(i, 1, n).font = Font(name=F, size=10)

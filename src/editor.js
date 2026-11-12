@@ -77,13 +77,13 @@ const ED_TOOLS = {
   box: [['box', 'Box', 'node', 'Đặt hộp; bấm hộp có sẵn để chọn và chỉnh thuộc tính (màu, dây, tên lửa, song sinh, đếm ngược)'],
     ['goal', 'Goal', 'node', 'Ô goal: bấm lại để đổi: nhận mọi hộp → hồng → đỏ → tím → vàng → xanh, rồi xoá'], ['wall', 'Wall', 'edge', 'Tường giữa hai ô'], ['hole', 'Hole', 'node', 'Lỗ trên map'],
     ['light', 'Light', 'node', 'Ô đèn: dây phải nằm trên đó'], ['num', 'Number', 'cell', 'Số giữa bốn ô: số cạnh dây phải đi (bấm lại để tăng 1→4, rồi xoá)'],
-    ['pad', 'Arrow tile', 'node', 'Ô mũi tên (bấm lại để xoay →↓←↑, lần 5 xoá)'], ['stop', 'Stop', 'node', 'Ô phanh'], ['oneway', 'One-way', 'edge', 'Khe một chiều (bấm lại để đảo chiều)'],
+    ['pad', 'Arrow tile', 'node', 'Ô mũi tên (bấm lại để xoay →↓←↑, lần 5 xoá)'], ['oneway', 'One-way', 'edge', 'Khe một chiều (bấm lại để đảo chiều)'],
     ['portal', 'Portal', 'node', 'Bấm 2 ô để tạo cặp'],
     ['switch', 'Switch', 'node', 'Ô chốt: bấm lại để đổi màu xanh → vàng → đỏ, rồi thành công tắc hai màu xanh/vàng → vàng/đỏ → đỏ/xanh (màu đầu dựng sẵn, màu sau hạ sẵn), rồi xoá'],
     ['door', 'Door', 'edge', 'Cửa khoá giữa hai ô: bấm lại để đổi màu xanh → vàng → đỏ, rồi xoá'],
     ['crack', 'Crack', 'node', 'Ô nứt: hộp rời đi là sụp'], ['paint', 'Paint', 'node', 'Ô sơn: hồng → đỏ → tím → vàng → xanh, rồi xoá'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
 };
-const ED_TAGS = ['', 'basic', 'trail', 'boxes', 'lights', 'nums', 'switches', 'dbl', 'colors', 'paints', 'cracks', 'ends', 'holes', 'oneway', 'portals', 'pads', 'stops', 'dash', 'helpers', 'many', 'budget', 'twin', 'twinrope', 'nolock', 'plates', 'swap'];
+const ED_TAGS = ['', 'basic', 'trail', 'boxes', 'lights', 'nums', 'switches', 'dbl', 'colors', 'paints', 'cracks', 'ends', 'holes', 'oneway', 'portals', 'pads', 'dash', 'helpers', 'many', 'budget', 'twin', 'twinrope', 'nolock', 'plates', 'swap'];
 let ED = null;
 const edClone = o => JSON.parse(JSON.stringify(o));
 const edSame = (a, b) => a && b && a[0] === b[0] && a[1] === b[1];

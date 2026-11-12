@@ -6718,48 +6718,6 @@
   "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
-  "id": "vel_1_t3",
-  "girl": "vel",
-  "layer": 1,
-  "n": 2.4,
-  "w": 3,
-  "h": 1,
-  "boxes": [
-   {
-    "x": 3,
-    "y": 1
-   }
-  ],
-  "exit": [
-   [
-    0,
-    0
-   ]
-  ],
-  "pads": [
-   [
-    2,
-    0,
-    -1,
-    0
-   ]
-  ],
-  "stops": [
-   [
-    1,
-    0
-   ]
-  ],
-  "solIn": "LUL",
-  "solutions": 1,
-  "minMoves": 3,
-  "luck": 20.1,
-  "belief": "",
-  "intro": "stops",
-  "tut": "stops",
-  "why": "Bảng dạy luật mới. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Mẹo: Ô phanh là chỗ duy nhất giữa đường mà hộp đang trượt chịu dừng."
- },
- {
   "id": "vel_1_3",
   "girl": "vel",
   "layer": 1,
@@ -6768,88 +6726,83 @@
   "h": 4,
   "broken": [
    [
-    1,
-    0,
-    2,
-    0
-   ],
-   [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
-    1,
-    1,
-    2,
-    1
-   ],
-   [
-    3,
-    1,
-    3,
-    2
-   ],
-   [
-    1,
     2,
     2,
-    2
-   ],
-   [
-    1,
-    3,
     2,
     3
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    2,
+    3,
+    2,
+    4
+   ],
+   [
+    3,
+    3,
+    4,
+    3
+   ],
+   [
+    4,
+    3,
+    4,
+    4
+   ],
+   [
+    2,
+    4,
+    3,
+    4
    ]
   ],
   "boxes": [
    {
     "x": 0,
-    "y": 2
+    "y": 3
    }
   ],
   "exit": [
    [
-    3,
-    0
+    4,
+    3
    ]
   ],
   "pads": [
    [
-    2,
-    0,
-    0,
-    1
-   ],
-   [
+    4,
     2,
     1,
-    0,
-    -1
+    0
    ],
    [
-    0,
+    4,
     4,
     0,
     -1
-   ]
-  ],
-  "stops": [
+   ],
    [
     1,
-    2
+    0,
+    0,
+    -1
    ]
   ],
-  "solIn": "RDDRUUUR",
+  "solIn": "RURRRD",
   "solutions": 1,
-  "minMoves": 8,
-  "luck": 0.2,
-  "quality": 15.6,
+  "minMoves": 6,
+  "luck": 1.3,
+  "quality": 12.7,
   "belief": "cute outfit, full tactical plan underneath.",
-  "intro": "stops",
-  "why": "Bảng dạy luật mới. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Mẹo: Ô phanh là chỗ duy nhất giữa đường mà hộp đang trượt chịu dừng."
+  "intro": null,
+  "feature": "pads",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
   "id": "vel_1_4",
@@ -6860,104 +6813,93 @@
   "h": 4,
   "holes": [
    [
-    0,
-    3
+    2,
+    2
    ],
    [
-    1,
-    1
+    3,
+    3
    ]
   ],
   "broken": [
    [
-    2,
+    1,
     0,
+    1,
+    1
+   ],
+   [
     3,
+    0,
+    4,
     0
    ],
    [
-    2,
+    3,
     0,
+    3,
+    1
+   ],
+   [
+    1,
+    1,
     2,
     1
    ],
    [
     3,
-    2,
-    3,
-    3
-   ],
-   [
-    1,
-    3,
-    2,
-    3
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
-    2,
     4,
-    3,
+    4,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 4,
-    "y": 0
+    "x": 0,
+    "y": 4
    }
   ],
   "exit": [
    [
-    1,
-    3
+    4,
+    1
    ]
   ],
   "pads": [
    [
-    3,
     1,
-    -1,
-    0
-   ],
-   [
-    1,
-    2,
-    -1,
-    0
-   ],
-   [
-    3,
     4,
+    0,
+    1
+   ],
+   [
+    1,
+    3,
     0,
     -1
    ],
    [
     2,
-    1,
-    -1,
-    0
-   ]
-  ],
-  "stops": [
+    4,
+    0,
+    1
+   ],
    [
+    4,
     2,
-    2
+    0,
+    1
    ]
   ],
-  "solIn": "LDDDDLU",
+  "solIn": "RULURRDRR",
   "solutions": 1,
-  "minMoves": 7,
-  "luck": 0.8,
-  "quality": 9.5,
+  "minMoves": 9,
+  "luck": 0.3,
+  "quality": 6.3,
   "belief": "if the road is blocked, go around. or through.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Chỗ trống trên map không đi được. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+  "feature": "pads",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
   "id": "vel_1_t5",
@@ -7101,112 +7043,121 @@
   "h": 5,
   "holes": [
    [
-    1,
+    3,
+    3
+   ],
+   [
+    2,
     1
    ],
    [
-    5,
-    3
-   ],
-   [
-    3,
-    3
+    4,
+    0
    ]
   ],
   "broken": [
    [
-    2,
+    0,
+    0,
     1,
-    2,
-    2
-   ],
-   [
-    4,
-    1,
-    4,
-    2
+    0
    ],
    [
     2,
-    2,
+    0,
+    3,
+    0
+   ],
+   [
+    3,
+    1,
     3,
     2
    ],
    [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    3,
+    1,
+    4
+   ],
+   [
+    5,
+    3,
+    5,
+    4
+   ],
+   [
     2,
     4,
     2,
     5
    ],
    [
-    1,
-    5,
-    2,
-    5
+    3,
+    4,
+    4,
+    4
    ]
   ],
   "boxes": [
    {
-    "x": 3,
-    "y": 0
+    "x": 4,
+    "y": 4
    }
   ],
   "exit": [
    [
     1,
-    2
+    0
    ]
   ],
   "pads": [
    [
+    1,
+    3,
+    0,
+    1
+   ],
+   [
+    3,
     4,
-    5,
+    -1,
+    0
+   ],
+   [
+    1,
+    1,
+    1,
+    0
+   ],
+   [
+    3,
+    0,
     -1,
     0
    ],
    [
     2,
-    4,
-    -1,
-    0
-   ],
-   [
-    0,
-    4,
-    1,
-    0
-   ],
-   [
-    4,
-    1,
-    0,
-    1
-   ],
-   [
-    1,
     0,
     1,
     0
    ]
   ],
-  "stops": [
-   [
-    0,
-    3
-   ],
-   [
-    3,
-    4
-   ]
-  ],
-  "solIn": "DDRDDLLUU",
+  "solIn": "DLUURUUU",
   "solutions": 1,
-  "minMoves": 9,
-  "luck": 0,
-  "quality": 14,
+  "minMoves": 8,
+  "luck": 0.3,
+  "quality": 11.7,
   "belief": "i'm fun at parties because i know where every exit is.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Chỗ trống trên map không đi được. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+  "feature": "pads",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
   "id": "vel_2_t1",
@@ -7260,52 +7211,58 @@
   "h": 3,
   "broken": [
    [
-    2,
+    1,
     0,
-    3,
+    2,
     0
    ],
    [
-    2,
     1,
+    0,
+    1,
+    1
+   ],
+   [
     2,
+    2,
+    3,
     2
    ],
    [
-    1,
-    3,
     2,
+    2,
+    2,
+    3
+   ],
+   [
+    2,
+    3,
+    3,
     3
    ]
   ],
   "boxes": [
    {
-    "x": 2,
+    "x": 1,
     "y": 3,
     "dash": true
    }
   ],
   "exit": [
    [
-    3,
-    1
-   ]
-  ],
-  "stops": [
-   [
     2,
-    0
+    2
    ]
   ],
-  "solIn": "ULURDR",
+  "solIn": "URULD",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 1.5,
-  "quality": 11.4,
+  "minMoves": 5,
+  "luck": 1.3,
+  "quality": 11.3,
   "belief": "up, down, up. pick a lane, vel.",
   "intro": null,
   "feature": "dash",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
  },
  {
   "id": "vel_2_2",
@@ -7316,21 +7273,15 @@
   "h": 3,
   "broken": [
    [
-    0,
+    1,
     0,
     1,
-    0
+    1
    ],
    [
-    1,
+    2,
     0,
     2,
-    0
-   ],
-   [
-    1,
-    0,
-    1,
     1
    ],
    [
@@ -7340,54 +7291,72 @@
     1
    ],
    [
-    1,
     2,
     1,
+    2,
+    2
+   ],
+   [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    3,
+    3,
+    4,
     3
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 3,
+    "x": 1,
+    "y": 1,
     "dash": true
    }
   ],
   "exit": [
    [
-    0,
-    1
+    2,
+    3
    ]
   ],
   "pads": [
    [
-    0,
-    0,
+    1,
+    2,
     0,
     1
    ],
    [
-    2,
+    0,
     1,
-    1,
+    -1,
     0
    ]
   ],
-  "stops": [
-   [
-    4,
-    1
-   ]
-  ],
-  "solIn": "RUULDL",
+  "solIn": "LURDLDLD",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 0.5,
-  "quality": 10.9,
+  "minMoves": 8,
+  "luck": 0.1,
+  "quality": 11.7,
   "belief": "yesterday i loved everyone. today i hate this font.",
   "intro": null,
   "feature": "dash",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
  },
  {
   "id": "vel_2_t3",
@@ -7513,63 +7482,81 @@
     1
    ],
    [
-    1,
-    2,
-    1,
-    3
+    4,
+    0,
+    4,
+    1
    ],
    [
     0,
-    4,
     1,
-    4
+    0,
+    2
    ],
    [
+    2,
+    2,
     3,
+    2
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ],
+   [
+    1,
+    3,
+    2,
+    3
+   ],
+   [
+    2,
+    3,
+    3,
+    3
+   ],
+   [
+    1,
     4,
-    4,
+    2,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 1,
+    "x": 4,
+    "y": 3,
     "dash": true
    },
    {
-    "x": 0,
-    "y": 4,
+    "x": 2,
+    "y": 3,
     "c": 2
    }
   ],
   "exit": [
    [
-    1,
-    3,
+    2,
+    4,
     3
    ],
    [
-    3,
-    3,
+    1,
+    0,
     2
    ]
   ],
-  "stops": [
-   [
-    1,
-    0
-   ]
-  ],
-  "solIn": "UUDRRRRLDU",
+  "solIn": "DRUUULURDLL",
   "solutions": 1,
-  "minMoves": 10,
+  "minMoves": 11,
   "luck": 0,
-  "quality": 28.3,
+  "quality": 26.9,
   "belief": "when the floor drops, i already have a rope.",
   "intro": null,
   "feature": "dash",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
  },
  {
   "id": "vel_2_5",
@@ -7694,16 +7681,28 @@
   "h": 4,
   "broken": [
    [
-    1,
-    0,
     2,
+    0,
+    3,
     0
    ],
    [
-    2,
+    3,
     0,
-    2,
+    4,
+    0
+   ],
+   [
+    0,
+    1,
+    1,
     1
+   ],
+   [
+    0,
+    1,
+    0,
+    2
    ],
    [
     3,
@@ -7712,15 +7711,15 @@
     1
    ],
    [
-    0,
+    1,
     2,
     1,
-    2
+    3
    ],
    [
-    4,
     2,
-    4,
+    2,
+    2,
     3
    ],
    [
@@ -7736,56 +7735,46 @@
     3
    ],
    [
-    2,
+    1,
     4,
-    3,
+    2,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 4,
+    "x": 0,
+    "y": 0,
     "dash": true
    },
    {
-    "x": 3,
-    "y": 4,
+    "x": 2,
+    "y": 1,
     "dash": true,
     "c": 2
    }
   ],
   "exit": [
    [
-    4,
     3,
+    4,
     3
    ],
    [
     0,
-    0,
+    1,
     2
    ]
   ],
-  "stops": [
-   [
-    0,
-    2
-   ],
-   [
-    3,
-    2
-   ]
-  ],
-  "solIn": "ULULDDURUDRU",
+  "solIn": "URDLULDRURULD",
   "solutions": 1,
-  "minMoves": 12,
+  "minMoves": 13,
   "luck": 0,
-  "quality": 28.6,
+  "quality": 29.7,
   "belief": "stay sharp. moods are weather. weather passes.",
   "intro": null,
   "feature": "dash",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi."
  },
  {
   "id": "vel_2_7",
@@ -8012,8 +8001,14 @@
   "broken": [
    [
     0,
-    1,
     0,
+    0,
+    1
+   ],
+   [
+    2,
+    1,
+    2,
     2
    ],
    [
@@ -8030,51 +8025,52 @@
    ],
    [
     1,
+    2,
+    2,
+    2
+   ],
+   [
     3,
-    1,
+    2,
+    3,
+    3
+   ],
+   [
+    2,
+    3,
+    2,
     4
    ],
    [
-    2,
-    3,
-    3,
-    3
-   ],
-   [
-    0,
-    4,
     1,
+    4,
+    2,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 3,
+    "x": 3,
+    "y": 4,
     "dash": true,
-    "n": 6
+    "n": 10
    }
   ],
   "exit": [
    [
-    0,
+    1,
     2
    ]
   ],
-  "stops": [
-   [
-    3,
-    2
-   ]
-  ],
-  "solIn": "RDRULL",
+  "solIn": "ULDRURDLDR",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 0.1,
-  "quality": 16.6,
+  "minMoves": 10,
+  "luck": 0,
+  "quality": 20.1,
   "belief": "you don't step where you haven't checked. ever.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại). Mẹo: Bom chỉ đếm khi hộp ôm bom nhúc nhích: dựa nó vào tường để những hộp khác đi trước."
+  "feature": "budget",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại). Mẹo: Bom chỉ đếm khi hộp ôm bom nhúc nhích: dựa nó vào tường để những hộp khác đi trước."
  },
  {
   "id": "vel_3_3",
@@ -8671,10 +8667,10 @@
   "h": 4,
   "broken": [
    [
-    4,
+    2,
     0,
-    4,
-    1
+    3,
+    0
    ],
    [
     1,
@@ -8683,34 +8679,28 @@
     1
    ],
    [
+    3,
     1,
-    1,
-    1,
-    2
+    4,
+    1
    ],
    [
-    4,
-    3,
-    4,
-    4
-   ],
-   [
-    3,
-    4,
-    4,
-    4
+    2,
+    2,
+    2,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 1,
+    "x": 4,
     "y": 0,
     "c": 2,
     "n": 9
    },
    {
-    "x": 5,
-    "y": 0,
+    "x": 2,
+    "y": 1,
     "dash": true,
     "c": 4
    },
@@ -8723,35 +8713,29 @@
   "exit": [
    [
     2,
-    1,
+    4,
     2
    ],
    [
-    0,
-    1,
+    4,
+    4,
     4
    ],
    [
-    1,
-    2,
+    5,
+    3,
     0
    ]
   ],
-  "stops": [
-   [
-    3,
-    1
-   ]
-  ],
-  "solIn": "LDDRRUUUDLL",
+  "solIn": "LDRRDDLUUUULRDDD",
   "solutions": 1,
-  "minMoves": 11,
+  "minMoves": 16,
   "luck": 0,
-  "quality": 26,
+  "quality": 45,
   "belief": "three plans. three colours. zero surprises.",
   "intro": null,
   "feature": "colors",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: mỗi lần hộp đó thật sự di chuyển, số trên bom giảm 1 (đứng yên vì bị chặn thì không giảm); về 0 mà chưa thắng là bom nổ, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  },
  {
   "id": "myne_1_1",
@@ -10051,90 +10035,90 @@
   "broken": [
    [
     0,
-    0,
-    1,
-    0
-   ],
-   [
     1,
     1,
-    2,
     1
    ],
    [
-    0,
-    2,
-    0,
-    3
+    1,
+    1,
+    1,
+    2
    ],
    [
+    1,
     2,
-    2,
-    3,
-    2
+    1,
+    3
    ],
    [
     0,
     3,
     1,
     3
+   ],
+   [
+    2,
+    3,
+    3,
+    3
+   ],
+   [
+    0,
+    4,
+    1,
+    4
    ]
   ],
   "boxes": [
    {
-    "x": 4,
-    "y": 1
+    "x": 0,
+    "y": 3
    },
    {
-    "x": 0,
+    "x": 4,
     "y": 0,
     "m": "opp"
    }
   ],
   "exit": [
    [
-    3,
-    1
+    2,
+    3
    ],
    [
-    3,
-    0
+    0,
+    1
    ]
   ],
   "pads": [
    [
     0,
     4,
+    0,
+    1
+   ],
+   [
+    3,
+    2,
     1,
     0
    ],
    [
-    4,
-    0,
-    -1,
+    2,
+    2,
+    1,
     0
-   ],
-   [
-    2,
-    2,
-    0,
-    -1
    ]
   ],
-  "stops": [
-   [
-    3,
-    2
-   ]
-  ],
-  "solIn": "DULDLDURUL",
+  "solIn": "URUULURRUD",
   "solutions": 1,
   "minMoves": 10,
-  "luck": 0.1,
-  "quality": 26.7,
+  "luck": 0,
+  "quality": 26.9,
   "belief": "my body can't keep up. so my head runs for both.",
   "intro": "pads",
-  "why": "Bảng dạy luật mới. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+  "why": "Bảng dạy luật mới. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
   "id": "myne_3_3",
