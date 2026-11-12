@@ -314,8 +314,12 @@ function pruneWalls(p, c, spec) {
 /* Light tiles and numbers for rope boxes: explore every position, keep the ones where the goals are done,
    pick a long one as the intended answer, then add lights on its rope / numbers around it until no shorter
    finish keeps every clue and only a few as short ones do. */
-function clueCover(p, spec) {
-  const g = spec.gen || {}, X = E.boxCtx(p), cap = spec.cap || 40000, maxL = capLen(spec);
+function clueCover(p, spec) { const r = clueCover0(p, spec); delete p.litAll; return r; }
+function clueCover0(p, spec) {
+  const g = spec.gen || {}, cap = spec.cap || 40000, maxL = capLen(spec);
+  // plain boxes light tiles by stepping on them: while exploring, remember every tile any box stepped on
+  const plain = g.lights && !p.boxes.some(b => b.trail); if (plain) p.litAll = true;
+  const X = E.boxCtx(p);
   const s0 = E.boxStart(p); s0.tracks = s0.jumps = null;
   const seen = new Set([bkey(s0)]); let fr = [s0]; const done = [];
   const goalsOk = s => !E.boxNeed({ ...p, lights: [], nums: [] }, s).goals.length;
@@ -329,11 +333,11 @@ function clueCover(p, spec) {
     }
     fr = nx;
   }
-  const deep = done.filter(o => o.d >= (spec.minLen || 4) && o.s.trail.size >= 3); if (!deep.length) return null;
+  const deep = done.filter(o => o.d >= (spec.minLen || 4) && o.s.trail.size + o.s.lit.size >= 3); if (!deep.length) return null;
   deep.sort((a, b) => b.d - a.d || b.s.trail.size - a.s.trail.size);
   const T = deep[ri(Math.max(1, Math.ceil(deep.length * .25)))], D = T.d;
   const sp = new Set([...(p.exit || []), ...p.boxes.map(b => [b.x, b.y]), ...(p.switches || []), ...(p.pads || []), ...(p.portals || []).flatMap(q => [[q[0], q[1]], [q[2], q[3]]])].map(n => n[0] + ',' + n[1]));
-  const lit = s => { const o = new Set(s.trail); s.pos.forEach((q, i) => { if (p.boxes[i].trail) o.add(q.join(',')); }); return o; };
+  const lit = s => { const o = new Set(s.trail); s.lit.forEach(k => o.add(k)); s.pos.forEach((q, i) => { if (p.boxes[i].trail) o.add(q.join(',')); }); return o; };
   const units = [];
   if (g.lights) [...lit(T.s)].filter(k => !sp.has(k)).forEach(k => units.push({ k: 'lights', v: k.split(',').map(Number), ok: s => lit(s).has(k) }));
   if (g.nums) cells(p).filter(([x, y]) => [[x, y], [x + 1, y], [x, y + 1], [x + 1, y + 1]].every(n => E.inside(p, ...n))).forEach(([x, y]) => {
@@ -436,6 +440,7 @@ function designBox(spec) {
     for (let i = 0; i < (g.pads || 0); i++) { const n = pick(); if (n) (p.pads = p.pads || []).push([...n, ...D4[ri(4)]]); }
     for (let i = 0; i < (g.stops || 0); i++) { const n = pick(); if (n) (p.stops = p.stops || []).push(n); }
     for (let i = 0; i < (g.portals || 0); i++) { const a = pick(), b = a && pick(n => Math.abs(n[0] - a[0]) + Math.abs(n[1] - a[1]) >= 3); if (b) (p.portals = p.portals || []).push([...a, ...b]); }
+    for (let i = 0; i < (g.litR || 0); i++) { const n = pick(); if (n) (p.lights = p.lights || []).push(n); }   // light tiles dropped at random (the search decides if they make a good panel)
     for (let i = 0; i < (g.cracks || 0); i++) { const n = pick(); if (n) (p.cracks = p.cracks || []).push(n); }
     for (const c of g.paints || []) { const n = pick(); if (n) (p.paints = p.paints || []).push([...n, c]); }
     for (let i = 0; i < (g.oneway || 0); i++) { const e = shuffle(allEdges(p)).find(e => !p.broken.some(b => E.ekey(...b) === E.ekey(...e))); if (e) (p.oneway = p.oneway || []).push(rnd() < .5 ? e : [e[2], e[3], e[0], e[1]]); }
@@ -509,7 +514,7 @@ const BRULE = {
   goal: 'Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal.',
   colors: 'Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được.',
   trail: 'Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại).',
-  lights: 'Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng.',
+  lights: 'Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng.',
   nums: 'Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu).',
   touch: 'Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa).',
   switches: 'Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu.',
@@ -706,6 +711,15 @@ add('prim', 3, 4, BX(5, 4, [M, M, M], { gen: { walls: 0.2, bites: 3, holes: 1 },
 add('prim', 3, 5, BX(5, 4, [M, M, M], { gen: { walls: 0.2, portals: 1, bites: 3 }, uses: { portals: 1 }, extra: [1, 2, 3, 4], distinct: 1, minLen: 11, luck: .02, feature: 'budget', cap: 120000 }));
 add('prim', 3, 6, BX(5, 5, [M, M, M], { gen: { walls: 0.22, portals: 2, bites: 4 }, uses: { portals: 1 }, extra: [0, 2, 3, 4], distinct: 1, minLen: 12, luck: .02, feature: 'budget', cap: 120000 }));
 add('prim', 3, 7, BX(5, 4, [M, M, M], { gen: { walls: 0.22, portals: 2, bites: 4, holes: 1 }, uses: { portals: 1 }, extra: [1, 2, 3, 4, 5], distinct: 1, minLen: 13, luck: .02, feature: 'budget', cap: 120000, time: 60000 }));
+/* Prim extras: arrow tiles and light tiles (a mine switches a light on by stepping on it) */
+TUT('prim', 1, 7, 'pads', BX(3, 2, [M], EZ({ gen: { walls: .05, pads: 1 }, uses: { pads: 1 }, minLen: 2, maxLen: 6 })));
+add('prim', 1, 7, BX(4, 3, [M], { gen: { walls: .18, pads: 2, bites: 2 }, uses: { pads: 1 }, minLen: 6, luck: .04, feature: 'pads' }));
+TUT('prim', 1, 8, 'lights', BX(3, 2, [M], EZ({ gen: { walls: .05, lights: 1 }, minLen: 3, maxLen: 7 })));
+add('prim', 1, 8, BX(4, 3, [M], { gen: { walls: .18, lights: 2, bites: 2 }, minLen: 7, luck: .04, feature: 'lights' }));
+add('prim', 2, 8, BX(4, 4, [M, M], { gen: { walls: .2, pads: 2, bites: 2 }, uses: { pads: 1 }, distinct: 1, minLen: 9, luck: .02, feature: 'pads' }));
+add('prim', 2, 9, BX(4, 4, [M, M], { gen: { walls: .2, litR: 2, bites: 2 }, distinct: 1, minLen: 10, luck: .02, feature: 'lights', cap: 80000 }));
+add('prim', 3, 8, BX(5, 4, [M, M, M], { gen: { walls: .2, pads: 2, litR: 2, bites: 3 }, uses: { pads: 1 }, distinct: 1, minLen: 12, luck: .02, feature: 'lights', cap: 120000, time: 40000 }));
+add('prim', 3, 9, BX(5, 4, [M, M, M], { gen: { walls: .2, portals: 1, litR: 3, bites: 3 }, uses: { portals: 1 }, distinct: 1, minLen: 12, luck: .02, feature: 'lights', cap: 120000, time: 60000 }));
 /* Trix: rope boxes and edge numbers (+ a few lights); two ropes from layer 2 */
 TUT('trix', 1, 1, 'trail', BX(2, 1, [R0], EZ({ gen: { walls: .05 }, minLen: 3, maxLen: 6 })));
 add('trix', 1, 1, BX(3, 2, [R0], { gen: { walls: .15, bites: 1 }, minLen: 5, luck: .06, feature: 'trail' }));

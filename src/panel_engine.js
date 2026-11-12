@@ -250,7 +250,7 @@ const PanelEngine = (() => {
        c      colour, one of the five girls' colours: 0 pink (Prim), 1 red (Trix), 2 purple (Paige), 3 yellow (Vel),
               4 blue (Myne). Without c the box wears the colour of the girl the panel belongs to
      p.exit     goals [[x,y,c?]]: with c it wants a box of that colour; without, it takes any box
-     p.lights   [[x,y]] light tiles: lit while a rope lies on them (or a rope box stands there)
+     p.lights   [[x,y]] light tiles: switched on for good when any box steps onto them (a rope lying on one keeps it on too)
      p.nums     [[cx,cy,n]] (old) the ropes must use exactly n sides of this square (between four tiles)
      p.touch    [[x,y,n]] a sensor block standing on a tile (nothing can enter it): exactly n of the four tiles
                 next to it must be covered by rope (or hold a rope box)
@@ -266,7 +266,7 @@ const PanelEngine = (() => {
      and every number is right. */
   function boxDir(b, d) { const m = b.m || 'same'; return m === 'mx' ? [-d[0], d[1]] : m === 'my' ? [d[0], -d[1]] : m === 'opp' ? [-d[0], -d[1]] : d; }
   function boxCtx(p) {
-    const X = { C: ctx(p), sw: new Map(), paint: new Map(), crack: new Set(), door: new Map(), diceT: new Set((p.dice || []).map(q => key(q[0], q[1]))), diceAll: !!p.diceAll, touch: new Set((p.touch || []).map(q => key(q[0], q[1]))) };
+    const X = { C: ctx(p), sw: new Map(), paint: new Map(), crack: new Set(), door: new Map(), diceT: new Set((p.dice || []).map(q => key(q[0], q[1]))), diceAll: !!p.diceAll, touch: new Set((p.touch || []).map(q => key(q[0], q[1]))), lights: new Set((p.lights || []).map(q => key(q[0], q[1]))), litAll: !!p.litAll };
     (p.switches || []).forEach((q, i) => X.sw.set(key(q[0], q[1]), i));
     (p.paints || []).forEach(q => X.paint.set(key(q[0], q[1]), q[2]));
     (p.cracks || []).forEach(q => X.crack.add(key(q[0], q[1])));
@@ -277,7 +277,7 @@ const PanelEngine = (() => {
   const girlHue = p => GIRL_HUE_I[p.girl] ?? 0;
   function boxStart(p) {
     return { pos: p.boxes.map(b => [b.x, b.y]), left: p.boxes.map(b => b.n == null ? null : b.n), col: p.boxes.map(b => b.c != null ? b.c : girlHue(p)),
-      open: (p.switches || []).reduce((o, q) => q[3] != null ? o | (1 << q[3]) : o, 0), sw: [], crk: new Set(), trail: new Set(), rope: new Set(), ropes: p.boxes.map(() => []), dice: p.boxes.map(b => b.die ? (b.die === true ? [1, 2, 3] : b.die.slice()) : null), stamp: new Map(), dead: -1, inputs: '',
+      open: (p.switches || []).reduce((o, q) => q[3] != null ? o | (1 << q[3]) : o, 0), sw: [], crk: new Set(), trail: new Set(), rope: new Set(), ropes: p.boxes.map(() => []), dice: p.boxes.map(b => b.die ? (b.die === true ? [1, 2, 3] : b.die.slice()) : null), stamp: new Map(), lit: new Set(), dead: -1, inputs: '',
       tracks: p.boxes.map(b => [[b.x, b.y]]), jumps: p.boxes.map(() => [false]) };
   }
   // a two-colour switch shows the colour whose walls are up now; stepping on it lowers those and raises the other colour
@@ -292,12 +292,13 @@ const PanelEngine = (() => {
       else { const up = swUp(q, s.open), oth = up === q[2] ? q[3] : q[2]; s.open = (s.open | (1 << up)) & ~(1 << oth); }
     }
     const pc = X.paint.get(k); if (pc !== undefined) s.col[i] = pc;
+    if (X.litAll || X.lights.has(k)) s.lit.add(k);
   }
   // one key press; returns { state, moved: [bool…], dead } (a new state; rec=false skips the drawing tracks)
   function boxStep(p, s0, d, rec = true, X = boxCtx(p)) {
     const n = p.boxes.length, C = X.C;
     const s = { pos: s0.pos.map(q => q.slice()), left: s0.left.slice(), col: s0.col.slice(), open: s0.open, sw: s0.sw.slice(), crk: new Set(s0.crk),
-      trail: new Set(s0.trail), rope: new Set(s0.rope), ropes: s0.ropes.map(r => r.slice()), dice: s0.dice.map(q => q && q.slice()), stamp: new Map(s0.stamp), dead: s0.dead, inputs: s0.inputs + dirKey(d),
+      trail: new Set(s0.trail), rope: new Set(s0.rope), ropes: s0.ropes.map(r => r.slice()), dice: s0.dice.map(q => q && q.slice()), stamp: new Map(s0.stamp), lit: new Set(s0.lit), dead: s0.dead, inputs: s0.inputs + dirKey(d),
       tracks: rec && s0.tracks ? s0.tracks.map(t => t.map(q => q.slice())) : null, jumps: rec && s0.jumps ? s0.jumps.map(j => j.slice()) : null };
     const moved = Array(n).fill(false);
     if (s0.dead >= 0) return { state: s, moved, dead: s0.dead };
@@ -369,7 +370,7 @@ const PanelEngine = (() => {
     (p.touch || []).forEach(([x, y, n], i) => { const c = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([dx, dy]) => roped(key(x + dx, y + dy))).length; if (c !== n) touch.push({ i, c }); });
     (p.dice || []).forEach(([x, y, v], i) => { if (s.stamp.get(key(x, y)) !== v) dice.push(i); });
     (p.exit || []).forEach((g, i) => { const b = at.get(key(g[0], g[1])); if (b === undefined || (g[2] != null && s.col[b] !== g[2])) goals.push(i); });
-    (p.lights || []).forEach(([x, y], i) => { const k = key(x, y), b = at.get(k); if (!s.trail.has(k) && !(b !== undefined && p.boxes[b].trail)) lights.push(i); });
+    (p.lights || []).forEach(([x, y], i) => { const k = key(x, y), b = at.get(k); if (!s.lit.has(k) && !s.trail.has(k) && !(b !== undefined && p.boxes[b].trail)) lights.push(i); });
     (p.nums || []).forEach(([cx, cy, n], i) => { const c = cellSides(cx, cy).filter(k => s.rope.has(k)).length; if (c !== n) nums.push({ i, c }); });
     return { goals, lights, nums, dice, mines, touch };
   }
@@ -386,6 +387,7 @@ const PanelEngine = (() => {
   function boxReplay(p, inputs) { let s = boxStart(p); const X = boxCtx(p); for (const c of inputs) s = boxStep(p, s, DK[c], true, X).state; return s; }
   const boxKey = s => s.pos.map(q => key(...q)).join('/') + '|' + s.left.join(',') + '|' + s.col.join('') + '|' + s.open + s.sw.join('')
     + (s.crk.size ? '~' + [...s.crk].sort().join(';') : '') + (s.trail.size ? '#' + s.ropes.map(r => r.join(';')).join('#') : '')
+    + (s.lit.size ? '*' + [...s.lit].sort().join(';') : '')
     + (s.dice.some(Boolean) ? '@' + s.dice.map(q => q ? q.join('') : '').join('/') + '@' + [...s.stamp].sort().join(';') : '');
   // breadth-first: the shortest key sequences that win (up to `limit`)
   function boxSolve(p, maxDepth = 40, limit = 20, maxStates = 400000) {

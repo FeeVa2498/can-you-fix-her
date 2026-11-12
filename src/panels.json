@@ -512,6 +512,248 @@
   "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
  },
  {
+  "id": "prim_1_t7",
+  "girl": "prim",
+  "layer": 1,
+  "n": 6.4,
+  "w": 3,
+  "h": 2,
+  "boxes": [
+   {
+    "x": 3,
+    "y": 1,
+    "n": 3
+   }
+  ],
+  "exit": [
+   [
+    1,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    2,
+    1,
+    0,
+    1
+   ]
+  ],
+  "solIn": "LLU",
+  "solutions": 1,
+  "minMoves": 3,
+  "luck": 3.7,
+  "belief": "",
+  "intro": "pads",
+  "tut": "pads",
+  "why": "Bảng dạy luật mới. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+ },
+ {
+  "id": "prim_1_7",
+  "girl": "prim",
+  "layer": 1,
+  "n": 7,
+  "w": 4,
+  "h": 3,
+  "holes": [
+   [
+    4,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    3,
+    2,
+    4,
+    2
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 4,
+    "y": 1,
+    "n": 8
+   }
+  ],
+  "exit": [
+   [
+    3,
+    3
+   ]
+  ],
+  "pads": [
+   [
+    1,
+    2,
+    0,
+    1
+   ],
+   [
+    1,
+    1,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "LLLDRRRD",
+  "solutions": 1,
+  "minMoves": 8,
+  "luck": 0,
+  "quality": 20.1,
+  "belief": "",
+  "intro": null,
+  "feature": "pads",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+ },
+ {
+  "id": "prim_1_t8",
+  "girl": "prim",
+  "layer": 1,
+  "n": 7.4,
+  "w": 3,
+  "h": 2,
+  "broken": [
+   [
+    2,
+    0,
+    3,
+    0
+   ],
+   [
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 3,
+    "y": 1,
+    "n": 7
+   }
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "lights": [
+   [
+    1,
+    2
+   ]
+  ],
+  "solIn": "LLDURRU",
+  "solutions": 1,
+  "minMoves": 7,
+  "luck": 0,
+  "belief": "",
+  "intro": "lights",
+  "tut": "lights",
+  "why": "Bảng dạy luật mới. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+ },
+ {
+  "id": "prim_1_8",
+  "girl": "prim",
+  "layer": 1,
+  "n": 8,
+  "w": 4,
+  "h": 3,
+  "holes": [
+   [
+    1,
+    0
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    4,
+    0,
+    4,
+    1
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 3,
+    "n": 12
+   }
+  ],
+  "exit": [
+   [
+    1,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    4,
+    0
+   ]
+  ],
+  "solIn": "RUURRURLDLLD",
+  "solutions": 1,
+  "minMoves": 12,
+  "luck": 0,
+  "quality": 26.7,
+  "belief": "",
+  "intro": null,
+  "feature": "lights",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+ },
+ {
   "id": "prim_2_t1",
   "girl": "prim",
   "layer": 2,
@@ -1101,6 +1343,162 @@
   "intro": null,
   "feature": "budget",
   "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+ },
+ {
+  "id": "prim_2_8",
+  "girl": "prim",
+  "layer": 2,
+  "n": 8,
+  "w": 4,
+  "h": 4,
+  "holes": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    4
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    4,
+    3,
+    4,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 1,
+    "y": 2,
+    "n": 11
+   },
+   {
+    "x": 1,
+    "y": 4,
+    "n": 8
+   }
+  ],
+  "exit": [
+   [
+    4,
+    2
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "pads": [
+   [
+    0,
+    2,
+    -1,
+    0
+   ],
+   [
+    2,
+    1,
+    0,
+    1
+   ]
+  ],
+  "solIn": "RRRLUURUULDDR",
+  "solutions": 1,
+  "minMoves": 13,
+  "luck": 0,
+  "quality": 38.1,
+  "belief": "",
+  "intro": null,
+  "feature": "pads",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+ },
+ {
+  "id": "prim_2_9",
+  "girl": "prim",
+  "layer": 2,
+  "n": 9,
+  "w": 4,
+  "h": 4,
+  "holes": [
+   [
+    2,
+    4
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    4,
+    2,
+    4,
+    3
+   ],
+   [
+    0,
+    3,
+    1,
+    3
+   ],
+   [
+    1,
+    3,
+    1,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 1,
+    "y": 0,
+    "n": 11
+   },
+   {
+    "x": 0,
+    "y": 1,
+    "n": 9
+   }
+  ],
+  "exit": [
+   [
+    0,
+    2
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "lights": [
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ]
+  ],
+  "solIn": "RRDLDLLDRRRUUD",
+  "solutions": 1,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 39,
+  "belief": "",
+  "intro": null,
+  "feature": "lights",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "prim_3_1",
@@ -1893,6 +2291,222 @@
   "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
  },
  {
+  "id": "prim_3_8",
+  "girl": "prim",
+  "layer": 3,
+  "n": 8,
+  "w": 5,
+  "h": 4,
+  "holes": [
+   [
+    4,
+    4
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    5,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    3,
+    4,
+    3
+   ],
+   [
+    4,
+    3,
+    5,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 4,
+    "y": 2,
+    "n": 13
+   },
+   {
+    "x": 1,
+    "y": 4,
+    "n": 9
+   },
+   {
+    "x": 2,
+    "y": 4,
+    "n": 5
+   }
+  ],
+  "exit": [
+   [
+    2,
+    2
+   ],
+   [
+    0,
+    4
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "pads": [
+   [
+    4,
+    0,
+    0,
+    -1
+   ],
+   [
+    4,
+    1,
+    0,
+    -1
+   ]
+  ],
+  "lights": [
+   [
+    1,
+    0
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "solIn": "UULLLRRDDRRLLL",
+  "solutions": 1,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 39.5,
+  "belief": "",
+  "intro": null,
+  "feature": "lights",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+ },
+ {
+  "id": "prim_3_9",
+  "girl": "prim",
+  "layer": 3,
+  "n": 9,
+  "w": 5,
+  "h": 4,
+  "holes": [
+   [
+    5,
+    3
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    5,
+    4
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    4,
+    0,
+    4,
+    1
+   ],
+   [
+    2,
+    3,
+    3,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 5,
+    "y": 1,
+    "n": 11
+   },
+   {
+    "x": 3,
+    "y": 0,
+    "n": 6
+   },
+   {
+    "x": 1,
+    "y": 1,
+    "n": 11
+   }
+  ],
+  "exit": [
+   [
+    1,
+    0
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "portals": [
+   [
+    4,
+    1,
+    0,
+    1
+   ]
+  ],
+  "lights": [
+   [
+    0,
+    3
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    1,
+    4
+   ]
+  ],
+  "solIn": "RDDRLDLLLDUUUDDD",
+  "solutions": 1,
+  "minMoves": 16,
+  "luck": 0,
+  "quality": 7.3,
+  "belief": "",
+  "intro": null,
+  "feature": "lights",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+ },
+ {
   "id": "trix_1_t1",
   "girl": "trix",
   "layer": 1,
@@ -2162,7 +2776,7 @@
   "belief": "",
   "intro": "lights",
   "tut": "lights",
-  "why": "Bảng dạy luật mới. Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "why": "Bảng dạy luật mới. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "trix_1_4",
@@ -2212,7 +2826,7 @@
   "belief": "if i count it twice, it is real.",
   "intro": null,
   "feature": "lights",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "trix_1_5",
@@ -2269,7 +2883,7 @@
   "belief": "",
   "intro": null,
   "feature": "touch",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_1_6",
@@ -2330,7 +2944,7 @@
   "belief": "rules exist so nothing surprises me.",
   "intro": null,
   "feature": "touch",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_t1",
@@ -2506,7 +3120,7 @@
   "belief": "zero means zero. not 'almost'.",
   "intro": null,
   "feature": "touch",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_3",
@@ -2579,7 +3193,7 @@
   "belief": "three sides. not two. not four. three.",
   "intro": null,
   "feature": "touch",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_4",
@@ -2724,7 +3338,7 @@
   "belief": "i check it again. and again.",
   "intro": null,
   "feature": "touch",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_6",
@@ -2886,7 +3500,7 @@
   "belief": "every square answers to me.",
   "intro": null,
   "feature": "touch",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_3_1",
@@ -3196,7 +3810,7 @@
   "belief": "i count the moves before i make them.",
   "intro": null,
   "feature": "touch",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_3_5",
@@ -9329,7 +9943,7 @@
   "belief": "two players, one heart rate.",
   "intro": null,
   "feature": "trail",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác."
  },
  {
   "id": "myne_3_7",
