@@ -369,15 +369,30 @@ function clueCover0(p, spec) {
       units.push({ k: 'touch', v: [x, y, n], ok: s => { const l = lit(s); return !l.has(k) && cnt(l) === n; } });
     });
   }
+  if (spec.cluster && g.touch) {   // number tiles packed close together: keep only those near one random centre
+    const tu = units.filter(u => u.k === 'touch'); if (!tu.length) return null;
+    const c = tu[ri(tu.length)].v, r = spec.cluster;
+    for (let i = units.length - 1; i >= 0; i--) if (units[i].k === 'touch' && Math.max(Math.abs(units[i].v[0] - c[0]), Math.abs(units[i].v[1] - c[1])) > r) units.splice(i, 1);
+  }
   let alive = done.filter(o => o.d <= D && o !== T);
   const chosen = [], room = { lights: g.lights || 0, nums: g.nums || 0, touch: g.touch || 0 };
   const short = () => alive.filter(o => o.d < D).length, ties = () => alive.filter(o => o.d === D).length;
   while ((short() || ties() > (spec.maxShortest || 3) - 1)) {
-    let best = null;
-    for (const u of shuffle(units.slice())) { if (!room[u.k] || chosen.includes(u)) continue; const cut = alive.filter(o => !u.ok(o.s)).length; if (cut && (!best || cut > best.cut)) best = { u, cut }; }
+    let best = null; const cutters = [];
+    for (const u of shuffle(units.slice())) { if (!room[u.k] || chosen.includes(u)) continue; const cut = alive.filter(o => !u.ok(o.s)).length; if (cut) cutters.push({ u, cut }); if (cut && (!best || cut > best.cut)) best = { u, cut }; }
     if (!best) return null;
+    if (spec.clueRand && cutters.length) best = cutters[ri(cutters.length)];   // many small clues instead of a few big ones
     chosen.push(best.u); room[best.u.k]--; alive = alive.filter(o => best.u.ok(o.s));
   }
+  if (spec.clueRand) {   // drop clues the others already imply
+    const all0 = done.filter(o => o.d <= D && o !== T), okAll = (us, o) => us.every(u => u.ok(o.s));
+    for (let i = chosen.length - 1; i >= 0; i--) {
+      const rest = chosen.filter((_, j) => j !== i), al = all0.filter(o => okAll(rest, o));
+      if (!al.some(o => o.d < D) && al.filter(o => o.d === D).length <= (spec.maxShortest || 3) - 1) chosen.splice(i, 1);
+    }
+    alive = all0.filter(o => okAll(chosen, o));
+  }
+  if (spec.minTouch && chosen.filter(u => u.k === 'touch').length < spec.minTouch) return null;
   if (chosen.length < (spec.minClues || 1)) {   // at least one clue the player has to read
     const extra = shuffle(units.filter(u => !chosen.includes(u) && room[u.k]))[0]; if (extra) chosen.push(extra);
   }
@@ -575,7 +590,7 @@ const BTIP = {
   mx: 'Dùng tường để làm hai hộp lệch nhau.', many: 'Hộp đứng yên cũng là một bức tường cho hộp khác.',
   nolock: 'Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ.', helpers: 'Đặt hộp thừa trước, rồi mới phóng hộp chính.',
   trail: 'Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
-  lights: 'Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.', lightAll: 'Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn.', touch: 'Ô số 3 gần như bị dây bao quanh; ô số 1 chỉ cho dây chạm một bên: bắt đầu từ chúng.', nums: 'Ô "1" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.',
+  lights: 'Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.', roomAll: 'Thắp cả phòng: dây phải phủ mọi ô rồi mới tới goal. Ô góc và ngõ cụt chỉ có một hai lối: dây buộc phải đi qua chúng theo đúng lối đó, bắt đầu tính từ đấy.', touchDense: 'Các ô số đứng sát nhau dùng chung ô cạnh: một ô có dây có thể được hai, ba ô số cùng đếm. Bắt đầu từ ô số mà các ô quanh nó ít lựa chọn nhất.', lightAll: 'Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn.', touch: 'Ô số 3 gần như bị dây bao quanh; ô số 1 chỉ cho dây chạm một bên: bắt đầu từ chúng.', nums: 'Ô "1" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.',
   switches: 'Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó.', dbl: 'Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ.',
   cracks: 'Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước.', paints: 'Có khi hộp phải đi vòng qua ô sơn trước khi về goal.', colors: 'Mỗi màu một goal: xem hộp nào phải đi trước hộp nào.',
 };
@@ -765,6 +780,13 @@ add('trix', 2, 3, BX(4, 3, [R0], { gen: { walls: .12, nums: 3, oneway: 1 }, uses
 TUT('trix', 2, 6, 'portals', BX(3, 2, [R0], EZ({ gen: { walls: .05, portals: 1 }, uses: { portals: 1 }, need: 2, minLen: 3, maxLen: 7 })));
 TUT('trix', 3, 6, 'switches', BX(3, 2, [R0], EZ({ gen: { walls: .05, guard: 1 }, uses: { door: 1 }, need: 2, minLen: 3, maxLen: 8 })));
 add('trix', 3, 9, BX(5, 4, [R0], { gen: { walls: .08, nums: 5, bites: 2 }, minLen: 18, luck: .01, feature: 'nums', cap: 250000, time: 60000 }));
+/* TRIX v10: light the whole room with the rope; number tiles packed close together */
+add('trix', 1, 7, BX(3, 3, [R0], { gen: { walls: .22, lightAll: 1, bites: 1 }, minLen: 10, maxLen: 16, luck: .02, maxShortest: 1, feature: 'roomAll', cap: 400000, time: 40000, tries: 40000 }));
+add('trix', 2, 9, BX(4, 3, [R0], { gen: { walls: .22, lightAll: 1, bites: 2 }, minLen: 14, maxLen: 20, luck: .01, maxShortest: 1, feature: 'roomAll', cap: 800000, time: 60000, tries: 40000 }));
+add('trix', 3, 10, BX(4, 4, [R0], { gen: { walls: .25, lightAll: 1, bites: 2 }, minLen: 18, maxLen: 26, luck: .01, maxShortest: 1, feature: 'roomAll', cap: 1500000, time: 80000, tries: 40000 }));
+add('trix', 2, 10, BX(4, 4, [R0], { gen: { walls: .06, touch: 6 }, cluster: 1, clueRand: 1, minTouch: 4, maxShortest: 1, minLen: 12, luck: .01, feature: 'touchDense', cap: 300000, time: 60000 }));
+add('trix', 3, 11, BX(5, 4, [R0], { gen: { walls: .05, touch: 8, bites: 1 }, cluster: 1, clueRand: 1, minTouch: 5, maxShortest: 1, minLen: 16, luck: .01, feature: 'touchDense', cap: 400000, time: 80000 }));
+add('trix', 3, 12, BX(5, 5, [R0], { gen: { walls: .05, touch: 9, bites: 2 }, cluster: 2, clueRand: 1, minTouch: 6, maxShortest: 1, minLen: 18, luck: .01, feature: 'touchDense', cap: 500000, time: 90000 }))
 /* Paige: a die to print the right numbers, arrow tiles that slide it without turning, portals; two dice in layer 3 */
 TUT('paige', 1, 1, 'dice', BX(3, 1, [DIE], EZ({ gen: { walls: .02, dice: 1, diceMore: 0 }, minLen: 2, maxLen: 6 })));
 add('paige', 1, 1, BX(3, 2, [DIE], { gen: { walls: 0.1, dice: 1 }, minLen: 4, luck: .04, feature: 'dice' }));
