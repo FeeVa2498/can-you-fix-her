@@ -251,7 +251,9 @@ const PanelEngine = (() => {
               4 blue (Myne). Without c the box wears the colour of the girl the panel belongs to
      p.exit     goals [[x,y,c?]]: with c it wants a box of that colour; without, it takes any box
      p.lights   [[x,y]] light tiles: lit while a rope lies on them (or a rope box stands there)
-     p.nums     [[cx,cy,n]] the ropes must use exactly n sides of this square (between four tiles)
+     p.nums     [[cx,cy,n]] (old) the ropes must use exactly n sides of this square (between four tiles)
+     p.touch    [[x,y,n]] a sensor block standing on a tile (nothing can enter it): exactly n of the four tiles
+                next to it must be covered by rope (or hold a rope box)
      p.switches [[x,y,c,c2?]] a box entering opens every door of colour c for good.
                 Two-colour switch (c2): at the start the c walls are up and the c2 walls are down. Stepping on it
                 lowers the colour it shows and raises the other one, and the switch now shows that other colour
@@ -264,7 +266,7 @@ const PanelEngine = (() => {
      and every number is right. */
   function boxDir(b, d) { const m = b.m || 'same'; return m === 'mx' ? [-d[0], d[1]] : m === 'my' ? [d[0], -d[1]] : m === 'opp' ? [-d[0], -d[1]] : d; }
   function boxCtx(p) {
-    const X = { C: ctx(p), sw: new Map(), paint: new Map(), crack: new Set(), door: new Map(), diceT: new Set((p.dice || []).map(q => key(q[0], q[1]))), diceAll: !!p.diceAll };
+    const X = { C: ctx(p), sw: new Map(), paint: new Map(), crack: new Set(), door: new Map(), diceT: new Set((p.dice || []).map(q => key(q[0], q[1]))), diceAll: !!p.diceAll, touch: new Set((p.touch || []).map(q => key(q[0], q[1]))) };
     (p.switches || []).forEach((q, i) => X.sw.set(key(q[0], q[1]), i));
     (p.paints || []).forEach(q => X.paint.set(key(q[0], q[1]), q[2]));
     (p.cracks || []).forEach(q => X.crack.add(key(q[0], q[1])));
@@ -307,7 +309,7 @@ const PanelEngine = (() => {
       const want = s.pos.map((q, i) => {
         if (!act[i]) return null;
         const to = [q[0] + dir[i][0], q[1] + dir[i][1]], tk = key(...to), ek = ekey(q[0], q[1], to[0], to[1]);
-        return inside(p, ...to) && linkOk(p, C, q, to) && !doorShut(X, s.open, ek) && !s.trail.has(tk) && !s.crk.has(tk) ? to : null;
+        return inside(p, ...to) && linkOk(p, C, q, to) && !doorShut(X, s.open, ek) && !s.trail.has(tk) && !s.crk.has(tk) && !X.touch.has(tk) ? to : null;
       });
       const ok = want.map(Boolean);
       for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (ok[i] && ok[j] && want[i][0] === want[j][0] && want[i][1] === want[j][1]) ok[i] = ok[j] = false;
@@ -362,16 +364,18 @@ const PanelEngine = (() => {
   // what's still missing: { goals, lights, nums, dice: [i…], mines: [i…] }
   function boxNeed(p, s) {
     const at = new Map(s.pos.map((q, i) => [key(...q), i]));
-    const goals = [], lights = [], nums = [], dice = [], mines = [];
+    const goals = [], lights = [], nums = [], dice = [], mines = [], touch = [];
+    const roped = k => { const b = at.get(k); return s.trail.has(k) || (b !== undefined && p.boxes[b].trail); };
+    (p.touch || []).forEach(([x, y, n], i) => { const c = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([dx, dy]) => roped(key(x + dx, y + dy))).length; if (c !== n) touch.push({ i, c }); });
     (p.dice || []).forEach(([x, y, v], i) => { if (s.stamp.get(key(x, y)) !== v) dice.push(i); });
     (p.exit || []).forEach((g, i) => { const b = at.get(key(g[0], g[1])); if (b === undefined || (g[2] != null && s.col[b] !== g[2])) goals.push(i); });
     (p.lights || []).forEach(([x, y], i) => { const k = key(x, y), b = at.get(k); if (!s.trail.has(k) && !(b !== undefined && p.boxes[b].trail)) lights.push(i); });
     (p.nums || []).forEach(([cx, cy, n], i) => { const c = cellSides(cx, cy).filter(k => s.rope.has(k)).length; if (c !== n) nums.push({ i, c }); });
-    return { goals, lights, nums, dice, mines };
+    return { goals, lights, nums, dice, mines, touch };
   }
   function boxWon(p, s) {
     if (s.dead >= 0) return false;
-    const N = boxNeed(p, s); return !N.goals.length && !N.lights.length && !N.nums.length && !N.dice.length && !N.mines.length;
+    const N = boxNeed(p, s); return !N.goals.length && !N.lights.length && !N.nums.length && !N.dice.length && !N.mines.length && !N.touch.length;
   }
   // the rope pieces to draw for box i: [[a,b]…] (a portal jump leaves a gap), ending at the box
   function ropeSegs(s, i) {

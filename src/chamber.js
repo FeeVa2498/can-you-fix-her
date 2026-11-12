@@ -13,14 +13,14 @@ CH.done = CH.done || {}; CH.opt = Object.assign({ intro: true, debug: false, vie
 const chSave = () => { try { localStorage.setItem(CH_KEY, JSON.stringify(CH)); } catch (e) { } };
 const CH_GIRLS = [
   { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'landmines (exact moves) · walls · portals' },
-  { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'rope boxes · edge numbers · light tiles' },
-  { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'dice: print the numbers · arrow tiles · portals' },
+  { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'rope boxes · sensor blocks (touch n sides) · light tiles' },
+  { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'dice: print the brief on the white tiles · arrow tiles · portals' },
   { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'arrow tiles · rocket boxes · locks · colours' },
   { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'reverse twins · no locking · two-colour switches · paint · rope boxes' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
 // what each tutorial panel teaches (shown as a NEW tag)
-const TEACH = { basic: 'roll to the gold tile', sketch: 'trace the pencil', plates: 'switches open gates', avoid: 'black pencil: keep off', mirror: 'the other hand', swap: 'striped gates swap', nums: 'edge count', ends: 'goal anywhere', holes: 'holes in the map', oneway: 'one-way', portals: 'portals', bridges: 'overpass', boxes: 'every key moves the box', pads: 'dash tiles', stops: 'brake tiles', dash: 'rocket box', budget: 'landmine: exact moves', dice: 'dice: print the numbers', many: 'more boxes', twin: 'twin boxes', nolock: 'goals never lock', opp: 'opposite twin', my: 'up/down twin', trail: 'rope box', switches: 'locks & doors', dbl: 'two-colour switch', colors: 'colour goals', paints: 'paint tiles', cracks: 'cracked tiles', lights: 'light tiles', twinrope: 'two ropes, one reversed', goal: 'every key moves every box' };
+const TEACH = { basic: 'roll to the gold tile', sketch: 'trace the pencil', plates: 'switches open gates', avoid: 'black pencil: keep off', mirror: 'the other hand', swap: 'striped gates swap', nums: 'edge count', ends: 'goal anywhere', holes: 'holes in the map', oneway: 'one-way', portals: 'portals', bridges: 'overpass', boxes: 'every key moves the box', pads: 'dash tiles', stops: 'brake tiles', dash: 'rocket box', budget: 'landmine: exact moves', dice: 'dice: print the brief', touch: 'sensor blocks: touch n sides', many: 'more boxes', twin: 'twin boxes', nolock: 'goals never lock', opp: 'opposite twin', my: 'up/down twin', trail: 'rope box', switches: 'locks & doors', dbl: 'two-colour switch', colors: 'colour goals', paints: 'paint tiles', cracks: 'cracked tiles', lights: 'light tiles', twinrope: 'two ropes, one reversed', goal: 'every key moves every box' };
 const CH_MEM = {
   tracing_paper: { name: 'tracing_paper.mem', ic: 'thread', desc: 'Once per panel: lay it over the board and the next few strokes of the answer show through.' },
   queen_piece: { name: 'queen_piece.mem', ic: 'queen', desc: 'Once per panel: one broken rule is forgiven (like an eraser).' },
@@ -347,11 +347,15 @@ function mountStage() {
   const vp = $('#pj-vp'); if (!vp || !PJ) return;
   if (PJ.view) { PJ.view.dispose(); PJ.view = null; }
   vp.innerHTML = ''; vp.classList.toggle('flat', true);
+  // dice panels keep a column on the right for the brief and the practice die; the board lives in its own host
+  const side = (PJ.p.dice || []).length > 0; vp.classList.toggle('has-side', side);
+  const host = side ? (vp.insertAdjacentHTML('beforeend', '<div class="pj-host" id="pj-host"></div>'), $('#pj-host')) : vp;
   if (CH.opt.view3d && P3.has()) {
-    try { PJ.view = P3.create(vp, PJ.p); PJ.view.setRetro(!!CH.opt.retro); bindPJ(PJ.view.canvas, PJ.view.toBoard); vp.classList.remove('flat'); vp.insertAdjacentHTML('beforeend', `<div class="pj3-hud">◉ DIVE·PROJ 3D <i>${PJ.p.boxes ? 'BOX' : 'LINE'} MODE</i>${PJ.p.tut ? `<b class="tut">NEW · ${esc(TEACH[PJ.p.tut] || PJ.p.tut)}</b>` : ''}</div>`); }
-    catch (e) { console.warn('3D projection failed, using the flat board', e); if (PJ.view) PJ.view.dispose(); PJ.view = null; vp.innerHTML = ''; }
+    try { PJ.view = P3.create(host, PJ.p); PJ.view.setRetro(!!CH.opt.retro); bindPJ(PJ.view.canvas, PJ.view.toBoard); vp.classList.remove('flat'); vp.insertAdjacentHTML('beforeend', `<div class="pj3-hud">◉ DIVE·PROJ 3D <i>${PJ.p.boxes ? 'BOX' : 'LINE'} MODE</i>${PJ.p.tut ? `<b class="tut">NEW · ${esc(TEACH[PJ.p.tut] || PJ.p.tut)}</b>` : ''}</div>`); }
+    catch (e) { console.warn('3D projection failed, using the flat board', e); if (PJ.view) PJ.view.dispose(); PJ.view = null; host.innerHTML = ''; }
   }
-  if (!PJ.view) { vp.innerHTML = `<svg id="pj-svg" viewBox="${vb(PJ.p)}" role="img" aria-label="Puzzle board. Move with WASD or the arrow keys."></svg>`; bindPJ($('#pj-svg')); }
+  if (!PJ.view) { host.innerHTML = `<svg id="pj-svg" viewBox="${vb(PJ.p)}" role="img" aria-label="Puzzle board. Move with WASD or the arrow keys."></svg>`; bindPJ($('#pj-svg')); }
+  vp.insertAdjacentHTML('beforeend', pjSideHTML(PJ.p)); pjSideBind();
   const f = $('#pj-fps'); if (f) f.textContent = PJ.view ? 'WebGL' : '2D view';
   drawPJ();
 }

@@ -881,12 +881,6 @@ rect.pb-head{stroke:#fff;stroke-width:.03}
 .pbx-box .die .pip{fill:#1a1024}
 .pbx-box .under rect{fill:#1a1024;opacity:.85}
 .pbx-box .under text{fill:#fff8fc;font-family:var(--mono);font-size:.15px;text-anchor:middle;dominant-baseline:central}
-.pbx-dt rect{fill:none;stroke:#cbb8ea;stroke-width:.03;stroke-dasharray:.06 .05;opacity:.7}
-.pbx-dt .pip{fill:#cbb8ea;opacity:.6}
-.pbx-dt.ok rect{stroke:#7be3a4;stroke-dasharray:none;opacity:1}
-.pbx-dt.ok .pip{fill:#7be3a4;opacity:1}
-.pbx-dt.bad rect{stroke:#ff4d5e;stroke-dasharray:none;opacity:1}
-.pbx-dt.bad .pip{fill:#ff4d5e;opacity:1}
 .pbx-box .bomb .spark{fill:#ff3050;animation:spark .3s steps(2) infinite}
 .pbx-box .bomb text{fill:#fff8fc;font-family:var(--mono);font-size:.2px;text-anchor:middle;dominant-baseline:central;font-weight:bold}
 .pbx-box .bomb.hot .ball{fill:#7a1030}
@@ -894,6 +888,46 @@ rect.pb-head{stroke:#fff;stroke-width:.03}
 .pbx-boom path{fill:#ffa040;stroke:#ffd86e;stroke-width:.05;animation:boom .5s ease-out}
 @keyframes boom{0%{transform:scale(.2);opacity:0}60%{opacity:1}100%{transform:scale(1)}}
 .pbx-boom{transform-box:fill-box;transform-origin:center}
+.pj-host{position:absolute;top:0;left:0;bottom:0;right:150px}
+.pj-vp.flat .pj-host{top:6px;left:6px;bottom:6px}
+.pj-host>svg{width:100%;height:100%}
+.pj-side{position:absolute;top:8px;right:8px;z-index:4;width:132px;padding:8px;background:rgba(26,16,36,.88);border:2px solid;border-color:#f5eeff #3a2554 #3a2554 #f5eeff;color:#f4e9ff;font:11px/1.3 var(--mono);display:flex;flex-direction:column;gap:5px}
+.pj-side .ps-h{font-weight:bold;letter-spacing:.08em;color:#ffd23f}
+.ps-map{width:100%;height:auto;max-height:120px}
+.ps-map .t{fill:#3b2560}
+.ps-map .w rect{fill:#f8f4ff}
+.ps-map .w .pip{fill:#1a1024}
+.ps-map .w.ok rect{fill:#c9f5dc}
+.ps-map .g{fill:none;stroke:#fff4fb;stroke-width:.07}
+.ps-die{position:relative;height:92px;perspective:420px;display:grid;place-items:center}
+.ps-cube{position:relative;width:44px;height:44px;transform-style:preserve-3d;transform:rotateX(-30deg) rotateY(-40deg)}
+.ps-cube.bump{animation:psbump .25s ease-out}
+@keyframes psbump{0%{transform:rotateX(-30deg) rotateY(-40deg) scale(.82)}100%{transform:rotateX(-30deg) rotateY(-40deg) scale(1)}}
+.ps-cube .f{position:absolute;inset:0;background:#a46bff;border:2px solid #f8f4ff;border-radius:6px;backface-visibility:hidden}
+.ps-cube .top{transform:rotateX(90deg) translateZ(22px);filter:brightness(1.15)}
+.ps-cube .front{transform:translateZ(22px)}
+.ps-cube .right{transform:rotateY(90deg) translateZ(22px);filter:brightness(.85)}
+.ps-cube .f i{position:absolute;width:8px;height:8px;border-radius:50%;background:#1a1024;transform:translate(-50%,-50%)}
+.ps-cube .f b{display:none}
+.ps-under{position:absolute;bottom:0;left:0;right:0;text-align:center;color:#ffd23f;font-weight:bold}
+.ps-ctrl{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.ps-ctrl button{font:inherit;padding:2px 0;background:#3b2560;color:#f4e9ff;border:1px solid #cbb8ea;cursor:pointer}
+.ps-ctrl button:hover{background:#5a3a8a}
+.ps-tip{opacity:.8}
+.pbx-dt rect{fill:#f8f4ff;stroke:#cbb8ea;stroke-width:.03}
+.pbx-dt .pip{fill:#1a1024}
+.pbx-dt.ok rect{stroke:#7be3a4;stroke-width:.07}
+.pbx-dt.ok .pip{fill:#1f8a4c}
+.pbx-dt.bad rect{stroke:#ff4d5e;stroke-width:.07}
+.pbx-dt.bad .pip{fill:#c0283a}
+.pbx-touch .blk{fill:#1a1024;stroke:#4fd8ff;stroke-width:.04}
+.pbx-touch .scr{fill:#0b2a3a;stroke:#4fd8ff;stroke-width:.02}
+.pbx-touch .ticks{stroke:#4fd8ff;stroke-width:.05;stroke-linecap:round}
+.pbx-touch text{fill:#c8f2ff;font-family:var(--mono);font-size:.22px;text-anchor:middle;dominant-baseline:central;font-weight:bold}
+.pbx-touch.ok .blk,.pbx-touch.ok .scr,.pbx-touch.ok .ticks{stroke:#7be3a4}
+.pbx-touch.ok text{fill:#7be3a4}
+.pbx-touch.bad .blk,.pbx-touch.bad .scr,.pbx-touch.bad .ticks{stroke:#ff4d5e}
+.pbx-touch.bad text{fill:#ff4d5e}
 .pbx-fallen{fill:#0f0818;stroke:#2a1840;stroke-width:.03;stroke-dasharray:.06 .05}
 .pbx-crack{fill:none;stroke:#140a22;stroke-width:.05;stroke-linecap:round;stroke-linejoin:round}
 .pbx-paint path,.pbx-paint circle{fill:var(--pc);opacity:.85}

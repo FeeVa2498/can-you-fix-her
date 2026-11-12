@@ -141,7 +141,10 @@ B = [
     ('Bom trên hộp', 'Hộp ôm một quả bom có ngòi cháy và số đếm ngược; mỗi lần ấn phím số giảm 1, còn 1 thì bom đỏ lên, về 0 là nổ.', 'Bom + ngòi + tia lửa (2–3 frame) + bom đỏ + nhãn số 0–9', 15, '128×128 / 64×64', 'P1'),
     ('Hộp nổ', 'Hộp hết nước mà vẫn phải đi: nổ tung thành mảnh vụn + chớp sáng, chữ "✹ BOOM ✹".', 'Chớp sáng 6 frame + mảnh vụn + chữ', 8, '256×256 / 720×120', 'P1'),
     ('Ô đèn (light)', 'Bóng đèn nhỏ trên ô: tối khi chưa có dây; sáng vàng có quầng khi dây nằm trên đó. Thắng cần mọi đèn sáng.', 'Tắt + sáng (+ quầng)', 3, '256×256', 'P1'),
-    ('Số cạnh (number)', 'Bảng số nhỏ nằm giữa bốn ô: số cạnh của ô vuông đó mà dây phải đi. Hiện "đã có/cần" (ví dụ 1/3): trắng = chưa đủ, xanh lá = đúng, đỏ = thừa. Cần bộ chữ số pixel 0–4 và dấu "/".', 'Khung + số 0–4 + "/" × 3 màu', 19, '64×64 mỗi ký tự'),
+    ('Khối cảm biến (Trix)', 'Khối console thấp đặt trên ô (không đi vào được), mặt trên là màn hình hiện "đã chạm/cần" (ví dụ 1/3): xanh dương = chưa đủ, xanh lá = đúng, đỏ = thừa. Dây phải chạm đúng ngần ấy cạnh của khối.', 'Khối + màn hình × 3 trạng thái + số 0–4 và dấu /', 12, 'concept 256×256 / màn hình 128×128'),
+    ('Xúc xắc (Paige)', 'Xúc xắc lăn: 6 mặt chấm (1–6), màu tím hoặc xanh; nhãn ▼n cho biết mặt đang úp xuống (mặt sẽ in).', '6 mặt × 2 màu + nhãn ▼', 14, 'texture mặt 128×128', 'P1'),
+    ('Ô giấy trắng + vết in', 'Ô trắng cần in. Khi xúc xắc đáp xuống thì in số chấm của mặt úp: xanh lá nếu đúng đề, đỏ nếu sai.', 'Ô trắng + chấm 1–6 × 2 màu', 13, '256×256', 'P1'),
+    ('Khung ĐỀ BÀI + xúc xắc nháp', 'Khung bên phải bàn chơi: bản đồ thu nhỏ có các ô trắng ghi số cần in; dưới là xúc xắc nháp xoay bằng 5 nút (▲◀▶▼⟲).', 'Khung + nút', 6, '160×320', 'P1'),
     ('Ô mũi tên (arrow tile)', 'Ô xanh có mũi tên: hộp đi vào bị đẩy trượt theo mũi tên tới cuối đường. Mũi tên nhấp nháy chạy.', '1 (code xoay 4 hướng) + 2 frame sáng', 3, '256×256', 'P1'),
     ('Ô chốt (switch)', 'Nút tròn lớn trên ô, màu xanh / vàng / đỏ: hộp đi vào là mở hẳn mọi cửa cùng màu (nút lún xuống, sáng).', '3 màu × (chưa mở + đã mở)', 6, 'concept 256×256', 'P1'),
     ('Công tắc hai màu', 'Nút ở giữa = màu tường đang dựng (giẫm vào sẽ hạ), vòng ngoài = màu kia, có ký hiệu mũi tên xoay. Giẫm vào: tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia.', '3 cặp màu', 3, 'concept 256×256', 'P1'),
@@ -155,7 +158,7 @@ B = [
 ]
 BF = ['tile_{top,side}.png', 'tile_goal_{gold,pink,blue,green}.png (+_on)', 'wall_glass.png', 'box_{plain,pink,blue,green}.png', 'box_rope_concept.png, box_rope_coil.png, rope_{pink,blue,green,plain}.png',
       'box_mark_twin.png', 'box_rocket_concept.png, fx_flame_sheet.png', 'box_bomb.png, box_bomb_hot.png, fx_fuse_spark_sheet.png, count_{0-9}.png', 'fx_boom_sheet.png, fx_boom_bits.png, txt_boom.png',
-      'tile_light_{off,on}.png, fx_light_halo.png', 'num_plate.png, num_{0-4}_{white,green,red}.png, num_slash_*.png', 'tile_arrow.png, tile_arrow_glow_sheet.png',
+      'tile_light_{off,on}.png, fx_light_halo.png', 'sensor_block.png, sensor_screen_{idle,ok,bad}.png, sensor_digits.png', 'dice_faces_{purple,blue}.png, dice_under_badge.png', 'paper_tile.png, print_pips_{ok,bad}.png', 'brief_frame.png, practice_die_buttons.png', 'tile_arrow.png, tile_arrow_glow_sheet.png',
       'switch_{pink,blue,green}_{up,down}.png', 'switch_double_{pink-blue,blue-green,green-pink}.png', 'door_{pink,blue,green}.png (+_open)', 'tile_crack.png, tile_crack_fall_sheet.png, hole_fallen.png',
       'tile_paint_{pink,blue,green}.png', 'arrow_oneway_gap.png', 'tile_portal_{yellow,sky,mint}.png', 'hole_edge.png', 'rope_{sol,win}.png']
 for (nm, d, v, n, sz, *pr), fn in zip(B, BF):
@@ -163,7 +166,7 @@ for (nm, d, v, n, sz, *pr), fn in zip(B, BF):
 
 # ---------------- 10. Mechanic icons (tutorials) ----------------
 G = '10. Icon mechanic (tutorial & danh sách level)'
-MECH = [('basic', 'Hộp dây tới ô goal'), ('boxes', 'Mọi phím điều khiển mọi hộp'), ('lights', 'Ô đèn'), ('nums', 'Số cạnh'), ('switches', 'Ô chốt & cửa khoá'), ('dbl', 'Công tắc hai màu'),
+MECH = [('basic', 'Hộp dây tới ô goal'), ('boxes', 'Mọi phím điều khiển mọi hộp'), ('lights', 'Ô đèn'), ('touch', 'Khối cảm biến'), ('dice', 'Xúc xắc in đề bài'), ('switches', 'Ô chốt & cửa khoá'), ('dbl', 'Công tắc hai màu'),
         ('colors', 'Hộp màu & goal màu'), ('paints', 'Ô sơn'), ('cracks', 'Ô nứt'), ('ends', 'Goal ở bất kỳ đâu'), ('holes', 'Map có lỗ'), ('oneway', 'Một chiều'),
         ('portals', 'Portal'), ('pads', 'Ô mũi tên'), ('dash', 'Hộp tên lửa'), ('helpers', 'Hộp chắn (thừa)'),
         ('many', 'Nhiều hộp'), ('budget', 'Hộp ôm bom'), ('twin', 'Hộp song sinh ngược'), ('twinrope', 'Hai hộp dây song sinh'), ('nolock', 'Hộp không bị khoá ở goal'), ('trail', 'Hộp dây')]

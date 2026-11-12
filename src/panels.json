@@ -1991,45 +1991,39 @@
   "broken": [
    [
     0,
-    2,
     1,
-    2
-   ],
-   [
     1,
-    2,
-    2,
-    2
+    1
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 1,
+    "x": 1,
+    "y": 2,
     "trail": true
    }
   ],
   "exit": [
    [
-    1,
+    0,
     0
    ]
   ],
-  "nums": [
+  "touch": [
    [
+    2,
     0,
-    1,
-    1
+    2
    ]
   ],
-  "solIn": "LLUR",
+  "solIn": "RULUL",
   "solutions": 1,
-  "minMoves": 4,
-  "luck": 3.1,
+  "minMoves": 5,
+  "luck": 4.7,
   "belief": "",
-  "intro": "nums",
-  "tut": "nums",
-  "why": "Bảng dạy luật mới. Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "intro": "touch",
+  "tut": "touch",
+  "why": "Bảng dạy luật mới. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_1_2",
@@ -2040,11 +2034,17 @@
   "h": 3,
   "holes": [
    [
-    0,
-    3
+    3,
+    2
    ]
   ],
   "broken": [
+   [
+    0,
+    2,
+    0,
+    3
+   ],
    [
     1,
     3,
@@ -2055,32 +2055,32 @@
   "boxes": [
    {
     "x": 0,
-    "y": 2,
+    "y": 0,
     "trail": true
    }
   ],
   "exit": [
    [
-    1,
+    0,
+    3
+   ]
+  ],
+  "touch": [
+   [
+    2,
+    0,
     2
    ]
   ],
-  "nums": [
-   [
-    2,
-    2,
-    1
-   ]
-  ],
-  "solIn": "URRRDLL",
+  "solIn": "RDRDLDL",
   "solutions": 1,
   "minMoves": 7,
-  "luck": 0.4,
-  "quality": 16.4,
+  "luck": 1.2,
+  "quality": 12.7,
   "belief": "a gap means i failed.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_1_3",
@@ -2095,44 +2095,39 @@
     3
    ],
    [
-    4,
-    1
+    3,
+    0
    ]
   ],
   "boxes": [
    {
-    "x": 2,
+    "x": 0,
     "y": 1,
     "trail": true
    }
   ],
   "exit": [
    [
-    3,
-    0
-   ]
-  ],
-  "nums": [
-   [
-    2,
-    1,
-    3
-   ],
-   [
-    1,
     1,
     2
    ]
   ],
-  "solIn": "RDLLUURR",
+  "touch": [
+   [
+    4,
+    0,
+    1
+   ]
+  ],
+  "solIn": "RRRRDLLL",
   "solutions": 1,
   "minMoves": 8,
-  "luck": 0.1,
-  "quality": 18.6,
+  "luck": 1.6,
+  "quality": 16.4,
   "belief": "numbers don't lie. people do.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_1_t4",
@@ -2229,53 +2224,52 @@
   "holes": [
    [
     4,
-    0
+    3
    ],
    [
     4,
     2
+   ],
+   [
+    3,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 1,
+    "x": 1,
+    "y": 0,
     "trail": true
    }
   ],
   "exit": [
    [
-    2,
-    0
+    0,
+    2
    ]
   ],
-  "nums": [
+  "touch": [
    [
+    3,
     2,
-    0,
-    3
-   ],
-   [
-    0,
-    0,
-    1
+    2
    ]
   ],
   "lights": [
    [
-    1,
-    3
+    0,
+    1
    ]
   ],
-  "solIn": "RDDRUURUL",
+  "solIn": "RRDLDLULD",
   "solutions": 1,
   "minMoves": 9,
   "luck": 0.1,
-  "quality": 20.4,
+  "quality": 18.7,
   "belief": "",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_1_6",
@@ -2286,67 +2280,57 @@
   "h": 4,
   "holes": [
    [
-    4,
-    1
+    0,
+    3
    ],
    [
     0,
     1
    ],
    [
-    4,
-    2
-   ]
-  ],
-  "broken": [
-   [
-    1,
-    3,
-    1,
+    2,
     4
    ],
    [
-    0,
-    4,
-    1,
-    4
+    2,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 4,
+    "x": 3,
+    "y": 3,
     "trail": true
    }
   ],
   "exit": [
    [
-    3,
-    4
+    4,
+    0
    ]
   ],
-  "nums": [
+  "touch": [
    [
-    2,
     1,
-    3
+    2,
+    2
    ]
   ],
   "lights": [
    [
-    0,
-    3
+    4,
+    2
    ]
   ],
-  "solIn": "ULLURRURDDD",
+  "solIn": "RULLULURRR",
   "solutions": 1,
-  "minMoves": 11,
-  "luck": 0.1,
-  "quality": 21.3,
+  "minMoves": 10,
+  "luck": 0.2,
+  "quality": 17.3,
   "belief": "rules exist so nothing surprises me.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_t1",
@@ -2412,30 +2396,18 @@
   "h": 3,
   "holes": [
    [
-    3,
-    3
-   ],
-   [
-    2,
-    3
-   ]
-  ],
-  "broken": [
-   [
     0,
-    2,
-    1,
-    2
+    3
    ]
   ],
   "boxes": [
    {
     "x": 1,
-    "y": 3,
+    "y": 2,
     "trail": true
    },
    {
-    "x": 2,
+    "x": 3,
     "y": 0,
     "trail": true,
     "c": 4
@@ -2443,37 +2415,32 @@
   ],
   "exit": [
    [
-    3,
+    0,
     2,
     1
    ],
    [
     2,
-    1,
+    0,
     4
    ]
   ],
-  "nums": [
+  "touch": [
    [
-    1,
-    1,
-    3
-   ],
-   [
-    0,
-    0,
-    3
+    3,
+    2,
+    2
    ]
   ],
-  "solIn": "ULLDRURD",
+  "solIn": "RUDLLDUR",
   "solutions": 1,
   "minMoves": 8,
-  "luck": 0,
-  "quality": 21.3,
+  "luck": 0.2,
+  "quality": 19.2,
   "belief": "a number is a promise. i keep promises.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_2",
@@ -2538,8 +2505,8 @@
   "quality": 22.8,
   "belief": "zero means zero. not 'almost'.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_3",
@@ -2550,30 +2517,30 @@
   "h": 3,
   "holes": [
    [
-    1,
-    0
+    3,
+    3
    ],
    [
-    4,
-    3
+    0,
+    1
    ]
   ],
   "broken": [
    [
-    4,
+    0,
+    3,
     1,
-    4,
-    2
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 2,
+    "x": 4,
     "y": 0,
     "trail": true
    },
    {
-    "x": 3,
+    "x": 0,
     "y": 3,
     "trail": true,
     "c": 4
@@ -2581,37 +2548,38 @@
   ],
   "exit": [
    [
-    1,
+    4,
     2,
     1
    ],
    [
+    2,
     0,
-    1,
     4
    ]
   ],
-  "nums": [
+  "touch": [
    [
     1,
     1,
     1
-   ],
-   [
-    2,
-    1,
-    2
    ]
   ],
-  "solIn": "RLLLDDUULL",
+  "lights": [
+   [
+    1,
+    3
+   ]
+  ],
+  "solIn": "DURDRURUUL",
   "solutions": 1,
   "minMoves": 10,
   "luck": 0,
-  "quality": 23.4,
+  "quality": 25.1,
   "belief": "three sides. not two. not four. three.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_4",
@@ -2626,75 +2594,68 @@
     4
    ],
    [
-    4,
-    3
-   ],
-   [
-    4,
-    1
-   ],
-   [
-    4,
-    2
+    0,
+    4
    ],
    [
     3,
-    2
-   ],
-   [
-    0,
     0
    ]
   ],
   "broken": [
    [
-    2,
-    2,
-    2,
-    3
+    1,
+    0,
+    1,
+    1
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 2,
+    "x": 0,
+    "y": 0,
     "trail": true
    },
    {
-    "x": 2,
-    "y": 0,
+    "x": 3,
+    "y": 4,
     "trail": true,
     "c": 4
    }
   ],
   "exit": [
    [
-    3,
     4,
+    1,
     1
    ],
    [
-    1,
-    4,
+    3,
+    3,
     4
    ]
   ],
-  "nums": [
+  "touch": [
+   [
+    1,
+    3,
+    2
+   ],
    [
     2,
     0,
-    3
+    1
    ]
   ],
-  "solIn": "RLDRLLLDDDR",
-  "solutions": 1,
+  "solIn": "LDDRUURRDRL",
+  "solutions": 2,
   "minMoves": 11,
   "luck": 0,
-  "quality": 28.5,
+  "quality": 24.2,
   "belief": "if the count is wrong, everything is wrong.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_5",
@@ -2706,61 +2667,64 @@
   "holes": [
    [
     0,
-    1
+    2
    ],
    [
     4,
     1
    ]
   ],
-  "broken": [
-   [
-    2,
-    0,
-    3,
-    0
-   ]
-  ],
   "boxes": [
    {
-    "x": 1,
-    "y": 2,
+    "x": 2,
+    "y": 3,
     "trail": true
    },
    {
     "x": 1,
-    "y": 3,
+    "y": 2,
     "trail": true,
     "c": 4
    }
   ],
   "exit": [
    [
-    3,
+    4,
     2,
     1
    ],
    [
-    4,
-    2,
+    3,
+    1,
     4
+   ]
+  ],
+  "touch": [
+   [
+    4,
+    4,
+    2
    ]
   ],
   "lights": [
    [
-    4,
-    3
+    2,
+    2
+   ],
+   [
+    0,
+    4
    ]
   ],
-  "solIn": "ULDDRRRRDUU",
+  "solIn": "LLDRUURDRURU",
   "solutions": 1,
-  "minMoves": 11,
+  "minMoves": 12,
   "luck": 0,
-  "quality": 30.9,
+  "quality": 28.8,
   "belief": "i check it again. and again.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_6",
@@ -2775,26 +2739,24 @@
     3
    ],
    [
-    4,
+    5,
+    0
+   ],
+   [
+    3,
     4
    ],
    [
-    5,
+    2,
     4
    ]
   ],
   "broken": [
    [
-    1,
     0,
+    1,
     1,
     1
-   ],
-   [
-    0,
-    3,
-    0,
-    4
    ]
   ],
   "boxes": [
@@ -2804,8 +2766,8 @@
     "trail": true
    },
    {
-    "x": 3,
-    "y": 1,
+    "x": 2,
+    "y": 2,
     "trail": true,
     "c": 4
    }
@@ -2813,31 +2775,31 @@
   "exit": [
    [
     4,
-    2,
+    3,
     1
    ],
    [
-    0,
-    4,
+    1,
+    3,
     4
    ]
   ],
-  "nums": [
+  "touch": [
    [
-    2,
-    2,
-    3
+    1,
+    0,
+    2
    ]
   ],
-  "solIn": "LLURRDRRDLLDL",
+  "solIn": "RDLRURURRDDDL",
   "solutions": 2,
   "minMoves": 13,
   "luck": 0,
-  "quality": 28.2,
+  "quality": 29.3,
   "belief": "",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_2_7",
@@ -2848,38 +2810,44 @@
   "h": 4,
   "holes": [
    [
-    5,
-    0
+    0,
+    2
    ],
    [
-    4,
-    0
-   ],
-   [
-    4,
+    0,
     1
    ],
    [
-    0,
-    3
+    4,
+    0
    ],
+   [
+    5,
+    0
+   ]
+  ],
+  "broken": [
    [
     1,
-    0
+    1,
+    1,
+    2
    ],
    [
     0,
-    0
+    4,
+    1,
+    4
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 3,
+    "x": 5,
+    "y": 4,
     "trail": true
    },
    {
-    "x": 2,
+    "x": 0,
     "y": 4,
     "trail": true,
     "c": 4
@@ -2887,37 +2855,38 @@
   ],
   "exit": [
    [
-    5,
-    4,
+    2,
+    1,
     1
    ],
    [
-    1,
-    2,
+    3,
+    0,
     4
    ]
   ],
-  "nums": [
+  "lights": [
    [
-    3,
-    2,
-    3
-   ],
-   [
-    2,
-    1,
+    5,
     1
    ]
   ],
-  "solIn": "ULURURDDDRURDD",
+  "touch": [
+   [
+    4,
+    4,
+    2
+   ]
+  ],
+  "solIn": "ULURULLDDRLUUR",
   "solutions": 1,
   "minMoves": 14,
   "luck": 0,
-  "quality": 33.8,
+  "quality": 30.1,
   "belief": "every square answers to me.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_3_1",
@@ -2928,51 +2897,31 @@
   "h": 4,
   "holes": [
    [
-    2,
-    0
-   ],
-   [
-    2,
+    3,
     4
    ],
    [
-    3,
+    1,
     0
+   ],
+   [
+    4,
+    4
    ],
    [
     0,
     4
    ]
   ],
-  "broken": [
-   [
-    2,
-    1,
-    2,
-    2
-   ],
-   [
-    3,
-    2,
-    3,
-    3
-   ],
-   [
-    1,
-    3,
-    1,
-    4
-   ]
-  ],
   "boxes": [
    {
-    "x": 4,
+    "x": 3,
     "y": 1,
     "trail": true
    },
    {
     "x": 1,
-    "y": 2,
+    "y": 4,
     "trail": true,
     "c": 4
    }
@@ -2980,31 +2929,31 @@
   "exit": [
    [
     3,
-    4,
+    2,
     1
    ],
    [
     2,
-    2,
+    0,
     4
    ]
   ],
-  "nums": [
+  "touch": [
    [
     0,
-    1,
-    2
+    0,
+    1
    ]
   ],
-  "solIn": "DDLUURRRDL",
+  "solIn": "RDUULLURRU",
   "solutions": 1,
   "minMoves": 10,
-  "luck": 0,
-  "quality": 28.1,
+  "luck": 0.3,
+  "quality": 25.9,
   "belief": "",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_3_2",
@@ -3015,85 +2964,82 @@
   "h": 4,
   "holes": [
    [
-    0,
-    0
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    0,
-    4
-   ],
-   [
-    0,
-    3
-   ],
-   [
-    0,
+    5,
     2
+   ],
+   [
+    1,
+    4
    ],
    [
     5,
-    2
+    1
+   ],
+   [
+    0,
+    0
    ]
   ],
   "broken": [
    [
+    0,
     1,
-    2,
-    1,
-    3
+    0,
+    2
+   ],
+   [
+    4,
+    3,
+    4,
+    4
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 1,
+    "x": 4,
+    "y": 4,
     "trail": true
    },
    {
-    "x": 1,
-    "y": 2,
+    "x": 0,
+    "y": 1,
     "trail": true,
     "c": 4
    }
   ],
   "exit": [
    [
+    3,
     2,
-    1,
     1
    ],
    [
+    2,
     1,
-    4,
     4
    ]
   ],
-  "nums": [
+  "touch": [
+   [
+    0,
+    4,
+    1
+   ],
    [
     4,
     0,
     1
    ]
   ],
-  "lights": [
-   [
-    2,
-    4
-   ]
-  ],
-  "solIn": "RDDULRRRDLL",
+  "solIn": "RDULDRRUULD",
   "solutions": 1,
   "minMoves": 11,
   "luck": 0,
-  "quality": 26.5,
+  "quality": 30.2,
   "belief": "",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_3_3",
@@ -3104,84 +3050,72 @@
   "h": 4,
   "holes": [
    [
-    4,
+    1,
+    2
+   ],
+   [
+    0,
     0
    ],
    [
-    3,
-    4
-   ],
-   [
-    2,
-    4
+    1,
+    0
    ],
    [
     5,
-    4
+    1
    ],
    [
     0,
-    4
-   ],
-   [
-    0,
-    3
-   ]
-  ],
-  "broken": [
-   [
-    4,
-    2,
-    4,
-    3
+    1
    ]
   ],
   "boxes": [
    {
-    "x": 3,
-    "y": 3,
+    "x": 5,
+    "y": 4,
     "trail": true
    },
    {
-    "x": 5,
-    "y": 1,
+    "x": 2,
+    "y": 2,
     "trail": true,
     "c": 4
    }
   ],
   "exit": [
    [
-    1,
+    4,
     3,
     1
    ],
    [
-    2,
-    0,
+    4,
+    1,
     4
    ]
   ],
-  "nums": [
+  "touch": [
    [
-    2,
+    0,
     2,
     1
    ],
    [
+    4,
     0,
-    1,
-    1
+    2
    ]
   ],
-  "solIn": "RRLULLLLURRD",
-  "solutions": 1,
+  "solIn": "LLLLLUURRRDR",
+  "solutions": 2,
   "minMoves": 12,
   "luck": 0,
-  "quality": 30.6,
+  "quality": 28.1,
   "belief": "some roads only go one way. like me.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_3_4",
@@ -3192,127 +3126,38 @@
   "h": 5,
   "holes": [
    [
+    0,
+    3
+   ],
+   [
     3,
-    0
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    0,
     5
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    1,
+    0
    ]
   ],
   "broken": [
    [
     2,
-    4,
-    3,
-    4
+    2,
+    2,
+    3
    ]
   ],
   "boxes": [
    {
     "x": 5,
-    "y": 2,
+    "y": 1,
     "trail": true
    },
    {
-    "x": 4,
-    "y": 2,
-    "trail": true,
-    "c": 4
-   }
-  ],
-  "exit": [
-   [
-    4,
-    4,
-    1
-   ],
-   [
-    1,
-    2,
-    4
-   ]
-  ],
-  "nums": [
-   [
-    3,
-    1,
-    3
-   ]
-  ],
-  "lights": [
-   [
-    5,
-    5
-   ]
-  ],
-  "solIn": "ULLDDDLUDRRUL",
-  "solutions": 1,
-  "minMoves": 13,
-  "luck": 0,
-  "quality": 32.7,
-  "belief": "i count the moves before i make them.",
-  "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
- },
- {
-  "id": "trix_3_5",
-  "girl": "trix",
-  "layer": 3,
-  "n": 5,
-  "w": 5,
-  "h": 5,
-  "holes": [
-   [
-    0,
-    2
-   ],
-   [
-    5,
-    3
-   ],
-   [
-    5,
-    4
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    4,
-    0
-   ],
-   [
-    3,
-    0
-   ]
-  ],
-  "boxes": [
-   {
-    "x": 0,
-    "y": 4,
-    "trail": true
-   },
-   {
-    "x": 1,
+    "x": 2,
     "y": 5,
     "trail": true,
     "c": 4
@@ -3326,31 +3171,121 @@
    ],
    [
     3,
-    5,
+    1,
     4
    ]
   ],
-  "nums": [
-   [
-    3,
-    1,
-    3
-   ],
+  "touch": [
    [
     1,
-    3,
+    2,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    4,
     3
    ]
   ],
-  "solIn": "UURDRUUURDDDDL",
-  "solutions": 1,
+  "solIn": "LUULRRLDLRULU",
+  "solutions": 2,
+  "minMoves": 13,
+  "luck": 0,
+  "quality": 27.6,
+  "belief": "i count the moves before i make them.",
+  "intro": null,
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: phải có dây nằm trên đó (hoặc hộp dây đứng đó) thì đèn mới sáng; thắng khi mọi đèn đều sáng. Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
+ },
+ {
+  "id": "trix_3_5",
+  "girl": "trix",
+  "layer": 3,
+  "n": 5,
+  "w": 5,
+  "h": 5,
+  "holes": [
+   [
+    4,
+    0
+   ],
+   [
+    5,
+    0
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    0,
+    3,
+    1
+   ],
+   [
+    1,
+    4,
+    2,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 1,
+    "y": 3,
+    "trail": true
+   },
+   {
+    "x": 0,
+    "y": 3,
+    "trail": true,
+    "c": 4
+   }
+  ],
+  "exit": [
+   [
+    3,
+    0,
+    1
+   ],
+   [
+    2,
+    3,
+    4
+   ]
+  ],
+  "touch": [
+   [
+    5,
+    4,
+    1
+   ]
+  ],
+  "solIn": "DDRRRUUULDULUR",
+  "solutions": 2,
   "minMoves": 14,
   "luck": 0,
-  "quality": 32.8,
+  "quality": 25.7,
   "belief": "a perfect game has no wasted moves.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_3_6",
@@ -3361,86 +3296,88 @@
   "h": 4,
   "holes": [
    [
-    2,
+    6,
+    3
+   ],
+   [
+    6,
     4
    ],
    [
-    4,
+    0,
     0
    ],
    [
-    4,
-    1
-   ],
-   [
-    5,
-    1
-   ],
-   [
-    0,
+    1,
     0
    ]
   ],
   "broken": [
    [
-    4,
-    3,
-    5,
-    3
+    0,
+    1,
+    1,
+    1
    ],
    [
-    5,
-    3,
-    5,
-    4
+    2,
+    1,
+    2,
+    2
+   ],
+   [
+    1,
+    2,
+    1,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 0,
+    "x": 3,
+    "y": 3,
     "trail": true
    },
    {
-    "x": 1,
-    "y": 2,
+    "x": 4,
+    "y": 3,
     "trail": true,
     "c": 4
    }
   ],
   "exit": [
    [
-    3,
-    3,
+    5,
+    4,
     1
    ],
    [
-    1,
-    1,
+    4,
+    2,
     4
    ]
   ],
-  "nums": [
-   [
-    4,
-    3,
-    2
-   ],
+  "touch": [
    [
     2,
     0,
     2
+   ],
+   [
+    6,
+    0,
+    1
    ]
   ],
-  "solIn": "LRUDRDRRRDDLLUL",
-  "solutions": 2,
+  "solIn": "LLULDRURRURRDLD",
+  "solutions": 3,
   "minMoves": 15,
   "luck": 0,
-  "quality": 25.7,
+  "quality": 24.5,
   "belief": "perfect is the minimum.",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "trix_3_7",
@@ -3451,74 +3388,62 @@
   "h": 5,
   "holes": [
    [
-    3,
-    0
+    0,
+    5
+   ],
+   [
+    1,
+    5
    ],
    [
     5,
+    0
+   ],
+   [
+    6,
+    0
+   ],
+   [
+    6,
     5
    ],
    [
-    4,
-    5
+    6,
+    4
    ],
    [
-    0,
-    5
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    0,
-    1
-   ],
-   [
-    0,
-    3
+    1,
+    0
    ]
   ],
   "broken": [
    [
-    1,
-    1,
     2,
-    1
-   ],
-   [
     2,
-    1,
-    2,
+    3,
     2
    ],
    [
+    1,
+    4,
     2,
-    3,
-    3,
-    3
-   ],
-   [
-    5,
-    3,
-    5,
     4
    ],
    [
-    2,
     4,
-    3,
+    4,
+    5,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 5,
-    "y": 0,
+    "x": 3,
+    "y": 1,
     "trail": true
    },
    {
-    "x": 5,
+    "x": 1,
     "y": 2,
     "trail": true,
     "c": 4
@@ -3526,37 +3451,37 @@
   ],
   "exit": [
    [
-    6,
+    3,
     3,
     1
    ],
    [
-    4,
+    2,
     4,
     4
    ]
   ],
-  "nums": [
+  "touch": [
    [
-    2,
-    3,
+    6,
+    1,
     2
    ],
    [
-    1,
     3,
-    3
+    5,
+    2
    ]
   ],
-  "solIn": "LLLLDRDRLDRRUURD",
+  "solIn": "DLURURDRDLDDLULU",
   "solutions": 1,
   "minMoves": 16,
   "luck": 0,
-  "quality": 34.2,
+  "quality": 37.3,
   "belief": "",
   "intro": null,
-  "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "feature": "touch",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Khối cảm biến (màn hình có số): không đi vào được; dây phải chạm đúng ngần ấy cạnh của nó, tức là đi qua đúng ngần ấy ô sát bên khối (màn hình hiện x/y, xanh khi đúng, đỏ khi thừa). Chỗ trống trên map không đi được. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng."
  },
  {
   "id": "paige_1_t1",
@@ -3592,7 +3517,7 @@
   "belief": "",
   "intro": "dice",
   "tut": "dice",
-  "why": "Bảng dạy luật mới. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Bảng dạy luật mới. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_1_1",
@@ -3629,7 +3554,7 @@
   "belief": "nobody should be alone in the dark.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_1_2",
@@ -3677,7 +3602,7 @@
   "belief": "two of a kind. that's the safest hand.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_1_3",
@@ -3737,7 +3662,7 @@
   "belief": "if they're going to leave, i leave first.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_1_t4",
@@ -3781,7 +3706,7 @@
   "belief": "",
   "intro": "pads",
   "tut": "pads",
-  "why": "Bảng dạy luật mới. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+  "why": "Bảng dạy luật mới. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
   "id": "paige_1_4",
@@ -3837,7 +3762,7 @@
   "belief": "some doors are already closed.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_1_5",
@@ -3911,7 +3836,7 @@
   "belief": "i keep everyone close. too close.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_1_6",
@@ -4002,7 +3927,7 @@
   "belief": "",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_2_t1",
@@ -4054,7 +3979,7 @@
   "belief": "",
   "intro": "portals",
   "tut": "portals",
-  "why": "Bảng dạy luật mới. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Coi hai cổng như một ô."
+  "why": "Bảng dạy luật mới. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Coi hai cổng như một ô."
  },
  {
   "id": "paige_2_1",
@@ -4114,7 +4039,7 @@
   "belief": "you don't get to see the cards before you bet.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_2_2",
@@ -4199,7 +4124,7 @@
   "belief": "every hand is a gamble.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_2_3",
@@ -4277,7 +4202,7 @@
   "belief": "i always bet on the worst outcome. it pays.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_2_4",
@@ -4365,7 +4290,7 @@
   "belief": "the house always wins. i am the house.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_2_5",
@@ -4457,7 +4382,7 @@
   "belief": "i count the exits in every room.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_2_6",
@@ -4543,7 +4468,7 @@
   "belief": "if i lose everything, at least it was my choice.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_2_7",
@@ -4668,7 +4593,7 @@
   "belief": "",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_3_t1",
@@ -4716,7 +4641,7 @@
   "belief": "",
   "intro": "colors",
   "tut": "colors",
-  "why": "Bảng dạy luật mới. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Bảng dạy luật mới. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  },
  {
   "id": "paige_3_1",
@@ -4776,7 +4701,7 @@
   "belief": "the real cards are hidden. look closer.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_3_2",
@@ -4860,7 +4785,7 @@
   "belief": "nobody sees what i'm holding.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_3_3",
@@ -4961,7 +4886,7 @@
   "belief": "half the deck is lies.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_3_4",
@@ -5066,7 +4991,7 @@
   "belief": "i read the cards so nobody reads me.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_3_5",
@@ -5169,7 +5094,7 @@
   "belief": "i only show my hand to people who stay.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_3_6",
@@ -5308,7 +5233,7 @@
   "belief": "whatever happens, i saw it coming.",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_3_7",
@@ -5460,7 +5385,7 @@
   "belief": "",
   "intro": null,
   "feature": "dice",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Các ô trắng là giấy cần in: khung ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Xúc xắc nháp bên cạnh xoay thử được bằng các nút mũi tên. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "vel_1_t1",

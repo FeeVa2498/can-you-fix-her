@@ -92,7 +92,7 @@ const P3 = (() => {
     const CHX = [0x4fd8ff, 0xffa040], plates3 = [], gates3 = [];
     let symKey = '';
     const numObjs = [];
-    const tiles3 = new Map(), lights3 = [], sw3 = [], dice3 = [];
+    const tiles3 = new Map(), lights3 = [], sw3 = [], dice3 = [], touch3 = [];
     if (isBox) buildBoxBoard(); else buildLineBoard();
 
     function plateMats(top, side) { const s = std(side), t = std(top); return [s, s, t, s, s, s]; }
@@ -130,8 +130,13 @@ const P3 = (() => {
         const glow = new THREE.Mesh(new THREE.CircleGeometry(.42, 20), additive(0xffd86e, 0)); glow.rotation.x = -Math.PI / 2; glow.position.set(x, .016, y);
         world.add(base, edges(bulb, 0xfff1b8, .5), glow); lights3.push({ mat, glow });
       });
+      (p.touch || []).forEach(([x, y, n]) => {   // sensor blocks: a squat console with a screen on top
+        const blk = box(.78, .46, .78, std(0x1a1024, { emissive: 0x0b2a3a, emissiveIntensity: .6 }), x, .23, y); world.add(edges(blk, 0x4fd8ff, .9));
+        const scr = new THREE.Mesh(new THREE.PlaneGeometry(.66, .66), new THREE.MeshBasicMaterial({ transparent: true })); scr.rotation.x = -Math.PI / 2; scr.position.set(x, .465, y); world.add(scr);
+        touch3.push({ scr, n, key: '' });
+      });
       (p.dice || []).forEach(([x, y, v]) => {
-        const m = new THREE.Mesh(new THREE.PlaneGeometry(.8, .8), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false })); m.rotation.x = -Math.PI / 2; m.position.set(x, .015, y); m.renderOrder = 2; world.add(m);
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(.88, .88), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false })); m.rotation.x = -Math.PI / 2; m.position.set(x, .015, y); m.renderOrder = 2; world.add(m);
         dice3.push({ m, x, y, v, key: '' });
       });
       walls(true);
@@ -466,15 +471,23 @@ const P3 = (() => {
       dice3.forEach(t => {
         const got = s.stamp ? s.stamp.get(t.x + ',' + t.y) : undefined, k = got === undefined ? 'w' + t.v : (got === t.v ? 'ok' : 'bad' + got);
         if (k === t.key) return; t.key = k;
-        const v = got === undefined ? t.v : got, fg = got === undefined ? 'rgba(244,233,255,.55)' : got === t.v ? '#7be3a4' : '#ff4d5e', P = { 1: [[.5, .5]], 2: [[.3, .3], [.7, .7]], 3: [[.3, .3], [.5, .5], [.7, .7]], 4: [[.3, .3], [.7, .3], [.3, .7], [.7, .7]], 5: [[.3, .3], [.7, .3], [.5, .5], [.3, .7], [.7, .7]], 6: [[.3, .27], [.7, .27], [.3, .5], [.7, .5], [.3, .73], [.7, .73]] }[v];
+        const v = got || 1, fg = got === t.v ? '#1f8a4c' : '#c0283a', P = { 1: [[.5, .5]], 2: [[.3, .3], [.7, .7]], 3: [[.3, .3], [.5, .5], [.7, .7]], 4: [[.3, .3], [.7, .3], [.3, .7], [.7, .7]], 5: [[.3, .3], [.7, .3], [.5, .5], [.3, .7], [.7, .7]], 6: [[.3, .27], [.7, .27], [.3, .5], [.7, .5], [.3, .73], [.7, .73]] }[v];
         if (t.m.material.map) t.m.material.map.dispose();
         t.m.material.map = canvasTex(128, 128, (g, w, h) => {
-          g.strokeStyle = fg; g.lineWidth = 6; g.setLineDash(got === undefined ? [10, 8] : []); g.strokeRect(10, 10, w - 20, h - 20);
-          g.fillStyle = fg; P.forEach(([a, b2]) => { g.beginPath(); g.arc(a * w, b2 * h, 11, 0, 7); g.fill(); });
+          // a white canvas tile: blank until the die prints on it (green pips = what the brief wants, red = wrong)
+          g.fillStyle = '#f8f4ff'; g.fillRect(4, 4, w - 8, h - 8);
+          if (got !== undefined) { g.strokeStyle = got === t.v ? '#7be3a4' : '#ff4d5e'; g.lineWidth = 8; g.strokeRect(6, 6, w - 12, h - 12); g.fillStyle = fg; P.forEach(([a, b2]) => { g.beginPath(); g.arc(a * w, b2 * h, 11, 0, 7); g.fill(); }); }
         });
         t.m.material.needsUpdate = true;
       });
       const N = E.boxNeed(p, s), dark = new Set(N.lights);
+      { const tn = new Map(N.touch.map(q => [q.i, q.c]));
+        touch3.forEach((t, i) => {
+          const c = tn.has(i) ? tn.get(i) : t.n, col = c === t.n ? '#7be3a4' : c > t.n ? '#ff4d5e' : '#c8f2ff', k = c + '/' + t.n + col; if (k === t.key) return; t.key = k;
+          if (t.scr.material.map) t.scr.material.map.dispose();
+          t.scr.material.map = canvasTex(128, 128, (g, w, h) => { g.fillStyle = '#0b2a3a'; g.fillRect(0, 0, w, h); g.strokeStyle = col; g.lineWidth = 6; g.strokeRect(6, 6, w - 12, h - 12); g.fillStyle = col; g.font = 'bold 54px "Courier New", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(c + '/' + t.n, w / 2, h / 2 + 4); });
+          t.scr.material.needsUpdate = true;
+        }); }
       lights3.forEach((l, i) => { const on = !dark.has(i); l.mat.emissiveIntensity = on ? 1.2 : 0; l.mat.color.setHex(on ? 0xfff1b8 : 0x6a5a3a); l.glow.material.opacity = on ? .45 : 0; });
       refreshNums(s.rope.size ? s.rope : null, {});
       tiles3.forEach((t, k) => { const gone = s.crk.has(k); if (gone && !t.userData.gone) { t.userData.gone = performance.now(); fallers.push(t); } if (!gone && t.userData.gone) { t.userData.gone = 0; t.visible = true; t.position.y = -.35; } });

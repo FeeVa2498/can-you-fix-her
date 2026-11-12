@@ -93,10 +93,16 @@ function boxBoardSVG(p, o = {}) {
     const c = need.has(i) ? need.get(i) : n;
     out.push(`<g class="pbx-num${live ? (c === n ? ' ok' : c > n ? ' bad' : '') : ''}"><rect x="${x + .5 - .2}" y="${y + .5 - .15}" width=".4" height=".3" rx=".07"/><text x="${x + .5}" y="${y + .51}">${live ? c + '/' + n : n}</text></g>`);
   });
-  // dice targets: the pips wanted (dashed), or the pips printed there (green right / red wrong)
+  // dice: white canvas tiles. The wanted numbers are only on the brief beside the board; here you see what got printed
   (p.dice || []).forEach(([x, y, v]) => {
     const got = s.stamp ? s.stamp.get(x + ',' + y) : undefined;
-    out.push(`<g class="pbx-dt${got === undefined ? '' : got === v ? ' ok' : ' bad'}"><rect x="${x - .36}" y="${y - .36}" width=".72" height=".72" rx=".08"/>${pipsSVG(x, y, got === undefined ? v : got, .3)}</g>`);
+    out.push(`<g class="pbx-dt${got === undefined ? '' : got === v ? ' ok' : ' bad'}"><rect x="${x - .42}" y="${y - .42}" width=".84" height=".84" rx=".1"/>${got === undefined ? '' : pipsSVG(x, y, got, .3)}</g>`);
+  });
+  // sensor blocks: nothing enters them; their screen counts the rope pieces touching their sides
+  const tneed = new Map(N.touch.map(q => [q.i, q.c]));
+  (p.touch || []).forEach(([x, y, n], i) => {
+    const c = tneed.has(i) ? tneed.get(i) : n, cls = c === n ? ' ok' : c > n ? ' bad' : '';
+    out.push(`<g class="pbx-touch${cls}"><rect class="blk" x="${x - .4}" y="${y - .4}" width=".8" height=".8" rx=".08"/><rect class="scr" x="${x - .3}" y="${y - .22}" width=".6" height=".4" rx=".05"/><path class="ticks" d="M${x} ${y - .46}v.08M${x} ${y + .38}v.08M${x - .46} ${y}h.08M${x + .38} ${y}h.08"/><text x="${x}" y="${y - .015}">${c}/${n}</text></g>`);
   });
   if (!o.noBoxes) out.push(boxesSVG(p, s, { mini: o.mini }));
   return out.join('');
@@ -204,6 +210,36 @@ function pjMovesText() {
   const p = PJ.p, n = p.boxes ? (PJ.bs ? PJ.bs.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0);
   return p.moves ? `moves ${n}/${p.moves}` : `moves ${n}`;
 }
+/* Dice panels: the brief (which number each white tile must show) and a practice die you can turn by hand.
+   The practice die follows the real one after every move; its arrows only turn the copy. */
+function pjSideHTML(p) {
+  if (!(p.dice || []).length) return '';
+  return `<div class="pj-side"><div class="ps-h">ĐỀ BÀI</div><svg class="ps-map" id="ps-map" viewBox="${vb(p)}"></svg>
+    <div class="ps-h">XÚC XẮC NHÁP</div><div class="ps-die"><div class="ps-cube" id="ps-cube"></div><div class="ps-under" id="ps-under"></div></div>
+    <div class="ps-ctrl"><button data-r="U" title="lăn lên">▲</button><button data-r="L" title="lăn trái">◀</button><button data-r="R" title="lăn phải">▶</button><button data-r="D" title="lăn xuống">▼</button><button data-r="S" title="khớp với xúc xắc thật">⟲</button></div>
+    <div class="ps-tip">Mặt <b>▼</b> (úp xuống) là số được in.</div></div>`;
+}
+function pjSideBind() {
+  const box = document.querySelector('.pj-side'); if (!box) return;
+  box.querySelectorAll('[data-r]').forEach(b => b.onclick = e => { e.stopPropagation(); SFX.click();
+    if (b.dataset.r === 'S') PJ.practice = null; else { const d = PanelEngine.DK[b.dataset.r]; PJ.practice = PanelEngine.roll(pjPracticeDie(), d[0], d[1]); }
+    pjSide(true); });
+}
+const pjRealDie = () => { const i = PJ.p.boxes.findIndex(b => b.die); return i >= 0 && PJ.bs ? PJ.bs.dice[i] : [1, 2, 3]; };
+const pjPracticeDie = () => PJ.practice || pjRealDie();
+function pjSide(turned) {
+  const p = PJ.p, map = $('#ps-map'); if (!map) return;
+  const E = PanelEngine, d = E.dims(p), s = PJ.bs, out = [];
+  for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) if (E.inside(p, x, y)) out.push(`<rect class="t" x="${x - .45}" y="${y - .45}" width=".9" height=".9" rx=".12"/>`);
+  (p.dice || []).forEach(([x, y, v]) => { const got = s && s.stamp.get(x + ',' + y); out.push(`<g class="w${got === v ? ' ok' : ''}"><rect x="${x - .42}" y="${y - .42}" width=".84" height=".84" rx=".1"/>${pipsSVG(x, y, v, .32)}</g>`); });
+  (p.exit || []).forEach(([x, y]) => out.push(`<rect class="g" x="${x - .36}" y="${y - .36}" width=".72" height=".72" rx=".1"/>`));
+  map.innerHTML = out.join('');
+  const [t, so, e] = pjPracticeDie(), face = (cls, v) => `<div class="f ${cls}">${(PIPS[v] || []).map(([a, b]) => `<i style="left:${50 + a * 28}%;top:${50 + b * 28}%"></i>`).join('')}<b>${v}</b></div>`;
+  const cube = $('#ps-cube'); if (!cube) return;
+  cube.innerHTML = face('top', t) + face('front', so) + face('right', e);
+  const un = $('#ps-under'); if (un) un.textContent = '▼ ' + (7 - t);
+  if (turned) { cube.classList.remove('bump'); void cube.offsetWidth; cube.classList.add('bump'); }
+}
 function pjChrome() {
   const mv = $('#pj-moves'); if (mv) { mv.textContent = pjMovesText(); mv.classList.toggle('bad', PJ.state === 'fail' && PJ.bad.some(b => b.kind === 'moves')); }
   const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
@@ -213,6 +249,7 @@ function pjChrome() {
 function drawPJ() {
   if (!PJ) return; const p = PJ.p;
   pjChrome();
+  if ((p.dice || []).length) { if (!PJ.practiceAt || PJ.practiceAt !== (PJ.bs && PJ.bs.inputs)) { PJ.practice = null; PJ.practiceAt = PJ.bs && PJ.bs.inputs; } pjSide(); }
   if (PJ.view) { if (PJ.solOn) drawSol3D(); else draw3D(); return; }
   const svg = $('#pj-svg'); if (!svg) return;
   if (PJ.solOn) { drawSol(svg); return; }
