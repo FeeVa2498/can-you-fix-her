@@ -207,17 +207,12 @@ function checkBox(p, spec) {
   const maxL = capLen(spec);
   let r = E.boxSolve(p, maxL, 8, 200000);
   if (!r.wins.length || r.capped) return null;
-  // countdowns: each box gets exactly the moves it makes in a shortest answer
-  if (spec.boxes.some(b => b.n)) {
-    if (!p.boxes.some(b => b.n != null)) {
-      const st = boxStats(p, r.wins[0]);
-      let bad = false;
-      spec.boxes.forEach((b, i) => { if (b.n) { if (!st.movesBy[i]) bad = true; p.boxes[i].n = st.movesBy[i]; } });
-      if (bad) return null;
-      const r0 = r; r = E.boxSolve(p, maxL, 8, 200000);
-      if (!r.wins.length || r.capped) return null;
-      if (!spec.noBind && !(r0.wins.length > r.wins.length || randomPlay({ ...p, boxes: p.boxes.map(b => ({ ...b, n: undefined })) }, r.wins[0].length * 2, 400) > 2 * randomPlay(p, r.wins[0].length * 2, 400))) return null;
-    }
+  // bombs: the countdown is the shortest answer plus a little slack early on (tutorials 2, layer 1: 2, layer 2: 1, layer 3: 0)
+  if (spec.boxes.some(b => b.n) && !p.boxes.some(b => b.n != null)) {
+    const slack = spec.slack ?? (spec.tut ? 2 : { 1: 2, 2: 1, 3: 0 }[spec.layer]);
+    spec.boxes.forEach((b, i) => { if (b.n) p.boxes[i].n = r.wins[0].length + slack; });
+    r = E.boxSolve(p, maxL, 8, 200000);
+    if (!r.wins.length || r.capped) return null;
   }
   const best = r.wins[0], L = best.length;
   if (L < (spec.minLen || 4)) return null;
@@ -456,7 +451,7 @@ const BRULE = {
   oneway: 'Mũi tên trên khe: chỉ đi qua được theo chiều đó.',
   holes: 'Chỗ trống trên map không đi được.',
   dash: 'Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng.',
-  budget: 'Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại).',
+  budget: 'Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ.',
   mx: 'Hộp có vạch dọc: trái/phải bị đảo.', my: 'Hộp có vạch ngang: lên/xuống bị đảo.',
   opp: 'Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống.',
   many: 'Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng.',
@@ -465,7 +460,7 @@ const BRULE = {
 };
 const BTIP = {
   pads: 'Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?', stops: 'Ô phanh là chỗ duy nhất giữa đường mà hộp đang trượt chịu dừng.',
-  dash: 'Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi.', budget: 'Đếm trước: mỗi nước phí là mất một số. Hộp về 0 thì phải dựa sẵn vào tường cho những phím sau.',
+  dash: 'Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi.', budget: 'Bom đếm từng lần ấn phím, kể cả phím chỉ làm hộp khác đi: không có nước nào để phí.',
   mx: 'Dùng tường để làm hai hộp lệch nhau.', many: 'Hộp đứng yên cũng là một bức tường cho hộp khác.',
   nolock: 'Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ.', helpers: 'Đặt hộp thừa trước, rồi mới phóng hộp chính.',
   trail: 'Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',

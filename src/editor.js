@@ -417,7 +417,7 @@ function edProps() {
       <label><input type="checkbox" id="eb-rope" ${sb.trail ? 'checked' : ''}> Rope box</label>
       <label><input type="checkbox" id="eb-dash" ${sb.dash ? 'checked' : ''}> Rocket box</label>
       <label><input type="checkbox" id="eb-twin" ${sb.m === 'opp' ? 'checked' : ''}> Reverse twin</label>
-      <label>Countdown <input id="eb-n" type="number" min="0" max="30" placeholder="none" value="${sb.n ?? ''}"></label>
+      <label>Bomb (presses) <input id="eb-n" type="number" min="0" max="30" placeholder="none" value="${sb.n ?? ''}"></label>
       <button class="btn" id="eb-del" ${p.boxes.length < 2 ? 'disabled' : ''}>Remove box</button></fieldset>` : box ? '<div class="ed-hint">Box tool: click a box to edit it.</div>' : ''}
     <label class="col">Belief (story) <textarea id="ep-belief" rows="2">${esc(p.belief || '')}</textarea></label>
     <label class="col">Key idea (Solution mode) <textarea id="ep-why" rows="3">${esc(p.why || '')}</textarea></label>

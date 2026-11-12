@@ -297,11 +297,11 @@ const P3 = (() => {
       // the move budget floats above the box as a badge that always faces you
       if (num == null) { if (cu.badge) cu.badge.visible = false; return; }
       if (!cu.badge) { cu.badge = new THREE.Sprite(new THREE.SpriteMaterial({ depthTest: false, transparent: true })); cu.badge.scale.set(.5, .5, 1); cu.badge.renderOrder = 5; cu.g.add(cu.badge); }
-      cu.badge.position.set(0, cu.size + .38, 0); cu.badge.visible = true;
+      cu.badge.position.set(0, cu.size + (cu.bomb ? .78 : .38), 0); cu.badge.visible = true;
       if (cu.badge.material.map) cu.badge.material.map.dispose();
       cu.badge.material.map = canvasTex(64, 64, (g, w, h) => {
-        g.fillStyle = num ? '#fff8fc' : '#ff4d7a'; g.strokeStyle = '#1a1024'; g.lineWidth = 5; g.beginPath(); g.roundRect ? g.roundRect(4, 4, w - 8, h - 8, 12) : g.rect(4, 4, w - 8, h - 8); g.fill(); g.stroke();
-        g.fillStyle = num ? '#1a1024' : '#fff'; g.font = 'bold 44px "Courier New", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(num), w / 2, h / 2 + 3);
+        g.fillStyle = num > 1 ? '#fff8fc' : '#ff4d7a'; g.strokeStyle = '#1a1024'; g.lineWidth = 5; g.beginPath(); g.roundRect ? g.roundRect(4, 4, w - 8, h - 8, 12) : g.rect(4, 4, w - 8, h - 8); g.fill(); g.stroke();
+        g.fillStyle = num > 1 ? '#1a1024' : '#fff'; g.font = 'bold 44px "Courier New", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(num), w / 2, h / 2 + 3);
       });
       cu.badge.material.map.magFilter = THREE.NearestFilter; cu.badge.material.needsUpdate = true;
     }
@@ -399,6 +399,14 @@ const P3 = (() => {
     if (isBox) {
       p.boxes.forEach((b, i) => {
         const cu = makeCube(.78, HUEX[b.c || 0]); cu.b = b; cu.col = b.c || 0; if (b.dash) addRocket(cu); dyn.add(cu.g); Bx.cubes.push(cu);
+        if (b.n != null) {   // bomb boxes carry a bomb on top: black ball, fuse, flickering spark
+          const bomb = new THREE.Group(); bomb.position.y = cu.size + .2;
+          const ball = new THREE.Mesh(new THREE.SphereGeometry(.2, 12, 10), std(0x1a1024, { roughness: .35, metalness: .3 })); bomb.add(edges(ball, 0x6a4a9a, .5));
+          const cap = new THREE.Mesh(new THREE.CylinderGeometry(.07, .07, .07, 8), std(0x9a8ab8)); cap.position.y = .2; bomb.add(cap);
+          const fuse = new THREE.Mesh(new THREE.CylinderGeometry(.018, .018, .16, 5), std(0xd8c49a)); fuse.position.set(.04, .28, 0); fuse.rotation.z = -.5; bomb.add(fuse);
+          const spark = new THREE.Mesh(new THREE.SphereGeometry(.06, 8, 6), additive(0xffa040, .95)); spark.position.set(.09, .35, 0); bomb.add(spark);
+          anim.flames.push(spark); spark.visible = true; cu.g.add(bomb); cu.bomb = bomb;
+        }
         if (b.trail) {   // rope boxes wear a coil of their rope round the middle
           cu.coil = std(ROPEX(cu.col), { emissive: ROPEX(cu.col), emissiveIntensity: .4 });
           [-.12, .02, .16].forEach(yy => { const r = box(.82, .07, .82, cu.coil, 0, yy, 0); cu.body.add(r); });
@@ -409,9 +417,9 @@ const P3 = (() => {
     const ropeMatB = [0, 1, 2, 3].map(c => std(ROPEX(c), { emissive: ROPEX(c), emissiveIntensity: .3 }));
     const booms = [];
     // a countdown ran out: the box bursts into glowing bits
-    function boom(i) {
+    function boom(i, q) {
       const cu = Bx.cubes[i]; cu.g.visible = false; if (REDUCED) return;
-      const at = cu.g.position.clone(), bits = [];
+      const at = new THREE.Vector3(q[0], 0, q[1]), bits = [];
       for (let k = 0; k < 26; k++) { const m = box(.12, .12, .12, basic(k % 3 ? HUEX[cu.col] : 0xffa040), at.x, .4, at.z); dyn.add(m); bits.push({ m, v: new THREE.Vector3((Math.random() - .5) * 5, 2 + Math.random() * 4, (Math.random() - .5) * 5) }); }
       const flash = new THREE.Mesh(new THREE.SphereGeometry(.5, 12, 8), additive(0xffd86e, .9)); flash.position.set(at.x, .4, at.z); dyn.add(flash);
       booms.push({ bits, flash, t0: performance.now(), i });
@@ -443,7 +451,7 @@ const P3 = (() => {
         if (cu.col !== col) { cu.col = col; cu.mat.color.setHex(HUEX[col]); cu.mat.emissive.setHex(HUEX[col]); if (cu.coil) { cu.coil.color.setHex(ROPEX(col)); cu.coil.emissive.setHex(ROPEX(col)); } }
         setDecal(cu, cu.b.m && cu.b.m !== 'same' ? cu.b.m : '', left);
         cu.mat.emissiveIntensity = o.cls === 'win' ? .7 : onG ? .35 : .08;
-        if (s.dead === i) { if (cu.g.visible && !(prev && prev.dead === i)) boom(i); cu.g.visible = false; } else cu.g.visible = true;
+        if (s.dead === i) { if (cu.g.visible && !(prev && prev.dead === i)) boom(i, s.pos[i]); cu.g.visible = false; } else cu.g.visible = true;
       });
       const occupied = new Set(s.pos.map(q => q.join(',')));
       anim.pulse.forEach(pu => { if (pu.at) pu.on = occupied.has(pu.at); });

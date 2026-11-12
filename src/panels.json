@@ -4357,7 +4357,7 @@
     "x": 1,
     "y": 0,
     "trail": true,
-    "n": 3
+    "n": 5
    }
   ],
   "exit": [
@@ -4373,7 +4373,7 @@
   "belief": "",
   "intro": "budget",
   "tut": "budget",
-  "why": "Bảng dạy luật mới. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Mẹo: Đếm trước: mỗi nước phí là mất một số. Hộp về 0 thì phải dựa sẵn vào tường cho những phím sau."
+  "why": "Bảng dạy luật mới. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Mẹo: Bom đếm từng lần ấn phím, kể cả phím chỉ làm hộp khác đi: không có nước nào để phí."
  },
  {
   "id": "trix_3_8",
@@ -4435,7 +4435,7 @@
   "belief": "i know exactly how many moves i have. always.",
   "intro": null,
   "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Mẹo: Đếm trước: mỗi nước phí là mất một số. Hộp về 0 thì phải dựa sẵn vào tường cho những phím sau."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Mẹo: Bom đếm từng lần ấn phím, kể cả phím chỉ làm hộp khác đi: không có nước nào để phí."
  },
  {
   "id": "trix_3_9",
@@ -4487,7 +4487,7 @@
     "x": 0,
     "y": 1,
     "trail": true,
-    "n": 14
+    "n": 17
    },
    {
     "x": 2,
@@ -4524,7 +4524,7 @@
   "belief": "one wrong count and it all goes up in smoke.",
   "intro": null,
   "feature": "nums",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó. Số giữa bốn ô: dây phải đi đúng ngần ấy cạnh của ô vuông đó (số x/y cho biết đã có bao nhiêu). Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Ô \"1\" và ô \"3\" cho nhiều thông tin nhất: bắt đầu từ chúng."
  },
  {
   "id": "paige_1_t1",
@@ -8276,7 +8276,7 @@
    {
     "x": 0,
     "y": 1,
-    "n": 2
+    "n": 4
    }
   ],
   "exit": [
@@ -8292,7 +8292,7 @@
   "belief": "",
   "intro": "budget",
   "tut": "budget",
-  "why": "Bảng dạy luật mới. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mẹo: Đếm trước: mỗi nước phí là mất một số. Hộp về 0 thì phải dựa sẵn vào tường cho những phím sau."
+  "why": "Bảng dạy luật mới. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Mẹo: Bom đếm từng lần ấn phím, kể cả phím chỉ làm hộp khác đi: không có nước nào để phí."
  },
  {
   "id": "vel_3_1",
@@ -8367,7 +8367,7 @@
   "quality": 17.4,
   "belief": "map the ground before you walk it.",
   "intro": "budget",
-  "why": "Bảng dạy luật mới. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Mẹo: Đếm trước: mỗi nước phí là mất một số. Hộp về 0 thì phải dựa sẵn vào tường cho những phím sau."
+  "why": "Bảng dạy luật mới. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Mẹo: Bom đếm từng lần ấn phím, kể cả phím chỉ làm hộp khác đi: không có nước nào để phí."
  },
  {
   "id": "vel_3_2",
@@ -8441,7 +8441,7 @@
   "quality": 16.6,
   "belief": "you don't step where you haven't checked. ever.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Mẹo: Đếm trước: mỗi nước phí là mất một số. Hộp về 0 thì phải dựa sẵn vào tường cho những phím sau."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Mẹo: Bom đếm từng lần ấn phím, kể cả phím chỉ làm hộp khác đi: không có nước nào để phí."
  },
  {
   "id": "vel_3_3",
@@ -8504,12 +8504,12 @@
    {
     "x": 0,
     "y": 1,
-    "n": 7
+    "n": 9
    },
    {
     "x": 0,
     "y": 4,
-    "n": 6
+    "n": 9
    }
   ],
   "exit": [
@@ -8529,7 +8529,7 @@
   "quality": 27.9,
   "belief": "a story is a minefield. i know where i buried everything.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "vel_3_4",
@@ -8587,12 +8587,12 @@
     "x": 0,
     "y": 4,
     "dash": true,
-    "n": 3
+    "n": 11
    },
    {
     "x": 5,
     "y": 2,
-    "n": 10
+    "n": 11
    }
   ],
   "exit": [
@@ -8626,7 +8626,7 @@
   "quality": 26.4,
   "belief": "swings and landmines. same drill.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "vel_3_5",
@@ -8683,7 +8683,7 @@
    {
     "x": 3,
     "y": 4,
-    "n": 10
+    "n": 13
    },
    {
     "x": 2,
@@ -8721,15 +8721,15 @@
     1
    ]
   ],
-  "solIn": "LLLRRUURRRDLL",
-  "solutions": 1,
+  "solIn": "RUUUURDLDRDLL",
+  "solutions": 4,
   "minMoves": 13,
   "luck": 0,
   "quality": 36.6,
   "belief": "i plan for the worst so nobody sees me fall.",
   "intro": null,
   "feature": "helpers",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đặt hộp thừa trước, rồi mới phóng hộp chính."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đặt hộp thừa trước, rồi mới phóng hộp chính."
  },
  {
   "id": "vel_3_6",
@@ -8775,13 +8775,13 @@
     "x": 2,
     "y": 4,
     "dash": true,
-    "n": 8
+    "n": 10
    },
    {
     "x": 3,
     "y": 3,
     "dash": true,
-    "n": 5
+    "n": 10
    }
   ],
   "exit": [
@@ -8823,7 +8823,7 @@
   "quality": 25.3,
   "belief": "if i'm in control, nothing explodes.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "vel_3_t7",
@@ -8966,13 +8966,13 @@
    {
     "x": 5,
     "y": 4,
-    "n": 5
+    "n": 13
    },
    {
     "x": 2,
     "y": 4,
     "dash": true,
-    "n": 8
+    "n": 13
    },
    {
     "x": 0,
@@ -9013,15 +9013,15 @@
     2
    ]
   ],
-  "solIn": "RRURRURLRULDRLLU",
-  "solutions": 2,
-  "minMoves": 16,
+  "solIn": "ULUUURURRDDUD",
+  "solutions": 1,
+  "minMoves": 13,
   "luck": 0,
   "quality": 34.3,
   "belief": "as long as the map is mine, nobody gets left behind.",
   "intro": null,
   "feature": "dbl",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Đếm số lần đi vào ô chốt đôi: lần lẻ mở màu đầu, lần chẵn mở màu sau."
  },
  {
   "id": "vel_3_8",
@@ -9067,7 +9067,7 @@
     "x": 1,
     "y": 0,
     "c": 1,
-    "n": 6
+    "n": 11
    },
    {
     "x": 5,
@@ -9104,15 +9104,15 @@
     1
    ]
   ],
-  "solIn": "RUDLLLULRUDL",
-  "solutions": 2,
-  "minMoves": 12,
+  "solIn": "LDDRRUUUDLL",
+  "solutions": 1,
+  "minMoves": 11,
   "luck": 0,
   "quality": 26,
   "belief": "three plans. three colours. zero surprises.",
   "intro": null,
   "feature": "colors",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp màu phải vào goal cùng màu; goal không màu nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp màu phải vào goal cùng màu; goal không màu nhận hộp nào cũng được. Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
  },
  {
   "id": "myne_1_t1",
@@ -9706,13 +9706,13 @@
    {
     "x": 0,
     "y": 2,
-    "n": 4
+    "n": 9
    },
    {
     "x": 0,
     "y": 1,
     "m": "opp",
-    "n": 4
+    "n": 9
    }
   ],
   "exit": [
@@ -9726,13 +9726,13 @@
    ]
   ],
   "solIn": "LLURDRRR",
-  "solutions": 1,
+  "solutions": 3,
   "minMoves": 8,
   "luck": 0.1,
   "quality": 19.5,
   "belief": "can't. sit. still.",
   "intro": "budget",
-  "why": "Bảng dạy luật mới. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Đếm trước: mỗi nước phí là mất một số. Hộp về 0 thì phải dựa sẵn vào tường cho những phím sau."
+  "why": "Bảng dạy luật mới. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Bom đếm từng lần ấn phím, kể cả phím chỉ làm hộp khác đi: không có nước nào để phí."
  },
  {
   "id": "myne_2_2",
@@ -10216,13 +10216,13 @@
    {
     "x": 4,
     "y": 4,
-    "n": 8
+    "n": 13
    },
    {
     "x": 3,
     "y": 4,
     "m": "opp",
-    "n": 6
+    "n": 13
    }
   ],
   "exit": [
@@ -10260,14 +10260,14 @@
    ]
   ],
   "solIn": "DDDDURLLULLD",
-  "solutions": 1,
+  "solutions": 2,
   "minMoves": 12,
   "luck": 0,
   "quality": 36.3,
   "belief": "finish everything. right now. all of it.",
   "intro": null,
   "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Đếm trước: mỗi nước phí là mất một số. Hộp về 0 thì phải dựa sẵn vào tường cho những phím sau."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Bom đếm từng lần ấn phím, kể cả phím chỉ làm hộp khác đi: không có nước nào để phí."
  },
  {
   "id": "myne_2_7",
@@ -11040,7 +11040,7 @@
    {
     "x": 2,
     "y": 2,
-    "n": 10
+    "n": 11
    },
    {
     "x": 1,
@@ -11104,7 +11104,7 @@
   "belief": "as long as the game is running, i get to keep playing.",
   "intro": null,
   "feature": "many",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Số trên hộp = số nước nó còn được đi. Hộp ở 0 mà vẫn bị bắt đi là nổ tung, thua bàn (Z để lùi lại). Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Ô chốt đôi: mỗi lần có hộp đi vào, nó mở cửa màu đang hiện, đóng cửa màu kia, rồi đổi sang màu kia. Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng. Hộp ôm bom: số trên bom giảm 1 sau mỗi lần ấn phím; về 0 là bom nổ, thua bàn (Z để lùi lại). Phải thắng trước khi bom nổ. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Có nhiều hộp hơn goal: hộp thừa là vật chắn, dùng nó để dừng hộp khác đúng chỗ. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "myne_3_t8",

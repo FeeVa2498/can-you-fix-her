@@ -242,7 +242,8 @@ const PanelEngine = (() => {
      p.boxes [{x,y, m, dash, n, trail, c}]
        m      'opp': reverse twin, every key backwards (left↔right, up↔down). ('mx'/'my' still read: one axis)
        dash   rocket box: one press = slide until a wall, a box, a rope or a closed door stops it
-       n      countdown: moves this box may still make. A box at 0 that has to move explodes: the level fails
+       n      bomb countdown: every key press that moves anything takes one off; at 0 the bomb explodes and the
+              level fails (unless that very press won it)
        trail  rope box: leaves a rope behind; ropes block every box (its own too)
        c      colour 1..3 (0/none = plain)
      p.exit     goals [[x,y,c?]]: a goal with a colour wants a box of that colour; a plain goal takes any box
@@ -309,8 +310,6 @@ const PanelEngine = (() => {
           if (!ok[j] || (want[j][0] === s.pos[i][0] && want[j][1] === s.pos[i][1])) { ok[i] = false; changed = true; }
         }
       }
-      // countdown: a box with nothing left that has to move blows up
-      for (let i = 0; i < n; i++) if (ok[i] && !moved[i] && s.left[i] === 0) { s.dead = i; return { state: s, moved, dead: i }; }
       const left = [];
       for (let i = 0; i < n; i++) {
         if (!ok[i]) { act[i] = false; continue; }
@@ -337,8 +336,13 @@ const PanelEngine = (() => {
       // cracked tiles fall once nobody stands on them
       if (X.crack.size) for (const k of left) if (X.crack.has(k) && !s.pos.some(q => key(...q) === k)) s.crk.add(k);
     }
-    for (let i = 0; i < n; i++) if (moved[i] && s.left[i] !== null) s.left[i]--;
-    return { state: s, moved, dead: -1 };
+    // bombs: every key press that does something burns one second off every bomb; at 0 it goes off unless that press won the panel
+    if (moved.some(Boolean)) {
+      for (let i = 0; i < n; i++) if (s.left[i] !== null) s.left[i]--;
+      const z = s.left.findIndex(l => l === 0);
+      if (z >= 0) { const N = boxNeed(p, s); if (N.goals.length || N.lights.length || N.nums.length) s.dead = z; }
+    }
+    return { state: s, moved, dead: s.dead };
   }
   // what's still missing: { goals: [i…], lights: [i…], nums: [{i,c}…] }
   function boxNeed(p, s) {

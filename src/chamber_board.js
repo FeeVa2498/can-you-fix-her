@@ -106,13 +106,13 @@ function boxesSVG(p, s, o = {}) {
     const [x, y] = at[i], col = s.col ? s.col[i] : (b.c || 0), c = HUE[col], left = s.left ? s.left[i] : b.n;
     if (s.dead === i) { out.push(`<g class="pbx-boom"><path d="M${x} ${y - .46}L${x + .12} ${y - .14}L${x + .44} ${y - .2}L${x + .2} ${y + .04}L${x + .36} ${y + .36}L${x + .04} ${y + .2}L${x - .2} ${y + .44}L${x - .16} ${y + .12}L${x - .46} ${y}L${x - .16} ${y - .12}z"/></g>`); return; }
     const onG = (p.exit || []).some(g => g[0] === s.pos[i][0] && g[1] === s.pos[i][1] && (!g[2] || g[2] === col));
-    let g = `<g class="pbx-box${left === 0 ? ' zero' : ''}${onG ? ' on' : ''}${o.cls ? ' ' + o.cls : ''}"><rect x="${x - .32}" y="${y - .32}" width=".64" height=".64" rx=".13" fill="${c}"/>`;
+    let g = `<g class="pbx-box${onG ? ' on' : ''}${o.cls ? ' ' + o.cls : ''}"><rect x="${x - .32}" y="${y - .32}" width=".64" height=".64" rx=".13" fill="${c}"/>`;
     if (b.dash) g += `<path class="dash" d="M${x - .2} ${y - .14}h.16M${x - .24} ${y}h.2M${x - .2} ${y + .14}h.16"/>`;
     if (b.m === 'mx') g += `<path class="mark" d="M${x} ${y - .3}V${y + .3}"/>`;
     if (b.m === 'my') g += `<path class="mark" d="M${x - .3} ${y}H${x + .3}"/>`;
     if (b.m === 'opp') g += `<path class="mark" d="M${x - .26} ${y - .26}L${x + .26} ${y + .26}M${x + .26} ${y - .26}L${x - .26} ${y + .26}"/>`;
     if (b.trail) g += `<path class="coil" d="M${x - .32} ${y - .08}h.64M${x - .32} ${y + .04}h.64M${x - .32} ${y + .16}h.64" style="stroke:${ropeHue(col)}"/>`;
-    if (left != null && !o.mini) g += `<g class="cd"><rect x="${x - .17}" y="${y - .64}" width=".34" height=".28" rx=".06"/><text x="${x}" y="${y - .495}">${left}</text></g>`;
+    if (left != null && !o.mini) g += `<g class="bomb${left <= 1 ? ' hot' : ''}"><path class="fuse" d="M${x + .1} ${y - .52}q.06-.1 .14-.08"/><circle class="spark" cx="${x + .25}" cy="${y - .6}" r=".05"/><circle class="ball" cx="${x}" cy="${y - .42}" r=".17"/><text x="${x}" y="${y - .415}">${left}</text></g>`;
     out.push(g + '</g>');
   });
   return out.join('');
@@ -243,7 +243,7 @@ function pjMove(d) {
     if (r.dead >= 0) {   // a countdown ran out: the box blows up and the level is lost (Z brings it back)
       PJ.bsHist.push(PJ.bs); PJ.bs = r.state; PJ.animAt = null; PJ.state = 'fail'; PJ.bad = [{ kind: 'boom', i: r.dead }];
       SFX.glitch(.45); SFX.buzz(); if (PJ.view) pj3Flash('✹ BOOM ✹', 'fail');
-      $('#pj-msg').textContent = 'Hộp hết nước mà vẫn phải đi: nổ tung! Ấn Z để lùi hoặc R để chơi lại.';
+      $('#pj-msg').textContent = 'Bom nổ! Ấn Z để lùi hoặc R để chơi lại.';
       return true;
     }
     if (!r.moved.some(Boolean)) { SFX.tick(); return false; }

@@ -877,10 +877,12 @@ rect.pb-head{stroke:#fff;stroke-width:.03}
 .pbx-rope{fill:none;stroke-width:.1;stroke-linecap:round;stroke-linejoin:round;opacity:.85;stroke-dasharray:.16 .05}
 .pbx-box rect{stroke:#fff;stroke-width:.04;filter:drop-shadow(0 .04px 0 #1a1024)}
 .pbx-box.on rect{filter:drop-shadow(0 0 .14px #ffd86e)}
-.pbx-box.zero .cd rect{fill:#ff4d7a}
-.pbx-box.zero .cd text{fill:#fff}
-.pbx-box .cd rect{fill:#fff8fc;stroke:#1a1024;stroke-width:.03}
-.pbx-box .cd text{fill:#1a1024;font-family:var(--mono);font-size:.22px;text-anchor:middle;dominant-baseline:central;font-weight:bold}
+.pbx-box .bomb .ball{fill:#1a1024;stroke:#cbb8ea;stroke-width:.03}
+.pbx-box .bomb .fuse{fill:none;stroke:#d8c49a;stroke-width:.04;stroke-linecap:round}
+.pbx-box .bomb .spark{fill:#ffa040;animation:spark .3s steps(2) infinite}
+.pbx-box .bomb text{fill:#fff8fc;font-family:var(--mono);font-size:.2px;text-anchor:middle;dominant-baseline:central;font-weight:bold}
+.pbx-box .bomb.hot .ball{fill:#ff4d7a}
+@keyframes spark{50%{opacity:.3}}
 .pbx-boom path{fill:#ffa040;stroke:#ffd86e;stroke-width:.05;animation:boom .5s ease-out}
 @keyframes boom{0%{transform:scale(.2);opacity:0}60%{opacity:1}100%{transform:scale(1)}}
 .pbx-boom{transform-box:fill-box;transform-origin:center}

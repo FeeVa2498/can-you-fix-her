@@ -76,7 +76,7 @@ function boxSolEvents(p) {
     const c = inp[k], r = E.boxStep(p, s, E.DK[c], true, X), ns = r.state, out = [`Ấn ${KEYN[c]}.`];
     p.boxes.forEach((b, i) => {
       const nm = boxName(p, s, i);
-      if (!r.moved[i]) { out.push(s.left[i] === 0 ? `${nm} đã về 0 nhưng bị chặn sẵn nên không nổ.` : `${nm} bị chặn, đứng yên.`); return; }
+      if (!r.moved[i]) { out.push(`${nm} bị chặn, đứng yên.`); return; }
       const t = ns.tracks[i].slice(s.tracks[i].length - 1), J = ns.jumps[i].slice(s.tracks[i].length - 1);
       const d = E.boxDir(b, E.DK[c]), jumps = J.filter(Boolean).length, steps = t.length - 1 - jumps;
       let msg = `${nm} đi ${ARW[E.dirKey(d)]}${steps > 1 ? ` ${steps} ô` : ''}`;
@@ -84,13 +84,14 @@ function boxSolEvents(p) {
       if (jumps) msg += ', qua cổng';
       if (steps > 1 && E.isStop(p, ...ns.pos[i])) msg += ', dừng ở ô phanh';
       if (ns.col[i] !== s.col[i]) msg += `, bị sơn thành màu ${HUEN[ns.col[i]]}`;
-      if (ns.left[i] != null) msg += ` (còn ${ns.left[i]} nước)`;
+      
       msg += '.';
       const g = goalAt(ns.pos[i]);
       if (g && (!g[2] || g[2] === ns.col[i])) msg += ' Đang đứng trong goal.';
       else if (goalAt(s.pos[i])) msg += ' Rời khỏi goal (hộp không bị khoá).';
       out.push(msg);
     });
+    const bombs = ns.left.filter(l => l != null); if (bombs.length) out.push(`Bom còn ${[...new Set(bombs)].join('/')}.`);
     if (ns.open !== s.open) [1, 2, 3].forEach(cc => { const was = s.open & (1 << cc), now = ns.open & (1 << cc); if (now && !was) out.push(`Cửa ${HUEN[cc]} mở.`); if (was && !now) out.push(`Cửa ${HUEN[cc]} đóng lại.`); });
     if (ns.crk.size > s.crk.size) out.push('Ô nứt sụp xuống thành lỗ.');
     const lit = l => (p.lights || []).length - E.boxNeed(p, l).lights.length;

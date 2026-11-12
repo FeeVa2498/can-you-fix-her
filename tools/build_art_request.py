@@ -138,7 +138,7 @@ B = [
     ('Hộp dây (rope)', 'Hộp để lại sợi dây sau lưng; dây là tường với mọi hộp, kể cả chính nó. Hiện quấn 3 vòng dây quanh thân. Dây sáng: hồng (hộp không màu) hoặc màu của hộp.', 'Concept + vòng dây + texture dây × 4 màu', 6, '256×256 / dây 64×16', 'P1'),
     ('Hộp song sinh ngược', 'Hộp làm ngược mọi phím (trái↔phải, lên↔xuống). Hiện có dấu X trên nóc; artist có thể thiết kế ký hiệu dễ hiểu hơn (ví dụ hai mũi tên ngược).', 'Ký hiệu nóc hộp', 1, '128×128', 'P1'),
     ('Hộp tên lửa', 'Hộp có cụm 2 tên lửa phía sau; ấn phím thì quay về hướng bay, phun lửa và trượt tới khi đụng tường, hộp, dây hoặc cửa đóng.', 'Concept + lửa phụt (4–6 frame)', 7, 'concept 256×256 / lửa 64×128', 'P1'),
-    ('Nhãn đếm ngược', 'Nhãn nổi trên đầu hộp ghi số nước còn lại (0–30). Về 0 thì nhãn đỏ: nếu hộp còn bị bắt đi tiếp là nổ.', 'Khung nhãn thường + nhãn 0 (đỏ) + số 0–9', 12, '64×64', 'P1'),
+    ('Bom trên hộp', 'Hộp ôm một quả bom có ngòi cháy và số đếm ngược; mỗi lần ấn phím số giảm 1, còn 1 thì bom đỏ lên, về 0 là nổ.', 'Bom + ngòi + tia lửa (2–3 frame) + bom đỏ + nhãn số 0–9', 15, '128×128 / 64×64', 'P1'),
     ('Hộp nổ', 'Hộp hết nước mà vẫn phải đi: nổ tung thành mảnh vụn + chớp sáng, chữ "✹ BOOM ✹".', 'Chớp sáng 6 frame + mảnh vụn + chữ', 8, '256×256 / 720×120', 'P1'),
     ('Ô đèn (light)', 'Bóng đèn nhỏ trên ô: tối khi chưa có dây; sáng vàng có quầng khi dây nằm trên đó. Thắng cần mọi đèn sáng.', 'Tắt + sáng (+ quầng)', 3, '256×256', 'P1'),
     ('Số cạnh (number)', 'Bảng số nhỏ nằm giữa bốn ô: số cạnh của ô vuông đó mà dây phải đi. Hiện "đã có/cần" (ví dụ 1/3): trắng = chưa đủ, xanh lá = đúng, đỏ = thừa. Cần bộ chữ số pixel 0–4 và dấu "/".', 'Khung + số 0–4 + "/" × 3 màu', 19, '64×64 mỗi ký tự'),
@@ -155,7 +155,7 @@ B = [
     ('Dây lời giải / gợi ý', 'Dây ở chế độ lời giải (xanh dương), thắng (vàng).', '2 trạng thái', 2, 'texture 64×16 tile', 'P2'),
 ]
 BF = ['tile_{top,side}.png', 'tile_goal_{gold,pink,blue,green}.png (+_on)', 'wall_glass.png', 'box_{plain,pink,blue,green}.png', 'box_rope_concept.png, box_rope_coil.png, rope_{pink,blue,green,plain}.png',
-      'box_mark_twin.png', 'box_rocket_concept.png, fx_flame_sheet.png', 'badge_count.png, badge_count_zero.png, count_{0-9}.png', 'fx_boom_sheet.png, fx_boom_bits.png, txt_boom.png',
+      'box_mark_twin.png', 'box_rocket_concept.png, fx_flame_sheet.png', 'box_bomb.png, box_bomb_hot.png, fx_fuse_spark_sheet.png, count_{0-9}.png', 'fx_boom_sheet.png, fx_boom_bits.png, txt_boom.png',
       'tile_light_{off,on}.png, fx_light_halo.png', 'num_plate.png, num_{0-4}_{white,green,red}.png, num_slash_*.png', 'tile_arrow.png, tile_arrow_glow_sheet.png', 'tile_stop.png',
       'switch_{pink,blue,green}_{up,down}.png', 'switch_double_{pink-blue,blue-green,green-pink}.png', 'door_{pink,blue,green}.png (+_open)', 'tile_crack.png, tile_crack_fall_sheet.png, hole_fallen.png',
       'tile_paint_{pink,blue,green}.png', 'arrow_oneway_gap.png', 'tile_portal_{yellow,sky,mint}.png', 'hole_edge.png', 'rope_{sol,win}.png']
@@ -167,7 +167,7 @@ G = '10. Icon mechanic (tutorial & danh sách level)'
 MECH = [('basic', 'Hộp dây tới ô goal'), ('boxes', 'Mọi phím điều khiển mọi hộp'), ('lights', 'Ô đèn'), ('nums', 'Số cạnh'), ('switches', 'Ô chốt & cửa khoá'), ('dbl', 'Ô chốt đôi'),
         ('colors', 'Hộp màu & goal màu'), ('paints', 'Ô sơn'), ('cracks', 'Ô nứt'), ('ends', 'Goal ở bất kỳ đâu'), ('holes', 'Map có lỗ'), ('oneway', 'Một chiều'),
         ('portals', 'Portal'), ('pads', 'Ô mũi tên'), ('stops', 'Ô phanh'), ('dash', 'Hộp tên lửa'), ('helpers', 'Hộp chắn (thừa)'),
-        ('many', 'Nhiều hộp'), ('budget', 'Đếm ngược (nổ)'), ('twin', 'Hộp song sinh ngược'), ('twinrope', 'Hai hộp dây song sinh'), ('nolock', 'Hộp không bị khoá ở goal'), ('trail', 'Hộp dây')]
+        ('many', 'Nhiều hộp'), ('budget', 'Hộp ôm bom'), ('twin', 'Hộp song sinh ngược'), ('twinrope', 'Hai hộp dây song sinh'), ('nolock', 'Hộp không bị khoá ở goal'), ('trail', 'Hộp dây')]
 for k, vi in MECH:
     add(G, 'Icon mechanic', f'Icon mechanic "{k}"', f'{vi}. Hiện ở tag "NEW · …" khi gặp mechanic mới và có thể dùng trong danh sách level.', '1', 1, '32×32', 'PNG nền trong', f'ic_mech_{k}.png', 'P2')
 
