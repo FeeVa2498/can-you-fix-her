@@ -780,13 +780,8 @@ add('trix', 2, 3, BX(4, 3, [R0], { gen: { walls: .12, nums: 3, oneway: 1 }, uses
 TUT('trix', 2, 6, 'portals', BX(3, 2, [R0], EZ({ gen: { walls: .05, portals: 1 }, uses: { portals: 1 }, need: 2, minLen: 3, maxLen: 7 })));
 TUT('trix', 3, 6, 'switches', BX(3, 2, [R0], EZ({ gen: { walls: .05, guard: 1 }, uses: { door: 1 }, need: 2, minLen: 3, maxLen: 8 })));
 add('trix', 3, 9, BX(5, 4, [R0], { gen: { walls: .08, nums: 5, bites: 2 }, minLen: 18, luck: .01, feature: 'nums', cap: 250000, time: 60000 }));
-/* TRIX v10: light the whole room with the rope; number tiles packed close together */
-add('trix', 1, 7, BX(3, 3, [R0], { gen: { walls: .22, lightAll: 1, bites: 1 }, minLen: 10, maxLen: 16, luck: .02, maxShortest: 1, feature: 'roomAll', cap: 400000, time: 40000, tries: 40000 }));
-add('trix', 2, 9, BX(4, 3, [R0], { gen: { walls: .22, lightAll: 1, bites: 2 }, minLen: 14, maxLen: 20, luck: .01, maxShortest: 1, feature: 'roomAll', cap: 800000, time: 60000, tries: 40000 }));
-add('trix', 3, 10, BX(4, 4, [R0], { gen: { walls: .25, lightAll: 1, bites: 2 }, minLen: 18, maxLen: 26, luck: .01, maxShortest: 1, feature: 'roomAll', cap: 1500000, time: 80000, tries: 40000 }));
-add('trix', 2, 10, BX(4, 4, [R0], { gen: { walls: .06, touch: 6 }, cluster: 1, clueRand: 1, minTouch: 4, maxShortest: 1, minLen: 12, luck: .01, feature: 'touchDense', cap: 300000, time: 60000 }));
-add('trix', 3, 11, BX(5, 4, [R0], { gen: { walls: .05, touch: 8, bites: 1 }, cluster: 1, clueRand: 1, minTouch: 5, maxShortest: 1, minLen: 16, luck: .01, feature: 'touchDense', cap: 400000, time: 80000 }));
-add('trix', 3, 12, BX(5, 5, [R0], { gen: { walls: .05, touch: 9, bites: 2 }, cluster: 2, clueRand: 1, minTouch: 6, maxShortest: 1, minLen: 18, luck: .01, feature: 'touchDense', cap: 500000, time: 90000 }))
+/* TRIX v10: light-the-whole-room and packed-number panels are built route-first by tools/trix_v10.js (random
+   generation here almost never finds a rope that covers every tile) */
 /* Paige: a die to print the right numbers, arrow tiles that slide it without turning, portals; two dice in layer 3 */
 TUT('paige', 1, 1, 'dice', BX(3, 1, [DIE], EZ({ gen: { walls: .02, dice: 1, diceMore: 0 }, minLen: 2, maxLen: 6 })));
 add('paige', 1, 1, BX(3, 2, [DIE], { gen: { walls: 0.1, dice: 1 }, minLen: 4, luck: .04, feature: 'dice' }));
