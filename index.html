@@ -5215,13 +5215,13 @@ const ED_TOOLS = {
     ['bridge', 'Overpass', 'node', 'Cầu vượt'], ['plate0', 'Plate ●', 'node', 'Công tắc xanh'], ['plate1', 'Plate ●', 'node', 'Công tắc cam'],
     ['gate0', 'Gate ▮', 'edge', 'Cổng xanh (bấm lại = cổng đảo, lần 3 xoá)'], ['gate1', 'Gate ▮', 'edge', 'Cổng cam (bấm lại = cổng đảo, lần 3 xoá)'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
   box: [['box', 'Box', 'node', 'Đặt hộp; bấm hộp có sẵn để chọn và chỉnh thuộc tính (màu, dây, tên lửa, song sinh, đếm ngược)'],
-    ['goal', 'Goal', 'node', 'Ô goal: bấm lại để đổi: nhận mọi hộp → hồng → đỏ → tím → vàng → xanh, rồi xoá'], ['wall', 'Wall', 'edge', 'Tường giữa hai ô'], ['hole', 'Hole', 'node', 'Lỗ trên map'],
-    ['light', 'Light', 'node', 'Ô đèn: dây phải nằm trên đó'], ['touch', 'Sensor', 'node', 'Khối cảm biến: dây phải chạm đúng ngần ấy cạnh (bấm lại để tăng 1→4, rồi xoá)'],
+    ['goal', 'Goal', 'node', 'Ô goal: bấm lại để đổi: nhận mọi hộp → hồng → đỏ → tím → vàng → xanh, rồi xoá'], ['wall', 'Wall', 'edge', 'Tường giữa hai ô: bấm vào khe giữa hai ô; bấm lại để xoá'], ['hole', 'Hole', 'node', 'Khoét ô thành lỗ (xoá ô khỏi map); bấm lại vào lỗ để trả ô về'],
+    ['light', 'Light', 'node', 'Ô đèn: hộp nào bước lên là bật (dây nằm trên cũng tính); bấm lại để xoá'], ['touch', 'Sensor', 'node', 'Khối cảm biến: dây phải chạm đúng ngần ấy cạnh (bấm lại để tăng 1→4, rồi xoá)'],
     ['pad', 'Arrow tile', 'node', 'Ô mũi tên (bấm lại để xoay →↓←↑, lần 5 xoá)'], ['oneway', 'One-way', 'edge', 'Khe một chiều (bấm lại để đảo chiều)'],
     ['portal', 'Portal', 'node', 'Bấm 2 ô để tạo cặp'],
     ['switch', 'Switch', 'node', 'Ô chốt: bấm lại để đổi màu xanh → vàng → đỏ, rồi thành công tắc hai màu xanh/vàng → vàng/đỏ → đỏ/xanh (màu đầu dựng sẵn, màu sau hạ sẵn), rồi xoá'],
     ['door', 'Door', 'edge', 'Cửa khoá giữa hai ô: bấm lại để đổi màu xanh → vàng → đỏ, rồi xoá'],
-    ['dicet', 'Dice target', 'node', 'Ô số cho xúc xắc: bấm lại để đổi 1 → 6, rồi xoá'], ['crack', 'Crack', 'node', 'Ô nứt: hộp rời đi là sụp'], ['paint', 'Paint', 'node', 'Ô sơn: hồng → đỏ → tím → vàng → xanh, rồi xoá'], ['erase', 'Erase', 'any', 'Tẩy mọi thứ ở chỗ bấm']],
+    ['dicet', 'Dice target', 'node', 'Ô số cho xúc xắc: bấm lại để đổi 1 → 6, rồi xoá'], ['crack', 'Crack', 'node', 'Ô nứt: hộp rời đi là sụp'], ['paint', 'Paint', 'node', 'Ô sơn: hồng → đỏ → tím → vàng → xanh, rồi xoá'], ['erase', 'Erase', 'any', 'Tẩy vật trên ô hoặc trên khe (hộp, goal, đèn, portal, tường…); ô vẫn còn. Muốn bỏ hẳn ô thì dùng Hole']],
 };
 const ED_TAGS = ['', 'basic', 'trail', 'boxes', 'lights', 'nums', 'switches', 'dbl', 'colors', 'paints', 'cracks', 'ends', 'holes', 'oneway', 'portals', 'pads', 'dash', 'helpers', 'many', 'budget', 'twin', 'twinrope', 'nolock', 'dice', 'touch', 'plates', 'swap'];
 let ED = null;
@@ -5571,7 +5571,7 @@ function edProps() {
       <label><input type="checkbox" id="eb-dash" ${sb.dash ? 'checked' : ''}> Rocket box</label>
       <label><input type="checkbox" id="eb-twin" ${sb.m === 'opp' ? 'checked' : ''}> Reverse twin</label>
       <label><input type="checkbox" id="eb-die" ${sb.die ? 'checked' : ''}> Die</label>
-      <label>Landmine (exact moves) <input id="eb-n" type="number" min="0" max="30" placeholder="none" value="${sb.n ?? ''}"></label>
+      <label>Landmine (moves left) <input id="eb-n" type="number" min="0" max="30" placeholder="none" value="${sb.n ?? ''}"></label>
       <button class="btn" id="eb-del" ${p.boxes.length < 2 ? 'disabled' : ''}>Remove box</button></fieldset>` : box ? '<div class="ed-hint">Box tool: click a box to edit it.</div>' : ''}
     <label class="col">Belief (story) <textarea id="ep-belief" rows="2">${esc(p.belief || '')}</textarea></label>
     <label class="col">Key idea (Solution mode) <textarea id="ep-why" rows="3">${esc(p.why || '')}</textarea></label>
