@@ -292,7 +292,9 @@ const PanelEngine = (() => {
       else { const up = swUp(q, s.open), oth = up === q[2] ? q[3] : q[2]; s.open = (s.open | (1 << up)) & ~(1 << oth); }
     }
     const pc = X.paint.get(k); if (pc !== undefined) s.col[i] = pc;
-    if (X.litAll || X.lights.has(k)) s.lit.add(k);
+    // lights toggle: a box entering a dark light turns it on, entering a lit one turns it off (ropes never re-enter)
+    if (X.litAll) s.lit.add(k);
+    else if (X.lights.has(k)) { if (s.lit.has(k)) s.lit.delete(k); else s.lit.add(k); }
   }
   // one key press; returns { state, moved: [bool…], dead } (a new state; rec=false skips the drawing tracks)
   function boxStep(p, s0, d, rec = true, X = boxCtx(p)) {

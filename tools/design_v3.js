@@ -208,6 +208,11 @@ function goalAlone(p) {
   const sp = new Set([...(p.portals || []).flatMap(q => [[q[0], q[1]], [q[2], q[3]]]), ...(p.pads || []), ...(p.lights || []), ...(p.switches || []), ...(p.cracks || []), ...(p.paints || []), ...(p.dice || []), ...(p.touch || []), ...(p.stops || [])].map(n => n[0] + ',' + n[1]));
   return (p.exit || []).every(g => !sp.has(g[0] + ',' + g[1]));
 }
+function relights(p, w) {
+  let s = E.boxStart(p); const X = E.boxCtx(p);
+  for (const c of w) { const n = E.boxStep(p, s, E.DK[c], false, X).state; for (const k of s.lit) if (!n.lit.has(k)) return true; s = n; }
+  return false;
+}
 function checkBox(p, spec) {
   if (!goalAlone(p)) return null;
   const maxL = capLen(spec);
@@ -234,6 +239,8 @@ function checkBox(p, spec) {
   }
   const best = r.wins[0], L = best.length;
   if (L < (spec.minLen || 4)) return null;
+  // lights toggle: never design a panel whose answers walk back onto a light already lit (no backtracking)
+  if ((p.lights || []).length && p.boxes.some(b => !b.trail) && r.wins.some(w => relights(p, w))) return null;
   if (r.wins.length > (spec.maxShortest || 3)) return null;
   const st = boxStats(p, best), tr = st.s.tracks.flat(), allJ = st.s.jumps.flat();
   const u = spec.uses || {};
@@ -563,7 +570,7 @@ const BRULE = {
   goal: 'Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal.',
   colors: 'Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được.',
   trail: 'Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại).',
-  lights: 'Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng.',
+  lights: 'Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng.',
   nums: 'Ô số cạnh: ô vuông viền đứt nối tâm bốn ô xung quanh, số ở giữa. Dây phải đi đúng ngần ấy cạnh của ô vuông đó (x/y cho biết đã có bao nhiêu; viền xanh khi đúng, đỏ khi thừa).',
   touch: 'Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ.',
   switches: 'Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu.',
@@ -590,7 +597,7 @@ const BTIP = {
   mx: 'Dùng tường để làm hai hộp lệch nhau.', many: 'Hộp đứng yên cũng là một bức tường cho hộp khác.',
   nolock: 'Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ.', helpers: 'Đặt hộp thừa trước, rồi mới phóng hộp chính.',
   trail: 'Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
-  lights: 'Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.', roomAll: 'Thắp cả phòng: dây phải phủ mọi ô rồi mới tới goal. Ô góc và ngõ cụt chỉ có một hai lối: dây buộc phải đi qua chúng theo đúng lối đó, bắt đầu tính từ đấy.', touchDense: 'Các ô số đứng sát nhau dùng chung ô cạnh: một ô có dây có thể được hai, ba ô số cùng đếm. Bắt đầu từ ô số mà các ô quanh nó ít lựa chọn nhất.', lightAll: 'Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn.', touch: 'Ô số 3 gần như bị dây bao quanh; ô số 1 chỉ cho dây chạm một bên: bắt đầu từ chúng.', nums: 'Ô "1" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.',
+  lights: 'Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.', roomAll: 'Thắp cả phòng: dây phải phủ mọi ô rồi mới tới goal. Ô góc và ngõ cụt chỉ có một hai lối: dây buộc phải đi qua chúng theo đúng lối đó, bắt đầu tính từ đấy.', touchDense: 'Các ô số đứng sát nhau dùng chung ô cạnh: một ô có dây có thể được hai, ba ô số cùng đếm. Bắt đầu từ ô số mà các ô quanh nó ít lựa chọn nhất.', lightAll: 'Mê cung: ô nào cũng là đèn, mà đi lại ô đã sáng là đèn tắt. Tìm một đường đi qua mỗi ô đúng một lần; ngõ cụt chỉ nên là điểm cuối.', touch: 'Ô số 3 gần như bị dây bao quanh; ô số 1 chỉ cho dây chạm một bên: bắt đầu từ chúng.', nums: 'Ô "1" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.',
   switches: 'Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó.', dbl: 'Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ.',
   cracks: 'Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước.', paints: 'Có khi hộp phải đi vòng qua ô sơn trước khi về goal.', colors: 'Mỗi màu một goal: xem hộp nào phải đi trước hộp nào.',
 };

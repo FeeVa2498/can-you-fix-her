@@ -69,20 +69,51 @@ function tighten(p, pth, route) {   // add walls (route stays legal) until the a
   }
   return r;
 }
+// Plain box on an all-lights map (lights toggle): the shortest answers are exactly the paths that visit every tile
+// once, start → goal. Count them with a quick DFS instead of the general solver.
+function hamCount(p, cap = 4000) {
+  const BR = new Set((p.broken || []).map(e => E.ekey(...e))), cells = []; for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) if (E.inside(p, x, y)) cells.push([x, y]);
+  const idx = new Map(cells.map((c, i) => [K(...c), i])), nb = cells.map(([x, y]) => D4.map(([dx, dy]) => [x + dx, y + dy]).filter(([a, b]) => idx.has(K(a, b)) && !BR.has(E.ekey(x, y, a, b))).map(q => idx.get(K(...q))));
+  const st = idx.get(K(p.boxes[0].x, p.boxes[0].y)), g = idx.get(K(...p.exit[0])), N = cells.length, seen = new Uint8Array(N);
+  let n = 0, first = null; const path = [st]; seen[st] = 1;
+  (function go(v, d) {
+    if (n >= cap) return;
+    if (v === g) { if (d === N) { n++; if (!first) first = path.slice(); } return; }
+    for (const w of nb[v]) if (!seen[w]) { seen[w] = 1; path.push(w); go(w, d + 1); path.pop(); seen[w] = 0; }
+  })(st, 1);
+  const dirs = first && first.slice(1).map((w, i) => { const a = cells[first[i]], b = cells[w]; return b[0] > a[0] ? 'R' : b[0] < a[0] ? 'L' : b[1] > a[1] ? 'D' : 'U'; }).join('');
+  return { n, dirs };
+}
+function tightenHam(p, pth) {
+  let c = hamCount(p); const pool = shuf(edgesOff(p, pth));
+  while (c.n > 1) {
+    let best = null;
+    for (const e of pool) { const q = { ...p, broken: (p.broken || []).concat([e]) }, cc = hamCount(q); if (cc.n && (!best || cc.n < best.cc.n)) best = { e, cc }; }
+    if (!best) return null;
+    p.broken = (p.broken || []).concat([best.e]); pool.splice(pool.indexOf(best.e), 1); c = best.cc;
+    if (p.broken.length > 10) return null;
+  }
+  for (let i = (p.broken || []).length - 1; i >= 0; i--) { const q = { ...p, broken: p.broken.filter((_, j) => j !== i) }; if (hamCount(q).n === 1) p.broken = q.broken; }
+  c = hamCount(p);
+  return c.n === 1 ? { wins: [c.dirs] } : null;
+}
 let made = null;
 while (!made && Date.now() - T0 < budget * 1000) {
-  const p = { id, girl: 'trix', w: W, h: H, boxes: [], exit: [] };
+  const p = { id, girl: process.env.GIRL || 'trix', w: W, h: H, boxes: [], exit: [] };
   // a hole or two in the corners for shape
   const holes = []; if (Math.random() < .6) holes.push([[0, 0], [W, 0], [0, H], [W, H]][ri(4)]);
+  for (let i = 0; i < (+process.env.HOLES || 0); i++) { const c = [[0, 0], [W, 0], [0, H], [W, H], [ri(cols), 0], [0, ri(rows)], [W, ri(rows)], [ri(cols), H]][ri(8)]; if (!holes.some(h => h[0] === c[0] && h[1] === c[1])) holes.push(c); }
   if (holes.length) p.holes = holes;
   if (kind === 'room') {
     const free = new Set(); for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) if (E.inside(p, x, y)) free.add(K(x, y));
     const st = [...free][ri(free.size)].split(',').map(Number);
     const pth = walk(free, st, free.size); if (pth.length !== free.size) continue;
-    p.boxes = [{ x: st[0], y: st[1], trail: true }]; p.exit = [pth[pth.length - 1]];
+    const plain = p.girl === 'prim';   // Prim: a landmine box; lights toggle, so the walk may never step back on one
+    p.boxes = [plain ? { x: st[0], y: st[1], n: pth.length - 1 + 2 } : { x: st[0], y: st[1], trail: true }]; p.exit = [pth[pth.length - 1]];
     p.lights = pth.slice(1, -1);
+    if (!E.boxWon(p, E.boxReplay(p, (() => { let o = ''; for (let i = 1; i < pth.length; i++) o += pth[i][0] > pth[i - 1][0] ? 'R' : pth[i][0] < pth[i - 1][0] ? 'L' : pth[i][1] > pth[i - 1][1] ? 'D' : 'U'; return o; })()))) continue;
     const route = pth;
-    const r = tighten(p, pth, route); if (!r || r.wins.length !== 1) continue;
+    const r = plain ? tightenHam(p, pth) : tighten(p, pth, route); if (!r || r.wins.length !== 1) continue;
     // fewer lights: drop lights the walls already force (keep at least the map lit in the player's eyes = keep all)
     made = { p, r };
   } else {

@@ -435,7 +435,7 @@
   "belief": "",
   "intro": "lights",
   "tut": "lights",
-  "why": "Bảng dạy luật mới. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "why": "Bảng dạy luật mới. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "prim_1_5",
@@ -499,7 +499,7 @@
   "belief": "",
   "intro": null,
   "feature": "lights",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "prim_1_6",
@@ -510,8 +510,8 @@
   "h": 3,
   "holes": [
    [
-    1,
-    3
+    0,
+    2
    ]
   ],
   "broken": [
@@ -520,31 +520,19 @@
     0,
     1,
     1
-   ],
-   [
-    2,
-    0,
-    2,
-    1
-   ],
-   [
-    2,
-    1,
-    2,
-    2
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 1,
-    "n": 18
+    "x": 1,
+    "y": 3,
+    "n": 15
    }
   ],
   "exit": [
    [
-    0,
-    3
+    1,
+    0
    ]
   ],
   "lights": [
@@ -553,24 +541,20 @@
     0
    ],
    [
-    1,
-    0
-   ],
-   [
     2,
     0
-   ],
-   [
-    1,
-    1
-   ],
-   [
-    2,
-    1
    ],
    [
     0,
-    2
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
    ],
    [
     1,
@@ -579,21 +563,25 @@
    [
     2,
     2
+   ],
+   [
+    0,
+    3
    ],
    [
     2,
     3
    ]
   ],
-  "solIn": "URRLLDRRLDRDULLD",
+  "solIn": "RLLRURULLURRL",
   "solutions": 1,
-  "minMoves": 16,
+  "minMoves": 13,
   "luck": 0,
-  "quality": 31,
+  "quality": 27,
   "belief": "if i copy, i can't be wrong.",
   "intro": null,
   "feature": "lightAll",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn, mà đi lại ô đã sáng là đèn tắt. Tìm một đường đi qua mỗi ô đúng một lần; ngõ cụt chỉ nên là điểm cuối."
  },
  {
   "id": "prim_1_t7",
@@ -798,39 +786,27 @@
   "h": 3,
   "holes": [
    [
-    3,
-    3
+    0,
+    2
    ],
    [
     0,
-    2
+    3
    ]
   ],
   "broken": [
    [
+    2,
     0,
-    1,
-    1,
-    1
-   ],
-   [
-    1,
-    2,
-    2,
-    2
-   ],
-   [
-    1,
-    2,
-    1,
-    3
+    3,
+    0
    ]
   ],
   "boxes": [
    {
     "x": 1,
-    "y": 1,
-    "n": 21
+    "y": 3,
+    "n": 15
    }
   ],
   "exit": [
@@ -857,6 +833,10 @@
     1
    ],
    [
+    1,
+    1
+   ],
+   [
     2,
     1
    ],
@@ -877,27 +857,23 @@
     2
    ],
    [
-    0,
-    3
-   ],
-   [
-    1,
-    3
-   ],
-   [
     2,
+    3
+   ],
+   [
+    3,
     3
    ]
   ],
-  "solIn": "DUULDURRDDDLLRRURUU",
+  "solIn": "RRULLULURRDRU",
   "solutions": 1,
-  "minMoves": 19,
+  "minMoves": 13,
   "luck": 0,
-  "quality": 38.1,
+  "quality": 31.7,
   "belief": "",
   "intro": null,
   "feature": "lightAll",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn, mà đi lại ô đã sáng là đèn tắt. Tìm một đường đi qua mỗi ô đúng một lần; ngõ cụt chỉ nên là điểm cuối."
  },
  {
   "id": "prim_2_t1",
@@ -1201,138 +1177,54 @@
  {
   "id": "prim_2_4",
   "girl": "prim",
-  "layer": 2,
-  "n": 4,
   "w": 4,
   "h": 3,
-  "holes": [
-   [
-    0,
-    3
-   ],
-   [
-    4,
-    3
-   ]
-  ],
-  "broken": [
-   [
-    0,
-    0,
-    0,
-    1
-   ],
-   [
-    2,
-    0,
-    2,
-    1
-   ],
-   [
-    0,
-    1,
-    1,
-    1
-   ],
-   [
-    1,
-    1,
-    2,
-    1
-   ],
-   [
-    2,
-    1,
-    3,
-    1
-   ],
-   [
-    3,
-    1,
-    3,
-    2
-   ],
-   [
-    4,
-    1,
-    4,
-    2
-   ],
-   [
-    2,
-    3,
-    3,
-    3
-   ]
-  ],
   "boxes": [
    {
-    "x": 0,
-    "y": 1,
-    "n": 27
+    "x": 4,
+    "y": 2,
+    "n": 19
    }
   ],
   "exit": [
    [
-    4,
+    1,
     2
+   ]
+  ],
+  "holes": [
+   [
+    0,
+    0
+   ],
+   [
+    4,
+    3
    ]
   ],
   "lights": [
    [
-    0,
-    0
-   ],
-   [
-    1,
-    0
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    3,
-    0
+    4,
+    1
    ],
    [
     4,
     0
    ],
    [
-    1,
-    1
-   ],
-   [
-    2,
-    1
+    3,
+    0
    ],
    [
     3,
     1
    ],
    [
-    4,
-    1
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    1,
-    2
-   ],
-   [
-    2,
-    2
-   ],
-   [
     3,
     2
    ],
    [
-    1,
+    3,
     3
    ],
    [
@@ -1340,19 +1232,64 @@
     3
    ],
    [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    1,
     3,
+    1
+   ],
+   [
+    1,
+    2,
+    1,
     3
    ]
   ],
-  "solIn": "DRUURRRDLULLLRDDDRUUDRDUR",
+  "solIn": "UULDDDLLLUURURDDL",
   "solutions": 1,
-  "minMoves": 25,
-  "luck": 0,
-  "quality": 44.9,
-  "belief": "it copies everything i do.",
-  "intro": null,
+  "minMoves": 17,
   "feature": "lightAll",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
+  "layer": 2,
+  "n": 4,
+  "belief": "it copies everything i do.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn, mà đi lại ô đã sáng là đèn tắt. Tìm một đường đi qua mỗi ô đúng một lần; ngõ cụt chỉ nên là điểm cuối."
  },
  {
   "id": "prim_2_5",
@@ -1523,7 +1460,7 @@
   "belief": "",
   "intro": null,
   "feature": "lights",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "prim_2_7",
@@ -1609,60 +1546,50 @@
   "broken": [
    [
     1,
-    0,
-    1,
-    1
-   ],
-   [
-    2,
-    0,
-    2,
-    1
-   ],
-   [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
-    0,
     1,
     1,
-    1
-   ],
-   [
-    2,
-    2,
-    3,
     2
+   ],
+   [
+    2,
+    1,
+    3,
+    1
    ]
   ],
   "boxes": [
    {
-    "x": 3,
-    "y": 0,
-    "n": 9
+    "x": 2,
+    "y": 2,
+    "n": 8
    },
    {
-    "x": 1,
+    "x": 0,
     "y": 0,
-    "n": 17
+    "n": 7
    }
   ],
   "exit": [
    [
-    0,
+    1,
     2
    ],
    [
-    2,
-    0
+    3,
+    1
    ]
   ],
   "lights": [
    [
-    0,
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
     0
    ],
    [
@@ -1678,15 +1605,7 @@
     1
    ],
    [
-    3,
-    1
-   ],
-   [
-    1,
-    2
-   ],
-   [
-    2,
+    0,
     2
    ],
    [
@@ -1694,15 +1613,15 @@
     2
    ]
   ],
-  "solIn": "LDDRRURDULLDLURRD",
+  "solIn": "UURDLDRU",
   "solutions": 1,
-  "minMoves": 17,
+  "minMoves": 8,
   "luck": 0,
-  "quality": 39.5,
+  "quality": 25,
   "belief": "",
   "intro": null,
   "feature": "lightAll",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mê cung: ô nào cũng là đèn, mà đi lại ô đã sáng là đèn tắt. Tìm một đường đi qua mỗi ô đúng một lần; ngõ cụt chỉ nên là điểm cuối."
  },
  {
   "id": "prim_2_9",
@@ -1965,129 +1884,67 @@
  {
   "id": "prim_3_3",
   "girl": "prim",
-  "layer": 3,
-  "n": 3,
   "w": 4,
   "h": 3,
-  "holes": [
-   [
-    0,
-    3
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    0,
-    1
-   ]
-  ],
-  "broken": [
-   [
-    2,
-    0,
-    3,
-    0
-   ],
-   [
-    3,
-    0,
-    3,
-    1
-   ],
-   [
-    2,
-    1,
-    3,
-    1
-   ],
-   [
-    1,
-    2,
-    2,
-    2
-   ],
-   [
-    2,
-    2,
-    2,
-    3
-   ],
-   [
-    3,
-    2,
-    3,
-    3
-   ],
-   [
-    2,
-    3,
-    3,
-    3
-   ]
-  ],
   "boxes": [
    {
-    "x": 3,
-    "y": 1,
-    "n": 28
+    "x": 0,
+    "y": 2,
+    "n": 20
    }
   ],
   "exit": [
    [
+    3,
+    1
+   ]
+  ],
+  "holes": [
+   [
     4,
-    0
+    3
    ]
   ],
   "lights": [
    [
     0,
-    0
-   ],
-   [
-    1,
-    0
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    1,
-    1
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    4,
-    1
-   ],
-   [
-    1,
-    2
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    4,
-    2
+    3
    ],
    [
     1,
     3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
    ],
    [
     2,
@@ -2098,19 +1955,42 @@
     3
    ],
    [
+    3,
+    2
+   ],
+   [
     4,
-    3
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    3,
+    0
    ]
   ],
-  "solIn": "DLULDDRLUUULRRDDRRDLRUUULR",
+  "broken": [
+   [
+    2,
+    1,
+    3,
+    1
+   ]
+  ],
+  "solIn": "DRUULURRDDDRURUULD",
   "solutions": 1,
-  "minMoves": 26,
-  "luck": 0,
-  "quality": 46.5,
-  "belief": "my colours. my lines.",
-  "intro": null,
+  "minMoves": 18,
   "feature": "lightAll",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
+  "layer": 3,
+  "n": 3,
+  "belief": "my colours. my lines.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn, mà đi lại ô đã sáng là đèn tắt. Tìm một đường đi qua mỗi ô đúng một lần; ngõ cụt chỉ nên là điểm cuối."
  },
  {
   "id": "prim_3_4",
@@ -2121,73 +2001,73 @@
   "h": 4,
   "holes": [
    [
-    5,
-    0
+    1,
+    4
    ],
    [
     5,
-    1
-   ],
-   [
-    5,
-    3
+    4
    ],
    [
     0,
-    0
+    1
+   ],
+   [
+    0,
+    2
    ]
   ],
   "broken": [
    [
-    0,
-    2,
     1,
+    0,
+    1,
+    1
+   ],
+   [
+    4,
+    1,
+    4,
     2
    ],
    [
+    4,
     2,
-    2,
-    2,
-    3
+    5,
+    2
    ],
    [
-    0,
-    3,
-    0,
-    4
-   ],
-   [
-    2,
     4,
     3,
-    4
+    5,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 3,
+    "x": 2,
     "y": 4,
+    "n": 12
+   },
+   {
+    "x": 5,
+    "y": 3,
+    "n": 13
+   },
+   {
+    "x": 2,
+    "y": 0,
     "n": 8
-   },
-   {
-    "x": 3,
-    "y": 0,
-    "n": 11
-   },
-   {
-    "x": 4,
-    "y": 0,
-    "n": 14
    }
   ],
   "exit": [
    [
-    2,
-    2
+    3,
+    4
    ],
    [
-    2,
-    3
+    0,
+    4
    ],
    [
     1,
@@ -2196,27 +2076,27 @@
   ],
   "lights": [
    [
-    5,
-    2
-   ],
-   [
     1,
-    4
+    0
    ],
    [
     3,
-    2
+    3
+   ],
+   [
+    4,
+    0
    ]
   ],
-  "solIn": "DDRLLDLLDULLR",
-  "solutions": 3,
-  "minMoves": 13,
+  "solIn": "UULDURDLLDDD",
+  "solutions": 1,
+  "minMoves": 12,
   "luck": 0,
-  "quality": 6.4,
+  "quality": 6.2,
   "belief": "no pencil to follow. not really.",
   "intro": null,
   "feature": "lights",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "prim_3_5",
@@ -2319,53 +2199,43 @@
   "h": 2,
   "broken": [
    [
-    2,
-    0,
-    2,
-    1
-   ],
-   [
     0,
     1,
     1,
     1
    ],
    [
+    3,
     1,
-    1,
-    1,
+    3,
     2
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 2,
+    "x": 3,
+    "y": 1,
     "n": 10
    },
    {
-    "x": 3,
+    "x": 2,
     "y": 2,
     "m": "opp",
-    "n": 10
+    "n": 6
    }
   ],
   "exit": [
    [
-    1,
+    0,
     2
    ],
    [
     0,
-    2
+    0
    ]
   ],
   "lights": [
    [
-    0,
-    0
-   ],
-   [
     1,
     0
    ],
@@ -2390,19 +2260,23 @@
     1
    ],
    [
+    1,
+    2
+   ],
+   [
     3,
-    1
+    2
    ]
   ],
-  "solIn": "DDRRRULLULDD",
+  "solIn": "ULDLULDRRRU",
   "solutions": 1,
-  "minMoves": 12,
+  "minMoves": 11,
   "luck": 0,
-  "quality": 33.8,
+  "quality": 31.3,
   "belief": "i don't need the pencil anymore.",
   "intro": null,
   "feature": "lightAll",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Mê cung: ô nào cũng là đèn, mà đi lại ô đã sáng là đèn tắt. Tìm một đường đi qua mỗi ô đúng một lần; ngõ cụt chỉ nên là điểm cuối."
  },
  {
   "id": "prim_3_7",
@@ -2610,38 +2484,111 @@
    ]
   ],
   "solIn": "RUULLRDRDDDL",
-  "solutions": 3,
+  "solutions": 2,
   "minMoves": 12,
   "luck": 0,
   "quality": 40.8,
   "belief": "",
   "intro": null,
   "feature": "opp",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "prim_3_9",
   "girl": "prim",
-  "layer": 3,
-  "n": 9,
   "w": 4,
   "h": 4,
+  "boxes": [
+   {
+    "x": 4,
+    "y": 0,
+    "n": 23
+   }
+  ],
+  "exit": [
+   [
+    0,
+    1
+   ]
+  ],
   "holes": [
+   [
+    4,
+    4
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "lights": [
+   [
+    4,
+    1
+   ],
    [
     4,
     2
    ],
    [
     4,
-    1
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
    ],
    [
     3,
     1
-   ],
-   [
-    4,
-    0
    ],
    [
     3,
@@ -2652,124 +2599,36 @@
     0
    ],
    [
-    4,
-    3
+    2,
+    1
+   ],
+   [
+    1,
+    1
    ]
   ],
   "broken": [
    [
     1,
     1,
-    2,
-    1
-   ],
-   [
     1,
-    2,
-    2,
     2
    ],
    [
     1,
-    3,
+    2,
     1,
-    4
-   ],
-   [
-    0,
-    4,
-    1,
-    4
+    3
    ]
   ],
-  "boxes": [
-   {
-    "x": 0,
-    "y": 0,
-    "n": 24
-   }
-  ],
-  "exit": [
-   [
-    2,
-    2
-   ]
-  ],
-  "lights": [
-   [
-    1,
-    0
-   ],
-   [
-    0,
-    1
-   ],
-   [
-    1,
-    1
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    1,
-    2
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    0,
-    3
-   ],
-   [
-    1,
-    3
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    0,
-    4
-   ],
-   [
-    1,
-    4
-   ],
-   [
-    2,
-    4
-   ],
-   [
-    3,
-    4
-   ],
-   [
-    4,
-    4
-   ]
-  ],
-  "solIn": "RLDRDLDDURRDLRRRLUULUD",
+  "solIn": "DDDLDLULDLUURRRUULDLL",
   "solutions": 1,
-  "minMoves": 22,
-  "luck": 0,
-  "quality": 8,
-  "belief": "",
-  "intro": null,
+  "minMoves": 21,
   "feature": "lightAll",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
+  "layer": 3,
+  "n": 9,
+  "belief": "",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn, mà đi lại ô đã sáng là đèn tắt. Tìm một đường đi qua mỗi ô đúng một lần; ngõ cụt chỉ nên là điểm cuối."
  },
  {
   "id": "trix_1_t1",
@@ -2842,7 +2701,7 @@
    ]
   ],
   "belief": "every point gets visited. no exceptions.",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.",
   "note": "Dạy cách vẽ đường + nét chì mờ phải được tô lại.",
   "solIn": "URURUR",
   "solutions": 1,
@@ -2975,7 +2834,7 @@
    ]
   ],
   "belief": "numbers don't lie. people do.",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.",
   "note": "Phủ kín + đường đứt: tìm thứ tự duy nhất.",
   "solIn": "URDRRULULLURRRD",
   "solutions": 1,
@@ -3167,11 +3026,104 @@
    ]
   ],
   "belief": "rules exist so nothing surprises me.",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.",
   "note": "Nét chì rời rạc: phải tìm đường duy nhất nối hết các mảnh.",
   "solIn": "RULURRURDRU",
   "solutions": 2,
   "minMoves": 11
+ },
+ {
+  "id": "trix_1_7",
+  "girl": "trix",
+  "w": 3,
+  "h": 3,
+  "boxes": [
+   {
+    "x": 1,
+    "y": 1,
+    "trail": true
+   }
+  ],
+  "exit": [
+   [
+    1,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    1,
+    0,
+    2
+   ]
+  ],
+  "solIn": "LURRRDLDRDLLLUR",
+  "solutions": 1,
+  "minMoves": 15,
+  "feature": "roomAll",
+  "layer": 1,
+  "n": 7,
+  "belief": "leave one square dark and the whole proof is void.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Mẹo: Thắp cả phòng: dây phải phủ mọi ô rồi mới tới goal. Ô góc và ngõ cụt chỉ có một hai lối: dây buộc phải đi qua chúng theo đúng lối đó, bắt đầu tính từ đấy."
  },
  {
   "id": "trix_2_t1",
@@ -3438,7 +3390,7 @@
   "minMoves": 9,
   "belief": "if the count is wrong, everything is wrong.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác."
  },
  {
   "id": "trix_2_5",
@@ -3622,7 +3574,7 @@
   ],
   "belief": "two of a kind. that's the safest hand.",
   "intro": "ends",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Mẹo: Coi hai cổng như một ô.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Mẹo: Coi hai cổng như một ô.",
   "solIn": "DLLURULDDDLUUULLL",
   "solutions": 1,
   "minMoves": 17
@@ -3703,7 +3655,7 @@
   ],
   "belief": "every square answers to me.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.",
   "solIn": "RULUURDRDDRURULUR",
   "solutions": 2,
   "minMoves": 17
@@ -3764,7 +3716,179 @@
   "minMoves": 10,
   "belief": "rules exist so nothing surprises me.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác."
+ },
+ {
+  "id": "trix_2_9",
+  "girl": "trix",
+  "w": 4,
+  "h": 3,
+  "boxes": [
+   {
+    "x": 2,
+    "y": 0,
+    "trail": true
+   }
+  ],
+  "exit": [
+   [
+    0,
+    0
+   ]
+  ],
+  "holes": [
+   [
+    0,
+    3
+   ]
+  ],
+  "lights": [
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    2,
+    1,
+    2,
+    2
+   ]
+  ],
+  "solIn": "LDRRURDDDLULDLULUU",
+  "solutions": 1,
+  "minMoves": 18,
+  "feature": "roomAll",
+  "layer": 2,
+  "n": 9,
+  "belief": "every room gets checked. every corner. twice.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Mẹo: Thắp cả phòng: dây phải phủ mọi ô rồi mới tới goal. Ô góc và ngõ cụt chỉ có một hai lối: dây buộc phải đi qua chúng theo đúng lối đó, bắt đầu tính từ đấy."
+ },
+ {
+  "id": "trix_2_10",
+  "girl": "trix",
+  "w": 4,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 1,
+    "y": 0,
+    "trail": true
+   }
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "holes": [
+   [
+    0,
+    4
+   ]
+  ],
+  "touch": [
+   [
+    2,
+    1,
+    2
+   ],
+   [
+    3,
+    1,
+    2
+   ],
+   [
+    1,
+    2,
+    3
+   ],
+   [
+    2,
+    3,
+    3
+   ]
+  ],
+  "solIn": "DLDDRDRRURUUULL",
+  "solutions": 1,
+  "minMoves": 15,
+  "feature": "touchDense",
+  "layer": 2,
+  "n": 10,
+  "belief": "numbers next to numbers. they have to agree with each other.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Các ô số đứng sát nhau dùng chung ô cạnh: một ô có dây có thể được hai, ba ô số cùng đếm. Bắt đầu từ ô số mà các ô quanh nó ít lựa chọn nhất."
  },
  {
   "id": "trix_3_1",
@@ -3841,7 +3965,7 @@
    ]
   ],
   "belief": "if i count it twice, it is real.",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Mẹo: Ô số 3 gần như bị dây bao quanh; ô số 1 chỉ cho dây chạm một bên: bắt đầu từ chúng.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Mẹo: Ô số 3 gần như bị dây bao quanh; ô số 1 chỉ cho dây chạm một bên: bắt đầu từ chúng.",
   "note": "Số + phủ kín cùng lúc.",
   "solIn": "RRRULLLUURRRD",
   "solutions": 1,
@@ -4056,7 +4180,7 @@
   ],
   "belief": "i count the moves before i make them.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.",
   "solIn": "ULDLDRRDLDRDDLDDDDRD",
   "solutions": 1,
   "minMoves": 20
@@ -4101,7 +4225,7 @@
   ],
   "belief": "a perfect game has no wasted moves.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Mẹo: Ô số 3 gần như bị dây bao quanh; ô số 1 chỉ cho dây chạm một bên: bắt đầu từ chúng.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Mẹo: Ô số 3 gần như bị dây bao quanh; ô số 1 chỉ cho dây chạm một bên: bắt đầu từ chúng.",
   "solIn": "URDRRRUULLLURRR",
   "solutions": 1,
   "minMoves": 15,
@@ -4242,7 +4366,7 @@
   ],
   "belief": "perfect is the minimum.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.",
   "solIn": "UUURDDDRRRULULUURR",
   "solutions": 2,
   "minMoves": 18
@@ -4389,7 +4513,7 @@
   ],
   "belief": "i finish what i start. all of it.",
   "intro": null,
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.",
   "solIn": "URDRRRULULLULURRRDRU",
   "solutions": 1,
   "minMoves": 20,
@@ -4471,6 +4595,263 @@
     3
    ]
   ]
+ },
+ {
+  "id": "trix_3_10",
+  "girl": "trix",
+  "w": 4,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 1,
+    "y": 0,
+    "trail": true
+   }
+  ],
+  "exit": [
+   [
+    0,
+    4
+   ]
+  ],
+  "holes": [
+   [
+    4,
+    0
+   ]
+  ],
+  "lights": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    3
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    2,
+    3,
+    2,
+    4
+   ]
+  ],
+  "solIn": "LDDRURURDRDLLDRRDLLLULD",
+  "solutions": 1,
+  "minMoves": 23,
+  "feature": "roomAll",
+  "layer": 3,
+  "n": 10,
+  "belief": "if i miss one tile, i start over. that is the rule.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Mẹo: Thắp cả phòng: dây phải phủ mọi ô rồi mới tới goal. Ô góc và ngõ cụt chỉ có một hai lối: dây buộc phải đi qua chúng theo đúng lối đó, bắt đầu tính từ đấy."
+ },
+ {
+  "id": "trix_3_11",
+  "girl": "trix",
+  "w": 5,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 5,
+    "y": 3,
+    "trail": true
+   }
+  ],
+  "exit": [
+   [
+    4,
+    3
+   ]
+  ],
+  "holes": [
+   [
+    0,
+    4
+   ]
+  ],
+  "touch": [
+   [
+    2,
+    1,
+    1
+   ],
+   [
+    3,
+    1,
+    1
+   ],
+   [
+    2,
+    2,
+    1
+   ],
+   [
+    3,
+    2,
+    1
+   ],
+   [
+    3,
+    3,
+    2
+   ]
+  ],
+  "solIn": "DLLLLUULUURRRRRDDLD",
+  "solutions": 1,
+  "minMoves": 19,
+  "feature": "touchDense",
+  "layer": 3,
+  "n": 11,
+  "belief": "one wrong count and the whole column collapses.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Các ô số đứng sát nhau dùng chung ô cạnh: một ô có dây có thể được hai, ba ô số cùng đếm. Bắt đầu từ ô số mà các ô quanh nó ít lựa chọn nhất."
+ },
+ {
+  "id": "trix_3_12",
+  "girl": "trix",
+  "w": 5,
+  "h": 5,
+  "boxes": [
+   {
+    "x": 3,
+    "y": 3,
+    "trail": true
+   }
+  ],
+  "exit": [
+   [
+    2,
+    5
+   ]
+  ],
+  "holes": [
+   [
+    5,
+    5
+   ]
+  ],
+  "touch": [
+   [
+    1,
+    1,
+    2
+   ],
+   [
+    3,
+    1,
+    1
+   ],
+   [
+    2,
+    2,
+    1
+   ],
+   [
+    4,
+    2,
+    2
+   ],
+   [
+    1,
+    3,
+    2
+   ]
+  ],
+  "solIn": "LDRRURUUULLLLLDDDDDRR",
+  "solutions": 1,
+  "minMoves": 21,
+  "feature": "touchDense",
+  "layer": 3,
+  "n": 12,
+  "belief": "i can hold six constraints in my head. i have to.",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Các ô số đứng sát nhau dùng chung ô cạnh: một ô có dây có thể được hai, ba ô số cùng đếm. Bắt đầu từ ô số mà các ô quanh nó ít lựa chọn nhất."
  },
  {
   "id": "paige_1_t1",
@@ -10286,15 +10667,15 @@
     0
    ]
   ],
-  "solIn": "UURRRRULLLLLDDL",
+  "solIn": "LLLDRRRRRUUR",
   "solutions": 1,
-  "minMoves": 15,
+  "minMoves": 12,
   "luck": 0,
   "quality": 40.5,
   "belief": "two players, one heart rate.",
   "intro": null,
   "feature": "trail",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác."
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác."
  },
  {
   "id": "myne_3_7",
@@ -10637,527 +11018,5 @@
   "intro": null,
   "feature": "colors",
   "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô sơn: hộp đi vào bị đổi sang màu của ô. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
- },
- {
-  "id": "trix_1_7",
-  "girl": "trix",
-  "w": 3,
-  "h": 3,
-  "boxes": [
-   {
-    "x": 1,
-    "y": 1,
-    "trail": true
-   }
-  ],
-  "exit": [
-   [
-    1,
-    2
-   ]
-  ],
-  "lights": [
-   [
-    0,
-    1
-   ],
-   [
-    0,
-    0
-   ],
-   [
-    1,
-    0
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    3,
-    1
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    1,
-    3
-   ],
-   [
-    0,
-    3
-   ],
-   [
-    0,
-    2
-   ]
-  ],
-  "broken": [
-   [
-    0,
-    1,
-    0,
-    2
-   ]
-  ],
-  "solIn": "LURRRDLDRDLLLUR",
-  "solutions": 1,
-  "minMoves": 15,
-  "feature": "roomAll",
-  "layer": 1,
-  "n": 7,
-  "belief": "leave one square dark and the whole proof is void.",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Mẹo: Thắp cả phòng: dây phải phủ mọi ô rồi mới tới goal. Ô góc và ngõ cụt chỉ có một hai lối: dây buộc phải đi qua chúng theo đúng lối đó, bắt đầu tính từ đấy."
- },
- {
-  "id": "trix_2_9",
-  "girl": "trix",
-  "w": 4,
-  "h": 3,
-  "boxes": [
-   {
-    "x": 2,
-    "y": 0,
-    "trail": true
-   }
-  ],
-  "exit": [
-   [
-    0,
-    0
-   ]
-  ],
-  "holes": [
-   [
-    0,
-    3
-   ]
-  ],
-  "lights": [
-   [
-    1,
-    0
-   ],
-   [
-    1,
-    1
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    3,
-    1
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    4,
-    0
-   ],
-   [
-    4,
-    1
-   ],
-   [
-    4,
-    2
-   ],
-   [
-    4,
-    3
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    1,
-    3
-   ],
-   [
-    1,
-    2
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    0,
-    1
-   ]
-  ],
-  "broken": [
-   [
-    0,
-    1,
-    1,
-    1
-   ],
-   [
-    2,
-    1,
-    2,
-    2
-   ]
-  ],
-  "solIn": "LDRRURDDDLULDLULUU",
-  "solutions": 1,
-  "minMoves": 18,
-  "feature": "roomAll",
-  "layer": 2,
-  "n": 9,
-  "belief": "every room gets checked. every corner. twice.",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Mẹo: Thắp cả phòng: dây phải phủ mọi ô rồi mới tới goal. Ô góc và ngõ cụt chỉ có một hai lối: dây buộc phải đi qua chúng theo đúng lối đó, bắt đầu tính từ đấy."
- },
- {
-  "id": "trix_3_10",
-  "girl": "trix",
-  "w": 4,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 1,
-    "y": 0,
-    "trail": true
-   }
-  ],
-  "exit": [
-   [
-    0,
-    4
-   ]
-  ],
-  "holes": [
-   [
-    4,
-    0
-   ]
-  ],
-  "lights": [
-   [
-    0,
-    0
-   ],
-   [
-    0,
-    1
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    1,
-    2
-   ],
-   [
-    1,
-    1
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    3,
-    1
-   ],
-   [
-    4,
-    1
-   ],
-   [
-    4,
-    2
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    4,
-    3
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    3,
-    4
-   ],
-   [
-    2,
-    4
-   ],
-   [
-    1,
-    4
-   ],
-   [
-    1,
-    3
-   ],
-   [
-    0,
-    3
-   ]
-  ],
-  "broken": [
-   [
-    0,
-    2,
-    0,
-    3
-   ],
-   [
-    2,
-    3,
-    2,
-    4
-   ]
-  ],
-  "solIn": "LDDRURURDRDLLDRRDLLLULD",
-  "solutions": 1,
-  "minMoves": 23,
-  "feature": "roomAll",
-  "layer": 3,
-  "n": 10,
-  "belief": "if i miss one tile, i start over. that is the rule.",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Mẹo: Thắp cả phòng: dây phải phủ mọi ô rồi mới tới goal. Ô góc và ngõ cụt chỉ có một hai lối: dây buộc phải đi qua chúng theo đúng lối đó, bắt đầu tính từ đấy."
- },
- {
-  "id": "trix_2_10",
-  "girl": "trix",
-  "w": 4,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 1,
-    "y": 0,
-    "trail": true
-   }
-  ],
-  "exit": [
-   [
-    2,
-    0
-   ]
-  ],
-  "holes": [
-   [
-    0,
-    4
-   ]
-  ],
-  "touch": [
-   [
-    2,
-    1,
-    2
-   ],
-   [
-    3,
-    1,
-    2
-   ],
-   [
-    1,
-    2,
-    3
-   ],
-   [
-    2,
-    3,
-    3
-   ]
-  ],
-  "solIn": "DLDDRDRRURUUULL",
-  "solutions": 1,
-  "minMoves": 15,
-  "feature": "touchDense",
-  "layer": 2,
-  "n": 10,
-  "belief": "numbers next to numbers. they have to agree with each other.",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Các ô số đứng sát nhau dùng chung ô cạnh: một ô có dây có thể được hai, ba ô số cùng đếm. Bắt đầu từ ô số mà các ô quanh nó ít lựa chọn nhất."
- },
- {
-  "id": "trix_3_11",
-  "girl": "trix",
-  "w": 5,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 5,
-    "y": 3,
-    "trail": true
-   }
-  ],
-  "exit": [
-   [
-    4,
-    3
-   ]
-  ],
-  "holes": [
-   [
-    0,
-    4
-   ]
-  ],
-  "touch": [
-   [
-    2,
-    1,
-    1
-   ],
-   [
-    3,
-    1,
-    1
-   ],
-   [
-    2,
-    2,
-    1
-   ],
-   [
-    3,
-    2,
-    1
-   ],
-   [
-    3,
-    3,
-    2
-   ]
-  ],
-  "solIn": "DLLLLUULUURRRRRDDLD",
-  "solutions": 1,
-  "minMoves": 19,
-  "feature": "touchDense",
-  "layer": 3,
-  "n": 11,
-  "belief": "one wrong count and the whole column collapses.",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Các ô số đứng sát nhau dùng chung ô cạnh: một ô có dây có thể được hai, ba ô số cùng đếm. Bắt đầu từ ô số mà các ô quanh nó ít lựa chọn nhất."
- },
- {
-  "id": "trix_3_12",
-  "girl": "trix",
-  "w": 5,
-  "h": 5,
-  "boxes": [
-   {
-    "x": 3,
-    "y": 3,
-    "trail": true
-   }
-  ],
-  "exit": [
-   [
-    2,
-    5
-   ]
-  ],
-  "holes": [
-   [
-    5,
-    5
-   ]
-  ],
-  "touch": [
-   [
-    1,
-    1,
-    2
-   ],
-   [
-    3,
-    1,
-    1
-   ],
-   [
-    2,
-    2,
-    1
-   ],
-   [
-    4,
-    2,
-    2
-   ],
-   [
-    1,
-    3,
-    2
-   ]
-  ],
-  "solIn": "LDRRURUUULLLLLDDDDDRR",
-  "solutions": 1,
-  "minMoves": 21,
-  "feature": "touchDense",
-  "layer": 3,
-  "n": 12,
-  "belief": "i can hold six constraints in my head. i have to.",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp dây: lăn tới đâu để lại dây tới đó; dây là tường với mọi hộp, kể cả chính nó (đi nhầm thì ấn Z để lùi lại). Ô số (tấm đồng có số to ở giữa): không đi vào được; dây phải phủ đúng ngần ấy ô nằm sát 4 cạnh của nó. Mỗi cạnh có một đèn, sáng lên khi ô bên đó có dây; đủ số thì cả ô chuyển xanh, thừa thì đỏ. Chỗ trống trên map không đi được. Mẹo: Các ô số đứng sát nhau dùng chung ô cạnh: một ô có dây có thể được hai, ba ô số cùng đếm. Bắt đầu từ ô số mà các ô quanh nó ít lựa chọn nhất."
  }
 ]
