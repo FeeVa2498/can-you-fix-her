@@ -18,7 +18,7 @@
    {
     "x": 0,
     "y": 0,
-    "n": 4
+    "n": 6
    }
   ],
   "exit": [
@@ -30,7 +30,7 @@
   "solIn": "RRRD",
   "solutions": 2,
   "minMoves": 4,
-  "luck": 5.2,
+  "luck": 7.6,
   "belief": "",
   "intro": "budget",
   "tut": "budget",
@@ -46,45 +46,45 @@
   "holes": [
    [
     0,
-    0
+    2
    ],
    [
     1,
-    0
+    2
    ]
   ],
   "broken": [
    [
     2,
-    1,
+    0,
     3,
-    1
+    0
    ],
    [
     2,
+    0,
     2,
-    3,
-    2
+    1
    ]
   ],
   "boxes": [
    {
     "x": 0,
-    "y": 1,
-    "n": 6
+    "y": 0,
+    "n": 7
    }
   ],
   "exit": [
    [
     3,
-    2
+    0
    ]
   ],
-  "solIn": "RRURDD",
+  "solIn": "RDRRU",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 0.5,
-  "quality": 13.9,
+  "minMoves": 5,
+  "luck": 2.9,
+  "quality": 10.7,
   "belief": "i only draw on top of other people's lines.",
   "intro": null,
   "feature": "budget",
@@ -103,56 +103,95 @@
     3
    ],
    [
-    3,
-    0
-   ],
-   [
-    2,
-    0
+    1,
+    3
    ]
   ],
   "broken": [
    [
-    0,
     1,
+    0,
     1,
     1
    ],
    [
-    2,
+    1,
     1,
     2,
+    1
+   ],
+   [
+    1,
+    1,
+    1,
     2
    ],
    [
+    1,
     2,
     2,
-    3,
     2
    ]
   ],
   "boxes": [
    {
+    "x": 1,
+    "y": 2,
+    "n": 9
+   }
+  ],
+  "exit": [
+   [
+    2,
+    2
+   ]
+  ],
+  "solIn": "LUURRDD",
+  "solutions": 1,
+  "minMoves": 7,
+  "luck": 0,
+  "quality": 14.8,
+  "belief": "if i lose the line, i'll ruin the whole page.",
+  "intro": null,
+  "feature": "budget",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+ },
+ {
+  "id": "prim_1_t3",
+  "girl": "prim",
+  "layer": 1,
+  "n": 2.4,
+  "w": 3,
+  "h": 2,
+  "boxes": [
+   {
     "x": 0,
-    "y": 1,
-    "n": 7
+    "y": 0,
+    "n": 4
    }
   ],
   "exit": [
    [
     3,
-    3
+    2
    ]
   ],
-  "solIn": "DRURRDD",
+  "portals": [
+   [
+    3,
+    1,
+    0,
+    1
+   ]
+  ],
+  "solIn": "DD",
   "solutions": 1,
-  "minMoves": 7,
-  "luck": 0.9,
-  "quality": 15.5,
-  "belief": "if i lose the line, i'll ruin the whole page.",
-  "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "minMoves": 2,
+  "luck": 13.7,
+  "belief": "",
+  "intro": "portals",
+  "tut": "portals",
+  "why": "Bảng dạy luật mới. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Coi hai cổng như một ô."
  },
  {
   "id": "prim_1_3",
@@ -163,12 +202,16 @@
   "h": 3,
   "holes": [
    [
-    0,
-    3
+    2,
+    2
    ],
    [
     4,
-    3
+    1
+   ],
+   [
+    1,
+    0
    ],
    [
     2,
@@ -183,40 +226,48 @@
     1
    ],
    [
-    1,
-    1,
-    1,
-    2
+    0,
+    2,
+    0,
+    3
    ],
    [
-    3,
     1,
-    4,
-    1
+    3,
+    2,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 0,
-    "n": 8
+    "x": 0,
+    "y": 3,
+    "n": 10
    }
   ],
   "exit": [
    [
-    4,
+    2,
     1
    ]
   ],
-  "solIn": "LDDRRRRU",
+  "portals": [
+   [
+    0,
+    1,
+    4,
+    3
+   ]
+  ],
+  "solIn": "RULULUUL",
   "solutions": 1,
   "minMoves": 8,
-  "luck": 0.1,
-  "quality": 18.6,
+  "luck": 0.9,
+  "quality": 12.7,
   "belief": "i only draw what someone drew first.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "portals",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Coi hai cổng như một ô."
  },
  {
   "id": "prim_1_t4",
@@ -225,35 +276,43 @@
   "n": 3.4,
   "w": 3,
   "h": 2,
+  "broken": [
+   [
+    0,
+    1,
+    1,
+    1
+   ]
+  ],
   "boxes": [
    {
-    "x": 0,
-    "y": 2,
+    "x": 3,
+    "y": 1,
     "n": 4
    }
   ],
   "exit": [
    [
-    3,
-    0
-   ]
-  ],
-  "portals": [
-   [
-    2,
-    2,
     0,
     1
    ]
   ],
-  "solIn": "URUU",
-  "solutions": 2,
-  "minMoves": 4,
-  "luck": 5.3,
+  "pads": [
+   [
+    3,
+    0,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "UD",
+  "solutions": 1,
+  "minMoves": 2,
+  "luck": 15.4,
   "belief": "",
-  "intro": "portals",
-  "tut": "portals",
-  "why": "Bảng dạy luật mới. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Coi hai cổng như một ô."
+  "intro": "pads",
+  "tut": "pads",
+  "why": "Bảng dạy luật mới. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
   "id": "prim_1_4",
@@ -264,70 +323,119 @@
   "h": 3,
   "holes": [
    [
-    3,
-    3
+    0,
+    2
    ],
    [
-    1,
-    0
+    0,
+    1
    ]
   ],
   "broken": [
    [
     1,
+    0,
     1,
-    2,
     1
    ],
    [
-    1,
-    1,
-    1,
-    2
-   ],
-   [
+    2,
     0,
     2,
-    1,
-    2
-   ],
-   [
-    1,
-    2,
-    2,
-    2
+    1
    ]
   ],
   "boxes": [
    {
-    "x": 4,
-    "y": 3,
+    "x": 1,
+    "y": 0,
     "n": 7
    }
   ],
   "exit": [
    [
     0,
-    0
-   ]
-  ],
-  "portals": [
-   [
-    4,
-    0,
-    1,
     3
    ]
   ],
-  "solIn": "UUULUUU",
-  "solutions": 1,
-  "minMoves": 7,
-  "luck": 0.1,
-  "quality": 15.6,
+  "pads": [
+   [
+    4,
+    3,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "RRRDDD",
+  "solutions": 2,
+  "minMoves": 6,
+  "luck": 0.5,
+  "quality": 11,
   "belief": "if i trace it, it can't be wrong.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "pads",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+ },
+ {
+  "id": "prim_1_t5",
+  "girl": "prim",
+  "layer": 1,
+  "n": 4.4,
+  "w": 3,
+  "h": 2,
+  "broken": [
+   [
+    1,
+    0,
+    2,
+    0
+   ],
+   [
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 3,
+    "y": 1,
+    "n": 6
+   }
+  ],
+  "exit": [
+   [
+    0,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    2,
+    1
+   ]
+  ],
+  "solIn": "LLDL",
+  "solutions": 1,
+  "minMoves": 4,
+  "luck": 4.5,
+  "belief": "",
+  "intro": "lights",
+  "tut": "lights",
+  "why": "Bảng dạy luật mới. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "prim_1_5",
@@ -335,181 +443,157 @@
   "layer": 1,
   "n": 5,
   "w": 4,
-  "h": 4,
+  "h": 3,
   "holes": [
    [
-    4,
-    2
+    3,
+    3
    ],
    [
-    0,
-    0
-   ],
-   [
-    0,
-    2
+    2,
+    3
    ]
   ],
   "broken": [
    [
+    0,
     1,
-    1,
+    0,
+    2
+   ],
+   [
     2,
+    1,
+    3,
     1
-   ],
-   [
-    2,
-    2,
-    2,
-    3
-   ],
-   [
-    3,
-    3,
-    4,
-    3
    ]
   ],
   "boxes": [
    {
-    "x": 4,
+    "x": 1,
     "y": 1,
-    "n": 7
+    "n": 10
    }
   ],
   "exit": [
    [
-    4,
-    3
+    2,
+    2
    ]
   ],
-  "portals": [
+  "lights": [
    [
-    1,
-    4,
-    4,
-    4
+    0,
+    2
+   ],
+   [
+    3,
+    1
    ]
   ],
-  "solIn": "LLDLDDU",
+  "solIn": "DLRRRUDL",
   "solutions": 1,
-  "minMoves": 7,
-  "luck": 0.5,
-  "quality": 16.4,
+  "minMoves": 8,
+  "luck": 0,
+  "quality": 23.3,
   "belief": "",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "lights",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "prim_1_6",
   "girl": "prim",
   "layer": 1,
   "n": 6,
-  "w": 5,
-  "h": 4,
+  "w": 2,
+  "h": 3,
   "holes": [
    [
-    0,
-    3
-   ],
-   [
-    0,
-    4
-   ],
-   [
-    5,
-    0
-   ],
-   [
-    0,
-    2
-   ],
-   [
     1,
-    2
+    3
    ]
   ],
   "broken": [
    [
     1,
     0,
-    2,
-    0
-   ],
-   [
-    3,
     1,
-    4,
     1
    ],
    [
-    5,
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    2,
     1,
-    5,
+    2,
     2
-   ],
-   [
-    2,
-    2,
-    2,
-    3
-   ],
-   [
-    3,
-    2,
-    4,
-    2
-   ],
-   [
-    4,
-    2,
-    5,
-    2
-   ],
-   [
-    4,
-    2,
-    4,
-    3
-   ],
-   [
-    1,
-    3,
-    1,
-    4
    ]
   ],
   "boxes": [
    {
     "x": 0,
-    "y": 0,
-    "n": 9
+    "y": 1,
+    "n": 18
    }
   ],
   "exit": [
    [
-    5,
-    1
-   ]
-  ],
-  "portals": [
-   [
-    2,
-    1,
-    3,
+    0,
     3
    ]
   ],
-  "solIn": "RDRUUURDR",
+  "lights": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "solIn": "URRLLDRRLDRDULLD",
   "solutions": 1,
-  "minMoves": 9,
-  "luck": 0.2,
-  "quality": 21,
+  "minMoves": 16,
+  "luck": 0,
+  "quality": 31,
   "belief": "if i copy, i can't be wrong.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "lightAll",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
  },
  {
   "id": "prim_1_t7",
@@ -518,125 +602,58 @@
   "n": 6.4,
   "w": 3,
   "h": 2,
+  "broken": [
+   [
+    2,
+    2,
+    3,
+    2
+   ]
+  ],
   "boxes": [
    {
-    "x": 3,
+    "x": 1,
+    "y": 2,
+    "n": 5
+   },
+   {
+    "x": 1,
     "y": 1,
-    "n": 3
+    "n": 5
    }
   ],
   "exit": [
    [
-    1,
-    1
-   ]
-  ],
-  "pads": [
-   [
-    2,
-    1,
     0,
-    1
+    2
+   ],
+   [
+    3,
+    2
    ]
   ],
-  "solIn": "LLU",
+  "solIn": "RRDLL",
   "solutions": 1,
-  "minMoves": 3,
-  "luck": 3.7,
+  "minMoves": 5,
+  "luck": 0.9,
   "belief": "",
-  "intro": "pads",
-  "tut": "pads",
-  "why": "Bảng dạy luật mới. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+  "intro": "many",
+  "tut": "many",
+  "why": "Bảng dạy luật mới. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "prim_1_7",
   "girl": "prim",
   "layer": 1,
   "n": 7,
-  "w": 4,
+  "w": 3,
   "h": 3,
   "holes": [
    [
-    4,
-    3
-   ],
-   [
-    0,
-    3
-   ],
-   [
     1,
-    3
-   ],
-   [
-    2,
-    3
-   ]
-  ],
-  "broken": [
-   [
-    2,
-    1,
-    2,
-    2
-   ],
-   [
-    3,
-    1,
-    3,
-    2
-   ],
-   [
-    3,
-    2,
-    4,
-    2
-   ]
-  ],
-  "boxes": [
-   {
-    "x": 4,
-    "y": 1,
-    "n": 8
-   }
-  ],
-  "exit": [
-   [
-    3,
-    3
-   ]
-  ],
-  "pads": [
-   [
-    1,
-    2,
-    0,
-    1
-   ],
-   [
-    1,
-    1,
-    -1,
     0
    ]
   ],
-  "solIn": "LLLDRRRD",
-  "solutions": 1,
-  "minMoves": 8,
-  "luck": 0,
-  "quality": 20.1,
-  "belief": "",
-  "intro": null,
-  "feature": "pads",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
- },
- {
-  "id": "prim_1_t8",
-  "girl": "prim",
-  "layer": 1,
-  "n": 7.4,
-  "w": 3,
-  "h": 2,
   "broken": [
    [
     2,
@@ -645,45 +662,55 @@
     0
    ],
    [
+    0,
     2,
-    1,
-    2,
-    2
+    0,
+    3
    ],
    [
-    3,
     1,
-    3,
-    2
+    2,
+    1,
+    3
+   ],
+   [
+    2,
+    2,
+    2,
+    3
    ]
   ],
   "boxes": [
    {
     "x": 3,
-    "y": 1,
+    "y": 2,
     "n": 7
+   },
+   {
+    "x": 0,
+    "y": 0,
+    "n": 11
    }
   ],
   "exit": [
    [
     3,
+    3
+   ],
+   [
+    3,
     0
    ]
   ],
-  "lights": [
-   [
-    1,
-    2
-   ]
-  ],
-  "solIn": "LLDURRU",
+  "solIn": "DRRRLULDRUR",
   "solutions": 1,
-  "minMoves": 7,
+  "minMoves": 11,
   "luck": 0,
+  "quality": 33.8,
   "belief": "",
-  "intro": "lights",
-  "tut": "lights",
-  "why": "Bảng dạy luật mới. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "intro": null,
+  "feature": "many",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "prim_1_8",
@@ -694,64 +721,183 @@
   "h": 3,
   "holes": [
    [
-    1,
+    2,
     0
    ],
+   [
+    4,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ],
+   [
+    2,
+    3,
+    3,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 4,
+    "y": 3,
+    "n": 7
+   },
+   {
+    "x": 1,
+    "y": 0,
+    "n": 5
+   }
+  ],
+  "exit": [
+   [
+    4,
+    1
+   ],
+   [
+    0,
+    3
+   ]
+  ],
+  "pads": [
+   [
+    0,
+    2,
+    1,
+    0
+   ]
+  ],
+  "solIn": "LULLDLDU",
+  "solutions": 1,
+  "minMoves": 8,
+  "luck": 0,
+  "quality": 23.8,
+  "belief": "",
+  "intro": null,
+  "feature": "pads",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+ },
+ {
+  "id": "prim_1_9",
+  "girl": "prim",
+  "layer": 1,
+  "n": 9,
+  "w": 3,
+  "h": 3,
+  "holes": [
    [
     3,
     3
    ],
    [
-    2,
-    3
-   ],
-   [
-    2,
+    0,
     2
    ]
   ],
   "broken": [
    [
-    2,
     0,
-    2,
+    1,
+    1,
     1
    ],
    [
-    4,
-    0,
-    4,
-    1
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    2,
+    1,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 3,
-    "n": 12
+    "x": 1,
+    "y": 1,
+    "n": 21
    }
   ],
   "exit": [
    [
-    1,
-    2
+    3,
+    0
    ]
   ],
   "lights": [
    [
-    4,
+    0,
     0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
    ]
   ],
-  "solIn": "RUURRURLDLLD",
+  "solIn": "DUULDURRDDDLLRRURUU",
   "solutions": 1,
-  "minMoves": 12,
+  "minMoves": 19,
   "luck": 0,
-  "quality": 26.7,
+  "quality": 38.1,
   "belief": "",
   "intro": null,
-  "feature": "lights",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "feature": "lightAll",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
  },
  {
   "id": "prim_2_t1",
@@ -759,45 +905,77 @@
   "layer": 2,
   "n": 0.4,
   "w": 3,
-  "h": 2,
+  "h": 3,
   "broken": [
    [
-    2,
     0,
+    0,
+    1,
+    0
+   ],
+   [
+    3,
+    3,
     2,
+    3
+   ],
+   [
+    3,
+    0,
+    3,
+    1
+   ],
+   [
+    0,
+    3,
+    0,
+    2
+   ],
+   [
+    2,
+    2,
+    3,
+    2
+   ],
+   [
+    1,
+    1,
+    0,
     1
    ]
   ],
   "boxes": [
    {
-    "x": 3,
-    "y": 2,
-    "n": 5
+    "x": 1,
+    "y": 3,
+    "n": 6
    },
    {
-    "x": 1,
+    "x": 2,
     "y": 0,
-    "n": 4
+    "m": "opp",
+    "n": 6
    }
   ],
   "exit": [
    [
-    3,
-    1
+    0,
+    0
    ],
    [
-    1,
-    2
+    3,
+    3
    ]
   ],
-  "solIn": "UULDRD",
+  "solIn": "ULUU",
   "solutions": 1,
-  "minMoves": 6,
-  "luck": 0,
+  "minMoves": 4,
+  "luck": 2.9,
+  "quality": 9.4,
   "belief": "",
-  "intro": "many",
-  "tut": "many",
-  "why": "Bảng dạy luật mới. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
+  "intro": "twin",
+  "tut": "twin",
+  "why": "Bảng dạy luật mới. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "prim_2_1",
@@ -808,34 +986,33 @@
   "h": 3,
   "holes": [
    [
-    3,
+    1,
     3
+   ],
+   [
+    1,
+    2
    ]
   ],
   "broken": [
    [
     0,
     0,
-    1,
-    0
-   ],
-   [
-    1,
-    2,
-    2,
-    2
+    0,
+    1
    ]
   ],
   "boxes": [
    {
     "x": 3,
     "y": 0,
-    "n": 6
+    "n": 5
    },
    {
-    "x": 2,
+    "x": 3,
     "y": 1,
-    "n": 4
+    "m": "opp",
+    "n": 7
    }
   ],
   "exit": [
@@ -844,19 +1021,19 @@
     1
    ],
    [
-    3,
-    2
+    0,
+    0
    ]
   ],
-  "solIn": "DLLLURD",
+  "solIn": "RRRULLLD",
   "solutions": 1,
-  "minMoves": 7,
-  "luck": 0,
-  "quality": 23.7,
+  "minMoves": 8,
+  "luck": 0.2,
+  "quality": 24.8,
   "belief": "the black lines aren't mine. i won't touch them.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "opp",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "prim_2_2",
@@ -867,53 +1044,87 @@
   "h": 3,
   "holes": [
    [
-    2,
-    3
+    3,
+    0
    ],
    [
-    0,
-    3
-   ]
-  ],
-  "broken": [
-   [
-    2,
-    1,
-    2,
-    2
-   ]
-  ],
-  "boxes": [
-   {
-    "x": 4,
-    "y": 3,
-    "n": 5
-   },
-   {
-    "x": 4,
-    "y": 0,
-    "n": 7
-   }
-  ],
-  "exit": [
-   [
-    0,
+    3,
     1
    ],
    [
     2,
     0
+   ],
+   [
+    2,
+    1
    ]
   ],
-  "solIn": "LLLUULDDU",
-  "solutions": 1,
+  "broken": [
+   [
+    0,
+    1,
+    0,
+    2
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 2,
+    "n": 8
+   },
+   {
+    "x": 1,
+    "y": 2,
+    "n": 7
+   }
+  ],
+  "exit": [
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "portals": [
+   [
+    0,
+    3,
+    3,
+    3
+   ]
+  ],
+  "solIn": "DLDRRUULR",
+  "solutions": 2,
   "minMoves": 9,
   "luck": 0,
-  "quality": 29.9,
+  "quality": 23,
   "belief": "i know which lines are mine. i think.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "portals",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Coi hai cổng như một ô."
  },
  {
   "id": "prim_2_3",
@@ -924,67 +1135,68 @@
   "h": 3,
   "holes": [
    [
-    4,
-    1
+    0,
+    3
    ],
    [
     1,
-    0
+    3
    ]
   ],
   "broken": [
    [
-    2,
-    0,
-    2,
+    3,
+    1,
+    4,
     1
    ],
    [
-    0,
     2,
-    0,
-    3
+    2,
+    3,
+    2
    ]
   ],
   "boxes": [
    {
-    "x": 2,
-    "y": 0,
-    "n": 7
+    "x": 4,
+    "y": 2,
+    "n": 6
    },
    {
-    "x": 4,
-    "y": 0,
-    "n": 8
+    "x": 0,
+    "y": 1,
+    "m": "opp",
+    "n": 6
    }
   ],
   "exit": [
    [
-    0,
+    4,
     3
    ],
    [
     3,
-    0
+    3
    ]
   ],
-  "portals": [
+  "pads": [
    [
-    2,
-    3,
     4,
-    2
+    0,
+    0,
+    1
    ]
   ],
-  "solIn": "RDLDLDDLUU",
+  "solIn": "ULLUUULU",
   "solutions": 1,
-  "minMoves": 10,
+  "minMoves": 8,
   "luck": 0,
-  "quality": 29,
+  "quality": 23.6,
   "belief": "when i draw, the other hand draws too.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "pads",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
   "id": "prim_2_4",
@@ -992,30 +1204,58 @@
   "layer": 2,
   "n": 4,
   "w": 4,
-  "h": 4,
+  "h": 3,
   "holes": [
    [
-    1,
+    0,
     3
    ],
    [
-    1,
-    0
-   ],
-   [
     4,
-    4
-   ],
-   [
-    4,
-    1
+    3
    ]
   ],
   "broken": [
    [
+    0,
+    0,
+    0,
+    1
+   ],
+   [
     2,
+    0,
     2,
+    1
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    2,
+    1,
     3,
+    1
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    4,
+    1,
+    4,
     2
    ],
    [
@@ -1023,91 +1263,148 @@
     3,
     3,
     3
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
-    0,
-    4,
-    1,
-    4
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 4,
-    "n": 7
-   },
-   {
-    "x": 2,
-    "y": 2,
-    "n": 6
+    "x": 0,
+    "y": 1,
+    "n": 27
    }
   ],
   "exit": [
    [
     4,
     2
+   ]
+  ],
+  "lights": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
    ],
    [
     1,
     1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
    ]
   ],
-  "solIn": "RULLUURDR",
+  "solIn": "DRUURRRDLULLLRDDDRUUDRDUR",
   "solutions": 1,
-  "minMoves": 9,
+  "minMoves": 25,
   "luck": 0,
-  "quality": 28.3,
+  "quality": 44.9,
   "belief": "it copies everything i do.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "lightAll",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
  },
  {
   "id": "prim_2_5",
   "girl": "prim",
   "layer": 2,
   "n": 5,
-  "w": 5,
-  "h": 3,
+  "w": 4,
+  "h": 4,
   "holes": [
    [
-    3,
-    3
-   ],
-   [
-    4,
-    3
-   ],
-   [
-    4,
-    0
-   ]
-  ],
-  "broken": [
-   [
-    3,
     2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
     4,
     2
    ]
   ],
+  "broken": [
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ],
+   [
+    3,
+    3,
+    3,
+    4
+   ]
+  ],
   "boxes": [
    {
-    "x": 5,
-    "y": 0,
-    "n": 6
+    "x": 1,
+    "y": 1,
+    "n": 9
    },
    {
-    "x": 5,
-    "y": 1,
-    "n": 11
+    "x": 4,
+    "y": 4,
+    "n": 6
    }
   ],
   "exit": [
@@ -1116,27 +1413,27 @@
     1
    ],
    [
-    3,
-    0
-   ]
-  ],
-  "portals": [
-   [
-    0,
-    0,
-    3,
+    4,
     1
    ]
   ],
-  "solIn": "LLRLLDLLRLU",
+  "pads": [
+   [
+    3,
+    1,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "RDRDULUUR",
   "solutions": 1,
-  "minMoves": 11,
+  "minMoves": 9,
   "luck": 0,
-  "quality": 27.6,
+  "quality": 24.5,
   "belief": "we never touch. we can't.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "pads",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
   "id": "prim_2_6",
@@ -1147,279 +1444,265 @@
   "h": 4,
   "holes": [
    [
-    3,
-    0
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    4,
-    3
+    0,
+    2
    ],
    [
     0,
-    1
+    3
    ],
    [
-    1,
+    4,
     1
    ]
   ],
   "broken": [
    [
-    3,
+    1,
+    0,
+    1,
+    1
+   ],
+   [
+    2,
     1,
     3,
+    1
+   ],
+   [
+    2,
+    1,
+    2,
     2
    ],
    [
-    1,
     3,
     2,
-    3
+    4,
+    2
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 3,
-    "n": 6
+    "x": 2,
+    "y": 1,
+    "n": 8
    },
    {
-    "x": 2,
+    "x": 4,
     "y": 0,
-    "n": 7
+    "m": "opp",
+    "n": 15
    }
   ],
   "exit": [
    [
-    3,
-    4
-   ],
-   [
-    0,
-    0
-   ]
-  ],
-  "portals": [
-   [
-    3,
-    3,
-    4,
-    0
+    2,
+    3
    ],
    [
     1,
-    0,
-    0,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    1,
+    3
+   ],
+   [
+    4,
     4
    ]
   ],
-  "solIn": "DLDRUDLDUD",
+  "solIn": "RUUULURDRRLUD",
   "solutions": 1,
-  "minMoves": 10,
+  "minMoves": 13,
   "luck": 0,
-  "quality": 28.8,
+  "quality": 36.5,
   "belief": "",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "lights",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "prim_2_7",
   "girl": "prim",
   "layer": 2,
   "n": 7,
-  "w": 5,
+  "w": 4,
   "h": 4,
   "holes": [
    [
-    3,
-    4
-   ],
-   [
-    5,
-    2
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    5,
-    3
-   ],
-   [
-    5,
-    4
-   ]
-  ],
-  "broken": [
-   [
-    1,
-    0,
-    1,
-    1
-   ],
-   [
-    2,
-    1,
-    3,
-    1
-   ],
-   [
-    0,
-    2,
-    1,
-    2
-   ],
-   [
-    2,
-    2,
-    3,
-    2
-   ],
-   [
-    0,
-    3,
-    1,
-    3
-   ],
-   [
-    1,
-    3,
-    2,
-    3
-   ],
-   [
-    1,
     4,
-    2,
-    4
+    3
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    2
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 2,
-    "n": 9
+    "x": 0,
+    "y": 4,
+    "n": 6
    },
    {
-    "x": 5,
-    "y": 0,
-    "n": 11
+    "x": 0,
+    "y": 1,
+    "m": "opp",
+    "n": 8
    }
   ],
   "exit": [
    [
-    0,
-    2
+    2,
+    1
    ],
    [
-    1,
+    4,
     4
    ]
   ],
   "portals": [
    [
-    2,
+    1,
     3,
-    4,
-    4
+    2,
+    0
    ]
   ],
-  "solIn": "ULDLUURDDDULDD",
+  "solIn": "LDRRRRUUUU",
   "solutions": 1,
-  "minMoves": 14,
+  "minMoves": 10,
   "luck": 0,
-  "quality": 36.6,
+  "quality": 29,
   "belief": "the other hand always knows where i am going.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "opp",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "prim_2_8",
   "girl": "prim",
   "layer": 2,
   "n": 8,
-  "w": 4,
-  "h": 4,
-  "holes": [
+  "w": 3,
+  "h": 2,
+  "broken": [
    [
+    1,
     0,
+    1,
     1
    ],
    [
     2,
-    4
-   ]
-  ],
-  "broken": [
-   [
-    1,
+    0,
     2,
-    1,
-    3
+    1
    ],
    [
-    4,
     3,
-    4,
-    4
+    0,
+    3,
+    1
+   ],
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    2,
+    2,
+    3,
+    2
    ]
   ],
   "boxes": [
    {
-    "x": 1,
-    "y": 2,
-    "n": 11
+    "x": 3,
+    "y": 0,
+    "n": 9
    },
    {
     "x": 1,
-    "y": 4,
-    "n": 8
+    "y": 0,
+    "n": 17
    }
   ],
   "exit": [
    [
-    4,
+    0,
     2
    ],
    [
-    1,
+    2,
     0
    ]
   ],
-  "pads": [
+  "lights": [
    [
     0,
-    2,
-    -1,
     0
    ],
    [
-    2,
-    1,
     0,
     1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
    ]
   ],
-  "solIn": "RRRLUURUULDDR",
+  "solIn": "LDDRRURDULLDLURRD",
   "solutions": 1,
-  "minMoves": 13,
+  "minMoves": 17,
   "luck": 0,
-  "quality": 38.1,
+  "quality": 39.5,
   "belief": "",
   "intro": null,
-  "feature": "pads",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
+  "feature": "lightAll",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
  },
  {
   "id": "prim_2_9",
@@ -1427,78 +1710,80 @@
   "layer": 2,
   "n": 9,
   "w": 4,
-  "h": 4,
+  "h": 3,
   "holes": [
    [
-    2,
-    4
+    1,
+    1
    ],
    [
-    0,
-    0
+    3,
+    1
+   ],
+   [
+    3,
+    3
    ]
   ],
   "broken": [
    [
-    4,
     2,
-    4,
-    3
+    1,
+    2,
+    2
    ],
    [
     0,
-    3,
+    2,
     1,
-    3
+    2
    ],
    [
-    1,
+    2,
+    2,
     3,
-    1,
-    4
+    2
    ]
   ],
   "boxes": [
    {
     "x": 1,
-    "y": 0,
-    "n": 11
+    "y": 2,
+    "n": 7
    },
    {
-    "x": 0,
-    "y": 1,
-    "n": 9
+    "x": 2,
+    "y": 3,
+    "n": 10
    }
   ],
   "exit": [
    [
     0,
-    2
-   ],
-   [
-    4,
-    4
-   ]
-  ],
-  "lights": [
-   [
-    3,
     0
    ],
    [
-    3,
+    4,
     1
    ]
   ],
-  "solIn": "RRDLDLLDRRRUUD",
+  "portals": [
+   [
+    0,
+    2,
+    3,
+    0
+   ]
+  ],
+  "solIn": "LLULLDLURDL",
   "solutions": 1,
-  "minMoves": 14,
+  "minMoves": 11,
   "luck": 0,
-  "quality": 39,
+  "quality": 28.4,
   "belief": "",
   "intro": null,
-  "feature": "lights",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "feature": "portals",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Coi hai cổng như một ô."
  },
  {
   "id": "prim_3_1",
@@ -1509,34 +1794,22 @@
   "h": 3,
   "holes": [
    [
-    3,
-    0
+    0,
+    1
    ]
   ],
   "broken": [
    [
-    2,
-    0,
-    2,
-    1
-   ],
-   [
-    0,
     1,
     1,
-    1
-   ],
-   [
     1,
-    1,
-    2,
-    1
-   ],
-   [
-    2,
-    2,
-    3,
     2
+   ],
+   [
+    2,
+    1,
+    3,
+    1
    ],
    [
     3,
@@ -1545,52 +1818,52 @@
     3
    ],
    [
+    1,
+    3,
     2,
-    3,
-    3,
     3
    ]
   ],
   "boxes": [
    {
+    "x": 0,
+    "y": 2,
+    "n": 9
+   },
+   {
+    "x": 3,
+    "y": 1,
+    "n": 9
+   },
+   {
     "x": 1,
     "y": 3,
-    "n": 8
-   },
-   {
-    "x": 2,
-    "y": 0,
-    "n": 4
-   },
-   {
-    "x": 2,
-    "y": 2,
-    "n": 7
+    "n": 11
    }
   ],
   "exit": [
    [
     3,
-    2
+    0
+   ],
+   [
+    1,
+    0
    ],
    [
     3,
-    1
-   ],
-   [
-    0,
-    0
+    2
    ]
   ],
-  "solIn": "URURDLDRUL",
+  "solIn": "URRRDLURUL",
   "solutions": 1,
   "minMoves": 10,
   "luck": 0,
-  "quality": 31.4,
-  "belief": "what if i drew something of my own?",
+  "quality": 32.2,
+  "belief": "",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "many",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hộp đứng yên cũng là một bức tường cho hộp khác."
  },
  {
   "id": "prim_3_2",
@@ -1602,87 +1875,92 @@
   "holes": [
    [
     0,
-    4
-   ],
-   [
-    4,
     0
    ],
    [
     3,
-    0
-   ],
-   [
-    3,
-    1
-   ]
-  ],
-  "broken": [
-   [
-    1,
-    3,
-    2,
-    3
-   ],
-   [
-    1,
-    3,
-    1,
-    4
-   ],
-   [
-    3,
-    3,
-    3,
-    4
-   ],
-   [
-    2,
-    4,
-    3,
-    4
-   ]
-  ],
-  "boxes": [
-   {
-    "x": 2,
-    "y": 4,
-    "n": 8
-   },
-   {
-    "x": 4,
-    "y": 2,
-    "n": 10
-   },
-   {
-    "x": 4,
-    "y": 4,
-    "n": 6
-   }
-  ],
-  "exit": [
-   [
-    1,
-    1
-   ],
-   [
-    3,
-    3
+    2
    ],
    [
     0,
     2
    ]
   ],
-  "solIn": "URDLLULDRUL",
+  "broken": [
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ],
+   [
+    4,
+    2,
+    4,
+    3
+   ],
+   [
+    3,
+    3,
+    3,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 3,
+    "y": 3,
+    "n": 9
+   },
+   {
+    "x": 3,
+    "y": 1,
+    "n": 7
+   },
+   {
+    "x": 3,
+    "y": 4,
+    "m": "opp",
+    "n": 6
+   }
+  ],
+  "exit": [
+   [
+    4,
+    3
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "portals": [
+   [
+    1,
+    1,
+    2,
+    4
+   ]
+  ],
+  "solIn": "LLRDRRDURUR",
   "solutions": 1,
   "minMoves": 11,
   "luck": 0,
-  "quality": 35.1,
+  "quality": 31.4,
   "belief": "it doesn't look like anything. it's mine.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "opp",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
  },
  {
   "id": "prim_3_3",
@@ -1690,32 +1968,26 @@
   "layer": 3,
   "n": 3,
   "w": 4,
-  "h": 4,
+  "h": 3,
   "holes": [
-   [
-    0,
-    4
-   ],
    [
     0,
     3
    ],
    [
-    4,
+    0,
     2
+   ],
+   [
+    0,
+    1
    ]
   ],
   "broken": [
    [
+    2,
     0,
-    0,
-    1,
-    0
-   ],
-   [
     3,
-    0,
-    4,
     0
    ],
    [
@@ -1725,102 +1997,120 @@
     1
    ],
    [
-    1,
-    1,
-    1,
-    2
-   ],
-   [
     2,
     1,
-    2,
-    2
-   ],
-   [
     3,
-    1,
-    4,
     1
    ],
    [
+    1,
     2,
     2,
-    3,
     2
    ],
    [
     2,
-    3,
     2,
-    4
-   ],
-   [
-    3,
-    3,
-    4,
+    2,
     3
    ],
    [
     3,
+    2,
     3,
-    3,
-    4
+    3
    ],
    [
-    4,
+    2,
     3,
-    4,
-    4
+    3,
+    3
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 2,
-    "n": 6
-   },
-   {
-    "x": 2,
-    "y": 4,
-    "n": 8
-   },
-   {
     "x": 3,
-    "y": 0,
-    "n": 9
+    "y": 1,
+    "n": 28
    }
   ],
   "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "lights": [
    [
     0,
     0
    ],
    [
     1,
-    3
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    1,
+    2
    ],
    [
     2,
     2
-   ]
-  ],
-  "portals": [
+   ],
    [
     3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
     1,
+    3
+   ],
+   [
     2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
     3
    ]
   ],
-  "solIn": "RDLLRDLLUDU",
+  "solIn": "DLULDDRLUUULRRDDRRDLRUUULR",
   "solutions": 1,
-  "minMoves": 11,
+  "minMoves": 26,
   "luck": 0,
-  "quality": 32.6,
+  "quality": 46.5,
   "belief": "my colours. my lines.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "lightAll",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
  },
  {
   "id": "prim_3_4",
@@ -1831,106 +2121,126 @@
   "h": 4,
   "holes": [
    [
-    2,
-    1
-   ],
-   [
     5,
-    4
-   ],
-   [
-    4,
     0
    ],
    [
-    4,
+    5,
     1
    ],
    [
     5,
+    3
+   ],
+   [
+    0,
     0
    ]
   ],
   "broken": [
    [
-    3,
+    0,
     2,
-    4,
+    1,
     2
    ],
    [
     2,
-    3,
-    3,
+    2,
+    2,
     3
    ],
    [
-    1,
-    4,
+    0,
+    3,
+    0,
+    4
+   ],
+   [
     2,
+    4,
+    3,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 4,
+    "x": 3,
     "y": 4,
+    "n": 8
+   },
+   {
+    "x": 3,
+    "y": 0,
     "n": 11
    },
    {
-    "x": 5,
-    "y": 3,
-    "n": 10
-   },
-   {
-    "x": 5,
-    "y": 1,
-    "n": 2
+    "x": 4,
+    "y": 0,
+    "n": 14
    }
   ],
   "exit": [
    [
-    1,
+    2,
+    2
+   ],
+   [
+    2,
     3
    ],
    [
-    3,
+    1,
+    3
+   ]
+  ],
+  "lights": [
+   [
+    5,
+    2
+   ],
+   [
+    1,
     4
    ],
    [
-    4,
+    3,
     2
    ]
   ],
-  "solIn": "LLULLLRRDRRL",
-  "solutions": 1,
-  "minMoves": 12,
+  "solIn": "DDRLLDLLDULLR",
+  "solutions": 3,
+  "minMoves": 13,
   "luck": 0,
-  "quality": 36.4,
+  "quality": 6.4,
   "belief": "no pencil to follow. not really.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "lights",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
  },
  {
   "id": "prim_3_5",
   "girl": "prim",
   "layer": 3,
   "n": 5,
-  "w": 5,
+  "w": 4,
   "h": 4,
   "holes": [
    [
-    2,
-    0
+    0,
+    2
    ],
    [
-    5,
+    0,
     3
    ],
    [
-    5,
-    1
+    4,
+    2
+   ],
+   [
+    3,
+    2
    ]
   ],
   "broken": [
@@ -1941,218 +2251,158 @@
     1
    ],
    [
-    1,
-    1,
     2,
-    1
-   ],
-   [
     1,
-    2,
     2,
     2
    ],
    [
-    0,
     4,
-    1,
+    3,
+    4,
+    4
+   ],
+   [
+    2,
+    4,
+    3,
     4
    ]
   ],
   "boxes": [
    {
-    "x": 0,
-    "y": 4,
-    "n": 10
-   },
-   {
-    "x": 0,
-    "y": 1,
-    "n": 8
-   },
-   {
-    "x": 4,
+    "x": 3,
     "y": 3,
-    "n": 4
+    "n": 9
+   },
+   {
+    "x": 1,
+    "y": 2,
+    "m": "opp",
+    "n": 7
    }
   ],
   "exit": [
    [
-    3,
-    0
-   ],
-   [
-    5,
-    0
-   ],
-   [
-    2,
+    0,
     1
-   ]
-  ],
-  "portals": [
+   ],
    [
-    1,
-    4,
-    2,
-    2
+    0,
+    0
    ]
   ],
-  "solIn": "RUURURDDRUUDU",
+  "pads": [
+   [
+    3,
+    1,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "RDRLLLUURDR",
   "solutions": 1,
-  "minMoves": 13,
+  "minMoves": 11,
   "luck": 0,
-  "quality": 35,
+  "quality": 28.8,
   "belief": "even the other hand draws my way now.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "pads",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?"
  },
  {
   "id": "prim_3_6",
   "girl": "prim",
   "layer": 3,
   "n": 6,
-  "w": 5,
-  "h": 5,
-  "holes": [
-   [
-    0,
-    5
-   ],
-   [
-    1,
-    5
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    0,
-    4
-   ],
-   [
-    0,
-    3
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    5,
-    5
-   ]
-  ],
+  "w": 3,
+  "h": 2,
   "broken": [
    [
-    1,
+    2,
+    0,
+    2,
+    1
+   ],
+   [
     0,
     1,
-    1
-   ],
-   [
-    4,
-    0,
-    4,
+    1,
     1
    ],
    [
     1,
     1,
-    2,
-    1
-   ],
-   [
-    2,
     1,
-    3,
-    1
-   ],
-   [
-    3,
-    1,
-    3,
     2
-   ],
-   [
-    1,
-    2,
-    2,
-    2
-   ],
-   [
-    4,
-    2,
-    4,
-    3
-   ],
-   [
-    1,
-    3,
-    2,
-    3
    ]
   ],
   "boxes": [
    {
     "x": 2,
-    "y": 1,
-    "n": 7
-   },
-   {
-    "x": 2,
     "y": 2,
-    "n": 7
+    "n": 10
    },
    {
-    "x": 1,
-    "y": 0,
-    "n": 12
+    "x": 3,
+    "y": 2,
+    "m": "opp",
+    "n": 10
    }
   ],
   "exit": [
    [
-    4,
-    1
+    1,
+    2
    ],
    [
-    5,
-    4
-   ],
-   [
-    5,
-    1
+    0,
+    2
    ]
   ],
-  "portals": [
+  "lights": [
    [
-    3,
-    4,
-    4,
+    0,
     0
    ],
    [
-    4,
+    1,
+    0
+   ],
+   [
     2,
-    4,
-    5
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    1
    ]
   ],
-  "solIn": "LDRDDDRDDRRUR",
+  "solIn": "DDRRRULLULDD",
   "solutions": 1,
-  "minMoves": 13,
+  "minMoves": 12,
   "luck": 0,
-  "quality": 5.8,
+  "quality": 33.8,
   "belief": "i don't need the pencil anymore.",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "lightAll",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
  },
  {
   "id": "prim_3_7",
@@ -2163,132 +2413,102 @@
   "h": 4,
   "holes": [
    [
+    1,
+    2
+   ],
+   [
     0,
+    2
+   ],
+   [
+    1,
     1
    ],
    [
     1,
-    4
-   ],
-   [
-    0,
-    4
-   ],
-   [
-    0,
-    3
-   ],
-   [
-    4,
-    0
-   ],
-   [
-    0,
     0
    ],
    [
     1,
-    0
+    4
+   ],
+   [
+    0,
+    4
    ]
   ],
   "broken": [
    [
     2,
     0,
-    2,
+    3,
+    0
+   ],
+   [
+    5,
+    0,
+    5,
     1
    ],
    [
     4,
     1,
+    5,
+    1
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ],
+   [
     4,
+    2,
+    5,
     2
-   ],
-   [
-    5,
-    1,
-    5,
-    2
-   ],
-   [
-    1,
-    2,
-    1,
-    3
-   ],
-   [
-    2,
-    2,
-    2,
-    3
-   ],
-   [
-    2,
-    3,
-    3,
-    3
-   ],
-   [
-    4,
-    4,
-    5,
-    4
    ]
   ],
   "boxes": [
    {
-    "x": 3,
-    "y": 1,
-    "n": 13
+    "x": 4,
+    "y": 3,
+    "n": 10
    },
    {
     "x": 4,
-    "y": 2,
-    "n": 7
-   },
-   {
-    "x": 1,
-    "y": 3,
-    "n": 8
+    "y": 4,
+    "m": "opp",
+    "n": 9
    }
   ],
   "exit": [
    [
     5,
-    3
+    0
    ],
    [
     5,
     4
-   ],
-   [
-    3,
-    0
    ]
   ],
   "portals": [
    [
     4,
-    4,
+    2,
     2,
     1
-   ],
-   [
-    5,
-    1,
-    1,
-    2
    ]
   ],
-  "solIn": "RDRRRURLURDDDRR",
+  "solIn": "ULDDDRRRRURUU",
   "solutions": 1,
-  "minMoves": 15,
+  "minMoves": 13,
   "luck": 0,
-  "quality": 6.5,
+  "quality": 31.6,
   "belief": "",
   "intro": null,
-  "feature": "budget",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp."
+  "feature": "portals",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Coi hai cổng như một ô."
  },
  {
   "id": "prim_3_8",
@@ -2299,6 +2519,14 @@
   "h": 4,
   "holes": [
    [
+    3,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
     4,
     4
    ],
@@ -2309,161 +2537,220 @@
    [
     0,
     1
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    5,
-    0
    ]
   ],
   "broken": [
    [
-    3,
-    3,
     4,
-    3
+    1,
+    4,
+    2
    ],
    [
-    4,
-    3,
-    5,
-    3
-   ]
-  ],
-  "boxes": [
-   {
-    "x": 4,
-    "y": 2,
-    "n": 13
-   },
-   {
-    "x": 1,
-    "y": 4,
-    "n": 9
-   },
-   {
-    "x": 2,
-    "y": 4,
-    "n": 5
-   }
-  ],
-  "exit": [
-   [
+    1,
+    2,
     2,
     2
    ],
    [
-    0,
-    4
-   ],
-   [
     4,
-    3
-   ]
-  ],
-  "pads": [
-   [
-    4,
-    0,
-    0,
-    -1
-   ],
-   [
-    4,
-    1,
-    0,
-    -1
-   ]
-  ],
-  "lights": [
-   [
-    1,
-    0
-   ],
-   [
     3,
-    3
-   ]
-  ],
-  "solIn": "UULLLRRDDRRLLL",
-  "solutions": 1,
-  "minMoves": 14,
-  "luck": 0,
-  "quality": 39.5,
-  "belief": "",
-  "intro": null,
-  "feature": "lights",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
- },
- {
-  "id": "prim_3_9",
-  "girl": "prim",
-  "layer": 3,
-  "n": 9,
-  "w": 5,
-  "h": 4,
-  "holes": [
-   [
     5,
-    3
-   ],
-   [
-    0,
-    0
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    5,
-    4
-   ]
-  ],
-  "broken": [
-   [
-    1,
-    0,
-    1,
-    1
-   ],
-   [
-    4,
-    0,
-    4,
-    1
-   ],
-   [
-    2,
-    3,
-    3,
     3
    ]
   ],
   "boxes": [
    {
     "x": 5,
-    "y": 1,
-    "n": 11
+    "y": 4,
+    "n": 12
    },
    {
-    "x": 3,
-    "y": 0,
-    "n": 6
+    "x": 2,
+    "y": 4,
+    "m": "opp",
+    "n": 7
    },
    {
-    "x": 1,
-    "y": 1,
-    "n": 11
+    "x": 2,
+    "y": 3,
+    "n": 8
    }
   ],
   "exit": [
    [
+    3,
+    2
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    0,
+    4
+   ]
+  ],
+  "portals": [
+   [
+    5,
+    3,
+    0,
+    3
+   ]
+  ],
+  "lights": [
+   [
+    5,
+    2
+   ],
+   [
+    4,
+    1
+   ]
+  ],
+  "solIn": "RUULLRDRDDDL",
+  "solutions": 3,
+  "minMoves": 12,
+  "luck": 0,
+  "quality": 40.8,
+  "belief": "",
+  "intro": null,
+  "feature": "opp",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp."
+ },
+ {
+  "id": "prim_3_9",
+  "girl": "prim",
+  "layer": 3,
+  "n": 9,
+  "w": 4,
+  "h": 4,
+  "holes": [
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    3,
+    1,
+    4
+   ],
+   [
+    0,
+    4,
+    1,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 0,
+    "n": 24
+   }
+  ],
+  "exit": [
+   [
+    2,
+    2
+   ]
+  ],
+  "lights": [
+   [
     1,
     0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    0,
+    4
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    4
    ],
    [
     3,
@@ -2471,40 +2758,18 @@
    ],
    [
     4,
-    3
-   ]
-  ],
-  "portals": [
-   [
-    4,
-    1,
-    0,
-    1
-   ]
-  ],
-  "lights": [
-   [
-    0,
-    3
-   ],
-   [
-    5,
-    2
-   ],
-   [
-    1,
     4
    ]
   ],
-  "solIn": "RDDRLDLLLDUUUDDD",
+  "solIn": "RLDRDLDDURRDLRRRLUULUD",
   "solutions": 1,
-  "minMoves": 16,
+  "minMoves": 22,
   "luck": 0,
-  "quality": 7.3,
+  "quality": 8,
   "belief": "",
   "intro": null,
-  "feature": "lights",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu."
+  "feature": "lightAll",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: có hộp bước lên (hoặc dây nằm trên) là đèn bật và sáng luôn; thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí. Mẹo: Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn."
  },
  {
   "id": "trix_1_t1",

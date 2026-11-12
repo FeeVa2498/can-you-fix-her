@@ -293,16 +293,22 @@ const P3 = (() => {
     }
     function setDecal(cu, mark, num) {
       const k = (mark || '') + '|' + (num == null ? '' : num); if (k === cu.decal) return; cu.decal = k;
-      if (!mark && num == null) { cu.top.visible = false; if (cu.badge) cu.badge.visible = false; return; }
+      if (!mark && num == null) { cu.top.visible = false; if (cu.front) cu.front.visible = false; if (cu.badge) cu.badge.visible = false; return; }
       if (cu.top.material.map) cu.top.material.map.dispose();
       cu.top.material.map = canvasTex(128, 128, (g, w, h) => {
         g.strokeStyle = 'rgba(26,16,36,.6)'; g.lineWidth = 9; g.lineCap = 'round'; g.beginPath();
         if (mark === 'mx') { g.moveTo(w / 2, 8); g.lineTo(w / 2, h - 8); }
         if (mark === 'my') { g.moveTo(8, h / 2); g.lineTo(w - 8, h / 2); }
-        if (mark === 'opp') { g.moveTo(14, 14); g.lineTo(w - 14, h - 14); g.moveTo(w - 14, 14); g.lineTo(14, h - 14); }
+        // reverse twin: two crossed arrows
+        if (mark === 'opp') { g.lineJoin = 'round';
+          g.moveTo(22, h - 22); g.lineTo(w - 24, 24); g.moveTo(w - 24, 24); g.lineTo(w - 54, 24); g.moveTo(w - 24, 24); g.lineTo(w - 24, 54);
+          g.moveTo(22, 22); g.lineTo(w - 24, h - 24); g.moveTo(w - 24, h - 24); g.lineTo(w - 54, h - 24); g.moveTo(w - 24, h - 24); g.lineTo(w - 24, h - 54); }
         g.stroke();
       });
       cu.top.material.needsUpdate = true; cu.top.visible = !!mark;
+      // the mark is drawn on the side facing you as well (a landmine sits on top of the box and hides the lid)
+      if (!cu.front) { cu.front = new THREE.Mesh(new THREE.PlaneGeometry(cu.size * .9, cu.size * .9), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false })); cu.front.position.z = cu.size / 2 + .002; cu.body.add(cu.front); }
+      cu.front.material.map = cu.top.material.map; cu.front.material.needsUpdate = true; cu.front.visible = !!mark;
       // the move budget floats above the box as a badge that always faces you
       if (num == null) { if (cu.badge) cu.badge.visible = false; return; }
       if (!cu.badge) { cu.badge = new THREE.Sprite(new THREE.SpriteMaterial({ depthTest: false, transparent: true })); cu.badge.scale.set(.5, .5, 1); cu.badge.renderOrder = 5; cu.g.add(cu.badge); }

@@ -128,7 +128,8 @@ function boxesSVG(p, s, o = {}) {
     if (b.dash) g += `<path class="dash" d="M${x - .2} ${y - .14}h.16M${x - .24} ${y}h.2M${x - .2} ${y + .14}h.16"/>`;
     if (b.m === 'mx') g += `<path class="mark" d="M${x} ${y - .3}V${y + .3}"/>`;
     if (b.m === 'my') g += `<path class="mark" d="M${x - .3} ${y}H${x + .3}"/>`;
-    if (b.m === 'opp') g += `<path class="mark" d="M${x - .26} ${y - .26}L${x + .26} ${y + .26}M${x + .26} ${y - .26}L${x - .26} ${y + .26}"/>`;
+    // reverse twin: two crossed arrows (every key comes out backwards)
+    if (b.m === 'opp') g += `<path class="mark tw" d="M${x - .22} ${y + .22}L${x + .2} ${y - .2}M${x + .2} ${y - .2}h-.15M${x + .2} ${y - .2}v.15M${x - .22} ${y - .22}L${x + .2} ${y + .2}M${x + .2} ${y + .2}h-.15M${x + .2} ${y + .2}v-.15"/>`;
     if (b.trail) g += `<path class="coil" d="M${x - .32} ${y - .08}h.64M${x - .32} ${y + .04}h.64M${x - .32} ${y + .16}h.64" />`;
     if (s.dice && s.dice[i]) g += `<g class="die">${pipsSVG(x, y, s.dice[i][0], .32)}</g>`;
     if (left != null && !o.mini) g += `<g class="bomb${left === 0 ? ' hot' : ''}"><circle class="ball" cx="${x}" cy="${y - .42}" r=".18"/><circle class="spark" cx="${x + .13}" cy="${y - .55}" r=".045"/><text x="${x}" y="${y - .415}">${left}</text></g>`;

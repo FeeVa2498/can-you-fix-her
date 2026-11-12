@@ -217,11 +217,18 @@ function checkBox(p, spec) {
   if (spec.boxes.some(b => b.n) && !p.boxes.some(b => b.n != null)) {
     const mv = boxStats(p, r.wins[0]).movesBy, ex = spec.extra || [0, 2];
     if (spec.boxes.some((b, i) => b.n && !mv[i])) return null;
-    spec.boxes.forEach((b, i) => { if (b.n) p.boxes[i].n = mv[i]; });   // the moves it makes in a shortest answer
+    // the moves it makes in a shortest answer, plus a little to spare (fewer moves used = more time left in the day)
+    p._slack = spec.slack ?? 2;
+    spec.boxes.forEach((b, i) => { if (b.n) p.boxes[i].n = mv[i] + p._slack; });
     const ns = p.boxes.filter(b => b.n != null).map(b => b.n);
     if (spec.distinct && new Set(ns).size < ns.length) return null;
     r = E.boxSolve(p, maxL, 8, 200000);
     if (!r.wins.length || r.capped) return null;
+  }
+  // every arrow tile and portal must be needed: take any one away and the panel can't be solved any more
+  if (spec.need) for (const k of ['pads', 'portals']) for (let i = 0; i < (p[k] || []).length; i++) {
+    const q = { ...p, [k]: p[k].filter((_, j) => j !== i) }, rr = E.boxSolve(q, capLen(spec) + 6, 1, 150000);
+    if (rr.wins.length || rr.capped) return null;
   }
   const best = r.wins[0], L = best.length;
   if (L < (spec.minLen || 4)) return null;
@@ -231,7 +238,7 @@ function checkBox(p, spec) {
   if (u.pads && tr.filter(n => E.padAt(p, ...n)).length < u.pads) return null;
   if (u.stops && !tr.some(n => E.isStop(p, ...n))) return null;
   if (u.slide && !st.s.tracks.some(t => t.some((n, i) => { if (i < 2) return false; const pd = E.padAt(p, ...t[i - 1]); return pd && n[0] - t[i - 1][0] === pd[0] && n[1] - t[i - 1][1] === pd[1]; }))) return null;
-  if (u.portals && !allJ.some(Boolean)) return null;
+  if (u.portals && allJ.filter(Boolean).length < u.portals) return null;
   if (u.oneway && !(p.oneway || []).some(e => st.s.tracks.some(t => t.some((n, i) => i && t[i - 1][0] === e[0] && t[i - 1][1] === e[1] && n[0] === e[2] && n[1] === e[3])))) return null;
   if (u.door && st.hit.door < u.door) return null;
   if (u.dbl && st.hit.dbl < u.dbl) return null;
@@ -246,7 +253,8 @@ function checkBox(p, spec) {
 }
 function finishBox(p, c) {
   // landmines: wall pruning can shorten the answer, so the numbers follow the final answer
-  if (p.boxes.some(b => b.n != null)) { const mv = boxStats(p, c.best).movesBy; p.boxes.forEach((b, i) => { if (b.n != null) b.n = mv[i]; }); c.r = E.boxSolve(p, 60, 8, 400000); c.best = c.r.wins[0]; c.L = c.best.length; }
+  if (p.boxes.some(b => b.n != null)) { const mv = boxStats(p, c.best).movesBy; p.boxes.forEach((b, i) => { if (b.n != null) b.n = mv[i] + (p._slack || 0); }); c.r = E.boxSolve(p, 60, 8, 400000); c.best = c.r.wins[0]; c.L = c.best.length; }
+  delete p._slack;
   const luck = randomPlay(p, c.L * 2);
   Object.assign(p, { solIn: c.best, solutions: c.r.wins.length, minMoves: c.L, luck: Math.round(luck * 1000) / 10 });
   if (c.score !== undefined) p.quality = Math.round(c.score * 10) / 10;
@@ -435,7 +443,7 @@ function designBox(spec) {
         n = rnd() < .6 ? nb[ri(nb.length)] : null;
       }
     }
-    if ((p.holes || []).length && !connected(p)) continue;
+    if ((p.holes || []).length && !g.portals && !connected(p)) continue;   // with portals a split map is fine (they join it)
     taken.clear();
     p.broken = allEdges(p).filter(() => rnd() < (g.walls || .2));
     const boxes = spec.boxes.map(b => { const n = pick(); return n && { x: n[0], y: n[1], ...(b.m && b.m !== 'same' ? { m: b.m } : {}), ...(b.dash ? { dash: true } : {}), ...(b.trail ? { trail: true } : {}), ...(b.die ? { die: true } : {}), ...(b.c ? { c: b.c } : {}) }; });
@@ -443,7 +451,21 @@ function designBox(spec) {
     p.boxes = boxes;
     const ng = spec.boxes.length - (spec.helpers || 0);
     p.exit = []; for (let i = 0; i < ng; i++) { const n = pick(); if (n) p.exit.push(spec.boxes[i].goal != null ? [...n, spec.boxes[i].goal] : spec.colored || spec.boxes[i].c ? [...n, spec.boxes[i].c || 0] : n); }
-    for (let i = 0; i < (g.pads || 0); i++) { const n = pick(); if (n) (p.pads = p.pads || []).push([...n, ...D4[ri(4)]]); }
+    // arrow tiles: with g.padMin, only where the slide runs at least that many tiles (a long slide is worth taking)
+    for (let i = 0; i < (g.pads || 0); i++) {
+      const br = new Set((p.broken || []).map(e => E.ekey(...e)));
+      const run = (n, dd) => { let k = 0, x = n[0], y = n[1]; while (E.inside(p, x + dd[0], y + dd[1]) && !br.has(E.ekey(x, y, x + dd[0], y + dd[1]))) { x += dd[0]; y += dd[1]; k++; } return k; };
+      let got = null;
+      for (let t = 0; t < 30 && !got; t++) { const n = shuffle(allNodes(p)).find(q => !taken.has(q.join(','))), dd = D4[ri(4)]; if (n && run(n, dd) >= (g.padMin || 1)) got = [n, dd]; }
+      if (got) {
+        taken.add(got[0].join(',')); (p.pads = p.pads || []).push([...got[0], ...got[1]]);
+        // g.padGoal: the first goal sits where that slide ends, so the arrow tile is the way in
+        if (g.padGoal && i === 0) {
+          let [x, y] = got[0]; const dd = got[1]; while (E.inside(p, x + dd[0], y + dd[1]) && !br.has(E.ekey(x, y, x + dd[0], y + dd[1]))) { x += dd[0]; y += dd[1]; }
+          if (p.exit.length && !p.boxes.some(b => b.x === x && b.y === y)) { p.exit[0] = p.exit[0].length > 2 ? [x, y, p.exit[0][2]] : [x, y]; taken.add(x + ',' + y); }
+        }
+      }
+    }
     for (let i = 0; i < (g.stops || 0); i++) { const n = pick(); if (n) (p.stops = p.stops || []).push(n); }
     for (let i = 0; i < (g.portals || 0); i++) { const a = pick(), b = a && pick(n => Math.abs(n[0] - a[0]) + Math.abs(n[1] - a[1]) >= 3); if (b) (p.portals = p.portals || []).push([...a, ...b]); }
     for (let i = 0; i < (g.litR || 0); i++) { const n = pick(); if (n) (p.lights = p.lights || []).push(n); }   // light tiles dropped at random (the search decides if they make a good panel)
@@ -480,6 +502,10 @@ function designBox(spec) {
       if (p.broken.length < (g.minWalls || 0)) continue;
     }
     if (!p.broken.length) delete p.broken;
+    if (g.lightAll) {   // light the whole map: every tile is a light except where boxes start and the goals
+      const skip = new Set([...p.boxes.map(b => b.x + ',' + b.y), ...p.exit.map(q => q[0] + ',' + q[1]), ...(p.pads || []).map(q => q[0] + ',' + q[1]), ...(p.portals || []).flatMap(q => [q[0] + ',' + q[1], q[2] + ',' + q[3]])]);
+      p.lights = allNodes(p).filter(n => !skip.has(n.join(',')));
+    }
     if (g.lights || g.nums || g.touch) { if (!clueCover(p, spec)) continue; }
     if (g.dice) { if (!diceCover(p, spec)) continue; }
     const c = checkBox(p, spec); if (!c) continue;
@@ -547,7 +573,7 @@ const BTIP = {
   mx: 'Dùng tường để làm hai hộp lệch nhau.', many: 'Hộp đứng yên cũng là một bức tường cho hộp khác.',
   nolock: 'Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ.', helpers: 'Đặt hộp thừa trước, rồi mới phóng hộp chính.',
   trail: 'Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
-  lights: 'Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.', touch: 'Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng.', nums: 'Ô "1" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.',
+  lights: 'Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.', lightAll: 'Mê cung: ô nào cũng là đèn. Tìm một đường đi qua hết, đừng để phải quay lại nhiều vì mìn có hạn.', touch: 'Khối số 3 gần như bị dây bao quanh; khối số 1 ở góc chỉ cho dây chạm một bên: bắt đầu từ chúng.', nums: 'Ô "1" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.',
   switches: 'Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó.', dbl: 'Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ.',
   cracks: 'Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước.', paints: 'Có khi hộp phải đi vòng qua ô sơn trước khi về goal.', colors: 'Mỗi màu một goal: xem hộp nào phải đi trước hộp nào.',
 };
@@ -693,39 +719,43 @@ add('myne', 2, 7, BX(5, 4, [{ n: 1 }, T1], CL({ gen: { walls: .2, guard: 1 }, us
 
 /* ======================= v6 · Prim: landmines · Trix: ropes & edge numbers · Paige: dice =======================
    Prim's pink boxes are landmines: exactly n moves, then sit on a goal. Walls, portals and odd-shaped maps only. */
-const M = { n: 1 }, DIE = { die: true }, DIE1 = { die: true, c: 1 };
-TUT('prim', 1, 1, 'budget', BX(3, 1, [M], EZ({ gen: { walls: .02 }, extra: [2], minLen: 3, maxLen: 7 })));
-add('prim', 1, 1, BX(3, 2, [M], { gen: { walls: 0.18, bites: 1 }, extra: [2], minLen: 4, luck: 0.1, feature: 'budget' }));
-add('prim', 1, 2, BX(3, 3, [M], { gen: { walls: 0.18, bites: 2 }, extra: [2, 4], minLen: 5, luck: 0.08, feature: 'budget' }));
-add('prim', 1, 3, BX(4, 3, [M], { gen: { walls: 0.2, bites: 2, holes: 1 }, extra: [2, 4], minLen: 6, luck: 0.06, feature: 'budget' }));
-TUT('prim', 1, 4, 'portals', BX(3, 2, [M], EZ({ gen: { walls: .05, portals: 1 }, uses: { portals: 1 }, extra: [1, 3], minLen: 3, maxLen: 7 })));
-add('prim', 1, 4, BX(4, 3, [M], { gen: { walls: 0.18, portals: 1, bites: 2 }, uses: { portals: 1 }, extra: [1, 2, 3], minLen: 6, luck: 0.05, feature: 'budget' }));
-add('prim', 1, 5, BX(4, 4, [M], { gen: { walls: 0.2, portals: 1, bites: 3 }, uses: { portals: 1 }, extra: [2, 3, 4], minLen: 7, luck: 0.04, feature: 'budget' }));
-add('prim', 1, 6, BX(5, 4, [M], { gen: { walls: 0.2, portals: 1, bites: 3, holes: 1 }, uses: { portals: 1 }, extra: [2, 4, 5], minLen: 8, luck: 0.03, feature: 'budget' }));
-TUT('prim', 2, 1, 'many', BX(3, 2, [M, M], EZ({ gen: { walls: .05 }, extra: [0, 2], distinct: 1, minLen: 3, maxLen: 8 })));
-add('prim', 2, 1, BX(3, 3, [M, M], { gen: { walls: 0.2, bites: 1 }, extra: [0, 2], distinct: 1, minLen: 6, luck: .03, feature: 'budget' }));
-add('prim', 2, 2, BX(4, 3, [M, M], { gen: { walls: 0.2, bites: 2 }, extra: [0, 2, 4], distinct: 1, minLen: 7, luck: .03, feature: 'budget' }));
-add('prim', 2, 3, BX(4, 3, [M, M], { gen: { walls: 0.2, portals: 1, bites: 2 }, uses: { portals: 1 }, extra: [0, 1, 2, 3], distinct: 1, minLen: 8, luck: .03, feature: 'budget' }));
-add('prim', 2, 4, BX(4, 4, [M, M], { gen: { walls: 0.2, bites: 3, holes: 1 }, extra: [0, 2, 4], distinct: 1, minLen: 9, luck: .03, feature: 'budget' }));
-add('prim', 2, 5, BX(5, 3, [M, M], { gen: { walls: 0.2, portals: 1, bites: 2 }, uses: { portals: 1 }, extra: [1, 2, 3], distinct: 1, minLen: 9, luck: .03, feature: 'budget' }));
-add('prim', 2, 6, BX(4, 4, [M, M], { gen: { walls: 0.22, portals: 2, bites: 3 }, uses: { portals: 1 }, extra: [0, 2, 3, 4], distinct: 1, minLen: 10, luck: .03, feature: 'budget' }));
-add('prim', 2, 7, BX(5, 4, [M, M], { gen: { walls: 0.22, portals: 1, bites: 3, holes: 1 }, uses: { portals: 1 }, extra: [2, 3, 4, 5], distinct: 1, minLen: 11, luck: .03, feature: 'budget' }));
-add('prim', 3, 1, BX(4, 3, [M, M, M], { gen: { walls: 0.2, bites: 1 }, extra: [0, 2], distinct: 1, minLen: 8, luck: .02, feature: 'budget', cap: 120000 }));
-add('prim', 3, 2, BX(4, 4, [M, M, M], { gen: { walls: 0.2, bites: 2 }, extra: [0, 2, 4], distinct: 1, minLen: 9, luck: .02, feature: 'budget', cap: 120000 }));
-add('prim', 3, 3, BX(4, 4, [M, M, M], { gen: { walls: 0.2, portals: 1, bites: 2 }, uses: { portals: 1 }, extra: [0, 1, 2, 3], distinct: 1, minLen: 10, luck: .02, feature: 'budget', cap: 120000 }));
-add('prim', 3, 4, BX(5, 4, [M, M, M], { gen: { walls: 0.2, bites: 3, holes: 1 }, extra: [0, 2, 4], distinct: 1, minLen: 10, luck: .02, feature: 'budget', cap: 120000 }));
-add('prim', 3, 5, BX(5, 4, [M, M, M], { gen: { walls: 0.2, portals: 1, bites: 3 }, uses: { portals: 1 }, extra: [1, 2, 3, 4], distinct: 1, minLen: 11, luck: .02, feature: 'budget', cap: 120000 }));
-add('prim', 3, 6, BX(5, 5, [M, M, M], { gen: { walls: 0.22, portals: 2, bites: 4 }, uses: { portals: 1 }, extra: [0, 2, 3, 4], distinct: 1, minLen: 12, luck: .02, feature: 'budget', cap: 120000 }));
-add('prim', 3, 7, BX(5, 4, [M, M, M], { gen: { walls: 0.22, portals: 2, bites: 4, holes: 1 }, uses: { portals: 1 }, extra: [1, 2, 3, 4, 5], distinct: 1, minLen: 13, luck: .02, feature: 'budget', cap: 120000, time: 60000 }));
+const M = { n: 1 }, MT = { n: 1, m: 'opp' }, DIE = { die: true }, DIE1 = { die: true, c: 1 };
 /* Prim extras: arrow tiles and light tiles (a mine switches a light on by stepping on it) */
-TUT('prim', 1, 7, 'pads', BX(3, 2, [M], EZ({ gen: { walls: .05, pads: 1 }, uses: { pads: 1 }, minLen: 2, maxLen: 6 })));
-add('prim', 1, 7, BX(4, 3, [M], { gen: { walls: .18, pads: 2, bites: 2 }, uses: { pads: 1 }, minLen: 6, luck: .04, feature: 'pads' }));
-TUT('prim', 1, 8, 'lights', BX(3, 2, [M], EZ({ gen: { walls: .05, lights: 1 }, minLen: 3, maxLen: 7 })));
-add('prim', 1, 8, BX(4, 3, [M], { gen: { walls: .18, lights: 2, bites: 2 }, minLen: 7, luck: .04, feature: 'lights' }));
-add('prim', 2, 8, BX(4, 4, [M, M], { gen: { walls: .2, pads: 2, bites: 2 }, uses: { pads: 1 }, distinct: 1, minLen: 9, luck: .02, feature: 'pads' }));
-add('prim', 2, 9, BX(4, 4, [M, M], { gen: { walls: .2, litR: 2, bites: 2 }, distinct: 1, minLen: 10, luck: .02, feature: 'lights', cap: 80000 }));
-add('prim', 3, 8, BX(5, 4, [M, M, M], { gen: { walls: .2, pads: 2, litR: 2, bites: 3 }, uses: { pads: 1 }, distinct: 1, minLen: 12, luck: .02, feature: 'lights', cap: 120000, time: 40000 }));
-add('prim', 3, 9, BX(5, 4, [M, M, M], { gen: { walls: .2, portals: 1, litR: 3, bites: 3 }, uses: { portals: 1 }, distinct: 1, minLen: 12, luck: .02, feature: 'lights', cap: 120000, time: 60000 }));
+/* PRIM v7: mines with a little to spare (+2), every arrow tile / portal must be needed, light-the-whole-map mazes,
+   two mines already in layer 1, reverse-twin mines from layer 2 */
+TUT('prim', 1, 1, 'budget', BX(3, 1, [M], EZ({ gen: { walls: .02 }, minLen: 3, maxLen: 6 })));
+add('prim', 1, 1, BX(3, 2, [M], { gen: { walls: .2, bites: 1 }, minLen: 5, luck: .08, feature: 'budget' }));
+add('prim', 1, 2, BX(3, 3, [M], { gen: { walls: .22, bites: 2 }, minLen: 6, luck: .06, feature: 'budget' }));
+TUT('prim', 1, 3, 'portals', BX(3, 2, [M], EZ({ gen: { walls: .05, portals: 1 }, uses: { portals: 1 }, need: 1, minLen: 2, maxLen: 6 })));
+add('prim', 1, 3, BX(4, 3, [M], { gen: { walls: .15, portals: 1, holes: 2, bites: 1 }, uses: { portals: 1 }, need: 1, minLen: 5, luck: .05, feature: 'portals', time: 40000, tries: 8000 }));
+TUT('prim', 1, 4, 'pads', BX(3, 2, [M], EZ({ gen: { walls: .05, pads: 1 }, uses: { pads: 1 }, need: 1, minLen: 2, maxLen: 6 })));
+add('prim', 1, 4, BX(4, 3, [M], { gen: { walls: .15, pads: 1, padMin: 3, padGoal: 1, bites: 1 }, uses: { pads: 1 }, need: 1, slack: 1, minLen: 5, luck: .05, feature: 'pads', time: 40000, tries: 8000 }));
+TUT('prim', 1, 5, 'lights', BX(3, 2, [M], EZ({ gen: { walls: .05, litR: 1 }, minLen: 3, maxLen: 6 })));
+add('prim', 1, 5, BX(4, 3, [M], { gen: { walls: .2, litR: 2, bites: 2 }, minLen: 7, luck: .04, feature: 'lights' }));
+add('prim', 1, 6, BX(2, 3, [M], { gen: { walls: .3, lightAll: 1, bites: 1 }, minLen: 7, maxLen: 18, luck: .02, feature: 'lightAll', cap: 300000 }));
+TUT('prim', 1, 7, 'many', BX(3, 2, [M, M], EZ({ gen: { walls: .05 }, minLen: 3, maxLen: 7 })));
+add('prim', 1, 7, BX(3, 3, [M, M], { gen: { walls: .2, bites: 1 }, minLen: 6, luck: .04, feature: 'many' }));
+add('prim', 1, 8, BX(4, 3, [M, M], { gen: { walls: .15, pads: 1, padMin: 3, bites: 2 }, uses: { pads: 1 }, need: 1, slack: 1, minLen: 7, luck: .03, feature: 'pads', time: 45000, tries: 8000 }));
+add('prim', 1, 9, BX(3, 3, [M], { gen: { walls: .3, lightAll: 1, bites: 2 }, minLen: 10, maxLen: 24, luck: .02, feature: 'lightAll', cap: 600000, time: 40000 }));
+TUT('prim', 2, 1, 'twin', BX(3, 3, [M, MT], EZ({ gen: { walls: .2, sym: 1, minWalls: 6 }, minLen: 3, maxLen: 8, maxShortest: 2, pick: 1, pool: 20 })));
+add('prim', 2, 1, BX(3, 3, [M, MT], { gen: { walls: .2, bites: 1 }, minLen: 7, luck: .03, feature: 'opp' }));
+add('prim', 2, 2, BX(4, 3, [M, M], { gen: { walls: .2, portals: 1, bites: 2 }, uses: { portals: 1 }, need: 1, distinct: 1, minLen: 8, luck: .03, feature: 'portals' }));
+add('prim', 2, 3, BX(4, 3, [M, MT], { gen: { walls: .15, pads: 1, padMin: 3, padGoal: 1, bites: 1 }, uses: { pads: 2 }, need: 1, slack: 1, minLen: 8, luck: .02, feature: 'pads', time: 45000, tries: 8000 }));
+add('prim', 2, 4, BX(4, 3, [M], { gen: { walls: .3, lightAll: 1, bites: 2 }, minLen: 12, maxLen: 28, luck: .02, feature: 'lightAll', cap: 800000, time: 50000 }));
+add('prim', 2, 5, BX(4, 4, [M, M], { gen: { walls: .15, pads: 1, padMin: 3, padGoal: 1, bites: 2 }, uses: { pads: 2 }, need: 1, slack: 1, distinct: 1, minLen: 9, luck: .02, feature: 'pads', time: 45000, tries: 8000 }));
+add('prim', 2, 6, BX(4, 4, [M, MT], { gen: { walls: .2, litR: 2, bites: 2 }, minLen: 10, luck: .02, feature: 'lights' }));
+add('prim', 2, 7, BX(4, 4, [M, MT], { gen: { walls: .15, portals: 1, holes: 2, bites: 2 }, uses: { portals: 1 }, need: 1, minLen: 10, luck: .02, feature: 'opp', time: 45000, tries: 8000 }));
+add('prim', 2, 8, BX(3, 2, [M, M], { gen: { walls: .3, lightAll: 1 }, distinct: 1, minLen: 8, maxLen: 20, luck: .02, feature: 'lightAll', cap: 600000, time: 50000 }));
+add('prim', 2, 9, BX(4, 3, [M, M], { gen: { walls: .15, portals: 1, holes: 2, bites: 1 }, uses: { portals: 1 }, need: 1, minLen: 9, luck: .02, feature: 'portals', time: 50000, tries: 10000 }));
+add('prim', 3, 1, BX(4, 3, [M, M, M], { gen: { walls: .25, bites: 1 }, minLen: 10, maxShortest: 4, luck: .03, feature: 'many', cap: 400000, time: 60000 }));
+add('prim', 3, 2, BX(4, 4, [M, M, MT], { gen: { walls: .15, portals: 1, holes: 2, bites: 1 }, uses: { portals: 2 }, need: 1, minLen: 11, luck: .02, feature: 'opp', cap: 150000, time: 50000, tries: 8000 }));
+add('prim', 3, 3, BX(4, 3, [M], { gen: { walls: .32, lightAll: 1, bites: 1 }, minLen: 14, maxLen: 30, luck: .02, feature: 'lightAll', cap: 900000, time: 60000 }));
+add('prim', 3, 4, BX(5, 4, [M, M, M], { gen: { walls: .2, litR: 3, bites: 3 }, distinct: 1, minLen: 12, luck: .02, feature: 'lights', cap: 150000 }));
+add('prim', 3, 5, BX(4, 4, [M, MT], { gen: { walls: .15, pads: 1, padMin: 3, padGoal: 1, bites: 2 }, uses: { pads: 2 }, need: 1, slack: 1, minLen: 11, luck: .02, feature: 'pads', time: 50000, tries: 8000 }));
+add('prim', 3, 6, BX(3, 2, [M, MT], { gen: { walls: .3, lightAll: 1 }, minLen: 9, maxLen: 22, luck: .02, feature: 'lightAll', cap: 700000, time: 50000 }));
+add('prim', 3, 7, BX(5, 4, [M, MT], { gen: { walls: .15, portals: 1, holes: 3, bites: 2 }, uses: { portals: 1 }, need: 1, minLen: 12, luck: .02, feature: 'portals', time: 60000, tries: 8000 }));
+add('prim', 3, 8, BX(5, 4, [M, MT, M], { gen: { walls: .15, litR: 2, portals: 1, holes: 3, bites: 1 }, uses: { portals: 1 }, need: 1, minLen: 12, luck: .02, feature: 'opp', cap: 150000, time: 60000, tries: 8000 }));
+add('prim', 3, 9, BX(4, 4, [M], { gen: { walls: .32, lightAll: 1, bites: 3 }, minLen: 16, maxLen: 34, luck: .02, feature: 'lightAll', cap: 1200000, time: 60000 }));
 /* Trix: rope boxes and edge numbers (+ a few lights); two ropes from layer 2 */
 TUT('trix', 1, 1, 'trail', BX(2, 1, [R0], EZ({ gen: { walls: .05 }, minLen: 3, maxLen: 6 })));
 add('trix', 1, 1, BX(3, 2, [R0], { gen: { walls: .15, bites: 1 }, minLen: 5, luck: .06, feature: 'trail' }));
