@@ -242,9 +242,8 @@ const PanelEngine = (() => {
      p.boxes [{x,y, m, dash, n, trail, c}]
        m      'opp': reverse twin, every key backwards (left↔right, up↔down). ('mx'/'my' still read: one axis)
        dash   rocket box: one press = slide until a wall, a box, a rope or a closed door stops it
-       n      landmine (Prim's pink boxes): it must make exactly n moves and end on a goal. One off each time it
-              actually moves (blocked = no change). It blows up (level lost) if it reaches 0 off a goal, or if it
-              has to move again once at 0
+       n      landmine (Prim's pink boxes): moves left. One off each time it actually moves (blocked = no change).
+              At 0 it may still sit anywhere; if it has to move again it blows up (level lost)
        trail  rope box: leaves a rope behind; ropes block every box, its own too (no backing up: Z undoes)
        die    a die [top, south, east] (true = [1,2,3]): every roll turns it; arrow tiles slide it without turning.
               Each tile it lands on is stamped with the face underneath (7 - top)
@@ -349,11 +348,11 @@ const PanelEngine = (() => {
       // cracked tiles fall once nobody stands on them
       if (X.crack.size) for (const k of left) if (X.crack.has(k) && !s.pos.some(q => key(...q) === k)) s.crk.add(k);
     }
-    // landmines: one off for each mine that really moved. Moving with nothing left, or reaching 0 off a goal, sets it off
+    // landmines: one off for each mine that really moved; moving with nothing left sets it off
     for (let i = 0; i < n && s.dead < 0; i++) {
       if (!moved[i] || s.left[i] === null) continue;
       if (s.left[i] === 0) { s.dead = i; break; }
-      if (--s.left[i] === 0 && !onGoal(p, s, i)) s.dead = i;
+      s.left[i]--;
     }
     return { state: s, moved, dead: s.dead };
   }
@@ -365,7 +364,6 @@ const PanelEngine = (() => {
     const at = new Map(s.pos.map((q, i) => [key(...q), i]));
     const goals = [], lights = [], nums = [], dice = [], mines = [];
     (p.dice || []).forEach(([x, y, v], i) => { if (s.stamp.get(key(x, y)) !== v) dice.push(i); });
-    s.left.forEach((l, i) => { if (l) mines.push(i); });
     (p.exit || []).forEach((g, i) => { const b = at.get(key(g[0], g[1])); if (b === undefined || (g[2] != null && s.col[b] !== g[2])) goals.push(i); });
     (p.lights || []).forEach(([x, y], i) => { const k = key(x, y), b = at.get(k); if (!s.trail.has(k) && !(b !== undefined && p.boxes[b].trail)) lights.push(i); });
     (p.nums || []).forEach(([cx, cy, n], i) => { const c = cellSides(cx, cy).filter(k => s.rope.has(k)).length; if (c !== n) nums.push({ i, c }); });

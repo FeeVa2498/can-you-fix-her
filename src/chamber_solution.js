@@ -105,7 +105,7 @@ function boxSolEvents(p) {
   }
   const last = ev[ev.length - 1];
   if ((p.nums || []).length) last.push('Mọi con số đều đúng.');
-  last.push('Mọi goal có hộp đúng màu' + ((p.lights || []).length ? ', mọi đèn đều sáng' : '') + ((p.dice || []).length ? ', mọi ô số đã in đúng' : '') + (p.boxes.some(b => b.n != null) ? ', mọi mìn về 0 trên goal' : '') + ': xong.');
+  last.push('Mọi goal có hộp đúng màu' + ((p.lights || []).length ? ', mọi đèn đều sáng' : '') + ((p.dice || []).length ? ', mọi ô số đã in đúng' : '') + ': xong.');
   return { ev, n: inp.length };
 }
 function solMode(on) {

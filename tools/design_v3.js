@@ -207,11 +207,11 @@ function checkBox(p, spec) {
   const maxL = capLen(spec);
   let r = E.boxSolve(p, maxL, 8, 200000);
   if (!r.wins.length || r.capped) return null;
-  // landmines (Prim): each mine must make exactly n moves; n = its moves in a free shortest answer + a detour from spec.extra
+  // landmines (Prim): n = the moves that mine makes in a shortest answer; one more move and it blows
   if (spec.boxes.some(b => b.n) && !p.boxes.some(b => b.n != null)) {
     const mv = boxStats(p, r.wins[0]).movesBy, ex = spec.extra || [0, 2];
     if (spec.boxes.some((b, i) => b.n && !mv[i])) return null;
-    spec.boxes.forEach((b, i) => { if (b.n) p.boxes[i].n = mv[i] + ex[ri(ex.length)]; });
+    spec.boxes.forEach((b, i) => { if (b.n) p.boxes[i].n = mv[i]; });   // the moves it makes in a shortest answer
     const ns = p.boxes.filter(b => b.n != null).map(b => b.n);
     if (spec.distinct && new Set(ns).size < ns.length) return null;
     r = E.boxSolve(p, maxL, 8, 200000);
@@ -239,6 +239,8 @@ function checkBox(p, spec) {
   return { r, best, L, luck };
 }
 function finishBox(p, c) {
+  // landmines: wall pruning can shorten the answer, so the numbers follow the final answer
+  if (p.boxes.some(b => b.n != null)) { const mv = boxStats(p, c.best).movesBy; p.boxes.forEach((b, i) => { if (b.n != null) b.n = mv[i]; }); c.r = E.boxSolve(p, 60, 8, 400000); c.best = c.r.wins[0]; c.L = c.best.length; }
   const luck = randomPlay(p, c.L * 2);
   Object.assign(p, { solIn: c.best, solutions: c.r.wins.length, minMoves: c.L, luck: Math.round(luck * 1000) / 10 });
   if (c.score !== undefined) p.quality = Math.round(c.score * 10) / 10;
@@ -510,7 +512,7 @@ const BRULE = {
   oneway: 'Mũi tên trên khe: chỉ đi qua được theo chiều đó.',
   holes: 'Chỗ trống trên map không đi được.',
   dash: 'Hộp tên lửa: mỗi lần ấn, nó trượt tới khi đụng tường, hộp khác, dây hoặc cửa đóng.',
-  budget: 'Hộp mìn (hồng): số trên hộp là số nước nó PHẢI đi, không hơn không kém. Mỗi lần nó thật sự di chuyển thì số giảm 1. Về 0 mà không đứng trên goal, hoặc đã về 0 mà còn bị bắt đi tiếp, là mìn nổ, thua bàn.',
+  budget: 'Hộp mìn (hồng): số trên hộp là số nước nó còn được đi; mỗi lần nó thật sự di chuyển thì giảm 1 (bị tường chặn thì không giảm). Về 0 mà còn bị bắt đi tiếp là mìn nổ, thua bàn. Số đó đúng bằng số nước của đường ngắn nhất: không có nước nào để phí.',
   dice: 'Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất (số ▼). Ô có số phải được in đúng số đó (lần in cuối cùng tính) rồi xúc xắc về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt.',
   mx: 'Hộp có vạch dọc: trái/phải bị đảo.', my: 'Hộp có vạch ngang: lên/xuống bị đảo.',
   opp: 'Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống.',
@@ -520,7 +522,7 @@ const BRULE = {
 };
 const BTIP = {
   pads: 'Lần ngược từ goal: hộp phải dừng ở goal, vậy cái gì chặn nó ở đó?', stops: 'Ô phanh là chỗ duy nhất giữa đường mà hộp đang trượt chịu dừng.',
-  dash: 'Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi.', budget: 'Mìn phải đi đúng số nước: đếm khoảng cách tới goal, phần dư phải đốt bằng một đường vòng (lẻ thì cần portal để đổi nhịp).', dice: 'Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?',
+  dash: 'Hộp tên lửa chỉ dừng cạnh vật chắn: tìm những ô có tường phía sau theo hướng bạn đi.', budget: 'Mìn chỉ đủ nước cho đường ngắn nhất: hộp nào tới goal trước phải được tường giữ đứng yên trong lúc hộp kia đi tiếp.', dice: 'Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?',
   mx: 'Dùng tường để làm hai hộp lệch nhau.', many: 'Hộp đứng yên cũng là một bức tường cho hộp khác.',
   nolock: 'Đưa hộp tới goal sau cùng cùng lúc với hộp kia, hoặc kẹp một hộp vào tường cạnh goal để nó đứng yên chờ.', helpers: 'Đặt hộp thừa trước, rồi mới phóng hộp chính.',
   trail: 'Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
