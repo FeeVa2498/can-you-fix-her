@@ -1227,6 +1227,84 @@ body.reckon #app{animation:none}
 .mm-hint{position:absolute;right:2%;bottom:1.5%;font:11px var(--mono);color:rgba(255,255,255,.5)}
 #su-name.need{border-color:#ff4d5e;animation:tutpulse .5s steps(2) 3}
 #su-ok:disabled{opacity:.55;cursor:not-allowed}
+.tq{min-width:0}.tq-bar{box-sizing:border-box}.tq-in{min-width:0}
+/* ---------- UnitConv.exe · Trix's pocket calculator ---------- */
+.ucx{position:relative;display:flex;flex-direction:column;gap:9px;padding:14px 16px 12px;border-radius:26px 26px 34px 34px;background:linear-gradient(160deg,#3a2440 0,#1a1020 55%,#120a16 100%);border:2px solid #0a050c;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.18),inset 0 -5px 10px rgba(0,0,0,.6),5px 7px 0 rgba(43,24,80,.35);color:#ffd2e6}
+.ucx::before{content:"";position:absolute;left:14px;right:14px;top:6px;height:5px;border-radius:3px;background:repeating-linear-gradient(90deg,#ff5fa8 0 6px,#1a1020 6px 12px);opacity:.8}
+.ucx-top{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.ucx-brand{font:900 13px var(--display);letter-spacing:1px;color:#ff8fc4;text-shadow:0 0 6px rgba(255,95,168,.6)}.ucx-brand b{color:#fff}.ucx-brand i{font:10px var(--mono);color:#b48aa8}
+.ucx-solar{display:flex;gap:2px;padding:3px;border-radius:4px;background:#2b1a24;border:1px solid #000}.ucx-solar i{width:14px;height:10px;background:linear-gradient(135deg,#3b2a1c,#6a4a2c 50%,#3b2a1c)}
+.ucx-lcd{min-height:150px;padding:8px 10px;border-radius:10px 10px 18px 10px;background:linear-gradient(180deg,#c7d7a8,#a9bd86);border:3px solid #0a050c;box-shadow:inset 0 3px 8px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.2);color:#1d3320;font-family:var(--mono);display:flex;flex-direction:column;gap:3px}
+.lc-s{font-size:10px;letter-spacing:1px;opacity:.75}
+.lc-in,.lc-out{display:flex;align-items:baseline;gap:6px;justify-content:flex-end}
+.lc-in input{flex:1;min-width:0;background:transparent;border:0;border-bottom:1px dashed rgba(29,51,32,.4);font:700 24px var(--mono);color:#1d3320;text-align:right;outline:none;text-shadow:1px 1px 0 rgba(29,51,32,.15)}
+.lc-in.sm input{font-size:18px}
+.lc-out output{font:700 30px var(--mono);letter-spacing:1px;text-shadow:1px 1px 0 rgba(29,51,32,.18);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px}
+.lc-in span,.lc-out span{font-size:11px;font-weight:700;min-width:34px}
+.lc-tk{display:grid;grid-template-columns:52px 58px 1fr 44px;gap:4px;align-items:center;font-size:11px}.lc-tk span{text-align:right}.lc-tk i{font-style:normal;text-align:right;font-size:10px}
+.ucx-mode{display:flex;align-items:center;justify-content:center;gap:8px}
+.ucx-mode button{padding:3px 12px;border-radius:10px;border:2px solid #0a050c;background:#2b1a2e;color:#b48aa8;font:700 10px var(--mono);letter-spacing:1px;cursor:pointer}
+.ucx-mode button.on{background:#ff5fa8;color:#fff;box-shadow:0 0 10px rgba(255,95,168,.6)}
+.ucx-led{width:8px;height:8px;border-radius:50%;background:#7dff9a;box-shadow:0 0 6px #7dff9a}.ucx-led.r{background:#ffd86e;box-shadow:0 0 6px #ffd86e}
+.ucx-keys{display:flex;flex-direction:column;gap:5px}
+.ux-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.ux-row{display:flex;gap:5px}.ux-row .uk{flex:1}
+.ux-lab{font:700 9px var(--mono);letter-spacing:2px;color:#b48aa8;margin-bottom:-2px}
+.uk{padding:5px 4px;border-radius:9px;border:2px solid #0a050c;background:linear-gradient(180deg,#ffe1ef,#ffb3d6);color:#3a0f26;font:700 11px var(--mono);cursor:pointer;box-shadow:0 3px 0 #7a2a52,inset 0 1px 0 #fff}
+.uk i{font-style:normal;opacity:.6;margin:0 3px}
+.uk:active{transform:translateY(3px);box-shadow:inset 0 1px 0 #fff}
+.uk.on{background:linear-gradient(180deg,#e6d6ff,#b9a3ff);box-shadow:0 3px 0 #4a3290,inset 0 1px 0 #fff,0 0 8px rgba(185,163,255,.7)}
+.uk.wide{background:linear-gradient(180deg,#5a3a5e,#3a2440);color:#ffd2e6;box-shadow:0 3px 0 #000,inset 0 1px 0 rgba(255,255,255,.25)}
+.uk.coin{font-size:10px}
+.ucx-foot{text-align:center;font:9px var(--mono);color:#7a5a72;letter-spacing:1px}
+.boot{display:flex;gap:14px;padding:16px;align-items:center;font-size:13px}
+/* ---------- Fortune.exe · Paige's tarot table ---------- */
+.ftx{display:flex;flex-direction:column;gap:10px;padding:14px 16px 12px;border-radius:30px;background:radial-gradient(120% 80% at 50% 30%,#3a1d4a 0,#1c0e26 60%,#0c0612 100%);border:2px solid #000;box-shadow:inset 0 0 0 4px #2a1636,inset 0 0 0 5px #c9a24a,5px 7px 0 rgba(43,24,80,.35);color:#f3dcb0}
+.ftx-head{display:flex;align-items:center;justify-content:center;gap:14px}.ftx-head b{font:italic 900 24px Georgia,'Times New Roman',serif;letter-spacing:2px;color:#ffd86e;text-shadow:0 0 10px rgba(255,180,60,.55)}
+.ftx-candle{width:8px;height:18px;border-radius:2px;background:linear-gradient(#f6ecd6,#c9b48a);position:relative}.ftx-candle i{position:absolute;left:50%;top:-12px;width:8px;height:12px;margin-left:-4px;border-radius:50% 50% 40% 40%;background:radial-gradient(circle at 50% 70%,#fff6c0,#ffb030 60%,transparent 70%);animation:flick 1.2s ease-in-out infinite alternate;box-shadow:0 0 14px 4px rgba(255,170,60,.45)}
+@keyframes flick{0%{transform:scale(1) rotate(-3deg)}100%{transform:scale(1.15,.92) rotate(4deg)}}
+.ftx-stage{flex:1;min-height:270px;display:grid;place-items:center;perspective:700px}
+.ftx-card{position:relative;width:170px;height:260px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.3,.7,.3,1.2)}.ftx-card.up{transform:rotateY(180deg)}
+.ftx-back,.ftx-front{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;border:3px solid #c9a24a;box-shadow:0 8px 18px rgba(0,0,0,.6)}
+.ftx-back{display:grid;place-items:center;background:repeating-linear-gradient(45deg,#2a1240 0 8px,#3a1a56 8px 16px);font-size:46px;color:#c9a24a}
+.ftx-back span{width:90px;height:90px;display:grid;place-items:center;border:2px solid #c9a24a;border-radius:50%;background:#1c0e26}
+.ftx-front{transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 12px;background:linear-gradient(180deg,#f8ecd0,#e4cf9e);color:#2a1236;text-align:center}
+.ftx-front small{font:700 11px Georgia,serif;letter-spacing:2px}.ftx-sig{font-size:56px;line-height:1.1;color:#5a1f6a}.ftx-front b{font:italic 900 16px Georgia,serif}.ftx-front p{margin:0;font-size:12px;line-height:1.45}
+.ftx-coin[hidden],.ftx-card[hidden]{display:none}
+.ftx-coin{display:flex;flex-direction:column;align-items:center;gap:12px}.ftx-coin .coin{width:90px;height:90px;font-size:38px;border-width:4px}
+.ftx-btns{display:flex;gap:8px}.ftb{flex:1;padding:8px;border-radius:20px;border:2px solid #c9a24a;background:linear-gradient(180deg,#4a2160,#2a1236);color:#ffd86e;font:700 12px Georgia,serif;letter-spacing:1px;cursor:pointer;box-shadow:0 3px 0 #000}.ftb:active{transform:translateY(3px);box-shadow:none}
+.ftx-foot{text-align:center;font:italic 10px Georgia,serif;color:#9a7aa8}
+/* ---------- Atlas.exe · Vel's field atlas ---------- */
+.atx{display:flex;flex-direction:column;gap:9px;height:100%;box-sizing:border-box;padding:12px 14px 10px;border-radius:14px 22px 14px 22px;background:repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0 2px,transparent 2px 5px),linear-gradient(160deg,#6d7448,#4a5130 70%,#3a4026);border:2px solid #20240f;box-shadow:inset 0 0 0 3px #59603a,inset 6px 0 0 #2e3319,5px 7px 0 rgba(43,24,80,.35);color:#eef0d8}
+.atx-head{display:flex;align-items:center;gap:10px}.atx-head b{display:block;font:900 26px Impact,'Arial Black',sans-serif;letter-spacing:6px;color:#f1e9c6;text-shadow:2px 2px 0 #20240f}.atx-head small{font:10px var(--mono);letter-spacing:2px;color:#cfd3a8}
+.atx-compass{position:relative;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle,#f6f0d6 0 55%,#b9a77a 56% 62%,#3a3a24 63%);border:2px solid #20240f;flex:none}
+.atx-compass i{position:absolute;left:50%;top:6px;width:4px;height:32px;margin-left:-2px;background:linear-gradient(#d23b3b 50%,#2a2a2a 50%);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);animation:compass 7s ease-in-out infinite}
+.atx-compass span{position:absolute;top:-1px;left:50%;transform:translateX(-50%);font:900 8px var(--mono);color:#20240f}
+@keyframes compass{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(18deg)}}
+.atx-stamp{margin-left:auto;padding:2px 6px;border:2px solid #ff6fae;color:#ff6fae;font:900 10px var(--mono);line-height:1.1;transform:rotate(8deg);border-radius:4px;opacity:.9}
+.atx-search{display:flex;align-items:center;gap:6px;padding:4px 8px;background:#1d2010;border-radius:4px;border:2px solid #0e1006}.atx-search span{font:700 11px var(--mono);color:#a6e36b}
+.atx .atx-search input{flex:1;min-width:0;background:transparent!important;border:0!important;box-shadow:none!important;outline:none;color:#e6ffcc;font:13px var(--mono);padding:2px}
+.boot.b-conv{background:linear-gradient(160deg,#3a2440,#120a16);color:#ffd2e6}.boot.b-tarot{background:radial-gradient(circle at 50% 30%,#3a1d4a,#0c0612);color:#ffd86e;font-family:Georgia,serif}.boot.b-atlas{background:linear-gradient(160deg,#6d7448,#3a4026);color:#f1e9c6}.boot.b-note{background:radial-gradient(120% 90% at 30% 0%,#fff,#a79fd6 70%,#7a6fb8);color:#2b2160}
+.boot.b-conv .boot-st,.boot.b-tarot .boot-st,.boot.b-atlas .boot-st{color:inherit;opacity:.75}.boot{border-radius:6px;height:100%;box-sizing:border-box}
+.atx-list{flex:1;min-height:0;overflow:auto;display:grid;gap:10px;padding:6px 4px}
+.atx-card{position:relative;padding:8px 10px 6px 12px;background:repeating-linear-gradient(180deg,#fbf6e4 0 17px,#cfe0f0 17px 18px);color:#2b2a1c;border-radius:2px;box-shadow:2px 3px 0 rgba(0,0,0,.35);transform:rotate(var(--r));font-size:12px;line-height:18px}
+.atx-card::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:1px;background:#e88}
+.atx-pin{position:absolute;right:10px;top:-5px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#ff5fa8 55%,#a0205e)}
+.atx-card b{font:900 14px Impact,'Arial Black',sans-serif;letter-spacing:1px}.atx-card span{display:block;font:11px var(--mono);color:#5a5a3a}.atx-card p{margin:0}.atx-card small{font:10px var(--mono);color:#7a7a5a}
+.atx-none{padding:20px;text-align:center;font:12px var(--mono);color:#e6ffcc}
+.atx-foot{font:italic 10px var(--mono);color:#cfd3a8;text-align:right}
+
+.boot svg{width:44px;height:44px}.boot>div:last-child{flex:1}.boot-st{margin:4px 0 8px;color:var(--ink-soft);font-size:12px;font-family:var(--mono)}
+.wiz{min-height:150px}.wiz-foot{display:flex;justify-content:flex-end;gap:8px;padding:6px 12px;border-top:2px solid var(--line)}.wiz-file{font-family:var(--mono);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+.conv2 .tabs{display:flex;gap:4px;margin-bottom:6px}.conv2 .tab{flex:1;padding:5px;border:2px solid var(--line);border-radius:8px 8px 0 0;background:var(--paper);font:inherit;cursor:pointer}.conv2 .tab.on{background:var(--pink-hi);font-weight:700}
+.cv-units{display:grid;gap:4px;max-height:300px;overflow:auto}.cv-units .trow{padding:3px 8px}.cv-units input{width:80px}
+.cv-market{display:grid;gap:2px;padding:6px;font-family:var(--mono);font-size:13px}.mk-row{display:grid;grid-template-columns:80px 90px 70px 1fr;gap:6px;align-items:center}.mk-row i{font-style:normal}.mk-row i.up{color:#2a9d63}.mk-row i.dn{color:#d2475f}.mk-row small{color:var(--ink-soft);font-size:11px}
+.cv-swap{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px}.cv-swap input{width:80px}.cv-swap output{font-family:var(--mono);font-weight:700;min-width:80px}.cv-day{color:var(--ink-soft)}
+.tq{display:grid;gap:6px;padding:6px}.tq-bar{height:10px;border:2px solid var(--line);border-radius:6px;background:var(--paper);overflow:hidden}.tq-bar i{display:block;height:100%;width:100%;background:var(--sky);transition:background .3s}.tq-bar i.hot{background:#e0465e}
+.tq-row{display:flex;gap:6px}.tq-in{flex:1;font:inherit;font-family:var(--mono);padding:6px;border:2px solid var(--line);border-radius:8px}
+.coin{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#e0b23a 60%,#a87a12);border:2px solid #7a5608;color:#5a3d00;font-family:var(--display);vertical-align:middle}
+.coin.spin{animation:coinspin .25s linear infinite}@keyframes coinspin{0%{transform:scaleX(1)}50%{transform:scaleX(.08)}100%{transform:scaleX(1)}}
 </style>
 </head>
 <body>
@@ -1715,6 +1793,7 @@ function reqList(r) {
 function renderAllChoices() { Object.values(VIEWS).forEach(renderChoicesIn); }
 function renderChoicesIn(v) {
   if (!v.root.isConnected) return;
+  if (S.tq && S.tq.g === v.ch && !S.active) { if (!$('.tq', v.root)) tqRender(); return; }
   const el = $('.chat-choices', v.root), a = S.active;
   if (a && a.ch === v.ch) {
     const n = getDlg(a.id) && getDlg(a.id).nodes[a.node];
@@ -1772,6 +1851,7 @@ function doAction(a) {
   else if (a.action === 'KNOW') { if (!knows(a.value)) S.know.push(a.value); }
   else if (a.action === 'JOURNAL') { if (!S.journal.some(j => j.text === a.value)) S.journal.push({ day: S.day, text: a.value }); }
   else if (a.action === 'SET_FLAG') S.flags[a.value] = true;
+  else if (a.action === 'COIN_PICK') { if (S.session) S.session.pick = a.value; }
   else if (a.action === 'UNSET_FLAG') delete S.flags[a.value];
   else if (a.action === 'SHOW') { S.show[a.value[0]] = a.value[1]; renderShowcase(); }
   else if (a.action === 'GLITCH') glitch(a.value || 'soft');
@@ -1789,6 +1869,8 @@ function handleEnd(n) {
     case 'BRIEF_DONE': S.flags.briefed = true; S.flags.ping = 'brain'; refresh(); break;
     case 'MORNING_DONE': afterMorning(); break;
     case 'SES_SCAN': sessionScan(); break;
+    case 'SES_COIN': paigeSessionCoin(); break;
+    case 'TIMED_Q': startTimedQ(S.tqNext); S.tqNext = null; break;
     case 'SES_CLOSE': closeSession(); break;
     case 'OVERLOAD_DONE': closeSession(); break;
     case 'BOSS_NIGHT_DONE': S.night.bossDone = true; break;
@@ -1820,7 +1902,7 @@ function openWin(id, o) {
   const rec = { el, o, body: el.querySelector('.win-body'), upd: [] }; WINS[id] = rec;
   el.addEventListener('pointerdown', () => focusWin(id), true);
   const minimize = () => { el.hidden = true; renderTasks(); };
-  el.querySelector('[data-a=close]').onclick = () => { SFX.click(); if (o.noClose && o.noClose()) { minimize(); toast(o.title, 'This window stays open until the session ends.'); } else closeWin(id); };
+  el.querySelector('[data-a=close]').onclick = () => { SFX.click(); if (o.noClose && o.noClose()) { minimize(); toast(o.title, o.closeMsg || 'This window stays open until the session ends.'); } else closeWin(id); };
   el.querySelector('[data-a=min]').onclick = () => { SFX.click(); minimize(); };
   const tb = el.querySelector('.titlebar');
   tb.addEventListener('pointerdown', e => {
@@ -1869,10 +1951,10 @@ function renderIcons() {
   ];
   if (S.session) list.splice(3, 0, { id: 'ses', label: 'session_' + S.session.g + '.tmp', ic: 'tmp', fn: focusSessionChat, isNew: true });
   if (SPECIAL[S.day] === 'showcase' && S.phase === 'day') list.push({ id: 'show', label: 'Showcase.exe', ic: 'gallery', fn: openShowcase, isNew: PLAYABLE.filter(k => onSite(k) && met(k)).some(k => !S.show[k]) });
-  if (S.apps.includes('UnitConv.exe')) list.push({ id: 'conv', label: 'UnitConv.exe', ic: 'conv', fn: openConv });
-  if (S.apps.includes('Atlas.exe')) list.push({ id: 'atlas', label: 'Atlas.exe', ic: 'atlas', fn: openAtlas });
-  if (S.apps.includes('MusicBox.exe')) list.push({ id: 'music', label: 'MusicBox.exe', ic: 'note', fn: openMusicBox });
-  if (S.apps.includes('Fortune.exe')) list.push({ id: 'fortune', label: 'Fortune.exe', ic: 'tarot', fn: openFortune });
+  if (S.apps.includes('UnitConv.exe')) list.push({ id: 'conv', label: 'UnitConv.exe', ic: 'conv', fn: () => launchApp('UnitConv.exe', openConv) });
+  if (S.apps.includes('Atlas.exe')) list.push({ id: 'atlas', label: 'Atlas.exe', ic: 'atlas', fn: () => launchApp('Atlas.exe', openAtlas) });
+  if (S.apps.includes('MusicBox.exe')) list.push({ id: 'music', label: 'MusicBox.exe', ic: 'note', fn: () => launchApp('MusicBox.exe', openMusicBox) });
+  if (S.apps.includes('Fortune.exe')) list.push({ id: 'fortune', label: 'Fortune.exe', ic: 'tarot', fn: () => launchApp('Fortune.exe', openFortune) });
   list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
   if (S.flags.rkFiles) list.push({ id: 'mycomp', label: 'My Computer', ic: 'drive', fn: openMyComputer, isNew: PLAYABLE.some(g => !S.flags['del_' + g]) });
   if (S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
@@ -2310,6 +2392,7 @@ function nightConvo(g) {
   // the last night always has her "tomorrow is the reckoning" chat
   const rk = list.find(x => x.id === g + '_reckoning');
   if (S.day >= LAST_DAY && rk && DD.night[rk.id]) return st.ntDone.includes(rk.id) ? null : { id: rk.id, by: rk.by, steps: DD.night[rk.id].steps };
+  const tq = timedQFor(g); if (tq) return { id: tq[0], by: 'girl', tq: true };
   // her "heart" chat (hidden in layer 2) and Prim's songs chat come first as soon as they're open
   const pri = list.find(x => /_(heart|songs)$/.test(x.id) && !st.ntDone.includes(x.id) && st.layer >= x.layer && cond(x.if));
   if (pri) return { id: pri.id, by: pri.by, steps: DD.night[pri.id].steps };
@@ -2333,15 +2416,16 @@ function startNightChat(g) {
   const c = nightConvo(g);
   S.night.chats++; S.night.with.push(g); S.g[g].ntDone.push(c.id); S.g[g].nt = S.g[g].ntDone.length;
   S.unread[g] = 0;
-  runDialogue(seq(g, g, playSteps(c.steps), 'NONE'));
+  if (c.tq) { S.tqNext = c.id; runDialogue(seq(g, g, [{ lines: TIMED_QS[c.id].intro }], 'TIMED_Q')); }
+  else runDialogue(seq(g, g, playSteps(c.steps), 'NONE'));
   renderBuddies(); renderIcons();
 }
 
 /* ---------------- mail, apps, mementos ---------------- */
 // one reward per gate: layer 1 → her software, layer 2 → her memento (it does something), layer 3 → a letter. All arrive at night.
 const MEMENTOS = {   // every memento does something in her memories; layer 2 gifts only
-  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): lift the paper and the last line comes off.' },
-  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Reset (and Undo, once you have it) costs no time.' },
+  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): 20 a day, and each one gives the minute back.' },
+  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Reset costs no time.' },
   'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five costs no time. Roll with it.' },
   'dog_tag.mem': { ic: 'tag', from: 'Vel', desc: 'Walking on a map costs half: every other step is free.' },
 };
@@ -2424,36 +2508,46 @@ function openMBox() {
     }
   });
 }
-function openConv() {
-  S.used = S.used || {}; S.used['UnitConv.exe'] = true; save();
-  openWin('conv', {
-    title: 'UnitConv.exe', icon: 'conv', w: 440, h: 380, x: 240, y: 70, render: b => {
-      const rows = [['mi', 'km', 1.609344], ['°F', '°C', null], ['lb', 'kg', 0.45359237]];
-      b.innerHTML = `<div class="tool">${rows.map((r, i) => `<div class="trow bevel"><div><label for="cv${i}">${r[0]}</label><input id="cv${i}" inputmode="decimal" value="${['12', '98.6', '10'][i]}"></div><span class="arrow">→</span><div><label>${r[1]}</label><output id="co${i}"></output></div></div>`).join('')}<small style="color:var(--ink-soft);padding:0 4px">a gift from Trix ✧</small></div>`;
-      const calc = () => rows.forEach((r, i) => { const v = parseFloat($('#cv' + i, b).value); const o = isNaN(v) ? '—' : r[2] ? (v * r[2]).toFixed(2) : ((v - 32) * 5 / 9).toFixed(1); $('#co' + i, b).textContent = o; });
-      $$('input', b).forEach(x => x.addEventListener('input', calc)); calc();
-    }
-  });
-}
 const ATLAS = [['Eiffel Tower', 'Paris, France', '330 m of iron. Not in Rome.'], ['Mount Everest', 'Nepal / China border', '8,849 m. There is no Swiss side.'], ['Santorini', 'Greece', 'Blue domes, white walls, a lot of cats.'], ['Reykjavik', 'Iceland', 'Northernmost capital of a sovereign state.'], ['Kyoto', 'Japan', 'Over 1,600 temples.'], ['Angkor Wat', 'Siem Reap, Cambodia', 'Largest religious monument on Earth.'], ['Lisbon', 'Portugal', 'Seven hills and yellow trams.'], ['Istanbul', 'Türkiye', 'One city, two continents.'], ['Machu Picchu', 'Cusco region, Peru', '2,430 m above sea level.'], ['Marrakech', 'Morocco', 'The red city.'], ['Hanoi', 'Vietnam', 'Old Quarter: 36 streets.'], ['Patagonia', 'Argentina & Chile', 'Wind up to 120 km/h.'], ['Trans-Siberian Railway', 'Moscow → Vladivostok', '9,289 km.'], ['Venice', 'Italy', '118 small islands.']];
 const TAROT = [['The Fool', 'Step off the edge. The floor might be glass.'], ['The Tower', 'Something comes down today. Stand clear.'], ['The Star', 'Somebody is still rooting for you.'], ['The Moon', 'Not everything you see is real. Check twice.'], ['Wheel of Fortune', 'Spin. Whatever lands, you were going to play anyway.'], ['Death', 'An ending. Not yours. Probably.'], ['The Lovers', 'A choice between two people. Or two versions of one.'], ['The Hermit', 'Stay in tonight. Someone will message.'], ['Strength', 'Gentle hands open stuck doors.'], ['The Sun', 'A good day. Don\'t waste it on worry.']];
+// Paige's tarot table: black velvet, candlelight, a card that flips, a coin that spins
+const TAROT_SIG = { 'The Fool': '✦', 'The Tower': '⚡', 'The Star': '★', 'The Moon': '☾', 'Wheel of Fortune': '☸', 'Death': '☠', 'The Lovers': '♡', 'The Hermit': '☉', 'Strength': '∞', 'The Sun': '☀' };
+const ROMAN = ['0', 'XVI', 'XVII', 'XVIII', 'X', 'XIII', 'VI', 'IX', 'VIII', 'XIX'];
 function openFortune() {
   S.used = S.used || {}; S.used['Fortune.exe'] = true; save();
-  openWin('fortune', { title: 'Fortune.exe', icon: 'tarot', w: 320, h: 360, x: 280, y: 60, render: b => {
-    b.innerHTML = `<div class="tool fortune"><div class="tcard" id="ft-card"><b>?</b><span>draw a card</span></div><div style="display:flex;gap:8px;justify-content:center"><button class="btn primary" id="ft-draw">Draw</button><button class="btn" id="ft-coin">Flip a coin</button></div><small style="color:var(--ink-soft);text-align:center">dealt by Paige. no refunds.</small></div>`;
-    $('#ft-draw', b).onclick = () => { SFX.pop(); const c = TAROT[Math.random() * TAROT.length | 0]; $('#ft-card', b).innerHTML = `<b>${esc(c[0])}</b><span>${esc(c[1])}</span>`; };
-    $('#ft-coin', b).onclick = () => { SFX.pop(); $('#ft-card', b).innerHTML = `<b>${Math.random() < .5 ? 'HEADS' : 'TAILS'}</b><span>the coin doesn't care.</span>`; };
+  openWin('fortune', { title: 'Fortune.exe', icon: 'tarot', w: 340, h: 470, x: 280, y: 40, skin: true, render: b => {
+    b.innerHTML = `<div class="ftx"><div class="ftx-head"><span class="ftx-candle"><i></i></span><b>Fortune</b><span class="ftx-candle"><i></i></span></div>
+      <div class="ftx-stage"><div class="ftx-card" id="ft-card"><div class="ftx-back"><span>✦</span></div><div class="ftx-front"><small id="ft-n"></small><span class="ftx-sig" id="ft-s"></span><b id="ft-t"></b><p id="ft-x"></p></div></div>
+        <div class="ftx-coin" id="ft-coinv" hidden><span class="coin"><b>?</b></span><b id="ft-cr"></b></div></div>
+      <div class="ftx-btns"><button class="ftb" id="ft-draw">✧ draw a card</button><button class="ftb" id="ft-coin">◐ flip a coin</button></div>
+      <div class="ftx-foot">dealt by Paige · no refunds</div></div>`;
+    const card = $('#ft-card', b), cv = $('#ft-coinv', b);
+    $('#ft-draw', b).onclick = () => {
+      SFX.pop(); cv.hidden = true; card.hidden = false; card.classList.remove('up');
+      setTimeout(() => { const k = Math.random() * TAROT.length | 0, c = TAROT[k];
+        $('#ft-n', b).textContent = ROMAN[k] || ''; $('#ft-s', b).textContent = TAROT_SIG[c[0]] || '✦'; $('#ft-t', b).textContent = c[0]; $('#ft-x', b).textContent = c[1];
+        card.classList.add('up'); SFX.tick(); }, 380);
+    };
+    $('#ft-coin', b).onclick = () => {
+      SFX.pop(); card.hidden = true; cv.hidden = false; const c = $('.coin', cv), r = Math.random() < .5 ? 'HEADS' : 'TAILS';
+      c.classList.add('spin'); $('b', c).textContent = '?'; $('#ft-cr', b).textContent = 'flipping…';
+      setTimeout(() => { c.classList.remove('spin'); $('b', c).textContent = r[0]; $('#ft-cr', b).textContent = r + ' · the coin doesn\'t care.'; SFX.tick(); }, REDUCED ? 100 : 1300);
+    };
   } });
 }
+// Vel's field atlas: olive canvas cover, stencil type, a spinning compass, pinned index cards
 function openAtlas() {
   S.used = S.used || {}; S.used['Atlas.exe'] = true; save();
-  openWin('atlas', {
-    title: 'Atlas.exe', icon: 'atlas', w: 420, h: 460, x: 260, y: 50, render: b => {
-      b.innerHTML = `<div class="tool" style="height:100%"><label for="atlas-q" style="font-size:11px;color:var(--ink-soft)">search a place</label><input id="atlas-q" placeholder="e.g. Eiffel" autocomplete="off"><div class="atlas-list" id="atlas-l"></div><small style="color:var(--ink-soft)">traced by Prim, page by page</small></div>`;
-      const r = () => { const q = $('#atlas-q', b).value.toLowerCase(); $('#atlas-l', b).innerHTML = ATLAS.filter(a => !q || a.join(' ').toLowerCase().includes(q)).map(a => `<div class="aentry bevel"><b>${esc(a[0])}</b><span>${esc(a[1])}</span>${esc(a[2])}</div>`).join(''); };
-      $('#atlas-q', b).addEventListener('input', r); r();
-    }
-  });
+  openWin('atlas', { title: 'Atlas.exe', icon: 'atlas', w: 400, h: 500, x: 260, y: 40, skin: true, render: b => {
+    b.innerHTML = `<div class="atx"><div class="atx-head"><div class="atx-compass" aria-hidden="true"><i></i><span>N</span></div><div><b>ATLAS</b><small>FIELD EDITION · VOL. 1</small></div><span class="atx-stamp">TRACED<br>BY PRIM</span></div>
+      <label class="atx-search"><span>SEARCH //</span><input id="atlas-q" placeholder="eiffel, everest…" autocomplete="off" aria-label="Search a place"></label>
+      <div class="atx-list" id="atlas-l"></div><div class="atx-foot">every soldier needs a map ✦ — V.</div></div>`;
+    const coord = s => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return `${(h % 90)}°${(h >> 8) % 60}′${h % 2 ? 'N' : 'S'} · ${(h >> 4) % 180}°${(h >> 12) % 60}′${(h >> 3) % 2 ? 'E' : 'W'}`; };
+    const r = () => { const q = $('#atlas-q', b).value.toLowerCase();
+      const hits = ATLAS.filter(a => !q || a.join(' ').toLowerCase().includes(q));
+      $('#atlas-l', b).innerHTML = hits.length ? hits.map((a, i) => `<div class="atx-card" style="--r:${(i % 3 - 1) * .6}deg"><i class="atx-pin"></i><b>${esc(a[0])}</b><span>${esc(a[1])}</span><p>${esc(a[2])}</p><small>${coord(a[0])}</small></div>`).join('') : '<div class="atx-none">NO RECORD. CHECK SPELLING. (vel never does)</div>'; };
+    $('#atlas-q', b).addEventListener('input', r); r();
+  } });
 }
 
 /* =========================================================
@@ -2727,6 +2821,8 @@ function startSession(g) {
   refresh();
   // she talks first; the scan only starts once the chat is done
   if (g === 'ray') { yapCh = 'boss'; setViewCh('yap', 'boss'); renderBuddies(); sessionScan(); return; }   // no small talk on the last day; Ray talks in her own chat
+  // Paige: heads or tails before every session; call it right and the session runs on a lucky streak
+  if (g === 'paige') { runDialogue(seq('session', g, [...sesIntro(g), paigeCoinStep()], 'SES_COIN')); return; }
   runDialogue(seq('session', g, sesIntro(g), 'SES_SCAN'));
 }
 // the feed on the left, the chat on the right; the map window goes in the middle after the scan
@@ -3179,7 +3275,7 @@ async function main() {
   if (pick === 'new') { wipeSave(); saved = null; }
   if (saved && saved.player) {
     // autosave: continue from the last checkpoint, no menus
-    S = Object.assign(fresh(), saved);
+    S = Object.assign(fresh(), saved); S.tq = null; S.tqNext = null;   // a timed question does not survive a reload
     S.active = null; S.queue = []; S.dyn = {}; S.session = null;
     await bootOS();
     if (S.flags.ended) { refresh(); endGame(S.flags.endKind || 'proto'); return; }
@@ -3709,7 +3805,8 @@ function owState(g) {
 // keys per layer: { have, need, total }
 function owKeys(g) {
   const M = owBuild(g), o = owState(g);
-  return M.gates.map(G => ({ have: M.nodes.filter(n => n.layer === G.layer && o.solved[n.pid]).length, need: G.need, total: G.total }));
+  const bonus = (S.g[g] && S.g[g].bonusKeys) || {};   // keys won at night (timed questions) count like solved memories
+  return M.gates.map(G => ({ have: M.nodes.filter(n => n.layer === G.layer && o.solved[n.pid]).length + (bonus[G.layer] || 0), need: G.need, total: G.total }));
 }
 function owFirstOpen(g) {
   const M = owBuild(g), o = owState(g), L = S.g[g].layer + 1;
@@ -3792,13 +3889,37 @@ function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-ms
 function owSpend(kind = 'move') {
   if (S.phase !== 'day' || S.dayOver || reckoning()) return;
   // mementos: hourglass (undo is free), dog tag (every other step on the map is free), d20 (one in five is free)
-  let free = (kind === 'undo' || kind === 'reset') && hasMem('hourglass.mem');
+  let free = kind === 'reset' && hasMem('hourglass.mem');
   if (!free && kind === 'map' && hasMem('dog_tag.mem')) { OW.dog = (OW.dog || 0) + 1; free = OW.dog % 2 === 0; }
+  if (!free && S.session && S.session.lucky) { OW.hot = (OW.hot || 0) + 1; free = OW.hot % 2 === 0; }   // Paige's coin: every 2 inputs cost 1 minute
   if (!free && hasMem('lucky_d20.mem') && Math.random() < .2) { free = true; owSay('🎲 lucky · free move'); }
   if (!free) S.mins += 1;
   if (S.mins >= DAY_END) overload();
   owHud(); renderTray();
   if (WINS.brain) renderBrain();
+  return free ? 0 : 1;
+}
+/* undo in her memories: unlocked by Prim's tracing paper, 20 a day, and it gives the minute back */
+const UNDO_PER_DAY = 20;
+function undoLeft() { if (S.undoDay !== S.day) { S.undoDay = S.day; S.undoLeft = UNDO_PER_DAY; } return S.undoLeft; }
+const pjHist = () => PJ.p.boxes ? PJ.bsHist.length : (PJ.st ? PJ.st.path.length - 1 : 0);
+function owStorySpend(kind) {
+  const c = owSpend(kind);
+  if (kind === 'move' && PJ) { const L = pjHist(); OW.costs = OW.costs || []; if (L > OW.costs.length) OW.costs.push(c || 0); else OW.costs.length = L; }
+  if (kind === 'reset') OW.costs = [];
+  return c;
+}
+function owStoryUndo() {
+  if (owLocked()) { SFX.buzz(); return; }
+  if (!pjCanUndo()) { SFX.buzz(); $('#pj-msg').textContent = 'Undo is locked. Someone here might lend you a way to take a move back.'; return; }
+  if (undoLeft() <= 0) { SFX.buzz(); $('#pj-msg').textContent = 'No undos left today.'; return; }
+  const before = pjHist(); pjUndo(); drawPJ();
+  const after = pjHist(); if (after >= before) return;
+  S.undoLeft--; OW.costs = OW.costs || [];
+  let back = 0; while (OW.costs.length > after) back += OW.costs.pop() || 0;
+  S.mins = Math.max(DAY_START, S.mins - back);
+  $('#pj-msg').textContent = `Undo · ${S.undoLeft} left today${back ? ` · +${back} min back` : ''}`;
+  save(); owHud(); renderTray(); if (WINS.brain) renderBrain();
 }
 const owLocked = () => S.dayOver || OW.frozen || !!S.flags.ended;
 function owOverloaded() {
@@ -3815,7 +3936,7 @@ function owKey(e) {
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   const D = KEYDIR[k];
   if (D) { e.preventDefault(); if (owLocked()) { SFX.buzz(); return; } owMove(D[0], D[1]); }
-  else if (k === 'Enter' || k === ' ') { e.preventDefault(); if (owLocked()) { SFX.buzz(); return; } owEnter(); }
+  else if (k === 'Enter' || k === ' ' || k === 'e') { e.preventDefault(); if (owLocked()) { SFX.buzz(); return; } owEnter(); }
 }
 function owMove(dx, dy) {
   const g = OW.g, o = owState(g), M = owBuild(g), nx = o.x + dx, ny = o.y + dy;
@@ -3852,7 +3973,7 @@ function owEnter() {
   SFX.link(); glitch('soft');
   const host = $('#ow-main'); if (!host) return;
   const inL = M.nodes.filter(m => m.layer === n.layer);
-  PJ_STORY = { g, node: n, spend: owSpend, locked: owLocked, win: owLevelWon, back: owBack };
+  PJ_STORY = { g, node: n, spend: owStorySpend, undo: owStoryUndo, locked: owLocked, win: owLevelWon, back: owBack }; OW.costs = [];
   pjNew(p);
   renderProjector(host, p, n.i + 1, inL.length);
   owHud();
@@ -3865,8 +3986,9 @@ function storyProjectorChrome(b, p) {
   const ed = $('[data-m="edit"]', b); if (ed) ed.remove();
   const bk = $('[data-m="back"] span', b); if (bk) bk.textContent = 'Back to the map';
   const dbg = $('.pj-debug', b); if (dbg) dbg.remove();
-  const rs = $('#pj-reset', b); rs.onclick = () => { if (owLocked()) { SFX.buzz(); return; } pjReset(); owSpend('reset'); };
-  $$('[data-m="undo"],[data-m="reset"]', b).forEach(el => { const f = el.onclick, kind = el.dataset.m; el.onclick = () => { if (owLocked()) { SFX.buzz(); return; } f(); owSpend(kind); }; });
+  const rs = $('#pj-reset', b); rs.onclick = () => { if (owLocked()) { SFX.buzz(); return; } pjReset(); owStorySpend('reset'); };
+  const um = $('[data-m="undo"]', b); if (um) um.onclick = () => owStoryUndo();
+  const rm = $('[data-m="reset"]', b); if (rm) rm.onclick = () => { if (owLocked()) { SFX.buzz(); return; } pjReset(); owStorySpend('reset'); };
   const bm = $('[data-m="back"]', b); if (bm) bm.onclick = () => { SFX.click(); owBack(); };
 }
 function owBack() {
@@ -4372,17 +4494,29 @@ function mbVis() {
 }
 /* installing software from DiveMail: a little setup wizard, then the icon lands on the desktop */
 function installApp(name) {
+  // an old-school setup wizard: Welcome → Next → copying files → Finish (visual only, no work minutes)
   return new Promise(res => {
-    pcBusy(20);
-    openWin('setup:' + name, { title: `Setup — ${name}`, icon: 'exe', w: 380, h: 210, render: b => {
-      b.innerHTML = `<div class="inst"><div class="inst-ic">${icon(APPICON[name] || 'exe')}</div><div><b>Installing ${esc(name)}…</b><p id="in-st">Copying files</p><div class="ldbar"><i id="in-b"></i></div></div></div>`;
-      const steps = ['Copying files', 'Registering components', 'Creating shortcuts', 'Done'];
-      let k = 0; const bar = $('#in-b', b), st = $('#in-st', b);
-      const iv = setInterval(() => {
-        k += 3 + Math.random() * 6; bar.style.width = Math.min(100, k) + '%'; st.textContent = steps[Math.min(3, k / 34 | 0)];
-        if (Math.random() < .3) pcBusy(4);
-        if (k >= 100) { clearInterval(iv); setTimeout(() => { closeWin('setup:' + name); res(); }, 500); }
-      }, REDUCED ? 20 : 140);
+    const id = 'setup:' + name, ic = APPICON[name] || 'exe';
+    openWin(id, { title: `${name} Setup`, icon: 'exe', w: 420, h: 250, noClose: () => true, closeMsg: 'Setup is still running. Finish it first.', render: b => {
+      const page = (body, btns) => { b.innerHTML = `<div class="inst wiz"><div class="inst-ic">${icon(ic)}</div><div>${body}</div></div><div class="wiz-foot">${btns}</div>`; };
+      page(`<b>Welcome to the ${esc(name)} Setup Wizard</b><p>This will install ${esc(name)} on your computer.<br>Close other programs before continuing. (or don't.)</p>`, `<button class="btn primary" id="wz-next">Next ▸</button>`);
+      $('#wz-next', b).onclick = () => {
+        SFX.click(); pcBusy(20);
+        page(`<b>Installing ${esc(name)}…</b><p id="in-st">Extracting files</p><div class="ldbar"><i id="in-b"></i></div><p class="wiz-file" id="in-f"></p>`, `<button class="btn" disabled>Next ▸</button>`);
+        const steps = ['Extracting files', 'Copying files', 'Registering components', 'Creating shortcuts', 'Finishing'];
+        const files = ['setup.cab', 'core.dll', 'skin.bmp', 'readme.txt', name.toLowerCase(), 'msvcrt.dll', 'data.pak', 'icon.ico'];
+        let k = 0; const bar = $('#in-b', b), st = $('#in-st', b), f = $('#in-f', b);
+        const iv = setInterval(() => {
+          k += 1.5 + Math.random() * 3.5; bar.style.width = Math.min(100, k) + '%'; st.textContent = steps[Math.min(4, k / 20 | 0)];
+          f.textContent = 'C:\\DIVE\\Apps\\' + name.replace('.exe', '') + '\\' + files[Math.random() * files.length | 0];
+          if (Math.random() < .25) pcBusy(4);
+          if (k >= 100) {
+            clearInterval(iv); SFX.item();
+            page(`<b>Setup complete</b><p>${esc(name)} has been installed. A shortcut was placed on your desktop.</p>`, `<button class="btn primary" id="wz-fin">Finish</button>`);
+            $('#wz-fin', b).onclick = () => { SFX.click(); closeWin(id); res(); };
+          }
+        }, REDUCED ? 20 : 150);
+      };
     } });
   });
 }
@@ -4460,7 +4594,6 @@ function renderChamber(b) {
         return `<button class="chm-card bevel${d ? ' done' : ''}${p.tut ? ' tut' : ''}" data-p="${p.id}" title="${p.tut ? 'Tutorial: ' + esc(TEACH[p.tut] || p.tut) : ''}"><span class="no">${idx + 1}${p.tut ? '<i>NEW</i>' : ''}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}${d.peek ? '<br><i>saw solution</i>' : ''}` : 'not solved<br>&nbsp;'}</small></button>`;
       }).join('')}</div></div>`).join('')}
       <div class="chm-opts sunk">
-        <label><input type="checkbox" id="co-intro" ${CH.opt.intro ? 'checked' : ''}> Magnifier → projector intro</label>
         <label><input type="checkbox" id="co-debug" ${CH.opt.debug ? 'checked' : ''}> Designer info (solution count, notes, show answer)</label>
         <label><input type="checkbox" id="co-story" ${CH.opt.story ? 'checked' : ''}> Story flow preview (her message between maps, like the real game)</label>
         <div class="chm-mem">${Object.entries(CH_MEM).map(([k, m]) => `<label title="${esc(m.desc)}"><input type="checkbox" data-mem="${k}" ${CH.opt.mem[k] ? 'checked' : ''}> ${icon(m.ic)} ${m.name}</label>`).join('')}</div>
@@ -4469,7 +4602,6 @@ function renderChamber(b) {
     </div></div>`;
   $$('[data-g]', b).forEach(x => x.onclick = () => { SFX.click(); chGirl = x.dataset.g; renderChamber(b); });
   $$('[data-p]', b).forEach(x => x.onclick = () => { SFX.click(); startPanel(x.dataset.p); });
-  $('#co-intro', b).onchange = e => { CH.opt.intro = e.target.checked; chSave(); };
   $('#co-debug', b).onchange = e => { CH.opt.debug = e.target.checked; chSave(); };
   $('#co-story', b).onchange = e => { CH.opt.story = e.target.checked; chSave(); };
   $$('[data-mem]', b).forEach(x => x.onchange = () => { CH.opt.mem[x.dataset.mem] = x.checked; chSave(); });
@@ -4486,7 +4618,7 @@ async function startPanel(id) {
   const p = PANELS.find(x => x.id === id); if (!p) return;
   if (WINS.projector) { openProjector(p); return; }   // already projecting: swap the map in place, no new scan
   ['feedcam', 'magnifier'].forEach(closeWin);
-  if (CH.opt.intro) await magnifierIntro(p);
+  // the test chamber skips the brain scan: straight into the level
   openProjector(p);
 }
 function magnifierIntro(p, o = {}) {
@@ -4513,7 +4645,6 @@ function magnifierIntro(p, o = {}) {
       res();
     };
     $('#mag-go').onclick = () => finish(true);
-    $('#mag-skip').onclick = () => finish(false);
   });
 }
 
@@ -4544,7 +4675,7 @@ function magDashHTML(p) {
       <div class="mg-p mg-eeg"><canvas id="mg-eeg" width="320" height="58"></canvas><label>EEG · CH1–3</label></div>
       <div class="mg-p mg-nums">${[['BPM', 'mgn0'], ['SpO₂', 'mgn1'], ['SYNC', 'mgn2'], ['NOISE', 'mgn3'], ['DEPTH', 'mgn4'], ['ANOMALY', 'mgn5']].map(([l, id]) => `<div><b id="${id}">--</b><small>${l}</small></div>`).join('')}</div>
     </div>
-    <div class="mg-foot"><span class="mg-lock">LOCK <span class="bar"><i id="magbar"></i></span> <b id="magf">0</b>%</span><button class="btn" id="mag-skip">Skip</button><button class="btn primary" id="mag-go" disabled>Project ▸</button></div>
+    <div class="mg-foot"><span class="mg-lock">LOCK <span class="bar"><i id="magbar"></i></span> <b id="magf">0</b>%</span><button class="btn primary" id="mag-go" disabled>Project ▸</button></div>
   </div>`;
 }
 function magDashRun(p) {
@@ -4636,7 +4767,7 @@ function openProjector(p) {
   const inL = panelsOf(p.girl).filter(x => x.layer === p.layer).sort((a, c) => a.n - c.n), nL = inL.length, idx = inL.findIndex(x => x.id === p.id) + 1;
   const title = `PROJECT3D.EXE · ${GIRLS[p.girl].name}`;
   if (W) { W.o.title = title; W.el.querySelector('.tt').textContent = title; renderProjector(W.body, p, idx, nL); focusWin('projector'); return; }
-  openWin('projector', { title, icon: 'brain', w: 600, h: 720, x: CH.opt.intro ? 320 : 120, y: 6,
+  openWin('projector', { title, icon: 'brain', w: 600, h: 720, x: 120, y: 6,
     onClose: () => { bgmOff(); if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); if (PJ.die3) PJ.die3.dispose(); } PJ = null; document.removeEventListener('keydown', pjKey); },
     render: b => renderProjector(b, p, idx, nL) });
 }
@@ -5203,7 +5334,7 @@ function pjKey(e) {
   // story: every input costs her stamina (moves, bumps, undo, reset); none once she's out
   if (PJ_STORY && (D || k === 'z' || k === 'Backspace' || k === 'r')) { if (PJ_STORY.locked()) { e.preventDefault(); SFX.buzz(); return; } }
   if (D) { e.preventDefault(); pjMove(D); drawPJ(); if (PJ_STORY) PJ_STORY.spend('move'); }
-  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); if (!pjCanUndo()) { SFX.buzz(); $('#pj-msg').textContent = 'Undo is locked. Someone here might lend you a way to take a move back.'; return; } pjUndo(); drawPJ(); if (PJ_STORY) PJ_STORY.spend('undo'); }
+  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); if (PJ_STORY) { PJ_STORY.undo(); return; } pjUndo(); drawPJ(); }
   else if (k === 'r') { e.preventDefault(); pjReset(); if (PJ_STORY) PJ_STORY.spend('reset'); }
   else if (k === 'Escape') { e.preventDefault(); if (PJ_STORY) PJ_STORY.back(); else pjReset(); }
   else if (k === 'Enter') {
@@ -6258,6 +6389,190 @@ const OW3 = (() => {
   }
   return { create, ROLL_MS };
 })();
+
+/* =========================================================
+   EXTRAS · apps that boot like real software, the coin market,
+   timed questions at night, Paige's coin at the start of her sessions.
+   ========================================================= */
+
+/* ---------- every app takes a moment to start (visual only: no work minutes) ---------- */
+const APP_BOOT = {
+  'UnitConv.exe': ['conv', 'UnitConv 2.1 · loading conversion tables', 'loading crypto feed…'],
+  'Atlas.exe': ['atlas', 'Atlas · unfolding pages', 'tracing coastlines…'],
+  'Fortune.exe': ['tarot', 'Fortune · shuffling the deck', 'cutting the deck…'],
+  'MusicBox.exe': ['note', 'MusicBox · warming up the EQ', 'spinning the disc…'],
+};
+const APP_WIN = { 'UnitConv.exe': 'conv', 'Atlas.exe': 'atlas', 'Fortune.exe': 'fortune', 'MusicBox.exe': 'music' };
+function launchApp(name, open) {
+  const wid = APP_WIN[name];
+  if (wid && WINS[wid]) { open(); return; }                  // already running
+  const bid = 'boot:' + name; if (WINS[bid]) { focusWin(bid); return; }
+  const [ic, l1, l2] = APP_BOOT[name] || ['exe', name, 'starting…'];
+  const ms = REDUCED ? 300 : 2000 + Math.random() * 1000;
+  pcBusy && pcBusy(ms / 100 | 0);
+  openWin(bid, { title: name, icon: ic, w: 340, h: 170, render: b => {
+    b.innerHTML = `<div class="boot b-${ic}"><div class="boot-ic">${icon(ic)}</div><div><b>${esc(l1)}</b><p class="boot-st">${esc(l2)}</p><div class="ldbar"><i></i></div></div></div>`;
+    const bar = $('.ldbar i', b), t0 = performance.now();
+    const tick = () => { if (!WINS[bid]) return; const k = Math.min(1, (performance.now() - t0) / ms); bar.style.width = (k * 100) + '%';
+      if (k < 1) requestAnimationFrame(tick); else { closeWin(bid); open(); } };
+    requestAnimationFrame(tick);
+  } });
+}
+
+/* ---------- the coin market: four meme coins, new prices every day, different every playthrough ---------- */
+const COINS = [
+  { id: 'HEX', name: '$HEX', note: 'witchy. volatile.' },
+  { id: 'BUNNY', name: '$BUNNY', note: 'cute until it isn\'t.' },
+  { id: 'FLOPPY', name: '$FLOPPY', note: '1.44 MB of hope.' },
+  { id: 'GRAVE', name: '$GRAVE', note: 'buried, then dug up.' },
+];
+function coinRng(n) { let x = (S.coinSeed = S.coinSeed || (1 + Math.random() * 2e9 | 0)) ^ (n * 2654435761); return () => { x ^= x << 13; x ^= x >>> 17; x ^= x << 5; return ((x >>> 0) % 1e6) / 1e6; }; }
+// price of each coin in "USD" on a day: a seeded random walk from day 1
+function coinPrices(day = S.day) {
+  S.coinPx = S.coinPx || {};
+  if (S.coinPx[day]) return S.coinPx[day];
+  let px;
+  if (day <= 1) { const r = coinRng(1); px = COINS.map(() => +(0.05 + r() * 4).toFixed(4)); }
+  else { const prev = coinPrices(day - 1), r = coinRng(day); px = prev.map(v => +Math.max(0.0042, v * (0.7 + r() * 0.65)).toFixed(4)); }
+  S.coinPx[day] = px; return px;
+}
+const coinRate = (a, b, day) => { const p = coinPrices(day), i = COINS.findIndex(c => c.id === a), j = COINS.findIndex(c => c.id === b); return p[i] / p[j]; };
+const UNITS = [
+  ['mi', 'km', v => v * 1.609344], ['ft', 'm', v => v * 0.3048], ['in', 'cm', v => v * 2.54], ['lb', 'kg', v => v * 0.45359237], ['oz', 'g', v => v * 28.349523],
+  ['°F', '°C', v => (v - 32) * 5 / 9], ['gal', 'L', v => v * 3.785412], ['mph', 'km/h', v => v * 1.609344], ['acre', 'm²', v => v * 4046.8564], ['cup', 'mL', v => v * 236.5882],
+];
+// Trix's calculator: a chunky Y2K pocket device, black shell + candy pink keys, a green LCD
+function openConv() {
+  S.used = S.used || {}; S.used['UnitConv.exe'] = true; save();
+  const U = S.ucx = S.ucx || { tab: 0, u: 0, rev: false, n: '1', cn: '100', a: 'HEX', b: 'BUNNY' };
+  openWin('conv', { title: 'UnitConv.exe', icon: 'conv', w: 318, h: 520, x: 240, y: 40, skin: true, render: b => {
+    const unitsLCD = () => { const u = UNITS[U.u], [f, t] = U.rev ? [u[1], u[0]] : [u[0], u[1]];
+      return `<div class="lc-s">CONVERT <b>${esc(f)}</b> ▸ <b>${esc(t)}</b></div><div class="lc-in"><input id="ux-n" inputmode="decimal" value="${esc(U.n)}" aria-label="Value in ${esc(f)}"><span>${esc(f)}</span></div><div class="lc-out"><output id="ux-o"></output><span>${esc(t)}</span></div>`; };
+    const cryptoLCD = () => { const p = coinPrices();
+      return `<div class="lc-s">MEME MARKET · DAY ${S.day}</div>${COINS.map((c, i) => { const y = S.day > 1 ? coinPrices(S.day - 1)[i] : p[i], d = p[i] / y - 1;
+        return `<div class="lc-tk"><b>${c.id}</b><canvas class="lc-sp" data-i="${i}" width="56" height="14"></canvas><span>${p[i].toFixed(4)}</span><i>${d >= 0 ? '▲' : '▼'}${Math.abs(d * 100).toFixed(1)}</i></div>`; }).join('')}
+        <div class="lc-in sm"><input id="ux-c" inputmode="decimal" value="${esc(U.cn)}" aria-label="Amount of ${U.a}"><span>${U.a}▸${U.b}</span></div><div class="lc-out"><output id="ux-co"></output><span>${U.b}</span></div>`; };
+    const keys = () => U.tab === 0
+      ? `<div class="ux-grid">${UNITS.map((u, i) => `<button class="uk${i === U.u ? ' on' : ''}" data-u="${i}">${esc(u[0])}<i>▸</i>${esc(u[1])}</button>`).join('')}</div><div class="ux-row"><button class="uk wide" data-k="rev">⇄ SWAP</button><button class="uk wide" data-k="clr">C</button></div>`
+      : `<div class="ux-lab">FROM</div><div class="ux-row">${COINS.map(c => `<button class="uk coin${U.a === c.id ? ' on' : ''}" data-a="${c.id}">${c.id}</button>`).join('')}</div>
+         <div class="ux-lab">TO</div><div class="ux-row">${COINS.map(c => `<button class="uk coin${U.b === c.id ? ' on' : ''}" data-b="${c.id}">${c.id}</button>`).join('')}</div><div class="ux-row"><button class="uk wide" data-k="rev">⇄ SWAP</button><button class="uk wide" data-k="clr">C</button></div>`;
+    const draw = () => {
+      b.innerHTML = `<div class="ucx"><div class="ucx-top"><span class="ucx-brand">TRIX<b>CALC</b> <i>UC-2001</i></span><span class="ucx-solar" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
+        <div class="ucx-lcd">${U.tab === 0 ? unitsLCD() : cryptoLCD()}</div>
+        <div class="ucx-mode" role="tablist"><button role="tab" data-t="0" class="${U.tab ? '' : 'on'}">UNIT</button><span class="ucx-led${U.tab ? ' r' : ''}"></span><button role="tab" data-t="1" class="${U.tab ? 'on' : ''}">CRYPTO</button></div>
+        <div class="ucx-keys">${keys()}</div>
+        <div class="ucx-foot">✧ property of trix · do not lick ✧</div></div>`;
+      $$('[data-t]', b).forEach(x => x.onclick = () => { SFX.click(); U.tab = +x.dataset.t; draw(); });
+      $$('[data-u]', b).forEach(x => x.onclick = () => { SFX.tick(); U.u = +x.dataset.u; draw(); });
+      $$('[data-a]', b).forEach(x => x.onclick = () => { SFX.tick(); U.a = x.dataset.a; draw(); });
+      $$('[data-b]', b).forEach(x => x.onclick = () => { SFX.tick(); U.b = x.dataset.b; draw(); });
+      $$('[data-k]', b).forEach(x => x.onclick = () => { SFX.tick();
+        if (x.dataset.k === 'rev') { if (U.tab === 0) U.rev = !U.rev; else [U.a, U.b] = [U.b, U.a]; }
+        else { if (U.tab === 0) U.n = ''; else U.cn = ''; }
+        draw(); const f = $('#ux-n,#ux-c', b); if (f) f.focus(); });
+      if (U.tab === 0) {
+        const calc = () => { U.n = $('#ux-n', b).value; const v = parseFloat(U.n), u = UNITS[U.u];
+          let r = NaN; if (!isNaN(v)) { if (!U.rev) r = u[2](v); else { let lo = -1e9, hi = 1e9; for (let k = 0; k < 90; k++) { const m = (lo + hi) / 2; if (u[2](m) < v) lo = m; else hi = m; } r = (lo + hi) / 2; } }
+          $('#ux-o', b).textContent = isNaN(r) ? '-----' : +r.toFixed(4); };
+        $('#ux-n', b).addEventListener('input', calc); calc();
+      } else {
+        const calc = () => { U.cn = $('#ux-c', b).value; const v = parseFloat(U.cn); $('#ux-co', b).textContent = isNaN(v) ? '-----' : (v * coinRate(U.a, U.b)).toFixed(2); };
+        $('#ux-c', b).addEventListener('input', calc); calc();
+        $$('.lc-sp', b).forEach(cv => { const i = +cv.dataset.i, d0 = Math.max(1, S.day - 6), ys = []; for (let d = d0; d <= S.day; d++) ys.push(coinPrices(d)[i]);
+          const c = cv.getContext('2d'), lo = Math.min(...ys), hi = Math.max(...ys) || 1; c.strokeStyle = '#1d3320'; c.lineWidth = 1.5; c.beginPath();
+          ys.forEach((y, k) => { const X = ys.length > 1 ? k / (ys.length - 1) * 54 + 1 : 28, Y = 13 - (hi > lo ? (y - lo) / (hi - lo) : .5) * 12; k ? c.lineTo(X, Y) : c.moveTo(X, Y); }); c.stroke(); });
+      }
+    };
+    draw();
+  } });
+}
+
+/* ---------- timed questions at night: answer in time, get her keys ---------- */
+const TQ_SECS = 30;
+// Paige, layer 2 nights: meme coins. Which two coins is random per playthrough; the rate is that day's.
+const TIMED_QS = {
+  paige_coinq: {
+    g: 'paige', layer: 1,   // shows while she is on her layer 2 (layer 1 open)
+    intro: ['found a new way to gamble 24/7.', 'meme coins. the market never sleeps so neither do i.', '{happy}quick question. clock\'s on.'],
+    ask: () => { const [a, b] = S.coinQ || (S.coinQ = (() => { const k = [...COINS].sort(() => Math.random() - .5); return [k[0].id, k[1].id]; })()); return { text: `100 $${a}. how much $${b} is that, right now? 🎲`, ans: 100 * coinRate(a, b) }; },
+    right: ['{happy}...huh. you\'re right. that\'s annoyingly attractive.', '{happy}correct. the house is impressed. take these.', '{happy}fast AND right? today\'s our lucky day.'],
+    wrong: ['{neutral}nope. the market ate that one.', '{sad}wrong. i went all in on your number, by the way. kidding. mostly.', '{neutral}that\'s not it. the coin doesn\'t forgive.'],
+    late: ['{neutral}too slow. the price moved. it always moves.', '{sad}and... time. that\'s the game.', '{neutral}clock ran out. so did my patience. kidding. kind of.'],
+  },
+};
+function timedQFor(g) {
+  const st = S.g[g]; st.ntDone = st.ntDone || [];
+  return Object.entries(TIMED_QS).find(([id, q]) => q.g === g && st.layer === q.layer && !st.ntDone.includes(id));
+}
+function startTimedQ(id) {
+  const q = TIMED_QS[id]; if (!q) return;
+  const a = q.ask(), m = { who: q.g, text: a.text, t: clockStr() }; S.logs[q.g].push(m); appendMsg(q.g, m); SFX.vibrate && SFX.vibrate();
+  S.tq = { id, g: q.g, ans: a.ans, until: null }; save();   // the clock starts once her chat is on screen
+  tqRender();
+}
+function tqRender() {
+  const T = S.tq; if (!T) return;
+  const views = liveViews(T.g); if (!views.length) return;
+  if (!T.until) T.until = Date.now() + TQ_SECS * 1000;
+  views.forEach(v => {
+    const box = $('.chat-choices', v.root); if (!box) return;
+    box.innerHTML = `<div class="tq"><div class="tq-bar"><i></i></div><div class="tq-row"><input class="tq-in" inputmode="decimal" placeholder="your answer" autocomplete="off"><button class="btn primary tq-go">Send</button></div></div>`;
+    const inp = $('.tq-in', box), bar = $('.tq-bar i', box);
+    const send = () => tqAnswer(inp.value);
+    $('.tq-go', box).onclick = send; inp.onkeydown = e => { if (e.key === 'Enter') send(); };
+    setTimeout(() => inp.focus(), 50);
+    const tick = () => {
+      if (!S.tq || !box.isConnected) return;
+      const left = Math.max(0, S.tq.until - Date.now()), k = left / (TQ_SECS * 1000);
+      bar.style.width = (k * 100) + '%'; bar.classList.toggle('hot', left < 10000);
+      if (left <= 0) { tqAnswer(null); return; }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
+function tqAnswer(v) {
+  const T = S.tq; if (!T) return; S.tq = null;
+  const q = TIMED_QS[T.id], g = T.g;
+  liveViews(g).forEach(vw => { const box = $('.chat-choices', vw.root); if (box) box.innerHTML = ''; });
+  let lines, ok = false;
+  if (v == null || v === '') lines = [pickRnd(q.late)];
+  else {
+    const m = { who: 'me', text: String(v), t: clockStr() }; S.logs[g].push(m); appendMsg(g, m);
+    const n = parseFloat(String(v).replace(/,/g, '')); ok = isFinite(n) && Math.abs(n - T.ans) <= Math.max(.01, Math.abs(T.ans) * .01);
+    lines = [pickRnd(ok ? q.right : q.wrong)];
+  }
+  const act = [];
+  if (ok) {
+    const k = 3 + (Math.random() * 3 | 0), L = S.g[g].layer + 1;
+    S.g[g].bonusKeys = S.g[g].bonusKeys || {}; S.g[g].bonusKeys[L] = (S.g[g].bonusKeys[L] || 0) + k;
+    SFX.item(); toast('Keys', `+${k} of ${esc(GIRLS[g].name)}'s keys (layer ${L})`);
+  } else SFX.buzz();
+  save();
+  runDialogue(seq(g, g, [{ lines }], 'NONE'));
+}
+
+/* ---------- Paige flips a coin at the start of every session ---------- */
+const PAIGE_ASK = ['{happy}heads or tails?', 'call it. heads or tails.', '{happy}before we start. heads or tails? humor me.', 'pick one. the coin\'s already in the air.'];
+const PAIGE_WIN = ['{happy}today\'s our lucky day.', '{happy}you called it. today\'s our lucky day. don\'t waste it.', '{happy}the coin likes you. don\'t let it go to your head.', '{happy}ha! lucky. stay lucky, okay?'];
+const PAIGE_LOSE = ['{neutral}ugh. the coin\'s never wrong though. that\'s the worst part.', '{sad}...wrong. and i was rooting for you.', '{neutral}figures. the house always wins.', '{sad}bad call. it\'s fine. it\'s fine. it\'s not fine.'];
+function paigeCoinStep() {
+  const pick = v => [{ action: 'COIN_PICK', value: v }];
+  return { lines: [pickRnd(PAIGE_ASK)], choices: [{ t: 'Heads.', act: pick('HEADS') }, { t: 'Tails.', act: pick('TAILS') }] };
+}
+async function paigeSessionCoin() {
+  const ss = S.session; if (!ss) return;
+  const res = Math.random() < .5 ? 'HEADS' : 'TAILS';
+  const els = appendMsg('session', { who: 'paige', text: '', t: clockStr() });
+  els.forEach(e => { e.classList.add('coinmsg'); $('.tx', e).innerHTML = '<span class="coin spin"><b>?</b></span> <i>flipping…</i>'; });
+  SFX.pop(); await wait(REDUCED ? 200 : 1600);
+  els.forEach(e => { $('.tx', e).innerHTML = `<span class="coin ${res === 'HEADS' ? 'h' : 't'}"><b>${res[0]}</b></span> <b>${res}</b>`; });
+  S.logs.session.push({ who: 'paige', text: `🪙 ${res}`, t: clockStr() });
+  SFX.tick(); await wait(500);
+  ss.lucky = ss.pick === res; save();
+  if (ss.lucky) toast('Lucky streak', 'This session: every 2 inputs cost 1 minute.');
+  runDialogue(seq('session', 'paige', [{ lines: [pickRnd(ss.lucky ? PAIGE_WIN : PAIGE_LOSE)] }], 'SES_SCAN'));
+}
 
 /* =========================================================
    LEVEL EDITOR (LevelEditor.exe)

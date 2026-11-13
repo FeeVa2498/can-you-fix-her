@@ -420,7 +420,7 @@ function pjKey(e) {
   // story: every input costs her stamina (moves, bumps, undo, reset); none once she's out
   if (PJ_STORY && (D || k === 'z' || k === 'Backspace' || k === 'r')) { if (PJ_STORY.locked()) { e.preventDefault(); SFX.buzz(); return; } }
   if (D) { e.preventDefault(); pjMove(D); drawPJ(); if (PJ_STORY) PJ_STORY.spend('move'); }
-  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); if (!pjCanUndo()) { SFX.buzz(); $('#pj-msg').textContent = 'Undo is locked. Someone here might lend you a way to take a move back.'; return; } pjUndo(); drawPJ(); if (PJ_STORY) PJ_STORY.spend('undo'); }
+  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); if (PJ_STORY) { PJ_STORY.undo(); return; } pjUndo(); drawPJ(); }
   else if (k === 'r') { e.preventDefault(); pjReset(); if (PJ_STORY) PJ_STORY.spend('reset'); }
   else if (k === 'Escape') { e.preventDefault(); if (PJ_STORY) PJ_STORY.back(); else pjReset(); }
   else if (k === 'Enter') {

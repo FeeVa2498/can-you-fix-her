@@ -91,7 +91,8 @@ function owState(g) {
 // keys per layer: { have, need, total }
 function owKeys(g) {
   const M = owBuild(g), o = owState(g);
-  return M.gates.map(G => ({ have: M.nodes.filter(n => n.layer === G.layer && o.solved[n.pid]).length, need: G.need, total: G.total }));
+  const bonus = (S.g[g] && S.g[g].bonusKeys) || {};   // keys won at night (timed questions) count like solved memories
+  return M.gates.map(G => ({ have: M.nodes.filter(n => n.layer === G.layer && o.solved[n.pid]).length + (bonus[G.layer] || 0), need: G.need, total: G.total }));
 }
 function owFirstOpen(g) {
   const M = owBuild(g), o = owState(g), L = S.g[g].layer + 1;
@@ -174,13 +175,37 @@ function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-ms
 function owSpend(kind = 'move') {
   if (S.phase !== 'day' || S.dayOver || reckoning()) return;
   // mementos: hourglass (undo is free), dog tag (every other step on the map is free), d20 (one in five is free)
-  let free = (kind === 'undo' || kind === 'reset') && hasMem('hourglass.mem');
+  let free = kind === 'reset' && hasMem('hourglass.mem');
   if (!free && kind === 'map' && hasMem('dog_tag.mem')) { OW.dog = (OW.dog || 0) + 1; free = OW.dog % 2 === 0; }
+  if (!free && S.session && S.session.lucky) { OW.hot = (OW.hot || 0) + 1; free = OW.hot % 2 === 0; }   // Paige's coin: every 2 inputs cost 1 minute
   if (!free && hasMem('lucky_d20.mem') && Math.random() < .2) { free = true; owSay('🎲 lucky · free move'); }
   if (!free) S.mins += 1;
   if (S.mins >= DAY_END) overload();
   owHud(); renderTray();
   if (WINS.brain) renderBrain();
+  return free ? 0 : 1;
+}
+/* undo in her memories: unlocked by Prim's tracing paper, 20 a day, and it gives the minute back */
+const UNDO_PER_DAY = 20;
+function undoLeft() { if (S.undoDay !== S.day) { S.undoDay = S.day; S.undoLeft = UNDO_PER_DAY; } return S.undoLeft; }
+const pjHist = () => PJ.p.boxes ? PJ.bsHist.length : (PJ.st ? PJ.st.path.length - 1 : 0);
+function owStorySpend(kind) {
+  const c = owSpend(kind);
+  if (kind === 'move' && PJ) { const L = pjHist(); OW.costs = OW.costs || []; if (L > OW.costs.length) OW.costs.push(c || 0); else OW.costs.length = L; }
+  if (kind === 'reset') OW.costs = [];
+  return c;
+}
+function owStoryUndo() {
+  if (owLocked()) { SFX.buzz(); return; }
+  if (!pjCanUndo()) { SFX.buzz(); $('#pj-msg').textContent = 'Undo is locked. Someone here might lend you a way to take a move back.'; return; }
+  if (undoLeft() <= 0) { SFX.buzz(); $('#pj-msg').textContent = 'No undos left today.'; return; }
+  const before = pjHist(); pjUndo(); drawPJ();
+  const after = pjHist(); if (after >= before) return;
+  S.undoLeft--; OW.costs = OW.costs || [];
+  let back = 0; while (OW.costs.length > after) back += OW.costs.pop() || 0;
+  S.mins = Math.max(DAY_START, S.mins - back);
+  $('#pj-msg').textContent = `Undo · ${S.undoLeft} left today${back ? ` · +${back} min back` : ''}`;
+  save(); owHud(); renderTray(); if (WINS.brain) renderBrain();
 }
 const owLocked = () => S.dayOver || OW.frozen || !!S.flags.ended;
 function owOverloaded() {
@@ -197,7 +222,7 @@ function owKey(e) {
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   const D = KEYDIR[k];
   if (D) { e.preventDefault(); if (owLocked()) { SFX.buzz(); return; } owMove(D[0], D[1]); }
-  else if (k === 'Enter' || k === ' ') { e.preventDefault(); if (owLocked()) { SFX.buzz(); return; } owEnter(); }
+  else if (k === 'Enter' || k === ' ' || k === 'e') { e.preventDefault(); if (owLocked()) { SFX.buzz(); return; } owEnter(); }
 }
 function owMove(dx, dy) {
   const g = OW.g, o = owState(g), M = owBuild(g), nx = o.x + dx, ny = o.y + dy;
@@ -234,7 +259,7 @@ function owEnter() {
   SFX.link(); glitch('soft');
   const host = $('#ow-main'); if (!host) return;
   const inL = M.nodes.filter(m => m.layer === n.layer);
-  PJ_STORY = { g, node: n, spend: owSpend, locked: owLocked, win: owLevelWon, back: owBack };
+  PJ_STORY = { g, node: n, spend: owStorySpend, undo: owStoryUndo, locked: owLocked, win: owLevelWon, back: owBack }; OW.costs = [];
   pjNew(p);
   renderProjector(host, p, n.i + 1, inL.length);
   owHud();
@@ -247,8 +272,9 @@ function storyProjectorChrome(b, p) {
   const ed = $('[data-m="edit"]', b); if (ed) ed.remove();
   const bk = $('[data-m="back"] span', b); if (bk) bk.textContent = 'Back to the map';
   const dbg = $('.pj-debug', b); if (dbg) dbg.remove();
-  const rs = $('#pj-reset', b); rs.onclick = () => { if (owLocked()) { SFX.buzz(); return; } pjReset(); owSpend('reset'); };
-  $$('[data-m="undo"],[data-m="reset"]', b).forEach(el => { const f = el.onclick, kind = el.dataset.m; el.onclick = () => { if (owLocked()) { SFX.buzz(); return; } f(); owSpend(kind); }; });
+  const rs = $('#pj-reset', b); rs.onclick = () => { if (owLocked()) { SFX.buzz(); return; } pjReset(); owStorySpend('reset'); };
+  const um = $('[data-m="undo"]', b); if (um) um.onclick = () => owStoryUndo();
+  const rm = $('[data-m="reset"]', b); if (rm) rm.onclick = () => { if (owLocked()) { SFX.buzz(); return; } pjReset(); owStorySpend('reset'); };
   const bm = $('[data-m="back"]', b); if (bm) bm.onclick = () => { SFX.click(); owBack(); };
 }
 function owBack() {

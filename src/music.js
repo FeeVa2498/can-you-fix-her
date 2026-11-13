@@ -195,17 +195,29 @@ function mbVis() {
 }
 /* installing software from DiveMail: a little setup wizard, then the icon lands on the desktop */
 function installApp(name) {
+  // an old-school setup wizard: Welcome → Next → copying files → Finish (visual only, no work minutes)
   return new Promise(res => {
-    pcBusy(20);
-    openWin('setup:' + name, { title: `Setup — ${name}`, icon: 'exe', w: 380, h: 210, render: b => {
-      b.innerHTML = `<div class="inst"><div class="inst-ic">${icon(APPICON[name] || 'exe')}</div><div><b>Installing ${esc(name)}…</b><p id="in-st">Copying files</p><div class="ldbar"><i id="in-b"></i></div></div></div>`;
-      const steps = ['Copying files', 'Registering components', 'Creating shortcuts', 'Done'];
-      let k = 0; const bar = $('#in-b', b), st = $('#in-st', b);
-      const iv = setInterval(() => {
-        k += 3 + Math.random() * 6; bar.style.width = Math.min(100, k) + '%'; st.textContent = steps[Math.min(3, k / 34 | 0)];
-        if (Math.random() < .3) pcBusy(4);
-        if (k >= 100) { clearInterval(iv); setTimeout(() => { closeWin('setup:' + name); res(); }, 500); }
-      }, REDUCED ? 20 : 140);
+    const id = 'setup:' + name, ic = APPICON[name] || 'exe';
+    openWin(id, { title: `${name} Setup`, icon: 'exe', w: 420, h: 250, noClose: () => true, closeMsg: 'Setup is still running. Finish it first.', render: b => {
+      const page = (body, btns) => { b.innerHTML = `<div class="inst wiz"><div class="inst-ic">${icon(ic)}</div><div>${body}</div></div><div class="wiz-foot">${btns}</div>`; };
+      page(`<b>Welcome to the ${esc(name)} Setup Wizard</b><p>This will install ${esc(name)} on your computer.<br>Close other programs before continuing. (or don't.)</p>`, `<button class="btn primary" id="wz-next">Next ▸</button>`);
+      $('#wz-next', b).onclick = () => {
+        SFX.click(); pcBusy(20);
+        page(`<b>Installing ${esc(name)}…</b><p id="in-st">Extracting files</p><div class="ldbar"><i id="in-b"></i></div><p class="wiz-file" id="in-f"></p>`, `<button class="btn" disabled>Next ▸</button>`);
+        const steps = ['Extracting files', 'Copying files', 'Registering components', 'Creating shortcuts', 'Finishing'];
+        const files = ['setup.cab', 'core.dll', 'skin.bmp', 'readme.txt', name.toLowerCase(), 'msvcrt.dll', 'data.pak', 'icon.ico'];
+        let k = 0; const bar = $('#in-b', b), st = $('#in-st', b), f = $('#in-f', b);
+        const iv = setInterval(() => {
+          k += 1.5 + Math.random() * 3.5; bar.style.width = Math.min(100, k) + '%'; st.textContent = steps[Math.min(4, k / 20 | 0)];
+          f.textContent = 'C:\\DIVE\\Apps\\' + name.replace('.exe', '') + '\\' + files[Math.random() * files.length | 0];
+          if (Math.random() < .25) pcBusy(4);
+          if (k >= 100) {
+            clearInterval(iv); SFX.item();
+            page(`<b>Setup complete</b><p>${esc(name)} has been installed. A shortcut was placed on your desktop.</p>`, `<button class="btn primary" id="wz-fin">Finish</button>`);
+            $('#wz-fin', b).onclick = () => { SFX.click(); closeWin(id); res(); };
+          }
+        }, REDUCED ? 20 : 150);
+      };
     } });
   });
 }

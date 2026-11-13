@@ -453,6 +453,7 @@ function reqList(r) {
 function renderAllChoices() { Object.values(VIEWS).forEach(renderChoicesIn); }
 function renderChoicesIn(v) {
   if (!v.root.isConnected) return;
+  if (S.tq && S.tq.g === v.ch && !S.active) { if (!$('.tq', v.root)) tqRender(); return; }
   const el = $('.chat-choices', v.root), a = S.active;
   if (a && a.ch === v.ch) {
     const n = getDlg(a.id) && getDlg(a.id).nodes[a.node];
@@ -510,6 +511,7 @@ function doAction(a) {
   else if (a.action === 'KNOW') { if (!knows(a.value)) S.know.push(a.value); }
   else if (a.action === 'JOURNAL') { if (!S.journal.some(j => j.text === a.value)) S.journal.push({ day: S.day, text: a.value }); }
   else if (a.action === 'SET_FLAG') S.flags[a.value] = true;
+  else if (a.action === 'COIN_PICK') { if (S.session) S.session.pick = a.value; }
   else if (a.action === 'UNSET_FLAG') delete S.flags[a.value];
   else if (a.action === 'SHOW') { S.show[a.value[0]] = a.value[1]; renderShowcase(); }
   else if (a.action === 'GLITCH') glitch(a.value || 'soft');
@@ -527,6 +529,8 @@ function handleEnd(n) {
     case 'BRIEF_DONE': S.flags.briefed = true; S.flags.ping = 'brain'; refresh(); break;
     case 'MORNING_DONE': afterMorning(); break;
     case 'SES_SCAN': sessionScan(); break;
+    case 'SES_COIN': paigeSessionCoin(); break;
+    case 'TIMED_Q': startTimedQ(S.tqNext); S.tqNext = null; break;
     case 'SES_CLOSE': closeSession(); break;
     case 'OVERLOAD_DONE': closeSession(); break;
     case 'BOSS_NIGHT_DONE': S.night.bossDone = true; break;
@@ -558,7 +562,7 @@ function openWin(id, o) {
   const rec = { el, o, body: el.querySelector('.win-body'), upd: [] }; WINS[id] = rec;
   el.addEventListener('pointerdown', () => focusWin(id), true);
   const minimize = () => { el.hidden = true; renderTasks(); };
-  el.querySelector('[data-a=close]').onclick = () => { SFX.click(); if (o.noClose && o.noClose()) { minimize(); toast(o.title, 'This window stays open until the session ends.'); } else closeWin(id); };
+  el.querySelector('[data-a=close]').onclick = () => { SFX.click(); if (o.noClose && o.noClose()) { minimize(); toast(o.title, o.closeMsg || 'This window stays open until the session ends.'); } else closeWin(id); };
   el.querySelector('[data-a=min]').onclick = () => { SFX.click(); minimize(); };
   const tb = el.querySelector('.titlebar');
   tb.addEventListener('pointerdown', e => {
@@ -607,10 +611,10 @@ function renderIcons() {
   ];
   if (S.session) list.splice(3, 0, { id: 'ses', label: 'session_' + S.session.g + '.tmp', ic: 'tmp', fn: focusSessionChat, isNew: true });
   if (SPECIAL[S.day] === 'showcase' && S.phase === 'day') list.push({ id: 'show', label: 'Showcase.exe', ic: 'gallery', fn: openShowcase, isNew: PLAYABLE.filter(k => onSite(k) && met(k)).some(k => !S.show[k]) });
-  if (S.apps.includes('UnitConv.exe')) list.push({ id: 'conv', label: 'UnitConv.exe', ic: 'conv', fn: openConv });
-  if (S.apps.includes('Atlas.exe')) list.push({ id: 'atlas', label: 'Atlas.exe', ic: 'atlas', fn: openAtlas });
-  if (S.apps.includes('MusicBox.exe')) list.push({ id: 'music', label: 'MusicBox.exe', ic: 'note', fn: openMusicBox });
-  if (S.apps.includes('Fortune.exe')) list.push({ id: 'fortune', label: 'Fortune.exe', ic: 'tarot', fn: openFortune });
+  if (S.apps.includes('UnitConv.exe')) list.push({ id: 'conv', label: 'UnitConv.exe', ic: 'conv', fn: () => launchApp('UnitConv.exe', openConv) });
+  if (S.apps.includes('Atlas.exe')) list.push({ id: 'atlas', label: 'Atlas.exe', ic: 'atlas', fn: () => launchApp('Atlas.exe', openAtlas) });
+  if (S.apps.includes('MusicBox.exe')) list.push({ id: 'music', label: 'MusicBox.exe', ic: 'note', fn: () => launchApp('MusicBox.exe', openMusicBox) });
+  if (S.apps.includes('Fortune.exe')) list.push({ id: 'fortune', label: 'Fortune.exe', ic: 'tarot', fn: () => launchApp('Fortune.exe', openFortune) });
   list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
   if (S.flags.rkFiles) list.push({ id: 'mycomp', label: 'My Computer', ic: 'drive', fn: openMyComputer, isNew: PLAYABLE.some(g => !S.flags['del_' + g]) });
   if (S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
@@ -1048,6 +1052,7 @@ function nightConvo(g) {
   // the last night always has her "tomorrow is the reckoning" chat
   const rk = list.find(x => x.id === g + '_reckoning');
   if (S.day >= LAST_DAY && rk && DD.night[rk.id]) return st.ntDone.includes(rk.id) ? null : { id: rk.id, by: rk.by, steps: DD.night[rk.id].steps };
+  const tq = timedQFor(g); if (tq) return { id: tq[0], by: 'girl', tq: true };
   // her "heart" chat (hidden in layer 2) and Prim's songs chat come first as soon as they're open
   const pri = list.find(x => /_(heart|songs)$/.test(x.id) && !st.ntDone.includes(x.id) && st.layer >= x.layer && cond(x.if));
   if (pri) return { id: pri.id, by: pri.by, steps: DD.night[pri.id].steps };
@@ -1071,15 +1076,16 @@ function startNightChat(g) {
   const c = nightConvo(g);
   S.night.chats++; S.night.with.push(g); S.g[g].ntDone.push(c.id); S.g[g].nt = S.g[g].ntDone.length;
   S.unread[g] = 0;
-  runDialogue(seq(g, g, playSteps(c.steps), 'NONE'));
+  if (c.tq) { S.tqNext = c.id; runDialogue(seq(g, g, [{ lines: TIMED_QS[c.id].intro }], 'TIMED_Q')); }
+  else runDialogue(seq(g, g, playSteps(c.steps), 'NONE'));
   renderBuddies(); renderIcons();
 }
 
 /* ---------------- mail, apps, mementos ---------------- */
 // one reward per gate: layer 1 → her software, layer 2 → her memento (it does something), layer 3 → a letter. All arrive at night.
 const MEMENTOS = {   // every memento does something in her memories; layer 2 gifts only
-  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): lift the paper and the last line comes off.' },
-  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Reset (and Undo, once you have it) costs no time.' },
+  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): 20 a day, and each one gives the minute back.' },
+  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Reset costs no time.' },
   'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five costs no time. Roll with it.' },
   'dog_tag.mem': { ic: 'tag', from: 'Vel', desc: 'Walking on a map costs half: every other step is free.' },
 };
@@ -1162,36 +1168,46 @@ function openMBox() {
     }
   });
 }
-function openConv() {
-  S.used = S.used || {}; S.used['UnitConv.exe'] = true; save();
-  openWin('conv', {
-    title: 'UnitConv.exe', icon: 'conv', w: 440, h: 380, x: 240, y: 70, render: b => {
-      const rows = [['mi', 'km', 1.609344], ['°F', '°C', null], ['lb', 'kg', 0.45359237]];
-      b.innerHTML = `<div class="tool">${rows.map((r, i) => `<div class="trow bevel"><div><label for="cv${i}">${r[0]}</label><input id="cv${i}" inputmode="decimal" value="${['12', '98.6', '10'][i]}"></div><span class="arrow">→</span><div><label>${r[1]}</label><output id="co${i}"></output></div></div>`).join('')}<small style="color:var(--ink-soft);padding:0 4px">a gift from Trix ✧</small></div>`;
-      const calc = () => rows.forEach((r, i) => { const v = parseFloat($('#cv' + i, b).value); const o = isNaN(v) ? '—' : r[2] ? (v * r[2]).toFixed(2) : ((v - 32) * 5 / 9).toFixed(1); $('#co' + i, b).textContent = o; });
-      $$('input', b).forEach(x => x.addEventListener('input', calc)); calc();
-    }
-  });
-}
 const ATLAS = [['Eiffel Tower', 'Paris, France', '330 m of iron. Not in Rome.'], ['Mount Everest', 'Nepal / China border', '8,849 m. There is no Swiss side.'], ['Santorini', 'Greece', 'Blue domes, white walls, a lot of cats.'], ['Reykjavik', 'Iceland', 'Northernmost capital of a sovereign state.'], ['Kyoto', 'Japan', 'Over 1,600 temples.'], ['Angkor Wat', 'Siem Reap, Cambodia', 'Largest religious monument on Earth.'], ['Lisbon', 'Portugal', 'Seven hills and yellow trams.'], ['Istanbul', 'Türkiye', 'One city, two continents.'], ['Machu Picchu', 'Cusco region, Peru', '2,430 m above sea level.'], ['Marrakech', 'Morocco', 'The red city.'], ['Hanoi', 'Vietnam', 'Old Quarter: 36 streets.'], ['Patagonia', 'Argentina & Chile', 'Wind up to 120 km/h.'], ['Trans-Siberian Railway', 'Moscow → Vladivostok', '9,289 km.'], ['Venice', 'Italy', '118 small islands.']];
 const TAROT = [['The Fool', 'Step off the edge. The floor might be glass.'], ['The Tower', 'Something comes down today. Stand clear.'], ['The Star', 'Somebody is still rooting for you.'], ['The Moon', 'Not everything you see is real. Check twice.'], ['Wheel of Fortune', 'Spin. Whatever lands, you were going to play anyway.'], ['Death', 'An ending. Not yours. Probably.'], ['The Lovers', 'A choice between two people. Or two versions of one.'], ['The Hermit', 'Stay in tonight. Someone will message.'], ['Strength', 'Gentle hands open stuck doors.'], ['The Sun', 'A good day. Don\'t waste it on worry.']];
+// Paige's tarot table: black velvet, candlelight, a card that flips, a coin that spins
+const TAROT_SIG = { 'The Fool': '✦', 'The Tower': '⚡', 'The Star': '★', 'The Moon': '☾', 'Wheel of Fortune': '☸', 'Death': '☠', 'The Lovers': '♡', 'The Hermit': '☉', 'Strength': '∞', 'The Sun': '☀' };
+const ROMAN = ['0', 'XVI', 'XVII', 'XVIII', 'X', 'XIII', 'VI', 'IX', 'VIII', 'XIX'];
 function openFortune() {
   S.used = S.used || {}; S.used['Fortune.exe'] = true; save();
-  openWin('fortune', { title: 'Fortune.exe', icon: 'tarot', w: 320, h: 360, x: 280, y: 60, render: b => {
-    b.innerHTML = `<div class="tool fortune"><div class="tcard" id="ft-card"><b>?</b><span>draw a card</span></div><div style="display:flex;gap:8px;justify-content:center"><button class="btn primary" id="ft-draw">Draw</button><button class="btn" id="ft-coin">Flip a coin</button></div><small style="color:var(--ink-soft);text-align:center">dealt by Paige. no refunds.</small></div>`;
-    $('#ft-draw', b).onclick = () => { SFX.pop(); const c = TAROT[Math.random() * TAROT.length | 0]; $('#ft-card', b).innerHTML = `<b>${esc(c[0])}</b><span>${esc(c[1])}</span>`; };
-    $('#ft-coin', b).onclick = () => { SFX.pop(); $('#ft-card', b).innerHTML = `<b>${Math.random() < .5 ? 'HEADS' : 'TAILS'}</b><span>the coin doesn't care.</span>`; };
+  openWin('fortune', { title: 'Fortune.exe', icon: 'tarot', w: 340, h: 470, x: 280, y: 40, skin: true, render: b => {
+    b.innerHTML = `<div class="ftx"><div class="ftx-head"><span class="ftx-candle"><i></i></span><b>Fortune</b><span class="ftx-candle"><i></i></span></div>
+      <div class="ftx-stage"><div class="ftx-card" id="ft-card"><div class="ftx-back"><span>✦</span></div><div class="ftx-front"><small id="ft-n"></small><span class="ftx-sig" id="ft-s"></span><b id="ft-t"></b><p id="ft-x"></p></div></div>
+        <div class="ftx-coin" id="ft-coinv" hidden><span class="coin"><b>?</b></span><b id="ft-cr"></b></div></div>
+      <div class="ftx-btns"><button class="ftb" id="ft-draw">✧ draw a card</button><button class="ftb" id="ft-coin">◐ flip a coin</button></div>
+      <div class="ftx-foot">dealt by Paige · no refunds</div></div>`;
+    const card = $('#ft-card', b), cv = $('#ft-coinv', b);
+    $('#ft-draw', b).onclick = () => {
+      SFX.pop(); cv.hidden = true; card.hidden = false; card.classList.remove('up');
+      setTimeout(() => { const k = Math.random() * TAROT.length | 0, c = TAROT[k];
+        $('#ft-n', b).textContent = ROMAN[k] || ''; $('#ft-s', b).textContent = TAROT_SIG[c[0]] || '✦'; $('#ft-t', b).textContent = c[0]; $('#ft-x', b).textContent = c[1];
+        card.classList.add('up'); SFX.tick(); }, 380);
+    };
+    $('#ft-coin', b).onclick = () => {
+      SFX.pop(); card.hidden = true; cv.hidden = false; const c = $('.coin', cv), r = Math.random() < .5 ? 'HEADS' : 'TAILS';
+      c.classList.add('spin'); $('b', c).textContent = '?'; $('#ft-cr', b).textContent = 'flipping…';
+      setTimeout(() => { c.classList.remove('spin'); $('b', c).textContent = r[0]; $('#ft-cr', b).textContent = r + ' · the coin doesn\'t care.'; SFX.tick(); }, REDUCED ? 100 : 1300);
+    };
   } });
 }
+// Vel's field atlas: olive canvas cover, stencil type, a spinning compass, pinned index cards
 function openAtlas() {
   S.used = S.used || {}; S.used['Atlas.exe'] = true; save();
-  openWin('atlas', {
-    title: 'Atlas.exe', icon: 'atlas', w: 420, h: 460, x: 260, y: 50, render: b => {
-      b.innerHTML = `<div class="tool" style="height:100%"><label for="atlas-q" style="font-size:11px;color:var(--ink-soft)">search a place</label><input id="atlas-q" placeholder="e.g. Eiffel" autocomplete="off"><div class="atlas-list" id="atlas-l"></div><small style="color:var(--ink-soft)">traced by Prim, page by page</small></div>`;
-      const r = () => { const q = $('#atlas-q', b).value.toLowerCase(); $('#atlas-l', b).innerHTML = ATLAS.filter(a => !q || a.join(' ').toLowerCase().includes(q)).map(a => `<div class="aentry bevel"><b>${esc(a[0])}</b><span>${esc(a[1])}</span>${esc(a[2])}</div>`).join(''); };
-      $('#atlas-q', b).addEventListener('input', r); r();
-    }
-  });
+  openWin('atlas', { title: 'Atlas.exe', icon: 'atlas', w: 400, h: 500, x: 260, y: 40, skin: true, render: b => {
+    b.innerHTML = `<div class="atx"><div class="atx-head"><div class="atx-compass" aria-hidden="true"><i></i><span>N</span></div><div><b>ATLAS</b><small>FIELD EDITION · VOL. 1</small></div><span class="atx-stamp">TRACED<br>BY PRIM</span></div>
+      <label class="atx-search"><span>SEARCH //</span><input id="atlas-q" placeholder="eiffel, everest…" autocomplete="off" aria-label="Search a place"></label>
+      <div class="atx-list" id="atlas-l"></div><div class="atx-foot">every soldier needs a map ✦ — V.</div></div>`;
+    const coord = s => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return `${(h % 90)}°${(h >> 8) % 60}′${h % 2 ? 'N' : 'S'} · ${(h >> 4) % 180}°${(h >> 12) % 60}′${(h >> 3) % 2 ? 'E' : 'W'}`; };
+    const r = () => { const q = $('#atlas-q', b).value.toLowerCase();
+      const hits = ATLAS.filter(a => !q || a.join(' ').toLowerCase().includes(q));
+      $('#atlas-l', b).innerHTML = hits.length ? hits.map((a, i) => `<div class="atx-card" style="--r:${(i % 3 - 1) * .6}deg"><i class="atx-pin"></i><b>${esc(a[0])}</b><span>${esc(a[1])}</span><p>${esc(a[2])}</p><small>${coord(a[0])}</small></div>`).join('') : '<div class="atx-none">NO RECORD. CHECK SPELLING. (vel never does)</div>'; };
+    $('#atlas-q', b).addEventListener('input', r); r();
+  } });
 }
 
 /* =========================================================
@@ -1465,6 +1481,8 @@ function startSession(g) {
   refresh();
   // she talks first; the scan only starts once the chat is done
   if (g === 'ray') { yapCh = 'boss'; setViewCh('yap', 'boss'); renderBuddies(); sessionScan(); return; }   // no small talk on the last day; Ray talks in her own chat
+  // Paige: heads or tails before every session; call it right and the session runs on a lucky streak
+  if (g === 'paige') { runDialogue(seq('session', g, [...sesIntro(g), paigeCoinStep()], 'SES_COIN')); return; }
   runDialogue(seq('session', g, sesIntro(g), 'SES_SCAN'));
 }
 // the feed on the left, the chat on the right; the map window goes in the middle after the scan
@@ -1917,7 +1935,7 @@ async function main() {
   if (pick === 'new') { wipeSave(); saved = null; }
   if (saved && saved.player) {
     // autosave: continue from the last checkpoint, no menus
-    S = Object.assign(fresh(), saved);
+    S = Object.assign(fresh(), saved); S.tq = null; S.tqNext = null;   // a timed question does not survive a reload
     S.active = null; S.queue = []; S.dyn = {}; S.session = null;
     await bootOS();
     if (S.flags.ended) { refresh(); endGame(S.flags.endKind || 'proto'); return; }

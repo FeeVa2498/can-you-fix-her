@@ -71,7 +71,6 @@ function renderChamber(b) {
         return `<button class="chm-card bevel${d ? ' done' : ''}${p.tut ? ' tut' : ''}" data-p="${p.id}" title="${p.tut ? 'Tutorial: ' + esc(TEACH[p.tut] || p.tut) : ''}"><span class="no">${idx + 1}${p.tut ? '<i>NEW</i>' : ''}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}${d.peek ? '<br><i>saw solution</i>' : ''}` : 'not solved<br>&nbsp;'}</small></button>`;
       }).join('')}</div></div>`).join('')}
       <div class="chm-opts sunk">
-        <label><input type="checkbox" id="co-intro" ${CH.opt.intro ? 'checked' : ''}> Magnifier → projector intro</label>
         <label><input type="checkbox" id="co-debug" ${CH.opt.debug ? 'checked' : ''}> Designer info (solution count, notes, show answer)</label>
         <label><input type="checkbox" id="co-story" ${CH.opt.story ? 'checked' : ''}> Story flow preview (her message between maps, like the real game)</label>
         <div class="chm-mem">${Object.entries(CH_MEM).map(([k, m]) => `<label title="${esc(m.desc)}"><input type="checkbox" data-mem="${k}" ${CH.opt.mem[k] ? 'checked' : ''}> ${icon(m.ic)} ${m.name}</label>`).join('')}</div>
@@ -80,7 +79,6 @@ function renderChamber(b) {
     </div></div>`;
   $$('[data-g]', b).forEach(x => x.onclick = () => { SFX.click(); chGirl = x.dataset.g; renderChamber(b); });
   $$('[data-p]', b).forEach(x => x.onclick = () => { SFX.click(); startPanel(x.dataset.p); });
-  $('#co-intro', b).onchange = e => { CH.opt.intro = e.target.checked; chSave(); };
   $('#co-debug', b).onchange = e => { CH.opt.debug = e.target.checked; chSave(); };
   $('#co-story', b).onchange = e => { CH.opt.story = e.target.checked; chSave(); };
   $$('[data-mem]', b).forEach(x => x.onchange = () => { CH.opt.mem[x.dataset.mem] = x.checked; chSave(); });
@@ -97,7 +95,7 @@ async function startPanel(id) {
   const p = PANELS.find(x => x.id === id); if (!p) return;
   if (WINS.projector) { openProjector(p); return; }   // already projecting: swap the map in place, no new scan
   ['feedcam', 'magnifier'].forEach(closeWin);
-  if (CH.opt.intro) await magnifierIntro(p);
+  // the test chamber skips the brain scan: straight into the level
   openProjector(p);
 }
 function magnifierIntro(p, o = {}) {
@@ -124,7 +122,6 @@ function magnifierIntro(p, o = {}) {
       res();
     };
     $('#mag-go').onclick = () => finish(true);
-    $('#mag-skip').onclick = () => finish(false);
   });
 }
 
@@ -155,7 +152,7 @@ function magDashHTML(p) {
       <div class="mg-p mg-eeg"><canvas id="mg-eeg" width="320" height="58"></canvas><label>EEG · CH1–3</label></div>
       <div class="mg-p mg-nums">${[['BPM', 'mgn0'], ['SpO₂', 'mgn1'], ['SYNC', 'mgn2'], ['NOISE', 'mgn3'], ['DEPTH', 'mgn4'], ['ANOMALY', 'mgn5']].map(([l, id]) => `<div><b id="${id}">--</b><small>${l}</small></div>`).join('')}</div>
     </div>
-    <div class="mg-foot"><span class="mg-lock">LOCK <span class="bar"><i id="magbar"></i></span> <b id="magf">0</b>%</span><button class="btn" id="mag-skip">Skip</button><button class="btn primary" id="mag-go" disabled>Project ▸</button></div>
+    <div class="mg-foot"><span class="mg-lock">LOCK <span class="bar"><i id="magbar"></i></span> <b id="magf">0</b>%</span><button class="btn primary" id="mag-go" disabled>Project ▸</button></div>
   </div>`;
 }
 function magDashRun(p) {
@@ -247,7 +244,7 @@ function openProjector(p) {
   const inL = panelsOf(p.girl).filter(x => x.layer === p.layer).sort((a, c) => a.n - c.n), nL = inL.length, idx = inL.findIndex(x => x.id === p.id) + 1;
   const title = `PROJECT3D.EXE · ${GIRLS[p.girl].name}`;
   if (W) { W.o.title = title; W.el.querySelector('.tt').textContent = title; renderProjector(W.body, p, idx, nL); focusWin('projector'); return; }
-  openWin('projector', { title, icon: 'brain', w: 600, h: 720, x: CH.opt.intro ? 320 : 120, y: 6,
+  openWin('projector', { title, icon: 'brain', w: 600, h: 720, x: 120, y: 6,
     onClose: () => { bgmOff(); if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); if (PJ.die3) PJ.die3.dispose(); } PJ = null; document.removeEventListener('keydown', pjKey); },
     render: b => renderProjector(b, p, idx, nL) });
 }
