@@ -851,8 +851,11 @@ add('trix', 3, 9, BX(5, 4, [R0], { gen: { walls: .08, nums: 5, bites: 2 }, minLe
     .forEach(([n, [w, h, d, pads]], k) => add('paige', 1, n, BX(w, h, [DIE], PT({ gen: { walls: .12, dice: d, pads, bites: k % 3 }, ...(pads ? { uses: { pads: 1 }, need: 2 } : {}), minLen: 4 + k / 2 | 0, feature: 'dice' }))));
   [[8, [4, 3, 3, 1, 0]], [9, [4, 3, 3, 0, 1]], [10, [4, 4, 3, 2, 0]], [11, [4, 4, 3, 0, 1]], [12, [5, 4, 3, 2, 0]], [13, [5, 4, 4, 0, 1]], [14, [5, 4, 4, 2, 0]], [15, [5, 4, 4, 0, 1]], [16, [5, 5, 4, 3, 0]], [17, [5, 5, 4, 0, 1]], [18, [5, 5, 5, 2, 0]], [19, [5, 5, 5, 0, 1]]]
     .forEach(([n, [w, h, d, pads, portals]], k) => add('paige', 2, n, BX(w, h, [DIE], PT({ gen: { walls: .12, dice: d, pads, portals, bites: 1 + k % 3 }, uses: portals ? { portals: 1 } : { pads: 1 }, need: 2, minLen: 8 + k / 2 | 0, feature: 'dice' }))));
-  [[8, [4, 3, 2, 1, 0]], [9, [4, 4, 3, 0, 1]], [10, [4, 4, 3, 1, 1]], [11, [5, 4, 3, 2, 0]], [12, [5, 4, 3, 1, 1]], [13, [5, 4, 4, 0, 1]], [14, [5, 5, 3, 2, 1]], [15, [5, 5, 4, 1, 1]], [16, [5, 5, 4, 2, 0]], [17, [6, 4, 4, 1, 1]], [18, [6, 5, 4, 2, 1]], [19, [6, 5, 5, 2, 1]]]
-    .forEach(([n, [w, h, d, pads, portals]], k) => add('paige', 3, n, BX(w, h, [DIE, DIE1], CL(PT({ gen: { walls: .12, dice: d, pads, portals, bites: 1 + k % 3 }, ...(pads || portals ? { uses: portals ? { portals: 1 } : { pads: 1 }, need: 2 } : {}), minLen: 9 + k / 2 | 0, feature: 'dice', time: 40000 })))));
+  // layer 3: one die with arrow tiles + portals (three kinds), or two dice on plain paper
+  [[8, [4, 3, 2, 1, 1, 1]], [9, [4, 4, 2, 0, 0, 2]], [10, [4, 4, 3, 1, 1, 1]], [11, [5, 4, 3, 2, 1, 1]], [12, [4, 4, 3, 0, 0, 2]], [13, [5, 4, 3, 1, 1, 1]], [14, [5, 4, 3, 0, 0, 2]], [15, [5, 5, 4, 2, 1, 1]], [16, [5, 4, 4, 1, 1, 1]], [17, [5, 5, 3, 0, 0, 2]], [18, [5, 5, 4, 2, 1, 1]], [19, [5, 5, 4, 0, 0, 2]]]
+    .forEach(([n, [w, h, d, pads, portals, nd]], k) => add('paige', 3, n, nd === 2
+      ? BX(w, h, [DIE, DIE1], CL(PT({ gen: { walls: .12, dice: d, bites: 1 + k % 3 }, minLen: 9 + k / 2 | 0, feature: 'dice' })))
+      : BX(w, h, [DIE], PT({ gen: { walls: .12, dice: d, pads, portals, bites: 1 + k % 3 }, uses: { portals: 1, pads: 1 }, need: 2, minLen: 10 + k / 2 | 0, feature: 'dice' }))));
 }
 /* Paige: a die to print the right numbers, arrow tiles that slide it without turning, portals; two dice in layer 3 */
 TUT('paige', 1, 1, 'dice', BX(3, 1, [DIE], EZ({ gen: { walls: .02, dice: 1, diceMore: 0 }, minLen: 2, maxLen: 6 })));
@@ -870,7 +873,7 @@ add('paige', 2, 3, BX(4, 4, [DIE], { gen: { walls: 0.12, portals: 1, dice: 2, bi
 add('paige', 2, 4, BX(4, 4, [DIE], { gen: { walls: 0.12, pads: 2, dice: 3, bites: 3 }, uses: { pads: 1 }, minLen: 9, luck: .03, feature: 'dice' }));
 add('paige', 2, 5, BX(5, 4, [DIE], { gen: { walls: 0.12, portals: 1, dice: 3, bites: 2 }, uses: { portals: 1 }, need: 1, minLen: 10, luck: .03, feature: 'dice' }));
 add('paige', 2, 6, BX(5, 4, [DIE], { gen: { walls: 0.12, pads: 3, dice: 4, bites: 3 }, uses: { pads: 2 }, minLen: 11, luck: .03, feature: 'dice' }));
-add('paige', 2, 7, BX(5, 5, [DIE], { gen: { walls: 0.12, pads: 2, dice: 4, bites: 4 }, uses: { pads: 1 }, need: 1, minLen: 12, luck: .03, feature: 'dice' }));
+add('paige', 2, 7, BX(5, 4, [DIE], { gen: { walls: 0.12, portals: 1, dice: 3, bites: 3 }, uses: { portals: 1 }, need: 2, minLen: 11, luck: .03, feature: 'dice' }));
 TUT('paige', 3, 1, 'colors', BX(3, 2, [DIE, DIE1], EZ(CL({ gen: { walls: .05, dice: 1 }, minLen: 3, maxLen: 8 }))));
 add('paige', 3, 1, BX(4, 3, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 2, bites: 1 }, minLen: 8, luck: .02, feature: 'dice' })));
 add('paige', 3, 2, BX(4, 4, [DIE, DIE1], CL({ gen: { walls: 0.12, dice: 2, pads: 1, bites: 2 }, minLen: 9, luck: .02, feature: 'dice' })));
