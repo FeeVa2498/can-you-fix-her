@@ -33,6 +33,7 @@ const GIRLS = {
   paige: { id: 'PAIGE_03', name: 'Paige', tag: 'Goth', from: 4, built: true, layers: ['INSECURITY · "bad luck"', 'INSECURITY · "too much"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{neutral}the dice said no today." },
   vel: { id: 'VEL_04', name: 'Vel', tag: 'Gyaru', from: 6, built: true, layers: ['INSECURITY · "just a bimbo"', 'INSECURITY · "trigger happy"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{sad}ugh. jammed. srry." },
   // Myne (Tomboy) is out of the game until further notice
+  ray: { id: 'RAY_00', name: 'Ray', tag: 'Boss', from: 99, layers: ['CORE'] },
 };
 const ORDER = ['prim', 'trix', 'paige', 'vel'];
 const PLAYABLE = ['prim', 'trix', 'paige', 'vel'];
@@ -271,6 +272,7 @@ const PORTRAIT = {
   prim: { hair: 4, hcol: '#8e2a5c', ecol: '#d0405a', scol: '#ffe4d6', ocol: '#ffb3d1', odet: 'blouse', extra: ['choker'] },
   trix: { hair: 5, hcol: '#ff2e6a', ecol: '#d0405a', scol: '#ffe4d6', ocol: '#ff5f97', odet: 'hoodie', extra: ['glasses', 'headphones'] },
   paige: { hair: 2, hcol: '#2a1a33', ecol: '#a46bff', scol: '#f6eef2', ocol: '#3b2a4a', odet: 'blouse', extra: ['choker'] },
+  ray: { hair: 2, hcol: '#e8e4ee', ecol: '#6a5a7a', scol: '#f3ebe8', ocol: '#3a3346', odet: 'hoodie', extra: [] },
   vel: { hair: 5, hcol: '#ffd23f', ecol: '#8a5a2e', scol: '#e8b48a', ocol: '#ffd23f', odet: 'hoodie', extra: [] },
 };
 const PCACHE = {};
@@ -290,9 +292,11 @@ const WHO = {
   trix: { name: 'Trix', sub: 'TRIX_02 · E-Girl' },
   paige: { name: 'Paige', sub: 'PAIGE_03 · Goth' },
   vel: { name: 'Vel', sub: 'VEL_04 · Gyaru' },
+  ray: { name: 'Ray', sub: 'RAY_00 · @r.admin' },
   dive: { name: 'DIVE Administration', sub: 'no-reply' },
 };
 function avHTML(who, cls = '', emo) {
+  if (who === 'boss' && S.flags && S.flags.rayFace) who = 'ray';
   if (PORTRAIT[who]) return `<img class="av ${cls}${S.g[who] && S.g[who].gone ? ' gone' : ''}" src="${portraitURL(who, emo || 'neutral')}" alt="${esc(WHO[who].name)}">`;
   if (who === 'me') return `<img class="av ${cls}" src="${S.player ? S.player.avatar : ''}" alt="you">`;
   if (ART[who]) return `<img class="av ${cls}${S.g[who] && S.g[who].gone ? ' gone' : ''}" src="${ART[who].face}" alt="${esc(WHO[who].name)}">`;
@@ -510,6 +514,10 @@ function handleEnd(n) {
     case 'SES_CLOSE': closeSession(); break;
     case 'OVERLOAD_DONE': closeSession(); break;
     case 'BOSS_NIGHT_DONE': S.night.bossDone = true; break;
+    case 'RK_FEED': rkFeed(); break;
+    case 'RK_MAP': rkMap(); break;
+    case 'RK_FILES': rkFiles(); break;
+    case 'RK_END': rkEnd(); break;
     case 'SHOW_DONE': renderShowcase(); if (PLAYABLE.filter(k => met(k)).every(k => S.show[k])) setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: ['Lovely! Like the Louvre, but with more glitter and fewer Mona Lisas.', 'I\'m keeping everyone\'s pieces. That\'s it for today. Go rest.'] }])), 900), setTimeout(() => { S.flags.nightAfter = true; }, 1500); break;
     case 'PROTO_END': endGame('proto'); break;
   }
@@ -588,6 +596,7 @@ function renderIcons() {
   if (S.apps.includes('MusicBox.exe')) list.push({ id: 'music', label: 'MusicBox.exe', ic: 'note', fn: openMusicBox });
   if (S.apps.includes('Fortune.exe')) list.push({ id: 'fortune', label: 'Fortune.exe', ic: 'tarot', fn: openFortune });
   list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
+  if (S.flags.rkFiles) list.push({ id: 'mycomp', label: 'My Computer', ic: 'drive', fn: openMyComputer, isNew: PLAYABLE.some(g => !S.flags['del_' + g]) });
   if (S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
   const sig = JSON.stringify(list.map(i => [i.id, i.badge, i.isNew, i.label, i.ic, i.ping]));
   if (box.dataset.sig === sig) return; box.dataset.sig = sig;
@@ -671,7 +680,7 @@ const ROOKIE = () => (S.player && S.player.name && S.player.name !== 'Newbie') ?
    On a web server the game reads data/*.csv fresh on every load;
    opened as a local file it uses the copy built into this page.
    ========================================================= */
-const CSV_FILES = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal'];
+const CSV_FILES = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal', 'act5_ending'];
 let DATA_EMPTY = 0; // blank placeholder rows (not written yet) are skipped quietly
 const CSV_EMBED = __CSV_EMBED__;
 const DATA_ISSUES = [];
@@ -875,6 +884,7 @@ function compileData(texts) {
   d.night = lines;
   d.first = compileEntries('first_message', texts.first_message, ['girl', 'day', 'if']);
   d.first.forEach(e => e.girl = e.girl.toLowerCase());
+  d.ending = {}; compileEntries('act5_ending', texts.act5_ending || '', ['section']).forEach(e => d.ending[e.id] = e);
   d.journal = csvObjects('journal', texts.journal).map(r => {
     const kind = (r.kind || 'entry').toLowerCase();
     if (!['entry', 'ending_few', 'ending_many', 'ps'].includes(kind)) dataIssue(r._file, r._row, `kind "${r.kind}" should be entry, ending_few, ending_many or ps`);
@@ -1009,6 +1019,7 @@ function startBossNight() {
   [...new Set([...S.todayWorked, ...S.todayFixed])].forEach(g => steps.push(...bossQ(g, false)));
   bossEntries('extra').forEach(e => steps.push(...playSteps(e.steps)));
   const cl = bossBest('closing'); if (cl) steps.push(...playSteps(cl.steps));
+  steps.push(...reckoningEve());
   runDialogue(seq('boss', 'boss', steps.length ? steps : [{ lines: [] }], 'BOSS_NIGHT_DONE'));
 }
 // girls at night ------------------------------------------------
@@ -1175,7 +1186,7 @@ function openAtlas() {
 const met = g => !!(S.met && S.met[g]);
 // every girl you've met is there every day, until the last one; you pick who to work with (one session at a time)
 const complete = k => S.g[k].layer >= 3;
-function availableToday() { if (SPECIAL[S.day] === 'showcase' || !S.flags.briefed || S.phase !== 'day' || S.dayOver) return []; return PLAYABLE.filter(k => met(k) && S.day >= GIRLS[k].from && !complete(k)); }
+function availableToday() { if (reckoning()) return S.flags.rkFiles && S.phase === 'day' && !(S.g.ray && S.g.ray.layer >= 1) ? ['ray'] : []; if (SPECIAL[S.day] === 'showcase' || !S.flags.briefed || S.phase !== 'day' || S.dayOver) return []; return PLAYABLE.filter(k => met(k) && S.day >= GIRLS[k].from && !complete(k)); }
 function checkpoint(at) {
   S.at = at;
   const cp = JSON.parse(JSON.stringify({ ...S, active: null, queue: [], dyn: {}, session: null }));
@@ -1290,7 +1301,7 @@ async function shutDown() {
   DD.journal.filter(j => j.kind === 'entry' && dayMatch(j.day, S.day) && cond(j.if)).forEach(j => {
     if (!S.journal.some(x => x.rid === j.id)) S.journal.push({ day: S.day, text: tpl(j.text, tplVars()), rid: j.id, ray: true });
   });
-  if (S.day >= LAST_DAY) { endGame('deadline'); return; }
+  if (S.day >= LAST_DAY) { const bo2 = document.createElement('div'); bo2.id = 'blackout'; document.body.appendChild(bo2); await wait(REDUCED ? 200 : 2200); bo2.remove(); await beginReckoning(); return; }
   const bo = document.createElement('div'); bo.id = 'blackout'; document.body.appendChild(bo);
   await wait(REDUCED ? 200 : 1200); bo.remove();
   S.day++;
@@ -1304,7 +1315,7 @@ function openBrain() { if (S.flags.ping === 'brain') { S.flags.ping = null; rend
 function renderBrain() {
   const w = WINS.brain; if (!w) return; const b = w.body;
   const night = S.phase === 'night', sp = SPECIAL[S.day];
-  const shown = PLAYABLE.filter(k => met(k));
+  const shown = reckoning() ? (S.flags.rkFiles ? ['ray'] : []) : PLAYABLE.filter(k => met(k));
   const cards = shown.map(k => {
     const G = GIRLS[k], st = S.g[k];
     let status = '', btn = '', dim = false, ok = false;
@@ -1437,6 +1448,7 @@ function startSession(g) {
   sessionLayout(g);
   refresh();
   // she talks first; the scan only starts once the chat is done
+  if (g === 'ray') { yapCh = 'boss'; setViewCh('yap', 'boss'); renderBuddies(); sessionScan(); return; }   // no small talk on the last day; Ray talks in her own chat
   runDialogue(seq('session', g, sesIntro(g), 'SES_SCAN'));
 }
 // the feed on the left, the chat on the right; the map window goes in the middle after the scan
@@ -1450,7 +1462,7 @@ async function sessionScan() {
   const ss = S.session; if (!ss || ss.scanned) return;
   ss.scanned = true;
   const g = ss.g, first = owFirstOpen(g);
-  if (first) await magnifierIntro(first, { noCam: true });
+  if (first && g !== 'ray') await magnifierIntro(first, { noCam: true });
   ['magnifier', 'feedcam'].forEach(closeWin);
   if (!S.session) return;
   openWorld(g);
@@ -1648,7 +1660,8 @@ function buildFeed(b, g) {
     <div class="layers sunk" id="feed-layers"></div></div>`;
   drawRoom($('.room', b)); drawFront($('.room-front', b));
   FEED.img = null; FEED.g = g;
-  if (ART[g]) loadImg(ART[g].body).then(img => { FEED.img = img; feedIdle(); renderFeed(); });
+  if (g === 'ray') drawRayBound($('#feed-cv', b));
+  else if (ART[g]) loadImg(ART[g].body).then(img => { FEED.img = img; feedIdle(); renderFeed(); });
   else drawSilhouette($('#feed-cv', b), g);
   renderFeed();
 }
@@ -1754,7 +1767,18 @@ function endGame(kind) {
     openNote('journal', 'journal.txt', journalText(), 'journal', 'journal');
     const fixed = PLAYABLE.filter(k => S.g[k].gone).map(k => GIRLS[k].name);
     openWin('end', {
-      title: kind === 'proto' ? 'End of prototype' : 'Deadline', icon: 'soul', w: 500, h: 560, x: 110, y: 16, render: b => {
+      title: kind === 'reckoning' ? 'Reckoning' : kind === 'proto' ? 'End of prototype' : 'Deadline', icon: 'soul', w: 500, h: 560, x: 110, y: 16, render: b => {
+        if (kind === 'reckoning') { b.innerHTML = `<div class="endc"><div class="chapter"><div class="hero"><small>DAY ${RECKON_DAY} · RECKONING</small><h2>Ori opened her eyes.</h2></div></div>
+        <div class="panel sunk" style="padding:0"><div class="term">patients      Prim · Trix · Paige · Vel · Ray
+status        erased
+host          Ori · awake
+showcase      ${PLAYABLE.map(k => GIRLS[k].name + ': ' + (S.show[k] === 'true' ? 'her own passion' : S.show[k] === 'empty' ? 'nothing' : S.show[k] ? 'as ordered' : '—')).join(' · ')}
+journal       ${S.journal.filter(j => !j.miss).length} entries
+<span class="m">doctor        in the chair next to her bed</span></div></div>
+        <p style="margin:0;font-size:13px;line-height:1.6">The room smells like bleach. Somebody is holding her hand. She doesn't know who any of us were. She is alive.</p>
+        <p style="margin:0;font-size:12px;color:var(--ink-soft);line-height:1.5">Ray kept a journal. It's open behind this window.</p>
+        <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap"><button class="btn" id="en-dive">about_dive.txt</button><button class="btn primary" id="en-new">New game</button></div></div>`;
+          $('#en-dive', b).onclick = () => openNote('dive', 'about_dive.txt', ABOUT_DIVE); $('#en-new', b).onclick = confirmReset; return; }
         b.innerHTML = `<div class="endc"><div class="chapter"><div class="hero"><small>${kind === 'proto' ? 'DAY ' + S.day + ' / ' + LAST_DAY : 'DAY ' + LAST_DAY + ' · TIME UP'}</small><h2>${kind === 'proto' ? 'Two patients "discharged"' : 'KPI missed'}</h2></div></div>
         <div class="panel sunk" style="padding:0"><div class="term">KPI           ${layersTotal()}/${kpiMax()}
 discharged    ${esc(fixed.join(', ') || 'none')}
@@ -1861,6 +1885,8 @@ async function main() {
     S.active = null; S.queue = []; S.dyn = {}; S.session = null;
     await bootOS();
     if (S.flags.ended) { refresh(); endGame(S.flags.endKind || 'proto'); return; }
+    if (S.flags.rayFace) WHO.boss.name = 'Ray';
+    if (S.at === 'reckoning') { S.day = LAST_DAY; await beginReckoning(); return; }
     if (S.at === 'd1') { S.flags.briefStarted = false; S.logs.boss = []; day1Start(); await lockScreen('Welcome back'); return; }
     if (S.at === 'night') { S.phase = 'day'; S.session = null; await goNight(); return; }
     await beginMorning(); return;

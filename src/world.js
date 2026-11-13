@@ -10,6 +10,7 @@ const OW_THEME = {   // per girl: floor, wall, accent (her colour)
   prim: { floor: ['#6a4a80', '#75538c'], wall: '#160b1d', wallTop: '#2a1636', acc: '#ff7eb6', hue: 0 },
   trix: { floor: ['#5e3a52', '#68425b'], wall: '#14080f', wallTop: '#2a1220', acc: '#ff4d5e', hue: 1 },
   paige: { floor: ['#4a3a6e', '#53427a'], wall: '#0f0a1a', wallTop: '#211832', acc: '#a46bff', hue: 2 },
+  ray: { floor: ['#8a8494', '#938d9c'], wall: '#100d14', wallTop: '#2a2530', acc: '#e8e4ee', hue: 0 },
   vel: { floor: ['#6e5a33', '#78633a'], wall: '#160f06', wallTop: '#2e2310', acc: '#ffd23f', hue: 3 },
 };
 const OW_REGION = ['memory', 'feeling', 'self'];
@@ -22,6 +23,7 @@ function owLayers(g) { return [1, 2, 3].map(L => panelsOf(g).filter(p => p.layer
 const OWMAP = {};
 function owBuild(g) {
   if (OWMAP[g]) return OWMAP[g];
+  if (g === 'ray') return (OWMAP.ray = rayMap());
   const R = owRand(owSeed('dive:' + g)), lay = owLayers(g);
   const W = 1 + 3 * OW_STRIDE + OW_CORE, H = OW_H;
   const t = new Uint8Array(W * H);   // 0 wall · 1 floor · 2 gate
@@ -149,8 +151,8 @@ function owClose() { if (PJ_STORY) { PJ_STORY = null; pjDispose(); document.remo
 function owFocus() { const w = WINS.fixit; if (w) focusWin('fixit'); }
 function owHud() {
   const g = OW.g; if (!g || !$('#ow-keys')) return;
-  const ks = owKeys(g), L = Math.min(3, S.g[g].layer + 1), k = ks[L - 1], M = owBuild(g), o = owState(g);
-  const done = S.g[g].layer >= 3;
+  const M = owBuild(g), ks = owKeys(g), L = Math.min(M.gates.length, S.g[g].layer + 1), k = ks[L - 1], o = owState(g);
+  const done = S.g[g].layer >= M.gates.length;
   $('#ow-keys').innerHTML = done ? `${keyIcon(g)} <b>every gate open</b>` : `${keyIcon(g)} <b>${k.have}</b>/${k.need} <small>keys · gate ${L}</small>`;
   const region = M.gates.findIndex(G => o.x < G.x); const rg = region < 0 ? 'core' : OW_REGION[region];
   $('#ow-reg').textContent = `Layer ${region < 0 ? 3 : region + 1} · ${rg}`;
@@ -170,7 +172,7 @@ function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-ms
 
 /* every gameplay input costs a minute of her day */
 function owSpend(kind = 'move') {
-  if (S.phase !== 'day' || S.dayOver) return;
+  if (S.phase !== 'day' || S.dayOver || reckoning()) return;
   // mementos: hourglass (undo is free), dog tag (every other step on the map is free), d20 (one in five is free)
   let free = kind === 'undo' && hasMem('hourglass.mem');
   if (!free && kind === 'map' && hasMem('dog_tag.mem')) { OW.dog = (OW.dog || 0) + 1; free = OW.dog % 2 === 0; }
@@ -188,7 +190,7 @@ function owOverloaded() {
 }
 
 function owKey(e) {
-  if (!OW.g || OW.mode !== 'map' || !WINS.fixit) return;
+  if (!OW.g || OW.mode !== 'map' || !WINS.fixit || document.getElementById('memory')) return;
   if (document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
   const top = Object.values(WINS).reduce((a, w) => (+w.el.style.zIndex || 0) > (+a.el.style.zIndex || 0) ? w : a, WINS.fixit);
   if (top !== WINS.fixit && !(top.el.contains(document.activeElement))) { /* still allow: the map is the main thing in a session */ }
@@ -215,6 +217,7 @@ async function owGate(G) {
   OW.frozen = true; SFX.gate(); OW.gateFx = { G, t0: performance.now() };
   await wait(REDUCED ? 100 : 1300);
   S.g[g].layer = Math.max(S.g[g].layer, G.layer); OW.frozen = false; OW.gateFx = null;
+  if (g === 'ray') { owHud(); save(); rayFinale(); return; }
   owSay(G.layer >= 3 ? 'the last gate is open.' : `gate ${G.layer} open · layer ${G.layer} faced`);
   owHud(); renderFeed(); save();
   sessionLayerOpened(g, G.layer);
@@ -225,6 +228,7 @@ function owEnter() {
   const g = OW.g, o = owState(g), M = owBuild(g), ni = M.nodeAt.get(o.y * M.W + o.x);
   if (ni == null) { owSay('nothing here. find a glowing tile.'); SFX.tick(); return; }
   const n = M.nodes[ni], p = PANELS.find(q => q.id === n.pid); if (!p) return;
+  if (g === 'ray' && rayLocked(n)) { SFX.bump(); OW.shake = performance.now(); owSay(`locked · held by ${n.src}`); runDialogue(seq('boss', 'boss', endSteps('ray_level_locked'), 'NONE')); return; }
   OW.mode = 'level'; cancelAnimationFrame(OW.raf); OW.raf = 0;
   SFX.link(); glitch('soft');
   const host = $('#ow-main'); if (!host) return;
@@ -257,7 +261,8 @@ function owLevelWon(p) {
   o.solved[p.id] = true; save();
   if (first) { SFX.key(); OW.keyFx = performance.now(); }
   renderFeed();
-  sessionLevelWon(g, p, first);
+  if (g === 'ray') { if (first) rayLevelWon(Object.keys(o.solved).length); }
+  else sessionLevelWon(g, p, first);
   setTimeout(() => { if (PJ_STORY && PJ && PJ.p === p) { owBack(); } }, REDUCED ? 600 : 2600);
 }
 
@@ -293,7 +298,7 @@ function owDraw() {
     x.fillStyle = got ? 'rgba(255,255,255,.08)' : T.acc; x.globalAlpha = got ? 1 : .25 + .25 * pulse; x.fillRect(px + 3, py + 3, ts - 6, ts - 6);
     x.globalAlpha = 1; x.strokeStyle = got ? 'rgba(255,255,255,.35)' : T.acc; x.lineWidth = 2; x.strokeRect(px + 4, py + 4, ts - 8, ts - 8); x.restore();
     x.fillStyle = got ? 'rgba(255,255,255,.55)' : '#fff'; x.font = `bold ${Math.round(ts * .34)}px "Courier New", monospace`; x.textAlign = 'center'; x.textBaseline = 'middle';
-    x.fillText(got ? '✓' : String(n.i + 1), px + ts / 2, py + ts / 2 + 1);
+    x.fillText(got ? '✓' : g === 'ray' && rayLocked(n) ? '🔒' : String(n.i + 1), px + ts / 2, py + ts / 2 + 1);
     if (p && p.tut && !got) { x.fillStyle = '#ffd86e'; x.font = `bold ${Math.round(ts * .2)}px monospace`; x.fillText('NEW', px + ts / 2, py + ts * .2); }
   });
   // core

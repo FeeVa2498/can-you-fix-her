@@ -183,6 +183,23 @@ G = '12. Bảng nối màu cũ (story hiện tại)'
 add(G, 'Fix-it · board', 'Bảng nối cặp màu', 'Bảng chơi cũ trong cốt truyện (nối các cặp chấm cùng màu, không cắt nhau). Sẽ được thay bằng máy chiếu 3D: chỉ vẽ nếu bản cũ còn được giữ.', 'Ô lưới + chấm (8 màu) + đoạn đường + huy hiệu S/A/B/C + thanh thời gian', 16, '64×64', 'PNG', 'old_board_*.png', 'P3', 'Hỏi lại trước khi vẽ')
 
 # ================= workbook =================
+# ---------------- 13. Story v9: map, room, showcase, reckoning ----------------
+G = '13. Game chính v9: map, phòng, showcase, kết thúc'
+add(G, 'Live feed', 'Phòng ngủ/làm việc dùng chung', 'Một phòng con gái bình thường dùng cho mọi nhân vật: cửa sổ có rèm, giường, kệ sách + thú bông, bảng ghim giấy note, bàn có màn hình CRT + đèn bàn, thảm tròn, ghế xoay (lưng ghế vẽ RIÊNG lớp sau lưng nhân vật, tay ghế + đệm ghế lớp trước).', 'Nền phòng + lớp ghế sau + lớp ghế trước; ban ngày (ban đêm tuỳ chọn)', 3, '720×630 (×3 của 240×210)', 'PNG', 'feed_room_*.png', 'P1', 'Không cần pixel hoá quá mức; nét mảnh, pastel.')
+add(G, 'Live feed', 'Nhân vật ngồi ghế, tách lớp cho idle', 'Mỗi cô ngồi trên ghế xoay. Tách lớp để làm idle kiểu Live2D: tóc trước, tóc sau, mặt, mắt mở/nhắm (chớp mắt), miệng, thân, tay.', '4 cô × các lớp', 4, '≥ 600 px cao', 'PSD/PNG lớp', 'feed_<girl>_layers.psd', 'P1', 'Hiện chỉ có Prim/Trix bản pixel 82×170; Paige, Vel chưa có hình.')
+add(G, 'Fix-it map', 'Tileset map trong đầu (mỗi cô 1 màu)', 'Sàn, tường nổi (mặt trên + mặt trước), ô memory phát sáng (chưa làm / đã lấy chìa / NEW), cổng lớn 3 ô có ổ khoá và số a/b, lõi (core) cuối map, hộp người chơi.', '4 cô + Ray (xám) ; mỗi bộ ~10 tile', 5, '64×64 / tile', 'PNG', 'ow_<girl>_tiles.png', 'P1')
+add(G, 'Showcase (ngày 12)', 'Đồ trưng bày "nửa vời"', 'Trix: selfie + ảnh chụp rank Iron IV · Paige: trải bài tarot, một lá viết sai "TEH TOWER", đặt ngược · Vel: váy tự may, một tay áo bị may dính · Prim: khung trống "(nothing submitted)".', '4 tranh', 4, '640×480', 'PNG', 'show_<girl>_bad.png', 'P2')
+add(G, 'Showcase (ngày 12)', 'Đồ trưng bày "thật"', 'Trix: sổ toán (chứng minh + biên bản ván cờ) · Paige: bộ chip poker "house of p." đầu lâu khắc tay · Vel: mô hình M1 Garand 1:4, sơn từng con ốc.', '3 tranh', 3, '640×480', 'PNG', 'show_<girl>_true.png', 'P2')
+add(G, 'Reckoning', 'Ray trên live feed', 'Ray (Boss) lộ mặt: ngồi ghế trong phòng tối, dây cáp/dây truyền cắm vào tay, cổ, lưng; mệt mỏi, thều thào. Tóc bạc dài. Ánh sáng xanh lạnh từ màn hình.', 'Idle thở chậm (tách lớp) + 1–2 biểu cảm', 1, '≥ 600 px cao', 'PSD/PNG lớp', 'feed_ray_bound.psd', 'P1')
+add(G, 'Reckoning', 'Avatar chat của Ray', 'Avatar 32×32 thay cho "?" sau khi Boss lộ mặt.', 'neutral, sad, tired', 3, '32×32 (+48×48)', 'PNG', 'av_ray_*.png', 'P1')
+for k, (t, d) in enumerate([('Ori', 'Căn hộ ồn ào; đứa trẻ co ro; bóng người lớn đè lên; một cô gái thứ hai (Ray) mờ mờ hiện ra bên cạnh.'),
+    ('Ray', 'Ray chịu đòn thay, đi học thay; rồi Ray đứng giữa bốn cô gái nhỏ (hồng, đỏ, tím, vàng) cô tạo ra cho Ori.'),
+    ('The hand', 'Bàn tay cầm dao gọt bút chì, vệt đỏ trên cổ tay Prim; hành lang bệnh viện; bác sĩ trưởng áo blouse ngồi đối diện Ray.'),
+    ('The board', 'Hội đồng điều trị ngồi dãy bàn dài; bác sĩ trưởng đứng lên, lắc đầu: "I don\'t erase people."'),
+    ('You', 'BIG REVEAL: Ray ngồi trước màn hình CRT, trên màn hình là màn "Choose desired appearance" đang ghi đè avatar người chơi (để trống ô avatar, game tự chèn avatar thật vào).')], 1):
+    add(G, 'Reckoning · ký ức', f'Ký ức {k:02d} · {t}', d, '1 tranh tĩnh 16:9', 1, '1920×1080', 'PNG', f'memory_{k}.png', 'P1', 'Artstyle: manga màu nước, tông nhạt, nét mực mảnh (giống ảnh tham khảo bác sĩ áo blouse).')
+add(G, 'Reckoning', 'Icon My Computer + file trong C:\\DIVE\\residue', 'Icon ổ đĩa + icon file cho 4 file còn sót lại: lyrics (Prim), .tex (Trix), bản thiết kế chip (Paige), sổ sơn mô hình (Vel).', '1 ổ + 4 file', 5, '32×32', 'PNG', 'ic_residue_*.png', 'P2')
+
 wb = Workbook()
 ink, pink, lav, cream = '4A2D6E', 'FF8CC6', 'F5EEFF', 'FFF8FC'
 hdr_font = Font(name=F, bold=True, color='FFFFFF', size=11)

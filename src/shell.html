@@ -1194,6 +1194,29 @@ line.ed-hov{stroke-width:.14}
 body:not(.nocrt) #app{border-radius:28px/22px;overflow:hidden}
 html{background:#120818}
 @media (prefers-reduced-motion:reduce){#crt{animation:none}.mbx-mq span,.mbx-orb i{animation:none}}
+
+/* ---------- reckoning ---------- */
+body.reckon #desktop{filter:saturate(.25) brightness(.85)}
+body.reckon #app{animation:none}
+.btn.danger{background:#ff4d5e;color:#fff;border-color:#7a1020}
+.mc{display:flex;flex-direction:column;height:100%;gap:6px;font-size:13px}
+.mc-path{font-family:var(--mono);padding:4px 8px;border:2px solid var(--line);border-radius:6px;background:#fff}
+.mc-main{flex:1;min-height:0;display:grid;grid-template-columns:230px 1fr;gap:6px}
+.mc-list{overflow:auto;padding:4px;display:flex;flex-direction:column;gap:4px}
+.mc-file{display:grid;grid-template-columns:28px 1fr;grid-template-rows:auto auto;column-gap:6px;text-align:left;padding:4px;border:2px solid transparent;border-radius:6px;background:none;cursor:pointer;font:inherit;color:inherit}
+.mc-file svg{grid-row:span 2;width:28px;height:28px}.mc-file small{color:var(--ink-soft);font-size:11px}
+.mc-file.sel,.mc-file:hover{border-color:var(--line);background:#fff3fa}
+.mc-view{overflow:auto;padding:8px;display:flex;flex-direction:column}.mc-view pre{flex:1;margin:0;white-space:pre-wrap;font:12px/1.5 var(--mono)}
+.mc-act{display:flex;justify-content:flex-end;padding-top:6px}
+.mc-status{font-size:11px;color:var(--ink-soft)}
+#memory{position:fixed;inset:0;z-index:400;background:#0b0810;display:flex;align-items:center;justify-content:center;cursor:pointer;animation:mmin .9s ease}
+#memory.out{animation:mmout .6s ease forwards}
+@keyframes mmin{from{opacity:0}}@keyframes mmout{to{opacity:0}}
+.mm-frame{position:relative;width:min(96vw,calc(88vh * 16 / 9));aspect-ratio:16/9;box-shadow:0 0 0 2px #2a2236,0 0 80px rgba(0,0,0,.8)}
+.mm-frame canvas{width:100%;height:100%;display:block;filter:sepia(.15) contrast(.95)}
+.mm-title{position:absolute;left:3%;top:4%;font:bold clamp(12px,1.6vw,18px) var(--mono);letter-spacing:3px;color:rgba(40,30,40,.75)}
+.mm-cap{position:absolute;left:6%;right:6%;bottom:6%;padding:12px 16px;background:rgba(250,246,240,.86);color:#2a1e28;font:clamp(14px,1.8vw,20px)/1.5 Georgia,serif;border-left:4px solid #8d7d86;min-height:2.6em}
+.mm-hint{position:absolute;right:2%;bottom:1.5%;font:11px var(--mono);color:rgba(255,255,255,.5)}
 </style>
 <div id="app">
   <main id="desktop" aria-label="DIVE OS desktop">

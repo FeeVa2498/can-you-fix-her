@@ -54,7 +54,7 @@ function openChamber() {
   $$('.dicon').forEach(d => d.hidden = true);   // a bare desktop: nothing from the story here
   openWin('chamber', { title: 'Test chamber', icon: 'puzzle', w: 640, h: 500, x: 30, y: 20, render: (b, rec) => { addUpd(rec, () => renderChamber(b)); renderChamber(b); } });
 }
-function panelsOf(g) { return PANELS.filter(p => p.girl === g); }
+function panelsOf(g) { return PANELS.filter(p => p.girl === g && !p.ray); }
 function fmtT(ms) { const s = Math.round(ms / 1000); return `${s / 60 | 0}:${String(s % 60).padStart(2, '0')}`; }
 function renderChamber(b) {
   const list = panelsOf(chGirl), G = CH_GIRLS.find(x => x.g === chGirl);

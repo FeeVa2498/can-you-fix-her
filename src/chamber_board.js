@@ -407,7 +407,7 @@ function bindPJ(svg, toPt = e => svgPt(svg, e)) {
 }
 const KEYDIR = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1], a: [-1, 0], d: [1, 0], w: [0, -1], s: [0, 1] };
 function pjKey(e) {
-  if (!PJ || !(WINS.projector || PJ_STORY)) return;
+  if (!PJ || !(WINS.projector || PJ_STORY) || document.getElementById('memory')) return;
   if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   if (PJ.solOn) {
