@@ -620,6 +620,7 @@ function renderIcons() {
   list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
   if (S.flags.rkFiles) list.push({ id: 'mycomp', label: 'My Computer', ic: 'drive', fn: openMyComputer, isNew: PLAYABLE.some(g => !S.flags['del_' + g]) });
   if (S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
+  if (S.flags.chamber) { const keep = ['music', 'conv', 'fortune', 'atlas', 'profiles']; list.splice(0, list.length, ...list.filter(i => keep.includes(i.id))); }   // test chamber: every app, installed
   const sig = JSON.stringify(list.map(i => [i.id, i.badge, i.isNew, i.label, i.ic, i.ping]));
   if (box.dataset.sig === sig) return; box.dataset.sig = sig;
   box.innerHTML = list.map(i => `<button class="dicon${i.isNew ? ' new' : ''}${i.ping ? ' ping' : ''}" data-id="${i.id}">${icon(i.ic)}<span>${esc(i.label)}</span>${i.badge ? `<span class="badge">${i.badge} new</span>` : ''}</button>`).join('');

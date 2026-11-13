@@ -52,8 +52,10 @@ let chGirl = 'prim';
 function openChamber() {
   S = fresh(); S.player = { name: 'tester', avatar: '' }; S.flags.chamber = true; S.phase = 'day';
   if (CH.raySrc) CH.raySrc.forEach((id, i) => { if (RAY_SRC[i]) RAY_SRC[i][1] = id; });
-  $$('.dicon').forEach(d => d.hidden = true);   // a bare desktop: nothing from the story here
-  openWin('chamber', { title: 'Test chamber', icon: 'puzzle', w: 640, h: 500, x: 30, y: 20, render: (b, rec) => { addUpd(rec, () => renderChamber(b)); renderChamber(b); } });
+  S.apps = ['MusicBox.exe', 'UnitConv.exe', 'Fortune.exe', 'Atlas.exe'];   // every app, as if installed
+  PLAYABLE.forEach(g => { S.met[g] = true; });
+  renderIcons();   // only the apps show on the chamber's desktop
+  openWin('chamber', { title: 'Test chamber', icon: 'puzzle', w: 640, h: 500, x: 120, y: 20, render: (b, rec) => { addUpd(rec, () => renderChamber(b)); renderChamber(b); } });
 }
 function panelsOf(g) { return PANELS.filter(p => p.girl === g && !p.ray); }
 function fmtT(ms) { const s = Math.round(ms / 1000); return `${s / 60 | 0}:${String(s % 60).padStart(2, '0')}`; }

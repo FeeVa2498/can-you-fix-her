@@ -2012,6 +2012,7 @@ function renderIcons() {
   list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
   if (S.flags.rkFiles) list.push({ id: 'mycomp', label: 'My Computer', ic: 'drive', fn: openMyComputer, isNew: PLAYABLE.some(g => !S.flags['del_' + g]) });
   if (S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
+  if (S.flags.chamber) { const keep = ['music', 'conv', 'fortune', 'atlas', 'profiles']; list.splice(0, list.length, ...list.filter(i => keep.includes(i.id))); }   // test chamber: every app, installed
   const sig = JSON.stringify(list.map(i => [i.id, i.badge, i.isNew, i.label, i.ic, i.ping]));
   if (box.dataset.sig === sig) return; box.dataset.sig = sig;
   box.innerHTML = list.map(i => `<button class="dicon${i.isNew ? ' new' : ''}${i.ping ? ' ping' : ''}" data-id="${i.id}">${icon(i.ic)}<span>${esc(i.label)}</span>${i.badge ? `<span class="badge">${i.badge} new</span>` : ''}</button>`).join('');
@@ -4678,8 +4679,10 @@ let chGirl = 'prim';
 function openChamber() {
   S = fresh(); S.player = { name: 'tester', avatar: '' }; S.flags.chamber = true; S.phase = 'day';
   if (CH.raySrc) CH.raySrc.forEach((id, i) => { if (RAY_SRC[i]) RAY_SRC[i][1] = id; });
-  $$('.dicon').forEach(d => d.hidden = true);   // a bare desktop: nothing from the story here
-  openWin('chamber', { title: 'Test chamber', icon: 'puzzle', w: 640, h: 500, x: 30, y: 20, render: (b, rec) => { addUpd(rec, () => renderChamber(b)); renderChamber(b); } });
+  S.apps = ['MusicBox.exe', 'UnitConv.exe', 'Fortune.exe', 'Atlas.exe'];   // every app, as if installed
+  PLAYABLE.forEach(g => { S.met[g] = true; });
+  renderIcons();   // only the apps show on the chamber's desktop
+  openWin('chamber', { title: 'Test chamber', icon: 'puzzle', w: 640, h: 500, x: 120, y: 20, render: (b, rec) => { addUpd(rec, () => renderChamber(b)); renderChamber(b); } });
 }
 function panelsOf(g) { return PANELS.filter(p => p.girl === g && !p.ray); }
 function fmtT(ms) { const s = Math.round(ms / 1000); return `${s / 60 | 0}:${String(s % 60).padStart(2, '0')}`; }
