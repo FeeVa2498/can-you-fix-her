@@ -39,7 +39,8 @@ const PLAYABLE = ['prim', 'trix', 'paige', 'vel'];
 const LAST_DAY = 14, NIGHT_CHATS = 2;
 const DAY_START = 9 * 60, DAY_END = 17 * 60;   // her stamina for the day: every gameplay input costs a minute
 const staminaPct = () => Math.max(0, Math.round((DAY_END - S.mins) / (DAY_END - DAY_START) * 100));
-const SPECIAL = { 3: 'showcase', 7: 'postcard', 10: 'inspection' };
+const SPECIAL = { 7: 'postcard', 10: 'inspection', 12: 'showcase' };
+const SHOWCASE_DAY = 12;
 const SPECIAL_NAME = { showcase: 'HOBBY SHOWCASE', postcard: 'POSTCARD DAY', inspection: 'INSPECTION DAY' };
 const QUAKE_DAYS = [5, 8, 11, 13];
 
@@ -509,7 +510,7 @@ function handleEnd(n) {
     case 'SES_CLOSE': closeSession(); break;
     case 'OVERLOAD_DONE': closeSession(); break;
     case 'BOSS_NIGHT_DONE': S.night.bossDone = true; break;
-    case 'SHOW_DONE': if (PLAYABLE.filter(k => onSite(k) && met(k)).every(k => S.show[k])) setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: ['Lovely! Like the Louvre, but with more glitter and fewer Mona Lisas.', 'I\'m keeping everyone\'s pieces. That\'s it for today. Go rest.'] }])), 900), setTimeout(() => { S.flags.nightAfter = true; }, 1500); break;
+    case 'SHOW_DONE': renderShowcase(); if (PLAYABLE.filter(k => met(k)).every(k => S.show[k])) setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: ['Lovely! Like the Louvre, but with more glitter and fewer Mona Lisas.', 'I\'m keeping everyone\'s pieces. That\'s it for today. Go rest.'] }])), 900), setTimeout(() => { S.flags.nightAfter = true; }, 1500); break;
     case 'PROTO_END': endGame('proto'); break;
   }
   save();
@@ -1018,7 +1019,10 @@ function nightConvo(g) {
   // the last night always has her "tomorrow is the reckoning" chat
   const rk = list.find(x => x.id === g + '_reckoning');
   if (S.day >= LAST_DAY && rk && DD.night[rk.id]) return st.ntDone.includes(rk.id) ? null : { id: rk.id, by: rk.by, steps: DD.night[rk.id].steps };
-  const c = list.find(x => !st.ntDone.includes(x.id) && !x.id.endsWith('_reckoning'));
+  // her "heart" chat (hidden in layer 2) and Prim's songs chat come first as soon as they're open
+  const pri = list.find(x => /_(heart|songs)$/.test(x.id) && !st.ntDone.includes(x.id) && st.layer >= x.layer && cond(x.if));
+  if (pri) return { id: pri.id, by: pri.by, steps: DD.night[pri.id].steps };
+  const c = list.find(x => !st.ntDone.includes(x.id) && !/_(reckoning|heart|songs)$/.test(x.id));
   if (!c || st.layer < c.layer || !cond(c.if)) return null;
   return { id: c.id, by: c.by, steps: DD.night[c.id].steps };
 }
@@ -1329,63 +1333,92 @@ function renderBrain() {
 /* =========================================================
    SHOWCASE DAY
    ========================================================= */
+/* Showcase (day 12): each girl shows what Boss made her "for". If you reached her hidden layer-2 chat and told her to
+   live her own passion (flag:<g>_true), she brings the real thing instead. Prim never submits anything. */
+const trueTo = g => !!S.flags[g + '_true'];
 function drawExhibit(c, g, good) {
   const x = c.getContext('2d'), W = 160, H = 120; x.clearRect(0, 0, W, H);
-  if (g === 'prim') {
-    x.fillStyle = '#fffaf2'; x.fillRect(0, 0, W, H);
-    if (good) {
-      const pet = (cx, cy, a, col) => { x.fillStyle = col; x.beginPath(); x.ellipse(cx + Math.cos(a) * 18, cy + Math.sin(a) * 18, 14, 8, a, 0, 7); x.fill(); x.strokeStyle = '#4a2d6e'; x.lineWidth = 1.5; x.stroke(); };
-      for (let i = 0; i < 6; i++) pet(80, 52, i / 6 * Math.PI * 2, i % 2 ? '#ffb3d9' : '#d8c6f4');
-      x.fillStyle = '#ffd86e'; x.beginPath(); x.arc(80, 52, 8, 0, 7); x.fill(); x.stroke();
-      x.strokeStyle = '#5fcf86'; x.lineWidth = 3; x.beginPath(); x.moveTo(80, 72); x.quadraticCurveTo(86, 96, 76, 116); x.stroke();
-      x.fillStyle = '#ff8cc6'; [[24, 20], [136, 30], [30, 96], [130, 92]].forEach(([a, b2]) => { x.fillRect(a, b2 - 3, 2, 8); x.fillRect(a - 3, b2, 8, 2); });
-    } else {
-      x.strokeStyle = '#5a5060'; x.lineWidth = 1.5;
-      for (let i = 0; i < 9; i++) { x.beginPath(); x.arc(80 + Math.sin(i * 2.1) * 6, 52 + Math.cos(i * 1.7) * 5, 10 + i * 2.2, i, i + 4.2); x.stroke(); }
-      x.fillStyle = 'rgba(120,110,130,.25)'; x.fillRect(40, 70, 70, 12); x.fillRect(95, 30, 20, 30);
-      x.beginPath(); x.moveTo(80, 76); x.lineTo(84, 116); x.stroke();
-      x.fillStyle = '#5a5060'; x.font = '11px VT323, monospace'; x.fillText('original work #1', 6, 114);
-    }
-  } else {
-    if (good) {
-      x.fillStyle = '#2f5a46'; x.fillRect(0, 0, W, H); x.fillStyle = '#e9f5ee'; x.font = '10px VT323, monospace';
-      ['Lemma 3. G has k paths', 'sum |P_i| = |G|  (no gaps)', 'P_i, P_j disjoint', '=> fill(G) = 100%', '', 'QED ✧'].forEach((l, i) => x.fillText(l, 10, 22 + i * 15));
-      x.fillStyle = '#ffb3d9'; x.fillRect(128, 92, 22, 4);
-    } else {
-      x.fillStyle = '#ffd3ea'; x.fillRect(0, 0, W, H); x.fillStyle = '#fff'; x.fillRect(30, 18, 100, 80);
-      x.fillStyle = '#ff5fa8'; x.beginPath(); x.moveTo(52, 40); x.lineTo(60, 22); x.lineTo(68, 40); x.fill(); x.beginPath(); x.moveTo(92, 40); x.lineTo(100, 22); x.lineTo(108, 40); x.fill();
-      x.strokeStyle = '#4a2d6e'; x.lineWidth = 1.5; x.beginPath(); x.arc(80, 62, 26, 0, 7); x.stroke();
-      x.fillStyle = '#4a2d6e'; x.font = '18px VT323, monospace'; x.fillText('uwu', 68, 68); x.font = '11px VT323, monospace'; x.fillText('stream highlights (3 sec)', 26, 112);
-    }
+  const R = (col, a, b, w, h) => { x.fillStyle = col; x.fillRect(a, b, w, h); }, T = (t, a, b, f = '11px VT323, monospace', col = '#4a2d6e') => { x.font = f; x.fillStyle = col; x.fillText(t, a, b); };
+  if (g === 'prim') {   // an empty frame
+    R('#f3eef8', 0, 0, W, H); x.strokeStyle = '#b9a3dc'; x.setLineDash([4, 3]); x.strokeRect(20, 14, 120, 80); x.setLineDash([]);
+    x.textAlign = 'center'; T('(nothing submitted)', 80, 58, '10px monospace', '#9a8ab0'); x.textAlign = 'left'; return;
+  }
+  if (g === 'trix') {
+    if (good) { R('#2f5a46', 0, 0, W, H); R('#e9e2c8', 22, 10, 116, 100); R('#c9bfa0', 79, 10, 2, 100);
+      ['∀ε ∃δ', '|x−a|<δ', '⇒ |f−f(a)|<ε', '', 'Lemma 4', 'QED'].forEach((l, i) => T(l, 25, 26 + i * 14, '8px monospace', '#2a2a2a'));
+      ['1.e4 e5', '2.Nf3 Nc6', '3.Bb5 a6', '', '1-0 ♞'].forEach((l, i) => T(l, 84, 26 + i * 14, '8px monospace', '#2a2a2a')); }
+    else { R('#ffd3ea', 0, 0, W, H); R('#fff', 12, 12, 64, 80); x.fillStyle = '#ff5fa8'; x.beginPath(); x.arc(44, 46, 18, 0, 7); x.fill(); T('peace ✌', 22, 84, '11px VT323, monospace');
+      R('#3a3a44', 84, 22, 66, 56); T('RANKED', 92, 38, '11px VT323, monospace', '#ddd'); T('IRON IV', 90, 58, '16px VT323, monospace', '#9a9aa8'); T('0 LP', 104, 72, '10px VT323, monospace', '#aaa'); }
+    return;
+  }
+  if (g === 'paige') {
+    if (good) { R('#1d1424', 0, 0, W, H); R('#2e6b45', 10, 10, 140, 100);
+      [[40, 50, '#c0303c'], [64, 44, '#111'], [88, 50, '#e8e2d0'], [112, 44, '#6a3fb0'], [52, 78, '#111'], [76, 82, '#c0303c'], [100, 78, '#e8e2d0']].forEach(([a, b, col]) => { x.fillStyle = col; x.beginPath(); x.arc(a, b, 11, 0, 7); x.fill(); x.strokeStyle = '#d8b04a'; x.lineWidth = 2; x.setLineDash([3, 3]); x.beginPath(); x.arc(a, b, 8, 0, 7); x.stroke(); x.setLineDash([]); x.fillStyle = '#d8b04a'; x.fillRect(a - 2, b - 2, 4, 4); });
+      T('house of p. · set 1', 32, 104, '9px monospace', '#d8b04a'); }
+    else { R('#2a1a33', 0, 0, W, H); [[18, 30, -8], [62, 24, 4], [104, 32, 12]].forEach(([a, b, rot]) => { x.save(); x.translate(a + 18, b + 30); x.rotate(rot * Math.PI / 180); R('#efe6d0', -18, -30, 36, 60); R('#c9bfa0', -14, -26, 28, 52); x.restore(); });
+      T('TEH TOWER', 14, 106, '9px monospace', '#efe6d0'); T('(upside down)', 82, 106, '9px monospace', '#9a8ab0'); }
+    return;
+  }
+  if (g === 'vel') {
+    if (good) { R('#22303a', 0, 0, W, H); R('#5a3c22', 14, 58, 108, 8); R('#3a3a40', 70, 54, 80, 6); R('#2a2a2e', 120, 52, 30, 10); R('#5a3c22', 30, 66, 20, 18);
+      for (let i = 0; i < 10; i++) R('#d8b04a', 20 + i * 12, 60, 2, 2);
+      T('M1 GARAND · 1:4', 40, 100, '9px monospace', '#d8e0e8'); }
+    else { R('#fff3c4', 0, 0, W, H); x.fillStyle = '#ff8cc6'; x.beginPath(); x.moveTo(60, 20); x.lineTo(100, 20); x.lineTo(112, 44); x.lineTo(104, 46); x.lineTo(102, 96); x.lineTo(58, 96); x.lineTo(56, 46); x.lineTo(48, 44); x.closePath(); x.fill();
+      x.strokeStyle = '#4a2d6e'; x.lineWidth = 1; x.setLineDash([2, 2]); x.beginPath(); x.moveTo(60, 30); x.lineTo(98, 34); x.moveTo(62, 70); x.lineTo(96, 62); x.moveTo(52, 44); x.lineTo(56, 48); x.stroke(); x.setLineDash([]);
+      R('#4a2d6e', 104, 40, 10, 4); T('sleeve sewn shut', 44, 112, '10px VT323, monospace'); }
   }
 }
 function openShowcase() {
-  openWin('show', { title: 'Showcase.exe', icon: 'gallery', w: 560, h: 470, x: 200, y: 30, render: (b, rec) => { addUpd(rec, renderShowcase); } });
+  openWin('show', { title: 'Showcase.exe', icon: 'gallery', w: 820, h: 400, x: 110, y: 20, render: (b, rec) => { addUpd(rec, renderShowcase); } });
   renderShowcase();
 }
+const SHOW_CAP = {
+  prim: ['Prim · "the artist" — nothing submitted.', 'Prim · "the artist" — nothing submitted.'],
+  trix: ['Trix · "the gamer girl" — a selfie and her rank: Iron IV.', 'Trix · her notebook: proofs, and a chess game she won in her head.'],
+  paige: ['Paige · "the goth" — a tarot spread. One card is spelled wrong.', 'Paige · "house of p." — a set of poker chips she designed.'],
+  vel: ['Vel · "the gyaru" — a dress she sewed. One sleeve is sewn shut.', 'Vel · a 1:4 M1 Garand model. Every screw painted.'],
+};
 function renderShowcase() {
   const w = WINS.show; if (!w) return; const b = w.body;
-  const here = PLAYABLE.filter(k => onSite(k) && met(k));
-  const cap = { prim: ['"Original Work #1" — made to order, as "the artist".', '"Coloring in someone else\'s lines" — Prim ♡'], trix: ['"Stream highlights (3 sec)" — made to order, as "the gamer girl".', '"Lemma 3: no gaps" — Trix ✧'] };
+  const here = PLAYABLE.filter(k => met(k));
   b.innerHTML = `<div class="show">${here.map(g => `<div class="exh bevel"><div class="who">${avHTML(g)}<b>${esc(GIRLS[g].name)}</b></div><canvas width="160" height="120" data-g="${g}"></canvas>
-     <div class="cap">${esc(cap[g][S.show[g] === 'good' ? 1 : 0])}</div>${S.show[g] ? '<span class="chip ok">✓ talked</span>' : `<button class="btn primary" data-talk="${g}" ${S.active ? 'disabled' : ''}>Talk about it</button>`}</div>`).join('') || '<div class="status-line">Nobody is left to exhibit.</div>'}</div>`;
-  $$('canvas', b).forEach(c => drawExhibit(c, c.dataset.g, S.show[c.dataset.g] === 'good'));
+     <div class="cap">${esc(SHOW_CAP[g][trueTo(g) ? 1 : 0])}</div>${S.show[g] ? '<span class="chip ok">✓ talked</span>' : `<button class="btn primary" data-talk="${g}" ${S.active ? 'disabled' : ''}>Talk about it</button>`}</div>`).join('')}</div>`;
+  $$('canvas', b).forEach(c => drawExhibit(c, c.dataset.g, trueTo(c.dataset.g)));
   $$('[data-talk]', b).forEach(x => x.onclick = () => { SFX.click(); showTalk(x.dataset.talk); });
 }
 function showTalk(g) {
   if (S.active) return;
   openYap(g);
+  const good = trueTo(g), mark = v => A.show(g, v);
   const D = {
-    prim: { lines: ['{sad}this is my exhibit. boss said the artist has to draw something original.', '{sad}so i drew a rose. from nothing. it\'s... fine.'], choices: [
-      { t: 'It\'s nice.', r: ['...thanks.'], act: [A.show('prim', 'bad'), A.jr('Showcase · Prim drew a rose "from nothing". She said it was fine. It was fine.')] },
-      { t: 'Is this what you wanted to make?', r: ['{angry}what i want doesn\'t matter. i\'m the artist.'], act: [A.show('prim', 'bad'), A.jr('Showcase · Prim\'s rose. She said what she wants doesn\'t matter. I taught her that.')] },
-      { t: 'Forget "original". Color in someone\'s lines — that\'s what you\'re great at.', req: { anyKnow: ['prim_traces', 'prim_color'] }, r: ['{surprised}...can i? really?', '{happy}okay. give me ten minutes.', ['sys', '*** Prim updated her exhibit ***']], act: [A.show('prim', 'good'), A.jr('Showcase · Prim colored in an old line drawing. Pink and lilac. The most beautiful thing in the room. The newbie told her she could.')] },
-    ] },
-    trix: { lines: ['behold. my exhibit. "stream highlights". 3 seconds of me saying uwu.', '{angry}boss said the gamer girl should do gamer girl things.'], choices: [
-      { t: 'Very on-brand.', r: ['{happy}ikr. kill me. jk.'], act: [A.show('trix', 'bad'), A.jr('Showcase · Trix: three seconds of "uwu". On brand, the newbie said.')] },
-      { t: 'You look bored.', r: ['{angry}bc i am bored.'], act: [A.show('trix', 'bad'), A.jr('Showcase · Trix looked bored. I did not ask why.')] },
-      { t: 'Present your proof instead. The anonymous one.', req: { anyKnow: ['trix_math', 'trix_proofs'] }, r: ['{surprised}...in front of everyone?', '{happy}ok. ok ok ok. give me a whiteboard.', ['sys', '*** Trix updated her exhibit ***']], act: [A.show('trix', 'good'), A.jr('Showcase · Trix presented a 17-page proof on a whiteboard. Nobody understood it. She didn\'t care. She looked so happy.')] },
-    ] },
+    prim: S.flags.prim_music
+      ? { lines: ['{shy}i didn\'t submit anything.', '{shy}the thing i actually make doesn\'t fit on a wall.'], choices: [
+        { t: 'I know. That\'s okay.', r: ['{shy}...thank you for knowing.'], act: [mark('true'), A.jr('Showcase · Prim submitted nothing. The newbie knows what she really makes.')] },
+        { t: 'Boss will be upset.', r: ['{sad}boss is always upset with me.'], act: [mark('true'), A.jr('Showcase · Prim submitted nothing. I was upset. I said so.')] }] }
+      : { lines: ['{sad}i didn\'t submit anything.', '{sad}i tried to draw. it was just lines going nowhere.'], choices: [
+        { t: 'Next time, then.', r: ['{sad}...maybe.'], act: [mark('empty'), A.jr('Showcase · Prim submitted nothing.')] },
+        { t: 'You don\'t have to be "the artist".', r: ['{surprised}...then what am i?'], act: [mark('empty'), A.jr('Showcase · Prim submitted nothing. She asked what she is, if not the artist.')] }] },
+    trix: good
+      ? { lines: ['{shy}so. it\'s my notebook. the real one.', 'the inspectors stared at lemma 4 for ten minutes. nobody got it. i don\'t care.'], choices: [
+        { t: 'It\'s beautiful.', r: ['{shy}...it\'s correct. that\'s better than beautiful.', '{happy}but thanks.'], act: [mark('true'), A.jr('Showcase · Trix showed her notebook. Proofs. She looked happy. I didn\'t make her that way.')] },
+        { t: 'Explain lemma 4 to me.', r: ['{happy}okay. sit down. this will take forty minutes.'], act: [mark('true'), A.jr('Showcase · Trix explained lemma 4 to the newbie. Forty minutes.')] }] }
+      : { lines: ['behold. a selfie. and my rank. iron four.', '{angry}boss said the gamer girl should do gamer girl things.'], choices: [
+        { t: 'Very on-brand.', r: ['{neutral}ikr. kill me. jk.'], act: [mark('asked'), A.jr('Showcase · Trix: a selfie and Iron IV. On brand.')] },
+        { t: 'You look bored.', r: ['{angry}because i am bored.'], act: [mark('asked'), A.jr('Showcase · Trix looked bored.')] }] },
+    paige: good
+      ? { lines: ['{shy}house of p. set number one.', 'weighted. 11.5 grams each. the skulls are hand-cut.'], choices: [
+        { t: 'Deal me in.', r: ['{happy}...first hand\'s free. after that i take everything.'], act: [mark('true'), A.jr('Showcase · Paige showed her poker chips. She laughed. Twice.')] },
+        { t: 'You should sell these.', r: ['{surprised}...and let them leave? no.'], act: [mark('true'), A.jr('Showcase · Paige won\'t sell her chips. She doesn\'t let things leave.')] }] }
+      : { lines: ['tarot. three cards. the tower, the moon, the star.', '{sad}i spelled "the" wrong on one. nobody will notice.'], choices: [
+        { t: 'Very mysterious.', r: ['{neutral}that\'s the job.'], act: [mark('asked'), A.jr('Showcase · Paige did tarot, as ordered.')] },
+        { t: 'You hate this, don\'t you.', r: ['{sad}...the house always wins.'], act: [mark('asked'), A.jr('Showcase · Paige did tarot. She hates tarot.')] }] },
+    vel: good
+      ? { lines: ['{happy}OK LOOK. m1 garand. 1:4. every. single. screw.', 'the bolt even moves!! dont touch it tho'], choices: [
+        { t: 'That\'s incredible.', r: ['{shy}...ur the first person who didnt say "why".'], act: [mark('true'), A.jr('Showcase · Vel showed her M1 Garand model. Nobody asked why. She cried a bit.')] },
+        { t: 'How long did it take?', r: ['{happy}3 gray days n 1 rly good one lol'], act: [mark('true'), A.jr('Showcase · Vel built her rifle model over three gray days and one good one.')] }] }
+      : { lines: ['{happy}tadaaa fashion!! i made a dress', '{sad}...the sleeve is sewn shut. i couldnt fix it'], choices: [
+        { t: 'It\'s cute anyway.', r: ['{sad}ya. cute. thats me'], act: [mark('asked'), A.jr('Showcase · Vel made a dress. One sleeve sewn shut.')] },
+        { t: 'Is this what you wanted to make?', r: ['{neutral}what i want doesnt matter. im the fashion girl'], act: [mark('asked'), A.jr('Showcase · Vel\'s dress. She said what she wants doesn\'t matter.')] }] },
   };
   runDialogue(seq(g, g, [D[g]], 'SHOW_DONE'));
 }
@@ -1726,7 +1759,7 @@ function endGame(kind) {
         <div class="panel sunk" style="padding:0"><div class="term">KPI           ${layersTotal()}/${kpiMax()}
 discharged    ${esc(fixed.join(', ') || 'none')}
 journal       ${S.journal.filter(j => !j.miss).length} entries
-showcase      ${PLAYABLE.map(k => GIRLS[k].name + ': ' + (S.show[k] === 'good' ? 'encouraged' : S.show[k] ? 'as ordered' : '—')).join(' · ')}
+showcase      ${PLAYABLE.map(k => GIRLS[k].name + ': ' + (S.show[k] === 'true' ? 'her own passion' : S.show[k] === 'empty' ? 'nothing' : S.show[k] ? 'as ordered' : '—')).join(' · ')}
 mementos      ${S.mementos.length}/${Object.keys(MEMENTOS).length} · software ${S.apps.length}/2
 <span class="m">earthquakes   ${S.quakes}</span></div></div>
         <p style="margin:0;font-size:13px;line-height:1.6">They didn't leave the facility. Every layer you removed was her will to live. She went back to the person who made her, and stopped.</p>

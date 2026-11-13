@@ -66,7 +66,29 @@ const TRACKS = [
       for (let i = 0; i < 16; i++) mbNote(mt(ch[i % 4] + 12), t + i * s, s * .8, .022, 'square', { r: .03 });
       [0, 4, 8, 12].forEach(i => mbKick(t + i * s, .18)); [2, 6, 10, 14].forEach(i => mbHat(t + i * s, .02));
       mbNote(mt(ch[0] - 24), t, B, .06, 'sawtooth', { a: .02 }); } },
+  /* four themes Prim wrote, one for each of them. They appear in the playlist the day after the Showcase,
+     only listed (never picked by Vibe): you find them if you look. Artist: "p." */
+  { id: 'p_ribbon', title: 'ribbon static (for me)', by: 'p.', bpm: 84, prim: 'prim',
+    bar(t, k, B) { const ch = [[72, 76, 79], [69, 72, 76], [65, 69, 72], [67, 71, 74]][k % 4], s = B / 6;   // a music-box waltz
+      [0, 1, 2, 3, 4, 5].forEach(i => mbNote(mt(ch[i % 3] + (i > 2 ? 12 : 0)), t + i * s, s * 1.6, .035, 'sine', { r: .6 }));
+      mbNote(mt(ch[0] - 24), t, s * 2, .06, 'triangle'); [2, 4].forEach(i => mbNote(mt(ch[1] - 12), t + i * s, s, .03, 'triangle')); } },
+  { id: 'p_fourteen', title: 'fourteen boards (for trix)', by: 'p.', bpm: 112, prim: 'trix',
+    bar(t, k, B) { const ch = [[62, 65, 69, 72], [60, 64, 67, 71], [58, 62, 65, 69], [57, 61, 64, 67]][k % 4], s = B / 8;   // a ticking clock, exact arpeggios
+      for (let i = 0; i < 8; i++) { mbNote(mt(ch[i % 4] + 12), t + i * s, s * .7, .025, 'square', { r: .04 }); mbHat(t + i * s, i % 4 ? .006 : .016, 9000, .015); }
+      mbNote(mt(ch[0] - 12), t, s * 4, .06, 'triangle'); mbNote(mt(ch[2] - 12), t + 4 * s, s * 4, .05, 'triangle'); } },
+  { id: 'p_house', title: 'house edge (for paige)', by: 'p.', bpm: 76, prim: 'paige',
+    bar(t, k, B) { const ch = [[57, 60, 64], [53, 57, 60], [52, 56, 59], [57, 60, 64]][k % 4], s = B / 8;   // a slow habanera, low organ
+      ch.forEach(m => mbNote(mt(m), t, B * .95, .025, 'sawtooth', { a: .2, r: .8 }));
+      [0, 3, 4, 6].forEach(i => mbNote(mt(ch[0] - 12), t + i * s, s * .9, .07, 'triangle'));
+      if (k % 2) mbNote(mt(ch[2] + 12), t + s * 5, s * 2, .03, 'sine'); } },
+  { id: 'p_gray', title: 'gray day cadence (for vel)', by: 'p.', bpm: 120, prim: 'vel',
+    bar(t, k, B) { const minor = k % 8 >= 4, ch = minor ? [[57, 60, 64], [53, 57, 60]][k % 2] : [[60, 64, 67], [65, 69, 72]][k % 2], s = B / 8;   // a bright march that turns gray
+      [0, 2, 4, 6].forEach(i => mbNote(mt(ch[i % 3] + 12), t + i * s, s * 1.5, .03, minor ? 'triangle' : 'square', { r: .1 }));
+      for (let i = 0; i < 8; i++) if (!minor || i % 2 === 0) mbHat(t + i * s, i % 2 ? .01 : .02, 2500, .05);
+      mbKick(t, .14); mbNote(mt(ch[0] - 12), t, s * 3, .05, 'triangle'); } },
 ];
+// Prim's themes show up in the playlist the day after the Showcase
+const mbTracks = () => TRACKS.filter(t => !t.prim || S.day > SHOWCASE_DAY);
 /* ---------------- the player ---------------- */
 const MB = { cur: null, playing: false, vibe: true, vol: .7, bus: null, an: null, timer: 0, bar: 0, next: 0, el: null, ctxT: null };
 const mbInstalled = () => S.apps && S.apps.includes('MusicBox.exe');
@@ -87,6 +109,7 @@ function mbPlay(id) {
   if (MB.cur === T.id && MB.playing) return;
   mbStopTrack();
   MB.cur = T.id; MB.playing = true; MB.bar = 0;
+  if (T.prim) { S.flags['heard_' + T.id] = true; S.flags.heard_prim_song = true; }
   const ctx = AU.ctx;
   if (T.file) {
     const el = new Audio(T.file); el.loop = true; el.volume = 0; MB.el = el; el.play().catch(() => { });
@@ -101,7 +124,7 @@ function mbPlay(id) {
   mbRender();
 }
 function mbPause() { MB.playing = false; mbStopTrack(); if (PC.out && AU.ctx) PC.out.gain.setTargetAtTime(.5, AU.ctx.currentTime, .5); mbRender(); }
-function mbStep(d) { const i = TRACKS.findIndex(t => t.id === MB.cur), n = TRACKS[(i + d + TRACKS.length) % TRACKS.length]; MB.vibe = false; mbSave(); MB.playing = false; mbPlay(n.id); }
+function mbStep(d) { const L = mbTracks(), i = L.findIndex(t => t.id === MB.cur), n = L[(i + d + L.length) % L.length]; MB.vibe = false; mbSave(); MB.playing = false; mbPlay(n.id); }
 function mbSave() { S.music = { vibe: MB.vibe, vol: MB.vol }; }
 // Vibe mode: what's on screen right now
 function mbContext() {
@@ -131,7 +154,7 @@ function openMusicBox() {
         <button class="mbb pill" id="mb-vibe" aria-pressed="false" title="Vibe mode: MusicBox picks the track for what's happening">VIBE</button>
         <label class="mbx-vol" title="Volume"><span aria-hidden="true">◢</span><input type="range" id="mb-vol" min="0" max="1" step=".05" aria-label="Volume"></label>
       </div>
-      <select id="mb-list" class="mbx-list" aria-label="Playlist">${TRACKS.map(t => `<option value="${t.id}">${esc(t.title)} — ${esc(t.by)}</option>`).join('')}</select>
+      <select id="mb-list" class="mbx-list" aria-label="Playlist">${mbTracks().map(t => `<option value="${t.id}">${esc(t.title)} — ${esc(t.by)}</option>`).join('')}</select>
     </div>`;
     $('#mb-play', b).onclick = () => { SFX.click(); if (MB.playing) mbPause(); else mbPlay(MB.vibe ? (TRACKS.find(t => t.vibe === mbContext()) || TRACKS[0]).id : (MB.cur || 'lull')); };
     $('#mb-prev', b).onclick = () => { SFX.click(); mbStep(-1); };
