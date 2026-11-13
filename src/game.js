@@ -1076,26 +1076,23 @@ function startNightChat(g) {
 }
 
 /* ---------------- mail, apps, mementos ---------------- */
-// layer 1 → software, layer 2 → a memento (helps in her memories), layer 3 → a letter (and a keepsake)
-const MEMENTOS = {
-  'pressed_flower.mem': { ic: 'flower', from: 'Prim', desc: 'A flower Prim traced and pressed between two pages. Keep it.' },
+// one reward per gate: layer 1 → her software, layer 2 → her memento (it does something), layer 3 → a letter. All arrive at night.
+const MEMENTOS = {   // every memento does something in her memories; layer 2 gifts only
   'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'In a memory: lay it over the board and the next few moves show through (once per memory).' },
-  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Undo costs no stamina.' },
-  'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five is free. Roll with it.' },
+  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Undo costs no time.' },
+  'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five costs no time. Roll with it.' },
   'dog_tag.mem': { ic: 'tag', from: 'Vel', desc: 'Walking on a map costs half: every other step is free.' },
-  'sketch_of_you.mem': { ic: 'img', from: 'Prim', desc: 'A drawing of you, by Prim. Not traced.' },
-  'queen_piece.mem': { ic: 'queen', from: 'Trix', desc: 'Her queen. She covers more squares than anyone.' },
 };
 const REWARD = {
   prim: {
-    1: { subject: 'something to listen to', body: 'counsellor,\n\nit\'s so quiet in your room. i can hear your computer humming from here.\nthis is the little player i used when i traced. it plays by itself if you let it.\n\nand a flower. i traced it and pressed it between two pages.\n\n— prim', atts: [{ kind: 'app', name: 'MusicBox.exe' }, { kind: 'mem', name: 'pressed_flower.mem' }] },
+    1: { subject: 'something to listen to', body: 'counsellor,\n\nit\'s so quiet in your room. i can hear your computer humming from here.\nthis is the little player i used when i traced. it plays by itself if you let it.\n\n— prim', atts: [{ kind: 'app', name: 'MusicBox.exe' }] },
     2: { subject: 'something i traced', body: 'i kept the tracing paper. lay it over anything and the lines just appear.\nmaybe it helps you find your way in my head.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
-    3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you. not traced. drew. it\'s bad. keep it anyway.\n\n— p.', atts: [{ kind: 'mem', name: 'sketch_of_you.mem' }] },
+    3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you once. not traced. drew. it was bad. i tore it up.\nmaybe i\'ll draw you again. maybe.\n\n— p.', atts: [] },
   },
   trix: {
     1: { subject: 'you\'re going to need this', body: 'you answer like someone who has never converted a unit in their life. here. UnitConv.\n\n— t', atts: [{ kind: 'app', name: 'UnitConv.exe' }] },
     2: { subject: 'spare time', body: 'found an hourglass in my head. it flips itself when you go back a step.\ntake it. i don\'t make mistakes, so i don\'t need it.\n\n— t', atts: [{ kind: 'mem', name: 'hourglass.mem' }] },
-    3: { subject: 'gg', body: 'that was the last layer. q.e.d.\n\nleft you my queen. she covers more squares than anyone.\n\n— t', atts: [{ kind: 'mem', name: 'queen_piece.mem' }] },
+    3: { subject: 'gg', body: 'that was the last layer. q.e.d.\n\nyou covered more squares than i expected. that\'s a compliment. don\'t frame it.\n\n— t', atts: [] },
   },
   paige: {
     1: { subject: 'pick a card', body: 'you look like someone who needs to know what\'s coming.\ni don\'t. that\'s the fun part. but here.\n\n— paige', atts: [{ kind: 'app', name: 'Fortune.exe' }] },
@@ -1149,7 +1146,7 @@ function download(m, i = 0) {
     renderMail();
     installApp(a.name).then(() => {
       if (!S.apps.includes(a.name)) S.apps.push(a.name); toast('Installed', `<b>${esc(a.name)}</b> is on your desktop.`); save(); refresh();
-      if (a.name === 'MusicBox.exe') { openMusicBox(); MB.vibe = true; mbSave(); mbPlay((TRACKS.find(t => t.vibe === mbContext()) || TRACKS[0]).id); }
+      if (a.name === 'MusicBox.exe') { MB.vibe = true; mbSave(); openMusicBox(); MB.vibe = true; mbSave(); mbPlay((TRACKS.find(t => t.vibe === mbContext()) || TRACKS[0]).id); }
     });
     SFX.item(); save(); return;
   }
@@ -1295,6 +1292,7 @@ async function goNight() {
   closeWorkWins(); applyAtmos(); refresh();
   await lockScreen('Shift over');
   if (S.day === 1 && !S.flags.policyMail) { S.flags.policyMail = true; sendMail({ from: 'dive', subject: 'Facility policy', body: 'Welcome to the DIVE facility.\n\n1. Staff and patients may not leave the premises until all treatments are complete.\n2. During seismic events, remain indoors.\n3. Do not discuss your training. You have completed it.\n\n— DIVE Administration' }); }
+  if (S.mailQueue && S.mailQueue.length) { const q = S.mailQueue; S.mailQueue = []; for (const m of q) { sendMail(m); await wait(700); } }
   S.unread.boss = (S.unread.boss || 0) + 1;
   PLAYABLE.forEach(g => { if (girlWaiting(g)) S.unread[g] = (S.unread[g] || 0) + 1; });
   SFX.chime(); openYap('boss'); refresh();
@@ -1536,7 +1534,7 @@ async function sessionLayerOpened(g, L) {
   const extra = L >= 3 ? [{ lines: [['sys', `*** ${GIRLS[g].id} · core reached · every layer faced ***`]] }] : [];
   runDialogue(seq('session', g, [...sesBreak(g, L), ...extra], 'NONE'));
   const R = REWARD[g] && REWARD[g][L];
-  if (R) setTimeout(() => sendMail({ from: g, ...R, atts: (R.atts || []).map(a => ({ ...a })) }), 2600);
+  if (R) { (S.mailQueue = S.mailQueue || []).push({ from: g, ...R, atts: (R.atts || []).map(a => ({ ...a })) }); }   // delivered tonight
   if (L >= 3) { S.todayFixed.push(g); setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: [`${GIRLS[g].name} faced her last layer! Gold star, rookie.`, 'She stays with us until the end of the program, though. Rules are rules. Like visas.'] }])), 5200); }
   save(); refresh();
 }

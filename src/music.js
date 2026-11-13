@@ -129,7 +129,8 @@ function mbSave() { S.music = { vibe: MB.vibe, vol: MB.vol }; }
 // Vibe mode: what's on screen right now
 function mbContext() {
   if (S.phase === 'night') return 'night';
-  if (S.session) { if (typeof PJ_STORY !== 'undefined' && PJ_STORY) return 'level'; if (staminaPct() <= 15) return 'tired'; return 'map'; }
+  // a gameplay window on screen (her map, a memory, the test chamber): always the projector theme
+  if (S.session || (typeof WINS !== 'undefined' && (WINS.fixit || WINS.chamber))) return 'level';
   if (S.active && S.active.ch === 'boss') return 'boss';
   return 'desktop';
 }
