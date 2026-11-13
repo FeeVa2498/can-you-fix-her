@@ -56,9 +56,10 @@ function boxBoardSVG(p, o = {}) {
   const E = PanelEngine, d = E.dims(p), out = [], br = E.brokenSet(p), s = o.s || E.boxStart(p);
   const at = new Map(s.pos.map((q, i) => [q.join(','), i]));
   for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) if (E.inside(p, x, y)) {
-    const k = x + ',' + y, cr = (p.cracks || []).some(c => c[0] === x && c[1] === y);
-    if (cr && s.crk.has(k)) { out.push(`<rect class="pbx-fallen" x="${x - .42}" y="${y - .42}" width=".84" height=".84" rx=".14"/>`); continue; }
+    const k = x + ',' + y, cr = (p.cracks || []).some(c => c[0] === x && c[1] === y), fr = (p.fragile || []).some(c => c[0] === x && c[1] === y);
+    if ((cr || fr) && s.crk.has(k)) { out.push(`<rect class="pbx-fallen" x="${x - .42}" y="${y - .42}" width=".84" height=".84" rx=".14"/>`); continue; }
     out.push(`<rect class="pbx-tile" x="${x - .47}" y="${y - .47}" width=".94" height=".94" rx=".14"/>`);
+    if (fr) out.push(`<g class="pbx-frag${s.frg && s.frg.has(k) ? ' cracked' : ''}"><rect x="${x - .4}" y="${y - .4}" width=".8" height=".8" rx=".1"/><path class="shine" d="M${x - .28} ${y + .1}L${x + .1} ${y - .28}M${x - .1} ${y + .26}L${x + .26} ${y - .1}"/><path class="cr" d="M${x - .32} ${y - .1}L${x - .04} ${y + .04}L${x - .14} ${y + .3}M${x - .04} ${y + .04}L${x + .2} ${y - .08}L${x + .34} ${y + .18}M${x + .2} ${y - .08}L${x + .08} ${y - .34}"/></g>`);
     if (cr) out.push(`<path class="pbx-crack" d="M${x - .3} ${y - .18}L${x - .06} ${y + .02}L${x - .12} ${y + .2}M${x - .06} ${y + .02}L${x + .16} ${y - .06}L${x + .3} ${y + .14}M${x + .16} ${y - .06}L${x + .1} ${y - .3}"/>`);
   }
   (p.exit || []).forEach(([x, y, c]) => {
@@ -418,9 +419,9 @@ function pjKey(e) {
   const D = KEYDIR[k];
   // story: every input costs her stamina (moves, bumps, undo, reset); none once she's out
   if (PJ_STORY && (D || k === 'z' || k === 'Backspace' || k === 'r')) { if (PJ_STORY.locked()) { e.preventDefault(); SFX.buzz(); return; } }
-  if (D) { e.preventDefault(); pjMove(D); drawPJ(); if (PJ_STORY) PJ_STORY.spend(); }
-  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); pjUndo(); drawPJ(); if (PJ_STORY) PJ_STORY.spend(); }
-  else if (k === 'r') { e.preventDefault(); pjReset(); if (PJ_STORY) PJ_STORY.spend(); }
+  if (D) { e.preventDefault(); pjMove(D); drawPJ(); if (PJ_STORY) PJ_STORY.spend('move'); }
+  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); pjUndo(); drawPJ(); if (PJ_STORY) PJ_STORY.spend('undo'); }
+  else if (k === 'r') { e.preventDefault(); pjReset(); if (PJ_STORY) PJ_STORY.spend('reset'); }
   else if (k === 'Escape') { e.preventDefault(); if (PJ_STORY) PJ_STORY.back(); else pjReset(); }
   else if (k === 'Enter') {
     if (PJ.p.boxes) return;

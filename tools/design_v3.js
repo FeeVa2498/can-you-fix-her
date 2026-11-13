@@ -576,6 +576,7 @@ const BRULE = {
   switches: 'Ô chốt: hộp đi vào là mở hẳn mọi cửa cùng màu.',
   dbl: 'Ô công tắc hai màu: lúc đầu tường màu đang hiện trên công tắc dựng lên, tường màu kia hạ xuống. Giẫm vào thì tường màu đang hiện hạ xuống, tường màu kia trồi lên, công tắc đổi sang màu kia.',
   cracks: 'Ô nứt: hộp rời đi là ô sụp thành lỗ.',
+  fragile: 'Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về.',
   paints: 'Ô sơn: hộp đi vào bị đổi sang màu của ô.',
   pads: 'Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường.',
   stops: 'Ô phanh (vuông cam): hộp đang trượt dừng lại ở đây.',
@@ -599,13 +600,13 @@ const BTIP = {
   trail: 'Dây cũng là tường: kéo dây để tạo chỗ dừng cho hộp khác.', portals: 'Coi hai cổng như một ô.', opp: 'Hai hộp luôn đi ngược nhau: dùng tường giữ một hộp đứng yên trong khi hộp kia đi tiếp.', oneway: 'Khe một chiều không cho quay lại: tính thứ tự trước khi đi.',
   lights: 'Đèn ở góc hay ngõ cụt cho biết dây buộc phải vòng qua đâu.', roomAll: 'Thắp cả phòng: dây phải phủ mọi ô rồi mới tới goal. Ô góc và ngõ cụt chỉ có một hai lối: dây buộc phải đi qua chúng theo đúng lối đó, bắt đầu tính từ đấy.', touchDense: 'Các ô số đứng sát nhau dùng chung ô cạnh: một ô có dây có thể được hai, ba ô số cùng đếm. Bắt đầu từ ô số mà các ô quanh nó ít lựa chọn nhất.', lightAll: 'Mê cung: ô nào cũng là đèn, mà đi lại ô đã sáng là đèn tắt. Tìm một đường đi qua mỗi ô đúng một lần; ngõ cụt chỉ nên là điểm cuối.', touch: 'Ô số 3 gần như bị dây bao quanh; ô số 1 chỉ cho dây chạm một bên: bắt đầu từ chúng.', nums: 'Ô "1" và ô "3" cho nhiều thông tin nhất: bắt đầu từ chúng.',
   switches: 'Tìm cửa chặn lối duy nhất tới goal, rồi tính đường đi qua ô chốt trước đó.', dbl: 'Mỗi lần giẫm là đổi phe: tính xem hộp nào phải đi qua lúc tường xanh hạ, hộp nào lúc tường hồng hạ.',
-  cracks: 'Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước.', paints: 'Có khi hộp phải đi vòng qua ô sơn trước khi về goal.', colors: 'Mỗi màu một goal: xem hộp nào phải đi trước hộp nào.',
+  cracks: 'Đi qua ô nứt là đốt cầu: tính xem có cần quay lại không trước khi bước.', fragile: 'Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng.', paints: 'Có khi hộp phải đi vòng qua ô sơn trước khi về goal.', colors: 'Mỗi màu một goal: xem hộp nào phải đi trước hộp nào.',
 };
 function boxRules(p) {
   const r = ['goal'];
   if (p.boxes.some(b => b.c != null && b.c !== E.girlHue(p)) || (p.exit || []).some(g => g[2] != null)) r.push('colors');
   if (p.boxes.some(b => b.trail)) r.push('trail');
-  for (const f of ['lights', 'nums', 'touch', 'pads', 'stops', 'portals', 'oneway', 'holes', 'cracks', 'paints']) if ((p[f] || []).length) r.push(f);
+  for (const f of ['lights', 'nums', 'touch', 'pads', 'stops', 'portals', 'oneway', 'holes', 'cracks', 'fragile', 'paints']) if ((p[f] || []).length) r.push(f);
   if ((p.switches || []).some(q => q[3] == null)) r.push('switches');
   if ((p.switches || []).some(q => q[3] != null)) r.push('dbl');
   if (p.boxes.some(b => b.dash)) r.push('dash');

@@ -15,11 +15,11 @@ const CH_GIRLS = [
   { g: 'prim', name: 'Prim', tag: 'Jirai Kei', rules: 'landmines (exact moves) · walls · portals' },
   { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'rope boxes · sensor blocks (touch n sides) · light tiles' },
   { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'dice: print the brief on the white tiles · arrow tiles · portals' },
-  { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'arrow tiles · rocket boxes · locks · colours' },
+  { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'glass tiles (crack, then break) · light tiles · arrow tiles' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
 // what each tutorial panel teaches (shown as a NEW tag)
-const TEACH = { basic: 'roll to the gold tile', sketch: 'trace the pencil', plates: 'switches open gates', avoid: 'black pencil: keep off', mirror: 'the other hand', swap: 'striped gates swap', nums: 'edge count', ends: 'goal anywhere', holes: 'holes in the map', oneway: 'one-way', portals: 'portals', bridges: 'overpass', boxes: 'every key moves the box', pads: 'dash tiles', stops: 'brake tiles', dash: 'rocket box', budget: 'landmine: exact moves', dice: 'dice: print the brief', lightAll: 'light the whole map', touch: 'sensor blocks: touch n sides', many: 'more boxes', twin: 'twin boxes', nolock: 'goals never lock', opp: 'opposite twin', my: 'up/down twin', trail: 'rope box', switches: 'locks & doors', dbl: 'two-colour switch', colors: 'colour goals', paints: 'paint tiles', cracks: 'cracked tiles', lights: 'light tiles', twinrope: 'two ropes, one reversed', goal: 'every key moves every box' };
+const TEACH = { basic: 'roll to the gold tile', sketch: 'trace the pencil', plates: 'switches open gates', avoid: 'black pencil: keep off', mirror: 'the other hand', swap: 'striped gates swap', nums: 'edge count', ends: 'goal anywhere', holes: 'holes in the map', oneway: 'one-way', portals: 'portals', bridges: 'overpass', boxes: 'every key moves the box', pads: 'dash tiles', stops: 'brake tiles', dash: 'rocket box', budget: 'landmine: exact moves', dice: 'dice: print the brief', lightAll: 'light the whole map', touch: 'sensor blocks: touch n sides', many: 'more boxes', twin: 'twin boxes', nolock: 'goals never lock', opp: 'opposite twin', my: 'up/down twin', trail: 'rope box', switches: 'locks & doors', dbl: 'two-colour switch', colors: 'colour goals', paints: 'paint tiles', cracks: 'cracked tiles', fragile: 'glass: cracks, then breaks', lights: 'light tiles', twinrope: 'two ropes, one reversed', goal: 'every key moves every box' };
 const CH_MEM = {
   tracing_paper: { name: 'tracing_paper.mem', ic: 'thread', desc: 'Once per panel: lay it over the board and the next few strokes of the answer show through.' },
   queen_piece: { name: 'queen_piece.mem', ic: 'queen', desc: 'Once per panel: one broken rule is forgiven (like an eraser).' },
@@ -237,7 +237,7 @@ function pjNew(p) {
   if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
   PJ = { p, st: null, bs: p.boxes ? PanelEngine.boxStart(p) : null, bsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null, view: null };
 }
-const pjMem = k => PJ_STORY ? hasMem(k + '.mem') : CH.opt.mem[k];
+const pjMem = k => PJ_STORY ? k === 'tracing_paper' && hasMem('tracing_paper.mem') : CH.opt.mem[k];
 function openProjector(p) {
   if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
   const W = WINS.projector;

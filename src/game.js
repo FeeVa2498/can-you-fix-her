@@ -82,7 +82,7 @@ function auInit() {
   const len = ctx.sampleRate * 2, crack = ctx.createBuffer(1, len, ctx.sampleRate), cd = crack.getChannelData(0);
   for (let i = 0; i < len; i++) cd[i] = Math.random() < .0008 ? (Math.random() * 2 - 1) : (Math.random() * 2 - 1) * .012;
   const s = ctx.createBufferSource(); s.buffer = crack; s.loop = true; AU.crackle = ctx.createGain(); AU.crackle.gain.value = .2; s.connect(AU.crackle); AU.crackle.connect(AU.master); s.start();
-  startMusic(); setDegrade();
+  pcAmbience(); setDegrade();
 }
 function setDegrade() {
   if (!AU.ctx) return;
@@ -91,28 +91,7 @@ function setDegrade() {
   AU.lp.frequency.setTargetAtTime((S.phase === 'night' ? 1100 : 1700) - d * 700, t, .5);
   AU.crackle.gain.setTargetAtTime(.18 + d * .5, t, .5);
 }
-const CHORDS_DAY = [[60, 64, 67, 71], [57, 60, 64, 67], [53, 57, 60, 64], [55, 59, 62, 65]];
-const CHORDS_NIGHT = [[57, 60, 64, 67], [53, 57, 60, 64], [50, 53, 57, 60], [52, 55, 59, 62]];
 const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
-function startMusic() {
-  let bar = 0; const BAR = 2.6;
-  const play = () => {
-    const ctx = AU.ctx; if (!ctx) return;
-    const t0 = ctx.currentTime + .05, CH = S.phase === 'night' ? CHORDS_NIGHT : CHORDS_DAY, ch = CH[bar % 4], d = AU.degrade;
-    ch.forEach((m, i) => {
-      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'triangle'; o.frequency.value = mtof(m);
-      o.detune.value = (Math.random() - .5) * (6 + d * 50);
-      const st = t0 + i * .025; g.gain.setValueAtTime(0, st); g.gain.linearRampToValueAtTime(.1, st + .3); g.gain.setTargetAtTime(0, st + BAR - .6, .35);
-      o.connect(g); g.connect(AU.lp); o.start(st); o.stop(st + BAR + 1.2);
-    });
-    const b = ctx.createOscillator(), bg = ctx.createGain(); b.type = 'sine'; b.frequency.value = mtof(ch[0] - 24);
-    bg.gain.setValueAtTime(0, t0); bg.gain.linearRampToValueAtTime(.2, t0 + .04); bg.gain.setTargetAtTime(0, t0 + .8, .4); b.connect(bg); bg.connect(AU.lp); b.start(t0); b.stop(t0 + BAR);
-    for (let k = 0; k < 8; k++) if (k % 2 === 0 || Math.random() < .5) noiseHit(t0 + k * BAR / 8, .02, 6500, k % 2 ? .018 : .03, AU.lp);
-    for (let k = 0; k < 4; k++) if (Math.random() < .6) tone(mtof(ch[(k + bar) % 4] + 24), t0 + k * BAR / 4 + .1, .5, .035, 'sine', AU.lp);
-    bar++;
-  };
-  play(); setInterval(play, BAR * 1000);
-}
 function tone(f, t, dur, vol, type = 'sine', dest) {
   const ctx = AU.ctx; if (!ctx) return; t = t || ctx.currentTime;
   const o = ctx.createOscillator(), g = ctx.createGain(); o.type = type; o.frequency.value = f;
@@ -213,6 +192,9 @@ const ICONS = {
   charm: '<path d="M16 28L5 17Q1 12 5 8T16 9Q22 4 27 8T27 17Z" fill="#ff8cc6"/><rect x="10" y="10" width="4" height="3" fill="#fff"/><rect x="15" y="2" width="2" height="6" fill="#ffd86e"/>',
   hourglass: '<rect x="7" y="3" width="18" height="3" fill="#b693ef"/><rect x="7" y="26" width="18" height="3" fill="#b693ef"/><path d="M9 6h14l-6 10 6 10H9l6-10z" fill="#f5eeff"/><path d="M12 22h8l-4-5z" fill="#ffd86e"/>',
   thread: '<rect x="9" y="6" width="14" height="20" fill="#ff5fa8"/><rect x="7" y="4" width="18" height="3" fill="#c7a17a"/><rect x="7" y="25" width="18" height="3" fill="#c7a17a"/><path d="M9 10h14M9 14h14M9 18h14M9 22h14" stroke="#e2458f" stroke-width="1"/><path d="M23 16q6 2 3 8" stroke="#ff5fa8" stroke-width="2" fill="none"/>',
+  note: '<rect x="6" y="4" width="20" height="24" rx="10" fill="#c9d6f2"/><rect x="8" y="7" width="16" height="9" fill="#3a2a6e"/><rect x="10" y="12" width="2" height="3" fill="#ff8cc6"/><rect x="13" y="10" width="2" height="5" fill="#8fdcf7"/><rect x="16" y="9" width="2" height="6" fill="#ff8cc6"/><rect x="19" y="11" width="2" height="4" fill="#8fdcf7"/><circle cx="16" cy="22" r="3" fill="#ff5fa8"/>',
+  tarot: '<rect x="8" y="3" width="16" height="26" fill="#2a1a33"/><rect x="10" y="5" width="12" height="22" fill="none" stroke="#ffd86e" stroke-width="1.5"/><circle cx="16" cy="13" r="3" fill="#ffd86e"/><path d="M16 18l2 4h-4z" fill="#a46bff"/>',
+  tag: '<rect x="8" y="6" width="16" height="22" rx="4" fill="#d8d8d8"/><circle cx="16" cy="10" r="2" fill="#666"/><rect x="11" y="15" width="10" height="2" fill="#666"/><rect x="11" y="19" width="8" height="2" fill="#666"/><path d="M16 6V2" stroke="#999" stroke-width="1.5"/>',
   queen: '<path d="M8 26h16l-2-12 4-6-6 4-4-7-4 7-6-4 4 6z" fill="#f5eeff"/><rect x="7" y="26" width="18" height="3" fill="#b693ef"/><circle cx="16" cy="4" r="2" fill="#ff8cc6"/>',
 };
 const icon = n => `<svg viewBox="0 0 32 32" shape-rendering="crispEdges" aria-hidden="true">${ICONS[n] || ICONS.doc}</svg>`;
@@ -539,7 +521,7 @@ function handleEnd(n) {
 const WINS = {}; let zTop = 10, cascade = 0;
 function openWin(id, o) {
   if (WINS[id]) { WINS[id].el.hidden = false; focusWin(id); return WINS[id]; }
-  const el = document.createElement('section'); el.className = 'win'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', o.title);
+  const el = document.createElement('section'); el.className = 'win' + (o.skin ? ' skin' : ''); el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', o.title);
   const dk = $('#desktop'), dw = dk.clientWidth, dh = dk.clientHeight;
   const w = Math.min(o.w || 520, dw - 16), h = Math.min(o.h || 420, dh - 16);
   const x = clamp(o.x ?? (130 + cascade * 26), 6, Math.max(6, dw - w - 6)), y = clamp(o.y ?? (14 + cascade * 22), 6, Math.max(6, dh - h - 6));
@@ -602,6 +584,8 @@ function renderIcons() {
   if (SPECIAL[S.day] === 'showcase' && S.phase === 'day') list.push({ id: 'show', label: 'Showcase.exe', ic: 'gallery', fn: openShowcase, isNew: PLAYABLE.filter(k => onSite(k) && met(k)).some(k => !S.show[k]) });
   if (S.apps.includes('UnitConv.exe')) list.push({ id: 'conv', label: 'UnitConv.exe', ic: 'conv', fn: openConv });
   if (S.apps.includes('Atlas.exe')) list.push({ id: 'atlas', label: 'Atlas.exe', ic: 'atlas', fn: openAtlas });
+  if (S.apps.includes('MusicBox.exe')) list.push({ id: 'music', label: 'MusicBox.exe', ic: 'note', fn: openMusicBox });
+  if (S.apps.includes('Fortune.exe')) list.push({ id: 'fortune', label: 'Fortune.exe', ic: 'tarot', fn: openFortune });
   list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
   if (S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
   const sig = JSON.stringify(list.map(i => [i.id, i.badge, i.isNew, i.label, i.ic, i.ping]));
@@ -1031,7 +1015,10 @@ function nightList(g) { return DD.nightIdx.filter(c => c.girl === g); }
 function nightConvo(g) {
   const st = S.g[g], list = nightList(g);
   if (!st.ntDone) st.ntDone = list.slice(0, st.nt || 0).map(c => c.id);
-  const c = list.find(x => !st.ntDone.includes(x.id));
+  // the last night always has her "tomorrow is the reckoning" chat
+  const rk = list.find(x => x.id === g + '_reckoning');
+  if (S.day >= LAST_DAY && rk && DD.night[rk.id]) return st.ntDone.includes(rk.id) ? null : { id: rk.id, by: rk.by, steps: DD.night[rk.id].steps };
+  const c = list.find(x => !st.ntDone.includes(x.id) && !x.id.endsWith('_reckoning'));
   if (!c || st.layer < c.layer || !cond(c.if)) return null;
   return { id: c.id, by: c.by, steps: DD.night[c.id].steps };
 }
@@ -1056,28 +1043,40 @@ function startNightChat(g) {
 }
 
 /* ---------------- mail, apps, mementos ---------------- */
+// layer 1 → software, layer 2 → a memento (helps in her memories), layer 3 → a letter (and a keepsake)
 const MEMENTOS = {
-  'pressed_flower.mem': { ic: 'flower', from: 'Prim', desc: '×2 points while fixing Trix.', target: 'trix', mult: 2 },
-  'lucky_d20.mem': { ic: 'dice', from: 'Trix', desc: '×2 points while fixing Prim.', target: 'prim', mult: 2 },
-  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: '40% chance: one pair links itself perfectly when a round starts.' },
-  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Once per round: when time runs out, it flows back to zero.' },
-  'sketch_of_you.mem': { ic: 'img', from: 'Prim', desc: 'A drawing of you, by Prim. +15% points on every round.', bonus: .15 },
-  'queen_piece.mem': { ic: 'queen', from: 'Trix', desc: '+3 extra moves on every round.' },
+  'pressed_flower.mem': { ic: 'flower', from: 'Prim', desc: 'A flower Prim traced and pressed between two pages. Keep it.' },
+  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'In a memory: lay it over the board and the next few moves show through (once per memory).' },
+  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Undo costs no stamina.' },
+  'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five is free. Roll with it.' },
+  'dog_tag.mem': { ic: 'tag', from: 'Vel', desc: 'Walking on a map costs half: every other step is free.' },
+  'sketch_of_you.mem': { ic: 'img', from: 'Prim', desc: 'A drawing of you, by Prim. Not traced.' },
+  'queen_piece.mem': { ic: 'queen', from: 'Trix', desc: 'Her queen. She covers more squares than anyone.' },
 };
 const REWARD = {
   prim: {
-    1: { subject: 'thank you (for today)', body: 'counsellor,\n\nthank you for being gentle.\ni traced a flower for you and pressed it between two pages.\n\ngive it to trix if you see her? she scares me a little. maybe it helps.\n\n— prim', atts: [{ kind: 'mem', name: 'pressed_flower.mem' }] },
-    2: { subject: 'something i traced', body: 'i traced every page of an old atlas once. the places looked so pretty in other people\'s lines.\nhere\'s a copy. maybe you can go see them for me.\n\nand some tracing paper. lay it over anything and the lines just appear.\n\n— prim', atts: [{ kind: 'app', name: 'Atlas.exe' }, { kind: 'mem', name: 'tracing_paper.mem' }] },
-    3: { subject: 'bye bye', body: 'boss says i faced everything. i\'m leaving today.\n\ni drew you. not traced. drew. it\'s bad. keep it anyway.\n\n— p.', atts: [{ kind: 'mem', name: 'sketch_of_you.mem' }] },
+    1: { subject: 'something to listen to', body: 'counsellor,\n\nit\'s so quiet in your room. i can hear your computer humming from here.\nthis is the little player i used when i traced. it plays by itself if you let it.\n\nand a flower. i traced it and pressed it between two pages.\n\n— prim', atts: [{ kind: 'app', name: 'MusicBox.exe' }, { kind: 'mem', name: 'pressed_flower.mem' }] },
+    2: { subject: 'something i traced', body: 'i kept the tracing paper. lay it over anything and the lines just appear.\nmaybe it helps you find your way in my head.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
+    3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you. not traced. drew. it\'s bad. keep it anyway.\n\n— p.', atts: [{ kind: 'mem', name: 'sketch_of_you.mem' }] },
   },
   trix: {
-    1: { subject: 'you\'re going to need these', body: 'you answer like someone who has never converted a unit in their life. here. UnitConv.\n\nalso a d20. statistically irrelevant. roll it next time you work on prim. trust me.\n\n— t', atts: [{ kind: 'mem', name: 'lucky_d20.mem' }, { kind: 'app', name: 'UnitConv.exe' }] },
-    2: { subject: 'spare time', body: 'found an hourglass in my head. it flips itself when you run out.\ntake it. i don\'t need extra time.\n\n— t', atts: [{ kind: 'mem', name: 'hourglass.mem' }] },
-    3: { subject: 'gg', body: 'checked out. taking the train home (boss\'s words).\n\nleft you my queen. she covers more squares than anyone.\n\n— t', atts: [{ kind: 'mem', name: 'queen_piece.mem' }] },
+    1: { subject: 'you\'re going to need this', body: 'you answer like someone who has never converted a unit in their life. here. UnitConv.\n\n— t', atts: [{ kind: 'app', name: 'UnitConv.exe' }] },
+    2: { subject: 'spare time', body: 'found an hourglass in my head. it flips itself when you go back a step.\ntake it. i don\'t make mistakes, so i don\'t need it.\n\n— t', atts: [{ kind: 'mem', name: 'hourglass.mem' }] },
+    3: { subject: 'gg', body: 'that was the last layer. q.e.d.\n\nleft you my queen. she covers more squares than anyone.\n\n— t', atts: [{ kind: 'mem', name: 'queen_piece.mem' }] },
+  },
+  paige: {
+    1: { subject: 'pick a card', body: 'you look like someone who needs to know what\'s coming.\ni don\'t. that\'s the fun part. but here.\n\n— paige', atts: [{ kind: 'app', name: 'Fortune.exe' }] },
+    2: { subject: 'loaded', body: 'my lucky d20. it\'s not loaded. probably.\nroll it when you\'re in my head. sometimes the dice are kind.\n\n— paige', atts: [{ kind: 'mem', name: 'lucky_d20.mem' }] },
+    3: { subject: 'stay', body: 'you didn\'t leave halfway.\nnobody ever didn\'t leave halfway.\n\n— p', atts: [] },
+  },
+  vel: {
+    1: { subject: 'maps r life', body: 'omg u dont even have a MAP?? every soldier needs a map\nprim said she traced this one. its so pretty. dont tell her i cried\n\n— vel 🫡', atts: [{ kind: 'app', name: 'Atlas.exe' }] },
+    2: { subject: 'dog tag', body: 'my dog tag. its fake obvs lol\nwear it in my head. u walk lighter w/ it. trust\n\n— vel', atts: [{ kind: 'mem', name: 'dog_tag.mem' }] },
+    3: { subject: 'mission complete', body: 'all clear.\nthx for not giving up on the gray days.\n\n— v', atts: [] },
   },
 };
 
-const APPICON = { 'Atlas.exe': 'atlas', 'UnitConv.exe': 'conv' };
+const APPICON = { 'Atlas.exe': 'atlas', 'UnitConv.exe': 'conv', 'MusicBox.exe': 'note', 'Fortune.exe': 'tarot' };
 function sendMail(m) {
   m.id = 'm' + S.mail.length; m.read = false; m.day = S.day; m.t = clockStr();
   if (m.att) { m.atts = [m.att]; delete m.att; }
@@ -1113,7 +1112,14 @@ function renderMail() {
 }
 function download(m, i = 0) {
   const a = m && m.atts && m.atts[i]; if (!a || a.got) return; a.got = true;
-  if (a.kind === 'app') { if (!S.apps.includes(a.name)) S.apps.push(a.name); toast('Installed', `<b>${esc(a.name)}</b> is on your desktop.`); }
+  if (a.kind === 'app') {
+    renderMail();
+    installApp(a.name).then(() => {
+      if (!S.apps.includes(a.name)) S.apps.push(a.name); toast('Installed', `<b>${esc(a.name)}</b> is on your desktop.`); save(); refresh();
+      if (a.name === 'MusicBox.exe') { openMusicBox(); MB.vibe = true; mbSave(); mbPlay((TRACKS.find(t => t.vibe === mbContext()) || TRACKS[0]).id); }
+    });
+    SFX.item(); save(); return;
+  }
   else { if (!hasMem(a.name)) S.mementos.push(a.name); toast('MementoBox', `<b>${esc(a.name)}</b> added. ${esc(MEMENTOS[a.name].desc)}`, openMBox); }
   SFX.item(); save(); refresh(); renderMail();
 }
@@ -1138,6 +1144,15 @@ function openConv() {
   });
 }
 const ATLAS = [['Eiffel Tower', 'Paris, France', '330 m of iron. Not in Rome.'], ['Mount Everest', 'Nepal / China border', '8,849 m. There is no Swiss side.'], ['Santorini', 'Greece', 'Blue domes, white walls, a lot of cats.'], ['Reykjavik', 'Iceland', 'Northernmost capital of a sovereign state.'], ['Kyoto', 'Japan', 'Over 1,600 temples.'], ['Angkor Wat', 'Siem Reap, Cambodia', 'Largest religious monument on Earth.'], ['Lisbon', 'Portugal', 'Seven hills and yellow trams.'], ['Istanbul', 'Türkiye', 'One city, two continents.'], ['Machu Picchu', 'Cusco region, Peru', '2,430 m above sea level.'], ['Marrakech', 'Morocco', 'The red city.'], ['Hanoi', 'Vietnam', 'Old Quarter: 36 streets.'], ['Patagonia', 'Argentina & Chile', 'Wind up to 120 km/h.'], ['Trans-Siberian Railway', 'Moscow → Vladivostok', '9,289 km.'], ['Venice', 'Italy', '118 small islands.']];
+const TAROT = [['The Fool', 'Step off the edge. The floor might be glass.'], ['The Tower', 'Something comes down today. Stand clear.'], ['The Star', 'Somebody is still rooting for you.'], ['The Moon', 'Not everything you see is real. Check twice.'], ['Wheel of Fortune', 'Spin. Whatever lands, you were going to play anyway.'], ['Death', 'An ending. Not yours. Probably.'], ['The Lovers', 'A choice between two people. Or two versions of one.'], ['The Hermit', 'Stay in tonight. Someone will message.'], ['Strength', 'Gentle hands open stuck doors.'], ['The Sun', 'A good day. Don\'t waste it on worry.']];
+function openFortune() {
+  S.used = S.used || {}; S.used['Fortune.exe'] = true; save();
+  openWin('fortune', { title: 'Fortune.exe', icon: 'tarot', w: 320, h: 360, x: 280, y: 60, render: b => {
+    b.innerHTML = `<div class="tool fortune"><div class="tcard" id="ft-card"><b>?</b><span>draw a card</span></div><div style="display:flex;gap:8px;justify-content:center"><button class="btn primary" id="ft-draw">Draw</button><button class="btn" id="ft-coin">Flip a coin</button></div><small style="color:var(--ink-soft);text-align:center">dealt by Paige. no refunds.</small></div>`;
+    $('#ft-draw', b).onclick = () => { SFX.pop(); const c = TAROT[Math.random() * TAROT.length | 0]; $('#ft-card', b).innerHTML = `<b>${esc(c[0])}</b><span>${esc(c[1])}</span>`; };
+    $('#ft-coin', b).onclick = () => { SFX.pop(); $('#ft-card', b).innerHTML = `<b>${Math.random() < .5 ? 'HEADS' : 'TAILS'}</b><span>the coin doesn't care.</span>`; };
+  } });
+}
 function openAtlas() {
   S.used = S.used || {}; S.used['Atlas.exe'] = true; save();
   openWin('atlas', {
@@ -1202,10 +1217,21 @@ function dayMail() {
 function newPatientsToday() {
   PLAYABLE.forEach(g => {
     if (g === 'prim' || GIRLS[g].from > S.day || met(g)) return;
-    const e = DD.first.find(x => x.girl === g && dayMatch(x.day, S.day) && cond(x.if)) || DD.first.find(x => x.girl === g);
+    const e = DD.first.find(x => x.girl === g && x.day && dayMatch(x.day, S.day) && cond(x.if)) || DD.first.find(x => x.girl === g && x.day);
     const steps = e ? playSteps(e.steps) : [{ lines: ['{neutral}hi. you\'re the new counsellor.'] }];
+    if (g === 'paige') coinFlip(steps);
     setTimeout(() => { S.met[g] = true; S.flags.ping = 'brain'; runDialogue(seq(g, g, steps, 'NONE')); refresh(); }, 2500);
   });
+}
+// Paige asks "heads or tails?" the first time; the coin is really tossed (50/50)
+function coinFlip(steps) {
+  const coin = Math.random() < .5 ? 'Heads.' : 'Tails.';
+  const part = id => { const e = DD.first.find(x => x.id === id); return e ? playSteps(e.steps) : []; };
+  const flat = st => st.flatMap(x => x.lines || []);
+  const win = part('paige_coin_win'), lose = part('paige_coin_lose');
+  const act = (ok) => [{ action: 'SET_FLAG', value: ok ? 'paige_lucky' : 'paige_unlucky' }];
+  steps.push({ lines: [], choices: ['Heads.', 'Tails.'].map(t => ({ t, r: flat(t === coin ? win : lose), act: act(t === coin) })) });
+  return steps;
 }
 function afterMorning() {
   if (SPECIAL[S.day] === 'showcase') { openShowcase(); return; }

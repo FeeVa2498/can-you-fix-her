@@ -169,9 +169,13 @@ function keyIcon(g) { return `<svg class="kic" viewBox="0 0 16 16" aria-hidden="
 function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-msg'); if (m) { m.textContent = t; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); } }
 
 /* every gameplay input costs a minute of her day */
-function owSpend() {
+function owSpend(kind = 'move') {
   if (S.phase !== 'day' || S.dayOver) return;
-  S.mins += 1;
+  // mementos: hourglass (undo is free), dog tag (every other step on the map is free), d20 (one in five is free)
+  let free = kind === 'undo' && hasMem('hourglass.mem');
+  if (!free && kind === 'map' && hasMem('dog_tag.mem')) { OW.dog = (OW.dog || 0) + 1; free = OW.dog % 2 === 0; }
+  if (!free && hasMem('lucky_d20.mem') && Math.random() < .2) { free = true; owSay('🎲 lucky · free move'); }
+  if (!free) S.mins += 1;
   if (S.mins >= DAY_END) overload();
   owHud(); renderTray();
   if (WINS.brain) renderBrain();
@@ -195,7 +199,7 @@ function owKey(e) {
 }
 function owMove(dx, dy) {
   const g = OW.g, o = owState(g), M = owBuild(g), nx = o.x + dx, ny = o.y + dy;
-  owSpend(); if (S.dayOver) return;
+  owSpend('map'); if (S.dayOver) return;
   const v = nx >= 0 && ny >= 0 && nx < M.W && ny < M.H ? M.t[ny * M.W + nx] : 0;
   if (v === 2 && !owPassable(g, nx, ny)) { owGate(M.gates.find(G => G.x === nx && G.y === ny)); return; }
   if (!owPassable(g, nx, ny)) { SFX.bump(); OW.anim = { from: [o.x, o.y], to: [o.x + dx * .18, o.y + dy * .18], t0: performance.now(), bump: true }; return; }
@@ -238,8 +242,8 @@ function storyProjectorChrome(b, p) {
   const ed = $('[data-m="edit"]', b); if (ed) ed.remove();
   const bk = $('[data-m="back"] span', b); if (bk) bk.textContent = 'Back to the map';
   const dbg = $('.pj-debug', b); if (dbg) dbg.remove();
-  const rs = $('#pj-reset', b); rs.onclick = () => { if (owLocked()) { SFX.buzz(); return; } pjReset(); owSpend(); };
-  $$('[data-m="undo"],[data-m="reset"]', b).forEach(el => { const f = el.onclick; el.onclick = () => { if (owLocked()) { SFX.buzz(); return; } f(); owSpend(); }; });
+  const rs = $('#pj-reset', b); rs.onclick = () => { if (owLocked()) { SFX.buzz(); return; } pjReset(); owSpend('reset'); };
+  $$('[data-m="undo"],[data-m="reset"]', b).forEach(el => { const f = el.onclick, kind = el.dataset.m; el.onclick = () => { if (owLocked()) { SFX.buzz(); return; } f(); owSpend(kind); }; });
   const bm = $('[data-m="back"]', b); if (bm) bm.onclick = () => { SFX.click(); owBack(); };
 }
 function owBack() {

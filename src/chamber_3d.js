@@ -92,18 +92,27 @@ const P3 = (() => {
     const CHX = [0x4fd8ff, 0xffa040], plates3 = [], gates3 = [];
     let symKey = '';
     const numObjs = [];
-    const tiles3 = new Map(), lights3 = [], sw3 = [], dice3 = [], touch3 = [];
+    const tiles3 = new Map(), fragDec = new Map(), lights3 = [], sw3 = [], dice3 = [], touch3 = [];
     if (isBox) buildBoxBoard(); else buildLineBoard();
 
     function plateMats(top, side) { const s = std(side), t = std(top); return [s, s, t, s, s, s]; }
     function buildBoxBoard() {
       const pads = new Map((p.pads || []).map(q => [q[0] + ',' + q[1], [q[2], q[3]]])), stops = new Set((p.stops || []).map(q => q.join(',')));
-      const goals = new Map((p.exit || []).map(g => [g[0] + ',' + g[1], g[2] || 0])), cracks = new Set((p.cracks || []).map(q => q[0] + ',' + q[1]));
+      const goals = new Map((p.exit || []).map(g => [g[0] + ',' + g[1], g[2] || 0])), cracks = new Set((p.cracks || []).map(q => q[0] + ',' + q[1])), frags = new Set((p.fragile || []).map(q => q[0] + ',' + q[1]));
       for (let y = 0; y < d.rows; y++) for (let x = 0; x < d.cols; x++) {
         if (!E.inside(p, x, y)) continue;
         const k = x + ',' + y, top = goals.has(k) ? 0x5c3d2a : pads.has(k) ? 0x24503a : stops.has(k) ? 0x5a2f3a : cracks.has(k) ? 0x4a3550 : 0x3b2560;
         const t = box(.96, .7, .96, plateMats(top, 0x1c0f30), x, -.35, y);
         world.add(edges(t, 0xff6fd8, .35)); tiles3.set(k, t);
+        if (frags.has(k)) {   // Vel's glass tile: clear when whole, a crack decal shows after the first time a box leaves it
+          t.material[2] = new THREE.MeshStandardMaterial({ color: 0x9fe6ff, emissive: 0x2a6a88, emissiveIntensity: .35, transparent: true, opacity: .7, roughness: .15, metalness: .1 });
+          const dec = new THREE.Mesh(new THREE.PlaneGeometry(.9, .9), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, opacity: 0, map: canvasTex(128, 128, (g) => {
+            g.strokeStyle = '#0d1c2a'; g.lineWidth = 6; g.lineCap = 'round'; g.lineJoin = 'round'; g.beginPath();
+            g.moveTo(10, 50); g.lineTo(54, 70); g.lineTo(38, 118); g.moveTo(54, 70); g.lineTo(92, 50); g.lineTo(120, 88); g.moveTo(92, 50); g.lineTo(76, 8); g.moveTo(54, 70); g.lineTo(70, 100); g.stroke();
+            g.strokeStyle = 'rgba(255,255,255,.8)'; g.lineWidth = 2; g.stroke();
+          }) }));
+          dec.rotation.x = -Math.PI / 2; dec.position.y = .352; t.add(dec); fragDec.set(k, dec);
+        }
         if (cracks.has(k)) {
           const dec = new THREE.Mesh(new THREE.PlaneGeometry(.9, .9), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, map: canvasTex(128, 128, (g, w, h) => {
             g.strokeStyle = '#140a22'; g.lineWidth = 7; g.lineCap = 'round'; g.lineJoin = 'round'; g.beginPath();
@@ -512,6 +521,7 @@ const P3 = (() => {
         }); }
       lights3.forEach((l, i) => { const on = !dark.has(i); l.mat.emissiveIntensity = on ? 1.2 : 0; l.mat.color.setHex(on ? 0xfff1b8 : 0x6a5a3a); l.glow.material.opacity = on ? .45 : 0; });
       refreshNums(s.rope.size ? s.rope : null, {});
+      fragDec.forEach((dec, k) => { dec.material.opacity = s.frg && s.frg.has(k) ? 1 : 0; });
       tiles3.forEach((t, k) => { const gone = s.crk.has(k); if (gone && !t.userData.gone) { t.userData.gone = performance.now(); fallers.push(t); } if (!gone && t.userData.gone) { t.userData.gone = 0; t.visible = true; t.position.y = -.35; } });
       if (fwd && !REDUCED) {
         // ticks per box: every plain step is one tick; a portal jump rides along in the same tick

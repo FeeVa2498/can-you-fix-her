@@ -259,6 +259,7 @@ const PanelEngine = (() => {
                 lowers the colour it shows and raises the other one, and the switch now shows that other colour
      p.doors    [[x1,y1,x2,y2,c]] a door between two tiles: shut until a switch of its colour opens it
      p.cracks   [[x,y]] a cracked tile falls away once the box on it leaves (then it's a hole)
+     p.fragile  [[x,y]] (Vel) a glass tile: the first box to leave it cracks it; leaving it a second time it falls away
      p.paints   [[x,y,c]] a box entering takes colour c
      p.dice     [[x,y,v]] dice targets: the last stamp on this tile must be v (1..6)
      Map tiles as before: pads (arrow tiles: slide on to the end), stops, portals, holes, broken (walls), oneway.
@@ -270,6 +271,7 @@ const PanelEngine = (() => {
     (p.switches || []).forEach((q, i) => X.sw.set(key(q[0], q[1]), i));
     (p.paints || []).forEach(q => X.paint.set(key(q[0], q[1]), q[2]));
     (p.cracks || []).forEach(q => X.crack.add(key(q[0], q[1])));
+    X.frag = new Set((p.fragile || []).map(q => key(q[0], q[1])));
     (p.doors || []).forEach(q => X.door.set(ekey(q[0], q[1], q[2], q[3]), q[4]));
     return X;
   }
@@ -277,7 +279,7 @@ const PanelEngine = (() => {
   const girlHue = p => GIRL_HUE_I[p.girl] ?? 0;
   function boxStart(p) {
     return { pos: p.boxes.map(b => [b.x, b.y]), left: p.boxes.map(b => b.n == null ? null : b.n), col: p.boxes.map(b => b.c != null ? b.c : girlHue(p)),
-      open: (p.switches || []).reduce((o, q) => q[3] != null ? o | (1 << q[3]) : o, 0), sw: [], crk: new Set(), trail: new Set(), rope: new Set(), ropes: p.boxes.map(() => []), dice: p.boxes.map(b => b.die ? (b.die === true ? [1, 2, 3] : b.die.slice()) : null), stamp: new Map(), lit: new Set(), dead: -1, inputs: '',
+      open: (p.switches || []).reduce((o, q) => q[3] != null ? o | (1 << q[3]) : o, 0), sw: [], crk: new Set(), frg: new Set(), trail: new Set(), rope: new Set(), ropes: p.boxes.map(() => []), dice: p.boxes.map(b => b.die ? (b.die === true ? [1, 2, 3] : b.die.slice()) : null), stamp: new Map(), lit: new Set(), dead: -1, inputs: '',
       tracks: p.boxes.map(b => [[b.x, b.y]]), jumps: p.boxes.map(() => [false]) };
   }
   // a two-colour switch shows the colour whose walls are up now; stepping on it lowers those and raises the other colour
@@ -299,7 +301,7 @@ const PanelEngine = (() => {
   // one key press; returns { state, moved: [bool…], dead } (a new state; rec=false skips the drawing tracks)
   function boxStep(p, s0, d, rec = true, X = boxCtx(p)) {
     const n = p.boxes.length, C = X.C;
-    const s = { pos: s0.pos.map(q => q.slice()), left: s0.left.slice(), col: s0.col.slice(), open: s0.open, sw: s0.sw.slice(), crk: new Set(s0.crk),
+    const s = { pos: s0.pos.map(q => q.slice()), left: s0.left.slice(), col: s0.col.slice(), open: s0.open, sw: s0.sw.slice(), crk: new Set(s0.crk), frg: new Set(s0.frg || []),
       trail: new Set(s0.trail), rope: new Set(s0.rope), ropes: s0.ropes.map(r => r.slice()), dice: s0.dice.map(q => q && q.slice()), stamp: new Map(s0.stamp), lit: new Set(s0.lit), dead: s0.dead, inputs: s0.inputs + dirKey(d),
       tracks: rec && s0.tracks ? s0.tracks.map(t => t.map(q => q.slice())) : null, jumps: rec && s0.jumps ? s0.jumps.map(j => j.slice()) : null };
     const moved = Array(n).fill(false);
@@ -352,6 +354,8 @@ const PanelEngine = (() => {
       }
       // cracked tiles fall once nobody stands on them
       if (X.crack.size) for (const k of left) if (X.crack.has(k) && !s.pos.some(q => key(...q) === k)) s.crk.add(k);
+      // glass tiles: the first time a box leaves one it cracks, the second time it falls
+      if (X.frag.size) for (const k of left) if (X.frag.has(k) && !s.pos.some(q => key(...q) === k)) { if (s.frg.has(k)) s.crk.add(k); else s.frg.add(k); }
     }
     // landmines: one off for each mine that really moved; moving with nothing left sets it off
     for (let i = 0; i < n && s.dead < 0; i++) {
@@ -388,7 +392,7 @@ const PanelEngine = (() => {
   }
   function boxReplay(p, inputs) { let s = boxStart(p); const X = boxCtx(p); for (const c of inputs) s = boxStep(p, s, DK[c], true, X).state; return s; }
   const boxKey = s => s.pos.map(q => key(...q)).join('/') + '|' + s.left.join(',') + '|' + s.col.join('') + '|' + s.open + s.sw.join('')
-    + (s.crk.size ? '~' + [...s.crk].sort().join(';') : '') + (s.trail.size ? '#' + s.ropes.map(r => r.join(';')).join('#') : '')
+    + (s.crk.size ? '~' + [...s.crk].sort().join(';') : '') + (s.frg && s.frg.size ? '^' + [...s.frg].sort().join(';') : '') + (s.trail.size ? '#' + s.ropes.map(r => r.join(';')).join('#') : '')
     + (s.lit.size ? '*' + [...s.lit].sort().join(';') : '')
     + (s.dice.some(Boolean) ? '@' + s.dice.map(q => q ? q.join('') : '').join('/') + '@' + [...s.stamp].sort().join(';') : '');
   // breadth-first: the shortest key sequences that win (up to `limit`)
