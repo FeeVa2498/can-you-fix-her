@@ -115,7 +115,7 @@ const SFX = {
   mail() { if (!AU.ctx) return; const t = AU.ctx.currentTime;[1318, 1046, 1568].forEach((f, i) => tone(f, t + i * .1, .4, .08, 'triangle')); },
   item() { if (!AU.ctx) return; const t = AU.ctx.currentTime;[784, 988, 1175, 1568].forEach((f, i) => tone(f, t + i * .07, .35, .09, 'square')); },
   buzz() { if (!AU.ctx) return; tone(130, 0, .22, .14, 'sawtooth'); },
-  glitch(len = .4) { if (!AU.ctx) return; noiseHit(0, len, 300, .3); tone(60 + Math.random() * 400, 0, len, .1, 'square'); },
+  glitch(len = .4) { if (!AU.ctx) return; noiseHit(0, len, 300, .15); tone(60 + Math.random() * 400, 0, len, .05, 'square'); },   // half as loud (v12)
   step(i = 0) { if (!AU.ctx) return; tone(523 * Math.pow(2, (i % 12) / 12), 0, .06, .045, 'triangle'); },
   link() { if (!AU.ctx) return; const t = AU.ctx.currentTime; tone(1046, t, .15, .09, 'triangle'); tone(1568, t + .06, .2, .08, 'triangle'); },
   win() { if (!AU.ctx) return; const t = AU.ctx.currentTime;[523, 659, 784, 1046, 1318].forEach((f, i) => tone(f, t + i * .08, .6, .09, 'triangle')); },
