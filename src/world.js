@@ -31,6 +31,7 @@ const OW_MID = 5;
 function owBuild(g) {
   if (OWMAP[g]) return OWMAP[g];
   if (g === 'ray') return (OWMAP.ray = rayMap());
+  const ov = typeof mapOverride === 'function' && mapOverride(g); if (ov) return (OWMAP[g] = ov);   // a layout from the map editor
   const lay = owLayers(g), H = 11, mid = OW_MID;
   const cells = [];   // [x, y, v] v: 1 floor · 2 gate · 3 seal
   const nodes = [], gates = [], seals = [];

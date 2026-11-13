@@ -109,7 +109,7 @@ const OW3 = (() => {
       const half = Math.tan(cam.fov * Math.PI / 360), want = 8;   // about eight tiles across
       const dist = Math.max(want / (2 * half * cam.aspect), 7.2 / (2 * half)) * .95, pitch = 60 * Math.PI / 180;
       const viewW = 2 * half * cam.aspect * dist, lo = viewW / 2 - 1, hi = M.W - viewW / 2;
-      let tx = lo < hi ? clamp(px, lo, hi) : (M.W - 1) / 2, tz = clamp(pz, OW_MID - 2.6, OW_MID + 2.6);
+      let tx = lo < hi ? clamp(px, lo, hi) : (M.W - 1) / 2, zm = (M.H - 1) / 2, zr = Math.max(0, zm - 2.4), tz = clamp(pz, zm - zr, zm + zr);
       if (camX == null) { camX = tx; camZ = tz; }
       camX += (tx - camX) * .12; camZ += (tz - camZ) * .08;
       const sh = OW.shake && now - OW.shake < 350 ? Math.sin((now - OW.shake) / 18) * .12 * (1 - (now - OW.shake) / 350) : 0;

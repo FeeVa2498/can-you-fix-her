@@ -181,3 +181,56 @@ async function paigeSessionCoin() {
   if (ss.lucky) toast('Lucky streak', 'This session: every 2 inputs cost 1 minute.');
   runDialogue(seq('session', 'paige', [{ lines: [pickRnd(ss.lucky ? PAIGE_WIN : PAIGE_LOSE)] }], 'SES_SCAN'));
 }
+
+/* ---------- Profiles.exe (DIVE default): what you know about each girl you've worked with ----------
+   Fields fill in as you learn them: night talks (how many you've had with her), layers faced, flags.
+   Until then a field shows ???. */
+const PROFILE = {
+  prim: [['Name', 'Prim'], ['File', 'PRIM_01'], ['Style', 'Jirai Kei'], ['Assigned role', '"the artist"', { s: 1 }],
+    ['Likes', 'pink ribbons, tracing paper, the sound of rain on a window', { nt: 1 }], ['Hates', 'being looked at while she draws', { nt: 2 }],
+    ['Says she is', 'fragile. "glass girl."', { L: 1 }], ['Real passion', 'music. she writes songs and never shows anyone.', { nt: 4, f: 'prim_music' }],
+    ['Afraid of', 'being "fixed" into someone who doesn\'t need anything', { L: 2 }], ['Wants', 'to see the sea. it\'s 19 km away.', { nt: 5 }]],
+  trix: [['Name', 'Trix'], ['File', 'TRIX_02'], ['Style', 'E-Girl'], ['Assigned role', '"the gamer girl"', { s: 1 }],
+    ['Likes', 'clean proofs, chess openings, being right', { nt: 1 }], ['Hates', 'being called cute when she\'s explaining something', { nt: 2 }],
+    ['Says she is', 'just a gamer. Iron IV. "it\'s ironic."', { L: 1 }], ['Real passion', 'mathematics. a notebook of proofs nobody asked for.', { nt: 4, f: 'trix_true' }],
+    ['Afraid of', 'an unsolved problem that stays unsolved', { L: 2 }], ['Wants', 'a whiteboard. a room with a whiteboard.', { nt: 5 }]],
+  paige: [['Name', 'Paige'], ['File', 'PAIGE_03'], ['Style', 'Goth'], ['Assigned role', '"the goth"', { s: 1 }],
+    ['Likes', 'coin flips, card tricks, the moment before the dice land', { nt: 1 }], ['Hates', 'people who call her lucky', { nt: 2 }],
+    ['Says she is', 'bad luck. "too much."', { L: 1 }], ['Real passion', 'designing poker chips. "house of p."', { nt: 4, f: 'paige_true' }],
+    ['Afraid of', 'a game where nothing is left to chance', { L: 2 }], ['Wants', 'one hand she doesn\'t fold.', { nt: 5 }]],
+  vel: [['Name', 'Vel'], ['File', 'VEL_04'], ['Style', 'Gyaru'], ['Assigned role', '"the gyaru"', { s: 1 }],
+    ['Likes', 'maps, field manuals, sticker bombs, loud music', { nt: 1 }], ['Hates', 'being called a bimbo. spelling tests.', { nt: 2 }],
+    ['Says she is', 'trigger happy. "just a bimbo."', { L: 1 }], ['Real passion', 'scale models. a 1:4 M1 Garand, every screw painted.', { nt: 4, f: 'vel_true' }],
+    ['Afraid of', 'not being taken seriously, ever', { L: 2 }], ['Wants', 'to finish the model. and the dress. both.', { nt: 5 }]],
+};
+function profKnown(g, at) {
+  if (!at) return true; const st = S.g[g] || {};
+  if (at.f && S.flags[at.f]) return true;
+  if (at.s && (st.sessions || 0) >= at.s) return true;
+  if (at.nt && (st.ntDone || []).length >= at.nt) return true;
+  if (at.L && (st.layer || 0) >= at.L) return true;
+  return false;
+}
+const profCount = g => (PROFILE[g] || []).filter(f => profKnown(g, f[2])).length;
+const profPeople = () => PLAYABLE.filter(g => met(g) && ((S.g[g].sessions || 0) > 0 || S.flags.chamber));
+// tell the player when a profile gets a new line
+function profCheck() {
+  S.prof = S.prof || {};
+  profPeople().forEach(g => { const n = profCount(g); if (S.prof[g] != null && n > S.prof[g]) { S.flags.profNew = true; toast('Profiles', `${esc(GIRLS[g].name)}'s profile was updated.`); } S.prof[g] = n; });
+}
+function openProfiles() {
+  S.flags.profNew = false; renderIcons();
+  let at = profPeople()[0];
+  openWin('profiles', { title: 'Profiles - DIVE', icon: 'id', w: 560, h: 460, x: 200, y: 40, render: (b, rec) => {
+    const draw = () => {
+      const ppl = profPeople(); if (!ppl.includes(at)) at = ppl[0];
+      if (!at) { b.innerHTML = '<div class="prof"><p class="jr-none">No patient files yet. Work with someone first.</p></div>'; return; }
+      const fs = PROFILE[at] || [];
+      b.innerHTML = `<div class="prof"><nav class="prof-tabs">${ppl.map(g => `<button class="prof-tab${g === at ? ' on' : ''}" data-pg="${g}" style="--c:${SEL_COL[g]}">${avHTML(g)}<span>${esc(GIRLS[g].name)}</span></button>`).join('')}</nav>
+        <article class="prof-card" style="--c:${SEL_COL[at]}"><div class="prof-pic">${selPortrait(at)}</div><div class="prof-body"><div class="prof-head"><b>${esc(GIRLS[at].name)}</b><small>patient file · ${profCount(at)}/${fs.length} known</small></div>
+          <dl>${fs.map(([k, v, cond]) => { const ok = profKnown(at, cond); return `<dt>${esc(k)}</dt><dd class="${ok ? '' : 'unk'}">${ok ? esc(v) : '???'}</dd>`; }).join('')}</dl></div></article></div>`;
+      $$('[data-pg]', b).forEach(x => x.onclick = () => { SFX.click(); at = x.dataset.pg; draw(); });
+    };
+    addUpd(rec, draw); draw();
+  } });
+}

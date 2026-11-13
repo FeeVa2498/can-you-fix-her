@@ -51,6 +51,7 @@ function titleScreen(hasSave) {
 let chGirl = 'prim';
 function openChamber() {
   S = fresh(); S.player = { name: 'tester', avatar: '' }; S.flags.chamber = true; S.phase = 'day';
+  if (CH.raySrc) CH.raySrc.forEach((id, i) => { if (RAY_SRC[i]) RAY_SRC[i][1] = id; });
   $$('.dicon').forEach(d => d.hidden = true);   // a bare desktop: nothing from the story here
   openWin('chamber', { title: 'Test chamber', icon: 'puzzle', w: 640, h: 500, x: 30, y: 20, render: (b, rec) => { addUpd(rec, () => renderChamber(b)); renderChamber(b); } });
 }
@@ -74,7 +75,7 @@ function renderChamber(b) {
         <label><input type="checkbox" id="co-debug" ${CH.opt.debug ? 'checked' : ''}> Designer info (solution count, notes, show answer)</label>
         <label><input type="checkbox" id="co-story" ${CH.opt.story ? 'checked' : ''}> Story flow preview (her message between maps, like the real game)</label>
         <div class="chm-mem">${Object.entries(CH_MEM).map(([k, m]) => `<label title="${esc(m.desc)}"><input type="checkbox" data-mem="${k}" ${CH.opt.mem[k] ? 'checked' : ''}> ${icon(m.ic)} ${m.name}</label>`).join('')}</div>
-        <div class="chm-btns"><button class="btn primary" id="co-editor">✎ Level editor</button><button class="btn" id="co-reset">Clear progress</button><button class="btn" id="co-title">Back to title</button></div>
+        <div class="chm-btns"><button class="btn primary" id="co-editor">✎ Level editor</button><button class="btn primary" id="co-kit">🧰 Designer kit</button><button class="btn" id="co-reset">Clear progress</button><button class="btn" id="co-title">Back to title</button></div>
       </div>
     </div></div>`;
   $$('[data-g]', b).forEach(x => x.onclick = () => { SFX.click(); chGirl = x.dataset.g; renderChamber(b); });
@@ -83,6 +84,7 @@ function renderChamber(b) {
   $('#co-story', b).onchange = e => { CH.opt.story = e.target.checked; chSave(); };
   $$('[data-mem]', b).forEach(x => x.onchange = () => { CH.opt.mem[x.dataset.mem] = x.checked; chSave(); });
  $('#co-editor', b).onclick = () => { SFX.click(); openEditor(); };
+  $('#co-kit', b).onclick = () => { SFX.click(); openKit(); };
   $$('[data-p]', b).forEach(x => x.oncontextmenu = e => { e.preventDefault(); openEditor(x.dataset.p); });
   $('#co-reset', b).onclick = () => { CH.done = {}; chSave(); renderChamber(b); };
   $('#co-title', b).onclick = () => location.reload();

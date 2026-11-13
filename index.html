@@ -1305,6 +1305,58 @@ body.reckon #app{animation:none}
 .tq-row{display:flex;gap:6px}.tq-in{flex:1;font:inherit;font-family:var(--mono);padding:6px;border:2px solid var(--line);border-radius:8px}
 .coin{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#e0b23a 60%,#a87a12);border:2px solid #7a5608;color:#5a3d00;font-family:var(--display);vertical-align:middle}
 .coin.spin{animation:coinspin .25s linear infinite}@keyframes coinspin{0%{transform:scaleX(1)}50%{transform:scaleX(.08)}100%{transform:scaleX(1)}}
+/* ---------- Fix-it · patient select (arcade character-select: slanted cells, greyscale until picked) ---------- */
+.selscr{background:linear-gradient(180deg,#2a2230,#16111c);color:#efe6f4;height:100%;box-sizing:border-box;display:flex;flex-direction:column}
+.selscr .bd-head{color:#efe6f4}.selscr .ph{color:#b9a8c8}
+.sel-title{margin-left:auto;font:900 15px var(--display);letter-spacing:3px;color:#ffd86e;text-shadow:2px 2px 0 #000}
+.sel-row{flex:1;display:flex;justify-content:center;align-items:flex-start;gap:5px;padding:30px 30px 14px;min-height:340px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 2px,transparent 2px 9px),radial-gradient(120% 90% at 50% 40%,#3a3042,#141017);border-radius:10px;border:3px solid #0b0910;box-shadow:inset 0 0 0 2px #4a4054,inset 0 0 30px rgba(0,0,0,.7);position:relative;overflow:hidden}
+.sel{position:relative;width:128px;flex:none;background:none;border:0;padding:0;cursor:pointer;color:inherit;font:inherit}
+.sel-mask{display:block;position:relative;height:250px;transform:skewX(-12deg);overflow:hidden;border:2px solid #c9a24a;outline:2px solid #0b0910;border-radius:2px;background:linear-gradient(180deg,#d8d0dc,#8f8698);box-shadow:inset 0 0 0 2px #6e6478,0 4px 0 #000}
+.sel-img{position:absolute;left:50%;top:-4px;height:470px;transform:translateX(-50%) skewX(12deg);image-rendering:pixelated;filter:grayscale(1) contrast(1.15) brightness(.95);transition:filter .2s,transform .2s}
+.sel-img.fig{height:360px;top:10px}
+.sel:hover .sel-img{filter:grayscale(.4) brightness(1)}
+.sel.on .sel-mask{background:linear-gradient(180deg,#fff3f9,var(--c));border-color:#000;box-shadow:inset 0 0 0 2px #fff,0 0 0 3px var(--c),0 0 22px var(--c),0 4px 0 #000}
+.sel.on .sel-img{filter:none;transform:translateX(-50%) skewX(12deg) scale(1.05)}
+.sel.on::before{content:"YOU";position:absolute;left:50%;top:-24px;transform:translateX(-50%);padding:1px 10px;font:900 13px var(--display);letter-spacing:2px;color:#ffd86e;background:#3a0f12;border:2px solid #ffd86e;border-radius:3px;text-shadow:0 0 6px #ff9a3c;z-index:2}
+.sel.sil .sel-img{filter:brightness(0) drop-shadow(0 0 2px var(--c))}
+.sel.sil .sel-mask{background:linear-gradient(180deg,#3a3242,#1d1822)}
+.sel-q{position:absolute;inset:0;display:grid;place-items:center;transform:skewX(12deg);font:900 54px var(--display);color:var(--c);text-shadow:0 0 12px var(--c),3px 3px 0 #000}
+.sel.dim .sel-img{opacity:.45}
+.sel-plate{display:block;margin-top:8px;padding:4px 6px 5px;transform:skewX(-12deg);background:linear-gradient(180deg,#8a8094,#4e4658);border:2px solid #0b0910;border-radius:3px;box-shadow:inset 0 1px 0 #c9bfd2,0 3px 0 #000;text-align:center}
+.sel:nth-child(even) .sel-plate{margin-top:18px}
+.sel-plate>*{transform:skewX(12deg)}
+.sel-plate b{display:block;font:900 15px var(--display);letter-spacing:1px;color:#f4ecd8;text-shadow:1px 1px 0 #000}
+.sel-plate small{display:block;font:9px var(--mono);color:#d8cce4}
+.sel-plate i{display:block;font:normal 10px var(--mono);color:#ffd86e}.sel-plate i.ok{color:#9dffb0}
+.sel-plate .pips{justify-content:center;margin:2px 0}
+.sel.on .sel-plate{background:linear-gradient(180deg,var(--c),#4e4658)}
+.sel-go{font-size:15px;padding:8px 22px;letter-spacing:1px}
+.sel-img.fig{height:400px;top:6px}
+/* designer kit */
+.kit{display:flex;flex-direction:column;height:100%;gap:6px}.kit-tabs{display:flex;gap:3px;flex-wrap:wrap}.kit-tab{padding:4px 10px;border:2px solid var(--line);border-radius:8px 8px 0 0;background:var(--paper);font:inherit;font-size:12px;cursor:pointer}.kit-tab.on{background:var(--pink-hi);font-weight:700}
+.kit-body{flex:1;min-height:0;overflow:auto;padding:10px}.kit-p{margin:0 0 8px;font-size:12px;color:var(--ink-soft)}.kit-body h4{margin:12px 0 6px}
+.kit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}.kit-card{display:flex;flex-direction:column;gap:5px;padding:8px;align-items:flex-start;font-size:12px}.kit-card .row{display:flex;gap:5px}.kit-card .mini{width:100%;height:90px}
+.kit-ic svg{width:32px;height:32px}.kit-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0;font-size:12px}.kit-row input[type=number]{width:54px}.kit-list{display:flex;flex-wrap:wrap;gap:6px}
+.gal{display:flex;flex-wrap:wrap;gap:8px}.gal figure{margin:0;padding:6px;display:flex;flex-direction:column;gap:4px;max-width:260px;font-size:11px}.gal figcaption small{color:var(--ink-soft)}
+.kit-talk{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:4px}.kit-talk button{text-align:left;font-size:11px}
+/* map editor */
+.me{display:flex;flex-direction:column;gap:6px;font-size:12px}.me-bar,.me-tools,.me-btns{display:flex;gap:5px;flex-wrap:wrap;align-items:center}.me-bar .sp{flex:1}.me-bar input{width:52px}
+.me-t{padding:3px 9px;border:2px solid var(--line);border-radius:7px;background:var(--paper);font:inherit;cursor:pointer}.me-t.on{background:var(--sky);font-weight:700}
+.me-wrap{overflow:auto;max-height:360px;background:#0c0812;border-radius:6px;padding:4px}#me-cv{display:block;cursor:crosshair;image-rendering:pixelated}.me-info .warn{color:#d2475f}.me-info .ok{color:#2a9d63}
+#testbar{position:fixed;top:6px;left:50%;transform:translateX(-50%);z-index:9000;display:flex;gap:10px;align-items:center;padding:4px 10px;background:#ffd86e;border:2px solid #3a2a00;border-radius:8px;font:12px var(--mono);color:#3a2a00;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+/* Boss's journal: a book with a page per girl */
+.jr{display:flex;height:100%;gap:0;background:#e9dfc8}.jr-tabs{display:flex;flex-direction:column;gap:3px;padding:10px 0 10px 6px;background:#5a3a2a}.jr-tab{padding:6px 10px;border:0;border-radius:6px 0 0 6px;background:#c9b48a;font:700 12px Georgia,serif;cursor:pointer;color:#3a2a1a;text-align:left}.jr-tab.on{background:#f6efdc}
+.jr-page{flex:1;overflow:auto;padding:14px 18px;background:repeating-linear-gradient(180deg,#f6efdc 0 23px,#d9e3ee 23px 24px);font:13px/24px Georgia,serif;color:#2a2018}
+.jr-page header{display:flex;align-items:center;gap:8px;border-bottom:2px solid #b44;margin-bottom:6px;padding-bottom:4px}.jr-page header b{font-size:18px}.jr-page header small{color:#7a6a5a;font-size:11px}
+.jr-page p{margin:0 0 6px}.jr-d{font:700 11px var(--mono);color:#b44;margin-right:6px}.jr-none{color:#9a8a7a;font-style:italic}
+.jr-ex{float:right;margin:0 0 8px 12px;padding:6px 6px 2px;background:#fff;box-shadow:2px 3px 0 rgba(0,0,0,.25);transform:rotate(1.5deg);width:170px;font:italic 11px/1.3 Georgia,serif}.jr-ex canvas{display:block;width:160px}
+.jr-end{white-space:pre-wrap;border-top:1px dashed #b9a;margin-top:12px;padding-top:6px}.jr-end.ps{font-style:italic}
+/* Profiles.exe */
+.prof{display:flex;flex-direction:column;height:100%;gap:6px}.prof-tabs{display:flex;gap:4px}.prof-tab{display:flex;align-items:center;gap:5px;padding:3px 8px;border:2px solid var(--line);border-radius:10px;background:var(--paper);font:inherit;font-size:12px;cursor:pointer}.prof-tab.on{background:var(--c);color:#1a1020;font-weight:700}
+.prof-card{flex:1;min-height:0;display:flex;gap:12px;padding:10px;border-radius:12px;background:linear-gradient(135deg,#fff,color-mix(in srgb,var(--c) 22%,#fff));border:2px solid var(--line)}
+.prof-pic{position:relative;width:130px;flex:none;overflow:hidden;border-radius:8px;background:linear-gradient(180deg,#fff,var(--c));border:2px solid var(--line)}.prof-pic .sel-img{height:330px;top:-2px;transform:translateX(-50%);filter:none}
+.prof-body{flex:1;min-width:0;overflow:auto}.prof-head b{font:900 20px var(--display)}.prof-head small{display:block;color:var(--ink-soft);font:11px var(--mono)}
+.prof dl{display:grid;grid-template-columns:110px 1fr;gap:4px 10px;margin:8px 0;font-size:12.5px}.prof dt{font-weight:700;color:var(--ink-soft)}.prof dd{margin:0}.prof dd.unk{font-family:var(--mono);color:#9a8ab0;letter-spacing:2px}
 </style>
 </head>
 <body>
@@ -1405,7 +1457,7 @@ function loadSave() { try { const t = localStorage.getItem(SAVE_KEY); return t ?
 function wipeSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) { } }
 const UPD = new Set();
 setInterval(() => { if (S.flags && S.flags.ping && !document.getElementById('setup') && !document.getElementById('blackout')) SFX.vibrate(); }, 2600);
-function refresh() { UPD.forEach(f => { try { f(); } catch (e) { console.error(e); } }); renderIcons(); renderTray(); applyAtmos(); }
+function refresh() { UPD.forEach(f => { try { f(); } catch (e) { console.error(e); } }); try { if (typeof profCheck === 'function' && S.player && !S.flags.chamber) profCheck(); } catch (e) { } renderIcons(); renderTray(); applyAtmos(); }
 const layersTotal = () => ORDER.reduce((a, k) => a + S.g[k].layer, 0);
 const clockStr = () => { const m = S.mins % (24 * 60); return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60); };
 const tick = (n = 1) => { S.mins += n; };
@@ -1521,6 +1573,7 @@ const ICONS = {
   atlas: '<circle cx="16" cy="16" r="12" fill="#8fdcf7"/><path d="M9 9q4 3 2 7t3 7M20 6q-2 5 3 7t2 8" fill="#7be3a4"/><rect x="15" y="4" width="2" height="24" fill="#ffffff" opacity=".6"/>',
   gallery: '<rect x="2" y="6" width="28" height="20" fill="#ffd86e"/><rect x="5" y="9" width="22" height="14" fill="#fff"/><path d="M7 21l6-6 4 4 3-3 5 5z" fill="#ff8cc6"/><circle cx="21" cy="13" r="2" fill="#8fdcf7"/>',
   doc: '<rect x="7" y="3" width="15" height="26" fill="#fff"/><rect x="22" y="9" width="4" height="20" fill="#fff"/><rect x="10" y="12" width="12" height="2" fill="#b9a3dc"/><rect x="10" y="16" width="13" height="2" fill="#b9a3dc"/><rect x="10" y="20" width="9" height="2" fill="#b9a3dc"/>',
+  id: '<rect x="3" y="7" width="26" height="19" rx="3" fill="#fff3fa" stroke="#4a2d6e" stroke-width="2"/><circle cx="11" cy="15" r="3.5" fill="#ff8cc6"/><rect x="6" y="20" width="10" height="3" rx="1.5" fill="#ff8cc6"/><rect x="18" y="12" width="8" height="2" fill="#4a2d6e"/><rect x="18" y="16" width="8" height="2" fill="#b693ef"/><rect x="18" y="20" width="6" height="2" fill="#b693ef"/>',
   journal: '<rect x="6" y="3" width="20" height="26" fill="#c7a17a"/><rect x="9" y="3" width="2" height="26" fill="#8a5a3a"/><rect x="14" y="10" width="9" height="2" fill="#fff4e0"/><rect x="14" y="14" width="7" height="2" fill="#fff4e0"/><path d="M20 22l3 3 3-3" fill="#ff5fa8"/>',
   img: '<rect x="3" y="6" width="26" height="20" fill="#ffd86e"/><rect x="5" y="8" width="22" height="16" fill="#d8c6f4"/><rect x="19" y="10" width="4" height="4" fill="#fff"/><path d="M5 24l7-8 5 5 3-3 7 6z" fill="#ff8cc6"/>',
   exe: '<rect x="3" y="5" width="26" height="22" fill="#f5eeff"/><rect x="3" y="5" width="26" height="5" fill="#ff8cc6"/><rect x="7" y="14" width="18" height="2" fill="#e2458f"/><rect x="7" y="19" width="12" height="2" fill="#b9a3dc"/>',
@@ -1849,7 +1902,7 @@ const KNOW_TXT = {
 function doAction(a) {
   if (a.action === 'GIVE_ITEM') { if (!S.inv.includes(a.value)) { S.inv.push(a.value); SFX.item(); toast('Added to inventory', `<b>${esc(a.value)}</b>`); } }
   else if (a.action === 'KNOW') { if (!knows(a.value)) S.know.push(a.value); }
-  else if (a.action === 'JOURNAL') { if (!S.journal.some(j => j.text === a.value)) S.journal.push({ day: S.day, text: a.value }); }
+  else if (a.action === 'JOURNAL') { if (!S.journal.some(j => j.text === a.value)) S.journal.push({ day: S.day, text: a.value, g: a.g || null }); }
   else if (a.action === 'SET_FLAG') S.flags[a.value] = true;
   else if (a.action === 'COIN_PICK') { if (S.session) S.session.pick = a.value; }
   else if (a.action === 'UNSET_FLAG') delete S.flags[a.value];
@@ -1948,6 +2001,7 @@ function renderIcons() {
     { id: 'mail', label: 'DiveMail', ic: 'mail', fn: openMail, badge: mailUnread },
     { id: 'brain', label: 'Fix-it', ic: 'wrench', fn: openBrain, ping: S.flags.ping === 'brain', isNew: S.phase === 'day' && availableToday().length > 0 && !S.session },
     { id: 'mbox', label: 'MementoBox', ic: 'box', fn: openMBox },
+    { id: 'profiles', label: 'Profiles', ic: 'id', fn: openProfiles, isNew: !!S.flags.profNew },
   ];
   if (S.session) list.splice(3, 0, { id: 'ses', label: 'session_' + S.session.g + '.tmp', ic: 'tmp', fn: focusSessionChat, isNew: true });
   if (SPECIAL[S.day] === 'showcase' && S.phase === 'day') list.push({ id: 'show', label: 'Showcase.exe', ic: 'gallery', fn: openShowcase, isNew: PLAYABLE.filter(k => onSite(k) && met(k)).some(k => !S.show[k]) });
@@ -2189,7 +2243,7 @@ function compileSteps(e) {
     if (r.emo && !EMOS.includes(r.emo.toLowerCase())) dataIssue(F, R, `unknown emo "${r.emo}" (use ${EMOS.join(', ')})`);
     const ln = { who: (r.who || '').toLowerCase() || null, emo: (r.emo || '').toLowerCase() || null, text: r.text || '' };
     if (!ln.text) { DATA_EMPTY++; if (type === 'choice') lastChoice = 'skip'; return; }   // not written yet
-    const fx = parseEffects(r.effects, F, R); if (r.journal) fx.act.push({ action: 'JOURNAL', value: r.journal });
+    const fx = parseEffects(r.effects, F, R); if (r.journal) fx.act.push({ action: 'JOURNAL', value: r.journal, g: ((e.meta && e.meta.girl) || '').trim().toLowerCase() || null });
     // the journal is Boss's: only what the player tells Boss at night (night_boss) is written into it
     if (F !== 'night_boss' && fx.act.some(a => a.action === 'JOURNAL')) { dataIssue(F, R, 'journal only comes from night_boss (the nightly talk with Boss) — ignored here'); fx.act = fx.act.filter(a => a.action !== 'JOURNAL'); }
     if (type === 'line') {
@@ -2401,8 +2455,10 @@ function nightConvo(g) {
   return { id: c.id, by: c.by, steps: DD.night[c.id].steps };
 }
 function nightAvail(g) { return S.phase === 'night' && PLAYABLE.includes(g) && !S.g[g].gone && S.g[g].sessions > 0; }
-function canNightChat(g) { return nightAvail(g) && S.night.chats < NIGHT_CHATS && !S.night.with.includes(g) && !S.active && !!nightConvo(g); }
-function girlWaiting(g) { const c = nightConvo(g); return nightAvail(g) && c && c.by === 'girl' && !S.night.with.includes(g); }
+// the girl you worked with today writes to you at night, and she can't be ignored (Boss can)
+function nightMust(g) { return nightAvail(g) && (S.todayWorked || []).includes(g) && !S.night.with.includes(g) && !!nightConvo(g); }
+function canNightChat(g) { return nightAvail(g) && (S.night.chats < NIGHT_CHATS || nightMust(g)) && !S.night.with.includes(g) && !S.active && !!nightConvo(g); }
+function girlWaiting(g) { const c = nightConvo(g); return nightAvail(g) && c && (c.by === 'girl' || nightMust(g)) && !S.night.with.includes(g); }
 function nightChatWhyNot(g) {
   if (S.g[g].gone) return `${GIRLS[g].name} left the facility.`;
   if (S.active) return 'Waiting… another conversation is active.';
@@ -2560,6 +2616,7 @@ const complete = k => S.g[k].layer >= 3;
 function availableToday() { if (reckoning()) return S.flags.rkFiles && S.phase === 'day' && !(S.g.ray && S.g.ray.layer >= 1) ? ['ray'] : []; if (SPECIAL[S.day] === 'showcase' || !S.flags.briefed || S.phase !== 'day' || S.dayOver) return []; return PLAYABLE.filter(k => met(k) && S.day >= GIRLS[k].from && !complete(k)); }
 function checkpoint(at) {
   S.at = at;
+  if (S.flags.chamber) return;   // the test chamber's sandbox never touches the real save
   const cp = JSON.parse(JSON.stringify({ ...S, active: null, queue: [], dyn: {}, session: null }));
   cp.logs.session = [];
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(cp)); } catch (e) { }
@@ -2652,6 +2709,8 @@ async function goNight() {
   S.unread.boss = (S.unread.boss || 0) + 1;
   PLAYABLE.forEach(g => { if (girlWaiting(g)) S.unread[g] = (S.unread[g] || 0) + 1; });
   SFX.chime(); openYap('boss'); refresh();
+  toast('Yappy Yappy', '<b>Boss</b> sent you a message.');
+  for (const g of PLAYABLE.filter(nightMust)) { await wait(900); SFX.vibrate(); toast('Yappy Yappy', `<b>${esc(GIRLS[g].name)}</b> sent you a message.`); }
 }
 setInterval(() => { if (S.flags && S.flags.nightAfter && !S.active && !S.queue.length && !S.session) { S.flags.nightAfter = false; goNight(); } }, 800);
 /* Start ▸ Shut down. At night it ends the night. In the day it ends the work day only once she's run out of
@@ -2669,6 +2728,8 @@ function startShutDown() {
 }
 async function shutDown() {
   if (S.phase !== 'night' || S.active || S.flags.ended) return;
+  const owed = PLAYABLE.filter(nightMust);
+  if (owed.length) { SFX.buzz(); toast('Yappy Yappy', `<b>${esc(GIRLS[owed[0]].name)}</b> is waiting for your reply.`); openYap(owed[0]); return; }
   S.night.bossPending = false;   // if Boss wasn't answered tonight, that night simply has no section in the journal
   DD.journal.filter(j => j.kind === 'entry' && dayMatch(j.day, S.day) && cond(j.if)).forEach(j => {
     if (!S.journal.some(x => x.rid === j.id)) S.journal.push({ day: S.day, text: tpl(j.text, tplVars()), rid: j.id, ray: true });
@@ -2683,29 +2744,45 @@ async function shutDown() {
 /* =========================================================
    FIX-IT (patient list)
    ========================================================= */
-function openBrain() { if (S.flags.ping === 'brain') { S.flags.ping = null; renderIcons(); } openWin('brain', { title: 'Fix-it', icon: 'wrench', w: 560, h: 440, x: 120, y: 30, render: (b, rec) => { addUpd(rec, renderBrain); renderBrain(); } }); }
+function openBrain() { if (S.flags.ping === 'brain') { S.flags.ping = null; renderIcons(); } openWin('brain', { title: 'Fix-it', icon: 'wrench', w: 760, h: 560, x: 100, y: 20, render: (b, rec) => { addUpd(rec, renderBrain); renderBrain(); } }); }
+// the patient select screen: tall masked portraits like a fighting game's character select.
+// Not met yet: not shown. Met but never picked: a silhouette. Picked before: her portrait.
+const SEL_COL = { prim: '#ff7eb6', trix: '#ff4d5e', paige: '#a46bff', vel: '#ffd23f', ray: '#e8e4ee' };
+function selPortrait(k) {
+  if (ART[k]) return `<img class="sel-img" src="${ART[k].body}" alt="">`;
+  const c = SEL_COL[k] || '#bbb';   // no art yet: a drawn stand-in figure in her colour
+  return `<svg class="sel-img fig" viewBox="0 0 80 170" aria-hidden="true"><ellipse cx="40" cy="30" rx="17" ry="19" fill="${c}"/><path d="M20 30 Q18 6 40 6 Q62 6 60 30 L64 60 L54 44 L26 44 L16 60 Z" fill="${c}" opacity=".75"/><path d="M18 58 Q40 46 62 58 L68 120 L12 120 Z" fill="${c}"/><rect x="22" y="118" width="14" height="48" rx="5" fill="${c}"/><rect x="44" y="118" width="14" height="48" rx="5" fill="${c}"/></svg>`;
+}
 function renderBrain() {
   const w = WINS.brain; if (!w) return; const b = w.body;
   const night = S.phase === 'night', sp = SPECIAL[S.day];
   const shown = reckoning() ? (S.flags.rkFiles ? ['ray'] : []) : PLAYABLE.filter(k => met(k));
+  const info = k => {
+    const st = S.g[k] || { layer: 0 };
+    if (k !== 'ray' && complete(k)) return { status: 'every layer faced', ok: true, dim: true };
+    if (S.session && S.session.g === k) return { status: 'in session', go: true };
+    if (night) return { status: 'resting' };
+    if (sp === 'showcase') return { status: 'showcase today' };
+    if (S.dayOver) return { status: 'exhausted' };
+    if (S.session) return { status: 'waiting' };
+    if (availableToday().includes(k)) return { status: 'ready', dive: true };
+    return { status: 'resting' };
+  };
+  if (!shown.includes(S.selPick)) S.selPick = shown.find(k => info(k).dive || info(k).go) || null;
   const cards = shown.map(k => {
-    const G = GIRLS[k], st = S.g[k];
-    let status = '', btn = '', dim = false, ok = false;
-    if (complete(k)) { status = 'every layer faced'; ok = true; dim = true; }
-    else if (S.session && S.session.g === k) { status = 'in session'; btn = `<button class="btn" data-go="${k}">Return ▶</button>`; }
-    else if (night) status = 'resting';
-    else if (sp === 'showcase') status = 'showcase today';
-    else if (S.dayOver) status = 'exhausted';
-    else if (S.session) status = 'waiting';
-    else if (availableToday().includes(k)) { status = 'ready'; btn = `<button class="btn primary" data-dive="${k}">Start session ▶</button>`; }
-    else status = 'resting';
-    const pips = `<div class="pips" title="layers">${[0, 1, 2].map(i => `<span class="pip${st.layer > i ? '' : ' off'}"></span>`).join('')}</div>`;
-    return `<div class="pcard bevel${dim ? ' dim' : ''}"><div class="top">${avHTML(k)}<div><b>${esc(G.name)}</b><small>${esc(G.id)}</small></div></div>${pips}<div class="st${ok ? ' ok' : ''}">${esc(status)}</div>${btn}</div>`;
+    const G = GIRLS[k], st = S.g[k] || { layer: 0 }, I = info(k), sil = k !== 'ray' && !(st.sessions > 0);
+    const pips = k === 'ray' ? '' : `<div class="pips">${[0, 1, 2].map(i => `<span class="pip${st.layer > i ? '' : ' off'}"></span>`).join('')}</div>`;
+    return `<button class="sel${sil ? ' sil' : ''}${I.dim ? ' dim' : ''}${S.selPick === k ? ' on' : ''}${I.dive || I.go ? ' can' : ''}" data-pick="${k}" style="--c:${SEL_COL[k] || '#ccc'}" aria-label="${esc(G.name)} · ${esc(I.status)}">
+      <span class="sel-mask">${selPortrait(k)}${sil ? '<span class="sel-q">?</span>' : ''}</span>
+      <span class="sel-plate"><b>${sil ? '???' : esc(G.name)}</b><small>${esc(G.id)}</small>${pips}<i class="${I.ok ? 'ok' : ''}">${esc(I.status)}</i></span></button>`;
   }).join('') || '<div class="status-line">No patients assigned yet.</div>';
+  const pk = S.selPick && info(S.selPick);
   const part = night ? 'Closed until 09:00' : sp === 'showcase' ? 'Hobby Showcase' : S.dayOver ? 'Work day over · Start ▸ Shut down' : `Work day · stamina ${staminaPct()}%`;
-  b.innerHTML = `<div class="bd"><div class="bd-head"><div><div class="day">${S.flags.probation ? 'Day ' + S.day : 'Fix-it'}</div><div class="ph">${esc(part)} · ${clockStr()}</div></div></div>
-    <div class="cards">${cards}</div>
-    <div class="bd-foot">${S.flags.ended ? '<button class="btn primary" id="bd-new">New game</button>' : night ? `<button class="btn" id="bd-sleep" ${S.active ? 'disabled' : ''}>Shut down for the night</button>` : sp === 'showcase' ? '<button class="btn" id="bd-show">Open Showcase.exe</button>' : ''}</div></div>`;
+  b.innerHTML = `<div class="bd selscr"><div class="bd-head"><div><div class="day">${S.flags.probation ? 'Day ' + S.day : 'Fix-it'}</div><div class="ph">${esc(part)} · ${clockStr()}</div></div><div class="sel-title">SELECT YOUR PATIENT</div></div>
+    <div class="sel-row">${cards}</div>
+    <div class="bd-foot">${S.flags.ended ? '<button class="btn primary" id="bd-new">New game</button>' : night ? `<button class="btn" id="bd-sleep" ${S.active ? 'disabled' : ''}>Shut down for the night</button>` : sp === 'showcase' ? '<button class="btn" id="bd-show">Open Showcase.exe</button>'
+      : pk && pk.go ? `<button class="btn primary sel-go" data-go="${S.selPick}">Return to ${esc(GIRLS[S.selPick].name)} ▶</button>` : pk && pk.dive ? `<button class="btn primary sel-go" data-dive="${S.selPick}">DIVE · ${esc(GIRLS[S.selPick].name)} ▶</button>` : ''}</div></div>`;
+  $$('[data-pick]', b).forEach(x => { x.onclick = () => { SFX.tick(); S.selPick = x.dataset.pick; renderBrain(); }; x.ondblclick = () => { const I = info(x.dataset.pick); if (I.dive) startSession(x.dataset.pick); }; });
   $$('[data-dive]', b).forEach(x => x.onclick = () => { SFX.click(); startSession(x.dataset.dive); });
   $$('[data-go]', b).forEach(x => x.onclick = () => { focusWin('feed'); focusWin('fixit'); focusSessionChat(); });
   const s = $('#bd-sleep', b); if (s) s.onclick = () => { SFX.click(); shutDown(); };
@@ -2764,6 +2841,7 @@ const SHOW_CAP = {
 function renderShowcase() {
   const w = WINS.show; if (!w) return; const b = w.body;
   const here = PLAYABLE.filter(k => met(k));
+  S.exhibit = S.exhibit || {}; here.forEach(g => { if (!S.exhibit[g]) S.exhibit[g] = { kind: trueTo(g) ? 'real' : 'half', day: S.day }; });
   b.innerHTML = `<div class="show">${here.map(g => `<div class="exh bevel"><div class="who">${avHTML(g)}<b>${esc(GIRLS[g].name)}</b></div><canvas width="160" height="120" data-g="${g}"></canvas>
      <div class="cap">${esc(SHOW_CAP[g][trueTo(g) ? 1 : 0])}</div>${S.show[g] ? '<span class="chip ok">✓ talked</span>' : `<button class="btn primary" data-talk="${g}" ${S.active ? 'disabled' : ''}>Talk about it</button>`}</div>`).join('')}</div>`;
   $$('canvas', b).forEach(c => drawExhibit(c, c.dataset.g, trueTo(c.dataset.g)));
@@ -2883,10 +2961,12 @@ function focusSessionChat() { openYap('session'); }
 function placeWin(id, x, y, w, h) { const W = WINS[id]; if (!W || narrow()) return; const dk = $('#desktop'); Object.assign(W.el.style, { left: clamp(x, 6, Math.max(6, dk.clientWidth - w - 6)) + 'px', top: y + 'px', width: Math.min(w, dk.clientWidth - 16) + 'px', height: Math.min(h, dk.clientHeight - 16) + 'px' }); }
 // called by the map: a memory was cleared (react), a gate opened (a layer came off)
 function sessionLevelWon(g, p, first) {
+  if (S.flags.chamber) return;
   if (!first || !S.session || S.active) return;
   if (Math.random() < .55) { const st = sesSteps(g, 'react', e => !e.trigger || /^(WIN|PERFECT)_/.test(e.trigger)); if (st) runDialogue(seq('session', g, st, 'NONE')); }
 }
 async function sessionLayerOpened(g, L) {
+  if (S.flags.chamber) { owSay(`gate ${L} open (test)`); return; }
   S.todayLayers++;
   await breakLayerFx(g, L);
   const extra = L >= 3 ? [{ lines: [['sys', `*** ${GIRLS[g].id} · core reached · every layer faced ***`]] }] : [];
@@ -2948,6 +3028,7 @@ async function closeSession(quick) {
 }
 // leaving early: she says bye, then the chat is deleted
 function endSessionEarly() {
+  if (S.flags.chamber) { if (typeof owClose === 'function') owClose(); closeWin('fixit'); return; }
   const ss = S.session; if (!ss || S.active) return;
   if (typeof owClose === 'function') owClose();
   runDialogue(seq('session', ss.g, sesOutro(ss.g), 'SES_CLOSE'));
@@ -3147,7 +3228,7 @@ function endGame(kind) {
   S.flags.ended = true; S.flags.endKind = kind; checkpoint('ended'); refresh();
   glitch('hard');
   setTimeout(() => {
-    openNote('journal', 'journal.txt', journalText(), 'journal', 'journal');
+    openJournal();
     const fixed = PLAYABLE.filter(k => S.g[k].gone).map(k => GIRLS[k].name);
     openWin('end', {
       title: kind === 'reckoning' ? 'Reckoning' : kind === 'proto' ? 'End of prototype' : 'Deadline', icon: 'soul', w: 500, h: 560, x: 110, y: 16, render: b => {
@@ -3270,7 +3351,8 @@ async function main() {
   await loadDialogueData();
   buildTaskbar(); renderIcons(); renderTray();
   let saved = loadSave();
-  const pick = await titleScreen(!!(saved && saved.player));
+  let auto = false; try { auto = sessionStorage.getItem('cyfh_autostart') === '1'; sessionStorage.removeItem('cyfh_autostart'); } catch (e) { }
+  const pick = auto && saved ? 'continue' : await titleScreen(!!(saved && saved.player));
   if (pick === 'chamber') { await bootOS(); openChamber(); return; }
   if (pick === 'new') { wipeSave(); saved = null; }
   if (saved && saved.player) {
@@ -3278,6 +3360,7 @@ async function main() {
     S = Object.assign(fresh(), saved); S.tq = null; S.tqNext = null;   // a timed question does not survive a reload
     S.active = null; S.queue = []; S.dyn = {}; S.session = null;
     await bootOS();
+    if (S.flags.testRun) testRunBanner();
     if (S.flags.ended) { refresh(); endGame(S.flags.endKind || 'proto'); return; }
     if (S.flags.rayFace) WHO.boss.name = 'Ray';
     if (S.at === 'reckoning') { S.day = LAST_DAY; await beginReckoning(); return; }
@@ -3745,6 +3828,7 @@ const OW_MID = 5;
 function owBuild(g) {
   if (OWMAP[g]) return OWMAP[g];
   if (g === 'ray') return (OWMAP.ray = rayMap());
+  const ov = typeof mapOverride === 'function' && mapOverride(g); if (ov) return (OWMAP[g] = ov);   // a layout from the map editor
   const lay = owLayers(g), H = 11, mid = OW_MID;
   const cells = [];   // [x, y, v] v: 1 floor · 2 gate · 3 seal
   const nodes = [], gates = [], seals = [];
@@ -4574,6 +4658,7 @@ function titleScreen(hasSave) {
 let chGirl = 'prim';
 function openChamber() {
   S = fresh(); S.player = { name: 'tester', avatar: '' }; S.flags.chamber = true; S.phase = 'day';
+  if (CH.raySrc) CH.raySrc.forEach((id, i) => { if (RAY_SRC[i]) RAY_SRC[i][1] = id; });
   $$('.dicon').forEach(d => d.hidden = true);   // a bare desktop: nothing from the story here
   openWin('chamber', { title: 'Test chamber', icon: 'puzzle', w: 640, h: 500, x: 30, y: 20, render: (b, rec) => { addUpd(rec, () => renderChamber(b)); renderChamber(b); } });
 }
@@ -4597,7 +4682,7 @@ function renderChamber(b) {
         <label><input type="checkbox" id="co-debug" ${CH.opt.debug ? 'checked' : ''}> Designer info (solution count, notes, show answer)</label>
         <label><input type="checkbox" id="co-story" ${CH.opt.story ? 'checked' : ''}> Story flow preview (her message between maps, like the real game)</label>
         <div class="chm-mem">${Object.entries(CH_MEM).map(([k, m]) => `<label title="${esc(m.desc)}"><input type="checkbox" data-mem="${k}" ${CH.opt.mem[k] ? 'checked' : ''}> ${icon(m.ic)} ${m.name}</label>`).join('')}</div>
-        <div class="chm-btns"><button class="btn primary" id="co-editor">✎ Level editor</button><button class="btn" id="co-reset">Clear progress</button><button class="btn" id="co-title">Back to title</button></div>
+        <div class="chm-btns"><button class="btn primary" id="co-editor">✎ Level editor</button><button class="btn primary" id="co-kit">🧰 Designer kit</button><button class="btn" id="co-reset">Clear progress</button><button class="btn" id="co-title">Back to title</button></div>
       </div>
     </div></div>`;
   $$('[data-g]', b).forEach(x => x.onclick = () => { SFX.click(); chGirl = x.dataset.g; renderChamber(b); });
@@ -4606,6 +4691,7 @@ function renderChamber(b) {
   $('#co-story', b).onchange = e => { CH.opt.story = e.target.checked; chSave(); };
   $$('[data-mem]', b).forEach(x => x.onchange = () => { CH.opt.mem[x.dataset.mem] = x.checked; chSave(); });
  $('#co-editor', b).onclick = () => { SFX.click(); openEditor(); };
+  $('#co-kit', b).onclick = () => { SFX.click(); openKit(); };
   $$('[data-p]', b).forEach(x => x.oncontextmenu = e => { e.preventDefault(); openEditor(x.dataset.p); });
   $('#co-reset', b).onclick = () => { CH.done = {}; chSave(); renderChamber(b); };
   $('#co-title', b).onclick = () => location.reload();
@@ -6354,7 +6440,7 @@ const OW3 = (() => {
       const half = Math.tan(cam.fov * Math.PI / 360), want = 8;   // about eight tiles across
       const dist = Math.max(want / (2 * half * cam.aspect), 7.2 / (2 * half)) * .95, pitch = 60 * Math.PI / 180;
       const viewW = 2 * half * cam.aspect * dist, lo = viewW / 2 - 1, hi = M.W - viewW / 2;
-      let tx = lo < hi ? clamp(px, lo, hi) : (M.W - 1) / 2, tz = clamp(pz, OW_MID - 2.6, OW_MID + 2.6);
+      let tx = lo < hi ? clamp(px, lo, hi) : (M.W - 1) / 2, zm = (M.H - 1) / 2, zr = Math.max(0, zm - 2.4), tz = clamp(pz, zm - zr, zm + zr);
       if (camX == null) { camX = tx; camZ = tz; }
       camX += (tx - camX) * .12; camZ += (tz - camZ) * .08;
       const sh = OW.shake && now - OW.shake < 350 ? Math.sin((now - OW.shake) / 18) * .12 * (1 - (now - OW.shake) / 350) : 0;
@@ -6572,6 +6658,349 @@ async function paigeSessionCoin() {
   ss.lucky = ss.pick === res; save();
   if (ss.lucky) toast('Lucky streak', 'This session: every 2 inputs cost 1 minute.');
   runDialogue(seq('session', 'paige', [{ lines: [pickRnd(ss.lucky ? PAIGE_WIN : PAIGE_LOSE)] }], 'SES_SCAN'));
+}
+
+/* ---------- Profiles.exe (DIVE default): what you know about each girl you've worked with ----------
+   Fields fill in as you learn them: night talks (how many you've had with her), layers faced, flags.
+   Until then a field shows ???. */
+const PROFILE = {
+  prim: [['Name', 'Prim'], ['File', 'PRIM_01'], ['Style', 'Jirai Kei'], ['Assigned role', '"the artist"', { s: 1 }],
+    ['Likes', 'pink ribbons, tracing paper, the sound of rain on a window', { nt: 1 }], ['Hates', 'being looked at while she draws', { nt: 2 }],
+    ['Says she is', 'fragile. "glass girl."', { L: 1 }], ['Real passion', 'music. she writes songs and never shows anyone.', { nt: 4, f: 'prim_music' }],
+    ['Afraid of', 'being "fixed" into someone who doesn\'t need anything', { L: 2 }], ['Wants', 'to see the sea. it\'s 19 km away.', { nt: 5 }]],
+  trix: [['Name', 'Trix'], ['File', 'TRIX_02'], ['Style', 'E-Girl'], ['Assigned role', '"the gamer girl"', { s: 1 }],
+    ['Likes', 'clean proofs, chess openings, being right', { nt: 1 }], ['Hates', 'being called cute when she\'s explaining something', { nt: 2 }],
+    ['Says she is', 'just a gamer. Iron IV. "it\'s ironic."', { L: 1 }], ['Real passion', 'mathematics. a notebook of proofs nobody asked for.', { nt: 4, f: 'trix_true' }],
+    ['Afraid of', 'an unsolved problem that stays unsolved', { L: 2 }], ['Wants', 'a whiteboard. a room with a whiteboard.', { nt: 5 }]],
+  paige: [['Name', 'Paige'], ['File', 'PAIGE_03'], ['Style', 'Goth'], ['Assigned role', '"the goth"', { s: 1 }],
+    ['Likes', 'coin flips, card tricks, the moment before the dice land', { nt: 1 }], ['Hates', 'people who call her lucky', { nt: 2 }],
+    ['Says she is', 'bad luck. "too much."', { L: 1 }], ['Real passion', 'designing poker chips. "house of p."', { nt: 4, f: 'paige_true' }],
+    ['Afraid of', 'a game where nothing is left to chance', { L: 2 }], ['Wants', 'one hand she doesn\'t fold.', { nt: 5 }]],
+  vel: [['Name', 'Vel'], ['File', 'VEL_04'], ['Style', 'Gyaru'], ['Assigned role', '"the gyaru"', { s: 1 }],
+    ['Likes', 'maps, field manuals, sticker bombs, loud music', { nt: 1 }], ['Hates', 'being called a bimbo. spelling tests.', { nt: 2 }],
+    ['Says she is', 'trigger happy. "just a bimbo."', { L: 1 }], ['Real passion', 'scale models. a 1:4 M1 Garand, every screw painted.', { nt: 4, f: 'vel_true' }],
+    ['Afraid of', 'not being taken seriously, ever', { L: 2 }], ['Wants', 'to finish the model. and the dress. both.', { nt: 5 }]],
+};
+function profKnown(g, at) {
+  if (!at) return true; const st = S.g[g] || {};
+  if (at.f && S.flags[at.f]) return true;
+  if (at.s && (st.sessions || 0) >= at.s) return true;
+  if (at.nt && (st.ntDone || []).length >= at.nt) return true;
+  if (at.L && (st.layer || 0) >= at.L) return true;
+  return false;
+}
+const profCount = g => (PROFILE[g] || []).filter(f => profKnown(g, f[2])).length;
+const profPeople = () => PLAYABLE.filter(g => met(g) && ((S.g[g].sessions || 0) > 0 || S.flags.chamber));
+// tell the player when a profile gets a new line
+function profCheck() {
+  S.prof = S.prof || {};
+  profPeople().forEach(g => { const n = profCount(g); if (S.prof[g] != null && n > S.prof[g]) { S.flags.profNew = true; toast('Profiles', `${esc(GIRLS[g].name)}'s profile was updated.`); } S.prof[g] = n; });
+}
+function openProfiles() {
+  S.flags.profNew = false; renderIcons();
+  let at = profPeople()[0];
+  openWin('profiles', { title: 'Profiles - DIVE', icon: 'id', w: 560, h: 460, x: 200, y: 40, render: (b, rec) => {
+    const draw = () => {
+      const ppl = profPeople(); if (!ppl.includes(at)) at = ppl[0];
+      if (!at) { b.innerHTML = '<div class="prof"><p class="jr-none">No patient files yet. Work with someone first.</p></div>'; return; }
+      const fs = PROFILE[at] || [];
+      b.innerHTML = `<div class="prof"><nav class="prof-tabs">${ppl.map(g => `<button class="prof-tab${g === at ? ' on' : ''}" data-pg="${g}" style="--c:${SEL_COL[g]}">${avHTML(g)}<span>${esc(GIRLS[g].name)}</span></button>`).join('')}</nav>
+        <article class="prof-card" style="--c:${SEL_COL[at]}"><div class="prof-pic">${selPortrait(at)}</div><div class="prof-body"><div class="prof-head"><b>${esc(GIRLS[at].name)}</b><small>patient file · ${profCount(at)}/${fs.length} known</small></div>
+          <dl>${fs.map(([k, v, cond]) => { const ok = profKnown(at, cond); return `<dt>${esc(k)}</dt><dd class="${ok ? '' : 'unk'}">${ok ? esc(v) : '???'}</dd>`; }).join('')}</dl></div></article></div>`;
+      $$('[data-pg]', b).forEach(x => x.onclick = () => { SFX.click(); at = x.dataset.pg; draw(); });
+    };
+    addUpd(rec, draw); draw();
+  } });
+}
+
+/* =========================================================
+   DESIGNER KIT (Test chamber) · apps, every girl's map, a map editor,
+   jump to the big days, cutscenes, the boss's level, a gallery.
+   Plus Boss's journal as a book: one page per girl.
+   ========================================================= */
+const KIT_APPS = ['MusicBox.exe', 'UnitConv.exe', 'Fortune.exe', 'Atlas.exe'];
+const KIT_OPEN = { 'MusicBox.exe': () => openMusicBox(), 'UnitConv.exe': () => openConv(), 'Fortune.exe': () => openFortune(), 'Atlas.exe': () => openAtlas() };
+const KIT = { tab: 'apps', g: 'prim' };
+function openKit() {
+  openWin('kit', { title: 'Designer kit', icon: 'puzzle', w: 780, h: 580, x: 120, y: 20, render: (b, rec) => { addUpd(rec, () => kitRender(b)); kitRender(b); } });
+}
+const KIT_TABS = [['apps', 'Apps'], ['nights', 'Night talks'], ['maps', 'Maps'], ['medit', 'Map editor'], ['events', 'Big days'], ['cuts', 'Cutscenes'], ['boss', 'Boss level'], ['gallery', 'Gallery']];
+function kitRender(b) {
+  if (KIT.tab === 'medit' && $('#me-cv', b)) return;   // the editor redraws itself
+  b.innerHTML = `<div class="kit"><div class="kit-tabs">${KIT_TABS.map(([k, t]) => `<button class="kit-tab${KIT.tab === k ? ' on' : ''}" data-k="${k}">${t}</button>`).join('')}</div><div class="kit-body sunk" id="kit-body"></div></div>`;
+  $$('.kit-tab', b).forEach(x => x.onclick = () => { SFX.click(); KIT.tab = x.dataset.k; b.innerHTML = ''; kitRender(b); });
+  const body = $('#kit-body', b);
+  ({ apps: kitApps, nights: kitNights, maps: kitMaps, medit: kitMapEditor, events: kitEvents, cuts: kitCuts, boss: kitBoss, gallery: kitGallery })[KIT.tab](body);
+}
+
+/* ---------- apps ---------- */
+function kitApps(el) {
+  el.innerHTML = `<p class="kit-p">Every app the girls can send. <b>Launch</b> runs it with its boot popup, <b>Install</b> runs the setup wizard first (like opening it from DiveMail).</p>
+    <div class="kit-grid">${KIT_APPS.map(n => `<div class="kit-card bevel"><div class="kit-ic">${icon(APPICON[n] || 'exe')}</div><b>${n}</b><small>${esc(Object.entries(REWARD).find(([g, r]) => (r[1].atts || []).some(a => a.name === n)) ? 'from ' + GIRLS[Object.entries(REWARD).find(([g, r]) => (r[1].atts || []).some(a => a.name === n))[0]].name + ' · layer 1' : '')}</small>
+      <div class="row"><button class="btn primary" data-l="${n}">Launch</button><button class="btn" data-i="${n}">Install</button></div></div>`).join('')}</div>
+    <div class="kit-row"><label>Day for the coin market <input type="number" id="kit-day" min="1" max="15" value="${S.day}"></label><button class="btn" id="kit-q">Test Paige's timed question</button></div>`;
+  $$('[data-l]', el).forEach(x => x.onclick = () => { SFX.click(); if (!S.apps.includes(x.dataset.l)) S.apps.push(x.dataset.l); launchApp(x.dataset.l, KIT_OPEN[x.dataset.l]); });
+  $$('[data-i]', el).forEach(x => x.onclick = async () => { SFX.click(); await installApp(x.dataset.i); if (!S.apps.includes(x.dataset.i)) S.apps.push(x.dataset.i); launchApp(x.dataset.i, KIT_OPEN[x.dataset.i]); });
+  $('#kit-day', el).onchange = e => { S.day = clamp(+e.target.value || 1, 1, 15); if (WINS.conv) { closeWin('conv'); openConv(); } };
+  $('#kit-q', el).onclick = () => {
+    SFX.click(); S.met.paige = true; S.g.paige.layer = 1; S.g.paige.ntDone = []; S.phase = 'night';
+    openYap('paige'); S.tqNext = 'paige_coinq'; runDialogue(seq('paige', 'paige', [{ lines: TIMED_QS.paige_coinq.intro }], 'TIMED_Q'));
+  };
+}
+
+/* ---------- night talks: play any girl's night chat or any of Boss's night questions ---------- */
+function kitNights(el) {
+  const g = KIT.ng || (KIT.ng = 'prim');
+  const chats = DD.nightIdx.filter(e => e.girl === g), boss = DD.boss.filter(e => !e.girl || e.girl === g);
+  el.innerHTML = `<p class="kit-p">Play any night talk on its own (Yappy opens). <b>Simulate a night</b> runs the real night flow after a day working with her: Boss and she both message you; she can't be ignored.</p>
+    <div class="kit-row">${PLAYABLE.map(k => `<button class="btn${k === g ? ' primary' : ''}" data-ng="${k}">${esc(GIRLS[k].name)}</button>`).join('')}<button class="btn primary" id="kn-sim">Simulate a night with ${esc(GIRLS[g].name)}</button></div>
+    <h4>${esc(GIRLS[g].name)} · night chats (${chats.length})</h4><div class="kit-talk">${chats.map(e => `<button class="btn" data-nc="${e.id}" title="layer ${e.layer} · ${e.by === 'girl' ? 'she writes first' : 'you write first'}">${esc(e.id)} <small>L${e.layer}${e.by === 'girl' ? ' · ✉' : ''}</small></button>`).join('') || '<i>none</i>'}</div>
+    <h4>Boss · night questions about ${esc(GIRLS[g].name)} (${boss.length})</h4><div class="kit-talk">${boss.map((e, i) => `<button class="btn" data-nb="${i}">${esc(e.id)} <small>${esc(e.kind)}${e.day ? ' · day ' + esc(e.day) : ''}</small></button>`).join('') || '<i>none</i>'}</div>`;
+  $$('[data-ng]', el).forEach(x => x.onclick = () => { KIT.ng = x.dataset.ng; kitNights(el); });
+  const ready = () => { S.met[g] = true; S.g[g].sessions = Math.max(1, S.g[g].sessions || 0); if (S.active) { S.active = null; S.queue = []; } };
+  $$('[data-nc]', el).forEach(x => x.onclick = () => { SFX.click(); ready(); const d = DD.night[x.dataset.nc]; if (!d) return; openYap(g); runDialogue(seq(g, g, playSteps(d.steps), 'NONE')); });
+  $$('[data-nb]', el).forEach(x => x.onclick = () => { SFX.click(); ready(); const e = boss[+x.dataset.nb]; openYap('boss'); runDialogue(seq('boss', 'boss', playSteps(e.steps, { girl: GIRLS[g].name }), 'NONE')); });
+  $('#kn-sim', el).onclick = () => { SFX.click(); ready(); S.phase = 'day'; S.todayWorked = [g]; S.session = null; S.g[g].ntDone = S.g[g].ntDone || []; goNight(); };
+}
+
+/* ---------- maps: walk any girl's map, at any progress ---------- */
+function kitMaps(el) {
+  const st = KIT.mapL || (KIT.mapL = {});
+  el.innerHTML = `<p class="kit-p">Walk a girl's map exactly as in the story (no minutes spent). Pick how many gates are already open.</p>
+    <div class="kit-grid">${PLAYABLE.map(g => `<div class="kit-card bevel">${avHTML(g)}<b>${esc(GIRLS[g].name)}</b><small>${mapOverride(g) ? '<span class="chip">custom layout</span>' : 'built from her panels'}</small>
+      <label>Gates open <select data-gl="${g}">${[0, 1, 2, 3].map(L => `<option value="${L}"${(st[g] || 0) === L ? ' selected' : ''}>${L}</option>`).join('')}</select></label>
+      <label><input type="checkbox" data-gs="${g}"> memories before it solved</label>
+      <button class="btn primary" data-m="${g}">Open map</button></div>`).join('')}</div>`;
+  $$('[data-gl]', el).forEach(x => x.onchange = () => { st[x.dataset.gl] = +x.value; });
+  $$('[data-m]', el).forEach(x => x.onclick = () => { SFX.click(); const g = x.dataset.m; kitWalk(g, st[g] || 0, $(`[data-gs="${g}"]`, el).checked); });
+}
+function kitWalk(g, L, solved) {
+  if (WINS.fixit) { owClose && owClose(); closeWin('fixit'); }
+  delete OWMAP[g]; S.met[g] = true; S.g[g].layer = L; S.g[g].ow = null; S.phase = 'day'; S.session = null;
+  const M = owBuild(g), o = owState(g);
+  if (solved) M.nodes.filter(n => n.layer <= L).forEach(n => o.solved[n.pid] = true);
+  else M.nodes.filter(n => n.layer <= L && n.tut).forEach(n => o.solved[n.pid] = true);
+  openWorld(g);
+}
+
+/* ---------- map editor ---------- */
+const MAPS_KEY = 'cyfh_maps';
+let MAPS_CACHE = null;
+function mapsStore() { if (!MAPS_CACHE) { try { MAPS_CACHE = JSON.parse(localStorage.getItem(MAPS_KEY)) || {}; } catch (e) { MAPS_CACHE = {}; } } return MAPS_CACHE; }
+function mapsSave() { try { localStorage.setItem(MAPS_KEY, JSON.stringify(mapsStore())); } catch (e) { } }
+// layout → the map the game walks: { W, H, t, nodes, gates, seals, start, core, nodeAt }
+function mapFromLayout(g, L) {
+  const W = L.W, H = L.H, t = new Uint8Array(W * H), ok = (x, y) => x >= 0 && y >= 0 && x < W && y < H;
+  L.cells.forEach(([x, y, v]) => { if (ok(x, y)) t[y * W + x] = v; });
+  const ps = id => PANELS.find(p => p.id === id);
+  const raw = L.nodes.filter(n => ps(n.pid) && ok(n.x, n.y)).map(n => ({ ...n, layer: ps(n.pid).layer, tut: !!ps(n.pid).tut }));
+  const nodes = [];
+  [1, 2, 3].forEach(Ly => raw.filter(n => n.layer === Ly).sort((a, b) => a.x - b.x || a.y - b.y).forEach((n, i) => { t[n.y * W + n.x] = t[n.y * W + n.x] || 1; nodes.push({ x: n.x, y: n.y, layer: Ly, pid: n.pid, i, tut: n.tut }); }));
+  const gates = L.gates.filter(q => ok(q.x, q.y)).map(q => { const total = nodes.filter(n => n.layer === q.layer).length; t[q.y * W + q.x] = 2; return { x: q.x, y: q.y, layer: q.layer, total, need: q.need || keysNeed(total) }; }).sort((a, b) => a.layer - b.layer);
+  const seals = L.seals.filter(q => ok(q.x, q.y)).map(q => { t[q.y * W + q.x] = 3; return { x: q.x, y: q.y, pid: q.pid }; });
+  return { g, W, H, t, nodes, gates, seals, start: L.start, core: L.core, nodeAt: new Map(nodes.map((n, k) => [n.y * W + n.x, k])), custom: true };
+}
+function mapOverride(g) { if (g === 'ray' || S.flags.noOverride) return null; const L = mapsStore()[g]; return L && L.on ? mapFromLayout(g, L) : null; }
+function layoutFromMap(M) {
+  const cells = []; for (let y = 0; y < M.H; y++) for (let x = 0; x < M.W; x++) { const v = M.t[y * M.W + x]; if (v === 1) cells.push([x, y, 1]); }
+  return { W: M.W, H: M.H, cells, nodes: M.nodes.map(n => ({ x: n.x, y: n.y, pid: n.pid })), gates: M.gates.map(q => ({ x: q.x, y: q.y, layer: q.layer, need: q.need })), seals: M.seals.map(q => ({ x: q.x, y: q.y, pid: q.pid })), start: M.start.slice(), core: M.core.slice() };
+}
+function generatedMap(g) { S.flags.noOverride = true; delete OWMAP[g]; const M = owBuild(g); delete OWMAP[g]; S.flags.noOverride = false; return M; }
+const ME = { g: null, L: null, tool: 'floor', pid: '', layer: 1, need: 0, cs: 18 };
+function kitMapEditor(el) {
+  if (ME.g !== KIT.g || !ME.L) { ME.g = KIT.g; const saved = mapsStore()[ME.g]; ME.L = saved ? JSON.parse(JSON.stringify(saved)) : layoutFromMap(generatedMap(ME.g)); }
+  const ps = panelsOf(ME.g).sort((a, b) => a.layer - b.layer || (a.tut ? -1 : 0) - (b.tut ? -1 : 0) || a.n - b.n);
+  const on = mapsStore()[ME.g] && mapsStore()[ME.g].on;
+  el.innerHTML = `<div class="me">
+    <div class="me-bar">${PLAYABLE.map(g => `<button class="btn${g === ME.g ? ' primary' : ''}" data-mg="${g}">${esc(GIRLS[g].name)}</button>`).join('')}<span class="sp"></span>
+      <label>W <input type="number" id="me-w" value="${ME.L.W}" min="8" max="120"></label><label>H <input type="number" id="me-h" value="${ME.L.H}" min="5" max="25"></label></div>
+    <div class="me-tools">${[['floor', 'Floor'], ['erase', 'Erase'], ['node', 'Memory'], ['seal', 'Seal'], ['gate', 'Gate'], ['start', 'Start'], ['core', 'Core']].map(([k, t]) => `<button class="me-t${ME.tool === k ? ' on' : ''}" data-t="${k}">${t}</button>`).join('')}
+      <select id="me-pid" title="Panel for Memory / Seal"><option value="">— panel —</option>${ps.map(p => `<option value="${p.id}"${ME.pid === p.id ? ' selected' : ''}>L${p.layer} · ${p.id}${p.tut ? ' (tut)' : ''}${ME.L.nodes.some(n => n.pid === p.id) ? ' ✓' : ''}</option>`).join('')}</select>
+      <label>gate layer <select id="me-layer">${[1, 2, 3].map(L => `<option${ME.layer === L ? ' selected' : ''}>${L}</option>`).join('')}</select></label>
+      <label>keys <input type="number" id="me-need" value="${ME.need || ''}" placeholder="auto" min="0" max="40" style="width:52px"></label></div>
+    <div class="me-wrap"><canvas id="me-cv"></canvas></div>
+    <div class="me-info" id="me-info"></div>
+    <div class="me-btns"><button class="btn" id="me-gen">Reset to generated</button><button class="btn" id="me-clear">Clear</button><button class="btn primary" id="me-test">Test in 3D</button>
+      <button class="btn${on ? ' primary' : ''}" id="me-use">${on ? '✓ Used in the game' : 'Use in the game'}</button><button class="btn" id="me-off">Remove custom</button><button class="btn" id="me-copy">Copy JSON</button><button class="btn" id="me-paste">Paste JSON</button></div></div>`;
+  $$('[data-mg]', el).forEach(x => x.onclick = () => { KIT.g = x.dataset.mg; ME.g = null; kitMapEditor(el); });
+  $$('.me-t', el).forEach(x => x.onclick = () => { ME.tool = x.dataset.t; $$('.me-t', el).forEach(y => y.classList.toggle('on', y === x)); });
+  $('#me-pid', el).onchange = e => { ME.pid = e.target.value; if (ME.tool !== 'seal') ME.tool = 'node'; $$('.me-t', el).forEach(y => y.classList.toggle('on', y.dataset.t === ME.tool)); };
+  $('#me-layer', el).onchange = e => { ME.layer = +e.target.value; ME.tool = 'gate'; $$('.me-t', el).forEach(y => y.classList.toggle('on', y.dataset.t === 'gate')); };
+  $('#me-need', el).onchange = e => { ME.need = +e.target.value || 0; };
+  const resize = () => { ME.L.W = clamp(+$('#me-w', el).value || ME.L.W, 8, 120); ME.L.H = clamp(+$('#me-h', el).value || ME.L.H, 5, 25); meDraw(el); };
+  $('#me-w', el).onchange = resize; $('#me-h', el).onchange = resize;
+  $('#me-gen', el).onclick = () => { ME.L = layoutFromMap(generatedMap(ME.g)); kitMapEditor(el); };
+  $('#me-clear', el).onclick = () => { ME.L = { W: ME.L.W, H: ME.L.H, cells: [], nodes: [], gates: [], seals: [], start: [1, ME.L.H >> 1], core: [ME.L.W - 3, ME.L.H >> 1] }; kitMapEditor(el); };
+  $('#me-test', el).onclick = () => { SFX.click(); mapsStore()['_test_' + ME.g] = ME.L; const g = ME.g; delete OWMAP[g]; OWMAP[g] = mapFromLayout(g, ME.L); S.g[g].layer = 0; S.g[g].ow = null; S.met[g] = true; if (WINS.fixit) { owClose(); closeWin('fixit'); } OWMAP[g] = mapFromLayout(g, ME.L); openWorld(g); };
+  $('#me-use', el).onclick = () => { mapsStore()[ME.g] = { ...JSON.parse(JSON.stringify(ME.L)), on: true }; mapsSave(); delete OWMAP[ME.g]; toast('Map editor', `${GIRLS[ME.g].name}'s map: your layout is used in the game (this browser).`); kitMapEditor(el); };
+  $('#me-off', el).onclick = () => { delete mapsStore()[ME.g]; mapsSave(); delete OWMAP[ME.g]; ME.g = null; kitMapEditor(el); };
+  $('#me-copy', el).onclick = async () => { const t = JSON.stringify({ [ME.g]: ME.L }); try { await navigator.clipboard.writeText(t); toast('Map editor', 'Layout copied as JSON.'); } catch (e) { prompt('Copy this JSON', t); } };
+  $('#me-paste', el).onclick = () => { const t = prompt('Paste a layout JSON'); if (!t) return; try { const o = JSON.parse(t), L = o[ME.g] || o; if (!L.cells || !L.W) throw 0; ME.L = L; kitMapEditor(el); } catch (e) { toast('Map editor', 'That is not a layout.'); } };
+  const cv = $('#me-cv', el); let down = false;
+  const cellAt = e => { const r = cv.getBoundingClientRect(); return [Math.floor((e.clientX - r.left) / ME.cs), Math.floor((e.clientY - r.top) / ME.cs)]; };
+  cv.onpointerdown = e => { down = true; cv.setPointerCapture(e.pointerId); meApply(...cellAt(e), el); };
+  cv.onpointermove = e => { if (down && (ME.tool === 'floor' || ME.tool === 'erase')) meApply(...cellAt(e), el); };
+  cv.onpointerup = () => { down = false; };
+  meDraw(el);
+}
+function meApply(x, y, el) {
+  const L = ME.L; if (x < 0 || y < 0 || x >= L.W || y >= L.H) return;
+  const at = q => q.x === x && q.y === y, clr = () => { L.cells = L.cells.filter(c => !(c[0] === x && c[1] === y)); L.nodes = L.nodes.filter(q => !at(q)); L.gates = L.gates.filter(q => !at(q)); L.seals = L.seals.filter(q => !at(q)); };
+  const floor = () => { if (!L.cells.some(c => c[0] === x && c[1] === y)) L.cells.push([x, y, 1]); };
+  if (ME.tool === 'floor') floor();
+  else if (ME.tool === 'erase') clr();
+  else if (ME.tool === 'node') { if (!ME.pid) { toast('Map editor', 'Pick a panel first.'); return; } L.nodes = L.nodes.filter(q => q.pid !== ME.pid && !at(q)); floor(); L.nodes.push({ x, y, pid: ME.pid }); }
+  else if (ME.tool === 'seal') { if (!ME.pid) { toast('Map editor', 'Pick the panel this seal waits for.'); return; } clr(); L.seals.push({ x, y, pid: ME.pid }); }
+  else if (ME.tool === 'gate') { clr(); L.gates = L.gates.filter(q => q.layer !== ME.layer); L.gates.push({ x, y, layer: ME.layer, need: ME.need || 0 }); }
+  else if (ME.tool === 'start') { floor(); L.start = [x, y]; }
+  else if (ME.tool === 'core') { floor(); L.core = [x, y]; }
+  meDraw(el);
+}
+function meDraw(el) {
+  const L = ME.L, cv = $('#me-cv', el); if (!cv) return;
+  const wrap = $('.me-wrap', el); ME.cs = clamp(Math.floor(Math.min((wrap.clientWidth || 700) / L.W, 330 / L.H)), 18, 28);   // big enough to click; the strip scrolls sideways
+  const cs = ME.cs; cv.width = L.W * cs; cv.height = L.H * cs;
+  const x = cv.getContext('2d'), T = OW_THEME[ME.g], ps = id => PANELS.find(p => p.id === id);
+  x.fillStyle = '#1a1024'; x.fillRect(0, 0, cv.width, cv.height);
+  x.strokeStyle = 'rgba(255,255,255,.06)'; for (let i = 0; i <= L.W; i++) { x.beginPath(); x.moveTo(i * cs, 0); x.lineTo(i * cs, cv.height); x.stroke(); } for (let j = 0; j <= L.H; j++) { x.beginPath(); x.moveTo(0, j * cs); x.lineTo(cv.width, j * cs); x.stroke(); }
+  L.cells.forEach(([cx, cy]) => { x.fillStyle = (cx + cy) & 1 ? T.floor[1] : T.floor[0]; x.fillRect(cx * cs + 1, cy * cs + 1, cs - 2, cs - 2); });
+  x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = `bold ${Math.round(cs * .5)}px monospace`;
+  const LC = ['', '#7fd6ff', '#ffd86e', '#ff7aa8'];
+  L.nodes.forEach(n => { const p = ps(n.pid); x.fillStyle = p ? LC[p.layer] : '#888'; x.fillRect(n.x * cs + 2, n.y * cs + 2, cs - 4, cs - 4); x.fillStyle = '#1a1024'; x.fillText(p && p.tut ? 'T' : String(p ? p.layer : '?'), n.x * cs + cs / 2, n.y * cs + cs / 2 + 1); });
+  L.seals.forEach(q => { x.strokeStyle = T.acc; x.lineWidth = 2; for (let i = 0; i < 3; i++) { x.beginPath(); x.moveTo(q.x * cs + cs * (.25 + i * .25), q.y * cs + 3); x.lineTo(q.x * cs + cs * (.25 + i * .25), q.y * cs + cs - 3); x.stroke(); } });
+  L.gates.forEach(q => { x.fillStyle = '#2a1636'; x.fillRect(q.x * cs + 1, q.y * cs + 1, cs - 2, cs - 2); x.strokeStyle = T.acc; x.lineWidth = 2; x.strokeRect(q.x * cs + 2, q.y * cs + 2, cs - 4, cs - 4); x.fillStyle = T.acc; x.fillText('G' + q.layer, q.x * cs + cs / 2, q.y * cs + cs / 2 + 1); });
+  x.fillStyle = '#7dff9a'; x.fillText('S', L.start[0] * cs + cs / 2, L.start[1] * cs + cs / 2 + 1);
+  x.fillStyle = '#fff'; x.fillText('◆', L.core[0] * cs + cs / 2, L.core[1] * cs + cs / 2 + 1);
+  // checks: panels not placed, memories you can't reach from the start
+  const M = mapFromLayout(ME.g, L), seen = new Set([L.start.join(',')]), q = [L.start.slice()];
+  while (q.length) { const [a, b] = q.pop(); for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = a + dx, ny = b + dy, k = nx + ',' + ny; if (nx < 0 || ny < 0 || nx >= M.W || ny >= M.H || seen.has(k) || !M.t[ny * M.W + nx]) continue; seen.add(k); q.push([nx, ny]); } }
+  const missing = panelsOf(ME.g).filter(p => !L.nodes.some(n => n.pid === p.id)), cut = L.nodes.filter(n => !seen.has(n.x + ',' + n.y));
+  const per = [1, 2, 3].map(Ly => `L${Ly}: ${M.nodes.filter(n => n.layer === Ly).length} memories · gate ${(M.gates.find(g => g.layer === Ly) || {}).need ?? '—'} keys`).join(' · ');
+  $('#me-info', el).innerHTML = `${per}<br>${missing.length ? `<span class="warn">Not on the map (${missing.length}): ${missing.slice(0, 12).map(p => p.id).join(', ')}${missing.length > 12 ? '…' : ''}</span>` : '<span class="ok">Every panel is on the map.</span>'}${cut.length ? ` · <span class="warn">${cut.length} memory tile(s) not connected to the start</span>` : ''}
+    ${M.gates.length < 3 ? ' · <span class="warn">fewer than 3 gates</span>' : ''}`;
+}
+
+/* ---------- big days: start a real game at that day (your save is kept aside) ---------- */
+const KIT_DAYS = [[1, 'Day 1 · first day'], [7, 'Day 7 · Postcard Day'], [10, 'Day 10 · Inspection'], [12, 'Day 12 · Showcase'], [14, 'Day 14 · last day (farewells)'], [15, 'Day 15 · Reckoning']];
+function kitEvents(el) {
+  el.innerHTML = `<p class="kit-p">Starts the real game on that morning, in a test run. Your own save is put aside and comes back with <b>Restore my save</b> on the test banner.</p>
+    <div class="kit-row"><label>Progress <select id="ev-pre"><option value="typical">typical for that day</option><option value="all">every gate open</option><option value="none">no gates open</option></select></label>
+      <label><input type="checkbox" id="ev-true"> every girl was told to follow her real passion (Showcase: the real pieces)</label></div>
+    <div class="kit-list">${KIT_DAYS.map(([d, t]) => `<button class="btn" data-d="${d}">${t}</button>`).join('')}</div>`;
+  $$('[data-d]', el).forEach(x => x.onclick = () => kitTestRun(+x.dataset.d, $('#ev-pre', el).value, $('#ev-true', el).checked));
+}
+function kitTestRun(day, preset, passion) {
+  try { const cur = localStorage.getItem(SAVE_KEY); if (cur && !JSON.parse(cur).flags.testRun && !localStorage.getItem(SAVE_KEY + '_kept')) localStorage.setItem(SAVE_KEY + '_kept', cur); } catch (e) { }
+  const T = fresh(); T.player = { name: 'Tester', hair: 0, hc: 0, eye: 11, skin: 1, outfit: 0, oc: 7, acc: 0 }; T.player.avatar = avatarURL(T.player);
+  T.day = day; T.flags = { testRun: true, briefed: true, briefStarted: true, welcomeMail: true, tutMap: true, owTutorial: true, probation: true };
+  const keep = S; S = T;
+  PLAYABLE.forEach(g => {
+    if (GIRLS[g].from > day) return; T.met[g] = true;
+    const L = preset === 'all' ? 3 : preset === 'none' ? 0 : clamp(Math.floor((day - GIRLS[g].from) / 3.2), 0, 3);
+    T.g[g].layer = L; T.g[g].ow = null; delete OWMAP[g];
+    const M = owBuild(g), o = owState(g);
+    for (let Ly = 1; Ly <= L; Ly++) { const ns = M.nodes.filter(n => n.layer === Ly), G = M.gates[Ly - 1]; ns.filter(n => n.tut).concat(ns.filter(n => !n.tut)).slice(0, Math.max(G ? G.need : 0, ns.filter(n => n.tut).length)).forEach(n => o.solved[n.pid] = true); }
+    if (L >= 1) (REWARD[g][1].atts || []).forEach(a => { if (a.kind === 'app' && !T.apps.includes(a.name)) T.apps.push(a.name); });
+    if (L >= 2) (REWARD[g][2].atts || []).forEach(a => { if (a.kind === 'mem' && !T.mementos.includes(a.name)) T.mementos.push(a.name); });
+    if (passion) T.flags[g + '_true'] = true;
+  });
+  if (passion) T.flags.prim_music = true;
+  T.at = day >= RECKON_DAY ? 'reckoning' : 'am'; if (day >= RECKON_DAY) T.day = LAST_DAY;
+  S = keep;
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(T)); sessionStorage.setItem('cyfh_autostart', '1'); } catch (e) { toast('Big days', 'Could not write the test save.'); return; }
+  location.reload();
+}
+function testRunBanner() {
+  const el = document.createElement('div'); el.id = 'testbar';
+  el.innerHTML = `<b>TEST RUN</b> · day ${S.day} <button class="btn" id="tb-back">Restore my save</button>`;
+  document.body.appendChild(el);
+  $('#tb-back', el).onclick = () => { try { const k = localStorage.getItem(SAVE_KEY + '_kept'); if (k) localStorage.setItem(SAVE_KEY, k); else localStorage.removeItem(SAVE_KEY); localStorage.removeItem(SAVE_KEY + '_kept'); } catch (e) { } location.reload(); };
+}
+
+/* ---------- cutscenes ---------- */
+function kitCuts(el) {
+  el.innerHTML = `<p class="kit-p">Play the cutscenes and screen effects on their own.</p>
+    <h4>Memories (the reckoning)</h4><div class="kit-list">${[1, 2, 3, 4, 5].map(k => `<button class="btn" data-mem="${k}">Memory ${k}</button>`).join('')}</div>
+    <h4>Screen effects</h4><div class="kit-list"><button class="btn" data-fx="quake">Earthquake</button><button class="btn" data-fx="soft">Glitch (soft)</button><button class="btn" data-fx="hard">Glitch (hard)</button><button class="btn" data-fx="wake">Wake up</button><button class="btn" data-fx="lock">Lock screen</button><button class="btn" data-fx="feed">Break-layer effect</button></div>
+    <h4>Talks</h4><div class="kit-list">${['reckoning_morning', 'reckoning_reveal', 'reckoning_map', 'final_talk'].map(k => `<button class="btn" data-talk="${k}">${k}</button>`).join('')}</div>
+    <h4>Endings</h4><div class="kit-list"><button class="btn" data-end="reckoning">Reckoning ending</button><button class="btn" data-end="deadline">Deadline ending</button><button class="btn" id="cu-journal">Boss's journal (sample)</button><button class="btn" id="cu-show">Showcase window</button></div>`;
+  $$('[data-mem]', el).forEach(x => x.onclick = () => { SFX.click(); playMemory(+x.dataset.mem); });
+  $$('[data-fx]', el).forEach(x => x.onclick = async () => {
+    const f = x.dataset.fx;
+    if (f === 'quake') { delete S.flags['quake' + S.day]; earthquake(); }
+    else if (f === 'soft' || f === 'hard') glitch(f);
+    else if (f === 'wake') { const bo = document.createElement('div'); bo.id = 'blackout'; document.body.appendChild(bo); await wait(600); await wakeUp(); }
+    else if (f === 'lock') await lockScreen('Good morning');
+    else if (f === 'feed') { S.met.prim = true; if (typeof breakLayerFx === 'function') breakLayerFx('prim', 1); }
+  });
+  $$('[data-talk]', el).forEach(x => x.onclick = () => { SFX.click(); openYap('boss'); runDialogue(seq('boss', 'boss', endSteps(x.dataset.talk), 'NONE')); });
+  $$('[data-end]', el).forEach(x => x.onclick = () => { kitSample(); endGame(x.dataset.end); });
+  $('#cu-journal', el).onclick = () => { kitSample(); openJournal(); };
+  $('#cu-show', el).onclick = () => { kitSample(); S.day = SHOWCASE_DAY; openShowcase(); };
+}
+// sandbox data so journal / endings / showcase have something to show
+function kitSample() {
+  PLAYABLE.forEach(g => { S.met[g] = true; });
+  if (!S.journal.length) {
+    const pick = g => { const e = DD.boss.find(e => e.girl === g && e.steps.some(st => (st.choices || []).some(c => (c.act || []).some(a => a.action === 'JOURNAL')))); if (!e) return []; const out = []; e.steps.forEach(st => (st.choices || []).forEach(c => (c.act || []).forEach(a => { if (a.action === 'JOURNAL' && out.length < 2) out.push(a.value); }))); return out; };
+    PLAYABLE.forEach((g, i) => pick(g).forEach((t, k) => S.journal.push({ day: 2 + i * 2 + k, text: t, g })));
+    S.journal.push({ day: 7, text: 'Postcard Day. I wrote to Santorini again. I always write to Santorini.' });
+  }
+  S.exhibit = S.exhibit || {}; PLAYABLE.forEach((g, i) => { if (!S.exhibit[g]) S.exhibit[g] = { kind: i % 2 ? 'real' : 'half', day: SHOWCASE_DAY }; });
+}
+
+/* ---------- the boss's level ---------- */
+function kitBoss(el) {
+  const ps = rayPanels();
+  el.innerHTML = `<p class="kit-p">Ray's map on the last day: four memories, each copied from one girl's panel and locked until her file is deleted, then the gate and the core.</p>
+    <div class="kit-grid">${RAY_SRC.map(([g, id], i) => `<div class="kit-card bevel"><b>Memory ${i + 1}</b><small>held by ${esc(GIRLS[g].name)}</small>${miniBoard(ps[i])}
+      <label>copied from <select data-src="${i}">${panelsOf(g).map(p => `<option value="${p.id}"${p.id === id ? ' selected' : ''}>${p.id}</option>`).join('')}</select></label>
+      <div class="row"><button class="btn primary" data-play="${i}">Play</button><button class="btn" data-edit="${i}">Edit</button></div></div>`).join('')}</div>
+    <div class="kit-row"><label><input type="checkbox" id="rb-lock"> locked like the story (files not deleted)</label><button class="btn primary" id="rb-map">Open Ray's map</button></div>
+    <p class="kit-p"><small>Edits are saved like the level editor's (this browser; export from the editor). "copied from" makes a fresh copy of that panel.</small></p>`;
+  $$('[data-src]', el).forEach(x => x.onchange = () => {
+    const i = +x.dataset.src; RAY_SRC[i][1] = x.value; CH.raySrc = RAY_SRC.map(r => r[1]); chSave();
+    const k = PANELS.findIndex(p => p.id === 'ray_' + (i + 1)); if (k >= 0) PANELS.splice(k, 1); delete OWMAP.ray; kitBoss(el);
+  });
+  $$('[data-play]', el).forEach(x => x.onclick = () => { SFX.click(); startPanel('ray_' + (+x.dataset.play + 1)); });
+  $$('[data-edit]', el).forEach(x => x.onclick = () => { SFX.click(); openEditor('ray_' + (+x.dataset.edit + 1)); });
+  $('#rb-map', el).onclick = () => {
+    SFX.click(); const lock = $('#rb-lock', el).checked;
+    PLAYABLE.forEach(g => { S.met[g] = true; S.flags['del_' + g] = !lock; });
+    S.g.ray = { layer: 0, sessions: 0, gone: false, nt: 0 }; delete OWMAP.ray; WHO.boss.name = 'Ray';
+    if (WINS.fixit) { owClose(); closeWin('fixit'); }
+    openWorld('ray');
+  };
+}
+
+/* ---------- gallery ---------- */
+function kitGallery(el) {
+  el.innerHTML = `<h4>Showcase (day 12) · what each girl submits</h4>
+    <div class="gal">${PLAYABLE.map(g => ['half', 'real'].map(k => `<figure class="bevel"><canvas width="160" height="120" data-ex="${g}" data-k="${k}"></canvas><figcaption><b>${esc(GIRLS[g].name)}</b> · ${k === 'real' ? 'her real passion' : 'half-hearted (as ordered)'}<br><small>${esc(SHOW_CAP[g][k === 'real' ? 1 : 0])}</small></figcaption></figure>`).join('')).join('')}</div>
+    <h4>Portraits</h4><div class="gal">${PLAYABLE.map(g => `<figure class="bevel">${ART[g] ? `<img src="${ART[g].body}" alt="${esc(GIRLS[g].name)}" style="height:150px;image-rendering:pixelated">` : avHTML(g, 'big')}<figcaption><b>${esc(GIRLS[g].name)}</b> · ${esc(GIRLS[g].tag)}${ART[g] ? '' : ' <small>(placeholder)</small>'}</figcaption></figure>`).join('')}</div>
+    <h4>Memory cutscenes</h4><div class="gal">${[1, 2, 3, 4, 5].map(k => `<figure class="bevel"><canvas width="960" height="540" data-memc="${k}" style="width:240px;height:135px"></canvas><figcaption>Memory ${k}</figcaption></figure>`).join('')}</div>`;
+  $$('[data-ex]', el).forEach(c => drawExhibit(c, c.dataset.ex, c.dataset.k === 'real'));
+  $$('[data-memc]', el).forEach(c => { try { drawMemory(c, +c.dataset.memc); } catch (e) { } });
+}
+
+/* ---------- Boss's journal: a book, one page per girl (her showcase piece on it), plus his own notes ---------- */
+function openJournal() {
+  const pages = PLAYABLE.filter(g => met(g) || S.journal.some(j => j.g === g)).concat(['notes']);
+  let at = pages[0];
+  openWin('journal', { title: 'journal - R.', icon: 'journal', w: 620, h: 540, x: 140, y: 20, render: b => {
+    const draw = () => {
+      const g = at, rows = S.journal.filter(j => !j.miss && (g === 'notes' ? !j.g || !PLAYABLE.includes(j.g) : j.g === g));
+      const ex = g !== 'notes' && S.exhibit && S.exhibit[g];
+      const ending = g === 'notes' && S.flags.ended ? `<div class="jr-end">${esc(journalPart(S.journal.filter(j => !j.ray && !j.miss).length < 4 ? 'ending_few' : 'ending_many'))}</div><div class="jr-end ps">${esc(journalPart('ps'))}</div>` : '';
+      b.innerHTML = `<div class="jr"><nav class="jr-tabs">${pages.map(p => `<button class="jr-tab${p === at ? ' on' : ''}" data-pg="${p}">${p === 'notes' ? 'R.' : esc(GIRLS[p].name)}</button>`).join('')}</nav>
+        <article class="jr-page"><header>${g === 'notes' ? '<b>my notes</b><small>private. not for the newbie.</small>' : `${avHTML(g)}<b>${esc(GIRLS[g].name)}</b><small>${esc(GIRLS[g].id)} · ${esc(GIRLS[g].tag)}</small>`}</header>
+          ${ex ? `<figure class="jr-ex"><canvas width="160" height="120"></canvas><figcaption>Showcase, day ${ex.day || SHOWCASE_DAY}: ${esc(SHOW_CAP[g][ex.kind === 'real' ? 1 : 0])}</figcaption></figure>` : ''}
+          ${rows.length ? rows.map(j => `<p><span class="jr-d">Day ${pad2(j.day)}</span> ${esc(j.text)}</p>`).join('') : '<p class="jr-none">(nothing written yet)</p>'}${ending}</article></div>`;
+      if (ex) drawExhibit($('.jr-ex canvas', b), g, ex.kind === 'real');
+      $$('[data-pg]', b).forEach(x => x.onclick = () => { SFX.click(); at = x.dataset.pg; draw(); });
+    };
+    draw();
+  } });
 }
 
 /* =========================================================
