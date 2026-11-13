@@ -271,7 +271,7 @@ function pjChrome() {
   const mv = $('#pj-moves'); if (mv) { mv.textContent = pjMovesText(); mv.classList.toggle('bad', PJ.state === 'fail' && PJ.bad.some(b => b.kind === 'moves')); }
   const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
   const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';
-  const st = $('#pj-st1'); if (st) st.textContent = PJ.solOn ? 'Replaying solution' : PJ.state === 'win' ? 'Belief erased' : PJ.state === 'fail' ? (PJ.bad.some(b => b.kind === 'boom') ? 'Box exploded' : 'Rule violation') : PJ.state === 'draw' ? 'Projecting…' : 'Ready';
+  const st = $('#pj-st1'); if (st) st.textContent = PJ.solOn ? 'Replaying solution' : PJ.state === 'win' ? 'Erased' : PJ.state === 'fail' ? (PJ.bad.some(b => b.kind === 'boom') ? 'Box exploded' : 'Rule violation') : PJ.state === 'draw' ? 'Projecting…' : 'Ready';
 }
 function drawPJ() {
   if (!PJ) return; const p = PJ.p;

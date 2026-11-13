@@ -311,7 +311,7 @@ async function afterWin(p) {
   if (PJ !== me || PJ.solOn || PJ.state !== 'win') return;
   if (CH.opt.story) { await storyMessage(p); if (PJ !== me || PJ.solOn || PJ.state !== 'win') return; }
   if (!nx) { $('#pj-msg').textContent = `Every map in ${GIRLS[p.girl].name}'s head is clear.`; $('#pj-next').textContent = '◂ Panels'; return; }
-  let k = 2; const tick = () => { if (PJ !== me || PJ.solOn || PJ.state !== 'win') return; if (k <= 0) { goNextPanel(); return; } $('#pj-msg').textContent = `next map in ${k}…`; k--; PJ.advT = setTimeout(tick, 600); };
+  let k = 2; const tick = () => { if (PJ !== me || PJ.solOn || PJ.state !== 'win') return; if (k <= 0) { goNextPanel(); return; } k--; PJ.advT = setTimeout(tick, 600); };
   tick();
 }
 // a chat strip inside the projector: her reaction lines, your choice, her reply
@@ -367,10 +367,10 @@ async function pjSubmit() {
     $('#pj-msg').textContent = 'The queen took one rule off the board.';
   }
   if (ok) {
-    PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win(); if (PJ.view) { const v = PJ.view; setTimeout(() => { if (PJ && PJ.view === v && PJ.state === 'win' && !PJ.solOn) v.winFx(); }, 380); setTimeout(() => { if (PJ && PJ.view === v && PJ.state === 'win') pj3Flash('◆ BELIEF ERASED ◆', 'win'); }, 1300); }
+    PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win(); if (PJ.view) { const v = PJ.view; setTimeout(() => { if (PJ && PJ.view === v && PJ.state === 'win' && !PJ.solOn) v.winFx(); }, 380); setTimeout(() => { if (PJ && PJ.view === v && PJ.state === 'win') pj3Flash('ERASED', 'win'); }, 1300); } else setTimeout(() => { if (PJ && PJ.state === 'win') pj3Flash('ERASED', 'win'); }, 300);
     const t = performance.now() - PJ.t0, prev = CH.done[p.id];
     CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries, peek: prev ? prev.peek && PJ.peeked : PJ.peeked }; chSave();
-    if (!PJ.erased) $('#pj-msg').textContent = `${fmtT(t)} · ${PJ.tries} ${PJ.tries === 1 ? 'try' : 'tries'}`;
+    $('#pj-msg').textContent = '';
     $('#pj-next').hidden = false;
     UPD.forEach(f => f());
     afterWin(p);
