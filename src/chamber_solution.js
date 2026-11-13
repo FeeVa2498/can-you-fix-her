@@ -134,7 +134,7 @@ function solPlay() {
 function renderSolLog() {
   const { ev, n } = PJ.solData, k = PJ.solK;
   $('#sb-k').textContent = `move ${k}/${n}`;
-  const log = $('#sb-log');
+  const log = $('#sb-log'); if (!log) return;   // no step-by-step text: the board shows the moves
   log.innerHTML = ev.slice(0, k + 1).map((lines, i) => `<li class="${i === k ? 'now' : ''}" value="${i}">${lines.map(esc).join(' ')}</li>`).join('');
   const now = $('li.now', log); if (now) now.scrollIntoView({ block: 'nearest' });
 }

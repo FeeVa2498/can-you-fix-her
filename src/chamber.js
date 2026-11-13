@@ -266,9 +266,7 @@ function renderProjector(b, p, idx, nL) {
         <div class="pj-stage pj-vp" id="pj-vp"></div>
         <div class="pj-msg" id="pj-msg" aria-live="polite"></div>
         <div class="pj-solbox sunk" id="pj-solbox" hidden>
-          <div class="sb-why"><b>Ý chính</b> ${esc(p.why || 'Chưa có giải thích cho bảng này.')}${p.solutions !== 1 ? ` <i>(Bảng có ${p.solutions} lời giải${p.boxes ? ' ngắn nhất' : ''}; đây là một.)</i>` : ''}</div>
           <div class="sb-ctrl"><button class="btn" id="sb-first" aria-label="Back to start">⏮</button><button class="btn" id="sb-prev" aria-label="Step back">◀</button><button class="btn primary" id="sb-play">▶ Play</button><button class="btn" id="sb-next" aria-label="Step forward">▶</button><span id="sb-k"></span></div>
-          <ol class="sb-log" id="sb-log"></ol>
         </div>
         <div class="pj-bar">
           <button class="btn" id="pj-back">◂ Panels</button>
