@@ -675,7 +675,7 @@ const P3 = (() => {
       dispose() { alive = false; ro.disconnect(); renderer.dispose(); scene.traverse(o => { if (o.geometry) o.geometry.dispose(); }); cv.remove(); },
     };
   }
-  return { has, create };
+  return { has, create, kit: { backdrop, canvasTex, std, basic, additive, edges, box, numTex } };
 })();
 
 /* glue: draw the current panel state into the 3D view */

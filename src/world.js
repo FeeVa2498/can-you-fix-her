@@ -140,9 +140,13 @@ function owRenderShell(b) {
   OW.ro = new ResizeObserver(() => { const r = view.getBoundingClientRect(); cv.width = Math.max(10, r.width | 0); cv.height = Math.max(10, r.height | 0); owDraw(); });
   OW.ro.observe(view);
   document.removeEventListener('keydown', owKey); document.addEventListener('keydown', owKey);
+  owDispose3();
+  if (typeof P3 !== 'undefined' && P3.has()) { try { OW.v3 = OW3.create(view, g); cv.hidden = true; } catch (e) { console.warn('3D map unavailable', e); OW.v3 = null; } }
+  if (OW.keyFx && performance.now() - OW.keyFx < 4000) { OW.keyFx = null; setTimeout(() => owSay('+1 key'), 60); }
   owHud(); owLoop();
 }
-function owStop() { cancelAnimationFrame(OW.raf); OW.raf = 0; if (OW.ro) OW.ro.disconnect(); OW.ro = null; document.removeEventListener('keydown', owKey); }
+function owDispose3() { if (OW.v3) { OW.v3.dispose(); OW.v3 = null; } }
+function owStop() { owDispose3(); cancelAnimationFrame(OW.raf); OW.raf = 0; if (OW.ro) OW.ro.disconnect(); OW.ro = null; document.removeEventListener('keydown', owKey); }
 function owClose() { if (PJ_STORY) { PJ_STORY = null; pjDispose(); document.removeEventListener('keydown', pjKey); } owStop(); OW.g = null; }
 function owFocus() { const w = WINS.fixit; if (w) focusWin('fixit'); }
 function owHud() {
@@ -226,7 +230,7 @@ function owEnter() {
   if (ni == null) { owSay('nothing here. find a glowing tile.'); SFX.tick(); return; }
   const n = M.nodes[ni], p = PANELS.find(q => q.id === n.pid); if (!p) return;
   if (g === 'ray' && rayLocked(n)) { SFX.bump(); OW.shake = performance.now(); owSay(`locked · held by ${n.src}`); runDialogue(seq('boss', 'boss', endSteps('ray_level_locked'), 'NONE')); return; }
-  OW.mode = 'level'; cancelAnimationFrame(OW.raf); OW.raf = 0;
+  OW.mode = 'level'; cancelAnimationFrame(OW.raf); OW.raf = 0; owDispose3();
   SFX.link(); glitch('soft');
   const host = $('#ow-main'); if (!host) return;
   const inL = M.nodes.filter(m => m.layer === n.layer);
@@ -267,11 +271,12 @@ function owLevelWon(p) {
 function owLoop() { cancelAnimationFrame(OW.raf); const f = () => { owDraw(); OW.raf = requestAnimationFrame(f); }; OW.raf = requestAnimationFrame(f); }
 function owDraw() {
   const cv = $('#ow-cv'); if (!cv || !OW.g || OW.mode !== 'map') return;
+  if (OW.v3) { OW.v3.frame(); owDrawMini(); return; }
   const g = OW.g, M = owBuild(g), o = owState(g), T = OW_THEME[g], x = cv.getContext('2d'), now = performance.now();
   const Wp = cv.width, Hp = cv.height, ts = Math.max(48, Math.min(84, Math.floor(Math.min(Wp / 10, Hp / 7.2)))), lift = Math.round(ts * .22);
   // box position (tweened)
   let bx = o.x, by = o.y;
-  if (OW.anim) { const k = Math.min(1, (now - OW.anim.t0) / 110), e = OW.anim.bump ? Math.sin(k * Math.PI) : 1 - Math.pow(1 - k, 3); const [fx, fy] = OW.anim.from, [tx, ty] = OW.anim.to; if (OW.anim.bump) { bx = fx + (tx - fx) * e; by = fy + (ty - fy) * e; } else { bx = fx + (tx - fx) * e; by = fy + (ty - fy) * e; } if (k >= 1) OW.anim = null; }
+  if (OW.anim) { const k = Math.min(1, (now - OW.anim.t0) / 140), e = OW.anim.bump ? Math.sin(k * Math.PI) : 1 - Math.pow(1 - k, 3); const [fx, fy] = OW.anim.from, [tx, ty] = OW.anim.to; if (OW.anim.bump) { bx = fx + (tx - fx) * e; by = fy + (ty - fy) * e; } else { bx = fx + (tx - fx) * e; by = fy + (ty - fy) * e; } if (k >= 1) OW.anim = null; }
   let camX = bx * ts + ts / 2 - Wp / 2, camY = by * ts + ts / 2 - Hp / 2;
   camX = clamp(camX, -ts, M.W * ts - Wp + ts); camY = clamp(camY, -ts * 1.2, M.H * ts - Hp + ts);
   if (M.W * ts < Wp) camX = (M.W * ts - Wp) / 2; if (M.H * ts < Hp) camY = (M.H * ts - Hp) / 2 - lift / 2;

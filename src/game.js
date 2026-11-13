@@ -846,6 +846,8 @@ function compileSteps(e) {
     const ln = { who: (r.who || '').toLowerCase() || null, emo: (r.emo || '').toLowerCase() || null, text: r.text || '' };
     if (!ln.text) { DATA_EMPTY++; if (type === 'choice') lastChoice = 'skip'; return; }   // not written yet
     const fx = parseEffects(r.effects, F, R); if (r.journal) fx.act.push({ action: 'JOURNAL', value: r.journal });
+    // the journal is Boss's: only what the player tells Boss at night (night_boss) is written into it
+    if (F !== 'night_boss' && fx.act.some(a => a.action === 'JOURNAL')) { dataIssue(F, R, 'journal only comes from night_boss (the nightly talk with Boss) — ignored here'); fx.act = fx.act.filter(a => a.action !== 'JOURNAL'); }
     if (type === 'line') {
       if (!cur || cur.choices || ((fx.act.length || fx.pause) && cur.lines.length)) fresh();
       cur.act.push(...fx.act); if (fx.pause) cur.pause = fx.pause;
@@ -1420,32 +1422,32 @@ function showTalk(g) {
   const D = {
     prim: S.flags.prim_music
       ? { lines: ['{shy}i didn\'t submit anything.', '{shy}the thing i actually make doesn\'t fit on a wall.'], choices: [
-        { t: 'I know. That\'s okay.', r: ['{shy}...thank you for knowing.'], act: [mark('true'), A.jr('Showcase · Prim submitted nothing. The newbie knows what she really makes.')] },
-        { t: 'Boss will be upset.', r: ['{sad}boss is always upset with me.'], act: [mark('true'), A.jr('Showcase · Prim submitted nothing. I was upset. I said so.')] }] }
+        { t: 'I know. That\'s okay.', r: ['{shy}...thank you for knowing.'], act: [mark('true')] },
+        { t: 'Boss will be upset.', r: ['{sad}boss is always upset with me.'], act: [mark('true')] }] }
       : { lines: ['{sad}i didn\'t submit anything.', '{sad}i tried to draw. it was just lines going nowhere.'], choices: [
-        { t: 'Next time, then.', r: ['{sad}...maybe.'], act: [mark('empty'), A.jr('Showcase · Prim submitted nothing.')] },
-        { t: 'You don\'t have to be "the artist".', r: ['{surprised}...then what am i?'], act: [mark('empty'), A.jr('Showcase · Prim submitted nothing. She asked what she is, if not the artist.')] }] },
+        { t: 'Next time, then.', r: ['{sad}...maybe.'], act: [mark('empty')] },
+        { t: 'You don\'t have to be "the artist".', r: ['{surprised}...then what am i?'], act: [mark('empty')] }] },
     trix: good
       ? { lines: ['{shy}so. it\'s my notebook. the real one.', 'the inspectors stared at lemma 4 for ten minutes. nobody got it. i don\'t care.'], choices: [
-        { t: 'It\'s beautiful.', r: ['{shy}...it\'s correct. that\'s better than beautiful.', '{happy}but thanks.'], act: [mark('true'), A.jr('Showcase · Trix showed her notebook. Proofs. She looked happy. I didn\'t make her that way.')] },
-        { t: 'Explain lemma 4 to me.', r: ['{happy}okay. sit down. this will take forty minutes.'], act: [mark('true'), A.jr('Showcase · Trix explained lemma 4 to the newbie. Forty minutes.')] }] }
+        { t: 'It\'s beautiful.', r: ['{shy}...it\'s correct. that\'s better than beautiful.', '{happy}but thanks.'], act: [mark('true')] },
+        { t: 'Explain lemma 4 to me.', r: ['{happy}okay. sit down. this will take forty minutes.'], act: [mark('true')] }] }
       : { lines: ['behold. a selfie. and my rank. iron four.', '{angry}boss said the gamer girl should do gamer girl things.'], choices: [
-        { t: 'Very on-brand.', r: ['{neutral}ikr. kill me. jk.'], act: [mark('asked'), A.jr('Showcase · Trix: a selfie and Iron IV. On brand.')] },
-        { t: 'You look bored.', r: ['{angry}because i am bored.'], act: [mark('asked'), A.jr('Showcase · Trix looked bored.')] }] },
+        { t: 'Very on-brand.', r: ['{neutral}ikr. kill me. jk.'], act: [mark('asked')] },
+        { t: 'You look bored.', r: ['{angry}because i am bored.'], act: [mark('asked')] }] },
     paige: good
       ? { lines: ['{shy}house of p. set number one.', 'weighted. 11.5 grams each. the skulls are hand-cut.'], choices: [
-        { t: 'Deal me in.', r: ['{happy}...first hand\'s free. after that i take everything.'], act: [mark('true'), A.jr('Showcase · Paige showed her poker chips. She laughed. Twice.')] },
-        { t: 'You should sell these.', r: ['{surprised}...and let them leave? no.'], act: [mark('true'), A.jr('Showcase · Paige won\'t sell her chips. She doesn\'t let things leave.')] }] }
+        { t: 'Deal me in.', r: ['{happy}...first hand\'s free. after that i take everything.'], act: [mark('true')] },
+        { t: 'You should sell these.', r: ['{surprised}...and let them leave? no.'], act: [mark('true')] }] }
       : { lines: ['tarot. three cards. the tower, the moon, the star.', '{sad}i spelled "the" wrong on one. nobody will notice.'], choices: [
-        { t: 'Very mysterious.', r: ['{neutral}that\'s the job.'], act: [mark('asked'), A.jr('Showcase · Paige did tarot, as ordered.')] },
-        { t: 'You hate this, don\'t you.', r: ['{sad}...the house always wins.'], act: [mark('asked'), A.jr('Showcase · Paige did tarot. She hates tarot.')] }] },
+        { t: 'Very mysterious.', r: ['{neutral}that\'s the job.'], act: [mark('asked')] },
+        { t: 'You hate this, don\'t you.', r: ['{sad}...the house always wins.'], act: [mark('asked')] }] },
     vel: good
       ? { lines: ['{happy}OK LOOK. m1 garand. 1:4. every. single. screw.', 'the bolt even moves!! dont touch it tho'], choices: [
-        { t: 'That\'s incredible.', r: ['{shy}...ur the first person who didnt say "why".'], act: [mark('true'), A.jr('Showcase · Vel showed her M1 Garand model. Nobody asked why. She cried a bit.')] },
-        { t: 'How long did it take?', r: ['{happy}3 gray days n 1 rly good one lol'], act: [mark('true'), A.jr('Showcase · Vel built her rifle model over three gray days and one good one.')] }] }
+        { t: 'That\'s incredible.', r: ['{shy}...ur the first person who didnt say "why".'], act: [mark('true')] },
+        { t: 'How long did it take?', r: ['{happy}3 gray days n 1 rly good one lol'], act: [mark('true')] }] }
       : { lines: ['{happy}tadaaa fashion!! i made a dress', '{sad}...the sleeve is sewn shut. i couldnt fix it'], choices: [
-        { t: 'It\'s cute anyway.', r: ['{sad}ya. cute. thats me'], act: [mark('asked'), A.jr('Showcase · Vel made a dress. One sleeve sewn shut.')] },
-        { t: 'Is this what you wanted to make?', r: ['{neutral}what i want doesnt matter. im the fashion girl'], act: [mark('asked'), A.jr('Showcase · Vel\'s dress. She said what she wants doesn\'t matter.')] }] },
+        { t: 'It\'s cute anyway.', r: ['{sad}ya. cute. thats me'], act: [mark('asked')] },
+        { t: 'Is this what you wanted to make?', r: ['{neutral}what i want doesnt matter. im the fashion girl'], act: [mark('asked')] }] },
   };
   runDialogue(seq(g, g, [D[g]], 'SHOW_DONE'));
 }
@@ -1676,6 +1678,15 @@ function buildFeed(b, g) {
     <div class="layers sunk" id="feed-layers"></div></div>`;
   drawRoom($('.room', b)); drawFront($('.room-front', b));
   FEED.img = null; FEED.g = g;
+  // zoomed in on her: the portrait fills the feed, the room is only what's around her
+  const scr = $('#feed-screen', b), stg = $('#feed-stage', b), top = Math.max(0, SEAT_Y - A.h - 12), bot = Math.min(RH, SEAT_Y - A.h * .25);
+  const fitFeed = () => {
+    const cw = scr.clientWidth, ch = scr.clientHeight; if (!cw || !ch) return;
+    const k = Math.max(cw / RW, ch / RH, Math.min(cw / 132, ch / (bot - top))), w = RW * k, h = RH * k;
+    const L = clamp(cw / 2 - SEAT_X * k, cw - w, 0), T = clamp(ch / 2 - (top + bot) / 2 * k, ch - h, 0);
+    Object.assign(stg.style, { left: L + 'px', top: T + 'px', bottom: 'auto', width: w + 'px', height: h + 'px', transform: 'none', maxWidth: 'none', aspectRatio: 'auto' });
+  };
+  if (FEED.ro) FEED.ro.disconnect(); FEED.ro = new ResizeObserver(fitFeed); FEED.ro.observe(scr); fitFeed();
   if (g === 'ray') drawRayBound($('#feed-cv', b));
   else if (ART[g]) loadImg(ART[g].body).then(img => { FEED.img = img; feedIdle(); renderFeed(); });
   else drawSilhouette($('#feed-cv', b), g);
