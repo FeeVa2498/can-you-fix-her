@@ -1817,7 +1817,7 @@ mementos      ${S.mementos.length}/${Object.keys(MEMENTOS).length} · software $
    ========================================================= */
 function setupScreen() {
   return new Promise(resolve => {
-    const P = { name: 'Newbie', hair: 0, hc: 0, eye: 11, skin: 1, outfit: 0, oc: 7, acc: 0 };
+    const P = { name: '', hair: 0, hc: 0, eye: 11, skin: 1, outfit: 0, oc: 7, acc: 0 };
     const sw = (k, list) => `<div class="set sws" data-k="${k}">${list.map((h, i) => `<button class="sw" data-v="${i}" style="background:${h[1]}" aria-label="${h[0]}" title="${h[0]}"></button>`).join('')}</div>`;
     const pick = (k, n, label) => `<div class="set pick" data-pick="${k}" data-n="${n}"><button class="btn arr" data-d="-1" aria-label="Previous ${label}">◀</button><span class="pk" id="pk-${k}" aria-live="polite"></span><button class="btn arr" data-d="1" aria-label="Next ${label}">▶</button></div>`;
     const el = document.createElement('div'); el.id = 'setup';
@@ -1825,7 +1825,7 @@ function setupScreen() {
      <div class="win-body" style="overflow:visible"><div class="su">
       <div class="su-prev bevel"><canvas id="su-cv" width="32" height="32" aria-label="Avatar preview"></canvas><div class="nm" id="su-nm"></div><button class="btn" id="su-rand">Randomize</button></div>
       <div class="su-opts">
-       <div class="su-row"><span>Name</span><div class="set"><input id="su-name" maxlength="12" value="" placeholder="Newbie" autocomplete="off"></div></div>
+       <div class="su-row"><span>Name</span><div class="set"><input id="su-name" maxlength="12" value="" placeholder="type your name" autocomplete="off" required aria-required="true"></div></div>
        <div class="su-row"><span>Hair</span>${pick('hair', HAIRS.length, 'hair')}</div>
        <div class="su-row"><span>Hair color</span>${sw('hc', PALETTE)}</div>
        <div class="su-row"><span>Eyes</span>${sw('eye', PALETTE)}</div>
@@ -1840,14 +1840,16 @@ function setupScreen() {
     const upd = () => {
       $$('.set[data-k]', el).forEach(s => $$('[data-v]', s).forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === P[s.dataset.k]))));
       $$('[data-pick]', el).forEach(s => { const k = s.dataset.pick; $('#pk-' + k, el).textContent = `Type ${P[k] + 1}`; s.title = (k === 'hair' ? HAIRS : k === 'outfit' ? OUTFITS.map(o => o[0]) : ACCS)[P[k]]; });
-      $('#su-nm', el).textContent = P.name || 'Newbie'; paint(false);
+      $('#su-nm', el).textContent = P.name || '—'; paint(false);
+      const ok = $('#su-ok', el); if (ok) { ok.disabled = !P.name; ok.title = P.name ? '' : 'Enter a name first'; }
     };
     $$('[data-pick]', el).forEach(s => s.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; auInit(); SFX.pop(); const k = s.dataset.pick, n = +s.dataset.n; P[k] = (P[k] + +b.dataset.d + n) % n; if (k === 'outfit') P.oc = OUTFITS[P.outfit][1]; upd(); }));
     $$('.set[data-k]', el).forEach(s => s.addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (!b) return; auInit(); SFX.pop(); P[s.dataset.k] = +b.dataset.v; upd(); }));
-    $('#su-name', el).addEventListener('input', e => { P.name = e.target.value.replace(/[<>]/g, '').trim() || 'Newbie'; upd(); });
+    $('#su-name', el).addEventListener('input', e => { P.name = e.target.value.replace(/[<>]/g, '').trim(); upd(); });
     $('#su-rand', el).onclick = () => { auInit(); SFX.pop(); const r = n => Math.random() * n | 0; P.hair = r(HAIRS.length); P.hc = r(PALETTE.length); P.eye = r(PALETTE.length); P.skin = r(SKIN.length); P.outfit = r(OUTFITS.length); P.oc = r(PALETTE.length); P.acc = r(ACCS.length); upd(); };
     const blinkIv = setInterval(() => { paint(true); setTimeout(() => paint(false), 140); }, 3200);
     $('#su-ok', el).onclick = () => {
+      if (!P.name) { SFX.buzz(); $('#su-name', el).focus(); $('#su-name', el).classList.add('need'); return; }
       auInit(); SFX.click();
       const m = document.createElement('div'); m.className = 'su-modal';
       m.innerHTML = `<div class="card bevel" role="alertdialog" aria-label="Confirm appearance"><p>Is this how you want to look?<br>This can't be changed later.</p><div class="row"><button class="btn" id="su-no">No</button><button class="btn primary" id="su-yes">Yes</button></div></div>`;
@@ -1855,7 +1857,7 @@ function setupScreen() {
       $('#su-no', m).onclick = () => { SFX.click(); m.remove(); };
       $('#su-yes', m).onclick = async () => {
         clearInterval(blinkIv); SFX.click();
-        P.name = (P.name || 'Newbie').slice(0, 12);
+        P.name = P.name.slice(0, 12);
         const player = { ...P, avatar: avatarURL(P) };
         m.innerHTML = `<div class="card bevel load" role="status"><p id="ld-t">Creating avatar…</p><div class="ldbar"><i id="ld-b"></i></div></div>`;
         const bar = $('#ld-b', m), txt = $('#ld-t', m);
@@ -1894,6 +1896,7 @@ function day1Start() {
   S.phase = 'day'; S.day = 1; S.mins = DAY_START; S.dayOver = false; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = [];
   S.night = { chats: 0, with: [], bossPending: false, bossDone: false };
   S.unread.boss = 1; S.flags.ping = 'yap';
+  if (!S.flags.welcomeMail) { S.flags.welcomeMail = true; sendMail({ from: 'dive', subject: 'Welcome to DIVE — your appointment', body: `Dear ${S.player ? S.player.name : 'Counsellor'},\n\nCongratulations. We are pleased to confirm your appointment as Counsellor (probationary, 14 days) at the DIVE patient care facility, effective today.\n\nYour duties:\n  · run treatment sessions with your assigned patients (Fix-it)\n  · clear each patient's layers of insecurity, one memory at a time\n  · report to your supervisor, Boss (@r.admin), every morning and night\n\nYour workstation, accommodation and meals are provided. You will not need to leave the premises.\n\nYour training is complete. You may not remember it. This is normal.\n\nWelcome aboard,\n— DIVE Human Resources\n\nP.S. Your supervisor is very excited to meet you.` }); }
   checkpoint('d1'); refresh();
 }
 async function main() {

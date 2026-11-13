@@ -12,6 +12,17 @@ const ri = n => Math.floor(Math.random() * n), shuf = a => { for (let i = a.leng
 const K = (x, y) => x + ',' + y, D4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 const sig = r => r.wins.length ? r.wins[0].length + ':' + r.wins.slice().sort().join(',') : 'none';
 // [id, layer, n, cols, rows, glass, lights, holes share, pads, minLen, tut, belief]
+// v11: about 20 per layer. Layers 1–2: glass + lights only (two kinds). Layer 3: glass + lights + arrow tiles.
+const V11 = [];
+{
+  const L1 = [[4, 4, 1, 2], [5, 4, 1, 2], [4, 4, 1, 3], [5, 4, 2, 2], [5, 4, 1, 3], [5, 5, 1, 3], [5, 5, 2, 3], [6, 4, 2, 2], [6, 4, 1, 3], [5, 5, 2, 2], [6, 5, 1, 3], [6, 5, 2, 3], [6, 5, 2, 4]];
+  L1.forEach(([c, r, g, l], k) => V11.push([`vel_1_${7 + k}`, 1, 7 + k, c, r, g, l, .18, 0, 8 + (k >> 1), null, '']));
+  const L2 = [[5, 4, 1, 2], [5, 4, 2, 2], [5, 5, 2, 3], [5, 5, 2, 3], [6, 5, 2, 3], [6, 5, 2, 4], [6, 5, 3, 3], [5, 5, 2, 4], [6, 5, 2, 4], [6, 6, 2, 4], [6, 6, 3, 4], [6, 6, 2, 5], [6, 6, 3, 4], [7, 5, 2, 4], [7, 5, 3, 4], [7, 6, 2, 5], [7, 6, 3, 4], [7, 6, 2, 5], [7, 6, 3, 5], [7, 6, 3, 5]];
+  L2.forEach(([c, r, g, l], k) => V11.push([`vel_2_${1 + k}`, 2, 1 + k, c, r, g, l, .2, 0, 9 + (k >> 1), null, '']));
+  V11.push(['vel_3_t1', 3, 0, 5, 4, 1, 2, .15, 1, 7, 'pads', '']);
+  const L3 = [[6, 5, 2, 3, 1], [6, 5, 2, 4, 1], [6, 6, 2, 4, 1], [6, 6, 2, 4, 2], [7, 5, 2, 4, 1], [7, 5, 2, 5, 1], [7, 6, 2, 4, 2], [7, 6, 2, 5, 1], [7, 6, 3, 4, 1], [7, 6, 2, 5, 2], [7, 7, 2, 5, 2], [7, 7, 3, 5, 1], [7, 7, 3, 5, 2]];
+  L3.forEach(([c, r, g, l, pd], k) => V11.push([`vel_3_${7 + k}`, 3, 7 + k, c, r, g, l, .22, pd, 14 + (k >> 1), null, '']));
+}
 const PLAN = [
   ['vel_1_t1', 1, 0, 4, 3, 1, 1, .1, 0, 5, 'fragile', 'glass floor. you get there, you get back. once.'],
   ['vel_1_1', 1, 1, 4, 4, 1, 2, .15, 0, 7, null, 'check your exits before you go in.'],
@@ -119,7 +130,7 @@ if (process.argv[2] === 'merge') {
   fs.writeFileSync(OUT, JSON.stringify(ALL.filter(p => p.girl !== 'vel').concat(got), null, 1)); console.log('merged', got.length); process.exit(0);
 }
 const made = [], SEC = +process.env.SEC || 40, ONLY = process.env.ONLY || '', IDS = process.env.IDS ? process.env.IDS.split(',') : null;
-for (const row of PLAN) {
+for (const row of (process.env.V11 ? V11 : PLAN)) {
   if (ONLY && !row[0].startsWith(ONLY)) continue;
   if (IDS && !IDS.includes(row[0])) continue;
   const t0 = Date.now(); let best = null, tries = 0;
