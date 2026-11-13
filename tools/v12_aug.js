@@ -4,6 +4,7 @@
 // and every added tile matters (take it away and the shortest answers change). At most 3 kinds per panel.
 // Usage: PART=out.json [IDS=a,b] [GIRL=prim] SEC=60 node tools/v12_aug.js      merge: node tools/v12_aug.js merge a.json …
 const E = require('../src/panel_engine.js'), fs = require('fs'), path = require('path');
+const { pingPong } = require('./pad_loops.js');   // arrow tiles that throw a box back and forth are never allowed
 const OUT = path.join(__dirname, '../src/panels.json');
 const ALL = JSON.parse(fs.readFileSync(OUT, 'utf8'));
 if (process.argv[2] === 'merge') {
@@ -46,6 +47,7 @@ function mutate(p0, want) {
 }
 function judge(p0, r0, cand, depth) {
   const { p, added } = cand, solve = q => E.boxSolve(q, depth, 6, 1200000);
+  if (pingPong(p).length) return null;
   const r = solve(p); if (r.capped || !r.wins.length || r.wins.length > 3) return null;
   if (r.wins[0].length < r0.minMoves - 2) return null;
   if ((p.lights || []).length && r.wins.some(w => relights(p, w))) return null;
@@ -54,13 +56,16 @@ function judge(p0, r0, cand, depth) {
   return r;
 }
 const IDS = process.env.IDS ? process.env.IDS.split(',') : null, GIRL = process.env.GIRL, SEC = +process.env.SEC || 60;
-const targets = ALL.filter(p => p.layer === 3 && !p.tut && !p.ray && ['prim', 'trix', 'paige'].includes(p.girl) && kinds(p).length <= 1 && (!GIRL || p.girl === GIRL) && (!IDS || IDS.includes(p.id)));
+// REPAD=1 IDS=…: take the panel's arrow tiles away and place new ones (none facing each other)
+const REPAD = !!process.env.REPAD;
+const targets = REPAD ? ALL.filter(p => IDS.includes(p.id)).map(p => { const q = JSON.parse(JSON.stringify(p)); q._orig = p.minMoves; delete q.pads; return q; }) : ALL.filter(p => p.layer === 3 && !p.tut && !p.ray && ['prim', 'trix', 'paige'].includes(p.girl) && kinds(p).length <= 1 && (!GIRL || p.girl === GIRL) && (!IDS || IDS.includes(p.id)));
 const made = [];
 for (const p0 of targets) {
-  const has = kinds(p0), opts = [];
-  if (!has.includes('portals')) opts.push(['portals']);
-  if (!has.includes('pads')) opts.push(['pads']);
-  if (has.length <= 1 && !has.includes('portals') && !has.includes('pads')) opts.push(['portals', 'pads']);
+  const has = kinds(p0), opts = REPAD ? [['pads']] : [];
+  if (REPAD) { p0.minMoves = p0._orig; delete p0._orig; }
+  else if (!has.includes('portals')) opts.push(['portals']);
+  if (!REPAD && !has.includes('pads')) opts.push(['pads']);
+  if (!REPAD && has.length <= 1 && !has.includes('portals') && !has.includes('pads')) opts.push(['portals', 'pads']);
   const depth = p0.minMoves + 8, t0 = Date.now(); let best = null, tries = 0;
   while (Date.now() - t0 < SEC * 1000) {
     tries++;

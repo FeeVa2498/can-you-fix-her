@@ -7,6 +7,7 @@
 // back onto a lit light.
 // Usage: node tools/vel_v9.js [write]   (env SEC = seconds per panel, ONLY = id prefix)
 const E = require('../src/panel_engine.js'), fs = require('fs'), path = require('path');
+const { pingPong } = require('./pad_loops.js');
 const OUT = path.join(__dirname, '../src/panels.json');
 const ri = n => Math.floor(Math.random() * n), shuf = a => { for (let i = a.length - 1; i > 0; i--) { const j = ri(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const K = (x, y) => x + ',' + y, D4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
@@ -113,6 +114,7 @@ function attempt(row) {
 }
 function relights(p, w) { let s = E.boxStart(p); const X = E.boxCtx(p); for (const c of w) { const n = E.boxStep(p, s, E.DK[c], false, X).state; for (const k of s.lit) if (!n.lit.has(k)) return true; s = n; } return false; }
 function judge(p, minLen, maxLen, tut) {
+  if (pingPong(p).length) return null;   // no arrow tiles facing each other
   const solve = q => E.boxSolve(q, 44, 6, 700000);
   const r = solve(p); if (r.capped || !r.wins.length || r.wins.length > (p.layer === 3 ? 3 : 2) || r.wins[0].length < minLen || r.wins[0].length > maxLen) return null;
   if (r.wins.some(w => relights(p, w))) return null;
