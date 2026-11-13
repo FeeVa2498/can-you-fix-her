@@ -21,57 +21,52 @@ function owLayers(g) { return [1, 2, 3].map(L => panelsOf(g).filter(p => p.layer
 
 /* ---------------- the map: three maze regions joined by gates, and a small core room ---------------- */
 const OWMAP = {};
+/* A layer is laid out left → right like a level:
+   1. a straight corridor with her tutorials ON the road: each one is sealed behind (you must clear it to pass);
+      if the layer has no tutorial, its first memory is the forced one;
+   2. then the road branches: short side paths, each ending in a normal memory (choose which ones);
+   3. further on, longer side paths to the hard memories;
+   4. the gate (a/b keys) closes the layer. After the third gate: her core. */
+const OW_MID = 5;
 function owBuild(g) {
   if (OWMAP[g]) return OWMAP[g];
   if (g === 'ray') return (OWMAP.ray = rayMap());
-  const R = owRand(owSeed('dive:' + g)), lay = owLayers(g);
-  const W = 1 + 3 * OW_STRIDE + OW_CORE, H = OW_H;
-  const t = new Uint8Array(W * H);   // 0 wall · 1 floor · 2 gate
-  const I = (x, y) => y * W + x, CW = 7, CHh = 5;
-  const nodes = [], gates = [];
-  let entryCy = 2, start = null;
+  const lay = owLayers(g), H = 11, mid = OW_MID;
+  const cells = [];   // [x, y, v] v: 1 floor · 2 gate · 3 seal
+  const nodes = [], gates = [], seals = [];
+  const floor = (x, y) => cells.push([x, y, 1]);
+  let x = 1;
+  floor(x, mid); floor(x + 1, mid); x += 2;
   for (let r = 0; r < 3; r++) {
-    const ox = 1 + r * OW_STRIDE, cx0 = cx => ox + 2 * cx, cy0 = cy => 1 + 2 * cy;
-    const gateCy = 1 + Math.floor(R() * 3);
-    // carve a maze over the 7×5 cells (depth first), then knock out a few walls so it loops
-    const seen = new Set(), stack = [[0, entryCy]]; seen.add(0 + ',' + entryCy); t[I(cx0(0), cy0(entryCy))] = 1;
-    while (stack.length) {
-      const [cx, cy] = stack[stack.length - 1];
-      const nb = [[1, 0], [-1, 0], [0, 1], [0, -1]].map(([dx, dy]) => [cx + dx, cy + dy, dx, dy]).filter(([a, b]) => a >= 0 && b >= 0 && a < CW && b < CHh && !seen.has(a + ',' + b));
-      if (!nb.length) { stack.pop(); continue; }
-      const [a, b, dx, dy] = nb[Math.floor(R() * nb.length)];
-      seen.add(a + ',' + b); t[I(cx0(a), cy0(b))] = 1; t[I(cx0(cx) + dx, cy0(cy) + dy)] = 1; stack.push([a, b]);
-    }
-    for (let cy = 0; cy < CHh; cy++) for (let cx = 0; cx < CW; cx++) for (const [dx, dy] of [[1, 0], [0, 1]]) {
-      const a = cx + dx, b = cy + dy; if (a >= CW || b >= CHh) continue;
-      const wx = cx0(cx) + dx, wy = cy0(cy) + dy; if (!t[I(wx, wy)] && R() < .2) t[I(wx, wy)] = 1;
-    }
-    // a little plaza in front of the gate, and the gate itself in the wall to the right
-    const gy = cy0(gateCy), gx = ox + OW_RW;
-    for (let y = gy - 1; y <= gy + 1; y++) t[I(gx - 1, y)] = 1;
-    t[I(gx, gy)] = 2;
-    if (r === 0) start = [cx0(0), cy0(entryCy)];
-    // memories: spread over the cells by distance from the entry (tutorials and easy ones near, hard ones far)
-    const dist = owBfs(t, W, H, r === 0 ? start : [ox, cy0(entryCy)]);
-    const cand = [];
-    for (let cy = 0; cy < CHh; cy++) for (let cx = 0; cx < CW; cx++) {
-      if ((cx === 0 && cy === entryCy) || (cx === CW - 1 && cy === gateCy)) continue;
-      const x = cx0(cx), y = cy0(cy); if (dist[I(x, y)] >= 0) cand.push([x, y, dist[I(x, y)]]);
-    }
-    cand.sort((a, b) => a[2] - b[2]);
-    const ps = lay[r], n = Math.min(ps.length, cand.length);
-    for (let i = 0; i < n; i++) {
-      const c = cand[n === 1 ? 0 : Math.round(i * (cand.length - 1) / (n - 1))];
-      nodes.push({ x: c[0], y: c[1], layer: r + 1, pid: ps[i].id, i });
-    }
-    gates.push({ x: gx, y: gy, layer: r + 1, total: ps.length, need: keysNeed(ps.length) });
-    entryCy = gateCy;
+    const ps = lay[r]; if (!ps.length) continue;
+    let tuts = ps.filter(p => p.tut), rest = ps.filter(p => !p.tut);
+    if (!tuts.length) { tuts = rest.slice(0, 1); rest = rest.slice(1); }
+    let i = 0;
+    const node = (p, nx, ny) => { nodes.push({ x: nx, y: ny, layer: r + 1, pid: p.id, i: i++, tut: !!p.tut }); floor(nx, ny); };
+    // 1. the forced corridor
+    tuts.forEach(p => { floor(x, mid); node(p, x + 1, mid); cells.push([x + 2, mid, 3]); seals.push({ x: x + 2, y: mid, pid: p.id }); x += 3; });
+    floor(x, mid); x++;
+    // 2. side paths: normals first, hard ones (the last ~40%) on longer paths further along
+    const nHard = rest.length >= 4 ? Math.round(rest.length * .4) : 0, easy = rest.slice(0, rest.length - nHard), hard = rest.slice(rest.length - nHard);
+    let up = true;
+    easy.forEach(p => { floor(x, mid); floor(x + 1, mid); const d = up ? -1 : 1; floor(x + 1, mid + d); floor(x + 1, mid + 2 * d); node(p, x + 1, mid + 3 * d); up = !up; x += 2; });
+    if (hard.length) { floor(x, mid); floor(x + 1, mid); x += 2; }
+    hard.forEach(p => {   // a path with a bend: three up/down, one sideways
+      floor(x, mid); floor(x + 1, mid); floor(x + 2, mid); const d = up ? -1 : 1;
+      floor(x + 1, mid + d); floor(x + 1, mid + 2 * d); floor(x + 1, mid + 3 * d); floor(x + 2, mid + 3 * d); floor(x + 3, mid + 3 * d); node(p, x + 3, mid + 4 * d);
+      up = !up; x += 3;
+    });
+    // 4. the gate, with a little plaza in front
+    floor(x, mid); floor(x + 1, mid); floor(x + 1, mid - 1); floor(x + 1, mid + 1); x += 2;
+    cells.push([x, mid, 2]); gates.push({ x, y: mid, layer: r + 1, total: ps.length, need: keysNeed(ps.length) }); x++;
+    floor(x, mid); x++;
   }
-  // the core room past the last gate
-  const cox = 1 + 3 * OW_STRIDE, gy3 = gates[2].y;
-  for (let y = Math.max(1, gy3 - 2); y <= Math.min(H - 2, gy3 + 2); y++) for (let x = cox; x < cox + OW_CORE - 1; x++) t[I(x, y)] = 1;
-  const core = [cox + 2, gy3];
-  const M = { g, W, H, t, nodes, gates, start, core, nodeAt: new Map(nodes.map((n, i) => [I(n.x, n.y), i])) };
+  // the core room
+  for (let yy = mid - 2; yy <= mid + 2; yy++) for (let xx = x; xx < x + 5; xx++) floor(xx, yy);
+  const core = [x + 2, mid]; x += 6;
+  const W = x + 1, t = new Uint8Array(W * H);
+  cells.forEach(([cx, cy, v]) => { if (cx >= 0 && cy >= 0 && cx < W && cy < H && (t[cy * W + cx] === 0 || v > 1)) t[cy * W + cx] = v; });
+  const M = { g, W, H, t, nodes, gates, seals, start: [1, mid], core, nodeAt: new Map(nodes.map((n, k) => [n.y * W + n.x, k])) };
   OWMAP[g] = M; return M;
 }
 function owBfs(t, W, H, [sx, sy]) {
@@ -90,7 +85,7 @@ function owBfs(t, W, H, [sx, sy]) {
 function owState(g) {
   const st = S.g[g], M = owBuild(g);
   if (!st.ow) st.ow = { x: M.start[0], y: M.start[1], solved: {}, seen: '' };
-  if (st.ow.seen.length !== M.W * M.H) st.ow.seen = '0'.repeat(M.W * M.H);
+  if (st.ow.seen.length !== M.W * M.H || st.ow.seen.includes('0')) st.ow.seen = '1'.repeat(M.W * M.H);   // no fog of war
   return st.ow;
 }
 // keys per layer: { have, need, total }
@@ -108,6 +103,7 @@ function owPassable(g, x, y) {
   const M = owBuild(g); if (x < 0 || y < 0 || x >= M.W || y >= M.H) return false;
   const v = M.t[y * M.W + x]; if (v === 1) return true;
   if (v === 2) { const G = M.gates.find(G => G.x === x && G.y === y); return owGateOpen(g, G); }
+  if (v === 3) { const sl = M.seals.find(q => q.x === x && q.y === y); return !!owState(g).solved[sl.pid]; }
   return false;
 }
 function owReveal(g) {
@@ -204,6 +200,7 @@ function owMove(dx, dy) {
   owSpend('map'); if (S.dayOver) return;
   const v = nx >= 0 && ny >= 0 && nx < M.W && ny < M.H ? M.t[ny * M.W + nx] : 0;
   if (v === 2 && !owPassable(g, nx, ny)) { owGate(M.gates.find(G => G.x === nx && G.y === ny)); return; }
+  if (v === 3 && !owPassable(g, nx, ny)) { SFX.bump(); OW.shake = performance.now(); owSay('clear this memory first'); return; }
   if (!owPassable(g, nx, ny)) { SFX.bump(); OW.anim = { from: [o.x, o.y], to: [o.x + dx * .18, o.y + dy * .18], t0: performance.now(), bump: true }; return; }
   OW.anim = { from: [o.x, o.y], to: [nx, ny], t0: performance.now() };
   o.x = nx; o.y = ny; SFX.step(o.x + o.y); owReveal(g); owHud();
@@ -271,7 +268,7 @@ function owLoop() { cancelAnimationFrame(OW.raf); const f = () => { owDraw(); OW
 function owDraw() {
   const cv = $('#ow-cv'); if (!cv || !OW.g || OW.mode !== 'map') return;
   const g = OW.g, M = owBuild(g), o = owState(g), T = OW_THEME[g], x = cv.getContext('2d'), now = performance.now();
-  const Wp = cv.width, Hp = cv.height, ts = Math.max(28, Math.min(46, Math.floor(Math.min(Wp / 15, Hp / 9.5)))), lift = Math.round(ts * .22);
+  const Wp = cv.width, Hp = cv.height, ts = Math.max(48, Math.min(84, Math.floor(Math.min(Wp / 10, Hp / 7.2)))), lift = Math.round(ts * .22);
   // box position (tweened)
   let bx = o.x, by = o.y;
   if (OW.anim) { const k = Math.min(1, (now - OW.anim.t0) / 110), e = OW.anim.bump ? Math.sin(k * Math.PI) : 1 - Math.pow(1 - k, 3); const [fx, fy] = OW.anim.from, [tx, ty] = OW.anim.to; if (OW.anim.bump) { bx = fx + (tx - fx) * e; by = fy + (ty - fy) * e; } else { bx = fx + (tx - fx) * e; by = fy + (ty - fy) * e; } if (k >= 1) OW.anim = null; }
@@ -288,7 +285,12 @@ function owDraw() {
   for (let y = y0; y <= y1; y++) for (let xx = x0; xx <= x1; xx++) {
     const k = I(xx, y), v = M.t[k], px = xx * ts, py = y * ts;
     if (seen[k] !== '1') continue;
-    if (v === 1 || v === 2) { x.fillStyle = T.floor[(xx + y) & 1]; x.fillRect(px, py, ts, ts); }
+    if (v >= 1) { x.fillStyle = T.floor[(xx + y) & 1]; x.fillRect(px, py, ts, ts); }
+    if (v === 3 && !owPassable(g, xx, y)) {   // a seal: bars of light until the memory before it is cleared
+      x.save(); x.shadowColor = T.acc; x.shadowBlur = 12; x.fillStyle = T.acc; x.globalAlpha = .55 + .25 * Math.sin(now / 250 + xx);
+      for (let k = 0; k < 3; k++) x.fillRect(px + ts * (.2 + k * .25), py + ts * .08, ts * .1, ts * .84);
+      x.restore();
+    }
   }
   // memories
   M.nodes.forEach(n => {
