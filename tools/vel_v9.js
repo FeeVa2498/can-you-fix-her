@@ -147,7 +147,7 @@ for (const row of (process.env.V11 ? V11 : PLAN)) {
   Object.assign(p, { solIn: r.wins[0], solutions: r.wins.length, minMoves: r.wins[0].length, belief: row[11], feature: 'fragile' });
   if (row[10]) p.tut = row[10]; else p.intro = undefined;
   if (!p.pads || !p.pads.length) delete p.pads;
-  made.push(p);
+  made.push(p); if (process.env.PART) fs.writeFileSync(process.env.PART, JSON.stringify(made));
   console.log(p.id.padEnd(9), `${p.w + 1}x${p.h + 1}`, 'glass', p.fragile.length, 'lights', p.lights.length, 'pads', (p.pads || []).length, 'len', p.minMoves, 'ways', p.solutions, `(${tries} tries)`);
 }
 if (process.env.PART) fs.writeFileSync(process.env.PART, JSON.stringify(made));
