@@ -1121,6 +1121,40 @@ line.ed-hov{stroke-width:.14}
 .g-myne .pj-stage{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.5),transparent 70%),repeating-radial-gradient(circle at 50% 50%,#d6f5e6 0 8px,#bdebd5 8px 12px,#ecfbf3 12px 20px)}
 @media (max-width:720px){.chm{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}.chm-girls{flex-direction:row;overflow-x:auto}.chm-girl small{display:none}}
 @media (prefers-reduced-motion:reduce){.bad,.mag-scan{animation:none}.lens{transition:none}}
+
+/* ---------- story map (Fix-it) ---------- */
+.ow{display:flex;flex-direction:column;height:100%;gap:6px;background:#0d0714;margin:-6px;padding:6px;color:#f3e8ff}
+.ow-top{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;flex-wrap:wrap}
+.ow-top .sp{flex:1}
+.ow-keys{display:flex;align-items:center;gap:6px;padding:3px 8px;border:2px solid var(--acc);border-radius:6px;background:rgba(0,0,0,.4)}
+.ow-keys b{font-size:15px;color:var(--acc)}.ow-keys small{opacity:.75}
+.kic{width:18px;height:18px}
+.ow-reg{opacity:.8}
+.ow-stam{position:relative;width:180px;height:20px;border:2px solid #f3e8ff;border-radius:5px;background:#24122e;overflow:hidden}
+.ow-stam i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#7be3a4,#ffd86e);transition:width .25s}
+.ow-stam.low i{background:#ff4d5e;animation:tutpulse .6s steps(2) infinite}
+.ow-stam b{position:relative;display:block;text-align:center;font-size:11px;line-height:16px;color:#1b0d22;mix-blend-mode:normal;text-shadow:0 0 2px #fff}
+.ow-main{flex:1;min-height:0;position:relative;display:flex;flex-direction:column}
+.ow-main>.pj{flex:1;min-height:0}
+.ow-view{position:relative;flex:1;min-height:0;border:2px solid #3a2346;border-radius:6px;overflow:hidden;background:#0d0714}
+.ow-view canvas#ow-cv{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.ow-mini{position:absolute;right:8px;top:8px;border:2px solid var(--acc);border-radius:4px;image-rendering:pixelated;width:auto;height:auto;max-width:45%;}
+.ow-card{position:absolute;left:10px;bottom:10px;padding:6px 10px;border:2px solid var(--acc);border-radius:6px;background:rgba(13,7,20,.9);font-family:var(--mono);font-size:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:60%}
+.ow-card .new{color:#ffd86e}.ow-card .got{color:#7be3a4}.ow-card .go{color:var(--acc);font-weight:bold}
+.ow-msg{position:absolute;left:50%;top:14px;transform:translateX(-50%);font-family:var(--mono);font-size:14px;font-weight:bold;color:#fff;text-shadow:0 0 8px var(--acc),2px 2px 0 #000;opacity:0;pointer-events:none;white-space:nowrap}
+.ow-msg.on{animation:owmsg 2.2s ease-out forwards}
+@keyframes owmsg{0%{opacity:0;transform:translate(-50%,6px)}10%{opacity:1;transform:translate(-50%,0)}75%{opacity:1}100%{opacity:0}}
+.ow-help{font-family:var(--mono);font-size:11px;opacity:.6;text-align:center}
+.ow-view.dead,.pj-vp.dead{filter:grayscale(.85) brightness(.6)}
+/* the company says no */
+.warnbox{display:flex;gap:12px;padding:8px;font-size:13px;line-height:1.5}
+.warnbox p{margin:4px 0}.warnbox .sig{color:var(--ink-soft);font-size:12px}
+.wb-ic{flex:none;width:36px;height:36px;border-radius:50%;background:#ffd23f;border:3px solid #6b4a1e;color:#6b4a1e;font:bold 22px/30px var(--mono);text-align:center}
+.warnfoot{display:flex;justify-content:flex-end;padding:0 8px 8px}
+/* out of stamina: one hard jolt */
+.jolt #desktop{animation:jolt .65s cubic-bezier(.3,.7,.4,1)}
+@keyframes jolt{0%{transform:none;filter:none}8%{transform:translate(-14px,6px) scale(1.01);filter:brightness(2) contrast(1.6)}18%{transform:translate(12px,-5px)}30%{transform:translate(-8px,4px);filter:hue-rotate(40deg)}45%{transform:translate(5px,-2px)}65%{transform:translate(-2px,1px);filter:none}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.jolt #desktop{animation:none}}
 </style>
 </head>
 <body>
@@ -1159,7 +1193,7 @@ line.ed-hov{stroke-width:.14}
 /* =========================================================
    CAN YOU FIX HER — DIVE OS v2.4 prototype (v4)
    ========================================================= */
-const SAVE_KEY = 'cyfh_v8_save';
+const SAVE_KEY = 'cyfh_v9_save';   // v9: overworld + day stamina (older saves don't carry over)
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -1175,8 +1209,6 @@ const ART = {
   trix: { body: 'data:image/png;base64,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', face: 'data:image/png;base64,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', w: 124, h: 170 },
 };
 // two cascaded windows over the face: front (layer 1) and back (layer 2), same size, back offset down-right
-const LEVELS = {"prim":[{"n":5,"pairs":[[[0,1],[2,0]],[[0,2],[1,4]],[[2,2],[4,4]],[[3,4],[4,2]]],"sol":[[[0,1],[0,0],[1,0],[2,0]],[[0,2],[0,3],[0,4],[1,4]],[[2,2],[3,2],[3,3],[4,3],[4,4]],[[3,4],[2,4],[2,3],[1,3],[1,2],[1,1],[2,1],[3,1],[3,0],[4,0],[4,1],[4,2]]]},{"n":5,"pairs":[[[0,0],[3,1]],[[1,0],[4,0]],[[1,3],[2,2]],[[3,2],[4,1]]],"sol":[[[0,0],[0,1],[1,1],[2,1],[3,1]],[[1,0],[2,0],[3,0],[4,0]],[[1,3],[1,2],[0,2],[0,3],[0,4],[1,4],[2,4],[2,3],[2,2]],[[3,2],[3,3],[3,4],[4,4],[4,3],[4,2],[4,1]]]},{"n":5,"pairs":[[[0,4],[0,0]],[[1,0],[4,1]],[[4,3],[1,1]],[[1,3],[4,4]]],"sol":[[[0,4],[0,3],[0,2],[0,1],[0,0]],[[1,0],[2,0],[2,1],[3,1],[3,0],[4,0],[4,1]],[[4,3],[4,2],[3,2],[3,3],[2,3],[2,2],[1,2],[1,1]],[[1,3],[1,4],[2,4],[3,4],[4,4]]]},{"n":5,"pairs":[[[2,0],[0,0]],[[1,2],[0,4]],[[2,4],[4,1]],[[3,4],[4,2]]],"sol":[[[2,0],[1,0],[1,1],[0,1],[0,0]],[[1,2],[0,2],[0,3],[0,4]],[[2,4],[1,4],[1,3],[2,3],[2,2],[2,1],[3,1],[3,0],[4,0],[4,1]],[[3,4],[4,4],[4,3],[3,3],[3,2],[4,2]]]},{"n":6,"pairs":[[[0,2],[0,4]],[[2,0],[0,1]],[[2,1],[3,3]],[[3,0],[0,5]],[[4,3],[1,1]]],"sol":[[[0,2],[0,3],[1,3],[1,4],[0,4]],[[2,0],[1,0],[0,0],[0,1]],[[2,1],[3,1],[4,1],[4,2],[3,2],[3,3]],[[3,0],[4,0],[5,0],[5,1],[5,2],[5,3],[5,4],[5,5],[4,5],[3,5],[2,5],[1,5],[0,5]],[[4,3],[4,4],[3,4],[2,4],[2,3],[2,2],[1,2],[1,1]]]},{"n":6,"pairs":[[[2,5],[3,0]],[[1,4],[2,1]],[[3,1],[5,1]],[[4,5],[2,2]],[[3,3],[5,5]]],"sol":[[[2,5],[1,5],[0,5],[0,4],[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[3,0]],[[1,4],[1,3],[1,2],[1,1],[2,1]],[[3,1],[4,1],[4,0],[5,0],[5,1]],[[4,5],[3,5],[3,4],[2,4],[2,3],[2,2]],[[3,3],[3,2],[4,2],[5,2],[5,3],[4,3],[4,4],[5,4],[5,5]]]},{"n":6,"pairs":[[[0,0],[0,4]],[[0,5],[5,2]],[[2,1],[4,4]],[[3,2],[2,4]],[[5,1],[1,2]]],"sol":[[[0,0],[0,1],[0,2],[0,3],[1,3],[1,4],[0,4]],[[0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[5,4],[5,3],[5,2]],[[2,1],[3,1],[4,1],[4,2],[4,3],[4,4]],[[3,2],[2,2],[2,3],[3,3],[3,4],[2,4]],[[5,1],[5,0],[4,0],[3,0],[2,0],[1,0],[1,1],[1,2]]]},{"n":6,"pairs":[[[0,0],[0,4]],[[1,2],[1,0]],[[4,1],[3,2]],[[4,3],[2,2]],[[2,4],[5,3]]],"sol":[[[0,0],[0,1],[0,2],[0,3],[1,3],[1,4],[1,5],[0,5],[0,4]],[[1,2],[1,1],[2,1],[2,0],[1,0]],[[4,1],[3,1],[3,0],[4,0],[5,0],[5,1],[5,2],[4,2],[3,2]],[[4,3],[3,3],[2,3],[2,2]],[[2,4],[2,5],[3,5],[3,4],[4,4],[4,5],[5,5],[5,4],[5,3]]]},{"n":6,"pairs":[[[0,4],[0,0]],[[1,2],[2,0]],[[0,5],[5,4]],[[4,1],[5,3]],[[5,1],[2,3]]],"sol":[[[0,4],[1,4],[1,3],[0,3],[0,2],[0,1],[1,1],[1,0],[0,0]],[[1,2],[2,2],[2,1],[2,0]],[[0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[5,4]],[[4,1],[4,2],[5,2],[5,3]],[[5,1],[5,0],[4,0],[3,0],[3,1],[3,2],[3,3],[4,3],[4,4],[3,4],[2,4],[2,3]]]},{"n":6,"pairs":[[[0,3],[0,0]],[[0,5],[2,4]],[[4,2],[2,1]],[[4,3],[5,0]],[[3,5],[2,2]]],"sol":[[[0,3],[0,2],[0,1],[0,0]],[[0,5],[0,4],[1,4],[1,5],[2,5],[2,4]],[[4,2],[3,2],[3,1],[4,1],[4,0],[3,0],[2,0],[1,0],[1,1],[2,1]],[[4,3],[5,3],[5,2],[5,1],[5,0]],[[3,5],[4,5],[5,5],[5,4],[4,4],[3,4],[3,3],[2,3],[1,3],[1,2],[2,2]]]},{"n":6,"pairs":[[[0,3],[1,1]],[[0,0],[5,2]],[[3,1],[5,0]],[[3,3],[0,5]],[[4,5],[5,3]]],"sol":[[[0,3],[1,3],[1,2],[0,2],[0,1],[1,1]],[[0,0],[1,0],[2,0],[2,1],[2,2],[3,2],[4,2],[4,1],[5,1],[5,2]],[[3,1],[3,0],[4,0],[5,0]],[[3,3],[2,3],[2,4],[3,4],[3,5],[2,5],[1,5],[1,4],[0,4],[0,5]],[[4,5],[5,5],[5,4],[4,4],[4,3],[5,3]]]},{"n":6,"pairs":[[[0,0],[1,2]],[[0,5],[3,4]],[[2,0],[4,0]],[[4,2],[5,0]],[[1,0],[5,5]]],"sol":[[[0,0],[0,1],[0,2],[1,2]],[[0,5],[0,4],[0,3],[1,3],[2,3],[2,4],[1,4],[1,5],[2,5],[3,5],[3,4]],[[2,0],[3,0],[3,1],[4,1],[4,0]],[[4,2],[5,2],[5,1],[5,0]],[[1,0],[1,1],[2,1],[2,2],[3,2],[3,3],[4,3],[5,3],[5,4],[4,4],[4,5],[5,5]]]},{"n":7,"pairs":[[[0,0],[0,4]],[[1,5],[2,6]],[[4,3],[5,1]],[[3,4],[6,4]],[[6,5],[2,3]],[[5,3],[3,0]]],"sol":[[[0,0],[1,0],[1,1],[0,1],[0,2],[0,3],[0,4]],[[1,5],[0,5],[0,6],[1,6],[2,6]],[[4,3],[4,2],[5,2],[5,1]],[[3,4],[4,4],[4,5],[5,5],[5,4],[6,4]],[[6,5],[6,6],[5,6],[4,6],[3,6],[3,5],[2,5],[2,4],[1,4],[1,3],[1,2],[2,2],[3,2],[3,3],[2,3]],[[5,3],[6,3],[6,2],[6,1],[6,0],[5,0],[4,0],[4,1],[3,1],[2,1],[2,0],[3,0]]]},{"n":7,"pairs":[[[0,0],[3,0]],[[0,6],[1,1]],[[2,5],[3,6]],[[4,0],[4,3]],[[6,0],[3,2]],[[5,3],[4,6]]],"sol":[[[0,0],[1,0],[2,0],[3,0]],[[0,6],[0,5],[0,4],[0,3],[1,3],[1,2],[0,2],[0,1],[1,1]],[[2,5],[2,4],[1,4],[1,5],[1,6],[2,6],[3,6]],[[4,0],[4,1],[3,1],[2,1],[2,2],[2,3],[3,3],[3,4],[3,5],[4,5],[5,5],[5,4],[4,4],[4,3]],[[6,0],[5,0],[5,1],[6,1],[6,2],[5,2],[4,2],[3,2]],[[5,3],[6,3],[6,4],[6,5],[6,6],[5,6],[4,6]]]},{"n":7,"pairs":[[[1,1],[2,0]],[[1,5],[3,5]],[[2,1],[3,0]],[[3,4],[2,6]],[[5,4],[6,6]],[[6,1],[5,3]]],"sol":[[[1,1],[0,1],[0,0],[1,0],[2,0]],[[1,5],[1,6],[0,6],[0,5],[0,4],[0,3],[0,2],[1,2],[2,2],[2,3],[1,3],[1,4],[2,4],[2,5],[3,5]],[[2,1],[3,1],[4,1],[4,0],[3,0]],[[3,4],[3,3],[3,2],[4,2],[4,3],[4,4],[4,5],[5,5],[5,6],[4,6],[3,6],[2,6]],[[5,4],[6,4],[6,5],[6,6]],[[6,1],[6,0],[5,0],[5,1],[5,2],[6,2],[6,3],[5,3]]]},{"n":7,"pairs":[[[0,4],[3,0]],[[0,5],[3,4]],[[2,2],[5,3]],[[4,2],[6,0]],[[0,6],[5,5]],[[5,6],[6,1]]],"sol":[[[0,4],[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0]],[[0,5],[1,5],[1,4],[2,4],[2,5],[3,5],[3,4]],[[2,2],[1,2],[1,3],[2,3],[3,3],[4,3],[5,3]],[[4,2],[3,2],[3,1],[4,1],[4,0],[5,0],[6,0]],[[0,6],[1,6],[2,6],[3,6],[4,6],[4,5],[4,4],[5,4],[5,5]],[[5,6],[6,6],[6,5],[6,4],[6,3],[6,2],[5,2],[5,1],[6,1]]]},{"n":7,"pairs":[[[0,0],[2,1]],[[0,2],[3,1]],[[0,3],[2,4]],[[3,0],[6,1]],[[4,4],[5,1]],[[4,5],[5,3]]],"sol":[[[0,0],[0,1],[1,1],[1,0],[2,0],[2,1]],[[0,2],[1,2],[2,2],[2,3],[3,3],[3,2],[3,1]],[[0,3],[1,3],[1,4],[0,4],[0,5],[0,6],[1,6],[1,5],[2,5],[2,6],[3,6],[3,5],[3,4],[2,4]],[[3,0],[4,0],[5,0],[6,0],[6,1]],[[4,4],[4,3],[4,2],[4,1],[5,1]],[[4,5],[4,6],[5,6],[6,6],[6,5],[5,5],[5,4],[6,4],[6,3],[6,2],[5,2],[5,3]]]},{"n":7,"pairs":[[[0,1],[2,2]],[[5,4],[2,5]],[[0,0],[6,4]],[[3,4],[0,2]],[[4,3],[5,1]],[[6,6],[4,6]]],"sol":[[[0,1],[1,1],[2,1],[3,1],[3,2],[3,3],[2,3],[2,2]],[[5,4],[4,4],[4,5],[3,5],[3,6],[2,6],[1,6],[0,6],[0,5],[1,5],[2,5]],[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[6,1],[6,2],[5,2],[5,3],[6,3],[6,4]],[[3,4],[2,4],[1,4],[0,4],[0,3],[1,3],[1,2],[0,2]],[[4,3],[4,2],[4,1],[5,1]],[[6,6],[6,5],[5,5],[5,6],[4,6]]]},{"n":7,"pairs":[[[0,0],[2,1]],[[0,2],[4,3]],[[0,3],[6,3]],[[0,4],[1,6]],[[4,6],[6,4]],[[4,0],[6,2]]],"sol":[[[0,0],[1,0],[2,0],[2,1]],[[0,2],[0,1],[1,1],[1,2],[2,2],[3,2],[3,3],[4,3]],[[0,3],[1,3],[2,3],[2,4],[1,4],[1,5],[2,5],[2,6],[3,6],[3,5],[3,4],[4,4],[4,5],[5,5],[5,4],[5,3],[6,3]],[[0,4],[0,5],[0,6],[1,6]],[[4,6],[5,6],[6,6],[6,5],[6,4]],[[4,0],[3,0],[3,1],[4,1],[4,2],[5,2],[5,1],[5,0],[6,0],[6,1],[6,2]]]},{"n":7,"pairs":[[[0,6],[2,0]],[[0,0],[1,2]],[[4,4],[1,4]],[[3,6],[5,2]],[[6,0],[3,2]],[[6,2],[6,6]]],"sol":[[[0,6],[1,6],[1,5],[0,5],[0,4],[0,3],[1,3],[2,3],[2,2],[2,1],[2,0]],[[0,0],[1,0],[1,1],[0,1],[0,2],[1,2]],[[4,4],[4,3],[3,3],[3,4],[2,4],[1,4]],[[3,6],[2,6],[2,5],[3,5],[4,5],[4,6],[5,6],[5,5],[5,4],[5,3],[5,2]],[[6,0],[6,1],[5,1],[5,0],[4,0],[3,0],[3,1],[4,1],[4,2],[3,2]],[[6,2],[6,3],[6,4],[6,5],[6,6]]]},{"n":8,"pairs":[[[1,4],[3,0]],[[1,7],[0,5]],[[2,6],[5,4]],[[3,3],[2,5]],[[5,0],[1,1]],[[7,1],[4,4]],[[7,5],[4,7]]],"sol":[[[1,4],[0,4],[0,3],[0,2],[0,1],[0,0],[1,0],[2,0],[2,1],[3,1],[3,0]],[[1,7],[0,7],[0,6],[1,6],[1,5],[0,5]],[[2,6],[2,7],[3,7],[3,6],[3,5],[4,5],[4,6],[5,6],[5,5],[5,4]],[[3,3],[3,4],[2,4],[2,5]],[[5,0],[4,0],[4,1],[4,2],[3,2],[2,2],[2,3],[1,3],[1,2],[1,1]],[[7,1],[7,0],[6,0],[6,1],[5,1],[5,2],[5,3],[4,3],[4,4]],[[7,5],[7,4],[7,3],[7,2],[6,2],[6,3],[6,4],[6,5],[6,6],[7,6],[7,7],[6,7],[5,7],[4,7]]]},{"n":8,"pairs":[[[0,0],[0,3]],[[4,0],[3,4]],[[2,6],[3,7]],[[2,7],[1,4]],[[4,5],[6,5]],[[5,2],[3,1]],[[7,5],[7,1]]],"sol":[[[0,0],[0,1],[0,2],[1,2],[1,3],[0,3]],[[4,0],[3,0],[2,0],[1,0],[1,1],[2,1],[2,2],[3,2],[3,3],[2,3],[2,4],[3,4]],[[2,6],[2,5],[3,5],[3,6],[3,7]],[[2,7],[1,7],[0,7],[0,6],[1,6],[1,5],[0,5],[0,4],[1,4]],[[4,5],[4,4],[5,4],[5,5],[5,6],[4,6],[4,7],[5,7],[6,7],[7,7],[7,6],[6,6],[6,5]],[[5,2],[5,3],[4,3],[4,2],[4,1],[3,1]],[[7,5],[7,4],[6,4],[6,3],[7,3],[7,2],[6,2],[6,1],[5,1],[5,0],[6,0],[7,0],[7,1]]]},{"n":8,"pairs":[[[0,7],[3,1]],[[1,2],[5,3]],[[1,5],[3,6]],[[4,3],[2,4]],[[4,4],[7,4]],[[4,7],[7,7]],[[7,2],[6,0]]],"sol":[[[0,7],[0,6],[0,5],[0,4],[1,4],[1,3],[0,3],[0,2],[0,1],[0,0],[1,0],[1,1],[2,1],[2,0],[3,0],[4,0],[5,0],[5,1],[4,1],[3,1]],[[1,2],[2,2],[3,2],[4,2],[5,2],[5,3]],[[1,5],[2,5],[2,6],[1,6],[1,7],[2,7],[3,7],[3,6]],[[4,3],[3,3],[2,3],[2,4]],[[4,4],[3,4],[3,5],[4,5],[5,5],[5,4],[6,4],[6,3],[7,3],[7,4]],[[4,7],[4,6],[5,6],[5,7],[6,7],[6,6],[6,5],[7,5],[7,6],[7,7]],[[7,2],[6,2],[6,1],[7,1],[7,0],[6,0]]]},{"n":8,"pairs":[[[0,5],[2,6]],[[0,7],[5,7]],[[2,4],[4,3]],[[3,0],[0,0]],[[7,7],[5,6]],[[7,3],[7,0]],[[7,6],[4,2]]],"sol":[[[0,5],[0,6],[1,6],[2,6]],[[0,7],[1,7],[2,7],[3,7],[4,7],[5,7]],[[2,4],[2,5],[1,5],[1,4],[0,4],[0,3],[0,2],[1,2],[1,3],[2,3],[3,3],[4,3]],[[3,0],[3,1],[3,2],[2,2],[2,1],[2,0],[1,0],[1,1],[0,1],[0,0]],[[7,7],[6,7],[6,6],[6,5],[5,5],[4,5],[4,4],[3,4],[3,5],[3,6],[4,6],[5,6]],[[7,3],[6,3],[6,2],[7,2],[7,1],[6,1],[6,0],[7,0]],[[7,6],[7,5],[7,4],[6,4],[5,4],[5,3],[5,2],[5,1],[5,0],[4,0],[4,1],[4,2]]]}],"trix":[{"n":6,"pairs":[[[0,2],[2,3]],[[2,5],[0,4]],[[4,3],[5,5]],[[5,0],[2,0]],[[5,1],[0,1]]],"sol":[[[0,2],[0,3],[1,3],[1,2],[2,2],[2,3]],[[2,5],[2,4],[1,4],[1,5],[0,5],[0,4]],[[4,3],[4,4],[5,4],[5,3],[5,2],[4,2],[3,2],[3,3],[3,4],[3,5],[4,5],[5,5]],[[5,0],[4,0],[3,0],[2,0]],[[5,1],[4,1],[3,1],[2,1],[1,1],[1,0],[0,0],[0,1]]]},{"n":6,"pairs":[[[3,1],[1,0]],[[0,5],[2,2]],[[3,4],[1,3]],[[4,3],[5,0]],[[5,5],[5,3]]],"sol":[[[3,1],[3,0],[2,0],[2,1],[1,1],[0,1],[0,0],[1,0]],[[0,5],[1,5],[1,4],[0,4],[0,3],[0,2],[1,2],[2,2]],[[3,4],[3,5],[2,5],[2,4],[2,3],[1,3]],[[4,3],[3,3],[3,2],[4,2],[5,2],[5,1],[4,1],[4,0],[5,0]],[[5,5],[4,5],[4,4],[5,4],[5,3]]]},{"n":6,"pairs":[[[0,0],[2,5]],[[1,4],[0,2]],[[5,0],[3,0]],[[4,4],[5,1]],[[5,5],[4,3]]],"sol":[[[0,0],[0,1],[1,1],[1,0],[2,0],[2,1],[2,2],[1,2],[1,3],[2,3],[2,4],[2,5]],[[1,4],[1,5],[0,5],[0,4],[0,3],[0,2]],[[5,0],[4,0],[4,1],[3,1],[3,0]],[[4,4],[4,5],[3,5],[3,4],[3,3],[3,2],[4,2],[5,2],[5,1]],[[5,5],[5,4],[5,3],[4,3]]]},{"n":6,"pairs":[[[1,1],[0,3]],[[1,2],[2,4]],[[3,3],[3,0]],[[3,4],[4,2]],[[5,5],[4,1]]],"sol":[[[1,1],[2,1],[2,0],[1,0],[0,0],[0,1],[0,2],[0,3]],[[1,2],[2,2],[2,3],[1,3],[1,4],[0,4],[0,5],[1,5],[2,5],[2,4]],[[3,3],[3,2],[3,1],[3,0]],[[3,4],[3,5],[4,5],[4,4],[4,3],[4,2]],[[5,5],[5,4],[5,3],[5,2],[5,1],[5,0],[4,0],[4,1]]]},{"n":6,"pairs":[[[1,4],[1,2]],[[0,5],[5,1]],[[1,3],[0,0]],[[5,0],[3,3]],[[4,3],[2,4]]],"sol":[[[1,4],[0,4],[0,3],[0,2],[1,2]],[[0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[5,4],[5,3],[5,2],[5,1]],[[1,3],[2,3],[2,2],[2,1],[2,0],[1,0],[1,1],[0,1],[0,0]],[[5,0],[4,0],[3,0],[3,1],[4,1],[4,2],[3,2],[3,3]],[[4,3],[4,4],[3,4],[2,4]]]},{"n":6,"pairs":[[[0,0],[2,2]],[[1,4],[0,3]],[[5,3],[3,0]],[[4,0],[5,2]],[[4,5],[0,2]]],"sol":[[[0,0],[0,1],[1,1],[1,0],[2,0],[2,1],[2,2]],[[1,4],[1,5],[0,5],[0,4],[0,3]],[[5,3],[4,3],[3,3],[3,2],[4,2],[4,1],[3,1],[3,0]],[[4,0],[5,0],[5,1],[5,2]],[[4,5],[5,5],[5,4],[4,4],[3,4],[3,5],[2,5],[2,4],[2,3],[1,3],[1,2],[0,2]]]},{"n":7,"pairs":[[[3,0],[1,1]],[[3,5],[0,3]],[[4,0],[5,1]],[[4,1],[0,2]],[[5,2],[1,6]],[[6,2],[6,6]]],"sol":[[[3,0],[2,0],[1,0],[0,0],[0,1],[1,1]],[[3,5],[3,4],[2,4],[2,3],[1,3],[0,3]],[[4,0],[5,0],[6,0],[6,1],[5,1]],[[4,1],[4,2],[4,3],[3,3],[3,2],[3,1],[2,1],[2,2],[1,2],[0,2]],[[5,2],[5,3],[5,4],[4,4],[4,5],[4,6],[3,6],[2,6],[2,5],[1,5],[1,4],[0,4],[0,5],[0,6],[1,6]],[[6,2],[6,3],[6,4],[6,5],[5,5],[5,6],[6,6]]]},{"n":7,"pairs":[[[0,6],[2,6]],[[2,5],[0,1]],[[2,0],[3,2]],[[4,4],[1,3]],[[3,6],[6,2]],[[5,2],[4,0]]],"sol":[[[0,6],[0,5],[1,5],[1,6],[2,6]],[[2,5],[2,4],[1,4],[0,4],[0,3],[0,2],[1,2],[1,1],[1,0],[0,0],[0,1]],[[2,0],[3,0],[3,1],[2,1],[2,2],[3,2]],[[4,4],[3,4],[3,3],[2,3],[1,3]],[[3,6],[3,5],[4,5],[4,6],[5,6],[6,6],[6,5],[5,5],[5,4],[6,4],[6,3],[6,2]],[[5,2],[5,3],[4,3],[4,2],[4,1],[5,1],[6,1],[6,0],[5,0],[4,0]]]},{"n":7,"pairs":[[[0,6],[1,1]],[[0,0],[6,4]],[[3,4],[1,4]],[[4,6],[1,5]],[[5,1],[2,1]],[[5,6],[4,3]]],"sol":[[[0,6],[0,5],[0,4],[0,3],[1,3],[1,2],[0,2],[0,1],[1,1]],[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[6,1],[6,2],[6,3],[5,3],[5,4],[6,4]],[[3,4],[3,5],[2,5],[2,4],[1,4]],[[4,6],[3,6],[2,6],[1,6],[1,5]],[[5,1],[5,2],[4,2],[4,1],[3,1],[3,2],[3,3],[2,3],[2,2],[2,1]],[[5,6],[6,6],[6,5],[5,5],[4,5],[4,4],[4,3]]]},{"n":7,"pairs":[[[3,4],[0,1]],[[0,4],[3,6]],[[2,3],[6,0]],[[3,2],[6,4]],[[4,6],[3,5]],[[5,1],[4,2]]],"sol":[[[3,4],[2,4],[2,5],[1,5],[1,4],[1,3],[0,3],[0,2],[1,2],[1,1],[1,0],[0,0],[0,1]],[[0,4],[0,5],[0,6],[1,6],[2,6],[3,6]],[[2,3],[2,2],[2,1],[2,0],[3,0],[3,1],[4,1],[4,0],[5,0],[6,0]],[[3,2],[3,3],[4,3],[5,3],[6,3],[6,4]],[[4,6],[5,6],[6,6],[6,5],[5,5],[5,4],[4,4],[4,5],[3,5]],[[5,1],[6,1],[6,2],[5,2],[4,2]]]},{"n":7,"pairs":[[[0,2],[0,5]],[[1,3],[6,1]],[[2,1],[2,4]],[[3,3],[5,1]],[[5,4],[6,6]],[[6,2],[5,6]]],"sol":[[[0,2],[0,3],[0,4],[1,4],[1,5],[1,6],[0,6],[0,5]],[[1,3],[1,2],[1,1],[0,1],[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[6,1]],[[2,1],[2,2],[2,3],[2,4]],[[3,3],[3,2],[3,1],[4,1],[4,2],[5,2],[5,1]],[[5,4],[6,4],[6,5],[6,6]],[[6,2],[6,3],[5,3],[4,3],[4,4],[3,4],[3,5],[2,5],[2,6],[3,6],[4,6],[4,5],[5,5],[5,6]]]},{"n":7,"pairs":[[[0,2],[2,0]],[[0,4],[0,6]],[[3,4],[1,6]],[[6,2],[4,1]],[[6,1],[2,5]],[[5,5],[4,2]]],"sol":[[[0,2],[0,1],[0,0],[1,0],[1,1],[1,2],[2,2],[2,1],[2,0]],[[0,4],[0,3],[1,3],[1,4],[1,5],[0,5],[0,6]],[[3,4],[3,5],[4,5],[4,6],[3,6],[2,6],[1,6]],[[6,2],[6,3],[5,3],[5,2],[5,1],[4,1]],[[6,1],[6,0],[5,0],[4,0],[3,0],[3,1],[3,2],[3,3],[2,3],[2,4],[2,5]],[[5,5],[5,6],[6,6],[6,5],[6,4],[5,4],[4,4],[4,3],[4,2]]]},{"n":7,"pairs":[[[1,3],[0,6]],[[2,1],[0,2]],[[4,3],[1,6]],[[4,1],[6,0]],[[3,3],[5,5]],[[6,4],[5,2]]],"sol":[[[1,3],[0,3],[0,4],[1,4],[1,5],[0,5],[0,6]],[[2,1],[2,0],[1,0],[0,0],[0,1],[1,1],[1,2],[0,2]],[[4,3],[4,2],[3,2],[2,2],[2,3],[2,4],[2,5],[3,5],[3,6],[2,6],[1,6]],[[4,1],[3,1],[3,0],[4,0],[5,0],[5,1],[6,1],[6,0]],[[3,3],[3,4],[4,4],[4,5],[4,6],[5,6],[6,6],[6,5],[5,5]],[[6,4],[5,4],[5,3],[6,3],[6,2],[5,2]]]},{"n":7,"pairs":[[[2,0],[1,1]],[[2,3],[3,6]],[[4,0],[1,5]],[[5,5],[4,3]],[[6,3],[5,1]],[[6,4],[4,1]]],"sol":[[[2,0],[1,0],[0,0],[0,1],[1,1]],[[2,3],[2,4],[2,5],[2,6],[3,6]],[[4,0],[3,0],[3,1],[2,1],[2,2],[1,2],[0,2],[0,3],[1,3],[1,4],[0,4],[0,5],[0,6],[1,6],[1,5]],[[5,5],[5,4],[4,4],[4,3]],[[6,3],[5,3],[5,2],[6,2],[6,1],[6,0],[5,0],[5,1]],[[6,4],[6,5],[6,6],[5,6],[4,6],[4,5],[3,5],[3,4],[3,3],[3,2],[4,2],[4,1]]]},{"n":7,"pairs":[[[3,0],[0,0]],[[3,1],[2,4]],[[3,2],[4,0]],[[4,5],[3,6]],[[4,6],[5,5]],[[5,4],[6,2]]],"sol":[[[3,0],[2,0],[1,0],[1,1],[0,1],[0,0]],[[3,1],[2,1],[2,2],[2,3],[2,4]],[[3,2],[3,3],[3,4],[4,4],[4,3],[4,2],[4,1],[5,1],[6,1],[6,0],[5,0],[4,0]],[[4,5],[3,5],[2,5],[1,5],[1,4],[1,3],[1,2],[0,2],[0,3],[0,4],[0,5],[0,6],[1,6],[2,6],[3,6]],[[4,6],[5,6],[6,6],[6,5],[5,5]],[[5,4],[6,4],[6,3],[5,3],[5,2],[6,2]]]},{"n":7,"pairs":[[[1,5],[3,6]],[[0,0],[2,3]],[[1,0],[4,1]],[[3,0],[5,1]],[[3,3],[4,2]],[[6,6],[6,0]]],"sol":[[[1,5],[1,4],[0,4],[0,5],[0,6],[1,6],[2,6],[3,6]],[[0,0],[0,1],[1,1],[1,2],[0,2],[0,3],[1,3],[2,3]],[[1,0],[2,0],[2,1],[2,2],[3,2],[3,1],[4,1]],[[3,0],[4,0],[5,0],[5,1]],[[3,3],[3,4],[2,4],[2,5],[3,5],[4,5],[4,6],[5,6],[5,5],[5,4],[4,4],[4,3],[5,3],[5,2],[4,2]],[[6,6],[6,5],[6,4],[6,3],[6,2],[6,1],[6,0]]]},{"n":8,"pairs":[[[1,1],[4,2]],[[3,7],[1,6]],[[2,5],[0,2]],[[3,0],[5,5]],[[4,7],[3,5]],[[7,0],[5,0]],[[7,7],[7,4]]],"sol":[[[1,1],[0,1],[0,0],[1,0],[2,0],[2,1],[3,1],[3,2],[4,2]],[[3,7],[3,6],[2,6],[2,7],[1,7],[0,7],[0,6],[0,5],[1,5],[1,6]],[[2,5],[2,4],[3,4],[3,3],[2,3],[2,2],[1,2],[1,3],[1,4],[0,4],[0,3],[0,2]],[[3,0],[4,0],[4,1],[5,1],[5,2],[5,3],[4,3],[4,4],[5,4],[6,4],[6,5],[5,5]],[[4,7],[5,7],[6,7],[6,6],[5,6],[4,6],[4,5],[3,5]],[[7,0],[7,1],[7,2],[7,3],[6,3],[6,2],[6,1],[6,0],[5,0]],[[7,7],[7,6],[7,5],[7,4]]]},{"n":8,"pairs":[[[1,5],[0,7]],[[4,6],[2,3]],[[3,6],[7,7]],[[5,3],[7,1]],[[6,1],[1,1]],[[7,0],[2,0]],[[7,4],[5,6]]],"sol":[[[1,5],[1,4],[0,4],[0,5],[0,6],[0,7]],[[4,6],[4,5],[4,4],[3,4],[3,5],[2,5],[2,4],[2,3]],[[3,6],[2,6],[1,6],[1,7],[2,7],[3,7],[4,7],[5,7],[6,7],[7,7]],[[5,3],[5,2],[6,2],[7,2],[7,1]],[[6,1],[5,1],[4,1],[4,2],[4,3],[3,3],[3,2],[2,2],[1,2],[1,3],[0,3],[0,2],[0,1],[0,0],[1,0],[1,1]],[[7,0],[6,0],[5,0],[4,0],[3,0],[3,1],[2,1],[2,0]],[[7,4],[7,3],[6,3],[6,4],[5,4],[5,5],[6,5],[7,5],[7,6],[6,6],[5,6]]]},{"n":8,"pairs":[[[2,0],[0,3]],[[0,7],[0,4]],[[1,3],[1,6]],[[6,2],[4,1]],[[3,4],[6,6]],[[6,1],[6,3]],[[7,5],[4,6]]],"sol":[[[2,0],[2,1],[1,1],[1,0],[0,0],[0,1],[0,2],[0,3]],[[0,7],[0,6],[0,5],[0,4]],[[1,3],[1,2],[2,2],[2,3],[2,4],[1,4],[1,5],[2,5],[2,6],[2,7],[1,7],[1,6]],[[6,2],[5,2],[5,1],[5,0],[4,0],[3,0],[3,1],[4,1]],[[3,4],[3,3],[3,2],[4,2],[4,3],[4,4],[4,5],[3,5],[3,6],[3,7],[4,7],[5,7],[6,7],[7,7],[7,6],[6,6]],[[6,1],[6,0],[7,0],[7,1],[7,2],[7,3],[7,4],[6,4],[5,4],[5,3],[6,3]],[[7,5],[6,5],[5,5],[5,6],[4,6]]]},{"n":8,"pairs":[[[0,3],[0,0]],[[2,1],[5,0]],[[4,4],[7,0]],[[3,6],[0,5]],[[7,7],[0,6]],[[6,3],[7,1]],[[6,6],[7,3]]],"sol":[[[0,3],[0,4],[1,4],[1,3],[2,3],[2,2],[1,2],[0,2],[0,1],[1,1],[1,0],[0,0]],[[2,1],[2,0],[3,0],[4,0],[5,0]],[[4,4],[4,5],[3,5],[2,5],[2,4],[3,4],[3,3],[4,3],[4,2],[3,2],[3,1],[4,1],[5,1],[6,1],[6,0],[7,0]],[[3,6],[2,6],[1,6],[1,5],[0,5]],[[7,7],[6,7],[5,7],[5,6],[4,6],[4,7],[3,7],[2,7],[1,7],[0,7],[0,6]],[[6,3],[5,3],[5,2],[6,2],[7,2],[7,1]],[[6,6],[7,6],[7,5],[6,5],[5,5],[5,4],[6,4],[7,4],[7,3]]]},{"n":8,"pairs":[[[1,7],[2,5]],[[1,2],[0,0]],[[4,4],[5,5]],[[3,6],[7,7]],[[7,4],[3,2]],[[6,5],[5,1]],[[7,3],[6,1]]],"sol":[[[1,7],[0,7],[0,6],[1,6],[1,5],[0,5],[0,4],[0,3],[1,3],[1,4],[2,4],[2,5]],[[1,2],[0,2],[0,1],[1,1],[1,0],[0,0]],[[4,4],[4,3],[5,3],[5,4],[5,5]],[[3,6],[2,6],[2,7],[3,7],[4,7],[5,7],[6,7],[7,7]],[[7,4],[6,4],[6,3],[6,2],[5,2],[4,2],[4,1],[3,1],[3,2]],[[6,5],[7,5],[7,6],[6,6],[5,6],[4,6],[4,5],[3,5],[3,4],[3,3],[2,3],[2,2],[2,1],[2,0],[3,0],[4,0],[5,0],[5,1]],[[7,3],[7,2],[7,1],[7,0],[6,0],[6,1]]]},{"n":8,"pairs":[[[0,0],[6,0]],[[0,6],[1,2]],[[1,4],[2,3]],[[5,2],[0,2]],[[4,7],[5,5]],[[7,0],[6,2]],[[6,4],[7,6]]],"sol":[[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[5,1],[6,1],[6,0]],[[0,6],[0,7],[1,7],[1,6],[1,5],[0,5],[0,4],[0,3],[1,3],[1,2]],[[1,4],[2,4],[2,5],[2,6],[2,7],[3,7],[3,6],[4,6],[4,5],[3,5],[3,4],[3,3],[3,2],[2,2],[2,3]],[[5,2],[5,3],[5,4],[4,4],[4,3],[4,2],[4,1],[3,1],[2,1],[1,1],[0,1],[0,2]],[[4,7],[5,7],[5,6],[5,5]],[[7,0],[7,1],[7,2],[6,2]],[[6,4],[6,3],[7,3],[7,4],[7,5],[6,5],[6,6],[6,7],[7,7],[7,6]]]},{"n":8,"pairs":[[[0,0],[6,1]],[[1,5],[0,3]],[[2,2],[6,3]],[[4,3],[3,6]],[[4,6],[7,7]],[[4,7],[0,7]],[[6,2],[3,5]]],"sol":[[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[7,1],[6,1]],[[1,5],[0,5],[0,4],[1,4],[1,3],[0,3]],[[2,2],[1,2],[0,2],[0,1],[1,1],[2,1],[3,1],[3,2],[4,2],[4,1],[5,1],[5,2],[5,3],[6,3]],[[4,3],[3,3],[2,3],[2,4],[2,5],[2,6],[3,6]],[[4,6],[4,5],[5,5],[5,6],[5,7],[6,7],[6,6],[7,6],[7,7]],[[4,7],[3,7],[2,7],[1,7],[1,6],[0,6],[0,7]],[[6,2],[7,2],[7,3],[7,4],[7,5],[6,5],[6,4],[5,4],[4,4],[3,4],[3,5]]]},{"n":8,"pairs":[[[1,2],[0,4]],[[0,7],[2,6]],[[4,5],[3,7]],[[7,3],[7,1]],[[6,3],[1,6]],[[7,0],[4,2]],[[7,6],[5,5]]],"sol":[[[1,2],[1,1],[1,0],[0,0],[0,1],[0,2],[0,3],[1,3],[1,4],[0,4]],[[0,7],[1,7],[2,7],[2,6]],[[4,5],[3,5],[3,6],[3,7]],[[7,3],[7,2],[6,2],[5,2],[5,1],[6,1],[7,1]],[[6,3],[5,3],[4,3],[4,4],[3,4],[3,3],[2,3],[2,4],[2,5],[1,5],[0,5],[0,6],[1,6]],[[7,0],[6,0],[5,0],[4,0],[4,1],[3,1],[3,0],[2,0],[2,1],[2,2],[3,2],[4,2]],[[7,6],[7,7],[6,7],[5,7],[4,7],[4,6],[5,6],[6,6],[6,5],[7,5],[7,4],[6,4],[5,4],[5,5]]]}]};
-const lvlAt = (g, i) => { const P = LEVELS[g]; return P[i < P.length ? i : P.length - 8 + (i % 8)]; };
 
 /* ---------------- cast ---------------- */
 const GIRLS = {
@@ -1188,13 +1220,15 @@ const GIRLS = {
     layers: ['INSECURITY · "pick-me airhead"', 'INSECURITY · "attention seeker"', 'CORE · ▒▒▒▒▒▒▒▒'], core: 'WILL_TO_LIVE',
     rule: 'OCD / Perfectionism: connect every pair AND fill 100% of the tiles. A board with gaps does not count.',
     fail: "{angry}time is a constraint. i hate constraints. next." },
-  paige: { id: 'PAIGE_03', name: 'Paige', tag: 'Goth', from: 4, built: false, gim: 'Attachment: dots stuck side by side' },
-  vel: { id: 'VEL_04', name: 'Vel', tag: 'Gyaru', from: 6, built: false, gim: 'Bipolar: portal nodes' },
-  myne: { id: 'MYNE_05', name: 'Myne', tag: 'Tomboy', from: 8, built: false, gim: 'ADHD: lines wrap around the edges' },
+  paige: { id: 'PAIGE_03', name: 'Paige', tag: 'Goth', from: 4, built: true, layers: ['INSECURITY · "bad luck"', 'INSECURITY · "too much"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{neutral}the dice said no today." },
+  vel: { id: 'VEL_04', name: 'Vel', tag: 'Gyaru', from: 6, built: true, layers: ['INSECURITY · "just a bimbo"', 'INSECURITY · "trigger happy"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{sad}ugh. jammed. srry." },
+  // Myne (Tomboy) is out of the game until further notice
 };
-const ORDER = ['prim', 'trix', 'paige', 'vel', 'myne'];
-const PLAYABLE = ['prim', 'trix'];
-const LAST_DAY = 14, LEVELS_PER_SESSION = 5, NIGHT_CHATS = 2, MAX_FIX = 2;
+const ORDER = ['prim', 'trix', 'paige', 'vel'];
+const PLAYABLE = ['prim', 'trix', 'paige', 'vel'];
+const LAST_DAY = 14, NIGHT_CHATS = 2;
+const DAY_START = 9 * 60, DAY_END = 17 * 60;   // her stamina for the day: every gameplay input costs a minute
+const staminaPct = () => Math.max(0, Math.round((DAY_END - S.mins) / (DAY_END - DAY_START) * 100));
 const SPECIAL = { 3: 'showcase', 7: 'postcard', 10: 'inspection' };
 const SPECIAL_NAME = { showcase: 'HOBBY SHOWCASE', postcard: 'POSTCARD DAY', inspection: 'INSPECTION DAY' };
 const QUAKE_DAYS = [5, 8, 11, 13];
@@ -1203,9 +1237,9 @@ const QUAKE_DAYS = [5, 8, 11, 13];
 function fresh() {
   const g = {}; ORDER.forEach(k => g[k] = { layer: 0, dmg: 0, lvl: 0, ex: 0, sessions: 0, doneDay: 0, gone: false, nt: 0 });
   return {
-    player: null, day: 1, phase: 'day', mins: 9 * 60, g,
+    player: null, day: 1, phase: 'day', mins: 9 * 60, g, dayOver: false,
     inv: [], apps: [], mementos: [], know: [], flags: {}, seen: {},
-    logs: { boss: [], session: [], prim: [], trix: [] }, unread: { boss: 0, prim: 0, trix: 0 },
+    logs: { boss: [], session: [], prim: [], trix: [], paige: [], vel: [] }, unread: { boss: 0, prim: 0, trix: 0, paige: 0, vel: 0 },
     active: null, queue: [], dyn: {}, session: null, route: [],
     todayLayers: 0, todayFixed: [], todayWorked: [], best: 0,
     mail: [], journal: [], show: {}, quakes: 0, asked: {}, used: {}, fixes: 0, met: {}, half: 1, at: 'd1',
@@ -1298,6 +1332,11 @@ const SFX = {
   rumble() { if (!AU.ctx) return; noiseHit(0, 1.6, 160, .9, null, true); tone(38, 0, 1.5, .35, 'sine'); tone(52, 0, 1.2, .2, 'sine'); },
   vibrate() { if (!AU.ctx) return; const t = AU.ctx.currentTime; for (let i = 0; i < 6; i++) tone(95, t + i * .09, .06, .12, 'square'); },
   rewind() { if (!AU.ctx) return; const t = AU.ctx.currentTime; for (let i = 0; i < 8; i++) tone(1600 - i * 150, t + i * .04, .05, .06, 'square'); },
+  // a CRT power surge: a thump, a falling whine and static
+  overload() { if (!AU.ctx) return; const t = AU.ctx.currentTime; noiseHit(0, .9, 900, .5); tone(55, t, .6, .4, 'sine'); for (let i = 0; i < 10; i++) tone(2400 - i * 210, t + i * .05, .06, .07, 'sawtooth'); tone(30, t + .1, 1, .3, 'square'); },
+  bump() { if (!AU.ctx) return; tone(90, 0, .08, .12, 'square'); noiseHit(0, .03, 800, .1); },
+  gate() { if (!AU.ctx) return; const t = AU.ctx.currentTime; noiseHit(0, 1.2, 220, .5, null, true); [392, 523, 659, 784, 1046].forEach((f, i) => tone(f, t + .3 + i * .12, .7, .09, 'triangle')); },
+  key() { if (!AU.ctx) return; const t = AU.ctx.currentTime; [1568, 2093, 2637].forEach((f, i) => tone(f, t + i * .06, .3, .07, 'triangle')); },
 };
 
 /* ---------------- atmosphere ---------------- */
@@ -1438,6 +1477,8 @@ function drawAvatar(cv, p, blink, emo = 'neutral') {
 const PORTRAIT = {
   prim: { hair: 4, hcol: '#8e2a5c', ecol: '#d0405a', scol: '#ffe4d6', ocol: '#ffb3d1', odet: 'blouse', extra: ['choker'] },
   trix: { hair: 5, hcol: '#ff2e6a', ecol: '#d0405a', scol: '#ffe4d6', ocol: '#ff5f97', odet: 'hoodie', extra: ['glasses', 'headphones'] },
+  paige: { hair: 2, hcol: '#2a1a33', ecol: '#a46bff', scol: '#f6eef2', ocol: '#3b2a4a', odet: 'blouse', extra: ['choker'] },
+  vel: { hair: 5, hcol: '#ffd23f', ecol: '#8a5a2e', scol: '#e8b48a', ocol: '#ffd23f', odet: 'hoodie', extra: [] },
 };
 const PCACHE = {};
 function portraitURL(g, emo = 'neutral') {
@@ -1454,6 +1495,8 @@ const WHO = {
   boss: { name: 'Boss', sub: '@r.admin · supervisor' },
   prim: { name: 'Prim', sub: 'PRIM_01 · Jirai Kei' },
   trix: { name: 'Trix', sub: 'TRIX_02 · E-Girl' },
+  paige: { name: 'Paige', sub: 'PAIGE_03 · Goth' },
+  vel: { name: 'Vel', sub: 'VEL_04 · Gyaru' },
   dive: { name: 'DIVE Administration', sub: 'no-reply' },
 };
 function avHTML(who, cls = '', emo) {
@@ -1555,7 +1598,7 @@ async function say(ch, n, tok) {
     await wait(280 + Math.min(750, n.text.length * 8)); tmp.forEach(e => e.remove());
   } else await wait(200);
   if (tok !== runToken) return false;
-  tick(); const m = { who: sp, text: n.text, t: clockStr(), emo: n.emotion || undefined };
+  if (S.phase !== 'day') tick(); const m = { who: sp, text: n.text, t: clockStr(), emo: n.emotion || undefined };
   if (ch === 'session' && PORTRAIT[sp] && n.emotion) setFeedEmo(n.emotion);
   S.logs[ch].push(m);
   if (liveViews(ch).length) {
@@ -1639,7 +1682,7 @@ function choose(i) {
   const n = getDlg(a.id).nodes[a.node]; if (!n || n.type !== 'ANSWER') return;
   const c = n.choices[i]; if (!c) return;
   if (reqList(c.requirements).some(r => !r.ok)) { SFX.buzz(); return; }
-  SFX.click(); tick();
+  SFX.click(); if (S.phase !== 'day') tick();
   const m = { who: 'me', text: c.text, t: clockStr() }; S.logs[a.ch].push(m); appendMsg(a.ch, m);
   (c.actions || []).forEach(doAction);
   S.route.push(c.choice_id);
@@ -1670,10 +1713,10 @@ function handleEnd(n) {
   switch (n.trigger_event) {
     case 'BRIEF_DONE': S.flags.briefed = true; S.flags.ping = 'brain'; refresh(); break;
     case 'MORNING_DONE': afterMorning(); break;
-    case 'SES_LEVEL': nextLevel(); break;
-    case 'SES_AFTER': afterExchange(); break;
+    case 'SES_SCAN': sessionScan(); break;
     case 'SES_CLOSE': closeSession(); break;
-    case 'BOSS_NIGHT_DONE': S.night.bossDone = true; if (S.flags.protoReady && !S.flags.protoEnd) protoEndBoss(); break;
+    case 'OVERLOAD_DONE': closeSession(); break;
+    case 'BOSS_NIGHT_DONE': S.night.bossDone = true; break;
     case 'SHOW_DONE': if (PLAYABLE.filter(k => onSite(k) && met(k)).every(k => S.show[k])) setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: ['Lovely! Like the Louvre, but with more glitter and fewer Mona Lisas.', 'I\'m keeping everyone\'s pieces. That\'s it for today. Go rest.'] }])), 900), setTimeout(() => { S.flags.nightAfter = true; }, 1500); break;
     case 'PROTO_END': endGame('proto'); break;
   }
@@ -1737,7 +1780,7 @@ function toast(title, text, onclick) {
 }
 function renderIcons() {
   const box = $('#icons'); if (!box) return;
-  const unread = (S.unread.boss || 0) + (S.unread.prim || 0) + (S.unread.trix || 0);
+  const unread = ['boss', ...PLAYABLE].reduce((a, k) => a + (S.unread[k] || 0), 0);
   const mailUnread = S.mail.filter(m => !m.read).length;
   const list = [
     { id: 'yap', label: 'Yappy Yappy', ic: 'chat', fn: () => openYap(), badge: unread, ping: S.flags.ping === 'yap' },
@@ -1768,7 +1811,7 @@ function buildTaskbar() {
   const sm = $('#startmenu');
   const items = [
     ['Yappy Yappy', 'chat', () => openYap()], ['DiveMail', 'mail', openMail], ['Fix-it', 'wrench', openBrain], ['MementoBox', 'box', openMBox], ['Recycle Bin', 'trash', openBin], null,
-    ['CRT scanlines on/off', 'feed', () => document.body.classList.toggle('nocrt')], ['New game…', 'exe', confirmReset], ['Shut down', 'lock', () => { if (S.phase === 'night') shutDown(); else SFX.buzz(); }],
+    ['CRT scanlines on/off', 'feed', () => document.body.classList.toggle('nocrt')], ['New game…', 'exe', confirmReset], ['Shut down', 'lock', startShutDown],
   ];
   sm.innerHTML = `<div class="side">DIVE OS <i>v2.4</i></div><ul>${items.map((it, i) => it ? `<li><button role="menuitem" data-i="${i}">${icon(it[1])}<span>${esc(it[0])}</span></button></li>` : '<li><hr></li>').join('')}</ul>`;
   $$('button', sm).forEach(b => b.onclick = () => { SFX.click(); toggleStart(false); items[b.dataset.i][2](); });
@@ -2017,7 +2060,7 @@ function compileData(texts) {
   d.session = compileEntries('session', texts.session, ['girl', 'kind', 'layer', 'trigger', 'if']);
   d.session.forEach(e => {
     e.girl = e.girl.toLowerCase(); e.kind = e.kind.toLowerCase(); e.trigger = e.trigger.toUpperCase();
-    if (!['intro', 'outro', 'react', 'break', 'quiz'].includes(e.kind)) dataIssue(e._file, e._row, `kind "${e.kind}" should be intro, outro, react, break or quiz`);
+    if (!['intro', 'outro', 'react', 'break', 'quiz', 'overload'].includes(e.kind)) dataIssue(e._file, e._row, `kind "${e.kind}" should be intro, outro, react, break, quiz or overload`);
     if (e.trigger && !['WIN_HIGH', 'WIN_LOW', 'PERFECT_HIGH', 'PERFECT_LOW', 'FAIL_MOVES', 'FAIL_TIME'].includes(e.trigger)) dataIssue(e._file, e._row, `trigger "${e.trigger}" is not one of WIN_HIGH, WIN_LOW, PERFECT_HIGH, PERFECT_LOW, FAIL_MOVES, FAIL_TIME`);
   });
   d.morning = compileEntries('morning', texts.morning, ['day', 'if', 'group', 'once']);
@@ -2168,7 +2211,7 @@ function startBossNight() {
   S.night.bossPending = false;
   const steps = [], op = bossBest('opening');
   if (op) steps.push(...playSteps(op.steps));
-  [...new Set([...S.todayWorked, ...S.todayFixed])].forEach(g => steps.push(...bossQ(g, S.todayFixed.includes(g))));
+  [...new Set([...S.todayWorked, ...S.todayFixed])].forEach(g => steps.push(...bossQ(g, false)));
   bossEntries('extra').forEach(e => steps.push(...playSteps(e.steps)));
   const cl = bossBest('closing'); if (cl) steps.push(...playSteps(cl.steps));
   runDialogue(seq('boss', 'boss', steps.length ? steps : [{ lines: [] }], 'BOSS_NIGHT_DONE'));
@@ -2301,7 +2344,9 @@ function openAtlas() {
    Autosave only at the start of each part (no save slots).
    ========================================================= */
 const met = g => !!(S.met && S.met[g]);
-function availableToday() { if (S.flags.afterSess || SPECIAL[S.day] === 'showcase' || !S.flags.briefed || S.phase !== 'day' || (S.fixes || 0) >= MAX_FIX) return []; return PLAYABLE.filter(k => met(k) && !S.g[k].gone && S.day >= GIRLS[k].from); }
+// every girl you've met is there every day, until the last one; you pick who to work with (one session at a time)
+const complete = k => S.g[k].layer >= 3;
+function availableToday() { if (SPECIAL[S.day] === 'showcase' || !S.flags.briefed || S.phase !== 'day' || S.dayOver) return []; return PLAYABLE.filter(k => met(k) && S.day >= GIRLS[k].from && !complete(k)); }
 function checkpoint(at) {
   S.at = at;
   const cp = JSON.parse(JSON.stringify({ ...S, active: null, queue: [], dyn: {}, session: null }));
@@ -2324,7 +2369,7 @@ function lockScreen(sub, btn = 'Log in') {
 }
 function closeWorkWins() { Object.keys(WINS).forEach(id => { if (!['yap', 'mail', 'mbox', 'reset'].includes(id) && !id.startsWith('note:')) closeWin(id); }); }
 async function beginMorning() {
-  S.phase = 'day'; S.half = 1; S.mins = 9 * 60 + 2; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = []; S.fixes = 0;
+  S.phase = 'day'; S.mins = DAY_START; S.dayOver = false; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = [];
   S.night = { chats: 0, with: [], bossPending: false, bossDone: false };
   checkpoint('am');
   closeWorkWins(); applyAtmos(); refresh();
@@ -2346,7 +2391,7 @@ function dayMail() {
 // new patients only exist for the player once they've said something
 function newPatientsToday() {
   PLAYABLE.forEach(g => {
-    if (g === 'prim' || GIRLS[g].from !== S.day || met(g) || S.g[g].gone) return;
+    if (g === 'prim' || GIRLS[g].from > S.day || met(g)) return;
     const e = DD.first.find(x => x.girl === g && dayMatch(x.day, S.day) && cond(x.if)) || DD.first.find(x => x.girl === g);
     const steps = e ? playSteps(e.steps) : [{ lines: ['{neutral}hi. you\'re the new counsellor.'] }];
     setTimeout(() => { S.met[g] = true; S.flags.ping = 'brain'; runDialogue(seq(g, g, steps, 'NONE')); refresh(); }, 2500);
@@ -2357,13 +2402,6 @@ function afterMorning() {
   S.flags.ping = 'brain'; refresh();
   newPatientsToday();
   if (QUAKE_DAYS.includes(S.day) && !S.flags['quake' + S.day]) setTimeout(earthquake, 12000);
-}
-async function beginAfternoon() {
-  S.half = 2; S.mins = 13 * 60 + 1;
-  checkpoint('pm');
-  closeWorkWins(); applyAtmos(); refresh();
-  await lockScreen('Lunch break is over');
-  S.flags.ping = 'brain'; refresh();
 }
 function earthquake() {
   if (S.flags['quake' + S.day]) return; S.flags['quake' + S.day] = true; S.quakes++;
@@ -2378,15 +2416,9 @@ function earthquake() {
   }[S.quakes] || ['Again.'];
   setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: L }])), 1600);
 }
-// after a session: break, or the end of the work day
-function afterSession() {
-  if (S.phase !== 'day') return;
-  if ((S.fixes || 0) >= MAX_FIX) { goNight(); return; }
-  if (!availableToday().length) { goNight(); return; }
-  if (S.half === 1) beginAfternoon();
-}
 async function goNight() {
-  if (S.session || S.phase === 'night') return;
+  if (S.phase === 'night') return;
+  if (S.session) closeSession(true);
   if (S.active || S.queue.length) { S.flags.nightAfter = true; return; }
   S.phase = 'night'; S.mins = 22 * 60 + 14;
   S.night = { chats: 0, with: [], bossPending: true, bossDone: false };
@@ -2399,13 +2431,25 @@ async function goNight() {
   SFX.chime(); openYap('boss'); refresh();
 }
 setInterval(() => { if (S.flags && S.flags.nightAfter && !S.active && !S.queue.length && !S.session) { S.flags.nightAfter = false; goNight(); } }, 800);
+/* Start ▸ Shut down. At night it ends the night. In the day it ends the work day only once she's run out of
+   stamina; before that the company says no. */
+function startShutDown() {
+  if (S.flags.ended) return;
+  if (S.phase === 'night') { shutDown(); return; }
+  if (S.dayOver || SPECIAL[S.day] === 'showcase' && S.flags.showDone) { if (S.active && S.active.ch !== 'session') { SFX.buzz(); toast('DIVE OS', 'Finish the conversation first.'); return; } goNight(); return; }
+  SFX.buzz();
+  openWin('warn', { title: 'DIVE Administration', icon: 'lock', w: 380, h: 210, render: b => {
+    b.innerHTML = `<div class="warnbox"><div class="wb-ic" aria-hidden="true">!</div><div><b>Shift still in progress.</b><p>Your patients have not reached today's work quota. Shutting down a workstation during a shift will be reported to your supervisor.</p><p class="sig">— DIVE Administration</p></div></div><div class="warnfoot"><button class="btn primary" id="wb-ok">Back to work</button></div>`;
+    $('#wb-ok', b).onclick = () => { SFX.click(); closeWin('warn'); };
+    $('#wb-ok', b).focus();
+  } });
+}
 async function shutDown() {
   if (S.phase !== 'night' || S.active || S.flags.ended) return;
   S.night.bossPending = false;   // if Boss wasn't answered tonight, that night simply has no section in the journal
   DD.journal.filter(j => j.kind === 'entry' && dayMatch(j.day, S.day) && cond(j.if)).forEach(j => {
     if (!S.journal.some(x => x.rid === j.id)) S.journal.push({ day: S.day, text: tpl(j.text, tplVars()), rid: j.id, ray: true });
   });
-  if (S.flags.protoReady) { endGame('proto'); return; }
   if (S.day >= LAST_DAY) { endGame('deadline'); return; }
   const bo = document.createElement('div'); bo.id = 'blackout'; document.body.appendChild(bo);
   await wait(REDUCED ? 200 : 1200); bo.remove();
@@ -2424,22 +2468,23 @@ function renderBrain() {
   const cards = shown.map(k => {
     const G = GIRLS[k], st = S.g[k];
     let status = '', btn = '', dim = false, ok = false;
-    if (st.gone) { status = 'discharged'; ok = true; dim = true; }
+    if (complete(k)) { status = 'every layer faced'; ok = true; dim = true; }
     else if (S.session && S.session.g === k) { status = 'in session'; btn = `<button class="btn" data-go="${k}">Return ▶</button>`; }
     else if (night) status = 'resting';
     else if (sp === 'showcase') status = 'showcase today';
+    else if (S.dayOver) status = 'exhausted';
     else if (S.session) status = 'waiting';
     else if (availableToday().includes(k)) { status = 'ready'; btn = `<button class="btn primary" data-dive="${k}">Start session ▶</button>`; }
     else status = 'resting';
     const pips = `<div class="pips" title="layers">${[0, 1, 2].map(i => `<span class="pip${st.layer > i ? '' : ' off'}"></span>`).join('')}</div>`;
     return `<div class="pcard bevel${dim ? ' dim' : ''}"><div class="top">${avHTML(k)}<div><b>${esc(G.name)}</b><small>${esc(G.id)}</small></div></div>${pips}<div class="st${ok ? ' ok' : ''}">${esc(status)}</div>${btn}</div>`;
   }).join('') || '<div class="status-line">No patients assigned yet.</div>';
-  const part = night ? 'Closed until 09:00' : sp === 'showcase' ? 'Hobby Showcase' : S.half === 2 ? 'Afternoon session' : 'Morning session';
+  const part = night ? 'Closed until 09:00' : sp === 'showcase' ? 'Hobby Showcase' : S.dayOver ? 'Work day over · Start ▸ Shut down' : `Work day · stamina ${staminaPct()}%`;
   b.innerHTML = `<div class="bd"><div class="bd-head"><div><div class="day">${S.flags.probation ? 'Day ' + S.day : 'Fix-it'}</div><div class="ph">${esc(part)} · ${clockStr()}</div></div></div>
     <div class="cards">${cards}</div>
     <div class="bd-foot">${S.flags.ended ? '<button class="btn primary" id="bd-new">New game</button>' : night ? `<button class="btn" id="bd-sleep" ${S.active ? 'disabled' : ''}>Shut down for the night</button>` : sp === 'showcase' ? '<button class="btn" id="bd-show">Open Showcase.exe</button>' : ''}</div></div>`;
   $$('[data-dive]', b).forEach(x => x.onclick = () => { SFX.click(); startSession(x.dataset.dive); });
-  $$('[data-go]', b).forEach(x => x.onclick = () => { focusWin('feed'); focusWin('cl'); focusSessionChat(); });
+  $$('[data-go]', b).forEach(x => x.onclick = () => { focusWin('feed'); focusWin('fixit'); focusSessionChat(); });
   const s = $('#bd-sleep', b); if (s) s.onclick = () => { SFX.click(); shutDown(); };
   const sh = $('#bd-show', b); if (sh) sh.onclick = openShowcase;
   const nw = $('#bd-new', b); if (nw) nw.onclick = confirmReset;
@@ -2510,126 +2555,148 @@ function showTalk(g) {
 }
 
 /* =========================================================
-   SESSION
+   SESSION · a short chat in session_<girl>.tmp, then a neural scan, then her mind as a map (src/world.js)
    ========================================================= */
 function startSession(g) {
   if (S.session || S.phase !== 'day' || S.active || !availableToday().includes(g)) return;
   closeWin('brain');
-  const st = S.g[g]; st.sessions++; S.fixes = (S.fixes || 0) + 1;
-  S.session = { g, level: 0, score: 0, emo: 'neutral' };
+  const st = S.g[g]; st.sessions++;
+  S.session = { g, emo: 'neutral', scanned: false };
   if (!S.todayWorked.includes(g)) S.todayWorked.push(g);
   S.logs.session = [{ who: 'sys', text: `*** session_${g}.tmp created · ${GIRLS[g].id} connected ***`, t: clockStr() }];
   save(); glitch('soft');
-  const big = $('#desktop').clientWidth >= 1180;
-  openWin('feed', { title: `VideoFeed.exe — ${GIRLS[g].id}`, icon: 'feed', w: big ? 330 : 320, h: 600, x: big ? 108 : 20, y: 8, noClose: () => !!S.session, render: b => buildFeed(b, g) });
-  openWin('cl', { title: 'Fix-it · board', icon: 'puzzle', w: big ? 450 : 440, h: 620, x: big ? 446 : 60, y: 8, noClose: () => !!S.session, render: b => buildCLShell(b) });
-  openYap('session'); placeWin('yap', big ? 904 : 100, 8, big ? 368 : 360, big ? 600 : 520);
+  sessionLayout(g);
   refresh();
-  const pick = a => a[Math.random() * a.length | 0];
-  const go = () => runDialogue(seq('session', g, sesIntro(g), 'SES_LEVEL'));
-  if (!S.flags.tutorial) { previewLevel(g); runTutorial().then(() => { S.flags.tutorial = true; save(); go(); }); }
-  else go();
+  // she talks first; the scan only starts once the chat is done
+  runDialogue(seq('session', g, sesIntro(g), 'SES_SCAN'));
 }
-function previewLevel(g) {
-  const st = S.g[g], L = lvlAt(g, st.lvl);
-  focusWin('cl'); loadLevel({ n: L.n, pairs: L.pairs, sol: L.sol, fill: !!GIRLS[g].fill }, `LEVEL 1/${LEVELS_PER_SESSION}`); if (CL) CL.locked = true;
+// the feed on the left, the chat on the right; the map window goes in the middle after the scan
+function sessionLayout(g) {
+  const dk = $('#desktop'), W = dk.clientWidth, H = dk.clientHeight, big = W >= 1240;
+  const fw = big ? 380 : 340, cw = big ? 360 : 330;
+  openWin('feed', { title: `VideoFeed.exe — ${GIRLS[g].id}`, icon: 'feed', w: fw, h: Math.min(640, H - 16), x: 8, y: 8, noClose: () => !!S.session, render: b => buildFeed(b, g) });
+  openYap('session'); placeWin('yap', W - cw - 8, 8, cw, Math.min(640, H - 16));
 }
-/* ---- first-time tutorial: everything dims except Boss's messages and the board ---- */
+async function sessionScan() {
+  const ss = S.session; if (!ss || ss.scanned) return;
+  ss.scanned = true;
+  const g = ss.g, first = owFirstOpen(g);
+  if (first) await magnifierIntro(first, { noCam: true });
+  ['magnifier', 'feedcam'].forEach(closeWin);
+  if (!S.session) return;
+  openWorld(g);
+  if (!S.flags.owTutorial) { S.flags.owTutorial = true; await runTutorial(); }
+}
+// first time on the map: Boss walks you through it
 const TUTORIAL = [
-  { t: 'Okay rookie, this is the Fix-it board. Think of it as a tiny city map. Like Tokyo, but flat.', hl: '.cl-board' },
-  { t: 'Every dot has a twin of the same colour. Drag a line from one dot to its twin.', hl: '.cl-board' },
-  { t: 'Lines can\'t cross. Draw over another line and you snip it. Rude. Effective.', hl: '.cl-board' },
-  { t: 'This is the scoreboard. Faster = better grade. Fewer strokes = bonus. Like airport security: speed AND efficiency.', hl: '#cl-tiers' },
-  { t: 'Run out of time or run out of moves and the board fails. Like missing a connecting flight in Doha. Been there. Probably.', hl: '#cl-tiers' },
-  { t: 'Your score chips away at her layers, over there on the video feed. Clear all three and she walks out of here a whole new woman.', hl: null },
-  { t: 'One session before lunch, one after. Five rounds each. Same patient twice or two patients, your call. I\'ll be watching. In a supportive, supervisor-y way.', hl: null },
+  { t: 'Okay rookie, this is her head. Well, a map of it. Like the Tokyo metro, but with feelings.', hl: '.ow-view' },
+  { t: 'That little box is you. W A S D or the arrow keys. Step on a glowing tile and press Enter to dive into that memory.', hl: '.ow-view' },
+  { t: 'Clear a memory and you keep its key. Her colour, her keys.', hl: '.ow-keys' },
+  { t: 'Each layer of her is a big locked gate. It shows how many keys you have and how many it wants. You don\'t need every memory, just enough.', hl: '.ow-keys' },
+  { t: 'Every move costs her energy. On the map and inside the memories, undo included. That bar is how much she has left today.', hl: '.ow-stam' },
+  { t: 'When she runs out, she runs out. Then it\'s Start ▸ Shut down and we call it a day. Like a siesta in Madrid, but longer.', hl: '.ow-stam' },
+  { t: 'And that little map in the corner is the bit you\'ve seen so far. Go explore. Supportively.', hl: '.ow-mini' },
 ];
 async function runTutorial() {
-  const dk = $('#desktop'), cl = WINS.cl; if (!cl) return;
+  const dk = $('#desktop'), win = WINS.fixit; if (!win) return;
   document.body.classList.add('tutorial');
   const dim = document.createElement('div'); dim.id = 'tut-dim'; dk.appendChild(dim);
-  cl.el.hidden = false; cl.el.style.zIndex = 950;
-  const box = document.createElement('div'); box.id = 'tut-box'; box.className = 'bevel'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Boss explains the board');
+  win.el.style.zIndex = 950;
+  const box = document.createElement('div'); box.id = 'tut-box'; box.className = 'bevel'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Boss explains the map');
   box.innerHTML = `<div class="tut-head">${avHTML('boss')}<div><b>Boss</b><span>walking you through it</span></div></div><div class="tut-log" id="tut-log"></div><div class="tut-foot"><span id="tut-n"></span><button class="btn primary" id="tut-next">Next ▸</button></div>`;
   dk.appendChild(box);
-  const r = cl.el.getBoundingClientRect(), d = dk.getBoundingClientRect();
-  if (!narrow() && d.right - r.right > 330) { box.style.left = (r.right - d.left + 14) + 'px'; box.style.top = (r.top - d.top + 30) + 'px'; } else box.classList.add('bottom');
+  const r = win.el.getBoundingClientRect(), d = dk.getBoundingClientRect();
+  if (!narrow() && d.right - r.right > 300) { box.style.left = (r.right - d.left + 10) + 'px'; box.style.top = (r.top - d.top + 30) + 'px'; } else box.classList.add('bottom');
+  OW.frozen = true;
   for (let i = 0; i < TUTORIAL.length; i++) {
     const T = TUTORIAL[i];
     $('#tut-n', box).textContent = `${i + 1}/${TUTORIAL.length}`;
     $$('.tut-hl').forEach(e => e.classList.remove('tut-hl'));
-    if (T.hl) { const h = $(T.hl, cl.el); if (h) h.classList.add('tut-hl'); }
+    if (T.hl) { const h = $(T.hl, win.el); if (h) h.classList.add('tut-hl'); }
     const m = document.createElement('div'); m.className = 'tut-msg'; $('#tut-log', box).appendChild(m);
-    tick(); S.logs.boss.push({ who: 'boss', text: T.t, t: clockStr() });
+    S.logs.boss.push({ who: 'boss', text: T.t, t: clockStr() });
     SFX.chime(); await typeInto(m, T.t); $('#tut-log', box).scrollTop = 1e6;
     const btn = $('#tut-next', box); btn.textContent = i === TUTORIAL.length - 1 ? 'Let\'s go!' : 'Next ▸'; btn.focus();
     await new Promise(res => { btn.onclick = () => { SFX.click(); res(); }; });
   }
   $$('.tut-hl').forEach(e => e.classList.remove('tut-hl'));
-  dim.remove(); box.remove(); document.body.classList.remove('tutorial'); cl.el.style.zIndex = ++zTop;
+  dim.remove(); box.remove(); document.body.classList.remove('tutorial'); win.el.style.zIndex = ++zTop;
+  OW.frozen = false; owFocus();
   save();
 }
 function focusSessionChat() { openYap('session'); }
 function placeWin(id, x, y, w, h) { const W = WINS[id]; if (!W || narrow()) return; const dk = $('#desktop'); Object.assign(W.el.style, { left: clamp(x, 6, Math.max(6, dk.clientWidth - w - 6)) + 'px', top: y + 'px', width: Math.min(w, dk.clientWidth - 16) + 'px', height: Math.min(h, dk.clientHeight - 16) + 'px' }); }
-function nextLevel() {
-  const ss = S.session; if (!ss) return;
-  const g = ss.g, st = S.g[g], pool = LEVELS[g];
-  const L = lvlAt(g, st.lvl); st.lvl++;
-  ss.level++;
-  setFeedEmo('neutral'); focusWin('cl'); loadLevel({ n: L.n, pairs: L.pairs, sol: L.sol, fill: !!GIRLS[g].fill }, `LEVEL ${ss.level}/${LEVELS_PER_SESSION}`);
-  save();
+// called by the map: a memory was cleared (react), a gate opened (a layer came off)
+function sessionLevelWon(g, p, first) {
+  if (!first || !S.session || S.active) return;
+  if (Math.random() < .55) { const st = sesSteps(g, 'react', e => !e.trigger || /^(WIN|PERFECT)_/.test(e.trigger)); if (st) runDialogue(seq('session', g, st, 'NONE')); }
 }
-function onSolved(res) {
-  const ss = S.session; if (!ss) return;
-  const g = ss.g, st = S.g[g], G = GIRLS[g];
-  ss.score += res.total; S.best = Math.max(S.best, res.total); tick(10);
-  let broke = 0;
-  if (!res.failed) {
-    st.dmg += res.total;
-    // one layer per session at most: she has to rest after facing it
-    if (st.layer < 3 && st.dmg >= G.hp[st.layer]) { st.dmg = 0; st.layer++; broke = st.layer; }
-  }
-  if (broke) S.todayLayers++;
-  ss.broke = !!broke;
-  save(); refresh(); renderFeed();
-  (async () => {
-    if (broke) await breakLayerFx(g, broke);
-    if (st.layer >= 3 && !st.gone) { st.gone = true; S.todayFixed.push(g); }
-    renderFeed(); save();
-    const ex = broke ? sesBreak(g, broke) : pickPool(g, res);
-    const extra = st.gone ? [{ lines: [['sys', `*** ${G.id} faced every layer and has been discharged ***`]] }] : [];
-    if (narrow()) focusSessionChat();
-    runDialogue(seq('session', g, [...ex, ...extra], 'SES_AFTER'));
+async function sessionLayerOpened(g, L) {
+  S.todayLayers++;
+  await breakLayerFx(g, L);
+  const extra = L >= 3 ? [{ lines: [['sys', `*** ${GIRLS[g].id} · core reached · every layer faced ***`]] }] : [];
+  runDialogue(seq('session', g, [...sesBreak(g, L), ...extra], 'NONE'));
+  const R = REWARD[g] && REWARD[g][L];
+  if (R) setTimeout(() => sendMail({ from: g, ...R, atts: (R.atts || []).map(a => ({ ...a })) }), 2600);
+  if (L >= 3) { S.todayFixed.push(g); setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: [`${GIRLS[g].name} faced her last layer! Gold star, rookie.`, 'She stays with us until the end of the program, though. Rules are rules. Like visas.'] }])), 5200); }
+  save(); refresh();
+}
+/* she runs out of stamina: the screen jolts, she says she's done, the session closes.
+   The work day is over: Start ▸ Shut down to go to the night. */
+function overload() {
+  if (S.dayOver || S.phase !== 'day') return;
+  S.dayOver = true; S.mins = DAY_END;
+  const app = $('#app'); app.classList.remove('jolt'); void app.offsetWidth; app.classList.add('jolt'); setTimeout(() => app.classList.remove('jolt'), 700);
+  SFX.overload(); glitch('hard');
+  if (typeof owOverloaded === 'function') owOverloaded();
+  dropSessionTalk();
+  const g = S.session && S.session.g;
+  if (g) (async () => {   // straight into the temporary chat, whatever else is going on
+    await wait(900);
+    const lines = sesOverload(g).flatMap(st => st.lines || []);
+    for (const l of lines) {
+      const [who, raw] = Array.isArray(l) ? l : [g, l], mm = /^\{(\w+)\}\s*/.exec(raw), text = mm ? raw.slice(mm[0].length) : raw;
+      if (mm && who === g) setFeedEmo(mm[1]);
+      const m = { who: who === 'sys' ? 'sys' : g, text, t: clockStr(), emo: mm ? mm[1] : undefined }; S.logs.session.push(m); appendMsg('session', m); SFX.chime(); await wait(1400);
+    }
+    for (const t of ['*** patient stamina depleted · session locked ***', 'Start ▸ Shut down to end the work day.']) { const m = { who: 'sys', text: t, t: clockStr() }; S.logs.session.push(m); appendMsg('session', m); await wait(500); }
+    await wait(1600); closeSession();
   })();
+  toast('DIVE OS', 'Patient stamina depleted. <b>Start ▸ Shut down</b> to end the work day.', () => toggleStart(true));
+  refresh();
 }
-function afterExchange() {
-  const ss = S.session; if (!ss) return;
-  const st = S.g[ss.g];
-  if (st.gone || ss.broke) { closeSession(); return; }
-  if (ss.level < LEVELS_PER_SESSION) { nextLevel(); return; }
-  runDialogue(seq('session', ss.g, sesOutro(ss.g), 'SES_CLOSE'));
+function dropSessionTalk() {
+  if (S.active && S.active.ch === 'session') { delete S.dyn[S.active.id]; S.active = null; runToken++; renderAllChoices(); }
+  S.queue = S.queue.filter(id => { const d = getDlg(id); if (d && d.character_id === 'session') { delete S.dyn[id]; return false; } return !!d; });
 }
-async function closeSession() {
+function sesOverload(g) { return sesSteps(g, 'overload') || [{ lines: [OVERLOAD_FALLBACK[g] || '{pain}...too much. let\'s stop here.'] }]; }
+const OVERLOAD_FALLBACK = {
+  prim: '{pain}...my head is so full. can we stop here for today? i\'m sorry.',
+  trix: '{wince}cognitive load exceeded. i\'m done. we stop here. that\'s not a suggestion.',
+  paige: '{sad}the candles went out. that\'s a sign. we stop here.',
+  vel: '{pain}ok ok im overheatin rn. lets stop here ok?? srry',
+};
+async function closeSession(quick) {
   const ss = S.session; if (!ss) return;
   const g = ss.g;
-  if (CL) { CL.locked = true; clearInterval(CL.timer); }
-  for (const [t, d] of [[`*** session ended · score ${ss.score} ***`, false], ['session_' + g + '.tmp will be deleted in 3…', true], ['2…', true], ['1…', true]]) {
+  if (typeof owClose === 'function') owClose();
+  if (!quick) for (const [t, d] of [['*** session ended ***', false], ['session_' + g + '.tmp will be deleted in 3…', true], ['2…', true], ['1…', true]]) {
     const m = { who: 'sys', text: t, t: clockStr(), del: d }; S.logs.session.push(m); appendMsg('session', m); SFX.tick(); await wait(600);
   }
+  dropSessionTalk();
   S.session = null; S.logs.session = []; save();
-  ['cl', 'feed'].forEach(closeWin);
+  if (!S.active && S.queue.length) { const nx = S.queue.shift(); setTimeout(() => runDialogue(nx), 400); }
+  ['fixit', 'feed', 'magnifier', 'feedcam'].forEach(closeWin);
   if (yapCh === 'session') { yapCh = 'boss'; setViewCh('yap', 'boss'); } renderBuddies();
   glitch('soft'); toast('Yappy Yappy', `<b>session_${g}.tmp</b> deleted.`);
   refresh();
-  const st = S.g[g];
-  if (ss.broke) { const R = REWARD[g][st.layer]; if (R) setTimeout(() => sendMail({ from: g, ...R, atts: R.atts.map(a => ({ ...a })) }), 1200); }
-  if (st.gone) {
-    setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: [`${GIRLS[g].name} faced her last layer and checked out! Bon voyage!`, 'One less case. Gold star for you, rookie.'] }])), 2200);
-    if (PLAYABLE.every(k => S.g[k].gone)) S.flags.protoReady = true;
-  }
-  S.flags.sessEndAt = Date.now(); S.flags.afterSess = true; // break / end of day handled once chat is quiet
 }
-setInterval(() => { if (S.flags && S.flags.afterSess && Date.now() - (S.flags.sessEndAt || 0) > 3000 && !S.active && !S.queue.length && !S.session) { S.flags.afterSess = false; afterSession(); } }, 800);
+// leaving early: she says bye, then the chat is deleted
+function endSessionEarly() {
+  const ss = S.session; if (!ss || S.active) return;
+  if (typeof owClose === 'function') owClose();
+  runDialogue(seq('session', ss.g, sesOutro(ss.g), 'SES_CLOSE'));
+}
 
 /* ---------- Video Feed: the patient in Room 0, reacting to the chat ---------- */
 function loadImg(src) { return new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; }); }
@@ -2668,13 +2735,14 @@ function drawFront(c) {
 const HEAD_SPR = { prim: [52, 6], trix: [74, 10] };
 const EMOTE = { happy: '♪', sad: '…', surprised: '!', angry: '#', pain: '!!', wince: '>_<', shy: '///', neutral: '' };
 function buildFeed(b, g) {
-  const hs = HEAD_SPR[g], hx = SEAT_X - ART[g].w / 2 + hs[0], hy = SEAT_Y - ART[g].h + hs[1];
+  const A = ART[g] || { w: 60, h: 150 }, hs = HEAD_SPR[g] || [30, 6], hx = SEAT_X - A.w / 2 + hs[0], hy = SEAT_Y - A.h + hs[1];
   b.innerHTML = `<div class="feed"><div class="feed-top"><span class="live">● LIVE</span><span>Room 0 · ${esc(GIRLS[g].name)}</span><span class="id">${esc(GIRLS[g].id)}</span></div>
     <div class="feed-screen" id="feed-screen"><div class="feed-stage" id="feed-stage"><canvas class="room" width="${RW}" height="${RH}"></canvas><canvas id="feed-cv" class="feed-body" width="${RW}" height="${RH}"></canvas><canvas class="room-front" width="${RW}" height="${RH}"></canvas>
       <div class="emote" id="feed-emote" style="left:${hx / RW * 100}%;top:${hy / RH * 100}%" aria-live="polite"></div></div></div>
     <div class="layers sunk" id="feed-layers"></div></div>`;
   drawRoom($('.room', b)); drawFront($('.room-front', b));
-  loadImg(ART[g].body).then(img => { const cv = $('#feed-cv', b); if (cv && !S.g[g].gone) cv.getContext('2d').drawImage(img, SEAT_X - ART[g].w / 2, SEAT_Y - ART[g].h); renderFeed(); });
+  if (ART[g]) loadImg(ART[g].body).then(img => { const cv = $('#feed-cv', b); if (cv) cv.getContext('2d').drawImage(img, SEAT_X - ART[g].w / 2, SEAT_Y - ART[g].h); renderFeed(); });
+  else drawSilhouette($('#feed-cv', b), g);
   renderFeed();
 }
 function setFeedEmo(emo) {
@@ -2686,19 +2754,25 @@ function setFeedEmo(emo) {
 function renderFeed() {
   const st0 = $('#feed-stage'); if (!st0 || !S.session) return;
   const g = S.session.g, st = S.g[g], G = GIRLS[g];
-  const msg = $('#feed-msg'); if (msg) msg.remove();
-  const body = $('#feed-cv');
-  if (st.gone) { if (body && !body.dataset.dissolved) body.getContext('2d').clearRect(0, 0, RW, RH); $('#feed-screen').insertAdjacentHTML('beforeend', '<div class="feed-msg" id="feed-msg">DISCHARGED ♡<small>she has left the facility</small></div>'); }
   const box = $('#feed-layers'); if (!box) return;
+  const ks = typeof owKeys === 'function' ? owKeys(g) : null;
   box.innerHTML = [0, 1, 2].map(i => {
-    const done = st.layer > i, cur = st.layer === i, hp = G.hp[i], left = done ? 0 : cur ? Math.max(0, hp - st.dmg) : hp;
-    return `<div class="lyr${done ? ' done' : ''}${cur ? ' cur' : ''}"><span class="n">Layer ${i + 1}</span><div class="hp"><i style="width:${left / hp * 100}%"></i></div><span class="v">${done ? '✓' : ''}</span></div>`;
+    const done = st.layer > i, cur = st.layer === i, k = ks && ks[i];
+    return `<div class="lyr${done ? ' done' : ''}${cur ? ' cur' : ''}"><span class="n">Layer ${i + 1}</span><div class="hp"><i style="width:${done ? 100 : k ? Math.min(100, k.have / k.need * 100) : 0}%"></i></div><span class="v">${done ? '✓' : cur && k ? `${k.have}/${k.need}` : '🔒'}</span></div>`;
   }).join('');
+}
+// no art yet (Paige, Vel): a soft silhouette on the chair in her colour
+function drawSilhouette(cv, g) {
+  if (!cv) return; const x = cv.getContext('2d'), col = { paige: '#5b3f78', vel: '#c9a12e' }[g] || '#7a6a9a';
+  x.fillStyle = col; x.globalAlpha = .9;
+  x.beginPath(); x.ellipse(SEAT_X, SEAT_Y - 128, 20, 23, 0, 0, 7); x.fill();
+  x.beginPath(); x.roundRect(SEAT_X - 30, SEAT_Y - 104, 60, 70, 18); x.fill();
+  x.beginPath(); x.roundRect(SEAT_X - 26, SEAT_Y - 40, 52, 34, 10); x.fill();
+  x.globalAlpha = 1; x.fillStyle = 'rgba(255,255,255,.75)'; x.font = 'bold 11px monospace'; x.textAlign = 'center'; x.fillText('NO ART YET', SEAT_X, SEAT_Y - 70);
 }
 async function breakLayerFx(g, L) {
   SFX.shatter(); glitch(L === 3 ? 'hard' : 'soft'); setFeedEmo('surprised');
-  if (L === 3) { await wait(500); await dissolve(g); }
-  else await wait(700);
+  await wait(L === 3 ? 1200 : 700);
   renderFeed();
 }
 function dissolve(g) {
@@ -2709,153 +2783,6 @@ function dissolve(g) {
     let k = 0; const per = Math.ceil(cells.length / 40);
     const iv = setInterval(() => { for (let n = 0; n < per && k < cells.length; n++, k++) x.clearRect(cells[k][0], cells[k][1], 2, 2); if (k >= cells.length) { clearInterval(iv); cv.dataset.dissolved = '1'; res(); } }, 45);
   });
-}
-
-/* ---------- ColorLine.exe ---------- */
-const CL_COLORS = ['#ff5fa8', '#3fb6e0', '#ffbf3a', '#5fcf86', '#a77bf0', '#ff8a5c', '#38c9be', '#e86bd8'];
-const BASE_T = { 5: [10, 15, 20], 6: [15, 22, 30], 7: [22, 32, 45], 8: [30, 45, 60] };
-const PTS = { S: 300, A: 240, B: 190, C: 150 };
-let CL = null, clBody = null;
-function thresholds(L) { const f = L.fill ? 1.3 : 1; return BASE_T[L.n].map(t => Math.round(t * f)); }
-const timeLimit = L => thresholds(L)[2] * 2;
-const moveWindow = () => 2;
-const moveLimit = k => k + 3 + (hasMem('queen_piece.mem') ? 3 : 0);
-function scoreOf(L, sec, moves) {
-  const th = thresholds(L), k = L.pairs.length, g = S.session ? S.session.g : null;
-  const tier = sec <= th[0] ? 'S' : sec <= th[1] ? 'A' : sec <= th[2] ? 'B' : 'C';
-  const mb = moves <= k ? 100 : moves <= k + moveWindow() ? 50 : 0;
-  const base = PTS[tier] + mb;
-  let mult = 1, multFrom = null, bonus = 0;
-  S.mementos.forEach(m => { const M = MEMENTOS[m]; if (M.target === g && M.mult > mult) { mult = M.mult; multFrom = m; } if (M.bonus) bonus += M.bonus; });
-  const total = Math.round(base * mult * (1 + bonus));
-  return { tier, pts: PTS[tier], mb, mult, multFrom, bonus, total, th, k, sec, moves };
-}
-function buildCLShell(b) {
-  clBody = b;
-  b.innerHTML = `<div class="cl"><div class="cl-top" id="cl-top"><span>no board loaded</span></div>
-    <p class="cl-rule" id="cl-rule"></p><div class="tiers" id="cl-tiers"></div>
-    <div class="cl-board"><div class="cl-wrap" id="cl-wrap"><div class="cl-idle">Waiting for the patient…</div></div></div>
-    <div class="cl-stat" id="cl-stat"></div></div>`;
-}
-const key = (r, c) => r * 100 + c;
-function loadLevel(L, label) {
-  if (!clBody || !clBody.isConnected) return;
-  if (CL && CL.timer) clearInterval(CL.timer);
-  const N = L.n, dots = {};
-  L.pairs.forEach((p, i) => { dots[key(p[0][0], p[0][1])] = i; dots[key(p[1][0], p[1][1])] = i; });
-  CL = { max: moveLimit(L.pairs.length), L, N, k: L.pairs.length, dots, paths: L.pairs.map(() => null), cur: -1, drawing: false, moves: 0, last: -1, t0: 0, sec: 0, done: false, locked: false, label, timer: null, rewound: false, auto: -1 };
-  // red_thread: 40% chance one pair links itself (perfect path)
-  if (hasMem('tracing_paper.mem') && L.sol && Math.random() < .4) { const i = Math.random() * CL.k | 0; CL.paths[i] = L.sol[i].map(q => q.slice()); CL.auto = i; }
-  const G = GIRLS[S.session.g];
-  const mems = S.mementos.map(m => `<span title="${esc(MEMENTOS[m].desc)}" style="display:inline-block;width:18px;height:18px;vertical-align:middle">${icon(MEMENTOS[m].ic)}</span>`).join('');
-  $('#cl-top', clBody).innerHTML = `<span><b>${esc(G.name)}</b> · ${label}</span><span>${N}×${N} · ${CL.k} colors${L.fill ? ' · FILL 100%' : ''}</span><span>${mems}</span><span class="r" id="cl-time">0.0s</span>`;
-  $('#cl-rule', clBody).textContent = G.rule + (CL.auto >= 0 ? ' ✦ tracing_paper.mem linked one pair for you.' : '');
-  const th = thresholds(L);
-  $('#cl-tiers', clBody).innerHTML = `<span class="tier" data-t="S">≤${th[0]}s S·${PTS.S}</span><span class="tier" data-t="A">≤${th[1]}s A·${PTS.A}</span><span class="tier" data-t="B">≤${th[2]}s B·${PTS.B}</span><span class="tier" data-t="C">≤${timeLimit(L)}s C·${PTS.C}</span><span class="tier mv">${CL.k} strokes +100 · ≤${CL.k + moveWindow()} +50</span><span class="tier" style="border-color:var(--danger);color:var(--danger)">limit ${timeLimit(L)}s${hasMem('hourglass.mem') ? ' ⏳' : ''} · ${CL.max} moves</span>`;
-  const wrap = $('#cl-wrap', clBody);
-  wrap.innerHTML = `<div class="cl-grid" id="cl-grid" style="grid-template-columns:repeat(${N},1fr);grid-template-rows:repeat(${N},1fr)"></div><svg class="cl-svg" id="cl-svg" viewBox="0 0 ${N} ${N}" preserveAspectRatio="none"></svg>`;
-  const grid = $('#cl-grid', wrap);
-  let h = ''; for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const d = dots[key(r, c)]; h += `<div class="ccell" data-r="${r}" data-c="${c}">${d !== undefined ? `<span class="dot" style="background:${CL_COLORS[d]};color:${CL_COLORS[d]}"></span>` : ''}</div>`; }
-  grid.innerHTML = h;
-  const cellAt = e => { const rc = grid.getBoundingClientRect(); return [clamp(Math.floor((e.clientY - rc.top) / rc.height * N), 0, N - 1), clamp(Math.floor((e.clientX - rc.left) / rc.width * N), 0, N - 1)]; };
-  grid.addEventListener('pointerdown', e => {
-    if (!CL || CL.locked || CL.done) return; e.preventDefault();
-    const [r, c] = cellAt(e), d = CL.dots[key(r, c)];
-    let col = -1;
-    if (d !== undefined) { col = d; CL.paths[d] = [[r, c]]; }
-    else { const o = ownerAt(r, c); if (o < 0) return; col = o; const p = CL.paths[o], i = p.findIndex(q => q[0] === r && q[1] === c); p.length = i + 1; }
-    CL.cur = col; CL.drawing = true;
-    if (col !== CL.last) { CL.moves++; CL.last = col; }
-    if (CL.moves > CL.max) { CL.moves = CL.max; renderCL(); failLevel('moves'); return; }
-    if (!CL.t0) { CL.t0 = performance.now(); CL.timer = setInterval(updTime, 100); }
-    grid.setPointerCapture(e.pointerId); SFX.step(0); renderCL();
-  });
-  grid.addEventListener('pointermove', e => { if (CL && CL.drawing && !CL.locked && !CL.done) { const [r, c] = cellAt(e); stepTo(r, c); } });
-  const up = () => { if (!CL) return; CL.drawing = false; checkWin(); };
-  grid.addEventListener('pointerup', up); grid.addEventListener('pointercancel', up);
-  renderCL(); updTime();
-}
-function ownerAt(r, c) { for (let i = 0; i < CL.paths.length; i++) { const p = CL.paths[i]; if (p && p.some(q => q[0] === r && q[1] === c)) return i; } return -1; }
-function complete(i) {
-  const p = CL.paths[i]; if (!p || p.length < 2) return false;
-  const [a, b] = CL.L.pairs[i], s = p[0], e = p[p.length - 1];
-  const isA = q => q[0] === a[0] && q[1] === a[1], isB = q => q[0] === b[0] && q[1] === b[1];
-  return (isA(s) && isB(e)) || (isB(s) && isA(e));
-}
-function stepTo(r, c) {
-  let guard = 0;
-  while (guard++ < 16 && CL && !CL.done) {
-    const p = CL.paths[CL.cur]; if (!p) return; const h = p[p.length - 1];
-    if (h[0] === r && h[1] === c) return;
-    const dr = Math.sign(r - h[0]), dc = Math.sign(c - h[1]);
-    const first = Math.abs(r - h[0]) >= Math.abs(c - h[1]) ? [h[0] + dr, h[1]] : [h[0], h[1] + dc];
-    const second = first[0] !== h[0] ? [h[0], h[1] + dc] : [h[0] + dr, h[1]];
-    if (extend(first) || ((second[0] !== h[0] || second[1] !== h[1]) && extend(second))) { renderCL(); checkWin(); continue; }
-    return;
-  }
-}
-function extend([r, c]) {
-  const i = CL.cur, p = CL.paths[i], h = p[p.length - 1];
-  if (Math.abs(r - h[0]) + Math.abs(c - h[1]) !== 1) return false;
-  const j = p.findIndex(q => q[0] === r && q[1] === c);
-  if (j >= 0) { p.length = j + 1; SFX.tick(); return true; }
-  if (complete(i)) return false;
-  const d = CL.dots[key(r, c)];
-  if (d !== undefined && d !== i) return false;
-  const o = ownerAt(r, c);
-  if (o >= 0 && o !== i) { const q = CL.paths[o], m = q.findIndex(x => x[0] === r && x[1] === c); q.length = m; if (!q.length) CL.paths[o] = null; }
-  p.push([r, c]);
-  if (complete(i)) SFX.link(); else SFX.step(p.length);
-  return true;
-}
-function filledCount() { let n = 0; CL.paths.forEach(p => { if (p) n += p.length; }); return n; }
-function updTime() {
-  if (!CL || !clBody || !clBody.isConnected) return;
-  let sec = CL.done ? CL.sec : CL.t0 ? (performance.now() - CL.t0) / 1000 : 0;
-  const lim = timeLimit(CL.L);
-  if (!CL.done && sec > lim) {
-    if (hasMem('hourglass.mem') && !CL.rewound) { CL.rewound = true; CL.t0 = performance.now(); sec = 0; SFX.rewind(); toast('hourglass.mem', 'Time flowed back to zero.'); }
-    else { failLevel('time'); return; }
-  }
-  const t = $('#cl-time', clBody); if (t) t.textContent = sec.toFixed(1) + 's';
-  const th = thresholds(CL.L), tier = sec <= th[0] ? 'S' : sec <= th[1] ? 'A' : sec <= th[2] ? 'B' : 'C';
-  $$('#cl-tiers .tier[data-t]', clBody).forEach(e => e.classList.toggle('on', e.dataset.t === tier));
-}
-function renderCL() {
-  if (!CL || !clBody || !clBody.isConnected) return;
-  const N = CL.N, owner = {};
-  CL.paths.forEach((p, i) => p && p.forEach(q => owner[key(q[0], q[1])] = i));
-  $$('.ccell', clBody).forEach(el => {
-    const k = key(+el.dataset.r, +el.dataset.c), o = owner[k];
-    el.style.background = o !== undefined ? CL_COLORS[o] + '38' : '';
-    const dot = el.firstElementChild; if (dot) dot.classList.toggle('ok', complete(CL.dots[k]));
-  });
-  $('#cl-svg', clBody).innerHTML = CL.paths.map((p, i) => p && p.length > 1 ? `<polyline points="${p.map(q => `${q[1] + .5},${q[0] + .5}`).join(' ')}" fill="none" stroke="${CL_COLORS[i]}" stroke-width=".34" stroke-linecap="round" stroke-linejoin="round"/><polyline points="${p.map(q => `${q[1] + .5},${q[0] + .5}`).join(' ')}" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".08" stroke-linecap="round" stroke-linejoin="round"/>` : '').join('');
-  const conn = CL.paths.filter((p, i) => complete(i)).length, fill = Math.round(filledCount() / (N * N) * 100);
-  $('#cl-stat', clBody).innerHTML = `<span>linked <b>${conn}/${CL.k}</b></span><span>moves <b>${CL.moves}/${CL.max}</b></span><span>filled <b>${fill}%</b>${CL.L.fill ? ' (need 100%)' : ''}</span>`;
-}
-function resultCard(html) { const ov = document.createElement('div'); ov.className = 'cl-res'; ov.innerHTML = `<div class="card bevel">${html}</div>`; $('#cl-wrap', clBody).appendChild(ov); }
-function failLevel(why = 'time') {
-  if (!CL || CL.done) return;
-  CL.done = true; CL.failed = true; CL.drawing = false; clearInterval(CL.timer); SFX.buzz(); glitch('soft'); setFeedEmo('pain');
-  resultCard(`<h3>${why === 'moves' ? 'OUT OF MOVES' : 'TIME UP'}</h3><div class="big">×</div><table><tr><td>${why === 'moves' ? 'move limit ' + CL.max + ' reached' : 'limit ' + timeLimit(CL.L) + 's reached'}</td><td>+0</td></tr></table><p>No damage this board. ${esc(GIRLS[S.session.g].name)} is replying…</p>`);
-  setTimeout(() => onSolved({ total: 0, failed: true, why }), 700);
-}
-function checkWin() {
-  if (!CL || CL.done) return;
-  if (!CL.paths.every((p, i) => complete(i))) return;
-  if (CL.L.fill && filledCount() < CL.N * CL.N) { if (!CL.drawing && !CL.fillWarned) { CL.fillWarned = true; SFX.buzz(); toast('ColorLine.exe', 'All pairs linked, but there are empty tiles. Trix needs 100%.'); } return; }
-  if (!CL.t0) CL.t0 = performance.now();
-  CL.done = true; CL.drawing = false; CL.sec = (performance.now() - CL.t0) / 1000; clearInterval(CL.timer); updTime();
-  const res = scoreOf(CL.L, CL.sec, CL.moves); SFX.win(); setFeedEmo('wince');
-  const g = S.session.g, st = S.g[g];
-  resultCard(`<h3>BOARD CLEAR ✧</h3><div class="big">${res.tier}</div>
-    <table><tr><td>time ${res.sec.toFixed(1)}s → grade ${res.tier}</td><td>+${res.pts}</td></tr>
-    <tr><td>strokes ${res.moves}/${res.k}${res.mb === 100 ? ' · perfect' : res.mb ? ' · good' : ''}</td><td>+${res.mb}</td></tr>
-    ${res.mult > 1 ? `<tr><td>${esc(res.multFrom)} ×${res.mult}</td><td>×${res.mult}</td></tr>` : ''}${res.bonus ? `<tr><td>sketch_of_you.mem</td><td>+${Math.round(res.bonus * 100)}%</td></tr>` : ''}
-    <tr class="tot"><td>damage to Layer ${Math.min(st.layer + 1, 3)}</td><td>${res.total}</td></tr></table>
-    <p>${esc(GIRLS[g].name)} is replying in session chat…</p>`);
-  setTimeout(() => onSolved(res), 700);
 }
 
 /* =========================================================
@@ -3018,7 +2945,7 @@ async function bootOS() {
   applyAtmos(); refresh();
 }
 function day1Start() {
-  S.phase = 'day'; S.day = 1; S.half = 1; S.mins = 9 * 60 + 2; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = []; S.fixes = 0;
+  S.phase = 'day'; S.day = 1; S.mins = DAY_START; S.dayOver = false; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = [];
   S.night = { chats: 0, with: [], bossPending: false, bossDone: false };
   S.unread.boss = 1; S.flags.ping = 'yap';
   checkpoint('d1'); refresh();
@@ -3037,7 +2964,6 @@ async function main() {
     await bootOS();
     if (S.flags.ended) { refresh(); endGame(S.flags.endKind || 'proto'); return; }
     if (S.at === 'd1') { S.flags.briefStarted = false; S.logs.boss = []; day1Start(); await lockScreen('Welcome back'); return; }
-    if (S.at === 'pm') { S.phase = 'day'; await beginAfternoon(); return; }
     if (S.at === 'night') { S.phase = 'day'; S.session = null; await goNight(); return; }
     await beginMorning(); return;
   }
@@ -3465,6 +3391,365 @@ const PanelEngine = (() => {
 if (typeof module !== 'undefined') module.exports = PanelEngine;
 
 /* =========================================================
+   FIX-IT · the story map. Her mind as a big map: you are a box in her colour.
+   Every glowing tile is a memory (one panel); clear it and you keep its key.
+   Each layer of her is a big locked gate that wants a number of keys (you have more
+   memories than it needs, so you choose which to do). Every input costs her stamina.
+   ========================================================= */
+const KEY_SHARE = .6;            // a gate wants this share of the memories behind it
+const OW_RW = 13, OW_STRIDE = 14, OW_H = 11, OW_CORE = 6;
+const OW_THEME = {   // per girl: floor, wall, accent (her colour)
+  prim: { floor: ['#6a4a80', '#75538c'], wall: '#160b1d', wallTop: '#2a1636', acc: '#ff7eb6', hue: 0 },
+  trix: { floor: ['#5e3a52', '#68425b'], wall: '#14080f', wallTop: '#2a1220', acc: '#ff4d5e', hue: 1 },
+  paige: { floor: ['#4a3a6e', '#53427a'], wall: '#0f0a1a', wallTop: '#211832', acc: '#a46bff', hue: 2 },
+  vel: { floor: ['#6e5a33', '#78633a'], wall: '#160f06', wallTop: '#2e2310', acc: '#ffd23f', hue: 3 },
+};
+const OW_REGION = ['memory', 'feeling', 'self'];
+const keysNeed = n => Math.max(1, Math.ceil(n * KEY_SHARE));
+function owRand(seed) { let s = seed >>> 0 || 1; return () => (s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296; }
+function owSeed(t) { let h = 2166136261; for (const c of t) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; }
+function owLayers(g) { return [1, 2, 3].map(L => panelsOf(g).filter(p => p.layer === L).sort((a, b) => a.n - b.n)); }
+
+/* ---------------- the map: three maze regions joined by gates, and a small core room ---------------- */
+const OWMAP = {};
+function owBuild(g) {
+  if (OWMAP[g]) return OWMAP[g];
+  const R = owRand(owSeed('dive:' + g)), lay = owLayers(g);
+  const W = 1 + 3 * OW_STRIDE + OW_CORE, H = OW_H;
+  const t = new Uint8Array(W * H);   // 0 wall · 1 floor · 2 gate
+  const I = (x, y) => y * W + x, CW = 7, CHh = 5;
+  const nodes = [], gates = [];
+  let entryCy = 2, start = null;
+  for (let r = 0; r < 3; r++) {
+    const ox = 1 + r * OW_STRIDE, cx0 = cx => ox + 2 * cx, cy0 = cy => 1 + 2 * cy;
+    const gateCy = 1 + Math.floor(R() * 3);
+    // carve a maze over the 7×5 cells (depth first), then knock out a few walls so it loops
+    const seen = new Set(), stack = [[0, entryCy]]; seen.add(0 + ',' + entryCy); t[I(cx0(0), cy0(entryCy))] = 1;
+    while (stack.length) {
+      const [cx, cy] = stack[stack.length - 1];
+      const nb = [[1, 0], [-1, 0], [0, 1], [0, -1]].map(([dx, dy]) => [cx + dx, cy + dy, dx, dy]).filter(([a, b]) => a >= 0 && b >= 0 && a < CW && b < CHh && !seen.has(a + ',' + b));
+      if (!nb.length) { stack.pop(); continue; }
+      const [a, b, dx, dy] = nb[Math.floor(R() * nb.length)];
+      seen.add(a + ',' + b); t[I(cx0(a), cy0(b))] = 1; t[I(cx0(cx) + dx, cy0(cy) + dy)] = 1; stack.push([a, b]);
+    }
+    for (let cy = 0; cy < CHh; cy++) for (let cx = 0; cx < CW; cx++) for (const [dx, dy] of [[1, 0], [0, 1]]) {
+      const a = cx + dx, b = cy + dy; if (a >= CW || b >= CHh) continue;
+      const wx = cx0(cx) + dx, wy = cy0(cy) + dy; if (!t[I(wx, wy)] && R() < .2) t[I(wx, wy)] = 1;
+    }
+    // a little plaza in front of the gate, and the gate itself in the wall to the right
+    const gy = cy0(gateCy), gx = ox + OW_RW;
+    for (let y = gy - 1; y <= gy + 1; y++) t[I(gx - 1, y)] = 1;
+    t[I(gx, gy)] = 2;
+    if (r === 0) start = [cx0(0), cy0(entryCy)];
+    // memories: spread over the cells by distance from the entry (tutorials and easy ones near, hard ones far)
+    const dist = owBfs(t, W, H, r === 0 ? start : [ox, cy0(entryCy)]);
+    const cand = [];
+    for (let cy = 0; cy < CHh; cy++) for (let cx = 0; cx < CW; cx++) {
+      if ((cx === 0 && cy === entryCy) || (cx === CW - 1 && cy === gateCy)) continue;
+      const x = cx0(cx), y = cy0(cy); if (dist[I(x, y)] >= 0) cand.push([x, y, dist[I(x, y)]]);
+    }
+    cand.sort((a, b) => a[2] - b[2]);
+    const ps = lay[r], n = Math.min(ps.length, cand.length);
+    for (let i = 0; i < n; i++) {
+      const c = cand[n === 1 ? 0 : Math.round(i * (cand.length - 1) / (n - 1))];
+      nodes.push({ x: c[0], y: c[1], layer: r + 1, pid: ps[i].id, i });
+    }
+    gates.push({ x: gx, y: gy, layer: r + 1, total: ps.length, need: keysNeed(ps.length) });
+    entryCy = gateCy;
+  }
+  // the core room past the last gate
+  const cox = 1 + 3 * OW_STRIDE, gy3 = gates[2].y;
+  for (let y = Math.max(1, gy3 - 2); y <= Math.min(H - 2, gy3 + 2); y++) for (let x = cox; x < cox + OW_CORE - 1; x++) t[I(x, y)] = 1;
+  const core = [cox + 2, gy3];
+  const M = { g, W, H, t, nodes, gates, start, core, nodeAt: new Map(nodes.map((n, i) => [I(n.x, n.y), i])) };
+  OWMAP[g] = M; return M;
+}
+function owBfs(t, W, H, [sx, sy]) {
+  const d = new Int16Array(W * H).fill(-1), q = [[sx, sy]]; d[sy * W + sx] = 0;
+  while (q.length) {
+    const [x, y] = q.shift();
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const a = x + dx, b = y + dy; if (a < 0 || b < 0 || a >= W || b >= H) continue;
+      const k = b * W + a; if (t[k] !== 1 || d[k] >= 0) continue; d[k] = d[y * W + x] + 1; q.push([a, b]);
+    }
+  }
+  return d;
+}
+
+/* ---------------- her progress on the map (saved in S.g[g].ow) ---------------- */
+function owState(g) {
+  const st = S.g[g], M = owBuild(g);
+  if (!st.ow) st.ow = { x: M.start[0], y: M.start[1], solved: {}, seen: '' };
+  if (st.ow.seen.length !== M.W * M.H) st.ow.seen = '0'.repeat(M.W * M.H);
+  return st.ow;
+}
+// keys per layer: { have, need, total }
+function owKeys(g) {
+  const M = owBuild(g), o = owState(g);
+  return M.gates.map(G => ({ have: M.nodes.filter(n => n.layer === G.layer && o.solved[n.pid]).length, need: G.need, total: G.total }));
+}
+function owFirstOpen(g) {
+  const M = owBuild(g), o = owState(g), L = S.g[g].layer + 1;
+  const n = M.nodes.find(n => n.layer === Math.min(3, L) && !o.solved[n.pid]) || M.nodes[0];
+  return n && PANELS.find(p => p.id === n.pid);
+}
+const owGateOpen = (g, G) => S.g[g].layer >= G.layer;
+function owPassable(g, x, y) {
+  const M = owBuild(g); if (x < 0 || y < 0 || x >= M.W || y >= M.H) return false;
+  const v = M.t[y * M.W + x]; if (v === 1) return true;
+  if (v === 2) { const G = M.gates.find(G => G.x === x && G.y === y); return owGateOpen(g, G); }
+  return false;
+}
+function owReveal(g) {
+  const M = owBuild(g), o = owState(g), a = o.seen.split(''); let ch = false;
+  for (let y = o.y - 3; y <= o.y + 3; y++) for (let x = o.x - 4; x <= o.x + 4; x++) {
+    if (x < 0 || y < 0 || x >= M.W || y >= M.H) continue; const k = y * M.W + x; if (a[k] !== '1') { a[k] = '1'; ch = true; }
+  }
+  if (ch) o.seen = a.join('');
+}
+
+/* ---------------- the Fix-it window ---------------- */
+const OW = { g: null, mode: 'map', anim: null, raf: 0, frozen: false, msg: '', msgT: 0, shake: 0, keyFx: null, ro: null };
+function openWorld(g) {
+  OW.g = g; OW.mode = 'map'; owState(g); owReveal(g);
+  const dk = $('#desktop'), W = dk.clientWidth, H = dk.clientHeight;
+  const fw = W >= 1240 ? 380 : 340, cw = W >= 1240 ? 360 : 330;
+  const ww = Math.max(480, W - fw - cw - 32), x = fw + 16;
+  openWin('fixit', { title: `Fix-it · ${GIRLS[g].name}`, icon: 'brain', w: ww, h: Math.min(H - 16, 720), x, y: 8, noClose: () => !!S.session,
+    onClose: () => { owStop(); }, render: b => owRenderShell(b) });
+  placeWin('fixit', x, 8, ww, Math.min(H - 16, 720));
+  focusWin('fixit');
+}
+function owRenderShell(b) {
+  const g = OW.g;
+  b.innerHTML = `<div class="ow g-${g}" style="--acc:${OW_THEME[g].acc}">
+    <div class="ow-top"><span class="ow-keys" id="ow-keys"></span><span class="ow-reg" id="ow-reg"></span><span class="sp"></span>
+      <span class="ow-stam" id="ow-stam" title="Her stamina for today. Every input costs a little."><i></i><b></b></span>
+      <button class="btn" id="ow-end">End session</button></div>
+    <div class="ow-main" id="ow-main"><div class="ow-view" id="ow-view"><canvas id="ow-cv"></canvas><canvas class="ow-mini" id="ow-mini"></canvas><div class="ow-card" id="ow-card" hidden></div><div class="ow-msg" id="ow-msg" aria-live="polite"></div></div></div>
+    <div class="ow-help">W A S D / arrows: move · Enter: dive into a memory · Esc (in a memory): back to the map</div></div>`;
+  $('#ow-end', b).onclick = () => { SFX.click(); endSessionEarly(); };
+  const cv = $('#ow-cv', b), view = $('#ow-view', b);
+  if (OW.ro) OW.ro.disconnect();
+  OW.ro = new ResizeObserver(() => { const r = view.getBoundingClientRect(); cv.width = Math.max(10, r.width | 0); cv.height = Math.max(10, r.height | 0); owDraw(); });
+  OW.ro.observe(view);
+  document.removeEventListener('keydown', owKey); document.addEventListener('keydown', owKey);
+  owHud(); owLoop();
+}
+function owStop() { cancelAnimationFrame(OW.raf); OW.raf = 0; if (OW.ro) OW.ro.disconnect(); OW.ro = null; document.removeEventListener('keydown', owKey); }
+function owClose() { if (PJ_STORY) { PJ_STORY = null; pjDispose(); document.removeEventListener('keydown', pjKey); } owStop(); OW.g = null; }
+function owFocus() { const w = WINS.fixit; if (w) focusWin('fixit'); }
+function owHud() {
+  const g = OW.g; if (!g || !$('#ow-keys')) return;
+  const ks = owKeys(g), L = Math.min(3, S.g[g].layer + 1), k = ks[L - 1], M = owBuild(g), o = owState(g);
+  const done = S.g[g].layer >= 3;
+  $('#ow-keys').innerHTML = done ? `${keyIcon(g)} <b>every gate open</b>` : `${keyIcon(g)} <b>${k.have}</b>/${k.need} <small>keys · gate ${L}</small>`;
+  const region = M.gates.findIndex(G => o.x < G.x); const rg = region < 0 ? 'core' : OW_REGION[region];
+  $('#ow-reg').textContent = `Layer ${region < 0 ? 3 : region + 1} · ${rg}`;
+  const pct = staminaPct(), st = $('#ow-stam');
+  st.querySelector('i').style.width = pct + '%'; st.querySelector('b').textContent = `${clockStr()} · ${pct}%`; st.classList.toggle('low', pct <= 15);
+  // the card for the memory you're standing on
+  const card = $('#ow-card'); if (!card) return;
+  const ni = M.nodeAt.get(o.y * M.W + o.x);
+  if (OW.mode === 'map' && ni != null) {
+    const n = M.nodes[ni], p = PANELS.find(q => q.id === n.pid);
+    card.hidden = false;
+    card.innerHTML = `<b>Memory ${n.layer}·${n.i + 1}</b>${p && p.tut ? ` <span class="new">NEW · ${esc(TEACH[p.tut] || p.tut)}</span>` : ''}${o.solved[n.pid] ? ' <span class="got">key taken ✓</span>' : ''}<span class="go">Enter ▸ dive in</span>`;
+  } else card.hidden = true;
+}
+function keyIcon(g) { return `<svg class="kic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="5" cy="8" r="3.4" fill="none" stroke="${OW_THEME[g].acc}" stroke-width="2"/><path d="M8 8h7M12 8v3M14.5 8v2" stroke="${OW_THEME[g].acc}" stroke-width="2" fill="none"/></svg>`; }
+function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-msg'); if (m) { m.textContent = t; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); } }
+
+/* every gameplay input costs a minute of her day */
+function owSpend() {
+  if (S.phase !== 'day' || S.dayOver) return;
+  S.mins += 1;
+  if (S.mins >= DAY_END) overload();
+  owHud(); renderTray();
+  if (WINS.brain) renderBrain();
+}
+const owLocked = () => S.dayOver || OW.frozen || !!S.flags.ended;
+function owOverloaded() {
+  OW.shake = performance.now();
+  if (PJ_STORY) { const vp = $('#pj-vp'); if (vp) vp.classList.add('dead'); }
+  const v = $('#ow-view'); if (v) v.classList.add('dead');
+}
+
+function owKey(e) {
+  if (!OW.g || OW.mode !== 'map' || !WINS.fixit) return;
+  if (document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+  const top = Object.values(WINS).reduce((a, w) => (+w.el.style.zIndex || 0) > (+a.el.style.zIndex || 0) ? w : a, WINS.fixit);
+  if (top !== WINS.fixit && !(top.el.contains(document.activeElement))) { /* still allow: the map is the main thing in a session */ }
+  const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  const D = KEYDIR[k];
+  if (D) { e.preventDefault(); if (owLocked()) { SFX.buzz(); return; } owMove(D[0], D[1]); }
+  else if (k === 'Enter' || k === ' ') { e.preventDefault(); if (owLocked()) { SFX.buzz(); return; } owEnter(); }
+}
+function owMove(dx, dy) {
+  const g = OW.g, o = owState(g), M = owBuild(g), nx = o.x + dx, ny = o.y + dy;
+  owSpend(); if (S.dayOver) return;
+  const v = nx >= 0 && ny >= 0 && nx < M.W && ny < M.H ? M.t[ny * M.W + nx] : 0;
+  if (v === 2 && !owPassable(g, nx, ny)) { owGate(M.gates.find(G => G.x === nx && G.y === ny)); return; }
+  if (!owPassable(g, nx, ny)) { SFX.bump(); OW.anim = { from: [o.x, o.y], to: [o.x + dx * .18, o.y + dy * .18], t0: performance.now(), bump: true }; return; }
+  OW.anim = { from: [o.x, o.y], to: [nx, ny], t0: performance.now() };
+  o.x = nx; o.y = ny; SFX.step(o.x + o.y); owReveal(g); owHud();
+  if (o.x === M.core[0] && o.y === M.core[1] && S.g[g].layer >= 3 && !o.coreSeen) { o.coreSeen = true; owSay('her core. quiet in here.'); }
+}
+async function owGate(G) {
+  const g = OW.g, ks = owKeys(g)[G.layer - 1];
+  if (G.layer > S.g[g].layer + 1) { SFX.bump(); owSay('this gate is behind another one.'); return; }
+  if (ks.have < G.need) { SFX.bump(); OW.shake = performance.now(); owSay(`locked · ${ks.have}/${G.need} keys`); return; }
+  // open it: a layer of her comes off
+  OW.frozen = true; SFX.gate(); OW.gateFx = { G, t0: performance.now() };
+  await wait(REDUCED ? 100 : 1300);
+  S.g[g].layer = Math.max(S.g[g].layer, G.layer); OW.frozen = false; OW.gateFx = null;
+  owSay(G.layer >= 3 ? 'the last gate is open.' : `gate ${G.layer} open · layer ${G.layer} faced`);
+  owHud(); renderFeed(); save();
+  sessionLayerOpened(g, G.layer);
+}
+
+/* ---------------- diving into a memory: the projector, inside the Fix-it window ---------------- */
+function owEnter() {
+  const g = OW.g, o = owState(g), M = owBuild(g), ni = M.nodeAt.get(o.y * M.W + o.x);
+  if (ni == null) { owSay('nothing here. find a glowing tile.'); SFX.tick(); return; }
+  const n = M.nodes[ni], p = PANELS.find(q => q.id === n.pid); if (!p) return;
+  OW.mode = 'level'; cancelAnimationFrame(OW.raf); OW.raf = 0;
+  SFX.link(); glitch('soft');
+  const host = $('#ow-main'); if (!host) return;
+  const inL = M.nodes.filter(m => m.layer === n.layer);
+  PJ_STORY = { g, node: n, spend: owSpend, locked: owLocked, win: owLevelWon, back: owBack };
+  pjNew(p);
+  renderProjector(host, p, n.i + 1, inL.length);
+  owHud();
+  document.removeEventListener('keydown', pjKey); document.addEventListener('keydown', pjKey);
+}
+// the projector's bar in story mode: back to the map instead of the panel list; no answer button, no editor
+function storyProjectorChrome(b, p) {
+  const back = $('#pj-back', b); back.textContent = '◂ Map'; back.onclick = () => { SFX.click(); owBack(); };
+  ['#pj-sol', '#pj-next', '#pj-solbox'].forEach(s => { const e = $(s, b); if (e) e.remove(); });
+  const ed = $('[data-m="edit"]', b); if (ed) ed.remove();
+  const bk = $('[data-m="back"] span', b); if (bk) bk.textContent = 'Back to the map';
+  const dbg = $('.pj-debug', b); if (dbg) dbg.remove();
+  const rs = $('#pj-reset', b); rs.onclick = () => { if (owLocked()) { SFX.buzz(); return; } pjReset(); owSpend(); };
+  $$('[data-m="undo"],[data-m="reset"]', b).forEach(el => { const f = el.onclick; el.onclick = () => { if (owLocked()) { SFX.buzz(); return; } f(); owSpend(); }; });
+  const bm = $('[data-m="back"]', b); if (bm) bm.onclick = () => { SFX.click(); owBack(); };
+}
+function owBack() {
+  if (!PJ_STORY) return;
+  PJ_STORY = null; pjDispose(); document.removeEventListener('keydown', pjKey);
+  OW.mode = 'map';
+  const b = WINS.fixit && WINS.fixit.body; if (b) owRenderShell(b);
+}
+function owLevelWon(p) {
+  const g = OW.g, o = owState(g), first = !o.solved[p.id];
+  o.solved[p.id] = true; save();
+  if (first) { SFX.key(); OW.keyFx = performance.now(); }
+  renderFeed();
+  sessionLevelWon(g, p, first);
+  setTimeout(() => { if (PJ_STORY && PJ && PJ.p === p) { owBack(); } }, REDUCED ? 600 : 2600);
+}
+
+/* ---------------- drawing: a tilted top-down board with raised walls ---------------- */
+function owLoop() { cancelAnimationFrame(OW.raf); const f = () => { owDraw(); OW.raf = requestAnimationFrame(f); }; OW.raf = requestAnimationFrame(f); }
+function owDraw() {
+  const cv = $('#ow-cv'); if (!cv || !OW.g || OW.mode !== 'map') return;
+  const g = OW.g, M = owBuild(g), o = owState(g), T = OW_THEME[g], x = cv.getContext('2d'), now = performance.now();
+  const Wp = cv.width, Hp = cv.height, ts = Math.max(28, Math.min(46, Math.floor(Math.min(Wp / 15, Hp / 9.5)))), lift = Math.round(ts * .22);
+  // box position (tweened)
+  let bx = o.x, by = o.y;
+  if (OW.anim) { const k = Math.min(1, (now - OW.anim.t0) / 110), e = OW.anim.bump ? Math.sin(k * Math.PI) : 1 - Math.pow(1 - k, 3); const [fx, fy] = OW.anim.from, [tx, ty] = OW.anim.to; if (OW.anim.bump) { bx = fx + (tx - fx) * e; by = fy + (ty - fy) * e; } else { bx = fx + (tx - fx) * e; by = fy + (ty - fy) * e; } if (k >= 1) OW.anim = null; }
+  let camX = bx * ts + ts / 2 - Wp / 2, camY = by * ts + ts / 2 - Hp / 2;
+  camX = clamp(camX, -ts, M.W * ts - Wp + ts); camY = clamp(camY, -ts * 1.2, M.H * ts - Hp + ts);
+  if (M.W * ts < Wp) camX = (M.W * ts - Wp) / 2; if (M.H * ts < Hp) camY = (M.H * ts - Hp) / 2 - lift / 2;
+  const sh = OW.shake && now - OW.shake < 350 ? Math.sin((now - OW.shake) / 18) * 5 * (1 - (now - OW.shake) / 350) : 0;
+  x.setTransform(1, 0, 0, 1, Math.round(-camX + sh), Math.round(-camY));
+  const bg = x.createLinearGradient(0, camY, 0, camY + Hp); bg.addColorStop(0, '#0d0714'); bg.addColorStop(1, '#1f1030');
+  x.fillStyle = bg; x.fillRect(camX - 10, camY - 10, Wp + 20, Hp + 20);
+  const seen = o.seen, I = (a, b) => b * M.W + a;
+  const x0 = Math.max(0, Math.floor(camX / ts) - 1), x1 = Math.min(M.W - 1, Math.ceil((camX + Wp) / ts) + 1), y0 = Math.max(0, Math.floor(camY / ts) - 1), y1 = Math.min(M.H - 1, Math.ceil((camY + Hp) / ts) + 1);
+  // floor
+  for (let y = y0; y <= y1; y++) for (let xx = x0; xx <= x1; xx++) {
+    const k = I(xx, y), v = M.t[k], px = xx * ts, py = y * ts;
+    if (seen[k] !== '1') continue;
+    if (v === 1 || v === 2) { x.fillStyle = T.floor[(xx + y) & 1]; x.fillRect(px, py, ts, ts); }
+  }
+  // memories
+  M.nodes.forEach(n => {
+    const k = I(n.x, n.y); if (seen[k] !== '1') return;
+    const px = n.x * ts, py = n.y * ts, got = !!o.solved[n.pid], p = PANELS.find(q => q.id === n.pid), pulse = .55 + .45 * Math.sin(now / 420 + n.i);
+    x.save(); x.shadowColor = T.acc; x.shadowBlur = got ? 0 : 10 * pulse;
+    x.fillStyle = got ? 'rgba(255,255,255,.08)' : T.acc; x.globalAlpha = got ? 1 : .25 + .25 * pulse; x.fillRect(px + 3, py + 3, ts - 6, ts - 6);
+    x.globalAlpha = 1; x.strokeStyle = got ? 'rgba(255,255,255,.35)' : T.acc; x.lineWidth = 2; x.strokeRect(px + 4, py + 4, ts - 8, ts - 8); x.restore();
+    x.fillStyle = got ? 'rgba(255,255,255,.55)' : '#fff'; x.font = `bold ${Math.round(ts * .34)}px "Courier New", monospace`; x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.fillText(got ? '✓' : String(n.i + 1), px + ts / 2, py + ts / 2 + 1);
+    if (p && p.tut && !got) { x.fillStyle = '#ffd86e'; x.font = `bold ${Math.round(ts * .2)}px monospace`; x.fillText('NEW', px + ts / 2, py + ts * .2); }
+  });
+  // core
+  if (seen[I(...M.core)] === '1') { const [cx, cy] = M.core, px = cx * ts + ts / 2, py = cy * ts + ts / 2, r = ts * (.32 + .04 * Math.sin(now / 300)); x.save(); x.shadowColor = T.acc; x.shadowBlur = 18; x.fillStyle = S.g[g].layer >= 3 ? T.acc : '#fff'; x.beginPath(); x.moveTo(px, py - r); x.lineTo(px + r, py); x.lineTo(px, py + r); x.lineTo(px - r, py); x.closePath(); x.fill(); x.restore(); }
+  // walls (back to front, so fronts overlap), gates, then the box in its row
+  const boxRow = Math.round(by);
+  for (let y = y0; y <= y1; y++) {
+    for (let xx = x0; xx <= x1; xx++) {
+      const k = I(xx, y), v = M.t[k]; if (seen[k] !== '1') { x.fillStyle = '#0a0510'; x.fillRect(xx * ts, y * ts - lift, ts, ts + lift); continue; }
+      if (v !== 0) continue;
+      const px = xx * ts, py = y * ts;
+      x.fillStyle = T.wall; x.fillRect(px, py, ts, ts);          // front face
+      x.fillStyle = T.wallTop; x.fillRect(px, py - lift, ts, ts);  // top face
+      x.fillStyle = T.acc; x.globalAlpha = .18; x.fillRect(px, py - lift, ts, 2); x.globalAlpha = 1;
+    }
+    M.gates.forEach(G => { if (G.y - 1 <= y && y === G.y + 1 && seen[I(G.x, G.y)] === '1') owDrawGate(x, G, ts, lift, now); });
+    if (y === boxRow) owDrawBox(x, bx, by, ts, lift, T, now);
+  }
+  // fog edge: a soft vignette
+  x.setTransform(1, 0, 0, 1, 0, 0);
+  const vg = x.createRadialGradient(Wp / 2, Hp / 2, Math.min(Wp, Hp) * .35, Wp / 2, Hp / 2, Math.max(Wp, Hp) * .75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.45)'); x.fillStyle = vg; x.fillRect(0, 0, Wp, Hp);
+  if (OW.keyFx && now - OW.keyFx < 1400) { const k = (now - OW.keyFx) / 1400; x.globalAlpha = 1 - k; x.fillStyle = T.acc; x.font = `bold ${Math.round(28 + k * 10)}px "Courier New", monospace`; x.textAlign = 'center'; x.fillText('+1 KEY', Wp / 2, Hp * .35 - k * 30); x.globalAlpha = 1; }
+  owDrawMini();
+}
+function owDrawGate(x, G, ts, lift, now) {
+  const g = OW.g, T = OW_THEME[g], open = owGateOpen(g, G), px = G.x * ts, top = (G.y - 1) * ts - lift, h = ts * 3 + lift;
+  const fx = OW.gateFx && OW.gateFx.G === G ? Math.min(1, (now - OW.gateFx.t0) / 1200) : open ? 1 : 0;
+  x.save();
+  x.fillStyle = '#120818'; x.fillRect(px - ts * .2, top, ts * 1.4, h);
+  x.strokeStyle = T.acc; x.lineWidth = 3; x.shadowColor = T.acc; x.shadowBlur = open ? 4 : 12; x.strokeRect(px - ts * .2 + 2, top + 2, ts * 1.4 - 4, h - 4);
+  x.shadowBlur = 0;
+  // two doors sliding apart
+  const dw = ts * .7 * (1 - fx);
+  x.fillStyle = '#2a1636'; x.fillRect(px - ts * .2 + 4, top + 4, dw, h - 8); x.fillRect(px + ts * 1.2 - 4 - dw, top + 4, dw, h - 8);
+  if (fx < 1) {
+    const ks = owKeys(g)[G.layer - 1], cx = px + ts / 2, cy = top + h * .45;
+    x.fillStyle = T.acc; x.beginPath(); x.arc(cx, cy - ts * .12, ts * .16, Math.PI, 0); x.lineWidth = 3; x.strokeStyle = T.acc; x.stroke(); x.fillRect(cx - ts * .22, cy - ts * .1, ts * .44, ts * .34);
+    x.fillStyle = '#fff'; x.font = `bold ${Math.round(ts * .3)}px "Courier New", monospace`; x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.fillText(`${ks.have}/${G.need}`, cx, top + h * .78);
+  }
+  x.fillStyle = 'rgba(255,255,255,.7)'; x.font = `bold ${Math.round(ts * .2)}px monospace`; x.textAlign = 'center'; x.fillText(`LAYER ${G.layer}`, px + ts / 2, top + ts * .3);
+  x.restore();
+}
+function owDrawBox(x, bx, by, ts, lift, T, now) {
+  const s = ts * .7, px = bx * ts + (ts - s) / 2, py = by * ts + (ts - s) / 2 - lift * .3, bob = Math.sin(now / 380) * 1.5;
+  x.save();
+  x.fillStyle = 'rgba(0,0,0,.35)'; x.beginPath(); x.ellipse(bx * ts + ts / 2, by * ts + ts * .78, s * .5, s * .18, 0, 0, 7); x.fill();
+  x.fillStyle = shade(T.acc); x.fillRect(px, py + s * .45 + bob, s, s * .45);           // front
+  x.fillStyle = T.acc; x.shadowColor = T.acc; x.shadowBlur = 12; x.fillRect(px, py - s * .1 + bob, s, s * .58); // top
+  x.shadowBlur = 0; x.fillStyle = 'rgba(255,255,255,.35)'; x.fillRect(px + 3, py - s * .1 + 3 + bob, s - 6, 3);
+  x.restore();
+}
+function owDrawMini() {
+  const mc = $('#ow-mini'); if (!mc || !OW.g) return;
+  const g = OW.g, M = owBuild(g), o = owState(g), T = OW_THEME[g], s = 4;
+  if (mc.width !== M.W * s + 8) { mc.width = M.W * s + 8; mc.height = M.H * s + 8; }
+  const x = mc.getContext('2d'); x.clearRect(0, 0, mc.width, mc.height);
+  x.fillStyle = 'rgba(10,5,16,.85)'; x.fillRect(0, 0, mc.width, mc.height);
+  for (let y = 0; y < M.H; y++) for (let xx = 0; xx < M.W; xx++) {
+    const k = y * M.W + xx; if (o.seen[k] !== '1') continue;
+    const v = M.t[k]; x.fillStyle = v === 1 ? 'rgba(255,255,255,.28)' : v === 2 ? (owGateOpen(g, M.gates.find(G => G.x === xx && G.y === y)) ? 'rgba(255,255,255,.5)' : T.acc) : 'rgba(255,255,255,.05)';
+    x.fillRect(4 + xx * s, 4 + y * s, s, s);
+  }
+  M.nodes.forEach(n => { if (o.seen[n.y * M.W + n.x] !== '1') return; x.fillStyle = o.solved[n.pid] ? '#7be3a4' : T.acc; x.fillRect(4 + n.x * s, 4 + n.y * s, s, s); });
+  if ((performance.now() / 300 | 0) % 2) { x.fillStyle = '#fff'; x.fillRect(3 + o.x * s, 3 + o.y * s, s + 2, s + 2); }
+}
+
+/* =========================================================
    TITLE SCREEN + TEST CHAMBER
    The chamber is a sandbox for the new line panels: pick a girl,
    pick a panel, play it (with the magnifier → projector intro).
@@ -3482,7 +3767,6 @@ const CH_GIRLS = [
   { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'rope boxes · sensor blocks (touch n sides) · light tiles' },
   { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'dice: print the brief on the white tiles · arrow tiles · portals' },
   { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'arrow tiles · rocket boxes · locks · colours' },
-  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'reverse twins · no locking · two-colour switches · paint · rope boxes' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
 // what each tutorial panel teaches (shown as a NEW tag)
@@ -3567,13 +3851,14 @@ async function startPanel(id) {
   if (CH.opt.intro) await magnifierIntro(p);
   openProjector(p);
 }
-function magnifierIntro(p) {
+function magnifierIntro(p, o = {}) {
   return new Promise(res => {
     const g = p.girl, A = ART[g] || null;
-    openWin('feedcam', { title: `Live feed · ${GIRLS[g].id}`, icon: 'feed', w: 260, h: 330, x: 30, y: 30, render: b => {
+    if (!o.noCam) openWin('feedcam', { title: `Live feed · ${GIRLS[g].id}`, icon: 'feed', w: 260, h: 330, x: 30, y: 30, render: b => {
       b.innerHTML = `<div class="cam"><div class="cam-room">${A ? `<img src="${A.body}" alt="${GIRLS[g].name} on the chair">` : `<div class="cam-sil" aria-label="${GIRLS[g].name} on the chair"></div>`}<div class="lens" id="lens"></div></div><div class="cam-cap">● REC · room 0</div></div>`;
     } });
-    openWin('magnifier', { title: 'Magnifier.exe · neural scan', icon: 'img', w: 560, h: 470, x: 300, y: 24, render: b => { b.innerHTML = magDashHTML(p); } });
+    const dk = $('#desktop');
+    openWin('magnifier', { title: 'Magnifier.exe · neural scan', icon: 'img', w: 560, h: 470, x: o.noCam ? Math.max(8, (dk.clientWidth - 560) / 2) : 300, y: 24, render: b => { b.innerHTML = magDashHTML(p); } });
     const stop = magDashRun(p);
     const f = $('#magf'), go = $('#mag-go'), bar = $('#magbar'), lens = $('#lens');
     requestAnimationFrame(() => lens && lens.classList.add('on'));
@@ -3695,6 +3980,15 @@ function bgmMute() { if (BGM.el && BGM.want) bgmRun(); }
 
 /* ---------------- projector: the panel ---------------- */
 let PJ = null;
+/* PJ_STORY: set by the story map (src/world.js) while one of her memories is projected inside the Fix-it window.
+   { g, spend(), locked(), win(p), back() } */
+let PJ_STORY = null;
+function pjDispose() { if (!PJ) return; clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); if (PJ.die3) PJ.die3.dispose(); PJ = null; }
+function pjNew(p) {
+  if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
+  PJ = { p, st: null, bs: p.boxes ? PanelEngine.boxStart(p) : null, bsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null, view: null };
+}
+const pjMem = k => PJ_STORY ? hasMem(k + '.mem') : CH.opt.mem[k];
 function openProjector(p) {
   if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
   const W = WINS.projector;
@@ -3730,8 +4024,8 @@ function renderProjector(b, p, idx, nL) {
         <div class="pj-bar">
           <button class="btn" id="pj-back">◂ Panels</button>
           <button class="btn" id="pj-reset">Reset</button>
-          ${CH.opt.mem.tracing_paper ? `<button class="btn" id="pj-hint" title="${esc(CH_MEM.tracing_paper.desc)}">${icon('thread')} trace</button>` : ''}
-          ${CH.opt.mem.queen_piece ? `<span class="pj-tok" id="pj-erase" title="${esc(CH_MEM.queen_piece.desc)}">${icon('queen')} ready</span>` : ''}
+          ${pjMem('tracing_paper') ? `<button class="btn" id="pj-hint" title="${esc(CH_MEM.tracing_paper.desc)}">${icon('thread')} trace</button>` : ''}
+          ${pjMem('queen_piece') ? `<span class="pj-tok" id="pj-erase" title="${esc(CH_MEM.queen_piece.desc)}">${icon('queen')} ready</span>` : ''}
           <span class="sp"></span>
           <button class="btn" id="pj-sol" aria-pressed="false">Solution</button>
           <button class="btn primary" id="pj-next" hidden>Next ▸</button>
@@ -3758,7 +4052,8 @@ function renderProjector(b, p, idx, nL) {
         }
       });
       document.removeEventListener('keydown', pjKey); document.addEventListener('keydown', pjKey);
-      mountStage(); bgmOn();
+      if (PJ_STORY) storyProjectorChrome(b, p);
+      mountStage(); if (!PJ_STORY) bgmOn();
       PJ.fpsTimer = setInterval(() => { const f = $('#pj-fps'); if (f && PJ) f.textContent = PJ.view ? (PJ.view.fps() ? `WebGL · ${PJ.view.fps()} fps` : 'WebGL') : '2D view'; }, 1000);
     }
 }
@@ -3828,15 +4123,16 @@ function mountStage() {
 async function pjSubmit() {
   const p = PJ.p, r = p.boxes ? { ok: PanelEngine.boxWon(p, PJ.bs), bad: [{ kind: 'path' }] } : PanelEngine.validate(p, pjPath()); PJ.tries++;
   let ok = r.ok;
-  if (!ok && CH.opt.mem.queen_piece && !PJ.eraseUsed && r.bad.length === 1 && r.bad[0].kind !== 'path' && r.bad[0].kind !== 'moves') {
+  if (!ok && pjMem('queen_piece') && !PJ.eraseUsed && r.bad.length === 1 && r.bad[0].kind !== 'path' && r.bad[0].kind !== 'moves') {
     ok = true; PJ.eraseUsed = true; PJ.erased = r.bad[0].kind + ':' + r.bad[0].i;
     $('#pj-msg').textContent = 'The queen took one rule off the board.';
   }
   if (ok) {
     PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win(); if (PJ.view) { const v = PJ.view; setTimeout(() => { if (PJ && PJ.view === v && PJ.state === 'win' && !PJ.solOn) v.winFx(); }, 380); setTimeout(() => { if (PJ && PJ.view === v && PJ.state === 'win') pj3Flash('ERASED', 'win'); }, 1300); } else setTimeout(() => { if (PJ && PJ.state === 'win') pj3Flash('ERASED', 'win'); }, 300);
+    $('#pj-msg').textContent = '';
+    if (PJ_STORY) { PJ_STORY.win(p); return; }
     const t = performance.now() - PJ.t0, prev = CH.done[p.id];
     CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries, peek: prev ? prev.peek && PJ.peeked : PJ.peeked }; chSave();
-    $('#pj-msg').textContent = '';
     $('#pj-next').hidden = false;
     UPD.forEach(f => f());
     afterWin(p);
@@ -4255,7 +4551,7 @@ function bindPJ(svg, toPt = e => svgPt(svg, e)) {
 }
 const KEYDIR = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1], a: [-1, 0], d: [1, 0], w: [0, -1], s: [0, 1] };
 function pjKey(e) {
-  if (!PJ || !WINS.projector) return;
+  if (!PJ || !(WINS.projector || PJ_STORY)) return;
   if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   if (PJ.solOn) {
@@ -4265,9 +4561,12 @@ function pjKey(e) {
   }
   if (PJ.state === 'win') return;
   const D = KEYDIR[k];
-  if (D) { e.preventDefault(); pjMove(D); drawPJ(); }
-  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); pjUndo(); drawPJ(); }
-  else if (k === 'r' || k === 'Escape') { e.preventDefault(); pjReset(); }
+  // story: every input costs her stamina (moves, bumps, undo, reset); none once she's out
+  if (PJ_STORY && (D || k === 'z' || k === 'Backspace' || k === 'r')) { if (PJ_STORY.locked()) { e.preventDefault(); SFX.buzz(); return; } }
+  if (D) { e.preventDefault(); pjMove(D); drawPJ(); if (PJ_STORY) PJ_STORY.spend(); }
+  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); pjUndo(); drawPJ(); if (PJ_STORY) PJ_STORY.spend(); }
+  else if (k === 'r') { e.preventDefault(); pjReset(); if (PJ_STORY) PJ_STORY.spend(); }
+  else if (k === 'Escape') { e.preventDefault(); if (PJ_STORY) PJ_STORY.back(); else pjReset(); }
   else if (k === 'Enter') {
     if (PJ.p.boxes) return;
     if (PJ.st && PanelEngine.canStop(PJ.p, PJ.st, PanelEngine.ctx(PJ.p))) { e.preventDefault(); pjSubmit(); }
@@ -5233,7 +5532,7 @@ function edSync() {
   if (mj !== EDB.sentOrder) { EDB.sentOrder = mj; db.doc('levelmeta/order').set(meta).catch(() => { EDB.sentOrder = ''; }); }
 }
 setTimeout(edDbInit, 0);
-const ED_GIRLS = ['prim', 'trix', 'paige', 'vel', 'myne'];
+const ED_GIRLS = ['prim', 'trix', 'paige', 'vel'];   // Myne is out of the game for now
 const ED_TOOLS = {
   line: [['start', 'Start', 'node', 'Điểm xuất phát (chỉ một)'], ['exit', 'Goal', 'node', 'Ô đích (có thể nhiều)'], ['wall', 'Wall', 'edge', 'Đoạn đứt / tường'], ['hole', 'Hole', 'node', 'Lỗ trên map'],
     ['sketch', 'Pencil', 'edge', 'Nét chì: bắt buộc đi qua'], ['avoid', 'Black pencil', 'edge', 'Chì đen: cấm đi'], ['num', 'Edge count', 'cell', 'Số cạnh trong ô (bấm lại để tăng 0→4, rồi xoá)'],

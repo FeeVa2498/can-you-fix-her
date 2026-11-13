@@ -10,7 +10,7 @@ P = lambda *a: os.path.join(ROOT, *a)
 CSV = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal']
 
 # game + the new panel engine + title/test chamber; main() runs last
-js = '\n'.join(open(P('src', f), encoding='utf-8').read() for f in ('game.js', 'panel_engine.js', 'chamber.js', 'chamber_board.js', 'chamber_solution.js', 'chamber_3d.js', 'editor.js')) + '\nmain();\n'
+js = '\n'.join(open(P('src', f), encoding='utf-8').read() for f in ('game.js', 'panel_engine.js', 'world.js', 'chamber.js', 'chamber_board.js', 'chamber_solution.js', 'chamber_3d.js', 'editor.js')) + '\nmain();\n'
 js = js.replace('__PANELS__', json.dumps(json.load(open(P('src', 'panels.json'))), separators=(',', ':')))
 def sheet_csv(ws):
     import csv, io
@@ -32,7 +32,6 @@ for n in CSV:
 missing = [n for n in CSV if n not in embed]
 if missing: print('warning: no dialogue for', ', '.join(missing)); embed.update({n: '' for n in missing})
 js = js.replace('__CSV_EMBED__', json.dumps(embed, ensure_ascii=False).replace('</', '<\\/'))
-js = js.replace('__LEVELS__', json.dumps(json.load(open(P('src', 'levels.json'))), separators=(',', ':')))
 for key, f in [('__PRIM_BODY__', 'jirai_body.png'), ('__PRIM_FACE__', 'jirai_face.png'),
                ('__TRIX_BODY__', 'egirl_body.png'), ('__TRIX_FACE__', 'egirl_face.png')]:
     js = js.replace(key, 'data:image/png;base64,' + base64.b64encode(open(P('src', 'art', f), 'rb').read()).decode())

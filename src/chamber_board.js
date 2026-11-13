@@ -406,7 +406,7 @@ function bindPJ(svg, toPt = e => svgPt(svg, e)) {
 }
 const KEYDIR = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1], a: [-1, 0], d: [1, 0], w: [0, -1], s: [0, 1] };
 function pjKey(e) {
-  if (!PJ || !WINS.projector) return;
+  if (!PJ || !(WINS.projector || PJ_STORY)) return;
   if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   if (PJ.solOn) {
@@ -416,9 +416,12 @@ function pjKey(e) {
   }
   if (PJ.state === 'win') return;
   const D = KEYDIR[k];
-  if (D) { e.preventDefault(); pjMove(D); drawPJ(); }
-  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); pjUndo(); drawPJ(); }
-  else if (k === 'r' || k === 'Escape') { e.preventDefault(); pjReset(); }
+  // story: every input costs her stamina (moves, bumps, undo, reset); none once she's out
+  if (PJ_STORY && (D || k === 'z' || k === 'Backspace' || k === 'r')) { if (PJ_STORY.locked()) { e.preventDefault(); SFX.buzz(); return; } }
+  if (D) { e.preventDefault(); pjMove(D); drawPJ(); if (PJ_STORY) PJ_STORY.spend(); }
+  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); pjUndo(); drawPJ(); if (PJ_STORY) PJ_STORY.spend(); }
+  else if (k === 'r') { e.preventDefault(); pjReset(); if (PJ_STORY) PJ_STORY.spend(); }
+  else if (k === 'Escape') { e.preventDefault(); if (PJ_STORY) PJ_STORY.back(); else pjReset(); }
   else if (k === 'Enter') {
     if (PJ.p.boxes) return;
     if (PJ.st && PanelEngine.canStop(PJ.p, PJ.st, PanelEngine.ctx(PJ.p))) { e.preventDefault(); pjSubmit(); }

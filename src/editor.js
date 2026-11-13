@@ -67,7 +67,7 @@ function edSync() {
   if (mj !== EDB.sentOrder) { EDB.sentOrder = mj; db.doc('levelmeta/order').set(meta).catch(() => { EDB.sentOrder = ''; }); }
 }
 setTimeout(edDbInit, 0);
-const ED_GIRLS = ['prim', 'trix', 'paige', 'vel', 'myne'];
+const ED_GIRLS = ['prim', 'trix', 'paige', 'vel'];   // Myne is out of the game for now
 const ED_TOOLS = {
   line: [['start', 'Start', 'node', 'Điểm xuất phát (chỉ một)'], ['exit', 'Goal', 'node', 'Ô đích (có thể nhiều)'], ['wall', 'Wall', 'edge', 'Đoạn đứt / tường'], ['hole', 'Hole', 'node', 'Lỗ trên map'],
     ['sketch', 'Pencil', 'edge', 'Nét chì: bắt buộc đi qua'], ['avoid', 'Black pencil', 'edge', 'Chì đen: cấm đi'], ['num', 'Edge count', 'cell', 'Số cạnh trong ô (bấm lại để tăng 0→4, rồi xoá)'],

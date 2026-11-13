@@ -3,7 +3,7 @@
 /* =========================================================
    CAN YOU FIX HER — DIVE OS v2.4 prototype (v4)
    ========================================================= */
-const SAVE_KEY = 'cyfh_v8_save';
+const SAVE_KEY = 'cyfh_v9_save';   // v9: overworld + day stamina (older saves don't carry over)
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -19,8 +19,6 @@ const ART = {
   trix: { body: '__TRIX_BODY__', face: '__TRIX_FACE__', w: 124, h: 170 },
 };
 // two cascaded windows over the face: front (layer 1) and back (layer 2), same size, back offset down-right
-const LEVELS = __LEVELS__;
-const lvlAt = (g, i) => { const P = LEVELS[g]; return P[i < P.length ? i : P.length - 8 + (i % 8)]; };
 
 /* ---------------- cast ---------------- */
 const GIRLS = {
@@ -32,13 +30,15 @@ const GIRLS = {
     layers: ['INSECURITY · "pick-me airhead"', 'INSECURITY · "attention seeker"', 'CORE · ▒▒▒▒▒▒▒▒'], core: 'WILL_TO_LIVE',
     rule: 'OCD / Perfectionism: connect every pair AND fill 100% of the tiles. A board with gaps does not count.',
     fail: "{angry}time is a constraint. i hate constraints. next." },
-  paige: { id: 'PAIGE_03', name: 'Paige', tag: 'Goth', from: 4, built: false, gim: 'Attachment: dots stuck side by side' },
-  vel: { id: 'VEL_04', name: 'Vel', tag: 'Gyaru', from: 6, built: false, gim: 'Bipolar: portal nodes' },
-  myne: { id: 'MYNE_05', name: 'Myne', tag: 'Tomboy', from: 8, built: false, gim: 'ADHD: lines wrap around the edges' },
+  paige: { id: 'PAIGE_03', name: 'Paige', tag: 'Goth', from: 4, built: true, layers: ['INSECURITY · "bad luck"', 'INSECURITY · "too much"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{neutral}the dice said no today." },
+  vel: { id: 'VEL_04', name: 'Vel', tag: 'Gyaru', from: 6, built: true, layers: ['INSECURITY · "just a bimbo"', 'INSECURITY · "trigger happy"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{sad}ugh. jammed. srry." },
+  // Myne (Tomboy) is out of the game until further notice
 };
-const ORDER = ['prim', 'trix', 'paige', 'vel', 'myne'];
-const PLAYABLE = ['prim', 'trix'];
-const LAST_DAY = 14, LEVELS_PER_SESSION = 5, NIGHT_CHATS = 2, MAX_FIX = 2;
+const ORDER = ['prim', 'trix', 'paige', 'vel'];
+const PLAYABLE = ['prim', 'trix', 'paige', 'vel'];
+const LAST_DAY = 14, NIGHT_CHATS = 2;
+const DAY_START = 9 * 60, DAY_END = 17 * 60;   // her stamina for the day: every gameplay input costs a minute
+const staminaPct = () => Math.max(0, Math.round((DAY_END - S.mins) / (DAY_END - DAY_START) * 100));
 const SPECIAL = { 3: 'showcase', 7: 'postcard', 10: 'inspection' };
 const SPECIAL_NAME = { showcase: 'HOBBY SHOWCASE', postcard: 'POSTCARD DAY', inspection: 'INSPECTION DAY' };
 const QUAKE_DAYS = [5, 8, 11, 13];
@@ -47,9 +47,9 @@ const QUAKE_DAYS = [5, 8, 11, 13];
 function fresh() {
   const g = {}; ORDER.forEach(k => g[k] = { layer: 0, dmg: 0, lvl: 0, ex: 0, sessions: 0, doneDay: 0, gone: false, nt: 0 });
   return {
-    player: null, day: 1, phase: 'day', mins: 9 * 60, g,
+    player: null, day: 1, phase: 'day', mins: 9 * 60, g, dayOver: false,
     inv: [], apps: [], mementos: [], know: [], flags: {}, seen: {},
-    logs: { boss: [], session: [], prim: [], trix: [] }, unread: { boss: 0, prim: 0, trix: 0 },
+    logs: { boss: [], session: [], prim: [], trix: [], paige: [], vel: [] }, unread: { boss: 0, prim: 0, trix: 0, paige: 0, vel: 0 },
     active: null, queue: [], dyn: {}, session: null, route: [],
     todayLayers: 0, todayFixed: [], todayWorked: [], best: 0,
     mail: [], journal: [], show: {}, quakes: 0, asked: {}, used: {}, fixes: 0, met: {}, half: 1, at: 'd1',
@@ -142,6 +142,11 @@ const SFX = {
   rumble() { if (!AU.ctx) return; noiseHit(0, 1.6, 160, .9, null, true); tone(38, 0, 1.5, .35, 'sine'); tone(52, 0, 1.2, .2, 'sine'); },
   vibrate() { if (!AU.ctx) return; const t = AU.ctx.currentTime; for (let i = 0; i < 6; i++) tone(95, t + i * .09, .06, .12, 'square'); },
   rewind() { if (!AU.ctx) return; const t = AU.ctx.currentTime; for (let i = 0; i < 8; i++) tone(1600 - i * 150, t + i * .04, .05, .06, 'square'); },
+  // a CRT power surge: a thump, a falling whine and static
+  overload() { if (!AU.ctx) return; const t = AU.ctx.currentTime; noiseHit(0, .9, 900, .5); tone(55, t, .6, .4, 'sine'); for (let i = 0; i < 10; i++) tone(2400 - i * 210, t + i * .05, .06, .07, 'sawtooth'); tone(30, t + .1, 1, .3, 'square'); },
+  bump() { if (!AU.ctx) return; tone(90, 0, .08, .12, 'square'); noiseHit(0, .03, 800, .1); },
+  gate() { if (!AU.ctx) return; const t = AU.ctx.currentTime; noiseHit(0, 1.2, 220, .5, null, true); [392, 523, 659, 784, 1046].forEach((f, i) => tone(f, t + .3 + i * .12, .7, .09, 'triangle')); },
+  key() { if (!AU.ctx) return; const t = AU.ctx.currentTime; [1568, 2093, 2637].forEach((f, i) => tone(f, t + i * .06, .3, .07, 'triangle')); },
 };
 
 /* ---------------- atmosphere ---------------- */
@@ -282,6 +287,8 @@ function drawAvatar(cv, p, blink, emo = 'neutral') {
 const PORTRAIT = {
   prim: { hair: 4, hcol: '#8e2a5c', ecol: '#d0405a', scol: '#ffe4d6', ocol: '#ffb3d1', odet: 'blouse', extra: ['choker'] },
   trix: { hair: 5, hcol: '#ff2e6a', ecol: '#d0405a', scol: '#ffe4d6', ocol: '#ff5f97', odet: 'hoodie', extra: ['glasses', 'headphones'] },
+  paige: { hair: 2, hcol: '#2a1a33', ecol: '#a46bff', scol: '#f6eef2', ocol: '#3b2a4a', odet: 'blouse', extra: ['choker'] },
+  vel: { hair: 5, hcol: '#ffd23f', ecol: '#8a5a2e', scol: '#e8b48a', ocol: '#ffd23f', odet: 'hoodie', extra: [] },
 };
 const PCACHE = {};
 function portraitURL(g, emo = 'neutral') {
@@ -298,6 +305,8 @@ const WHO = {
   boss: { name: 'Boss', sub: '@r.admin · supervisor' },
   prim: { name: 'Prim', sub: 'PRIM_01 · Jirai Kei' },
   trix: { name: 'Trix', sub: 'TRIX_02 · E-Girl' },
+  paige: { name: 'Paige', sub: 'PAIGE_03 · Goth' },
+  vel: { name: 'Vel', sub: 'VEL_04 · Gyaru' },
   dive: { name: 'DIVE Administration', sub: 'no-reply' },
 };
 function avHTML(who, cls = '', emo) {
@@ -399,7 +408,7 @@ async function say(ch, n, tok) {
     await wait(280 + Math.min(750, n.text.length * 8)); tmp.forEach(e => e.remove());
   } else await wait(200);
   if (tok !== runToken) return false;
-  tick(); const m = { who: sp, text: n.text, t: clockStr(), emo: n.emotion || undefined };
+  if (S.phase !== 'day') tick(); const m = { who: sp, text: n.text, t: clockStr(), emo: n.emotion || undefined };
   if (ch === 'session' && PORTRAIT[sp] && n.emotion) setFeedEmo(n.emotion);
   S.logs[ch].push(m);
   if (liveViews(ch).length) {
@@ -483,7 +492,7 @@ function choose(i) {
   const n = getDlg(a.id).nodes[a.node]; if (!n || n.type !== 'ANSWER') return;
   const c = n.choices[i]; if (!c) return;
   if (reqList(c.requirements).some(r => !r.ok)) { SFX.buzz(); return; }
-  SFX.click(); tick();
+  SFX.click(); if (S.phase !== 'day') tick();
   const m = { who: 'me', text: c.text, t: clockStr() }; S.logs[a.ch].push(m); appendMsg(a.ch, m);
   (c.actions || []).forEach(doAction);
   S.route.push(c.choice_id);
@@ -514,10 +523,10 @@ function handleEnd(n) {
   switch (n.trigger_event) {
     case 'BRIEF_DONE': S.flags.briefed = true; S.flags.ping = 'brain'; refresh(); break;
     case 'MORNING_DONE': afterMorning(); break;
-    case 'SES_LEVEL': nextLevel(); break;
-    case 'SES_AFTER': afterExchange(); break;
+    case 'SES_SCAN': sessionScan(); break;
     case 'SES_CLOSE': closeSession(); break;
-    case 'BOSS_NIGHT_DONE': S.night.bossDone = true; if (S.flags.protoReady && !S.flags.protoEnd) protoEndBoss(); break;
+    case 'OVERLOAD_DONE': closeSession(); break;
+    case 'BOSS_NIGHT_DONE': S.night.bossDone = true; break;
     case 'SHOW_DONE': if (PLAYABLE.filter(k => onSite(k) && met(k)).every(k => S.show[k])) setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: ['Lovely! Like the Louvre, but with more glitter and fewer Mona Lisas.', 'I\'m keeping everyone\'s pieces. That\'s it for today. Go rest.'] }])), 900), setTimeout(() => { S.flags.nightAfter = true; }, 1500); break;
     case 'PROTO_END': endGame('proto'); break;
   }
@@ -581,7 +590,7 @@ function toast(title, text, onclick) {
 }
 function renderIcons() {
   const box = $('#icons'); if (!box) return;
-  const unread = (S.unread.boss || 0) + (S.unread.prim || 0) + (S.unread.trix || 0);
+  const unread = ['boss', ...PLAYABLE].reduce((a, k) => a + (S.unread[k] || 0), 0);
   const mailUnread = S.mail.filter(m => !m.read).length;
   const list = [
     { id: 'yap', label: 'Yappy Yappy', ic: 'chat', fn: () => openYap(), badge: unread, ping: S.flags.ping === 'yap' },
@@ -612,7 +621,7 @@ function buildTaskbar() {
   const sm = $('#startmenu');
   const items = [
     ['Yappy Yappy', 'chat', () => openYap()], ['DiveMail', 'mail', openMail], ['Fix-it', 'wrench', openBrain], ['MementoBox', 'box', openMBox], ['Recycle Bin', 'trash', openBin], null,
-    ['CRT scanlines on/off', 'feed', () => document.body.classList.toggle('nocrt')], ['New game…', 'exe', confirmReset], ['Shut down', 'lock', () => { if (S.phase === 'night') shutDown(); else SFX.buzz(); }],
+    ['CRT scanlines on/off', 'feed', () => document.body.classList.toggle('nocrt')], ['New game…', 'exe', confirmReset], ['Shut down', 'lock', startShutDown],
   ];
   sm.innerHTML = `<div class="side">DIVE OS <i>v2.4</i></div><ul>${items.map((it, i) => it ? `<li><button role="menuitem" data-i="${i}">${icon(it[1])}<span>${esc(it[0])}</span></button></li>` : '<li><hr></li>').join('')}</ul>`;
   $$('button', sm).forEach(b => b.onclick = () => { SFX.click(); toggleStart(false); items[b.dataset.i][2](); });
@@ -861,7 +870,7 @@ function compileData(texts) {
   d.session = compileEntries('session', texts.session, ['girl', 'kind', 'layer', 'trigger', 'if']);
   d.session.forEach(e => {
     e.girl = e.girl.toLowerCase(); e.kind = e.kind.toLowerCase(); e.trigger = e.trigger.toUpperCase();
-    if (!['intro', 'outro', 'react', 'break', 'quiz'].includes(e.kind)) dataIssue(e._file, e._row, `kind "${e.kind}" should be intro, outro, react, break or quiz`);
+    if (!['intro', 'outro', 'react', 'break', 'quiz', 'overload'].includes(e.kind)) dataIssue(e._file, e._row, `kind "${e.kind}" should be intro, outro, react, break, quiz or overload`);
     if (e.trigger && !['WIN_HIGH', 'WIN_LOW', 'PERFECT_HIGH', 'PERFECT_LOW', 'FAIL_MOVES', 'FAIL_TIME'].includes(e.trigger)) dataIssue(e._file, e._row, `trigger "${e.trigger}" is not one of WIN_HIGH, WIN_LOW, PERFECT_HIGH, PERFECT_LOW, FAIL_MOVES, FAIL_TIME`);
   });
   d.morning = compileEntries('morning', texts.morning, ['day', 'if', 'group', 'once']);
@@ -1012,7 +1021,7 @@ function startBossNight() {
   S.night.bossPending = false;
   const steps = [], op = bossBest('opening');
   if (op) steps.push(...playSteps(op.steps));
-  [...new Set([...S.todayWorked, ...S.todayFixed])].forEach(g => steps.push(...bossQ(g, S.todayFixed.includes(g))));
+  [...new Set([...S.todayWorked, ...S.todayFixed])].forEach(g => steps.push(...bossQ(g, false)));
   bossEntries('extra').forEach(e => steps.push(...playSteps(e.steps)));
   const cl = bossBest('closing'); if (cl) steps.push(...playSteps(cl.steps));
   runDialogue(seq('boss', 'boss', steps.length ? steps : [{ lines: [] }], 'BOSS_NIGHT_DONE'));
@@ -1145,7 +1154,9 @@ function openAtlas() {
    Autosave only at the start of each part (no save slots).
    ========================================================= */
 const met = g => !!(S.met && S.met[g]);
-function availableToday() { if (S.flags.afterSess || SPECIAL[S.day] === 'showcase' || !S.flags.briefed || S.phase !== 'day' || (S.fixes || 0) >= MAX_FIX) return []; return PLAYABLE.filter(k => met(k) && !S.g[k].gone && S.day >= GIRLS[k].from); }
+// every girl you've met is there every day, until the last one; you pick who to work with (one session at a time)
+const complete = k => S.g[k].layer >= 3;
+function availableToday() { if (SPECIAL[S.day] === 'showcase' || !S.flags.briefed || S.phase !== 'day' || S.dayOver) return []; return PLAYABLE.filter(k => met(k) && S.day >= GIRLS[k].from && !complete(k)); }
 function checkpoint(at) {
   S.at = at;
   const cp = JSON.parse(JSON.stringify({ ...S, active: null, queue: [], dyn: {}, session: null }));
@@ -1168,7 +1179,7 @@ function lockScreen(sub, btn = 'Log in') {
 }
 function closeWorkWins() { Object.keys(WINS).forEach(id => { if (!['yap', 'mail', 'mbox', 'reset'].includes(id) && !id.startsWith('note:')) closeWin(id); }); }
 async function beginMorning() {
-  S.phase = 'day'; S.half = 1; S.mins = 9 * 60 + 2; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = []; S.fixes = 0;
+  S.phase = 'day'; S.mins = DAY_START; S.dayOver = false; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = [];
   S.night = { chats: 0, with: [], bossPending: false, bossDone: false };
   checkpoint('am');
   closeWorkWins(); applyAtmos(); refresh();
@@ -1190,7 +1201,7 @@ function dayMail() {
 // new patients only exist for the player once they've said something
 function newPatientsToday() {
   PLAYABLE.forEach(g => {
-    if (g === 'prim' || GIRLS[g].from !== S.day || met(g) || S.g[g].gone) return;
+    if (g === 'prim' || GIRLS[g].from > S.day || met(g)) return;
     const e = DD.first.find(x => x.girl === g && dayMatch(x.day, S.day) && cond(x.if)) || DD.first.find(x => x.girl === g);
     const steps = e ? playSteps(e.steps) : [{ lines: ['{neutral}hi. you\'re the new counsellor.'] }];
     setTimeout(() => { S.met[g] = true; S.flags.ping = 'brain'; runDialogue(seq(g, g, steps, 'NONE')); refresh(); }, 2500);
@@ -1201,13 +1212,6 @@ function afterMorning() {
   S.flags.ping = 'brain'; refresh();
   newPatientsToday();
   if (QUAKE_DAYS.includes(S.day) && !S.flags['quake' + S.day]) setTimeout(earthquake, 12000);
-}
-async function beginAfternoon() {
-  S.half = 2; S.mins = 13 * 60 + 1;
-  checkpoint('pm');
-  closeWorkWins(); applyAtmos(); refresh();
-  await lockScreen('Lunch break is over');
-  S.flags.ping = 'brain'; refresh();
 }
 function earthquake() {
   if (S.flags['quake' + S.day]) return; S.flags['quake' + S.day] = true; S.quakes++;
@@ -1222,15 +1226,9 @@ function earthquake() {
   }[S.quakes] || ['Again.'];
   setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: L }])), 1600);
 }
-// after a session: break, or the end of the work day
-function afterSession() {
-  if (S.phase !== 'day') return;
-  if ((S.fixes || 0) >= MAX_FIX) { goNight(); return; }
-  if (!availableToday().length) { goNight(); return; }
-  if (S.half === 1) beginAfternoon();
-}
 async function goNight() {
-  if (S.session || S.phase === 'night') return;
+  if (S.phase === 'night') return;
+  if (S.session) closeSession(true);
   if (S.active || S.queue.length) { S.flags.nightAfter = true; return; }
   S.phase = 'night'; S.mins = 22 * 60 + 14;
   S.night = { chats: 0, with: [], bossPending: true, bossDone: false };
@@ -1243,13 +1241,25 @@ async function goNight() {
   SFX.chime(); openYap('boss'); refresh();
 }
 setInterval(() => { if (S.flags && S.flags.nightAfter && !S.active && !S.queue.length && !S.session) { S.flags.nightAfter = false; goNight(); } }, 800);
+/* Start ▸ Shut down. At night it ends the night. In the day it ends the work day only once she's run out of
+   stamina; before that the company says no. */
+function startShutDown() {
+  if (S.flags.ended) return;
+  if (S.phase === 'night') { shutDown(); return; }
+  if (S.dayOver || SPECIAL[S.day] === 'showcase' && S.flags.showDone) { if (S.active && S.active.ch !== 'session') { SFX.buzz(); toast('DIVE OS', 'Finish the conversation first.'); return; } goNight(); return; }
+  SFX.buzz();
+  openWin('warn', { title: 'DIVE Administration', icon: 'lock', w: 380, h: 210, render: b => {
+    b.innerHTML = `<div class="warnbox"><div class="wb-ic" aria-hidden="true">!</div><div><b>Shift still in progress.</b><p>Your patients have not reached today's work quota. Shutting down a workstation during a shift will be reported to your supervisor.</p><p class="sig">— DIVE Administration</p></div></div><div class="warnfoot"><button class="btn primary" id="wb-ok">Back to work</button></div>`;
+    $('#wb-ok', b).onclick = () => { SFX.click(); closeWin('warn'); };
+    $('#wb-ok', b).focus();
+  } });
+}
 async function shutDown() {
   if (S.phase !== 'night' || S.active || S.flags.ended) return;
   S.night.bossPending = false;   // if Boss wasn't answered tonight, that night simply has no section in the journal
   DD.journal.filter(j => j.kind === 'entry' && dayMatch(j.day, S.day) && cond(j.if)).forEach(j => {
     if (!S.journal.some(x => x.rid === j.id)) S.journal.push({ day: S.day, text: tpl(j.text, tplVars()), rid: j.id, ray: true });
   });
-  if (S.flags.protoReady) { endGame('proto'); return; }
   if (S.day >= LAST_DAY) { endGame('deadline'); return; }
   const bo = document.createElement('div'); bo.id = 'blackout'; document.body.appendChild(bo);
   await wait(REDUCED ? 200 : 1200); bo.remove();
@@ -1268,22 +1278,23 @@ function renderBrain() {
   const cards = shown.map(k => {
     const G = GIRLS[k], st = S.g[k];
     let status = '', btn = '', dim = false, ok = false;
-    if (st.gone) { status = 'discharged'; ok = true; dim = true; }
+    if (complete(k)) { status = 'every layer faced'; ok = true; dim = true; }
     else if (S.session && S.session.g === k) { status = 'in session'; btn = `<button class="btn" data-go="${k}">Return ▶</button>`; }
     else if (night) status = 'resting';
     else if (sp === 'showcase') status = 'showcase today';
+    else if (S.dayOver) status = 'exhausted';
     else if (S.session) status = 'waiting';
     else if (availableToday().includes(k)) { status = 'ready'; btn = `<button class="btn primary" data-dive="${k}">Start session ▶</button>`; }
     else status = 'resting';
     const pips = `<div class="pips" title="layers">${[0, 1, 2].map(i => `<span class="pip${st.layer > i ? '' : ' off'}"></span>`).join('')}</div>`;
     return `<div class="pcard bevel${dim ? ' dim' : ''}"><div class="top">${avHTML(k)}<div><b>${esc(G.name)}</b><small>${esc(G.id)}</small></div></div>${pips}<div class="st${ok ? ' ok' : ''}">${esc(status)}</div>${btn}</div>`;
   }).join('') || '<div class="status-line">No patients assigned yet.</div>';
-  const part = night ? 'Closed until 09:00' : sp === 'showcase' ? 'Hobby Showcase' : S.half === 2 ? 'Afternoon session' : 'Morning session';
+  const part = night ? 'Closed until 09:00' : sp === 'showcase' ? 'Hobby Showcase' : S.dayOver ? 'Work day over · Start ▸ Shut down' : `Work day · stamina ${staminaPct()}%`;
   b.innerHTML = `<div class="bd"><div class="bd-head"><div><div class="day">${S.flags.probation ? 'Day ' + S.day : 'Fix-it'}</div><div class="ph">${esc(part)} · ${clockStr()}</div></div></div>
     <div class="cards">${cards}</div>
     <div class="bd-foot">${S.flags.ended ? '<button class="btn primary" id="bd-new">New game</button>' : night ? `<button class="btn" id="bd-sleep" ${S.active ? 'disabled' : ''}>Shut down for the night</button>` : sp === 'showcase' ? '<button class="btn" id="bd-show">Open Showcase.exe</button>' : ''}</div></div>`;
   $$('[data-dive]', b).forEach(x => x.onclick = () => { SFX.click(); startSession(x.dataset.dive); });
-  $$('[data-go]', b).forEach(x => x.onclick = () => { focusWin('feed'); focusWin('cl'); focusSessionChat(); });
+  $$('[data-go]', b).forEach(x => x.onclick = () => { focusWin('feed'); focusWin('fixit'); focusSessionChat(); });
   const s = $('#bd-sleep', b); if (s) s.onclick = () => { SFX.click(); shutDown(); };
   const sh = $('#bd-show', b); if (sh) sh.onclick = openShowcase;
   const nw = $('#bd-new', b); if (nw) nw.onclick = confirmReset;
@@ -1354,126 +1365,148 @@ function showTalk(g) {
 }
 
 /* =========================================================
-   SESSION
+   SESSION · a short chat in session_<girl>.tmp, then a neural scan, then her mind as a map (src/world.js)
    ========================================================= */
 function startSession(g) {
   if (S.session || S.phase !== 'day' || S.active || !availableToday().includes(g)) return;
   closeWin('brain');
-  const st = S.g[g]; st.sessions++; S.fixes = (S.fixes || 0) + 1;
-  S.session = { g, level: 0, score: 0, emo: 'neutral' };
+  const st = S.g[g]; st.sessions++;
+  S.session = { g, emo: 'neutral', scanned: false };
   if (!S.todayWorked.includes(g)) S.todayWorked.push(g);
   S.logs.session = [{ who: 'sys', text: `*** session_${g}.tmp created · ${GIRLS[g].id} connected ***`, t: clockStr() }];
   save(); glitch('soft');
-  const big = $('#desktop').clientWidth >= 1180;
-  openWin('feed', { title: `VideoFeed.exe — ${GIRLS[g].id}`, icon: 'feed', w: big ? 330 : 320, h: 600, x: big ? 108 : 20, y: 8, noClose: () => !!S.session, render: b => buildFeed(b, g) });
-  openWin('cl', { title: 'Fix-it · board', icon: 'puzzle', w: big ? 450 : 440, h: 620, x: big ? 446 : 60, y: 8, noClose: () => !!S.session, render: b => buildCLShell(b) });
-  openYap('session'); placeWin('yap', big ? 904 : 100, 8, big ? 368 : 360, big ? 600 : 520);
+  sessionLayout(g);
   refresh();
-  const pick = a => a[Math.random() * a.length | 0];
-  const go = () => runDialogue(seq('session', g, sesIntro(g), 'SES_LEVEL'));
-  if (!S.flags.tutorial) { previewLevel(g); runTutorial().then(() => { S.flags.tutorial = true; save(); go(); }); }
-  else go();
+  // she talks first; the scan only starts once the chat is done
+  runDialogue(seq('session', g, sesIntro(g), 'SES_SCAN'));
 }
-function previewLevel(g) {
-  const st = S.g[g], L = lvlAt(g, st.lvl);
-  focusWin('cl'); loadLevel({ n: L.n, pairs: L.pairs, sol: L.sol, fill: !!GIRLS[g].fill }, `LEVEL 1/${LEVELS_PER_SESSION}`); if (CL) CL.locked = true;
+// the feed on the left, the chat on the right; the map window goes in the middle after the scan
+function sessionLayout(g) {
+  const dk = $('#desktop'), W = dk.clientWidth, H = dk.clientHeight, big = W >= 1240;
+  const fw = big ? 380 : 340, cw = big ? 360 : 330;
+  openWin('feed', { title: `VideoFeed.exe — ${GIRLS[g].id}`, icon: 'feed', w: fw, h: Math.min(640, H - 16), x: 8, y: 8, noClose: () => !!S.session, render: b => buildFeed(b, g) });
+  openYap('session'); placeWin('yap', W - cw - 8, 8, cw, Math.min(640, H - 16));
 }
-/* ---- first-time tutorial: everything dims except Boss's messages and the board ---- */
+async function sessionScan() {
+  const ss = S.session; if (!ss || ss.scanned) return;
+  ss.scanned = true;
+  const g = ss.g, first = owFirstOpen(g);
+  if (first) await magnifierIntro(first, { noCam: true });
+  ['magnifier', 'feedcam'].forEach(closeWin);
+  if (!S.session) return;
+  openWorld(g);
+  if (!S.flags.owTutorial) { S.flags.owTutorial = true; await runTutorial(); }
+}
+// first time on the map: Boss walks you through it
 const TUTORIAL = [
-  { t: 'Okay rookie, this is the Fix-it board. Think of it as a tiny city map. Like Tokyo, but flat.', hl: '.cl-board' },
-  { t: 'Every dot has a twin of the same colour. Drag a line from one dot to its twin.', hl: '.cl-board' },
-  { t: 'Lines can\'t cross. Draw over another line and you snip it. Rude. Effective.', hl: '.cl-board' },
-  { t: 'This is the scoreboard. Faster = better grade. Fewer strokes = bonus. Like airport security: speed AND efficiency.', hl: '#cl-tiers' },
-  { t: 'Run out of time or run out of moves and the board fails. Like missing a connecting flight in Doha. Been there. Probably.', hl: '#cl-tiers' },
-  { t: 'Your score chips away at her layers, over there on the video feed. Clear all three and she walks out of here a whole new woman.', hl: null },
-  { t: 'One session before lunch, one after. Five rounds each. Same patient twice or two patients, your call. I\'ll be watching. In a supportive, supervisor-y way.', hl: null },
+  { t: 'Okay rookie, this is her head. Well, a map of it. Like the Tokyo metro, but with feelings.', hl: '.ow-view' },
+  { t: 'That little box is you. W A S D or the arrow keys. Step on a glowing tile and press Enter to dive into that memory.', hl: '.ow-view' },
+  { t: 'Clear a memory and you keep its key. Her colour, her keys.', hl: '.ow-keys' },
+  { t: 'Each layer of her is a big locked gate. It shows how many keys you have and how many it wants. You don\'t need every memory, just enough.', hl: '.ow-keys' },
+  { t: 'Every move costs her energy. On the map and inside the memories, undo included. That bar is how much she has left today.', hl: '.ow-stam' },
+  { t: 'When she runs out, she runs out. Then it\'s Start ▸ Shut down and we call it a day. Like a siesta in Madrid, but longer.', hl: '.ow-stam' },
+  { t: 'And that little map in the corner is the bit you\'ve seen so far. Go explore. Supportively.', hl: '.ow-mini' },
 ];
 async function runTutorial() {
-  const dk = $('#desktop'), cl = WINS.cl; if (!cl) return;
+  const dk = $('#desktop'), win = WINS.fixit; if (!win) return;
   document.body.classList.add('tutorial');
   const dim = document.createElement('div'); dim.id = 'tut-dim'; dk.appendChild(dim);
-  cl.el.hidden = false; cl.el.style.zIndex = 950;
-  const box = document.createElement('div'); box.id = 'tut-box'; box.className = 'bevel'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Boss explains the board');
+  win.el.style.zIndex = 950;
+  const box = document.createElement('div'); box.id = 'tut-box'; box.className = 'bevel'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Boss explains the map');
   box.innerHTML = `<div class="tut-head">${avHTML('boss')}<div><b>Boss</b><span>walking you through it</span></div></div><div class="tut-log" id="tut-log"></div><div class="tut-foot"><span id="tut-n"></span><button class="btn primary" id="tut-next">Next ▸</button></div>`;
   dk.appendChild(box);
-  const r = cl.el.getBoundingClientRect(), d = dk.getBoundingClientRect();
-  if (!narrow() && d.right - r.right > 330) { box.style.left = (r.right - d.left + 14) + 'px'; box.style.top = (r.top - d.top + 30) + 'px'; } else box.classList.add('bottom');
+  const r = win.el.getBoundingClientRect(), d = dk.getBoundingClientRect();
+  if (!narrow() && d.right - r.right > 300) { box.style.left = (r.right - d.left + 10) + 'px'; box.style.top = (r.top - d.top + 30) + 'px'; } else box.classList.add('bottom');
+  OW.frozen = true;
   for (let i = 0; i < TUTORIAL.length; i++) {
     const T = TUTORIAL[i];
     $('#tut-n', box).textContent = `${i + 1}/${TUTORIAL.length}`;
     $$('.tut-hl').forEach(e => e.classList.remove('tut-hl'));
-    if (T.hl) { const h = $(T.hl, cl.el); if (h) h.classList.add('tut-hl'); }
+    if (T.hl) { const h = $(T.hl, win.el); if (h) h.classList.add('tut-hl'); }
     const m = document.createElement('div'); m.className = 'tut-msg'; $('#tut-log', box).appendChild(m);
-    tick(); S.logs.boss.push({ who: 'boss', text: T.t, t: clockStr() });
+    S.logs.boss.push({ who: 'boss', text: T.t, t: clockStr() });
     SFX.chime(); await typeInto(m, T.t); $('#tut-log', box).scrollTop = 1e6;
     const btn = $('#tut-next', box); btn.textContent = i === TUTORIAL.length - 1 ? 'Let\'s go!' : 'Next ▸'; btn.focus();
     await new Promise(res => { btn.onclick = () => { SFX.click(); res(); }; });
   }
   $$('.tut-hl').forEach(e => e.classList.remove('tut-hl'));
-  dim.remove(); box.remove(); document.body.classList.remove('tutorial'); cl.el.style.zIndex = ++zTop;
+  dim.remove(); box.remove(); document.body.classList.remove('tutorial'); win.el.style.zIndex = ++zTop;
+  OW.frozen = false; owFocus();
   save();
 }
 function focusSessionChat() { openYap('session'); }
 function placeWin(id, x, y, w, h) { const W = WINS[id]; if (!W || narrow()) return; const dk = $('#desktop'); Object.assign(W.el.style, { left: clamp(x, 6, Math.max(6, dk.clientWidth - w - 6)) + 'px', top: y + 'px', width: Math.min(w, dk.clientWidth - 16) + 'px', height: Math.min(h, dk.clientHeight - 16) + 'px' }); }
-function nextLevel() {
-  const ss = S.session; if (!ss) return;
-  const g = ss.g, st = S.g[g], pool = LEVELS[g];
-  const L = lvlAt(g, st.lvl); st.lvl++;
-  ss.level++;
-  setFeedEmo('neutral'); focusWin('cl'); loadLevel({ n: L.n, pairs: L.pairs, sol: L.sol, fill: !!GIRLS[g].fill }, `LEVEL ${ss.level}/${LEVELS_PER_SESSION}`);
-  save();
+// called by the map: a memory was cleared (react), a gate opened (a layer came off)
+function sessionLevelWon(g, p, first) {
+  if (!first || !S.session || S.active) return;
+  if (Math.random() < .55) { const st = sesSteps(g, 'react', e => !e.trigger || /^(WIN|PERFECT)_/.test(e.trigger)); if (st) runDialogue(seq('session', g, st, 'NONE')); }
 }
-function onSolved(res) {
-  const ss = S.session; if (!ss) return;
-  const g = ss.g, st = S.g[g], G = GIRLS[g];
-  ss.score += res.total; S.best = Math.max(S.best, res.total); tick(10);
-  let broke = 0;
-  if (!res.failed) {
-    st.dmg += res.total;
-    // one layer per session at most: she has to rest after facing it
-    if (st.layer < 3 && st.dmg >= G.hp[st.layer]) { st.dmg = 0; st.layer++; broke = st.layer; }
-  }
-  if (broke) S.todayLayers++;
-  ss.broke = !!broke;
-  save(); refresh(); renderFeed();
-  (async () => {
-    if (broke) await breakLayerFx(g, broke);
-    if (st.layer >= 3 && !st.gone) { st.gone = true; S.todayFixed.push(g); }
-    renderFeed(); save();
-    const ex = broke ? sesBreak(g, broke) : pickPool(g, res);
-    const extra = st.gone ? [{ lines: [['sys', `*** ${G.id} faced every layer and has been discharged ***`]] }] : [];
-    if (narrow()) focusSessionChat();
-    runDialogue(seq('session', g, [...ex, ...extra], 'SES_AFTER'));
+async function sessionLayerOpened(g, L) {
+  S.todayLayers++;
+  await breakLayerFx(g, L);
+  const extra = L >= 3 ? [{ lines: [['sys', `*** ${GIRLS[g].id} · core reached · every layer faced ***`]] }] : [];
+  runDialogue(seq('session', g, [...sesBreak(g, L), ...extra], 'NONE'));
+  const R = REWARD[g] && REWARD[g][L];
+  if (R) setTimeout(() => sendMail({ from: g, ...R, atts: (R.atts || []).map(a => ({ ...a })) }), 2600);
+  if (L >= 3) { S.todayFixed.push(g); setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: [`${GIRLS[g].name} faced her last layer! Gold star, rookie.`, 'She stays with us until the end of the program, though. Rules are rules. Like visas.'] }])), 5200); }
+  save(); refresh();
+}
+/* she runs out of stamina: the screen jolts, she says she's done, the session closes.
+   The work day is over: Start ▸ Shut down to go to the night. */
+function overload() {
+  if (S.dayOver || S.phase !== 'day') return;
+  S.dayOver = true; S.mins = DAY_END;
+  const app = $('#app'); app.classList.remove('jolt'); void app.offsetWidth; app.classList.add('jolt'); setTimeout(() => app.classList.remove('jolt'), 700);
+  SFX.overload(); glitch('hard');
+  if (typeof owOverloaded === 'function') owOverloaded();
+  dropSessionTalk();
+  const g = S.session && S.session.g;
+  if (g) (async () => {   // straight into the temporary chat, whatever else is going on
+    await wait(900);
+    const lines = sesOverload(g).flatMap(st => st.lines || []);
+    for (const l of lines) {
+      const [who, raw] = Array.isArray(l) ? l : [g, l], mm = /^\{(\w+)\}\s*/.exec(raw), text = mm ? raw.slice(mm[0].length) : raw;
+      if (mm && who === g) setFeedEmo(mm[1]);
+      const m = { who: who === 'sys' ? 'sys' : g, text, t: clockStr(), emo: mm ? mm[1] : undefined }; S.logs.session.push(m); appendMsg('session', m); SFX.chime(); await wait(1400);
+    }
+    for (const t of ['*** patient stamina depleted · session locked ***', 'Start ▸ Shut down to end the work day.']) { const m = { who: 'sys', text: t, t: clockStr() }; S.logs.session.push(m); appendMsg('session', m); await wait(500); }
+    await wait(1600); closeSession();
   })();
+  toast('DIVE OS', 'Patient stamina depleted. <b>Start ▸ Shut down</b> to end the work day.', () => toggleStart(true));
+  refresh();
 }
-function afterExchange() {
-  const ss = S.session; if (!ss) return;
-  const st = S.g[ss.g];
-  if (st.gone || ss.broke) { closeSession(); return; }
-  if (ss.level < LEVELS_PER_SESSION) { nextLevel(); return; }
-  runDialogue(seq('session', ss.g, sesOutro(ss.g), 'SES_CLOSE'));
+function dropSessionTalk() {
+  if (S.active && S.active.ch === 'session') { delete S.dyn[S.active.id]; S.active = null; runToken++; renderAllChoices(); }
+  S.queue = S.queue.filter(id => { const d = getDlg(id); if (d && d.character_id === 'session') { delete S.dyn[id]; return false; } return !!d; });
 }
-async function closeSession() {
+function sesOverload(g) { return sesSteps(g, 'overload') || [{ lines: [OVERLOAD_FALLBACK[g] || '{pain}...too much. let\'s stop here.'] }]; }
+const OVERLOAD_FALLBACK = {
+  prim: '{pain}...my head is so full. can we stop here for today? i\'m sorry.',
+  trix: '{wince}cognitive load exceeded. i\'m done. we stop here. that\'s not a suggestion.',
+  paige: '{sad}the candles went out. that\'s a sign. we stop here.',
+  vel: '{pain}ok ok im overheatin rn. lets stop here ok?? srry',
+};
+async function closeSession(quick) {
   const ss = S.session; if (!ss) return;
   const g = ss.g;
-  if (CL) { CL.locked = true; clearInterval(CL.timer); }
-  for (const [t, d] of [[`*** session ended · score ${ss.score} ***`, false], ['session_' + g + '.tmp will be deleted in 3…', true], ['2…', true], ['1…', true]]) {
+  if (typeof owClose === 'function') owClose();
+  if (!quick) for (const [t, d] of [['*** session ended ***', false], ['session_' + g + '.tmp will be deleted in 3…', true], ['2…', true], ['1…', true]]) {
     const m = { who: 'sys', text: t, t: clockStr(), del: d }; S.logs.session.push(m); appendMsg('session', m); SFX.tick(); await wait(600);
   }
+  dropSessionTalk();
   S.session = null; S.logs.session = []; save();
-  ['cl', 'feed'].forEach(closeWin);
+  if (!S.active && S.queue.length) { const nx = S.queue.shift(); setTimeout(() => runDialogue(nx), 400); }
+  ['fixit', 'feed', 'magnifier', 'feedcam'].forEach(closeWin);
   if (yapCh === 'session') { yapCh = 'boss'; setViewCh('yap', 'boss'); } renderBuddies();
   glitch('soft'); toast('Yappy Yappy', `<b>session_${g}.tmp</b> deleted.`);
   refresh();
-  const st = S.g[g];
-  if (ss.broke) { const R = REWARD[g][st.layer]; if (R) setTimeout(() => sendMail({ from: g, ...R, atts: R.atts.map(a => ({ ...a })) }), 1200); }
-  if (st.gone) {
-    setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: [`${GIRLS[g].name} faced her last layer and checked out! Bon voyage!`, 'One less case. Gold star for you, rookie.'] }])), 2200);
-    if (PLAYABLE.every(k => S.g[k].gone)) S.flags.protoReady = true;
-  }
-  S.flags.sessEndAt = Date.now(); S.flags.afterSess = true; // break / end of day handled once chat is quiet
 }
-setInterval(() => { if (S.flags && S.flags.afterSess && Date.now() - (S.flags.sessEndAt || 0) > 3000 && !S.active && !S.queue.length && !S.session) { S.flags.afterSess = false; afterSession(); } }, 800);
+// leaving early: she says bye, then the chat is deleted
+function endSessionEarly() {
+  const ss = S.session; if (!ss || S.active) return;
+  if (typeof owClose === 'function') owClose();
+  runDialogue(seq('session', ss.g, sesOutro(ss.g), 'SES_CLOSE'));
+}
 
 /* ---------- Video Feed: the patient in Room 0, reacting to the chat ---------- */
 function loadImg(src) { return new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; }); }
@@ -1512,13 +1545,14 @@ function drawFront(c) {
 const HEAD_SPR = { prim: [52, 6], trix: [74, 10] };
 const EMOTE = { happy: '♪', sad: '…', surprised: '!', angry: '#', pain: '!!', wince: '>_<', shy: '///', neutral: '' };
 function buildFeed(b, g) {
-  const hs = HEAD_SPR[g], hx = SEAT_X - ART[g].w / 2 + hs[0], hy = SEAT_Y - ART[g].h + hs[1];
+  const A = ART[g] || { w: 60, h: 150 }, hs = HEAD_SPR[g] || [30, 6], hx = SEAT_X - A.w / 2 + hs[0], hy = SEAT_Y - A.h + hs[1];
   b.innerHTML = `<div class="feed"><div class="feed-top"><span class="live">● LIVE</span><span>Room 0 · ${esc(GIRLS[g].name)}</span><span class="id">${esc(GIRLS[g].id)}</span></div>
     <div class="feed-screen" id="feed-screen"><div class="feed-stage" id="feed-stage"><canvas class="room" width="${RW}" height="${RH}"></canvas><canvas id="feed-cv" class="feed-body" width="${RW}" height="${RH}"></canvas><canvas class="room-front" width="${RW}" height="${RH}"></canvas>
       <div class="emote" id="feed-emote" style="left:${hx / RW * 100}%;top:${hy / RH * 100}%" aria-live="polite"></div></div></div>
     <div class="layers sunk" id="feed-layers"></div></div>`;
   drawRoom($('.room', b)); drawFront($('.room-front', b));
-  loadImg(ART[g].body).then(img => { const cv = $('#feed-cv', b); if (cv && !S.g[g].gone) cv.getContext('2d').drawImage(img, SEAT_X - ART[g].w / 2, SEAT_Y - ART[g].h); renderFeed(); });
+  if (ART[g]) loadImg(ART[g].body).then(img => { const cv = $('#feed-cv', b); if (cv) cv.getContext('2d').drawImage(img, SEAT_X - ART[g].w / 2, SEAT_Y - ART[g].h); renderFeed(); });
+  else drawSilhouette($('#feed-cv', b), g);
   renderFeed();
 }
 function setFeedEmo(emo) {
@@ -1530,19 +1564,25 @@ function setFeedEmo(emo) {
 function renderFeed() {
   const st0 = $('#feed-stage'); if (!st0 || !S.session) return;
   const g = S.session.g, st = S.g[g], G = GIRLS[g];
-  const msg = $('#feed-msg'); if (msg) msg.remove();
-  const body = $('#feed-cv');
-  if (st.gone) { if (body && !body.dataset.dissolved) body.getContext('2d').clearRect(0, 0, RW, RH); $('#feed-screen').insertAdjacentHTML('beforeend', '<div class="feed-msg" id="feed-msg">DISCHARGED ♡<small>she has left the facility</small></div>'); }
   const box = $('#feed-layers'); if (!box) return;
+  const ks = typeof owKeys === 'function' ? owKeys(g) : null;
   box.innerHTML = [0, 1, 2].map(i => {
-    const done = st.layer > i, cur = st.layer === i, hp = G.hp[i], left = done ? 0 : cur ? Math.max(0, hp - st.dmg) : hp;
-    return `<div class="lyr${done ? ' done' : ''}${cur ? ' cur' : ''}"><span class="n">Layer ${i + 1}</span><div class="hp"><i style="width:${left / hp * 100}%"></i></div><span class="v">${done ? '✓' : ''}</span></div>`;
+    const done = st.layer > i, cur = st.layer === i, k = ks && ks[i];
+    return `<div class="lyr${done ? ' done' : ''}${cur ? ' cur' : ''}"><span class="n">Layer ${i + 1}</span><div class="hp"><i style="width:${done ? 100 : k ? Math.min(100, k.have / k.need * 100) : 0}%"></i></div><span class="v">${done ? '✓' : cur && k ? `${k.have}/${k.need}` : '🔒'}</span></div>`;
   }).join('');
+}
+// no art yet (Paige, Vel): a soft silhouette on the chair in her colour
+function drawSilhouette(cv, g) {
+  if (!cv) return; const x = cv.getContext('2d'), col = { paige: '#5b3f78', vel: '#c9a12e' }[g] || '#7a6a9a';
+  x.fillStyle = col; x.globalAlpha = .9;
+  x.beginPath(); x.ellipse(SEAT_X, SEAT_Y - 128, 20, 23, 0, 0, 7); x.fill();
+  x.beginPath(); x.roundRect(SEAT_X - 30, SEAT_Y - 104, 60, 70, 18); x.fill();
+  x.beginPath(); x.roundRect(SEAT_X - 26, SEAT_Y - 40, 52, 34, 10); x.fill();
+  x.globalAlpha = 1; x.fillStyle = 'rgba(255,255,255,.75)'; x.font = 'bold 11px monospace'; x.textAlign = 'center'; x.fillText('NO ART YET', SEAT_X, SEAT_Y - 70);
 }
 async function breakLayerFx(g, L) {
   SFX.shatter(); glitch(L === 3 ? 'hard' : 'soft'); setFeedEmo('surprised');
-  if (L === 3) { await wait(500); await dissolve(g); }
-  else await wait(700);
+  await wait(L === 3 ? 1200 : 700);
   renderFeed();
 }
 function dissolve(g) {
@@ -1553,153 +1593,6 @@ function dissolve(g) {
     let k = 0; const per = Math.ceil(cells.length / 40);
     const iv = setInterval(() => { for (let n = 0; n < per && k < cells.length; n++, k++) x.clearRect(cells[k][0], cells[k][1], 2, 2); if (k >= cells.length) { clearInterval(iv); cv.dataset.dissolved = '1'; res(); } }, 45);
   });
-}
-
-/* ---------- ColorLine.exe ---------- */
-const CL_COLORS = ['#ff5fa8', '#3fb6e0', '#ffbf3a', '#5fcf86', '#a77bf0', '#ff8a5c', '#38c9be', '#e86bd8'];
-const BASE_T = { 5: [10, 15, 20], 6: [15, 22, 30], 7: [22, 32, 45], 8: [30, 45, 60] };
-const PTS = { S: 300, A: 240, B: 190, C: 150 };
-let CL = null, clBody = null;
-function thresholds(L) { const f = L.fill ? 1.3 : 1; return BASE_T[L.n].map(t => Math.round(t * f)); }
-const timeLimit = L => thresholds(L)[2] * 2;
-const moveWindow = () => 2;
-const moveLimit = k => k + 3 + (hasMem('queen_piece.mem') ? 3 : 0);
-function scoreOf(L, sec, moves) {
-  const th = thresholds(L), k = L.pairs.length, g = S.session ? S.session.g : null;
-  const tier = sec <= th[0] ? 'S' : sec <= th[1] ? 'A' : sec <= th[2] ? 'B' : 'C';
-  const mb = moves <= k ? 100 : moves <= k + moveWindow() ? 50 : 0;
-  const base = PTS[tier] + mb;
-  let mult = 1, multFrom = null, bonus = 0;
-  S.mementos.forEach(m => { const M = MEMENTOS[m]; if (M.target === g && M.mult > mult) { mult = M.mult; multFrom = m; } if (M.bonus) bonus += M.bonus; });
-  const total = Math.round(base * mult * (1 + bonus));
-  return { tier, pts: PTS[tier], mb, mult, multFrom, bonus, total, th, k, sec, moves };
-}
-function buildCLShell(b) {
-  clBody = b;
-  b.innerHTML = `<div class="cl"><div class="cl-top" id="cl-top"><span>no board loaded</span></div>
-    <p class="cl-rule" id="cl-rule"></p><div class="tiers" id="cl-tiers"></div>
-    <div class="cl-board"><div class="cl-wrap" id="cl-wrap"><div class="cl-idle">Waiting for the patient…</div></div></div>
-    <div class="cl-stat" id="cl-stat"></div></div>`;
-}
-const key = (r, c) => r * 100 + c;
-function loadLevel(L, label) {
-  if (!clBody || !clBody.isConnected) return;
-  if (CL && CL.timer) clearInterval(CL.timer);
-  const N = L.n, dots = {};
-  L.pairs.forEach((p, i) => { dots[key(p[0][0], p[0][1])] = i; dots[key(p[1][0], p[1][1])] = i; });
-  CL = { max: moveLimit(L.pairs.length), L, N, k: L.pairs.length, dots, paths: L.pairs.map(() => null), cur: -1, drawing: false, moves: 0, last: -1, t0: 0, sec: 0, done: false, locked: false, label, timer: null, rewound: false, auto: -1 };
-  // red_thread: 40% chance one pair links itself (perfect path)
-  if (hasMem('tracing_paper.mem') && L.sol && Math.random() < .4) { const i = Math.random() * CL.k | 0; CL.paths[i] = L.sol[i].map(q => q.slice()); CL.auto = i; }
-  const G = GIRLS[S.session.g];
-  const mems = S.mementos.map(m => `<span title="${esc(MEMENTOS[m].desc)}" style="display:inline-block;width:18px;height:18px;vertical-align:middle">${icon(MEMENTOS[m].ic)}</span>`).join('');
-  $('#cl-top', clBody).innerHTML = `<span><b>${esc(G.name)}</b> · ${label}</span><span>${N}×${N} · ${CL.k} colors${L.fill ? ' · FILL 100%' : ''}</span><span>${mems}</span><span class="r" id="cl-time">0.0s</span>`;
-  $('#cl-rule', clBody).textContent = G.rule + (CL.auto >= 0 ? ' ✦ tracing_paper.mem linked one pair for you.' : '');
-  const th = thresholds(L);
-  $('#cl-tiers', clBody).innerHTML = `<span class="tier" data-t="S">≤${th[0]}s S·${PTS.S}</span><span class="tier" data-t="A">≤${th[1]}s A·${PTS.A}</span><span class="tier" data-t="B">≤${th[2]}s B·${PTS.B}</span><span class="tier" data-t="C">≤${timeLimit(L)}s C·${PTS.C}</span><span class="tier mv">${CL.k} strokes +100 · ≤${CL.k + moveWindow()} +50</span><span class="tier" style="border-color:var(--danger);color:var(--danger)">limit ${timeLimit(L)}s${hasMem('hourglass.mem') ? ' ⏳' : ''} · ${CL.max} moves</span>`;
-  const wrap = $('#cl-wrap', clBody);
-  wrap.innerHTML = `<div class="cl-grid" id="cl-grid" style="grid-template-columns:repeat(${N},1fr);grid-template-rows:repeat(${N},1fr)"></div><svg class="cl-svg" id="cl-svg" viewBox="0 0 ${N} ${N}" preserveAspectRatio="none"></svg>`;
-  const grid = $('#cl-grid', wrap);
-  let h = ''; for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const d = dots[key(r, c)]; h += `<div class="ccell" data-r="${r}" data-c="${c}">${d !== undefined ? `<span class="dot" style="background:${CL_COLORS[d]};color:${CL_COLORS[d]}"></span>` : ''}</div>`; }
-  grid.innerHTML = h;
-  const cellAt = e => { const rc = grid.getBoundingClientRect(); return [clamp(Math.floor((e.clientY - rc.top) / rc.height * N), 0, N - 1), clamp(Math.floor((e.clientX - rc.left) / rc.width * N), 0, N - 1)]; };
-  grid.addEventListener('pointerdown', e => {
-    if (!CL || CL.locked || CL.done) return; e.preventDefault();
-    const [r, c] = cellAt(e), d = CL.dots[key(r, c)];
-    let col = -1;
-    if (d !== undefined) { col = d; CL.paths[d] = [[r, c]]; }
-    else { const o = ownerAt(r, c); if (o < 0) return; col = o; const p = CL.paths[o], i = p.findIndex(q => q[0] === r && q[1] === c); p.length = i + 1; }
-    CL.cur = col; CL.drawing = true;
-    if (col !== CL.last) { CL.moves++; CL.last = col; }
-    if (CL.moves > CL.max) { CL.moves = CL.max; renderCL(); failLevel('moves'); return; }
-    if (!CL.t0) { CL.t0 = performance.now(); CL.timer = setInterval(updTime, 100); }
-    grid.setPointerCapture(e.pointerId); SFX.step(0); renderCL();
-  });
-  grid.addEventListener('pointermove', e => { if (CL && CL.drawing && !CL.locked && !CL.done) { const [r, c] = cellAt(e); stepTo(r, c); } });
-  const up = () => { if (!CL) return; CL.drawing = false; checkWin(); };
-  grid.addEventListener('pointerup', up); grid.addEventListener('pointercancel', up);
-  renderCL(); updTime();
-}
-function ownerAt(r, c) { for (let i = 0; i < CL.paths.length; i++) { const p = CL.paths[i]; if (p && p.some(q => q[0] === r && q[1] === c)) return i; } return -1; }
-function complete(i) {
-  const p = CL.paths[i]; if (!p || p.length < 2) return false;
-  const [a, b] = CL.L.pairs[i], s = p[0], e = p[p.length - 1];
-  const isA = q => q[0] === a[0] && q[1] === a[1], isB = q => q[0] === b[0] && q[1] === b[1];
-  return (isA(s) && isB(e)) || (isB(s) && isA(e));
-}
-function stepTo(r, c) {
-  let guard = 0;
-  while (guard++ < 16 && CL && !CL.done) {
-    const p = CL.paths[CL.cur]; if (!p) return; const h = p[p.length - 1];
-    if (h[0] === r && h[1] === c) return;
-    const dr = Math.sign(r - h[0]), dc = Math.sign(c - h[1]);
-    const first = Math.abs(r - h[0]) >= Math.abs(c - h[1]) ? [h[0] + dr, h[1]] : [h[0], h[1] + dc];
-    const second = first[0] !== h[0] ? [h[0], h[1] + dc] : [h[0] + dr, h[1]];
-    if (extend(first) || ((second[0] !== h[0] || second[1] !== h[1]) && extend(second))) { renderCL(); checkWin(); continue; }
-    return;
-  }
-}
-function extend([r, c]) {
-  const i = CL.cur, p = CL.paths[i], h = p[p.length - 1];
-  if (Math.abs(r - h[0]) + Math.abs(c - h[1]) !== 1) return false;
-  const j = p.findIndex(q => q[0] === r && q[1] === c);
-  if (j >= 0) { p.length = j + 1; SFX.tick(); return true; }
-  if (complete(i)) return false;
-  const d = CL.dots[key(r, c)];
-  if (d !== undefined && d !== i) return false;
-  const o = ownerAt(r, c);
-  if (o >= 0 && o !== i) { const q = CL.paths[o], m = q.findIndex(x => x[0] === r && x[1] === c); q.length = m; if (!q.length) CL.paths[o] = null; }
-  p.push([r, c]);
-  if (complete(i)) SFX.link(); else SFX.step(p.length);
-  return true;
-}
-function filledCount() { let n = 0; CL.paths.forEach(p => { if (p) n += p.length; }); return n; }
-function updTime() {
-  if (!CL || !clBody || !clBody.isConnected) return;
-  let sec = CL.done ? CL.sec : CL.t0 ? (performance.now() - CL.t0) / 1000 : 0;
-  const lim = timeLimit(CL.L);
-  if (!CL.done && sec > lim) {
-    if (hasMem('hourglass.mem') && !CL.rewound) { CL.rewound = true; CL.t0 = performance.now(); sec = 0; SFX.rewind(); toast('hourglass.mem', 'Time flowed back to zero.'); }
-    else { failLevel('time'); return; }
-  }
-  const t = $('#cl-time', clBody); if (t) t.textContent = sec.toFixed(1) + 's';
-  const th = thresholds(CL.L), tier = sec <= th[0] ? 'S' : sec <= th[1] ? 'A' : sec <= th[2] ? 'B' : 'C';
-  $$('#cl-tiers .tier[data-t]', clBody).forEach(e => e.classList.toggle('on', e.dataset.t === tier));
-}
-function renderCL() {
-  if (!CL || !clBody || !clBody.isConnected) return;
-  const N = CL.N, owner = {};
-  CL.paths.forEach((p, i) => p && p.forEach(q => owner[key(q[0], q[1])] = i));
-  $$('.ccell', clBody).forEach(el => {
-    const k = key(+el.dataset.r, +el.dataset.c), o = owner[k];
-    el.style.background = o !== undefined ? CL_COLORS[o] + '38' : '';
-    const dot = el.firstElementChild; if (dot) dot.classList.toggle('ok', complete(CL.dots[k]));
-  });
-  $('#cl-svg', clBody).innerHTML = CL.paths.map((p, i) => p && p.length > 1 ? `<polyline points="${p.map(q => `${q[1] + .5},${q[0] + .5}`).join(' ')}" fill="none" stroke="${CL_COLORS[i]}" stroke-width=".34" stroke-linecap="round" stroke-linejoin="round"/><polyline points="${p.map(q => `${q[1] + .5},${q[0] + .5}`).join(' ')}" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".08" stroke-linecap="round" stroke-linejoin="round"/>` : '').join('');
-  const conn = CL.paths.filter((p, i) => complete(i)).length, fill = Math.round(filledCount() / (N * N) * 100);
-  $('#cl-stat', clBody).innerHTML = `<span>linked <b>${conn}/${CL.k}</b></span><span>moves <b>${CL.moves}/${CL.max}</b></span><span>filled <b>${fill}%</b>${CL.L.fill ? ' (need 100%)' : ''}</span>`;
-}
-function resultCard(html) { const ov = document.createElement('div'); ov.className = 'cl-res'; ov.innerHTML = `<div class="card bevel">${html}</div>`; $('#cl-wrap', clBody).appendChild(ov); }
-function failLevel(why = 'time') {
-  if (!CL || CL.done) return;
-  CL.done = true; CL.failed = true; CL.drawing = false; clearInterval(CL.timer); SFX.buzz(); glitch('soft'); setFeedEmo('pain');
-  resultCard(`<h3>${why === 'moves' ? 'OUT OF MOVES' : 'TIME UP'}</h3><div class="big">×</div><table><tr><td>${why === 'moves' ? 'move limit ' + CL.max + ' reached' : 'limit ' + timeLimit(CL.L) + 's reached'}</td><td>+0</td></tr></table><p>No damage this board. ${esc(GIRLS[S.session.g].name)} is replying…</p>`);
-  setTimeout(() => onSolved({ total: 0, failed: true, why }), 700);
-}
-function checkWin() {
-  if (!CL || CL.done) return;
-  if (!CL.paths.every((p, i) => complete(i))) return;
-  if (CL.L.fill && filledCount() < CL.N * CL.N) { if (!CL.drawing && !CL.fillWarned) { CL.fillWarned = true; SFX.buzz(); toast('ColorLine.exe', 'All pairs linked, but there are empty tiles. Trix needs 100%.'); } return; }
-  if (!CL.t0) CL.t0 = performance.now();
-  CL.done = true; CL.drawing = false; CL.sec = (performance.now() - CL.t0) / 1000; clearInterval(CL.timer); updTime();
-  const res = scoreOf(CL.L, CL.sec, CL.moves); SFX.win(); setFeedEmo('wince');
-  const g = S.session.g, st = S.g[g];
-  resultCard(`<h3>BOARD CLEAR ✧</h3><div class="big">${res.tier}</div>
-    <table><tr><td>time ${res.sec.toFixed(1)}s → grade ${res.tier}</td><td>+${res.pts}</td></tr>
-    <tr><td>strokes ${res.moves}/${res.k}${res.mb === 100 ? ' · perfect' : res.mb ? ' · good' : ''}</td><td>+${res.mb}</td></tr>
-    ${res.mult > 1 ? `<tr><td>${esc(res.multFrom)} ×${res.mult}</td><td>×${res.mult}</td></tr>` : ''}${res.bonus ? `<tr><td>sketch_of_you.mem</td><td>+${Math.round(res.bonus * 100)}%</td></tr>` : ''}
-    <tr class="tot"><td>damage to Layer ${Math.min(st.layer + 1, 3)}</td><td>${res.total}</td></tr></table>
-    <p>${esc(GIRLS[g].name)} is replying in session chat…</p>`);
-  setTimeout(() => onSolved(res), 700);
 }
 
 /* =========================================================
@@ -1862,7 +1755,7 @@ async function bootOS() {
   applyAtmos(); refresh();
 }
 function day1Start() {
-  S.phase = 'day'; S.day = 1; S.half = 1; S.mins = 9 * 60 + 2; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = []; S.fixes = 0;
+  S.phase = 'day'; S.day = 1; S.mins = DAY_START; S.dayOver = false; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = [];
   S.night = { chats: 0, with: [], bossPending: false, bossDone: false };
   S.unread.boss = 1; S.flags.ping = 'yap';
   checkpoint('d1'); refresh();
@@ -1881,7 +1774,6 @@ async function main() {
     await bootOS();
     if (S.flags.ended) { refresh(); endGame(S.flags.endKind || 'proto'); return; }
     if (S.at === 'd1') { S.flags.briefStarted = false; S.logs.boss = []; day1Start(); await lockScreen('Welcome back'); return; }
-    if (S.at === 'pm') { S.phase = 'day'; await beginAfternoon(); return; }
     if (S.at === 'night') { S.phase = 'day'; S.session = null; await goNight(); return; }
     await beginMorning(); return;
   }

@@ -16,7 +16,6 @@ const CH_GIRLS = [
   { g: 'trix', name: 'Trix', tag: 'E-Girl', rules: 'rope boxes · sensor blocks (touch n sides) · light tiles' },
   { g: 'paige', name: 'Paige', tag: 'Goth', rules: 'dice: print the brief on the white tiles · arrow tiles · portals' },
   { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'arrow tiles · rocket boxes · locks · colours' },
-  { g: 'myne', name: 'Myne', tag: 'Tomboy', rules: 'reverse twins · no locking · two-colour switches · paint · rope boxes' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
 // what each tutorial panel teaches (shown as a NEW tag)
@@ -101,13 +100,14 @@ async function startPanel(id) {
   if (CH.opt.intro) await magnifierIntro(p);
   openProjector(p);
 }
-function magnifierIntro(p) {
+function magnifierIntro(p, o = {}) {
   return new Promise(res => {
     const g = p.girl, A = ART[g] || null;
-    openWin('feedcam', { title: `Live feed · ${GIRLS[g].id}`, icon: 'feed', w: 260, h: 330, x: 30, y: 30, render: b => {
+    if (!o.noCam) openWin('feedcam', { title: `Live feed · ${GIRLS[g].id}`, icon: 'feed', w: 260, h: 330, x: 30, y: 30, render: b => {
       b.innerHTML = `<div class="cam"><div class="cam-room">${A ? `<img src="${A.body}" alt="${GIRLS[g].name} on the chair">` : `<div class="cam-sil" aria-label="${GIRLS[g].name} on the chair"></div>`}<div class="lens" id="lens"></div></div><div class="cam-cap">● REC · room 0</div></div>`;
     } });
-    openWin('magnifier', { title: 'Magnifier.exe · neural scan', icon: 'img', w: 560, h: 470, x: 300, y: 24, render: b => { b.innerHTML = magDashHTML(p); } });
+    const dk = $('#desktop');
+    openWin('magnifier', { title: 'Magnifier.exe · neural scan', icon: 'img', w: 560, h: 470, x: o.noCam ? Math.max(8, (dk.clientWidth - 560) / 2) : 300, y: 24, render: b => { b.innerHTML = magDashHTML(p); } });
     const stop = magDashRun(p);
     const f = $('#magf'), go = $('#mag-go'), bar = $('#magbar'), lens = $('#lens');
     requestAnimationFrame(() => lens && lens.classList.add('on'));
@@ -229,6 +229,15 @@ function bgmMute() { if (BGM.el && BGM.want) bgmRun(); }
 
 /* ---------------- projector: the panel ---------------- */
 let PJ = null;
+/* PJ_STORY: set by the story map (src/world.js) while one of her memories is projected inside the Fix-it window.
+   { g, spend(), locked(), win(p), back() } */
+let PJ_STORY = null;
+function pjDispose() { if (!PJ) return; clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); if (PJ.die3) PJ.die3.dispose(); PJ = null; }
+function pjNew(p) {
+  if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
+  PJ = { p, st: null, bs: p.boxes ? PanelEngine.boxStart(p) : null, bsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null, view: null };
+}
+const pjMem = k => PJ_STORY ? hasMem(k + '.mem') : CH.opt.mem[k];
 function openProjector(p) {
   if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
   const W = WINS.projector;
@@ -264,8 +273,8 @@ function renderProjector(b, p, idx, nL) {
         <div class="pj-bar">
           <button class="btn" id="pj-back">◂ Panels</button>
           <button class="btn" id="pj-reset">Reset</button>
-          ${CH.opt.mem.tracing_paper ? `<button class="btn" id="pj-hint" title="${esc(CH_MEM.tracing_paper.desc)}">${icon('thread')} trace</button>` : ''}
-          ${CH.opt.mem.queen_piece ? `<span class="pj-tok" id="pj-erase" title="${esc(CH_MEM.queen_piece.desc)}">${icon('queen')} ready</span>` : ''}
+          ${pjMem('tracing_paper') ? `<button class="btn" id="pj-hint" title="${esc(CH_MEM.tracing_paper.desc)}">${icon('thread')} trace</button>` : ''}
+          ${pjMem('queen_piece') ? `<span class="pj-tok" id="pj-erase" title="${esc(CH_MEM.queen_piece.desc)}">${icon('queen')} ready</span>` : ''}
           <span class="sp"></span>
           <button class="btn" id="pj-sol" aria-pressed="false">Solution</button>
           <button class="btn primary" id="pj-next" hidden>Next ▸</button>
@@ -292,7 +301,8 @@ function renderProjector(b, p, idx, nL) {
         }
       });
       document.removeEventListener('keydown', pjKey); document.addEventListener('keydown', pjKey);
-      mountStage(); bgmOn();
+      if (PJ_STORY) storyProjectorChrome(b, p);
+      mountStage(); if (!PJ_STORY) bgmOn();
       PJ.fpsTimer = setInterval(() => { const f = $('#pj-fps'); if (f && PJ) f.textContent = PJ.view ? (PJ.view.fps() ? `WebGL · ${PJ.view.fps()} fps` : 'WebGL') : '2D view'; }, 1000);
     }
 }
@@ -362,15 +372,16 @@ function mountStage() {
 async function pjSubmit() {
   const p = PJ.p, r = p.boxes ? { ok: PanelEngine.boxWon(p, PJ.bs), bad: [{ kind: 'path' }] } : PanelEngine.validate(p, pjPath()); PJ.tries++;
   let ok = r.ok;
-  if (!ok && CH.opt.mem.queen_piece && !PJ.eraseUsed && r.bad.length === 1 && r.bad[0].kind !== 'path' && r.bad[0].kind !== 'moves') {
+  if (!ok && pjMem('queen_piece') && !PJ.eraseUsed && r.bad.length === 1 && r.bad[0].kind !== 'path' && r.bad[0].kind !== 'moves') {
     ok = true; PJ.eraseUsed = true; PJ.erased = r.bad[0].kind + ':' + r.bad[0].i;
     $('#pj-msg').textContent = 'The queen took one rule off the board.';
   }
   if (ok) {
     PJ.state = 'win'; PJ.hint = null; drawPJ(); SFX.win(); if (PJ.view) { const v = PJ.view; setTimeout(() => { if (PJ && PJ.view === v && PJ.state === 'win' && !PJ.solOn) v.winFx(); }, 380); setTimeout(() => { if (PJ && PJ.view === v && PJ.state === 'win') pj3Flash('ERASED', 'win'); }, 1300); } else setTimeout(() => { if (PJ && PJ.state === 'win') pj3Flash('ERASED', 'win'); }, 300);
+    $('#pj-msg').textContent = '';
+    if (PJ_STORY) { PJ_STORY.win(p); return; }
     const t = performance.now() - PJ.t0, prev = CH.done[p.id];
     CH.done[p.id] = { t: prev ? Math.min(prev.t, t) : t, tries: prev ? Math.min(prev.tries, PJ.tries) : PJ.tries, peek: prev ? prev.peek && PJ.peeked : PJ.peeked }; chSave();
-    $('#pj-msg').textContent = '';
     $('#pj-next').hidden = false;
     UPD.forEach(f => f());
     afterWin(p);

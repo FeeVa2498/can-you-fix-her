@@ -1116,6 +1116,40 @@ line.ed-hov{stroke-width:.14}
 .g-myne .pj-stage{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.5),transparent 70%),repeating-radial-gradient(circle at 50% 50%,#d6f5e6 0 8px,#bdebd5 8px 12px,#ecfbf3 12px 20px)}
 @media (max-width:720px){.chm{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}.chm-girls{flex-direction:row;overflow-x:auto}.chm-girl small{display:none}}
 @media (prefers-reduced-motion:reduce){.bad,.mag-scan{animation:none}.lens{transition:none}}
+
+/* ---------- story map (Fix-it) ---------- */
+.ow{display:flex;flex-direction:column;height:100%;gap:6px;background:#0d0714;margin:-6px;padding:6px;color:#f3e8ff}
+.ow-top{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;flex-wrap:wrap}
+.ow-top .sp{flex:1}
+.ow-keys{display:flex;align-items:center;gap:6px;padding:3px 8px;border:2px solid var(--acc);border-radius:6px;background:rgba(0,0,0,.4)}
+.ow-keys b{font-size:15px;color:var(--acc)}.ow-keys small{opacity:.75}
+.kic{width:18px;height:18px}
+.ow-reg{opacity:.8}
+.ow-stam{position:relative;width:180px;height:20px;border:2px solid #f3e8ff;border-radius:5px;background:#24122e;overflow:hidden}
+.ow-stam i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#7be3a4,#ffd86e);transition:width .25s}
+.ow-stam.low i{background:#ff4d5e;animation:tutpulse .6s steps(2) infinite}
+.ow-stam b{position:relative;display:block;text-align:center;font-size:11px;line-height:16px;color:#1b0d22;mix-blend-mode:normal;text-shadow:0 0 2px #fff}
+.ow-main{flex:1;min-height:0;position:relative;display:flex;flex-direction:column}
+.ow-main>.pj{flex:1;min-height:0}
+.ow-view{position:relative;flex:1;min-height:0;border:2px solid #3a2346;border-radius:6px;overflow:hidden;background:#0d0714}
+.ow-view canvas#ow-cv{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.ow-mini{position:absolute;right:8px;top:8px;border:2px solid var(--acc);border-radius:4px;image-rendering:pixelated;width:auto;height:auto;max-width:45%;}
+.ow-card{position:absolute;left:10px;bottom:10px;padding:6px 10px;border:2px solid var(--acc);border-radius:6px;background:rgba(13,7,20,.9);font-family:var(--mono);font-size:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:60%}
+.ow-card .new{color:#ffd86e}.ow-card .got{color:#7be3a4}.ow-card .go{color:var(--acc);font-weight:bold}
+.ow-msg{position:absolute;left:50%;top:14px;transform:translateX(-50%);font-family:var(--mono);font-size:14px;font-weight:bold;color:#fff;text-shadow:0 0 8px var(--acc),2px 2px 0 #000;opacity:0;pointer-events:none;white-space:nowrap}
+.ow-msg.on{animation:owmsg 2.2s ease-out forwards}
+@keyframes owmsg{0%{opacity:0;transform:translate(-50%,6px)}10%{opacity:1;transform:translate(-50%,0)}75%{opacity:1}100%{opacity:0}}
+.ow-help{font-family:var(--mono);font-size:11px;opacity:.6;text-align:center}
+.ow-view.dead,.pj-vp.dead{filter:grayscale(.85) brightness(.6)}
+/* the company says no */
+.warnbox{display:flex;gap:12px;padding:8px;font-size:13px;line-height:1.5}
+.warnbox p{margin:4px 0}.warnbox .sig{color:var(--ink-soft);font-size:12px}
+.wb-ic{flex:none;width:36px;height:36px;border-radius:50%;background:#ffd23f;border:3px solid #6b4a1e;color:#6b4a1e;font:bold 22px/30px var(--mono);text-align:center}
+.warnfoot{display:flex;justify-content:flex-end;padding:0 8px 8px}
+/* out of stamina: one hard jolt */
+.jolt #desktop{animation:jolt .65s cubic-bezier(.3,.7,.4,1)}
+@keyframes jolt{0%{transform:none;filter:none}8%{transform:translate(-14px,6px) scale(1.01);filter:brightness(2) contrast(1.6)}18%{transform:translate(12px,-5px)}30%{transform:translate(-8px,4px);filter:hue-rotate(40deg)}45%{transform:translate(5px,-2px)}65%{transform:translate(-2px,1px);filter:none}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.jolt #desktop{animation:none}}
 </style>
 <div id="app">
   <main id="desktop" aria-label="DIVE OS desktop">
