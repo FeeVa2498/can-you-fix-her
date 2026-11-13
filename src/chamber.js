@@ -237,7 +237,9 @@ function pjNew(p) {
   if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
   PJ = { p, st: null, bs: p.boxes ? PanelEngine.boxStart(p) : null, bsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null, view: null };
 }
-const pjMem = k => PJ_STORY ? k === 'tracing_paper' && hasMem('tracing_paper.mem') : CH.opt.mem[k];
+const pjMem = k => PJ_STORY ? false : CH.opt.mem[k];
+// story: Undo is locked until Prim's tracing paper (her layer-2 memento). The test chamber has everything.
+const pjCanUndo = () => !PJ_STORY || hasMem('tracing_paper.mem');
 function openProjector(p) {
   if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
   const W = WINS.projector;
@@ -254,13 +256,13 @@ function renderProjector(b, p, idx, nL) {
       b.innerHTML = `<div class="pj pj3 g-${p.girl}">
         <div class="pj-menu" role="menubar">
           <div class="mn"><button class="mn-b">File</button><div class="mn-d">
-            <button data-m="undo"><span>Undo move</span><kbd>Z</kbd></button><button data-m="reset"><span>Reset panel</span><kbd>R</kbd></button><hr>
+            ${pjCanUndo() ? '<button data-m="undo"><span>Undo move</span><kbd>Z</kbd></button>' : ''}<button data-m="reset"><span>Reset panel</span><kbd>R</kbd></button><hr>
             <button data-m="edit"><span>Edit this level</span><kbd></kbd></button><button data-m="back"><span>Back to panels</span><kbd></kbd></button></div></div>
           <div class="mn"><button class="mn-b">View</button><div class="mn-d">
             <button data-m="3d"><span>${CH.opt.view3d ? '☑' : '☐'} 3D projection</span><kbd></kbd></button>
             <button data-m="retro"><span>${CH.opt.retro ? '☑' : '☐'} Chunky pixels (98 mode)</span><kbd></kbd></button></div></div>
           <div class="mn"><button class="mn-b">Help</button><div class="mn-d"><div class="mn-help">
-            <b>W A S D</b> or arrows: move (W goes away from you)<br><b>Z</b> undo · <b>R</b> reset${p.boxes ? '' : ' · <b>Enter</b> finish · or drag the little box'}<br>${p.boxes ? 'Every key moves every box. Fill all goals at the same time.' : 'Reach the gold goal tile.'}${(p.plates || []).length ? '<br>Round button: while something stands on it, gates of its colour open (striped gates close).' : ''}</div></div></div>
+            <b>W A S D</b> or arrows: move (W goes away from you)<br>${pjCanUndo() ? '<b>Z</b> undo · ' : ''}<b>R</b> reset${p.boxes ? '' : ' · <b>Enter</b> finish · or drag the little box'}<br>${p.boxes ? 'Every key moves every box. Fill all goals at the same time.' : 'Reach the gold goal tile.'}${(p.plates || []).length ? '<br>Round button: while something stands on it, gates of its colour open (striped gates close).' : ''}</div></div></div>
           <span class="pj-id">${p.id}</span>
         </div>
         <div class="pj-stage pj-vp" id="pj-vp"></div>

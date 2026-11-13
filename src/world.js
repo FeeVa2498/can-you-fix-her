@@ -174,7 +174,7 @@ function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-ms
 function owSpend(kind = 'move') {
   if (S.phase !== 'day' || S.dayOver || reckoning()) return;
   // mementos: hourglass (undo is free), dog tag (every other step on the map is free), d20 (one in five is free)
-  let free = kind === 'undo' && hasMem('hourglass.mem');
+  let free = (kind === 'undo' || kind === 'reset') && hasMem('hourglass.mem');
   if (!free && kind === 'map' && hasMem('dog_tag.mem')) { OW.dog = (OW.dog || 0) + 1; free = OW.dog % 2 === 0; }
   if (!free && hasMem('lucky_d20.mem') && Math.random() < .2) { free = true; owSay('🎲 lucky · free move'); }
   if (!free) S.mins += 1;

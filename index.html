@@ -2340,15 +2340,15 @@ function startNightChat(g) {
 /* ---------------- mail, apps, mementos ---------------- */
 // one reward per gate: layer 1 → her software, layer 2 → her memento (it does something), layer 3 → a letter. All arrive at night.
 const MEMENTOS = {   // every memento does something in her memories; layer 2 gifts only
-  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'In a memory: lay it over the board and the next few moves show through (once per memory).' },
-  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Undo costs no time.' },
+  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): lift the paper and the last line comes off.' },
+  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Reset (and Undo, once you have it) costs no time.' },
   'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five costs no time. Roll with it.' },
   'dog_tag.mem': { ic: 'tag', from: 'Vel', desc: 'Walking on a map costs half: every other step is free.' },
 };
 const REWARD = {
   prim: {
     1: { subject: 'something to listen to', body: 'counsellor,\n\nit\'s so quiet in your room. i can hear your computer humming from here.\nthis is the little player i used when i traced. it plays by itself if you let it.\n\n— prim', atts: [{ kind: 'app', name: 'MusicBox.exe' }] },
-    2: { subject: 'something i traced', body: 'i kept the tracing paper. lay it over anything and the lines just appear.\nmaybe it helps you find your way in my head.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
+    2: { subject: 'something i traced', body: 'i kept the tracing paper. if a line goes wrong you just lift it off and start that bit again.\nyou don\'t have to get everything right the first time. i never do.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
     3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you once. not traced. drew. it was bad. i tore it up.\nmaybe i\'ll draw you again. maybe.\n\n— p.', atts: [] },
   },
   trix: {
@@ -2752,7 +2752,7 @@ const TUTORIAL = [
   { t: 'That little box is you. W A S D or the arrow keys. Step on a glowing tile and press Enter to dive into that memory.', hl: '.ow-view' },
   { t: 'Clear a memory and you keep its key. Her colour, her keys.', hl: '.ow-keys' },
   { t: 'Each layer of her is a big locked gate. It shows how many keys you have and how many it wants. You don\'t need every memory, just enough.', hl: '.ow-keys' },
-  { t: 'Every move costs her energy. On the map and inside the memories, undo included. That bar is how much she has left today.', hl: '.ow-stam' },
+  { t: 'Every move costs her energy. On the map and inside the memories, resets included. And no take-backs in there, not yet. That bar is how much she has left today.', hl: '.ow-stam' },
   { t: 'When she runs out, she runs out. Then it\'s Start ▸ Shut down and we call it a day. Like a siesta in Madrid, but longer.', hl: '.ow-stam' },
   { t: 'And that little map in the corner is the bit you\'ve seen so far. Go explore. Supportively.', hl: '.ow-mini' },
 ];
@@ -3792,7 +3792,7 @@ function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-ms
 function owSpend(kind = 'move') {
   if (S.phase !== 'day' || S.dayOver || reckoning()) return;
   // mementos: hourglass (undo is free), dog tag (every other step on the map is free), d20 (one in five is free)
-  let free = kind === 'undo' && hasMem('hourglass.mem');
+  let free = (kind === 'undo' || kind === 'reset') && hasMem('hourglass.mem');
   if (!free && kind === 'map' && hasMem('dog_tag.mem')) { OW.dog = (OW.dog || 0) + 1; free = OW.dog % 2 === 0; }
   if (!free && hasMem('lucky_d20.mem') && Math.random() < .2) { free = true; owSay('🎲 lucky · free move'); }
   if (!free) S.mins += 1;
@@ -4626,7 +4626,9 @@ function pjNew(p) {
   if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
   PJ = { p, st: null, bs: p.boxes ? PanelEngine.boxStart(p) : null, bsHist: [], drawing: false, solOn: false, solK: 0, peeked: false, t0: performance.now(), tries: 0, hint: null, hintUsed: false, eraseUsed: false, state: 'idle', bad: [], erased: null, view: null };
 }
-const pjMem = k => PJ_STORY ? k === 'tracing_paper' && hasMem('tracing_paper.mem') : CH.opt.mem[k];
+const pjMem = k => PJ_STORY ? false : CH.opt.mem[k];
+// story: Undo is locked until Prim's tracing paper (her layer-2 memento). The test chamber has everything.
+const pjCanUndo = () => !PJ_STORY || hasMem('tracing_paper.mem');
 function openProjector(p) {
   if (PJ) { clearInterval(PJ.solTimer); clearInterval(PJ.fpsTimer); clearTimeout(PJ.advT); if (PJ.view) PJ.view.dispose(); }
   const W = WINS.projector;
@@ -4643,13 +4645,13 @@ function renderProjector(b, p, idx, nL) {
       b.innerHTML = `<div class="pj pj3 g-${p.girl}">
         <div class="pj-menu" role="menubar">
           <div class="mn"><button class="mn-b">File</button><div class="mn-d">
-            <button data-m="undo"><span>Undo move</span><kbd>Z</kbd></button><button data-m="reset"><span>Reset panel</span><kbd>R</kbd></button><hr>
+            ${pjCanUndo() ? '<button data-m="undo"><span>Undo move</span><kbd>Z</kbd></button>' : ''}<button data-m="reset"><span>Reset panel</span><kbd>R</kbd></button><hr>
             <button data-m="edit"><span>Edit this level</span><kbd></kbd></button><button data-m="back"><span>Back to panels</span><kbd></kbd></button></div></div>
           <div class="mn"><button class="mn-b">View</button><div class="mn-d">
             <button data-m="3d"><span>${CH.opt.view3d ? '☑' : '☐'} 3D projection</span><kbd></kbd></button>
             <button data-m="retro"><span>${CH.opt.retro ? '☑' : '☐'} Chunky pixels (98 mode)</span><kbd></kbd></button></div></div>
           <div class="mn"><button class="mn-b">Help</button><div class="mn-d"><div class="mn-help">
-            <b>W A S D</b> or arrows: move (W goes away from you)<br><b>Z</b> undo · <b>R</b> reset${p.boxes ? '' : ' · <b>Enter</b> finish · or drag the little box'}<br>${p.boxes ? 'Every key moves every box. Fill all goals at the same time.' : 'Reach the gold goal tile.'}${(p.plates || []).length ? '<br>Round button: while something stands on it, gates of its colour open (striped gates close).' : ''}</div></div></div>
+            <b>W A S D</b> or arrows: move (W goes away from you)<br>${pjCanUndo() ? '<b>Z</b> undo · ' : ''}<b>R</b> reset${p.boxes ? '' : ' · <b>Enter</b> finish · or drag the little box'}<br>${p.boxes ? 'Every key moves every box. Fill all goals at the same time.' : 'Reach the gold goal tile.'}${(p.plates || []).length ? '<br>Round button: while something stands on it, gates of its colour open (striped gates close).' : ''}</div></div></div>
           <span class="pj-id">${p.id}</span>
         </div>
         <div class="pj-stage pj-vp" id="pj-vp"></div>
@@ -5201,7 +5203,7 @@ function pjKey(e) {
   // story: every input costs her stamina (moves, bumps, undo, reset); none once she's out
   if (PJ_STORY && (D || k === 'z' || k === 'Backspace' || k === 'r')) { if (PJ_STORY.locked()) { e.preventDefault(); SFX.buzz(); return; } }
   if (D) { e.preventDefault(); pjMove(D); drawPJ(); if (PJ_STORY) PJ_STORY.spend('move'); }
-  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); pjUndo(); drawPJ(); if (PJ_STORY) PJ_STORY.spend('undo'); }
+  else if (k === 'z' || k === 'Backspace') { e.preventDefault(); if (!pjCanUndo()) { SFX.buzz(); $('#pj-msg').textContent = 'Undo is locked. Someone here might lend you a way to take a move back.'; return; } pjUndo(); drawPJ(); if (PJ_STORY) PJ_STORY.spend('undo'); }
   else if (k === 'r') { e.preventDefault(); pjReset(); if (PJ_STORY) PJ_STORY.spend('reset'); }
   else if (k === 'Escape') { e.preventDefault(); if (PJ_STORY) PJ_STORY.back(); else pjReset(); }
   else if (k === 'Enter') {

@@ -1078,15 +1078,15 @@ function startNightChat(g) {
 /* ---------------- mail, apps, mementos ---------------- */
 // one reward per gate: layer 1 → her software, layer 2 → her memento (it does something), layer 3 → a letter. All arrive at night.
 const MEMENTOS = {   // every memento does something in her memories; layer 2 gifts only
-  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'In a memory: lay it over the board and the next few moves show through (once per memory).' },
-  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Undo costs no time.' },
+  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): lift the paper and the last line comes off.' },
+  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Reset (and Undo, once you have it) costs no time.' },
   'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five costs no time. Roll with it.' },
   'dog_tag.mem': { ic: 'tag', from: 'Vel', desc: 'Walking on a map costs half: every other step is free.' },
 };
 const REWARD = {
   prim: {
     1: { subject: 'something to listen to', body: 'counsellor,\n\nit\'s so quiet in your room. i can hear your computer humming from here.\nthis is the little player i used when i traced. it plays by itself if you let it.\n\n— prim', atts: [{ kind: 'app', name: 'MusicBox.exe' }] },
-    2: { subject: 'something i traced', body: 'i kept the tracing paper. lay it over anything and the lines just appear.\nmaybe it helps you find your way in my head.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
+    2: { subject: 'something i traced', body: 'i kept the tracing paper. if a line goes wrong you just lift it off and start that bit again.\nyou don\'t have to get everything right the first time. i never do.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
     3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you once. not traced. drew. it was bad. i tore it up.\nmaybe i\'ll draw you again. maybe.\n\n— p.', atts: [] },
   },
   trix: {
@@ -1490,7 +1490,7 @@ const TUTORIAL = [
   { t: 'That little box is you. W A S D or the arrow keys. Step on a glowing tile and press Enter to dive into that memory.', hl: '.ow-view' },
   { t: 'Clear a memory and you keep its key. Her colour, her keys.', hl: '.ow-keys' },
   { t: 'Each layer of her is a big locked gate. It shows how many keys you have and how many it wants. You don\'t need every memory, just enough.', hl: '.ow-keys' },
-  { t: 'Every move costs her energy. On the map and inside the memories, undo included. That bar is how much she has left today.', hl: '.ow-stam' },
+  { t: 'Every move costs her energy. On the map and inside the memories, resets included. And no take-backs in there, not yet. That bar is how much she has left today.', hl: '.ow-stam' },
   { t: 'When she runs out, she runs out. Then it\'s Start ▸ Shut down and we call it a day. Like a siesta in Madrid, but longer.', hl: '.ow-stam' },
   { t: 'And that little map in the corner is the bit you\'ve seen so far. Go explore. Supportively.', hl: '.ow-mini' },
 ];
