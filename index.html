@@ -363,6 +363,8 @@ body.nocrt #crt{display:none}
 .pill:disabled{border-color:var(--line-soft);color:var(--line-soft);cursor:not-allowed;text-decoration:line-through;background:var(--lav-hi)}
 .pill:focus-visible,.sw:focus-visible{outline:2px dashed var(--pink-deep);outline-offset:2px}
 .sw{width:26px;height:26px;border:2px solid var(--line);border-radius:8px;cursor:pointer;padding:0}
+.sws{gap:4px!important}.sws .sw{width:22px;height:22px;border-radius:6px}.sw[aria-pressed=true]{outline:3px solid var(--pink-deep);outline-offset:1px}
+.pick{align-items:center;gap:8px!important}.pick .arr{min-width:34px;padding:2px 8px}.pick .pk{min-width:70px;text-align:center;font-family:var(--mono);font-size:14px}
 .sw[aria-pressed=true]{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--pink-deep)}
 #su-name{font-family:var(--ui);font-size:14px;padding:4px 10px;border:2px solid var(--line);border-radius:10px;width:min(220px,100%);background:var(--paper);color:var(--ink)}
 .su-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:6px 6px 2px;border-top:2px dotted var(--line-soft);margin-top:6px}
@@ -1462,12 +1464,15 @@ const LOCK_SVG = '<svg viewBox="0 0 12 14" aria-hidden="true"><rect x="1" y="6" 
 /* =========================================================
    PLAYER AVATAR
    ========================================================= */
-const HAIRC = [['Ink', '#3a2440'], ['Cocoa', '#7a3b2e'], ['Honey', '#e3b35c'], ['Sakura', '#f4a2c8'], ['Sky', '#8fb8ff'], ['Snow', '#efeaf6']];
-const EYEC = [['Violet', '#6a4ad6'], ['Mint', '#2f9e6e'], ['Ruby', '#d0405a'], ['Ocean', '#3a7bd5']];
-const SKIN = [['Light', '#ffe4d6'], ['Warm', '#f2c4a0'], ['Deep', '#b9805c']];
-const HAIRS = ['Short', 'Messy', 'Long', 'Ponytail'];
-const OUTFITS = [['Hoodie', '#ff8cc6'], ['Cardigan', '#b693ef'], ['Shirt & tie', '#ffffff'], ['Sweater', '#8fdcf7']];
-const ACCS = ['None', 'Glasses', 'Bandage', 'Hairclip'];
+// one palette for hair, eyes and clothes: every colour is available everywhere
+const PALETTE = [['Ink', '#2a1a33'], ['Charcoal', '#4a4458'], ['Cocoa', '#7a3b2e'], ['Chestnut', '#a0522d'], ['Honey', '#e3b35c'], ['Blonde', '#f3dc8a'], ['Peach', '#ffb38a'], ['Sakura', '#f4a2c8'], ['Rose', '#ff5fa8'], ['Red', '#d0303c'], ['Wine', '#7a1f3d'], ['Violet', '#6a4ad6'], ['Lilac', '#b693ef'], ['Sky', '#8fb8ff'], ['Ocean', '#3a7bd5'], ['Teal', '#2fa3a0'], ['Mint', '#5fcf96'], ['Forest', '#2f7a4a'], ['Silver', '#c9c6d4'], ['Snow', '#f4f0f8']];
+const HAIRC = PALETTE, EYEC = PALETTE;
+const SKIN = [['Porcelain', '#fff0e8'], ['Light', '#ffe4d6'], ['Warm', '#f2c4a0'], ['Tan', '#d9a07a'], ['Deep', '#b9805c'], ['Dark', '#7d5038']];
+// hair: 0 short · 1 messy · 2 long · 3 ponytail · 4 drill curls · 5 long + side locks · 6 twin tails · 7 bob · 8 space buns · 9 side braid
+const HAIRS = ['Short', 'Messy', 'Long', 'Ponytail', 'Drill curls', 'Side locks', 'Twin tails', 'Bob', 'Space buns', 'Side braid'];
+const OUTFITS = [['Hoodie', 7], ['Cardigan', 12], ['Shirt & tie', 19], ['Sweater', 13], ['Sailor uniform', 19], ['Lab coat', 13], ['Turtleneck', 1], ['Strap dress', 11], ['Zip jacket', 10]];   // [name, default colour]
+const ACCS = ['None', 'Glasses', 'Bandage', 'Hairclip', 'Headphones', 'Choker', 'Cat ears', 'Ribbon bow', 'Star earrings'];
+const ACC_KEY = [null, 'glasses', 'bandage', 'hairclip', 'headphones', 'choker', 'catears', 'bow', 'earrings'];
 const shade = h => { const n = parseInt(h.slice(1), 16), f = .72; return '#' + [n >> 16, (n >> 8) & 255, n & 255].map(v => Math.round(v * f).toString(16).padStart(2, '0')).join(''); };
 function drawFace(R, ln, ec, mo, emo, blink) {
   const eye = x0 => { R(ln, x0, 14, 3, 1); R(ec, x0, 15, 3, 2); R('#fff', x0, 15, 1, 1); };
@@ -1487,8 +1492,13 @@ function drawFace(R, ln, ec, mo, emo, blink) {
 function drawAvatar(cv, p, blink, emo = 'neutral') {
   const x = cv.getContext('2d'); x.clearRect(0, 0, 32, 32);
   const R = (c, a, b, w, h) => { x.fillStyle = c; x.fillRect(a, b, w, h); };
-  const hc = p.hcol || HAIRC[p.hc][1], sk = p.scol || SKIN[p.skin][1], ec = p.ecol || EYEC[p.eye][1], oc = p.ocol || OUTFITS[p.outfit][1], ln = '#4a2d6e', mo = '#c2507a', dk = shade(hc);
-  const ex = p.extra || [], has = k => ex.includes(k);
+  const hc = p.hcol || HAIRC[p.hc][1], sk = p.scol || SKIN[p.skin][1], ec = p.ecol || EYEC[p.eye][1], oc = p.ocol || PALETTE[p.oc ?? OUTFITS[p.outfit][1]][1], ln = '#4a2d6e', mo = '#c2507a', dk = shade(hc);
+  const ex = p.extra || [], has = k => ex.includes(k) || ACC_KEY[p.acc] === k;
+  // hair behind the head
+  if (p.hair === 6) { R(hc, 3, 9, 5, 14); R(hc, 24, 9, 5, 14); R(dk, 4, 20, 3, 3); R(dk, 25, 20, 3, 3); R('#ff5fa8', 6, 9, 2, 2); R('#ff5fa8', 24, 9, 2, 2); }
+  if (p.hair === 7) { R(hc, 8, 10, 16, 11); R(dk, 8, 20, 16, 1); }
+  if (p.hair === 8) { R(hc, 6, 3, 6, 6); R(hc, 20, 3, 6, 6); R(dk, 7, 7, 4, 1); R(dk, 21, 7, 4, 1); }
+  if (p.hair === 9) { R(hc, 21, 12, 3, 5); for (let i = 0; i < 4; i++) { R(hc, 22 + (i % 2), 17 + i * 3, 3, 3); R(dk, 22 + (i % 2), 19 + i * 3, 3, 1); } R('#ff8cc6', 22, 29, 3, 1); }
   if (p.hair === 2 || p.hair === 5) R(hc, 8, 10, 16, 17);
   if (p.hair === 5) { R(hc, 6, 14, 3, 13); R(hc, 23, 14, 3, 13); R(dk, 7, 20, 1, 6); R(dk, 24, 18, 1, 7); }
   if (p.hair === 3) { R(hc, 22, 8, 4, 12); R(hc, 23, 19, 3, 4); R('#ff8cc6', 22, 9, 2, 2); }
@@ -1501,7 +1511,12 @@ function drawAvatar(cv, p, blink, emo = 'neutral') {
     if (p.outfit === 0) { R('#fff', 13, 25, 1, 4); R('#fff', 18, 25, 1, 4); R('#e2458f', 10, 29, 12, 1); }
     if (p.outfit === 1) { R('#fff', 14, 24, 4, 8); R('#e9dcfb', 13, 25, 1, 7); R('#e9dcfb', 18, 25, 1, 7); }
     if (p.outfit === 2) { R('#ff5fa8', 15, 25, 2, 6); R('#e2458f', 15, 25, 2, 1); R('#d8c6f4', 7, 31, 18, 1); }
-    if (p.outfit === 3) { R('#5ec8ee', 7, 28, 18, 2); R(sk, 14, 24, 4, 1); }
+    if (p.outfit === 3) { R(shade(oc), 7, 28, 18, 2); R(sk, 14, 24, 4, 1); }
+    if (p.outfit === 4) { R('#fff', 8, 24, 16, 3); R('#2a3a7a', 8, 26, 16, 1); R('#d0303c', 14, 27, 4, 2); R('#d0303c', 15, 29, 2, 2); }
+    if (p.outfit === 5) { R('#f4f4f8', 7, 25, 6, 7); R('#f4f4f8', 19, 25, 6, 7); R('#d8d8e4', 12, 25, 1, 7); R('#d8d8e4', 19, 25, 1, 7); R('#8fb8ff', 9, 29, 2, 2); }
+    if (p.outfit === 6) { R(oc, 12, 21, 8, 3); R(shade(oc), 12, 23, 8, 1); R(shade(oc), 9, 28, 1, 4); R(shade(oc), 22, 28, 1, 4); }
+    if (p.outfit === 7) { R(sk, 7, 24, 18, 2); R(sk, 9, 26, 3, 1); R(sk, 20, 26, 3, 1); R(shade(oc), 11, 24, 1, 3); R(shade(oc), 20, 24, 1, 3); R(shade(oc), 7, 30, 18, 1); }
+    if (p.outfit === 8) { R(shade(oc), 7, 25, 3, 7); R(shade(oc), 22, 25, 3, 7); R('#d8d8e4', 16, 25, 1, 7); R('#fff', 13, 24, 6, 1); }
   }
   if (has('choker')) { R('#2a1a33', 13, 22, 6, 1); R('#ff8cc6', 15, 23, 2, 1); }
   R(sk, 10, 10, 12, 11); R(sk, 11, 21, 10, 1); R(sk, 9, 14, 1, 3); R(sk, 22, 14, 1, 3);
@@ -1515,6 +1530,9 @@ function drawAvatar(cv, p, blink, emo = 'neutral') {
   if (p.acc === 1 || has('glasses')) { R(ln, 11, 13, 5, 1); R(ln, 11, 17, 5, 1); R(ln, 11, 13, 1, 5); R(ln, 15, 13, 1, 5); R(ln, 16, 13, 5, 1); R(ln, 16, 17, 5, 1); R(ln, 20, 13, 1, 5); R('rgba(255,255,255,.55)', 12, 14, 1, 1); R('rgba(255,255,255,.55)', 17, 14, 1, 1); }
   if (p.acc === 2) { R('#fff', 18, 18, 3, 2); R('#ffb3c7', 19, 18, 1, 2); }
   if (p.acc === 3) { R('#ffd86e', 18, 8, 3, 1); R('#ffd86e', 19, 7, 1, 3); }
+  if (has('catears')) { R(hc, 9, 3, 4, 4); R(hc, 19, 3, 4, 4); R(hc, 10, 2, 2, 1); R(hc, 20, 2, 2, 1); R('#ffb3d9', 10, 4, 2, 2); R('#ffb3d9', 20, 4, 2, 2); }
+  if (has('bow')) { R('#ff5fa8', 11, 4, 4, 3); R('#ff5fa8', 17, 4, 4, 3); R('#e2458f', 15, 5, 2, 2); }
+  if (has('earrings')) { R('#ffd86e', 8, 17, 1, 1); R('#ffd86e', 7, 18, 3, 1); R('#ffd86e', 8, 19, 1, 1); R('#ffd86e', 23, 17, 1, 1); R('#ffd86e', 22, 18, 3, 1); R('#ffd86e', 23, 19, 1, 1); }
   if (has('headphones')) { R('#2a1a33', 9, 5, 14, 1); R('#2a1a33', 9, 2, 3, 3); R('#2a1a33', 20, 2, 3, 3); R('#ff8cc6', 10, 3, 1, 1); R('#ff8cc6', 21, 3, 1, 1); R('#2a1a33', 7, 12, 3, 6); R('#2a1a33', 22, 12, 3, 6); R('#ff5fa8', 8, 13, 1, 4); R('#ff5fa8', 23, 13, 1, 4); }
   const img = x.getImageData(0, 0, 32, 32), d = img.data, out = [];
   for (let y = 0; y < 32; y++) for (let xx = 0; xx < 32; xx++) {
@@ -3058,27 +3076,35 @@ mementos      ${S.mementos.length}/${Object.keys(MEMENTOS).length} · software $
    ========================================================= */
 function setupScreen() {
   return new Promise(resolve => {
-    const P = { name: 'Newbie', hair: 0, hc: 0, eye: 0, skin: 0, outfit: 0, acc: 0 };
+    const P = { name: 'Newbie', hair: 0, hc: 0, eye: 11, skin: 1, outfit: 0, oc: 7, acc: 0 };
+    const sw = (k, list) => `<div class="set sws" data-k="${k}">${list.map((h, i) => `<button class="sw" data-v="${i}" style="background:${h[1]}" aria-label="${h[0]}" title="${h[0]}"></button>`).join('')}</div>`;
+    const pick = (k, n, label) => `<div class="set pick" data-pick="${k}" data-n="${n}"><button class="btn arr" data-d="-1" aria-label="Previous ${label}">◀</button><span class="pk" id="pk-${k}" aria-live="polite"></span><button class="btn arr" data-d="1" aria-label="Next ${label}">▶</button></div>`;
     const el = document.createElement('div'); el.id = 'setup';
     el.innerHTML = `<section class="win" role="dialog" aria-label="Choose desired appearance"><div class="titlebar" style="cursor:default">${icon('soul')}<span class="tt">Choose desired appearance</span><button class="btn tbtn" disabled aria-label="Minimize">_</button><button class="btn tbtn" disabled aria-label="Close">×</button></div>
      <div class="win-body" style="overflow:visible"><div class="su">
       <div class="su-prev bevel"><canvas id="su-cv" width="32" height="32" aria-label="Avatar preview"></canvas><div class="nm" id="su-nm"></div><button class="btn" id="su-rand">Randomize</button></div>
       <div class="su-opts">
        <div class="su-row"><span>Name</span><div class="set"><input id="su-name" maxlength="12" value="" placeholder="Newbie" autocomplete="off"></div></div>
-       <div class="su-row"><span>Hair</span><div class="set" data-k="hair">${HAIRS.map((h, i) => `<button class="pill" data-v="${i}">${h}</button>`).join('')}</div></div>
-       <div class="su-row"><span>Hair color</span><div class="set" data-k="hc">${HAIRC.map((h, i) => `<button class="sw" data-v="${i}" style="background:${h[1]}" aria-label="${h[0]}" title="${h[0]}"></button>`).join('')}</div></div>
-       <div class="su-row"><span>Eyes</span><div class="set" data-k="eye">${EYEC.map((h, i) => `<button class="sw" data-v="${i}" style="background:${h[1]}" aria-label="${h[0]}" title="${h[0]}"></button>`).join('')}</div></div>
-       <div class="su-row"><span>Skin</span><div class="set" data-k="skin">${SKIN.map((h, i) => `<button class="sw" data-v="${i}" style="background:${h[1]}" aria-label="${h[0]}" title="${h[0]}"></button>`).join('')}</div></div>
-       <div class="su-row"><span>Outfit</span><div class="set" data-k="outfit">${OUTFITS.map((h, i) => `<button class="pill" data-v="${i}">${h[0]}</button>`).join('')}</div></div>
-       <div class="su-row"><span>Accessory</span><div class="set" data-k="acc">${ACCS.map((h, i) => `<button class="pill" data-v="${i}">${h}</button>`).join('')}</div></div>
+       <div class="su-row"><span>Hair</span>${pick('hair', HAIRS.length, 'hair')}</div>
+       <div class="su-row"><span>Hair color</span>${sw('hc', PALETTE)}</div>
+       <div class="su-row"><span>Eyes</span>${sw('eye', PALETTE)}</div>
+       <div class="su-row"><span>Skin</span>${sw('skin', SKIN)}</div>
+       <div class="su-row"><span>Outfit</span>${pick('outfit', OUTFITS.length, 'outfit')}</div>
+       <div class="su-row"><span>Outfit color</span>${sw('oc', PALETTE)}</div>
+       <div class="su-row"><span>Accessory</span>${pick('acc', ACCS.length, 'accessory')}</div>
       </div></div>
       <div class="su-foot"><span class="su-sync"></span><div class="su-btns"><button class="btn primary" id="su-ok">Confirm</button></div></div></div></section>`;
     document.body.appendChild(el);
     const cv = $('#su-cv', el), paint = blink => drawAvatar(cv, P, blink);
-    const upd = () => { $$('.set[data-k]', el).forEach(s => $$('[data-v]', s).forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === P[s.dataset.k])))); $('#su-nm', el).textContent = P.name || 'Newbie'; paint(false); };
+    const upd = () => {
+      $$('.set[data-k]', el).forEach(s => $$('[data-v]', s).forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === P[s.dataset.k]))));
+      $$('[data-pick]', el).forEach(s => { const k = s.dataset.pick; $('#pk-' + k, el).textContent = `Type ${P[k] + 1}`; s.title = (k === 'hair' ? HAIRS : k === 'outfit' ? OUTFITS.map(o => o[0]) : ACCS)[P[k]]; });
+      $('#su-nm', el).textContent = P.name || 'Newbie'; paint(false);
+    };
+    $$('[data-pick]', el).forEach(s => s.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; auInit(); SFX.pop(); const k = s.dataset.pick, n = +s.dataset.n; P[k] = (P[k] + +b.dataset.d + n) % n; if (k === 'outfit') P.oc = OUTFITS[P.outfit][1]; upd(); }));
     $$('.set[data-k]', el).forEach(s => s.addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (!b) return; auInit(); SFX.pop(); P[s.dataset.k] = +b.dataset.v; upd(); }));
     $('#su-name', el).addEventListener('input', e => { P.name = e.target.value.replace(/[<>]/g, '').trim() || 'Newbie'; upd(); });
-    $('#su-rand', el).onclick = () => { auInit(); SFX.pop(); P.hair = Math.random() * 4 | 0; P.hc = Math.random() * 6 | 0; P.eye = Math.random() * 4 | 0; P.skin = Math.random() * 3 | 0; P.outfit = Math.random() * 4 | 0; P.acc = Math.random() * 4 | 0; upd(); };
+    $('#su-rand', el).onclick = () => { auInit(); SFX.pop(); const r = n => Math.random() * n | 0; P.hair = r(HAIRS.length); P.hc = r(PALETTE.length); P.eye = r(PALETTE.length); P.skin = r(SKIN.length); P.outfit = r(OUTFITS.length); P.oc = r(PALETTE.length); P.acc = r(ACCS.length); upd(); };
     const blinkIv = setInterval(() => { paint(true); setTimeout(() => paint(false), 140); }, 3200);
     $('#su-ok', el).onclick = () => {
       auInit(); SFX.click();
