@@ -28,6 +28,8 @@ const OWMAP = {};
    3. further on, longer side paths to the hard memories;
    4. the gate (a/b keys) closes the layer. After the third gate: her core. */
 const OW_MID = 5;
+const OW_MORSE = { prim: ['.--', '.'], trix: ['.-', '.-.'], paige: ['.', '---'], vel: ['-.', '.'] };   // W E · A R · E O · N E
+const OW_WORDGAP = { paige: 0 };   // "E | O": the word gap falls inside Paige's map (after her first letter)
 function owBuild(g) {
   if (OWMAP[g]) return OWMAP[g];
   if (g === 'ray') return (OWMAP.ray = rayMap());
@@ -47,9 +49,25 @@ function owBuild(g) {
     // 1. the forced corridor
     tuts.forEach(p => { floor(x, mid); node(p, x + 1, mid); cells.push([x + 2, mid, 3]); seals.push({ x: x + 2, y: mid, pid: p.id }); x += 3; });
     floor(x, mid); x++;
+    let up = true;
+    // 1b. layer 3 hides two letters of Morse code in the paths that go UP: short = dot, long = dash.
+    //     Put the four maps side by side in the order you met them (Prim, Trix, Paige, Vel): WE ARE ONE.
+    if (r === 2 && OW_MORSE[g] && rest.length >= OW_MORSE[g].join('').length) {
+      for (let k = 0; k < 3; k++) floor(x++, mid);
+      OW_MORSE[g].forEach((letter, li) => {
+        [...letter].forEach((sym, si) => {   // a ledge two rows up: dot = 1 tile, dash = 3 tiles, joined to the road by one stem
+          const w = sym === '.' ? 1 : 3, c = x + (w >> 1);
+          for (let k = 0; k < w; k++) { floor(x + k, mid); floor(x + k, mid - 2); }
+          floor(c, mid - 1); node(rest.shift(), c, mid - 2);
+          x += w; if (si < letter.length - 1) floor(x++, mid);
+        });
+        const gap = li < OW_MORSE[g].length - 1 ? (OW_WORDGAP[g] === li ? 7 : 3) : 4;   // between letters 3, between words 7
+        for (let k = 0; k < gap; k++) floor(x++, mid);
+      });
+      up = false;   // the next ordinary path goes down, so the letters stand alone
+    }
     // 2. side paths: normals first, hard ones (the last ~40%) on longer paths further along
     const nHard = rest.length >= 4 ? Math.round(rest.length * .4) : 0, easy = rest.slice(0, rest.length - nHard), hard = rest.slice(rest.length - nHard);
-    let up = true;
     easy.forEach(p => { floor(x, mid); floor(x + 1, mid); const d = up ? -1 : 1; floor(x + 1, mid + d); floor(x + 1, mid + 2 * d); node(p, x + 1, mid + 3 * d); up = !up; x += 2; });
     if (hard.length) { floor(x, mid); floor(x + 1, mid); x += 2; }
     hard.forEach(p => {   // a path with a bend: three up/down, one sideways
@@ -86,6 +104,7 @@ function owBfs(t, W, H, [sx, sy]) {
 function owState(g) {
   const st = S.g[g], M = owBuild(g);
   if (!st.ow) st.ow = { x: M.start[0], y: M.start[1], solved: {}, seen: '' };
+  else if (!M.t[st.ow.y * M.W + st.ow.x] || st.ow.x >= M.W || st.ow.y >= M.H) { st.ow.x = M.start[0]; st.ow.y = M.start[1]; }   // the map changed under an old save
   if (st.ow.seen.length !== M.W * M.H || st.ow.seen.includes('0')) st.ow.seen = '1'.repeat(M.W * M.H);   // no fog of war
   return st.ow;
 }
