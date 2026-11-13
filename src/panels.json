@@ -5300,6 +5300,857 @@
   "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
+  "id": "paige_1_7",
+  "girl": "paige",
+  "layer": 1,
+  "n": 7,
+  "w": 3,
+  "h": 2,
+  "broken": [
+   [
+    2,
+    0,
+    2,
+    1
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 3,
+    "y": 1,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    0,
+    1,
+    2
+   ]
+  ],
+  "solIn": "LLLDRULRUR",
+  "solutions": 2,
+  "minMoves": 10,
+  "luck": 0,
+  "quality": 20,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_8",
+  "girl": "paige",
+  "layer": 1,
+  "n": 8,
+  "w": 3,
+  "h": 3,
+  "holes": [
+   [
+    0,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    3,
+    3,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 3,
+    "y": 2,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    1,
+    1
+   ]
+  ],
+  "dice": [
+   [
+    2,
+    3,
+    6
+   ],
+   [
+    1,
+    3,
+    4
+   ]
+  ],
+  "solIn": "LULDRDLUU",
+  "solutions": 1,
+  "minMoves": 9,
+  "luck": 0,
+  "quality": 24.1,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_9",
+  "girl": "paige",
+  "layer": 1,
+  "n": 9,
+  "w": 4,
+  "h": 3,
+  "holes": [
+   [
+    4,
+    0
+   ],
+   [
+    0,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 1,
+    "y": 0,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    1,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    2,
+    1,
+    0,
+    1
+   ]
+  ],
+  "dice": [
+   [
+    4,
+    3,
+    4
+   ],
+   [
+    2,
+    0,
+    4
+   ]
+  ],
+  "solIn": "DRRRUULULLD",
+  "solutions": 1,
+  "minMoves": 11,
+  "luck": 0,
+  "quality": 25.7,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_10",
+  "girl": "paige",
+  "layer": 1,
+  "n": 10,
+  "w": 4,
+  "h": 3,
+  "broken": [
+   [
+    3,
+    0,
+    4,
+    0
+   ],
+   [
+    1,
+    3,
+    2,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 1,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    3,
+    1
+   ]
+  ],
+  "dice": [
+   [
+    0,
+    0,
+    5
+   ],
+   [
+    3,
+    0,
+    4
+   ],
+   [
+    4,
+    3,
+    3
+   ],
+   [
+    4,
+    2,
+    6
+   ]
+  ],
+  "solIn": "URRRDRDLDRULU",
+  "solutions": 2,
+  "minMoves": 13,
+  "luck": 0,
+  "quality": 28.5,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_11",
+  "girl": "paige",
+  "layer": 1,
+  "n": 11,
+  "w": 3,
+  "h": 3,
+  "holes": [
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    1,
+    2,
+    1,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 2,
+    "y": 3,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    2,
+    2
+   ]
+  ],
+  "pads": [
+   [
+    3,
+    2,
+    -1,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    0,
+    0,
+    5
+   ],
+   [
+    0,
+    2,
+    6
+   ]
+  ],
+  "solIn": "URRULURDLDRR",
+  "solutions": 1,
+  "minMoves": 12,
+  "luck": 0,
+  "quality": 27.7,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_12",
+  "girl": "paige",
+  "layer": 1,
+  "n": 12,
+  "w": 4,
+  "h": 4,
+  "holes": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    3,
+    0,
+    3,
+    1
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 2,
+    "y": 0,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    0,
+    4
+   ]
+  ],
+  "pads": [
+   [
+    1,
+    1,
+    -1,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    0,
+    3,
+    5
+   ],
+   [
+    3,
+    2,
+    5
+   ],
+   [
+    2,
+    1,
+    6
+   ]
+  ],
+  "solIn": "DLDRRRULLDRDLD",
+  "solutions": 1,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 35.6,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_13",
+  "girl": "paige",
+  "layer": 1,
+  "n": 13,
+  "w": 4,
+  "h": 3,
+  "broken": [
+   [
+    1,
+    1,
+    1,
+    2
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    3,
+    3,
+    4,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 4,
+    "y": 0,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    1,
+    2
+   ]
+  ],
+  "pads": [
+   [
+    4,
+    1,
+    -1,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    3,
+    3,
+    2
+   ],
+   [
+    3,
+    2,
+    4
+   ],
+   [
+    2,
+    1,
+    4
+   ]
+  ],
+  "solIn": "DRRDRDLUUURDRDR",
+  "solutions": 2,
+  "minMoves": 15,
+  "luck": 0,
+  "quality": 34.5,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_14",
+  "girl": "paige",
+  "layer": 1,
+  "n": 14,
+  "w": 5,
+  "h": 3,
+  "holes": [
+   [
+    2,
+    3
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    1,
+    1,
+    1
+   ],
+   [
+    2,
+    1,
+    3,
+    1
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 0,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    1,
+    1
+   ]
+  ],
+  "dice": [
+   [
+    4,
+    2,
+    2
+   ],
+   [
+    5,
+    0,
+    5
+   ],
+   [
+    1,
+    0,
+    3
+   ],
+   [
+    5,
+    2,
+    1
+   ]
+  ],
+  "solIn": "RRRRDRDLURULLLDL",
+  "solutions": 1,
+  "minMoves": 16,
+  "luck": 0.1,
+  "quality": 39.9,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_15",
+  "girl": "paige",
+  "layer": 1,
+  "n": 15,
+  "w": 4,
+  "h": 4,
+  "holes": [
+   [
+    3,
+    4
+   ],
+   [
+    0,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 4,
+    "y": 2,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    3,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    4,
+    3,
+    0,
+    -1
+   ],
+   [
+    2,
+    0,
+    0,
+    1
+   ]
+  ],
+  "dice": [
+   [
+    1,
+    2,
+    5
+   ],
+   [
+    2,
+    1,
+    3
+   ],
+   [
+    0,
+    0,
+    2
+   ]
+  ],
+  "solIn": "DDLLLLUDRDRUR",
+  "solutions": 1,
+  "minMoves": 13,
+  "luck": 0,
+  "quality": 34.7,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_16",
+  "girl": "paige",
+  "layer": 1,
+  "n": 16,
+  "w": 5,
+  "h": 4,
+  "broken": [
+   [
+    1,
+    1,
+    2,
+    1
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    4,
+    1,
+    4,
+    2
+   ],
+   [
+    2,
+    2,
+    2,
+    3
+   ],
+   [
+    4,
+    3,
+    4,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 3,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "pads": [
+   [
+    3,
+    4,
+    0,
+    -1
+   ]
+  ],
+  "dice": [
+   [
+    1,
+    2,
+    3
+   ],
+   [
+    5,
+    0,
+    4
+   ],
+   [
+    4,
+    4,
+    4
+   ]
+  ],
+  "solIn": "URRRDRURDDLLLURRRUL",
+  "solutions": 1,
+  "minMoves": 19,
+  "luck": 0,
+  "quality": 45.4,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_17",
+  "girl": "paige",
+  "layer": 1,
+  "n": 17,
+  "w": 5,
+  "h": 4,
+  "holes": [
+   [
+    5,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    3,
+    3,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 5,
+    "y": 3,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    2,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    0,
+    3,
+    1,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    3,
+    4,
+    5
+   ],
+   [
+    5,
+    4,
+    2
+   ],
+   [
+    1,
+    1,
+    3
+   ],
+   [
+    1,
+    3,
+    1
+   ]
+  ],
+  "solIn": "DLLLLULLRULUR",
+  "solutions": 1,
+  "minMoves": 13,
+  "luck": 0,
+  "quality": 35.7,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_1_18",
+  "girl": "paige",
+  "layer": 1,
+  "n": 18,
+  "w": 5,
+  "h": 4,
+  "holes": [
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    5,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    2,
+    2,
+    3
+   ],
+   [
+    2,
+    3,
+    2,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 2,
+    "y": 4,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    1,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    1,
+    3,
+    0,
+    -1
+   ],
+   [
+    2,
+    3,
+    -1,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    1,
+    4,
+    5
+   ],
+   [
+    2,
+    1,
+    5
+   ],
+   [
+    0,
+    1,
+    1
+   ],
+   [
+    0,
+    2,
+    4
+   ]
+  ],
+  "solIn": "RULRRDDLLDDDRU",
+  "solutions": 3,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 30.2,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
   "id": "paige_2_t1",
   "girl": "paige",
   "layer": 2,
@@ -5956,6 +6807,899 @@
   "intro": null,
   "feature": "dice",
   "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_2_8",
+  "girl": "paige",
+  "layer": 2,
+  "n": 8,
+  "w": 4,
+  "h": 3,
+  "holes": [
+   [
+    3,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 2,
+    "y": 1,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    1,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    1,
+    3,
+    -1,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    0,
+    3,
+    6
+   ],
+   [
+    1,
+    0,
+    2
+   ],
+   [
+    0,
+    1,
+    1
+   ]
+  ],
+  "solIn": "LLDRDURUUD",
+  "solutions": 1,
+  "minMoves": 10,
+  "luck": 0.1,
+  "quality": 26.8,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_2_9",
+  "girl": "paige",
+  "layer": 2,
+  "n": 9,
+  "w": 4,
+  "h": 3,
+  "holes": [
+   [
+    0,
+    3
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 2,
+    "y": 1,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    0,
+    1
+   ]
+  ],
+  "portals": [
+   [
+    4,
+    0,
+    0,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    1,
+    3,
+    2
+   ],
+   [
+    3,
+    0,
+    1
+   ],
+   [
+    1,
+    1,
+    5
+   ]
+  ],
+  "solIn": "LDRDLUURRURD",
+  "solutions": 1,
+  "minMoves": 12,
+  "luck": 0,
+  "quality": 31.8,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_2_10",
+  "girl": "paige",
+  "layer": 2,
+  "n": 10,
+  "w": 4,
+  "h": 4,
+  "holes": [
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    3,
+    4
+   ]
+  ],
+  "broken": [
+   [
+    4,
+    2,
+    4,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 3,
+    "y": 3,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    4,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    0,
+    2,
+    1,
+    0
+   ],
+   [
+    1,
+    1,
+    0,
+    1
+   ]
+  ],
+  "dice": [
+   [
+    1,
+    3,
+    4
+   ],
+   [
+    3,
+    2,
+    2
+   ],
+   [
+    3,
+    1,
+    2
+   ]
+  ],
+  "solIn": "LLULULLLULUU",
+  "solutions": 1,
+  "minMoves": 12,
+  "luck": 0,
+  "quality": 30.6,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_2_11",
+  "girl": "paige",
+  "layer": 2,
+  "n": 11,
+  "w": 4,
+  "h": 4,
+  "holes": [
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    0,
+    0,
+    1
+   ],
+   [
+    1,
+    0,
+    1,
+    1
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 2,
+    "y": 0,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    0,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    1,
+    4,
+    2,
+    1
+   ]
+  ],
+  "dice": [
+   [
+    2,
+    4,
+    5
+   ],
+   [
+    3,
+    2,
+    5
+   ],
+   [
+    4,
+    3,
+    4
+   ]
+  ],
+  "solIn": "DURRRLULURLULL",
+  "solutions": 1,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 33.2,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_2_12",
+  "girl": "paige",
+  "layer": 2,
+  "n": 12,
+  "w": 5,
+  "h": 4,
+  "holes": [
+   [
+    5,
+    4
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    3,
+    3,
+    3
+   ],
+   [
+    4,
+    3,
+    5,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 2,
+    "y": 4,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    5,
+    0
+   ]
+  ],
+  "pads": [
+   [
+    5,
+    1,
+    0,
+    -1
+   ],
+   [
+    4,
+    2,
+    -1,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    3,
+    4,
+    4
+   ],
+   [
+    2,
+    3,
+    5
+   ],
+   [
+    3,
+    3,
+    2
+   ]
+  ],
+  "solIn": "ULLURRRDDUUURR",
+  "solutions": 1,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 34.7,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_2_13",
+  "girl": "paige",
+  "layer": 2,
+  "n": 13,
+  "w": 5,
+  "h": 4,
+  "holes": [
+   [
+    5,
+    2
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    4,
+    2,
+    4,
+    3
+   ],
+   [
+    3,
+    3,
+    4,
+    3
+   ],
+   [
+    2,
+    4,
+    3,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 4,
+    "y": 4,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    2,
+    2,
+    5,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    2,
+    3,
+    6
+   ],
+   [
+    3,
+    2,
+    5
+   ],
+   [
+    2,
+    1,
+    1
+   ],
+   [
+    3,
+    3,
+    3
+   ]
+  ],
+  "solIn": "LUUULRRURDRULL",
+  "solutions": 1,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 38,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_2_14",
+  "girl": "paige",
+  "layer": 2,
+  "n": 14,
+  "w": 5,
+  "h": 4,
+  "holes": [
+   [
+    5,
+    3
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    0,
+    2,
+    1
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 1,
+    "y": 1,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    0,
+    0
+   ]
+  ],
+  "pads": [
+   [
+    1,
+    3,
+    -1,
+    0
+   ],
+   [
+    1,
+    0,
+    -1,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    2,
+    4,
+    6
+   ],
+   [
+    0,
+    4,
+    1
+   ],
+   [
+    2,
+    1,
+    4
+   ],
+   [
+    2,
+    3,
+    3
+   ]
+  ],
+  "solIn": "RDLDRRDRRUUULU",
+  "solutions": 1,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 36.8,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_2_15",
+  "girl": "paige",
+  "layer": 2,
+  "n": 15,
+  "w": 5,
+  "h": 4,
+  "holes": [
+   [
+    5,
+    0
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    1,
+    3,
+    1
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    3,
+    2,
+    4,
+    2
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    2,
+    3,
+    2,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 4,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    2,
+    3
+   ]
+  ],
+  "portals": [
+   [
+    0,
+    3,
+    4,
+    1
+   ]
+  ],
+  "dice": [
+   [
+    4,
+    4,
+    6
+   ],
+   [
+    4,
+    2,
+    6
+   ],
+   [
+    1,
+    4,
+    1
+   ],
+   [
+    2,
+    4,
+    2
+   ]
+  ],
+  "solIn": "UDRDLLDRULDLLUR",
+  "solutions": 1,
+  "minMoves": 15,
+  "luck": 0,
+  "quality": 32.8,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_2_16",
+  "girl": "paige",
+  "layer": 2,
+  "n": 16,
+  "w": 5,
+  "h": 5,
+  "holes": [
+   [
+    5,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    1
+   ]
+  ],
+  "broken": [
+   [
+    4,
+    3,
+    4,
+    4
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 4,
+    "y": 5,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    0,
+    4
+   ]
+  ],
+  "pads": [
+   [
+    2,
+    3,
+    0,
+    1
+   ],
+   [
+    2,
+    4,
+    -1,
+    0
+   ],
+   [
+    3,
+    2,
+    0,
+    1
+   ]
+  ],
+  "dice": [
+   [
+    4,
+    4,
+    6
+   ],
+   [
+    2,
+    5,
+    3
+   ],
+   [
+    1,
+    4,
+    5
+   ],
+   [
+    3,
+    4,
+    2
+   ]
+  ],
+  "solIn": "RULLULRDRURDRU",
+  "solutions": 2,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 27.3,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_2_17",
+  "girl": "paige",
+  "layer": 2,
+  "n": 17,
+  "w": 5,
+  "h": 5,
+  "holes": [
+   [
+    4,
+    0
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    0,
+    3,
+    0
+   ],
+   [
+    3,
+    1,
+    3,
+    2
+   ],
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    1,
+    2,
+    1,
+    3
+   ],
+   [
+    3,
+    2,
+    3,
+    3
+   ],
+   [
+    4,
+    3,
+    5,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 0,
+    "y": 4,
+    "die": true
+   }
+  ],
+  "exit": [
+   [
+    4,
+    4
+   ]
+  ],
+  "portals": [
+   [
+    1,
+    4,
+    1,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    5,
+    2,
+    6
+   ],
+   [
+    2,
+    1,
+    2
+   ],
+   [
+    2,
+    0,
+    1
+   ],
+   [
+    5,
+    1,
+    6
+   ]
+  ],
+  "solIn": "RRDRRRDLURLDDD",
+  "solutions": 1,
+  "minMoves": 14,
+  "luck": 0,
+  "quality": 35.3,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
  },
  {
   "id": "paige_3_t1",
@@ -6732,6 +8476,1978 @@
   "intro": null,
   "feature": "dice",
   "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_3_8",
+  "girl": "paige",
+  "layer": 3,
+  "n": 8,
+  "w": 4,
+  "h": 3,
+  "holes": [
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    2,
+    2,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 2,
+    "y": 0,
+    "die": true
+   },
+   {
+    "x": 2,
+    "y": 3,
+    "die": true,
+    "c": 4
+   }
+  ],
+  "exit": [
+   [
+    2,
+    1,
+    2
+   ],
+   [
+    0,
+    2,
+    4
+   ]
+  ],
+  "pads": [
+   [
+    1,
+    0,
+    1,
+    0
+   ]
+  ],
+  "dice": [
+   [
+    1,
+    1,
+    1
+   ],
+   [
+    0,
+    1,
+    2
+   ]
+  ],
+  "solIn": "LLUURRDLULD",
+  "solutions": 1,
+  "minMoves": 11,
+  "luck": 0,
+  "quality": 28.6,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_3_9",
+  "girl": "paige",
+  "layer": 3,
+  "n": 9,
+  "w": 4,
+  "h": 4,
+  "holes": [
+   [
+    0,
+    2
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    2
+   ]
+  ],
+  "broken": [
+   [
+    2,
+    0,
+    3,
+    0
+   ],
+   [
+    2,
+    1,
+    3,
+    1
+   ],
+   [
+    0,
+    3,
+    1,
+    3
+   ],
+   [
+    3,
+    3,
+    4,
+    3
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 4,
+    "y": 3,
+    "die": true
+   },
+   {
+    "x": 1,
+    "y": 0,
+    "die": true,
+    "c": 4
+   }
+  ],
+  "exit": [
+   [
+    1,
+    3,
+    2
+   ],
+   [
+    0,
+    1,
+    4
+   ]
+  ],
+  "portals": [
+   [
+    2,
+    4,
+    2,
+    1
+   ]
+  ],
+  "dice": [
+   [
+    2,
+    3,
+    5
+   ],
+   [
+    1,
+    1,
+    2
+   ],
+   [
+    3,
+    4,
+    5
+   ]
+  ],
+  "solIn": "DDLURRLLL",
+  "solutions": 1,
+  "minMoves": 9,
+  "luck": 0,
+  "quality": 27.5,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "paige_3_10",
+  "girl": "paige",
+  "layer": 3,
+  "n": 10,
+  "w": 4,
+  "h": 4,
+  "holes": [
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    2,
+    4
+   ]
+  ],
+  "broken": [
+   [
+    0,
+    2,
+    1,
+    2
+   ],
+   [
+    0,
+    2,
+    0,
+    3
+   ],
+   [
+    1,
+    2,
+    2,
+    2
+   ]
+  ],
+  "boxes": [
+   {
+    "x": 1,
+    "y": 0,
+    "die": true
+   },
+   {
+    "x": 2,
+    "y": 0,
+    "die": true,
+    "c": 4
+   }
+  ],
+  "exit": [
+   [
+    0,
+    2,
+    2
+   ],
+   [
+    2,
+    3,
+    4
+   ]
+  ],
+  "pads": [
+   [
+    3,
+    1,
+    -1,
+    0
+   ]
+  ],
+  "portals": [
+   [
+    3,
+    4,
+    0,
+    3
+   ]
+  ],
+  "dice": [
+   [
+    2,
+    1,
+    4
+   ],
+   [
+    3,
+    3,
+    3
+   ],
+   [
+    1,
+    2,
+    1
+   ]
+  ],
+  "solIn": "DDDRDURRUD",
+  "solutions": 1,
+  "minMoves": 10,
+  "luck": 0,
+  "quality": 30,
+  "belief": "",
+  "intro": null,
+  "feature": "dice",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Cổng: hộp vào cổng này ra ở cổng cùng màu (đang trượt thì trượt tiếp). Chỗ trống trên map không đi được. Xúc xắc: mỗi lần lăn là đổi mặt; ô nó đáp xuống bị in mặt đang úp xuống đất. Các ô trắng là giấy cần in: ĐỀ BÀI bên cạnh cho biết mỗi ô trắng phải mang số nào (lần in cuối cùng tính). In đúng hết rồi về goal mới thắng. Đi vào ô mũi tên thì xúc xắc trượt chứ không lăn, giữ nguyên mặt. Kéo chuột trên xúc xắc nháp để xoay thử. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Có nhiều hộp: hộp chặn hộp, nên thứ tự đứng của chúng quan trọng. Mẹo: Lần ngược từ ô số: mặt úp xuống phải là số đó, vậy nước lăn cuối vào ô phải đến từ hướng nào?"
+ },
+ {
+  "id": "vel_1_t1",
+  "girl": "vel",
+  "layer": 1,
+  "n": 0,
+  "w": 3,
+  "h": 2,
+  "boxes": [
+   {
+    "x": 3,
+    "y": 2
+   }
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "holes": [
+   [
+    1,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    0,
+    2
+   ]
+  ],
+  "fragile": [
+   [
+    0,
+    1
+   ]
+  ],
+  "solIn": "LULLDURRRU",
+  "solutions": 2,
+  "minMoves": 10,
+  "belief": "glass floor. you get there, you get back. once.",
+  "feature": "fragile",
+  "tut": "fragile",
+  "why": "Bảng dạy luật mới. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_1_1",
+  "girl": "vel",
+  "layer": 1,
+  "n": 1,
+  "w": 3,
+  "h": 3,
+  "boxes": [
+   {
+    "x": 0,
+    "y": 1
+   }
+  ],
+  "exit": [
+   [
+    1,
+    0
+   ]
+  ],
+  "holes": [
+   [
+    2,
+    0
+   ],
+   [
+    1,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "fragile": [
+   [
+    3,
+    1
+   ]
+  ],
+  "solIn": "RRRUDDDLUULU",
+  "solutions": 1,
+  "minMoves": 12,
+  "belief": "check your exits before you go in.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_1_2",
+  "girl": "vel",
+  "layer": 1,
+  "n": 2,
+  "w": 4,
+  "h": 3,
+  "boxes": [
+   {
+    "x": 0,
+    "y": 3
+   }
+  ],
+  "exit": [
+   [
+    3,
+    1
+   ]
+  ],
+  "holes": [
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    1,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    3,
+    3
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "fragile": [
+   [
+    3,
+    2
+   ]
+  ],
+  "solIn": "UURURRDDLDRUU",
+  "solutions": 1,
+  "minMoves": 13,
+  "belief": "in, clear the room, out. textbook.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_1_3",
+  "girl": "vel",
+  "layer": 1,
+  "n": 3,
+  "w": 4,
+  "h": 3,
+  "boxes": [
+   {
+    "x": 3,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    2,
+    1
+   ]
+  ],
+  "holes": [
+   [
+    4,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "lights": [
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "fragile": [
+   [
+    1,
+    1
+   ]
+  ],
+  "solIn": "RLDDDLLLRUUUDR",
+  "solutions": 1,
+  "minMoves": 14,
+  "belief": "never walk the same hallway twice if you can help it.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_1_4",
+  "girl": "vel",
+  "layer": 1,
+  "n": 4,
+  "w": 4,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 3,
+    "y": 3
+   }
+  ],
+  "exit": [
+   [
+    1,
+    4
+   ]
+  ],
+  "holes": [
+   [
+    2,
+    0
+   ],
+   [
+    0,
+    4
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "lights": [
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    1
+   ]
+  ],
+  "fragile": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "solIn": "LLUULURDDDD",
+  "solutions": 2,
+  "minMoves": 11,
+  "belief": "two bridges. pick which one burns first.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_1_5",
+  "girl": "vel",
+  "layer": 1,
+  "n": 5,
+  "w": 4,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 3,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    4,
+    0
+   ]
+  ],
+  "holes": [
+   [
+    3,
+    4
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    4
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    1
+   ]
+  ],
+  "lights": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    0,
+    3
+   ]
+  ],
+  "fragile": [
+   [
+    0,
+    1
+   ]
+  ],
+  "solIn": "LDLLUDDDRRUUURR",
+  "solutions": 1,
+  "minMoves": 15,
+  "belief": "the room looks safe. rooms always look safe.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_1_6",
+  "girl": "vel",
+  "layer": 1,
+  "n": 6,
+  "w": 5,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 4,
+    "y": 2
+   }
+  ],
+  "exit": [
+   [
+    3,
+    3
+   ]
+  ],
+  "holes": [
+   [
+    4,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "lights": [
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    0,
+    3
+   ]
+  ],
+  "fragile": [
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "solIn": "LLLDLDRRLUUURDRD",
+  "solutions": 1,
+  "minMoves": 16,
+  "belief": "you don't get a second trip. plan the first one.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_2_t1",
+  "girl": "vel",
+  "layer": 2,
+  "n": 0,
+  "w": 4,
+  "h": 3,
+  "boxes": [
+   {
+    "x": 3,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    2,
+    0
+   ]
+  ],
+  "holes": [
+   [
+    4,
+    2
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    4,
+    3
+   ],
+   [
+    0,
+    2
+   ]
+  ],
+  "fragile": [
+   [
+    3,
+    3
+   ]
+  ],
+  "pads": [
+   [
+    1,
+    0,
+    1,
+    0
+   ]
+  ],
+  "solIn": "DDDRLLLLUURULL",
+  "solutions": 1,
+  "minMoves": 14,
+  "belief": "launch pad + glass. fun combo. dangerous combo.",
+  "feature": "fragile",
+  "tut": "pads",
+  "why": "Bảng dạy luật mới. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_2_1",
+  "girl": "vel",
+  "layer": 2,
+  "n": 1,
+  "w": 4,
+  "h": 3,
+  "boxes": [
+   {
+    "x": 2,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "holes": [
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ]
+  ],
+  "fragile": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    2,
+    3,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "RRDDLDLRUULRRUR",
+  "solutions": 2,
+  "minMoves": 15,
+  "belief": "slide in hot, walk out careful.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_2_2",
+  "girl": "vel",
+  "layer": 2,
+  "n": 2,
+  "w": 4,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 3,
+    "y": 2
+   }
+  ],
+  "exit": [
+   [
+    2,
+    4
+   ]
+  ],
+  "holes": [
+   [
+    1,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "lights": [
+   [
+    1,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "fragile": [
+   [
+    1,
+    3
+   ],
+   [
+    3,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    2,
+    3,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "URULDDLDUURLDDRRD",
+  "solutions": 1,
+  "minMoves": 17,
+  "belief": "every door you use is a door you lose.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_2_3",
+  "girl": "vel",
+  "layer": 2,
+  "n": 3,
+  "w": 4,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 1,
+    "y": 4
+   }
+  ],
+  "exit": [
+   [
+    2,
+    4
+   ]
+  ],
+  "holes": [
+   [
+    4,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "lights": [
+   [
+    4,
+    1
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "fragile": [
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "solIn": "UUURRRULDDDRLDL",
+  "solutions": 1,
+  "minMoves": 15,
+  "belief": "the second crossing is the one that counts.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_2_4",
+  "girl": "vel",
+  "layer": 2,
+  "n": 4,
+  "w": 5,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 1,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    1,
+    3
+   ]
+  ],
+  "holes": [
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    5,
+    4
+   ],
+   [
+    4,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    5,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "fragile": [
+   [
+    2,
+    2
+   ],
+   [
+    4,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    1,
+    2,
+    1,
+    0
+   ]
+  ],
+  "solIn": "DDDUURRDDUUULDLDLLD",
+  "solutions": 1,
+  "minMoves": 19,
+  "belief": "i'm not reckless. i'm fast. different thing.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_2_5",
+  "girl": "vel",
+  "layer": 2,
+  "n": 5,
+  "w": 5,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 0,
+    "y": 4
+   }
+  ],
+  "exit": [
+   [
+    1,
+    3
+   ]
+  ],
+  "holes": [
+   [
+    5,
+    0
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    1,
+    4
+   ]
+  ],
+  "lights": [
+   [
+    4,
+    4
+   ],
+   [
+    5,
+    3
+   ],
+   [
+    2,
+    4
+   ]
+  ],
+  "fragile": [
+   [
+    2,
+    3
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "solIn": "URRDUURRDRDLUULLLD",
+  "solutions": 2,
+  "minMoves": 18,
+  "belief": "three bridges. one shot each way.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_2_6",
+  "girl": "vel",
+  "layer": 2,
+  "n": 6,
+  "w": 5,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 4,
+    "y": 3
+   }
+  ],
+  "exit": [
+   [
+    2,
+    1
+   ]
+  ],
+  "holes": [
+   [
+    4,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    5,
+    4
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    2,
+    0
+   ]
+  ],
+  "lights": [
+   [
+    3,
+    0
+   ],
+   [
+    5,
+    0
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    3,
+    4
+   ]
+  ],
+  "fragile": [
+   [
+    3,
+    1
+   ],
+   [
+    5,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    5,
+    2,
+    0,
+    -1
+   ],
+   [
+    4,
+    1,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "RUDDLLDDUUUUDLLR",
+  "solutions": 1,
+  "minMoves": 16,
+  "belief": "cover the room, then get out of it.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_2_7",
+  "girl": "vel",
+  "layer": 2,
+  "n": 7,
+  "w": 5,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 2,
+    "y": 4
+   }
+  ],
+  "exit": [
+   [
+    4,
+    2
+   ]
+  ],
+  "holes": [
+   [
+    1,
+    2
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    5,
+    3
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    5,
+    0
+   ]
+  ],
+  "lights": [
+   [
+    0,
+    4
+   ],
+   [
+    5,
+    4
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    0,
+    2
+   ]
+  ],
+  "fragile": [
+   [
+    4,
+    4
+   ],
+   [
+    0,
+    3
+   ]
+  ],
+  "pads": [
+   [
+    4,
+    1,
+    0,
+    1
+   ]
+  ],
+  "solIn": "ULLDUUURRRRRLUURULU",
+  "solutions": 2,
+  "minMoves": 19,
+  "belief": "if i mess up the order, it all comes down.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_3_1",
+  "girl": "vel",
+  "layer": 3,
+  "n": 1,
+  "w": 5,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 5,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    3,
+    0
+   ]
+  ],
+  "holes": [
+   [
+    2,
+    0
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    4,
+    2
+   ]
+  ],
+  "lights": [
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "fragile": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "solIn": "DLLDLLDLDRUUULURDDRRUU",
+  "solutions": 1,
+  "minMoves": 22,
+  "belief": "people think i'm all noise. i count everything.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_3_2",
+  "girl": "vel",
+  "layer": 3,
+  "n": 2,
+  "w": 5,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 1,
+    "y": 4
+   }
+  ],
+  "exit": [
+   [
+    2,
+    1
+   ]
+  ],
+  "holes": [
+   [
+    5,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    5,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    5,
+    4
+   ]
+  ],
+  "lights": [
+   [
+    5,
+    1
+   ],
+   [
+    5,
+    3
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    4,
+    0
+   ]
+  ],
+  "fragile": [
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    3
+   ]
+  ],
+  "pads": [
+   [
+    3,
+    4,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "LUURRRUURDRLDDRLDLUURRU",
+  "solutions": 2,
+  "minMoves": 23,
+  "belief": "some days the floor holds. some days it doesn’t.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_3_3",
+  "girl": "vel",
+  "layer": 3,
+  "n": 3,
+  "w": 5,
+  "h": 5,
+  "boxes": [
+   {
+    "x": 1,
+    "y": 2
+   }
+  ],
+  "exit": [
+   [
+    3,
+    4
+   ]
+  ],
+  "holes": [
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    5
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "lights": [
+   [
+    4,
+    5
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    0,
+    4
+   ]
+  ],
+  "fragile": [
+   [
+    2,
+    1
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "pads": [
+   [
+    4,
+    1,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "RUUDLLDDDRRRRDURUUUDLDLD",
+  "solutions": 2,
+  "minMoves": 24,
+  "belief": "too loud, too much, too fast. still standing.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_3_4",
+  "girl": "vel",
+  "layer": 3,
+  "n": 4,
+  "w": 6,
+  "h": 4,
+  "boxes": [
+   {
+    "x": 5,
+    "y": 3
+   }
+  ],
+  "exit": [
+   [
+    4,
+    2
+   ]
+  ],
+  "holes": [
+   [
+    5,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    6,
+    0
+   ],
+   [
+    6,
+    4
+   ],
+   [
+    4,
+    0
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    5,
+    4
+   ]
+  ],
+  "lights": [
+   [
+    5,
+    0
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    6,
+    1
+   ]
+  ],
+  "fragile": [
+   [
+    3,
+    1
+   ],
+   [
+    5,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    2,
+    2,
+    0,
+    1
+   ]
+  ],
+  "solIn": "RUULUDLLUDLLLDDRRDRRUU",
+  "solutions": 1,
+  "minMoves": 22,
+  "belief": "i break things. i also know exactly how much they take.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_3_5",
+  "girl": "vel",
+  "layer": 3,
+  "n": 5,
+  "w": 5,
+  "h": 5,
+  "boxes": [
+   {
+    "x": 2,
+    "y": 3
+   }
+  ],
+  "exit": [
+   [
+    3,
+    3
+   ]
+  ],
+  "holes": [
+   [
+    1,
+    3
+   ],
+   [
+    5,
+    0
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    2,
+    5
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    5,
+    3
+   ],
+   [
+    5,
+    5
+   ]
+  ],
+  "lights": [
+   [
+    3,
+    5
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    5,
+    4
+   ],
+   [
+    1,
+    5
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "fragile": [
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    1
+   ]
+  ],
+  "pads": [
+   [
+    1,
+    4,
+    1,
+    0
+   ],
+   [
+    3,
+    1,
+    1,
+    0
+   ]
+  ],
+  "solIn": "RRDRLLDUUUULLLULLDDDDDRUUR",
+  "solutions": 1,
+  "minMoves": 26,
+  "belief": "every bridge i burn, i burned on purpose.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
+ },
+ {
+  "id": "vel_3_6",
+  "girl": "vel",
+  "layer": 3,
+  "n": 6,
+  "w": 6,
+  "h": 5,
+  "boxes": [
+   {
+    "x": 4,
+    "y": 0
+   }
+  ],
+  "exit": [
+   [
+    4,
+    2
+   ]
+  ],
+  "holes": [
+   [
+    2,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    5,
+    1
+   ],
+   [
+    5,
+    3
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    6,
+    0
+   ]
+  ],
+  "lights": [
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    5
+   ]
+  ],
+  "fragile": [
+   [
+    3,
+    2
+   ],
+   [
+    2,
+    4
+   ]
+  ],
+  "pads": [
+   [
+    4,
+    3,
+    0,
+    -1
+   ],
+   [
+    3,
+    4,
+    -1,
+    0
+   ]
+  ],
+  "solIn": "DLDLRDDUUURURLLDDDDDRRURRUDD",
+  "solutions": 1,
+  "minMoves": 28,
+  "belief": "i'm not the bomb. i'm the one who defuses it.",
+  "feature": "fragile",
+  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
  },
  {
   "id": "myne_1_1",
@@ -8841,1669 +12557,5 @@
   "intro": null,
   "feature": "colors",
   "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Hộp có màu của các cô gái (hồng, đỏ, tím, vàng, xanh): hộp màu nào phải vào goal màu đó; goal viền trắng nhận hộp nào cũng được. Ô sơn: hộp đi vào bị đổi sang màu của ô. Hộp song sinh ngược (dấu chéo): làm ngược mọi phím, trái thành phải, lên thành xuống. Hộp vào goal không bị khoá, phím tiếp theo vẫn kéo nó đi. Thắng ngay khi mọi goal cùng có hộp đúng màu. Mẹo: Mỗi màu một goal: xem hộp nào phải đi trước hộp nào."
- },
- {
-  "id": "vel_1_t1",
-  "girl": "vel",
-  "layer": 1,
-  "n": 0,
-  "w": 3,
-  "h": 2,
-  "boxes": [
-   {
-    "x": 3,
-    "y": 2
-   }
-  ],
-  "exit": [
-   [
-    3,
-    0
-   ]
-  ],
-  "holes": [
-   [
-    1,
-    2
-   ]
-  ],
-  "lights": [
-   [
-    0,
-    2
-   ]
-  ],
-  "fragile": [
-   [
-    0,
-    1
-   ]
-  ],
-  "solIn": "LULLDURRRU",
-  "solutions": 2,
-  "minMoves": 10,
-  "belief": "glass floor. you get there, you get back. once.",
-  "feature": "fragile",
-  "tut": "fragile",
-  "why": "Bảng dạy luật mới. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_1_1",
-  "girl": "vel",
-  "layer": 1,
-  "n": 1,
-  "w": 3,
-  "h": 3,
-  "boxes": [
-   {
-    "x": 0,
-    "y": 1
-   }
-  ],
-  "exit": [
-   [
-    1,
-    0
-   ]
-  ],
-  "holes": [
-   [
-    2,
-    0
-   ],
-   [
-    1,
-    2
-   ]
-  ],
-  "lights": [
-   [
-    3,
-    0
-   ],
-   [
-    3,
-    3
-   ]
-  ],
-  "fragile": [
-   [
-    3,
-    1
-   ]
-  ],
-  "solIn": "RRRUDDDLUULU",
-  "solutions": 1,
-  "minMoves": 12,
-  "belief": "check your exits before you go in.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_1_2",
-  "girl": "vel",
-  "layer": 1,
-  "n": 2,
-  "w": 4,
-  "h": 3,
-  "boxes": [
-   {
-    "x": 0,
-    "y": 3
-   }
-  ],
-  "exit": [
-   [
-    3,
-    1
-   ]
-  ],
-  "holes": [
-   [
-    2,
-    1
-   ],
-   [
-    1,
-    3
-   ],
-   [
-    4,
-    3
-   ],
-   [
-    1,
-    2
-   ]
-  ],
-  "lights": [
-   [
-    3,
-    3
-   ],
-   [
-    2,
-    2
-   ]
-  ],
-  "fragile": [
-   [
-    3,
-    2
-   ]
-  ],
-  "solIn": "UURURRDDLDRUU",
-  "solutions": 1,
-  "minMoves": 13,
-  "belief": "in, clear the room, out. textbook.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_1_3",
-  "girl": "vel",
-  "layer": 1,
-  "n": 3,
-  "w": 4,
-  "h": 3,
-  "boxes": [
-   {
-    "x": 3,
-    "y": 0
-   }
-  ],
-  "exit": [
-   [
-    2,
-    1
-   ]
-  ],
-  "holes": [
-   [
-    4,
-    1
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    0,
-    0
-   ],
-   [
-    2,
-    0
-   ]
-  ],
-  "lights": [
-   [
-    1,
-    0
-   ],
-   [
-    0,
-    3
-   ],
-   [
-    4,
-    0
-   ]
-  ],
-  "fragile": [
-   [
-    1,
-    1
-   ]
-  ],
-  "solIn": "RLDDDLLLRUUUDR",
-  "solutions": 1,
-  "minMoves": 14,
-  "belief": "never walk the same hallway twice if you can help it.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_1_4",
-  "girl": "vel",
-  "layer": 1,
-  "n": 4,
-  "w": 4,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 3,
-    "y": 3
-   }
-  ],
-  "exit": [
-   [
-    1,
-    4
-   ]
-  ],
-  "holes": [
-   [
-    2,
-    0
-   ],
-   [
-    0,
-    4
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    4,
-    3
-   ]
-  ],
-  "lights": [
-   [
-    1,
-    0
-   ],
-   [
-    0,
-    1
-   ]
-  ],
-  "fragile": [
-   [
-    1,
-    1
-   ],
-   [
-    1,
-    3
-   ]
-  ],
-  "solIn": "LLUULURDDDD",
-  "solutions": 2,
-  "minMoves": 11,
-  "belief": "two bridges. pick which one burns first.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_1_5",
-  "girl": "vel",
-  "layer": 1,
-  "n": 5,
-  "w": 4,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 3,
-    "y": 0
-   }
-  ],
-  "exit": [
-   [
-    4,
-    0
-   ]
-  ],
-  "holes": [
-   [
-    3,
-    4
-   ],
-   [
-    1,
-    0
-   ],
-   [
-    0,
-    4
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    3,
-    1
-   ]
-  ],
-  "lights": [
-   [
-    0,
-    0
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    0,
-    3
-   ]
-  ],
-  "fragile": [
-   [
-    0,
-    1
-   ]
-  ],
-  "solIn": "LDLLUDDDRRUUURR",
-  "solutions": 1,
-  "minMoves": 15,
-  "belief": "the room looks safe. rooms always look safe.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_2_t1",
-  "girl": "vel",
-  "layer": 2,
-  "n": 0,
-  "w": 4,
-  "h": 3,
-  "boxes": [
-   {
-    "x": 3,
-    "y": 0
-   }
-  ],
-  "exit": [
-   [
-    2,
-    0
-   ]
-  ],
-  "holes": [
-   [
-    4,
-    2
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    1,
-    2
-   ]
-  ],
-  "lights": [
-   [
-    4,
-    3
-   ],
-   [
-    0,
-    2
-   ]
-  ],
-  "fragile": [
-   [
-    3,
-    3
-   ]
-  ],
-  "pads": [
-   [
-    1,
-    0,
-    1,
-    0
-   ]
-  ],
-  "solIn": "DDDRLLLLUURULL",
-  "solutions": 1,
-  "minMoves": 14,
-  "belief": "launch pad + glass. fun combo. dangerous combo.",
-  "feature": "fragile",
-  "tut": "pads",
-  "why": "Bảng dạy luật mới. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_2_1",
-  "girl": "vel",
-  "layer": 2,
-  "n": 1,
-  "w": 4,
-  "h": 3,
-  "boxes": [
-   {
-    "x": 2,
-    "y": 0
-   }
-  ],
-  "exit": [
-   [
-    3,
-    0
-   ]
-  ],
-  "holes": [
-   [
-    1,
-    0
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    3,
-    1
-   ],
-   [
-    2,
-    2
-   ]
-  ],
-  "lights": [
-   [
-    0,
-    1
-   ],
-   [
-    1,
-    2
-   ]
-  ],
-  "fragile": [
-   [
-    1,
-    3
-   ],
-   [
-    1,
-    1
-   ]
-  ],
-  "pads": [
-   [
-    2,
-    3,
-    -1,
-    0
-   ]
-  ],
-  "solIn": "RRDDLDLRUULRRUR",
-  "solutions": 2,
-  "minMoves": 15,
-  "belief": "slide in hot, walk out careful.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_2_2",
-  "girl": "vel",
-  "layer": 2,
-  "n": 2,
-  "w": 4,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 3,
-    "y": 2
-   }
-  ],
-  "exit": [
-   [
-    2,
-    4
-   ]
-  ],
-  "holes": [
-   [
-    1,
-    2
-   ],
-   [
-    4,
-    2
-   ],
-   [
-    1,
-    4
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    2,
-    0
-   ]
-  ],
-  "lights": [
-   [
-    1,
-    1
-   ],
-   [
-    4,
-    1
-   ],
-   [
-    3,
-    0
-   ]
-  ],
-  "fragile": [
-   [
-    1,
-    3
-   ],
-   [
-    3,
-    1
-   ]
-  ],
-  "pads": [
-   [
-    2,
-    3,
-    -1,
-    0
-   ]
-  ],
-  "solIn": "URULDDLDUURLDDRRD",
-  "solutions": 1,
-  "minMoves": 17,
-  "belief": "every door you use is a door you lose.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_2_4",
-  "girl": "vel",
-  "layer": 2,
-  "n": 4,
-  "w": 5,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 1,
-    "y": 0
-   }
-  ],
-  "exit": [
-   [
-    1,
-    3
-   ]
-  ],
-  "holes": [
-   [
-    2,
-    3
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    4,
-    3
-   ],
-   [
-    1,
-    4
-   ],
-   [
-    5,
-    4
-   ],
-   [
-    4,
-    2
-   ]
-  ],
-  "lights": [
-   [
-    5,
-    3
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    4,
-    0
-   ]
-  ],
-  "fragile": [
-   [
-    2,
-    2
-   ],
-   [
-    4,
-    1
-   ]
-  ],
-  "pads": [
-   [
-    1,
-    2,
-    1,
-    0
-   ]
-  ],
-  "solIn": "DDDUURRDDUUULDLDLLD",
-  "solutions": 1,
-  "minMoves": 19,
-  "belief": "i'm not reckless. i'm fast. different thing.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_2_6",
-  "girl": "vel",
-  "layer": 2,
-  "n": 6,
-  "w": 5,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 4,
-    "y": 3
-   }
-  ],
-  "exit": [
-   [
-    2,
-    1
-   ]
-  ],
-  "holes": [
-   [
-    4,
-    4
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    5,
-    4
-   ],
-   [
-    1,
-    3
-   ],
-   [
-    4,
-    0
-   ],
-   [
-    2,
-    0
-   ]
-  ],
-  "lights": [
-   [
-    3,
-    0
-   ],
-   [
-    5,
-    0
-   ],
-   [
-    1,
-    1
-   ],
-   [
-    3,
-    4
-   ]
-  ],
-  "fragile": [
-   [
-    3,
-    1
-   ],
-   [
-    5,
-    1
-   ]
-  ],
-  "pads": [
-   [
-    5,
-    2,
-    0,
-    -1
-   ],
-   [
-    4,
-    1,
-    -1,
-    0
-   ]
-  ],
-  "solIn": "RUDDLLDDUUUUDLLR",
-  "solutions": 1,
-  "minMoves": 16,
-  "belief": "cover the room, then get out of it.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_1_6",
-  "girl": "vel",
-  "layer": 1,
-  "n": 6,
-  "w": 5,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 4,
-    "y": 2
-   }
-  ],
-  "exit": [
-   [
-    3,
-    3
-   ]
-  ],
-  "holes": [
-   [
-    4,
-    4
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    3,
-    1
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    3,
-    4
-   ],
-   [
-    2,
-    0
-   ]
-  ],
-  "lights": [
-   [
-    2,
-    4
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    0,
-    3
-   ]
-  ],
-  "fragile": [
-   [
-    2,
-    2
-   ],
-   [
-    1,
-    3
-   ]
-  ],
-  "solIn": "LLLDLDRRLUUURDRD",
-  "solutions": 1,
-  "minMoves": 16,
-  "belief": "you don't get a second trip. plan the first one.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_2_3",
-  "girl": "vel",
-  "layer": 2,
-  "n": 3,
-  "w": 4,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 1,
-    "y": 4
-   }
-  ],
-  "exit": [
-   [
-    2,
-    4
-   ]
-  ],
-  "holes": [
-   [
-    4,
-    2
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    2,
-    3
-   ]
-  ],
-  "lights": [
-   [
-    4,
-    1
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    4,
-    3
-   ]
-  ],
-  "fragile": [
-   [
-    3,
-    1
-   ],
-   [
-    3,
-    3
-   ]
-  ],
-  "solIn": "UUURRRULDDDRLDL",
-  "solutions": 1,
-  "minMoves": 15,
-  "belief": "the second crossing is the one that counts.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_2_5",
-  "girl": "vel",
-  "layer": 2,
-  "n": 5,
-  "w": 5,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 0,
-    "y": 4
-   }
-  ],
-  "exit": [
-   [
-    1,
-    3
-   ]
-  ],
-  "holes": [
-   [
-    5,
-    0
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    3,
-    4
-   ],
-   [
-    3,
-    1
-   ],
-   [
-    5,
-    1
-   ],
-   [
-    5,
-    2
-   ],
-   [
-    1,
-    4
-   ]
-  ],
-  "lights": [
-   [
-    4,
-    4
-   ],
-   [
-    5,
-    3
-   ],
-   [
-    2,
-    4
-   ]
-  ],
-  "fragile": [
-   [
-    2,
-    3
-   ],
-   [
-    4,
-    3
-   ]
-  ],
-  "solIn": "URRDUURRDRDLUULLLD",
-  "solutions": 2,
-  "minMoves": 18,
-  "belief": "three bridges. one shot each way.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_2_7",
-  "girl": "vel",
-  "layer": 2,
-  "n": 7,
-  "w": 5,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 2,
-    "y": 4
-   }
-  ],
-  "exit": [
-   [
-    4,
-    2
-   ]
-  ],
-  "holes": [
-   [
-    1,
-    2
-   ],
-   [
-    4,
-    0
-   ],
-   [
-    5,
-    3
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    1,
-    4
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    5,
-    0
-   ]
-  ],
-  "lights": [
-   [
-    0,
-    4
-   ],
-   [
-    5,
-    4
-   ],
-   [
-    5,
-    1
-   ],
-   [
-    0,
-    2
-   ]
-  ],
-  "fragile": [
-   [
-    4,
-    4
-   ],
-   [
-    0,
-    3
-   ]
-  ],
-  "pads": [
-   [
-    4,
-    1,
-    0,
-    1
-   ]
-  ],
-  "solIn": "ULLDUUURRRRRLUURULU",
-  "solutions": 2,
-  "minMoves": 19,
-  "belief": "if i mess up the order, it all comes down.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_3_1",
-  "girl": "vel",
-  "layer": 3,
-  "n": 1,
-  "w": 5,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 5,
-    "y": 0
-   }
-  ],
-  "exit": [
-   [
-    3,
-    0
-   ]
-  ],
-  "holes": [
-   [
-    2,
-    0
-   ],
-   [
-    4,
-    0
-   ],
-   [
-    2,
-    4
-   ],
-   [
-    2,
-    1
-   ],
-   [
-    0,
-    2
-   ],
-   [
-    4,
-    2
-   ]
-  ],
-  "lights": [
-   [
-    0,
-    1
-   ],
-   [
-    0,
-    3
-   ],
-   [
-    1,
-    4
-   ],
-   [
-    1,
-    0
-   ]
-  ],
-  "fragile": [
-   [
-    1,
-    3
-   ],
-   [
-    1,
-    1
-   ]
-  ],
-  "solIn": "DLLDLLDLDRUUULURDDRRUU",
-  "solutions": 1,
-  "minMoves": 22,
-  "belief": "people think i'm all noise. i count everything.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_3_2",
-  "girl": "vel",
-  "layer": 3,
-  "n": 2,
-  "w": 5,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 1,
-    "y": 4
-   }
-  ],
-  "exit": [
-   [
-    2,
-    1
-   ]
-  ],
-  "holes": [
-   [
-    5,
-    2
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    5,
-    0
-   ],
-   [
-    1,
-    0
-   ],
-   [
-    1,
-    3
-   ],
-   [
-    0,
-    0
-   ],
-   [
-    5,
-    4
-   ]
-  ],
-  "lights": [
-   [
-    5,
-    1
-   ],
-   [
-    5,
-    3
-   ],
-   [
-    4,
-    4
-   ],
-   [
-    4,
-    0
-   ]
-  ],
-  "fragile": [
-   [
-    4,
-    1
-   ],
-   [
-    4,
-    3
-   ]
-  ],
-  "pads": [
-   [
-    3,
-    4,
-    -1,
-    0
-   ]
-  ],
-  "solIn": "LUURRRUURDRLDDRLDLUURRU",
-  "solutions": 2,
-  "minMoves": 23,
-  "belief": "some days the floor holds. some days it doesn’t.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_3_4",
-  "girl": "vel",
-  "layer": 3,
-  "n": 4,
-  "w": 6,
-  "h": 4,
-  "boxes": [
-   {
-    "x": 5,
-    "y": 3
-   }
-  ],
-  "exit": [
-   [
-    4,
-    2
-   ]
-  ],
-  "holes": [
-   [
-    5,
-    2
-   ],
-   [
-    3,
-    3
-   ],
-   [
-    1,
-    2
-   ],
-   [
-    6,
-    0
-   ],
-   [
-    6,
-    4
-   ],
-   [
-    4,
-    0
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    5,
-    4
-   ]
-  ],
-  "lights": [
-   [
-    5,
-    0
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    0,
-    3
-   ],
-   [
-    4,
-    2
-   ],
-   [
-    6,
-    1
-   ]
-  ],
-  "fragile": [
-   [
-    3,
-    1
-   ],
-   [
-    5,
-    1
-   ]
-  ],
-  "pads": [
-   [
-    2,
-    2,
-    0,
-    1
-   ]
-  ],
-  "solIn": "RUULUDLLUDLLLDDRRDRRUU",
-  "solutions": 1,
-  "minMoves": 22,
-  "belief": "i break things. i also know exactly how much they take.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_3_5",
-  "girl": "vel",
-  "layer": 3,
-  "n": 5,
-  "w": 5,
-  "h": 5,
-  "boxes": [
-   {
-    "x": 2,
-    "y": 3
-   }
-  ],
-  "exit": [
-   [
-    3,
-    3
-   ]
-  ],
-  "holes": [
-   [
-    1,
-    3
-   ],
-   [
-    5,
-    0
-   ],
-   [
-    4,
-    2
-   ],
-   [
-    2,
-    5
-   ],
-   [
-    4,
-    5
-   ],
-   [
-    5,
-    2
-   ],
-   [
-    1,
-    1
-   ],
-   [
-    5,
-    3
-   ],
-   [
-    5,
-    5
-   ]
-  ],
-  "lights": [
-   [
-    3,
-    5
-   ],
-   [
-    5,
-    1
-   ],
-   [
-    5,
-    4
-   ],
-   [
-    1,
-    5
-   ],
-   [
-    1,
-    0
-   ]
-  ],
-  "fragile": [
-   [
-    3,
-    4
-   ],
-   [
-    4,
-    1
-   ]
-  ],
-  "pads": [
-   [
-    1,
-    4,
-    1,
-    0
-   ],
-   [
-    3,
-    1,
-    1,
-    0
-   ]
-  ],
-  "solIn": "RRDRLLDUUUULLLULLDDDDDRUUR",
-  "solutions": 1,
-  "minMoves": 26,
-  "belief": "every bridge i burn, i burned on purpose.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_3_3",
-  "girl": "vel",
-  "layer": 3,
-  "n": 3,
-  "w": 5,
-  "h": 5,
-  "boxes": [
-   {
-    "x": 1,
-    "y": 2
-   }
-  ],
-  "exit": [
-   [
-    3,
-    4
-   ]
-  ],
-  "holes": [
-   [
-    3,
-    0
-   ],
-   [
-    3,
-    2
-   ],
-   [
-    1,
-    0
-   ],
-   [
-    5,
-    5
-   ],
-   [
-    0,
-    0
-   ],
-   [
-    2,
-    5
-   ],
-   [
-    3,
-    5
-   ],
-   [
-    2,
-    3
-   ]
-  ],
-  "lights": [
-   [
-    4,
-    5
-   ],
-   [
-    2,
-    0
-   ],
-   [
-    5,
-    1
-   ],
-   [
-    0,
-    4
-   ]
-  ],
-  "fragile": [
-   [
-    2,
-    1
-   ],
-   [
-    4,
-    4
-   ]
-  ],
-  "pads": [
-   [
-    4,
-    1,
-    -1,
-    0
-   ]
-  ],
-  "solIn": "RUUDLLDDDRRRRDURUUUDLDLD",
-  "solutions": 2,
-  "minMoves": 24,
-  "belief": "too loud, too much, too fast. still standing.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
- },
- {
-  "id": "vel_3_6",
-  "girl": "vel",
-  "layer": 3,
-  "n": 6,
-  "w": 6,
-  "h": 5,
-  "boxes": [
-   {
-    "x": 4,
-    "y": 0
-   }
-  ],
-  "exit": [
-   [
-    4,
-    2
-   ]
-  ],
-  "holes": [
-   [
-    2,
-    1
-   ],
-   [
-    1,
-    2
-   ],
-   [
-    3,
-    0
-   ],
-   [
-    2,
-    3
-   ],
-   [
-    5,
-    1
-   ],
-   [
-    5,
-    3
-   ],
-   [
-    3,
-    5
-   ],
-   [
-    5,
-    5
-   ],
-   [
-    4,
-    5
-   ],
-   [
-    6,
-    0
-   ]
-  ],
-  "lights": [
-   [
-    2,
-    0
-   ],
-   [
-    2,
-    2
-   ],
-   [
-    1,
-    4
-   ],
-   [
-    2,
-    5
-   ]
-  ],
-  "fragile": [
-   [
-    3,
-    2
-   ],
-   [
-    2,
-    4
-   ]
-  ],
-  "pads": [
-   [
-    4,
-    3,
-    0,
-    -1
-   ],
-   [
-    3,
-    4,
-    -1,
-    0
-   ]
-  ],
-  "solIn": "DLDLRDDUUURURLLDDDDDRRURRUDD",
-  "solutions": 1,
-  "minMoves": 28,
-  "belief": "i'm not the bomb. i'm the one who defuses it.",
-  "feature": "fragile",
-  "why": "Luật trên bảng: Mỗi phím điều khiển mọi hộp trên bảng cùng lúc; hộp bị chặn thì đứng yên. Đưa hộp vào ô goal. Ô đèn: hộp bước vào ô đèn đang tắt thì đèn bật; bước vào lại ô đèn đang sáng thì đèn tắt (trượt ngang qua cũng tính). Dây nằm trên đèn thì đèn sáng luôn. Thắng khi mọi đèn đều sáng. Ô mũi tên: hộp đi vào là trượt theo mũi tên tới cuối đường. Chỗ trống trên map không đi được. Ô kính: hộp rời ô lần đầu thì kính nứt; rời ô lần thứ hai thì kính vỡ thành lỗ. Mỗi ô kính chỉ qua lại được đúng một lượt đi và một lượt về. Mẹo: Ô kính là cửa vào một khu đèn: đi vào, thắp hết, rồi phải quay ra đúng qua ô kính đó, vì lần thứ hai nó sẽ vỡ. Thắp sao cho đường ra không giẫm lại đèn đã sáng."
  }
 ]

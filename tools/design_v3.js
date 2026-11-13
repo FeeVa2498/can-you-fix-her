@@ -794,32 +794,32 @@ add('trix', 3, 9, BX(5, 4, [R0], { gen: { walls: .08, nums: 5, bites: 2 }, minLe
 /* v11: about 20 memories per layer. Special tile kinds per panel: at most 2 in layers 1–2, up to 3 in layer 3.
    (Light-the-whole-map / room panels and packed numbers are built route-first by tools/trix_v10.js.) */
 {
-  const T = (o) => ({ time: 50000, tries: 8000, luck: .03, ...o });
+  const T = (o) => ({ time: 30000, tries: 5000, luck: .03, ...o });
   // PRIM: portals, arrow tiles, lights (+ walls, mines, twins)
-  [[10, BX(4, 3, [M], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, bites: 1 }, uses: { portals: 1, pads: 1 }, need: 1, slack: 1, minLen: 6, feature: 'portals' }))],
-   [11, BX(4, 3, [M], T({ gen: { walls: .18, litR: 2, pads: 1, padMin: 3, bites: 1 }, uses: { pads: 1 }, need: 1, slack: 1, minLen: 6, feature: 'lights' }))],
+  [[10, BX(4, 3, [M], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, bites: 1 }, uses: { portals: 1, pads: 1 }, need: 2, slack: 1, minLen: 6, feature: 'portals' }))],
+   [11, BX(4, 3, [M], T({ gen: { walls: .18, litR: 2, pads: 1, padMin: 3, bites: 1 }, uses: { pads: 1 }, need: 2, slack: 1, minLen: 6, feature: 'lights' }))],
    [12, BX(3, 3, [M, M], T({ gen: { walls: .2, litR: 2, bites: 1 }, minLen: 6, feature: 'lights' }))],
-   [13, BX(4, 3, [M], T({ gen: { walls: .15, portals: 1, litR: 1, holes: 1, bites: 1 }, uses: { portals: 1 }, need: 1, minLen: 6, feature: 'portals' }))],
+   [13, BX(4, 3, [M], T({ gen: { walls: .15, portals: 1, litR: 1, holes: 1, bites: 1 }, uses: { portals: 1 }, need: 2, minLen: 6, feature: 'portals' }))],
    [15, BX(4, 4, [M, M], T({ gen: { walls: .22, bites: 2 }, minLen: 8, feature: 'many' }))],
   ].forEach(([n, sp]) => add('prim', 1, n, sp));
-  [[10, BX(4, 3, [M, MT], T({ gen: { walls: .15, portals: 1, litR: 1, holes: 1, bites: 1 }, uses: { portals: 1 }, need: 1, minLen: 8, feature: 'opp' }))],
-   [11, BX(4, 3, [M, MT], T({ gen: { walls: .15, pads: 1, padMin: 3, litR: 1, bites: 1 }, uses: { pads: 1 }, need: 1, slack: 1, minLen: 8, feature: 'opp' }))],
-   [12, BX(4, 4, [M, M], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, holes: 1, bites: 2 }, uses: { portals: 1, pads: 1 }, need: 1, slack: 1, minLen: 9, feature: 'portals' }))],
+  [[10, BX(4, 3, [M, MT], T({ gen: { walls: .15, portals: 1, litR: 1, holes: 1, bites: 1 }, uses: { portals: 1 }, need: 2, minLen: 8, feature: 'opp' }))],
+   [11, BX(4, 3, [M, MT], T({ gen: { walls: .15, pads: 1, padMin: 3, litR: 1, bites: 1 }, uses: { pads: 1 }, need: 2, slack: 1, minLen: 8, feature: 'opp' }))],
+   [12, BX(4, 4, [M, M], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, holes: 1, bites: 2 }, uses: { portals: 1, pads: 1 }, need: 2, slack: 1, minLen: 9, feature: 'portals' }))],
    [13, BX(4, 3, [M, MT], T({ gen: { walls: .2, litR: 2, bites: 1 }, minLen: 8, feature: 'lights' }))],
-   [14, BX(4, 4, [M, MT], T({ gen: { walls: .15, pads: 2, padMin: 3, bites: 2 }, uses: { pads: 2 }, need: 1, slack: 1, minLen: 9, feature: 'pads' }))],
-   [15, BX(4, 4, [M, M], T({ gen: { walls: .15, portals: 1, holes: 2, bites: 2 }, uses: { portals: 1 }, need: 1, minLen: 9, feature: 'portals' }))],
-   [17, BX(5, 4, [M, MT], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, holes: 2, bites: 2 }, uses: { portals: 1, pads: 1 }, need: 1, slack: 1, minLen: 10, feature: 'opp' }))],
-   [18, BX(5, 4, [M, M], T({ gen: { walls: .18, litR: 2, pads: 1, padMin: 3, bites: 2 }, uses: { pads: 1 }, need: 1, slack: 1, minLen: 10, feature: 'lights' }))],
+   [14, BX(4, 4, [M, MT], T({ gen: { walls: .15, pads: 2, padMin: 3, bites: 2 }, uses: { pads: 2 }, need: 2, slack: 1, minLen: 9, feature: 'pads' }))],
+   [15, BX(4, 4, [M, M], T({ gen: { walls: .15, portals: 1, holes: 2, bites: 2 }, uses: { portals: 1 }, need: 2, minLen: 9, feature: 'portals' }))],
+   [17, BX(5, 4, [M, MT], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, holes: 2, bites: 2 }, uses: { portals: 1, pads: 1 }, need: 2, slack: 1, minLen: 10, feature: 'opp' }))],
+   [18, BX(5, 4, [M, M], T({ gen: { walls: .18, litR: 2, pads: 1, padMin: 3, bites: 2 }, uses: { pads: 1 }, need: 2, slack: 1, minLen: 10, feature: 'lights' }))],
   ].forEach(([n, sp]) => add('prim', 2, n, sp));
-  [[10, BX(4, 4, [M, M, M], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, litR: 2, bites: 1 }, uses: { portals: 1, pads: 1 }, need: 1, slack: 1, minLen: 10, cap: 200000, feature: 'many' }))],
-   [11, BX(5, 4, [M, MT], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, litR: 2, holes: 2, bites: 2 }, uses: { portals: 1, pads: 1 }, need: 1, slack: 1, minLen: 11, feature: 'opp' }))],
-   [12, BX(5, 4, [M, M, MT], T({ gen: { walls: .18, pads: 1, padMin: 3, litR: 2, bites: 2 }, uses: { pads: 1 }, need: 1, slack: 1, minLen: 11, cap: 200000, feature: 'opp' }))],
-   [13, BX(5, 4, [M, MT, M], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, holes: 2, bites: 2 }, uses: { portals: 1, pads: 1 }, need: 1, slack: 1, minLen: 12, cap: 200000, feature: 'opp' }))],
-   [14, BX(5, 5, [M, MT], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, litR: 3, holes: 2, bites: 3 }, uses: { portals: 1, pads: 1 }, need: 1, slack: 1, minLen: 12, feature: 'opp' }))],
-   [16, BX(5, 4, [M, M, M], T({ gen: { walls: .2, portals: 1, litR: 3, holes: 2, bites: 2 }, uses: { portals: 1 }, need: 1, minLen: 12, cap: 200000, feature: 'many' }))],
-   [17, BX(5, 5, [M, MT, M], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, litR: 2, holes: 2, bites: 3 }, uses: { portals: 1, pads: 1 }, need: 1, slack: 1, minLen: 13, cap: 200000, feature: 'opp' }))],
-   [18, BX(5, 5, [M, MT], T({ gen: { walls: .15, pads: 2, padMin: 3, litR: 2, bites: 3 }, uses: { pads: 2 }, need: 1, slack: 1, minLen: 13, feature: 'pads' }))],
-   [20, BX(5, 5, [M, M, MT], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, litR: 3, holes: 3, bites: 3 }, uses: { portals: 1, pads: 1 }, need: 1, slack: 1, minLen: 14, cap: 200000, feature: 'opp' }))],
+  [[10, BX(4, 4, [M, M, M], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, litR: 2, bites: 1 }, uses: { portals: 1, pads: 1 }, need: 2, slack: 1, minLen: 10, cap: 200000, feature: 'many' }))],
+   [11, BX(5, 4, [M, MT], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, litR: 2, holes: 2, bites: 2 }, uses: { portals: 1, pads: 1 }, need: 2, slack: 1, minLen: 11, feature: 'opp' }))],
+   [12, BX(5, 4, [M, M, MT], T({ gen: { walls: .18, pads: 1, padMin: 3, litR: 2, bites: 2 }, uses: { pads: 1 }, need: 2, slack: 1, minLen: 11, cap: 200000, feature: 'opp' }))],
+   [13, BX(5, 4, [M, MT, M], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, holes: 2, bites: 2 }, uses: { portals: 1, pads: 1 }, need: 2, slack: 1, minLen: 12, cap: 200000, feature: 'opp' }))],
+   [14, BX(5, 5, [M, MT], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, litR: 3, holes: 2, bites: 3 }, uses: { portals: 1, pads: 1 }, need: 2, slack: 1, minLen: 12, feature: 'opp' }))],
+   [16, BX(5, 4, [M, M, M], T({ gen: { walls: .2, portals: 1, litR: 3, holes: 2, bites: 2 }, uses: { portals: 1 }, need: 2, minLen: 12, cap: 200000, feature: 'many' }))],
+   [17, BX(5, 5, [M, MT, M], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, litR: 2, holes: 2, bites: 3 }, uses: { portals: 1, pads: 1 }, need: 2, slack: 1, minLen: 13, cap: 200000, feature: 'opp' }))],
+   [18, BX(5, 5, [M, MT], T({ gen: { walls: .15, pads: 2, padMin: 3, litR: 2, bites: 3 }, uses: { pads: 2 }, need: 2, slack: 1, minLen: 13, feature: 'pads' }))],
+   [20, BX(5, 5, [M, M, MT], T({ gen: { walls: .15, portals: 1, pads: 1, padMin: 3, litR: 3, holes: 3, bites: 3 }, uses: { portals: 1, pads: 1 }, need: 2, slack: 1, minLen: 14, cap: 200000, feature: 'opp' }))],
   ].forEach(([n, sp]) => add('prim', 3, n, sp));
   // TRIX: one rope; lights, number tiles, one-way gaps, portals, switches+doors
   const RT = o => T({ cap: 250000, luck: .01, ...o });
@@ -846,13 +846,13 @@ add('trix', 3, 9, BX(5, 4, [R0], { gen: { walls: .08, nums: 5, bites: 2 }, minLe
    [19, BX(5, 5, [R0], RT({ gen: { walls: .05, touch: 4, oneway: 1, guard: 1, bites: 2 }, uses: { oneway: 1, door: 1 }, need: 2, minLen: 17, feature: 'switches' }))],
   ].forEach(([n, sp]) => add('trix', 3, n, sp));
   // PAIGE: the die prints the white tiles; arrow tiles and portals (two dice in layer 3)
-  const PT = o => T({ luck: .03, ...o });
+  const PT = o => T({ luck: .03, time: 30000, tries: 5000, ...o });
   [[7, [3, 2, 1, 0]], [8, [3, 3, 2, 0]], [9, [4, 3, 2, 1]], [10, [4, 3, 3, 0]], [11, [3, 3, 2, 1]], [12, [4, 4, 3, 1]], [13, [4, 3, 3, 1]], [14, [5, 3, 3, 0]], [15, [4, 4, 3, 2]], [16, [5, 4, 3, 1]], [17, [5, 4, 4, 1]], [18, [5, 4, 4, 2]]]
-    .forEach(([n, [w, h, d, pads]], k) => add('paige', 1, n, BX(w, h, [DIE], PT({ gen: { walls: .12, dice: d, pads, bites: k % 3 }, ...(pads ? { uses: { pads: 1 }, need: 1 } : {}), minLen: 4 + k / 2 | 0, feature: 'dice' }))));
+    .forEach(([n, [w, h, d, pads]], k) => add('paige', 1, n, BX(w, h, [DIE], PT({ gen: { walls: .12, dice: d, pads, bites: k % 3 }, ...(pads ? { uses: { pads: 1 }, need: 2 } : {}), minLen: 4 + k / 2 | 0, feature: 'dice' }))));
   [[8, [4, 3, 3, 1, 0]], [9, [4, 3, 3, 0, 1]], [10, [4, 4, 3, 2, 0]], [11, [4, 4, 3, 0, 1]], [12, [5, 4, 3, 2, 0]], [13, [5, 4, 4, 0, 1]], [14, [5, 4, 4, 2, 0]], [15, [5, 4, 4, 0, 1]], [16, [5, 5, 4, 3, 0]], [17, [5, 5, 4, 0, 1]], [18, [5, 5, 5, 2, 0]], [19, [5, 5, 5, 0, 1]]]
-    .forEach(([n, [w, h, d, pads, portals]], k) => add('paige', 2, n, BX(w, h, [DIE], PT({ gen: { walls: .12, dice: d, pads, portals, bites: 1 + k % 3 }, uses: portals ? { portals: 1 } : { pads: 1 }, need: 1, minLen: 8 + k / 2 | 0, feature: 'dice' }))));
+    .forEach(([n, [w, h, d, pads, portals]], k) => add('paige', 2, n, BX(w, h, [DIE], PT({ gen: { walls: .12, dice: d, pads, portals, bites: 1 + k % 3 }, uses: portals ? { portals: 1 } : { pads: 1 }, need: 2, minLen: 8 + k / 2 | 0, feature: 'dice' }))));
   [[8, [4, 3, 2, 1, 0]], [9, [4, 4, 3, 0, 1]], [10, [4, 4, 3, 1, 1]], [11, [5, 4, 3, 2, 0]], [12, [5, 4, 3, 1, 1]], [13, [5, 4, 4, 0, 1]], [14, [5, 5, 3, 2, 1]], [15, [5, 5, 4, 1, 1]], [16, [5, 5, 4, 2, 0]], [17, [6, 4, 4, 1, 1]], [18, [6, 5, 4, 2, 1]], [19, [6, 5, 5, 2, 1]]]
-    .forEach(([n, [w, h, d, pads, portals]], k) => add('paige', 3, n, BX(w, h, [DIE, DIE1], CL(PT({ gen: { walls: .12, dice: d, pads, portals, bites: 1 + k % 3 }, ...(pads || portals ? { uses: portals ? { portals: 1 } : { pads: 1 }, need: 1 } : {}), minLen: 9 + k / 2 | 0, feature: 'dice', time: 60000 })))));
+    .forEach(([n, [w, h, d, pads, portals]], k) => add('paige', 3, n, BX(w, h, [DIE, DIE1], CL(PT({ gen: { walls: .12, dice: d, pads, portals, bites: 1 + k % 3 }, ...(pads || portals ? { uses: portals ? { portals: 1 } : { pads: 1 }, need: 2 } : {}), minLen: 9 + k / 2 | 0, feature: 'dice', time: 40000 })))));
 }
 /* Paige: a die to print the right numbers, arrow tiles that slide it without turning, portals; two dice in layer 3 */
 TUT('paige', 1, 1, 'dice', BX(3, 1, [DIE], EZ({ gen: { walls: .02, dice: 1, diceMore: 0 }, minLen: 2, maxLen: 6 })));
@@ -913,7 +913,7 @@ else if (ONLY === 'merge') {
     Object.assign(p, { belief: spec.belief || (prev && prev.belief) || '', intro: spec.intro || null }); if (spec.tut) p.tut = spec.tut;
     if (spec.feature) p.feature = spec.feature;
     retext(p);
-    out.push(p);
+    out.push(p); fs.writeFileSync(process.env.PART || OUT + '.part', JSON.stringify(out, null, 1));   // keep what's done if the run is stopped
     const f = ['holes', 'broken', 'oneway', 'pads', 'stops', 'portals', 'lights', 'nums', 'switches', 'doors', 'cracks', 'paints', 'dice'].filter(k => (p[k] || []).length).map(k => `${k} ${p[k].length}`).join(', ');
     console.log(`${p.id.padEnd(10)} ${p.w}x${p.h} boxes ${p.boxes.map(b => (b.trail ? 'R' : 'B') + (b.m ? '~' : '') + (b.dash ? '>' : '') + (b.c != null ? b.c : '') + (b.n != null ? '#' + b.n : '')).join(' ')}  shortest ${p.minMoves} (${p.solutions} ways, luck ${p.luck}%${p.quality !== undefined ? ', q ' + p.quality : ''})  ${f}  (${Date.now() - t0}ms)`);
   }
