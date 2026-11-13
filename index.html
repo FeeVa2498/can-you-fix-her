@@ -1455,7 +1455,7 @@ const SFX = {
   mail() { if (!AU.ctx) return; const t = AU.ctx.currentTime;[1318, 1046, 1568].forEach((f, i) => tone(f, t + i * .1, .4, .08, 'triangle')); },
   item() { if (!AU.ctx) return; const t = AU.ctx.currentTime;[784, 988, 1175, 1568].forEach((f, i) => tone(f, t + i * .07, .35, .09, 'square')); },
   buzz() { if (!AU.ctx) return; tone(130, 0, .22, .14, 'sawtooth'); },
-  glitch(len = .4) { if (!AU.ctx) return; noiseHit(0, len, 300, .075); tone(60 + Math.random() * 400, 0, len, .025, 'square'); },   // a quarter of the old volume
+  glitch(len = .4) { if (!AU.ctx) return; noiseHit(0, len, 300, .3); tone(60 + Math.random() * 400, 0, len, .1, 'square'); },
   step(i = 0) { if (!AU.ctx) return; tone(523 * Math.pow(2, (i % 12) / 12), 0, .06, .045, 'triangle'); },
   link() { if (!AU.ctx) return; const t = AU.ctx.currentTime; tone(1046, t, .15, .09, 'triangle'); tone(1568, t + .06, .2, .08, 'triangle'); },
   win() { if (!AU.ctx) return; const t = AU.ctx.currentTime;[523, 659, 784, 1046, 1318].forEach((f, i) => tone(f, t + i * .08, .6, .09, 'triangle')); },
@@ -4307,7 +4307,7 @@ function drawRayBound(cv) {
 const PC = { on: false };
 function pcAmbience() {
   if (PC.on || !AU.ctx) return; PC.on = true;
-  const ctx = AU.ctx, out = ctx.createGain(); out.gain.value = .5; out.connect(AU.master); PC.out = out;
+  const ctx = AU.ctx, out = ctx.createGain(); out.gain.value = .125; out.connect(AU.master); PC.out = out;   // fan, hum, CRT whine, disk: a quarter of the old level
   // fan: low filtered noise
   const len = ctx.sampleRate * 3, nb = ctx.createBuffer(1, len, ctx.sampleRate), d = nb.getChannelData(0);
   let b = 0; for (let i = 0; i < len; i++) { b = (b + (Math.random() * 2 - 1) * .02) * .995; d[i] = b; }

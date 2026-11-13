@@ -8,7 +8,7 @@
 const PC = { on: false };
 function pcAmbience() {
   if (PC.on || !AU.ctx) return; PC.on = true;
-  const ctx = AU.ctx, out = ctx.createGain(); out.gain.value = .5; out.connect(AU.master); PC.out = out;
+  const ctx = AU.ctx, out = ctx.createGain(); out.gain.value = .125; out.connect(AU.master); PC.out = out;   // fan, hum, CRT whine, disk: a quarter of the old level
   // fan: low filtered noise
   const len = ctx.sampleRate * 3, nb = ctx.createBuffer(1, len, ctx.sampleRate), d = nb.getChannelData(0);
   let b = 0; for (let i = 0; i < len; i++) { b = (b + (Math.random() * 2 - 1) * .02) * .995; d[i] = b; }
