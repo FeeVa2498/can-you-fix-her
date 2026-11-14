@@ -232,16 +232,17 @@ function tarotRender() {
       if (!S.tq || S.tq.step !== step || !box.isConnected) return;
       const left = Math.max(0, S.tq.until - Date.now());
       bar.style.width = (left / (TQ_SECS * 1000) * 100) + '%'; bar.classList.toggle('hot', left < 10000);
-      if (left <= 0) { tarotAnswer(null); return; }
+      if (left <= 0) { tarotAnswer(pickRnd(q.opts), true); return; }   // time's up: the system picks one of the three at random
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
   });
 }
-async function tarotAnswer(i) {
+async function tarotAnswer(i, late) {
   const T = S.tq; if (!T || T.kind !== 'tarot' || T.busy) return; T.busy = true;
   const q = S.tarotQ[T.step], ok = i === q.card;
   liveViews('trix').forEach(vw => { const box = $('.chat-choices', vw.root); if (box) box.innerHTML = ''; });
+  if (late) { SFX.buzz(); toast('Time\'s up', 'An answer was picked at random.'); }
   if (i != null) { const m = { who: 'me', text: ARCANA[i].ans, t: clockStr() }; S.logs.trix.push(m); appendMsg('trix', m); }
   if (ok) T.right++; SFX.tick();
   const r = { who: 'trix', text: pickRnd(i == null ? TAROT_LATE : TAROT_NOTE), t: clockStr() };
