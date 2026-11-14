@@ -1285,6 +1285,12 @@ const NEWS_AHEAD = {
   5: 'SAVE THE DATE 🎨\nHOBBY SHOWCASE in 5 days (day 12). Every patient will present one piece of their own.\nPatients usually bring what they feel sure of. Counsellors: a little encouragement goes a long way.',
   1: 'REMINDER 🎨\nHOBBY SHOWCASE is tomorrow. No sessions on the day.\nIf a patient has something she really loves, tonight is the night to tell her it\'s worth showing.',
 };
+const QUAKE_NEWS = [
+  'SEISMIC NOTICE ⚠\nA minor tremor was recorded at {t}. No damage reported. Please continue working.',
+  'SEISMIC NOTICE ⚠\nA second, stronger tremor was recorded at {t}. Exits remain closed for your safety. Patients are being monitored.',
+  'SEISMIC NOTICE ⚠\nTremor #3 at {t}. Power fluctuations are expected. Save your work often.',
+  'SEISMIC NOTICE ⚠\nTremor #4 at {t}. Epicentre: unknown. Depth: 0 km.\nThe building is fine.',
+];
 const NEWS = {
   postcard: 'POSTCARD DAY 📮\nEveryone writes a postcard to somewhere they would go if they could leave. Cards will be delivered to your inbox.\nReminder: nobody leaves.',
   inspection: 'INSPECTION DAY 🗂\nInspectors from upstairs are on site today. Keep your workstation tidy and your answers short.\nPlease do not mention the seismic activity.',
@@ -1334,6 +1340,7 @@ function earthquake() {
   const app = $('#app'); app.classList.remove('quake'); void app.offsetWidth; app.classList.add('quake'); SFX.rumble();
   setTimeout(() => app.classList.remove('quake'), 1400);
   applyAtmos();
+  setTimeout(() => postNews(QUAKE_NEWS[Math.min(S.quakes, QUAKE_NEWS.length) - 1].replace('{t}', clockStr())), 2200);   // #announcements reports every tremor
   const L = {
     1: ['Whoa! Little wobble. Totally normal. Happens in Tokyo every Tuesday.', 'Reminder: nobody leaves the building until every patient is fixed. House rules.'],
     2: ['Okay that one was bigger. I was in Kathmandu for one like this. Kinda. Spiritually.', 'Keep working. The faster they\'re fixed, the faster the floor stops dancing.'],
