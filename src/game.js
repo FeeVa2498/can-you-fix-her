@@ -31,7 +31,7 @@ const GIRLS = {
     rule: 'OCD / Perfectionism: connect every pair AND fill 100% of the tiles. A board with gaps does not count.',
     fail: "{angry}time is a constraint. i hate constraints. next." },
   paige: { id: 'PAIGE_03', name: 'Paige', tag: 'Goth', from: 4, built: true, layers: ['ROLE · "the mystic"', 'INSECURITY · "too much"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{neutral}the dice said no today." },
-  vel: { id: 'VEL_04', name: 'Vel', tag: 'Gyaru', from: 6, built: true, layers: ['ROLE · "the fashion queen"', 'INSECURITY · "trigger happy"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{sad}ugh. jammed. srry." },
+  vel: { id: 'VEL_04', name: 'Vel', tag: 'Gyaru', from: 5, built: true, layers: ['ROLE · "the fashion queen"', 'INSECURITY · "trigger happy"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{sad}ugh. jammed. srry." },
   // Myne (Tomboy) is out of the game until further notice
   ray: { id: 'RAY_00', name: 'Ray', tag: 'Boss', from: 99, layers: ['CORE'] },
 };
