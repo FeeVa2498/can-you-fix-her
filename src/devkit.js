@@ -7,15 +7,17 @@ const KIT_APPS = ['MusicBox.exe', 'UnitConv.exe', 'Fortune.exe', 'Atlas.exe'];
 const KIT_OPEN = { 'MusicBox.exe': () => openMusicBox(), 'UnitConv.exe': () => openConv(), 'Fortune.exe': () => openFortune(), 'Atlas.exe': () => openAtlas() };
 const KIT = { tab: 'apps', g: 'prim' };
 function openKit() {
-  openWin('kit', { title: 'Designer kit', icon: 'puzzle', w: 780, h: 580, x: 120, y: 20, render: (b, rec) => { addUpd(rec, () => kitRender(b)); kitRender(b); } });
+  const dk = $('#desktop'), H = dk ? dk.clientHeight : 700;
+  openWin('kit', { title: 'Designer kit', icon: 'puzzle', w: 900, h: Math.max(580, Math.min(H - 24, 760)), x: 120, y: 12, render: (b, rec) => { addUpd(rec, () => kitRender(b)); kitRender(b); } });
 }
-const KIT_TABS = [['apps', 'Apps'], ['nights', 'Night talks'], ['maps', 'Maps'], ['medit', 'Map editor'], ['events', 'Big days'], ['cuts', 'Cutscenes'], ['boss', 'Boss level'], ['gallery', 'Gallery']];
+const KIT_TABS = [['apps', 'Apps'], ['nights', 'Night talks'], ['maps', 'Maps'], ['medit', 'Map editor'], ['events', 'Big days'], ['cuts', 'Cutscenes'], ['boss', 'Boss level'], ['gallery', 'Gallery'], ['dlg', 'Dialogue']];
 function kitRender(b) {
   if (KIT.tab === 'medit' && $('#me-cv', b)) return;   // the editor redraws itself
+  if (KIT.tab === 'dlg' && $('.dlg-list', b)) return;   // so does the dialogue editor (a refresh would wipe what you're typing)
   b.innerHTML = `<div class="kit"><div class="kit-tabs">${KIT_TABS.map(([k, t]) => `<button class="kit-tab${KIT.tab === k ? ' on' : ''}" data-k="${k}">${t}</button>`).join('')}</div><div class="kit-body sunk" id="kit-body"></div></div>`;
   $$('.kit-tab', b).forEach(x => x.onclick = () => { SFX.click(); KIT.tab = x.dataset.k; b.innerHTML = ''; kitRender(b); });
   const body = $('#kit-body', b);
-  ({ apps: kitApps, nights: kitNights, maps: kitMaps, medit: kitMapEditor, events: kitEvents, cuts: kitCuts, boss: kitBoss, gallery: kitGallery })[KIT.tab](body);
+  ({ apps: kitApps, nights: kitNights, maps: kitMaps, medit: kitMapEditor, events: kitEvents, cuts: kitCuts, boss: kitBoss, gallery: kitGallery, dlg: kitDialogue })[KIT.tab](body);
 }
 
 /* ---------- apps ---------- */

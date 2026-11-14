@@ -954,7 +954,8 @@ async function loadDialogueData() {
       if (live.length) src = `data/*.csv (${live.join(', ')})` + (live.length < CSV_FILES.length ? ' + built-in copy' : '');
     }
   }
-  DD = compileData(texts); DD.source = src;
+  DD = compileData(dlgApply(texts)); DD.source = src + (dlgCount() ? ` + ${dlgCount()} edits from the dialogue editor` : '');
+  dlgDbInit();
   const check = /[?&]check\b/.test(location.search);
   if (DATA_ISSUES.length) console.warn('Dialogue data problems:', DATA_ISSUES);
   if (DATA_ISSUES.length || check) showDataReport();
