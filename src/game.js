@@ -64,7 +64,7 @@ function save() { /* progress is written at checkpoints only (start of morning, 
 function loadSave() { try { const t = localStorage.getItem(SAVE_KEY); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
 function wipeSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) { } }
 const UPD = new Set();
-setInterval(() => { if (S.flags && S.flags.ping && !document.getElementById('setup') && !document.getElementById('blackout')) SFX.vibrate(); }, 2600);
+setInterval(() => { if (S.flags && (S.flags.ping || S.flags.mailPing) && !document.getElementById('setup') && !document.getElementById('blackout')) SFX.vibrate(); }, 2600);
 function refresh() { UPD.forEach(f => { try { f(); } catch (e) { console.error(e); } }); try { if (typeof profCheck === 'function' && S.player && !S.flags.chamber) profCheck(); } catch (e) { } renderIcons(); renderTray(); applyAtmos(); }
 const layersTotal = () => ORDER.reduce((a, k) => a + S.g[k].layer, 0);
 const clockStr = () => { const m = S.mins % (24 * 60); return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60); };
@@ -611,7 +611,7 @@ function renderIcons() {
   const mailUnread = S.mail.filter(m => !m.read).length;
   const list = [
     { id: 'yap', label: 'Yappy Yappy', ic: 'chat', fn: () => openYap(), badge: unread, ping: S.flags.ping === 'yap' },
-    { id: 'mail', label: 'DiveMail', ic: 'mail', fn: openMail, badge: mailUnread },
+    { id: 'mail', label: 'DiveMail', ic: 'mail', fn: openMail, badge: mailUnread, ping: !!S.flags.mailPing && mailUnread > 0 },
     { id: 'brain', label: 'Fix-it', ic: 'wrench', fn: openBrain, ping: S.flags.ping === 'brain', isNew: S.phase === 'day' && availableToday().length > 0 && !S.session },
     { id: 'mbox', label: 'MementoBox', ic: 'box', fn: openMBox },
     { id: 'profiles', label: 'Profiles', ic: 'id', fn: openProfiles, isNew: !!S.flags.profNew },
@@ -676,7 +676,7 @@ function openYap(ch) {
   });
   setViewCh('yap', yapCh); renderBuddies(); renderTasks();
   if (S.flags.ping === 'yap') { S.flags.ping = null; }
-  if (S.day === 1 && S.player && !S.flags.briefStarted) { S.flags.briefStarted = true; S.unread.boss = 0; yapCh = 'boss'; setViewCh('yap', 'boss'); setTimeout(() => runDialogue(briefDialogue()), 700); }
+  if (S.day === 1 && S.player && S.flags.d1Yap && !S.flags.briefStarted) { S.flags.briefStarted = true; S.unread.boss = 0; yapCh = 'boss'; setViewCh('yap', 'boss'); setTimeout(() => runDialogue(briefDialogue()), 700); }
   renderIcons();
 }
 const onSite = k => GIRLS[k].built && !S.g[k].gone && S.day >= GIRLS[k].from;
@@ -1135,12 +1135,13 @@ function sendMail(m) {
   m.id = 'm' + S.mail.length; m.read = false; m.day = S.day; m.t = clockStr();
   if (m.att) { m.atts = [m.att]; delete m.att; }
   (m.atts || []).forEach(a => a.got = false);
-  S.mail.unshift(m); SFX.mail();
+  S.mail.unshift(m); SFX.mail(); S.flags.mailPing = true; setTimeout(() => SFX.vibrate(), 350);   // unread mail shakes the icon and buzzes until DiveMail is opened
   toast('DiveMail', `New mail from <b>${esc(WHO[m.from] ? WHO[m.from].name : m.from)}</b>: ${esc(m.subject)}`, () => openMail(m.id));
   save(); refresh();
 }
 let mailSel = null;
 function openMail(id) {
+  if (S.flags.mailPing) { S.flags.mailPing = false; renderIcons(); }
   if (typeof id === 'string') mailSel = id;
   openWin('mail', { title: 'DiveMail', icon: 'mail', w: 600, h: 460, x: 190, y: 40, render: (b, rec) => { addUpd(rec, renderMail); } });
   renderMail();
@@ -2013,9 +2014,19 @@ async function bootOS() {
 function day1Start() {
   S.phase = 'day'; S.day = 1; S.mins = DAY_START; S.dayOver = false; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = [];
   S.night = { chats: 0, with: [], bossPending: false, bossDone: false };
-  S.unread.boss = 1; S.flags.ping = 'yap';
-  if (!S.flags.welcomeMail) { S.flags.welcomeMail = true; sendMail({ from: 'dive', subject: 'Welcome to DIVE — your appointment', body: `Dear ${S.player ? S.player.name : 'Counsellor'},\n\nCongratulations. We are pleased to confirm your appointment as Counsellor (probationary, 14 days) at the DIVE patient care facility, effective today.\n\nYour duties:\n  · run treatment sessions with your assigned patients (Fix-it)\n  · clear each patient's layers of insecurity, one memory at a time\n  · report to your supervisor, Boss (@r.admin), every morning and night\n\nYour workstation, accommodation and meals are provided. You will not need to leave the premises.\n\nYour training is complete. You may not remember it. This is normal.\n\nYou can't work without a little bit of music. Attached is MusicBox, our special player with "vibe mode": it automatically chooses your music based on the situation. Enjoy.\n\nWelcome aboard,\n— DIVE Human Resources\n\nP.S. Your supervisor is very excited to meet you.`, atts: [{ kind: 'app', name: 'MusicBox.exe' }] }); }
+  S.unread.boss = 0; S.flags.d1Yap = false;
   checkpoint('d1'); refresh();
+}
+// day 1 on the desktop: the welcome mail lands first, Boss's Yappy message about 5 s later
+async function day1Arrive() {
+  await wait(1200);
+  if (!S.flags.welcomeMail) { S.flags.welcomeMail = true; sendMail({ from: 'dive', subject: 'Welcome to DIVE — your appointment', body: `Dear ${S.player ? S.player.name : 'Counsellor'},\n\nCongratulations. We are pleased to confirm your appointment as Counsellor (probationary, 14 days) at the DIVE patient care facility, effective today.\n\nYour duties:\n  · run treatment sessions with your assigned patients (Fix-it)\n  · clear each patient's layers of insecurity, one memory at a time\n  · report to your supervisor, Boss (@r.admin), every morning and night\n\nYour workstation, accommodation and meals are provided. You will not need to leave the premises.\n\nYour training is complete. You may not remember it. This is normal.\n\nYou can't work without a little bit of music. Attached is MusicBox, our special player with "vibe mode": it automatically chooses your music based on the situation. Enjoy.\n\nWelcome aboard,\n— DIVE Human Resources\n\nP.S. Your supervisor is very excited to meet you.`, atts: [{ kind: 'app', name: 'MusicBox.exe' }] }); }
+  await wait(5000);
+  if (S.day !== 1 || S.flags.briefStarted) return;
+  S.flags.d1Yap = true; S.unread.boss = 1; S.flags.ping = 'yap'; SFX.vibrate();
+  toast('Yappy Yappy', '<b>Boss</b> sent you a message.', () => openYap('boss'));
+  save(); refresh();
+  if (VIEWS.yap) openYap('boss');   // Yappy already open: Boss starts talking right away
 }
 async function main() {
   await loadDialogueData();
@@ -2034,11 +2045,11 @@ async function main() {
     if (S.flags.ended) { refresh(); endGame(S.flags.endKind || 'proto'); return; }
     if (S.flags.rayFace) WHO.boss.name = 'Ray';
     if (S.at === 'reckoning') { S.day = LAST_DAY; await beginReckoning(); return; }
-    if (S.at === 'd1') { S.flags.briefStarted = false; S.logs.boss = []; day1Start(); await lockScreen('Welcome back'); return; }
+    if (S.at === 'd1') { S.flags.briefStarted = false; S.logs.boss = []; day1Start(); await lockScreen('Welcome back'); day1Arrive(); return; }
     if (S.at === 'night') { S.phase = 'day'; S.session = null; await goNight(); return; }
     await beginMorning(); return;
   }
   const player = await setupScreen();
   S = fresh(); S.player = player; day1Start();
-  await wakeUp();
+  await wakeUp(); day1Arrive();
 }
