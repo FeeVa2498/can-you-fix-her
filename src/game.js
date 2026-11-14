@@ -51,7 +51,7 @@ function fresh() {
   return {
     player: null, day: 1, phase: 'day', mins: 9 * 60, g, dayOver: false,
     inv: [], apps: [], mementos: [], know: [], flags: {}, seen: {},
-    logs: { boss: [], session: [], prim: [], trix: [], paige: [], vel: [] }, unread: { boss: 0, prim: 0, trix: 0, paige: 0, vel: 0 },
+    logs: { boss: [], session: [], prim: [], trix: [], paige: [], vel: [], news: [] }, unread: { boss: 0, prim: 0, trix: 0, paige: 0, vel: 0, news: 0 },
     active: null, queue: [], dyn: {}, session: null, route: [],
     todayLayers: 0, todayFixed: [], todayWorked: [], best: 0,
     mail: [], journal: [], show: {}, quakes: 0, asked: {}, used: {}, fixes: 0, met: {}, half: 1, at: 'd1',
@@ -311,12 +311,14 @@ const WHO = {
   vel: { name: 'Vel', sub: 'VEL_04 · Gyaru' },
   ray: { name: 'Ray', sub: 'RAY_00 · @r.admin' },
   dive: { name: 'DIVE Administration', sub: 'no-reply' },
+  news: { name: '#announcements', sub: 'DIVE · read only' },
 };
 function avHTML(who, cls = '', emo) {
   if (who === 'boss' && S.flags && S.flags.rayFace) who = 'ray';
   if (PORTRAIT[who]) return `<img class="av ${cls}${S.g[who] && S.g[who].gone ? ' gone' : ''}" src="${portraitURL(who, emo || 'neutral')}" alt="${esc(WHO[who].name)}">`;
   if (who === 'me') return `<img class="av ${cls}" src="${S.player ? S.player.avatar : ''}" alt="you">`;
   if (ART[who]) return `<img class="av ${cls}${S.g[who] && S.g[who].gone ? ' gone' : ''}" src="${ART[who].face}" alt="${esc(WHO[who].name)}">`;
+  if (who === 'news') return `<div class="av q ${cls}" style="background:#e0465e">📢</div>`;
   if (who === 'dive') return `<div class="av q ${cls}" style="background:#6b4a9e">D</div>`;
   return `<div class="av q ${cls}" aria-label="no avatar">?</div>`;
 }
@@ -490,6 +492,7 @@ function statusText(ch) {
   if (ch === 'session') return S.session ? 'Session in progress.' : 'No session.';
   if (ch === 'boss') return 'Boss is away.';
   if (S.g[ch] && S.g[ch].gone) return `${WHO[ch].name} has left the facility.`;
+  if (ch === 'news') return 'Read-only channel.';
   return `${WHO[ch].name} is offline.`;
 }
 function choose(i) {
@@ -683,7 +686,7 @@ function renderBuddies() {
   const row = (ch, sub) => `<button class="buddy${yapCh === ch ? ' sel' : ''}" data-ch="${ch}">${avHTML(ch)}<span>${esc(WHO[ch].name)}<small class="${typing(ch) ? 'dots' : ''}">${esc(typing(ch) ? 'typing' : sub)}</small></span>${S.unread[ch] ? `<span class="un">${S.unread[ch]}</span>` : ''}</button>`;
   const gstat = k => S.g[k].gone ? 'offline' : (S.phase === 'night' && canNightChat(k)) || (S.phase === 'day') ? 'online' : 'offline';
   const people = PLAYABLE.filter(k => met(k) && (S.g[k].sessions > 0 || S.logs[k].length));
-  el.innerHTML = `<h4>Chats</h4>${row('boss', 'supervisor')}
+  el.innerHTML = `<h4>Chats</h4>${row('boss', 'supervisor')}${S.logs.news && S.logs.news.length ? row('news', S.unread.news ? S.unread.news + ' new' : 'announcements') : ''}
    ${S.session ? `<button class="buddy tmp${yapCh === 'session' ? ' sel' : ''}" data-ch="session">${avHTML(S.session.g)}<span>session_${S.session.g}.tmp<small>temporary</small></span></button>` : ''}
    ${people.map(k => row(k, gstat(k))).join('')}`;
   $$('.buddy[data-ch]', el).forEach(bt => bt.onclick = () => {
@@ -1272,8 +1275,20 @@ async function beginMorning() {
   openYap('boss');
   runDialogue(morningDialogue());
 }
+// #announcements: a read-only Yappy channel where DIVE posts the big days
+function postNews(text) {
+  S.logs.news = S.logs.news || []; const m = { who: 'news', text, t: clockStr() }; S.logs.news.push(m);
+  if (typeof liveViews === 'function' && liveViews('news').length) appendMsg('news', m); else S.unread.news = (S.unread.news || 0) + 1;
+  toast('Yappy Yappy', '<b>#announcements</b> · ' + esc(text.split('\n')[0])); renderBuddies(); renderIcons();
+}
+const NEWS = {
+  postcard: 'POSTCARD DAY 📮\nEveryone writes a postcard to somewhere they would go if they could leave. Cards will be delivered to your inbox.\nReminder: nobody leaves.',
+  inspection: 'INSPECTION DAY 🗂\nInspectors from upstairs are on site today. Keep your workstation tidy and your answers short.\nPlease do not mention the seismic activity.',
+  showcase: 'HOBBY SHOWCASE 🎨\nNo sessions today. Every patient presents one piece. Open Showcase.exe to visit the exhibition.',
+};
 function dayMail() {
   const d = S.day;
+  if (NEWS[SPECIAL[d]] && !S.flags['news' + d]) { S.flags['news' + d] = true; postNews(NEWS[SPECIAL[d]]); }
   if (SPECIAL[d] === 'postcard') {
     sendMail({ from: 'boss', subject: 'Greetings from Santorini!', body: 'Wish you were here. (You are not. Nobody is. Rules are rules.)', card: { text: 'Dear rookie,\nThe sea is so blue it hurts.\nThe cats followed me all\nthe way to Oia.\n— Boss', stamp: 'LOCAL MAIL\n0 km' } });
     if (onSite('prim') && met('prim')) sendMail({ from: 'prim', subject: 'postcard', body: 'boss made us write one.', card: { text: 'to: the sea (19.3 km?)\nfrom: room 01\ni\'ll trace you\nsomeday.', stamp: '♡' } });

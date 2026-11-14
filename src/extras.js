@@ -95,6 +95,8 @@ function openConv() {
   } });
 }
 
+// a chat message posted straight from code: "{emo}text" becomes a face, never visible text
+function say(who, text) { const m = /^\{(\w+)\}\s*/.exec(text); return { who, text: m ? text.slice(m[0].length) : text, emo: m ? m[1] : undefined, t: clockStr() }; }
 /* ---------- timed questions at night: answer in time, get her keys ---------- */
 const TQ_SECS = 30;
 // Paige, layer 2 nights: meme coins. Which two coins is random per playthrough; the rate is that day's.
@@ -215,7 +217,7 @@ function tarotStart() {
 }
 function tarotAsk() {
   const T = S.tq, [nm, title] = ELITE4[T.step];
-  const m = { who: 'trix', text: `{neutral}${T.step + 1}/4. how do i beat ${nm}, "${title}"?`, t: clockStr() }; S.logs.trix.push(m); appendMsg('trix', m);
+  const m = say('trix', `how do i beat ${nm}, "${title}"?`); S.logs.trix.push(m); appendMsg('trix', m);
   SFX.vibrate && SFX.vibrate(); T.until = null; save(); tarotRender();
 }
 function tarotRender() {
@@ -245,7 +247,7 @@ async function tarotAnswer(i, late) {
   if (late) { SFX.buzz(); toast('Time\'s up', 'An answer was picked at random.'); }
   if (i != null) { const m = { who: 'me', text: ARCANA[i].ans, t: clockStr() }; S.logs.trix.push(m); appendMsg('trix', m); }
   if (ok) T.right++; SFX.tick();
-  const r = { who: 'trix', text: pickRnd(i == null ? TAROT_LATE : TAROT_NOTE), t: clockStr() };
+  const r = say('trix', pickRnd(i == null ? TAROT_LATE : TAROT_NOTE));
   await wait(600); S.logs.trix.push(r); appendMsg('trix', r);
   T.step++; T.busy = false;
   if (T.step < 4) { await wait(900); tarotAsk(); return; }
