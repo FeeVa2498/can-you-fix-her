@@ -23,15 +23,15 @@ const ART = {
 /* ---------------- cast ---------------- */
 const GIRLS = {
   prim: { id: 'PRIM_01', name: 'Prim', tag: 'Jirai Kei', from: 1, built: true, fill: false, hp: [600, 4800, 7000],
-    layers: ['INSECURITY · "fragile girl"', 'INSECURITY · "fake artist"', 'CORE · ▒▒▒▒▒▒▒▒'], core: 'WILL_TO_LIVE',
+    layers: ['ROLE · "the illustrator"', 'INSECURITY · "fake artist"', 'CORE · ▒▒▒▒▒▒▒▒'], core: 'WILL_TO_LIVE',
     rule: 'Connect every pair of matching dots. Lines cannot cross. Drawing over another line cuts it.',
     fail: "{sad}it's okay. i'm slow too." },
   trix: { id: 'TRIX_02', name: 'Trix', tag: 'E-Girl', from: 2, built: true, fill: true, hp: [900, 5600, 7800],
-    layers: ['INSECURITY · "pick-me airhead"', 'INSECURITY · "attention seeker"', 'CORE · ▒▒▒▒▒▒▒▒'], core: 'WILL_TO_LIVE',
+    layers: ['ROLE · "the streamer"', 'INSECURITY · "attention seeker"', 'CORE · ▒▒▒▒▒▒▒▒'], core: 'WILL_TO_LIVE',
     rule: 'OCD / Perfectionism: connect every pair AND fill 100% of the tiles. A board with gaps does not count.',
     fail: "{angry}time is a constraint. i hate constraints. next." },
-  paige: { id: 'PAIGE_03', name: 'Paige', tag: 'Goth', from: 4, built: true, layers: ['INSECURITY · "bad luck"', 'INSECURITY · "too much"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{neutral}the dice said no today." },
-  vel: { id: 'VEL_04', name: 'Vel', tag: 'Gyaru', from: 6, built: true, layers: ['INSECURITY · "just a bimbo"', 'INSECURITY · "trigger happy"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{sad}ugh. jammed. srry." },
+  paige: { id: 'PAIGE_03', name: 'Paige', tag: 'Goth', from: 4, built: true, layers: ['ROLE · "the mystic"', 'INSECURITY · "too much"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{neutral}the dice said no today." },
+  vel: { id: 'VEL_04', name: 'Vel', tag: 'Gyaru', from: 6, built: true, layers: ['ROLE · "the fashion queen"', 'INSECURITY · "trigger happy"', 'CORE · ▒▒▒▒▒▒▒▒'], fail: "{sad}ugh. jammed. srry." },
   // Myne (Tomboy) is out of the game until further notice
   ray: { id: 'RAY_00', name: 'Ray', tag: 'Boss', from: 99, layers: ['CORE'] },
 };
@@ -987,8 +987,14 @@ const pickRnd = a => a[Math.random() * a.length | 0];
 // session ----------------------------------------------------
 function sesEntries(g, kind, f) { return DD.session.filter(e => e.girl === g && e.kind === kind && (!f || f(e)) && cond(e.if)); }
 function sesSteps(g, kind, f) { const e = pickRnd(sesEntries(g, kind, f)); return e ? playSteps(e.steps) : null; }
-function sesIntro(g) { return sesSteps(g, 'intro') || [{ lines: ['{neutral}...'] }]; }
-function sesOutro(g) { return sesSteps(g, 'outro') || [{ lines: ['{neutral}bye.'] }]; }
+// intros/outros can belong to a stage of her story: layer "1" (Boss's role still on), "2" (her passion is out), "3", "2-3"; blank = any
+function stageOk(e, g) {
+  const v = String(e.layer == null ? '' : e.layer).trim(); if (!v) return true;
+  const st = Math.min(3, ((S.g[g] && S.g[g].layer) || 0) + 1), m = /^(\d)\s*(?:-\s*(\d))?$/.exec(v);
+  return m ? st >= +m[1] && st <= +(m[2] || m[1]) : true;
+}
+function sesIntro(g) { return sesSteps(g, 'intro', e => stageOk(e, g)) || [{ lines: ['{neutral}...'] }]; }
+function sesOutro(g) { return sesSteps(g, 'outro', e => stageOk(e, g)) || [{ lines: ['{neutral}bye.'] }]; }
 function sesBreak(g, layer) { return sesSteps(g, 'break', e => +e.layer === layer) || [{ lines: ['{surprised}...something just came off.'] }]; }
 function triggerOf(res) {
   if (res.failed) return res.why === 'moves' ? 'FAIL_MOVES' : 'FAIL_TIME';
@@ -1442,10 +1448,10 @@ function openShowcase() {
   renderShowcase();
 }
 const SHOW_CAP = {
-  prim: ['Prim · "the artist" — nothing submitted.', 'Prim · "the artist" — nothing submitted.'],
-  trix: ['Trix · "the gamer girl" — a selfie and her rank: Iron IV.', 'Trix · her notebook: proofs, and a chess game she won in her head.'],
-  paige: ['Paige · "the goth" — a tarot spread. One card is spelled wrong.', 'Paige · "house of p." — a set of poker chips she designed.'],
-  vel: ['Vel · "the gyaru" — a dress she sewed. One sleeve is sewn shut.', 'Vel · a 1:4 M1 Garand model. Every screw painted.'],
+  prim: ['Prim · "the illustrator" — nothing submitted.', 'Prim · "the illustrator" — nothing submitted. (her songs stay in her room)'],
+  trix: ['Trix · "the streamer" — a selfie and her rank: Iron IV.', 'Trix · her notebook: proofs, and a chess game she won in her head.'],
+  paige: ['Paige · "the mystic" — a tarot spread. One card is spelled wrong.', 'Paige · "house of p." — a set of poker chips she designed.'],
+  vel: ['Vel · "the fashion queen" — a dress she sewed. One sleeve is sewn shut.', 'Vel · a 1:4 M1 Garand model. Every screw painted.'],
 };
 function renderShowcase() {
   const w = WINS.show; if (!w) return; const b = w.body;
@@ -1467,7 +1473,7 @@ function showTalk(g) {
         { t: 'Boss will be upset.', r: ['{sad}boss is always upset with me.'], act: [mark('true')] }] }
       : { lines: ['{sad}i didn\'t submit anything.', '{sad}i tried to draw. it was just lines going nowhere.'], choices: [
         { t: 'Next time, then.', r: ['{sad}...maybe.'], act: [mark('empty')] },
-        { t: 'You don\'t have to be "the artist".', r: ['{surprised}...then what am i?'], act: [mark('empty')] }] },
+        { t: 'You don\'t have to be "the illustrator".', r: ['{surprised}...then what am i?'], act: [mark('empty')] }] },
     trix: good
       ? { lines: ['{shy}so. it\'s my notebook. the real one.', 'the inspectors stared at lemma 4 for ten minutes. nobody got it. i don\'t care.'], choices: [
         { t: 'It\'s beautiful.', r: ['{shy}...it\'s correct. that\'s better than beautiful.', '{happy}but thanks.'], act: [mark('true')] },

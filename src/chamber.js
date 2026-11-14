@@ -50,7 +50,7 @@ function titleScreen(hasSave) {
 /* ---------------- chamber: lists ---------------- */
 let chGirl = 'prim';
 function openChamber() {
-  S = fresh(); S.player = { name: 'tester', avatar: '' }; S.flags.chamber = true; S.phase = 'day';
+  S = fresh(); S.player = { name: 'tester', avatar: '' }; S.flags.chamber = true; S.flags.briefed = S.flags.briefStarted = S.flags.welcomeMail = true; S.phase = 'day';
   if (CH.raySrc) CH.raySrc.forEach((id, i) => { if (RAY_SRC[i]) RAY_SRC[i][1] = id; });
   S.apps = ['MusicBox.exe', 'UnitConv.exe', 'Fortune.exe', 'Atlas.exe'];   // every app, as if installed
   PLAYABLE.forEach(g => { S.met[g] = true; });

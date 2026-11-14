@@ -185,23 +185,27 @@ async function paigeSessionCoin() {
 /* ---------- Profiles.exe (DIVE default): what you know about each girl you've worked with ----------
    Fields fill in as you learn them: night talks (how many you've had with her), layers faced, flags.
    Until then a field shows ???. */
-const PROFILE = {
-  prim: [['Name', 'Prim'], ['File', 'PRIM_01'], ['Style', 'Jirai Kei'], ['Assigned role', '"the artist"', { s: 1 }],
-    ['Likes', 'pink ribbons, tracing paper, the sound of rain on a window', { nt: 1 }], ['Hates', 'being looked at while she draws', { nt: 2 }],
-    ['Says she is', 'fragile. "glass girl."', { L: 1 }], ['Real passion', 'music. she writes songs and never shows anyone.', { nt: 4, f: 'prim_music' }],
-    ['Afraid of', 'being "fixed" into someone who doesn\'t need anything', { L: 2 }], ['Wants', 'to see the sea. it\'s 19 km away.', { nt: 5 }]],
-  trix: [['Name', 'Trix'], ['File', 'TRIX_02'], ['Style', 'E-Girl'], ['Assigned role', '"the gamer girl"', { s: 1 }],
-    ['Likes', 'clean proofs, chess openings, being right', { nt: 1 }], ['Hates', 'being called cute when she\'s explaining something', { nt: 2 }],
-    ['Says she is', 'just a gamer. Iron IV. "it\'s ironic."', { L: 1 }], ['Real passion', 'mathematics. a notebook of proofs nobody asked for.', { nt: 4, f: 'trix_true' }],
-    ['Afraid of', 'an unsolved problem that stays unsolved', { L: 2 }], ['Wants', 'a whiteboard. a room with a whiteboard.', { nt: 5 }]],
-  paige: [['Name', 'Paige'], ['File', 'PAIGE_03'], ['Style', 'Goth'], ['Assigned role', '"the goth"', { s: 1 }],
-    ['Likes', 'coin flips, card tricks, the moment before the dice land', { nt: 1 }], ['Hates', 'people who call her lucky', { nt: 2 }],
-    ['Says she is', 'bad luck. "too much."', { L: 1 }], ['Real passion', 'designing poker chips. "house of p."', { nt: 4, f: 'paige_true' }],
-    ['Afraid of', 'a game where nothing is left to chance', { L: 2 }], ['Wants', 'one hand she doesn\'t fold.', { nt: 5 }]],
-  vel: [['Name', 'Vel'], ['File', 'VEL_04'], ['Style', 'Gyaru'], ['Assigned role', '"the gyaru"', { s: 1 }],
-    ['Likes', 'maps, field manuals, sticker bombs, loud music', { nt: 1 }], ['Hates', 'being called a bimbo. spelling tests.', { nt: 2 }],
-    ['Says she is', 'trigger happy. "just a bimbo."', { L: 1 }], ['Real passion', 'scale models. a 1:4 M1 Garand, every screw painted.', { nt: 4, f: 'vel_true' }],
-    ['Afraid of', 'not being taken seriously, ever', { L: 2 }], ['Wants', 'to finish the model. and the dress. both.', { nt: 5 }]],
+const PROFILE = {   // v13: Boss's plan (layer 1) → her real passion (layer 2) → why (layer 3)
+  prim: [['Name', 'Prim'], ['File', 'PRIM_01'], ['Style', 'Jirai Kei'], ["Boss's plan", 'illustrator', { s: 1 }],
+    ['Likes', 'tracing paper, pastel pens, rain on the window', { nt: 1 }], ['Always wears', 'headphones, even when she draws', { nt: 2 }],
+    ['Real passion', 'music. little songs on a keyboard with three broken keys.', { L: 1, f: 'prim_music' }],
+    ['Why the headphones', 'when she is made to draw, a voice says "draw. again." her songs are the one room in her head it can\'t walk into.', { L: 2 }],
+    ['Afraid of', 'being fixed into someone who doesn\'t need anything', { L: 2 }], ['Wants', 'to see the sea. it\'s 19 km away.', { nt: 5 }]],
+  trix: [['Name', 'Trix'], ['File', 'TRIX_02'], ['Style', 'E-Girl'], ["Boss's plan", 'gamer girl, streamer', { s: 1 }],
+    ['Likes', 'a clean board, a quiet room, being right', { nt: 1 }], ['Hates', 'being called cute mid-sentence', { nt: 2 }],
+    ['Real passion', 'mathematics and chess. 2400 rated. 14 games in her head at once.', { L: 1, f: 'trix_true' }],
+    ['Why', 'she streamed once, and chat voted on what she was worth. a proof is true with zero viewers; the board doesn\'t care what she looks like.', { L: 2 }],
+    ['Afraid of', 'losing on purpose again', { L: 2 }], ['Wants', 'a room with a whiteboard', { nt: 5 }]],
+  paige: [['Name', 'Paige'], ['File', 'PAIGE_03'], ['Style', 'Goth'], ["Boss's plan", 'the mystic: tarot, candles, fate', { s: 1 }],
+    ['Likes', 'the sound of a shuffle, a die in mid-air', { nt: 1 }], ['Hates', 'goodbyes with no time attached', { nt: 2 }],
+    ['Real passion', 'gambling. odds, dice, cards. numbers that don\'t pretend to be fate.', { L: 1, f: 'paige_true' }],
+    ['Why', 'a normal-looking day took her mom, with no omen. she can\'t beat the chaos, so she plays with it. every coin flip says: i\'m not scared of you.', { L: 2 }],
+    ['Afraid of', 'people leaving', { L: 2 }], ['Wants', 'one bet she doesn\'t have to hedge', { nt: 5 }]],
+  vel: [['Name', 'Vel'], ['File', 'VEL_04'], ['Style', 'Gyaru'], ["Boss's plan", 'fashion queen', { s: 1 }],
+    ['Likes', 'glitter, big boots, loud music', { nt: 1 }], ['Hates', 'being called a bimbo', { nt: 2 }],
+    ['Real passion', 'guns and military gear. rifles, field manuals. strips an AR-15 blindfolded in 38 s.', { L: 1, f: 'vel_true' }],
+    ['Why the typos', 'she texts without looking at the screen: eyes on the target, trust your hands. every typo is a miss, and she keeps score.', { L: 2 }],
+    ['Afraid of', 'being fixed into someone who doesn\'t count anything', { L: 2 }], ['Wants', 'to send one perfect message', { nt: 5 }]],
 };
 function profKnown(g, at) {
   if (!at) return true; const st = S.g[g] || {};
