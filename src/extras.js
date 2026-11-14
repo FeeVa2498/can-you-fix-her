@@ -120,6 +120,7 @@ function startTimedQ(id) {
 }
 function tqRender() {
   const T = S.tq; if (!T) return;
+  if (T.kind === 'tarot') return tarotRender();
   const views = liveViews(T.g); if (!views.length) return;
   if (!T.until) T.until = Date.now() + TQ_SECS * 1000;
   views.forEach(v => {
@@ -158,6 +159,100 @@ function tqAnswer(v) {
   } else SFX.buzz();
   save();
   runDialogue(seq(g, g, [{ lines }], 'NONE'));
+}
+
+
+/* ---------- Trix vs the Elite Four: four timed questions, answered with Paige's tarot app ----------
+   Each opponent gets one Major Arcana card per playthrough (random, no repeats). While her question is on,
+   Fortune.exe always draws that card; its description says how to beat that opponent. Three options each
+   (the right one + two other cards' answers from different groups); no option ever shows up twice. */
+const ARCANA = [
+  ['0', '✦', 'The Fool', 'A leap into the unknown, without looking down.', 'Play an opening he has never seen. Get him out of his preparation.', 'surprise'],
+  ['I', '✧', 'The Magician', 'Every tool is already on the table. Use them all.', 'Develop every piece before you attack.', 'structure'],
+  ['II', '☽', 'The High Priestess', 'What is hidden speaks louder than what is shown.', 'Play quiet moves. Stop his plans before he makes them.', 'defence'],
+  ['III', '❀', 'The Empress', 'A garden that grows slowly, and feeds itself.', 'Gain space with pawns and squeeze him slowly.', 'structure'],
+  ['IV', '♜', 'The Emperor', 'Stone walls. A throne that does not move.', 'Castle early. Keep your king safe and your position solid.', 'defence'],
+  ['V', '✝', 'The Hierophant', 'The old teachings. The way it has always been done.', 'Stick to main-line theory. Play the book move.', 'study'],
+  ['VI', '♡', 'The Lovers', 'Two that move as one.', 'Make your pieces work in pairs: the bishop pair, doubled rooks.', 'structure'],
+  ['VII', '➶', 'The Chariot', 'Forward, without stopping. Will over doubt.', 'Attack early and keep the initiative. Don\'t let him breathe.', 'attack'],
+  ['VIII', '∞', 'Strength', 'A gentle hand that tames the lion.', 'Stay calm, absorb his attack, then counter.', 'defence'],
+  ['IX', '☉', 'The Hermit', 'Alone with a lantern, thinking for a long time.', 'Slow down. Use your clock and calculate deeper.', 'study'],
+  ['X', '☸', 'Wheel of Fortune', 'What goes up, turns.', 'Make the position chaotic. Play for complications.', 'surprise'],
+  ['XI', '⚖', 'Justice', 'Every weight answered with an equal weight.', 'Answer every threat exactly. Keep the position balanced and symmetrical.', 'defence'],
+  ['XII', '⚲', 'The Hanged Man', 'Give something up to see the world upside down.', 'Sacrifice material for position: a gambit.', 'attack'],
+  ['XIII', '☠', 'Death', 'An ending makes room for what comes next.', 'Trade queens early and go into the endgame.', 'endgame'],
+  ['XIV', '⚱', 'Temperance', 'Pour slowly. Never too much of one thing.', 'Balance attack and defence. Don\'t overextend.', 'structure'],
+  ['XV', '⛓', 'The Devil', 'The chains you cannot see.', 'Pin and trap his pieces. Take away his moves.', 'attack'],
+  ['XVI', '⚡', 'The Tower', 'A sudden strike, and everything falls.', 'Look for a tactic: one combination against his king.', 'attack'],
+  ['XVII', '★', 'The Star', 'A quiet light on a very long road.', 'Play the long game. Keep a small edge and grind.', 'endgame'],
+  ['XVIII', '☾', 'The Moon', 'In the dark, nothing is what it seems.', 'Set traps. Play a move that looks like a mistake.', 'surprise'],
+  ['XIX', '☀', 'The Sun', 'Open sky. Everything in plain light.', 'Open the position: open files, open diagonals.', 'attack'],
+  ['XX', '♪', 'Judgement', 'Look back, and answer the call.', 'Study his past games and play against his habits.', 'study'],
+  ['XXI', '◯', 'The World', 'The circle closes. Every corner reached.', 'Play on the whole board. Switch flanks when he defends one.', 'endgame'],
+].map(([n, sig, name, desc, ans, grp]) => ({ n, sig, name, desc, ans, grp }));
+// the Elite Four of the chess site Trix plays on (titles say nothing about how to beat them)
+const ELITE4 = [['kn1ght_shift', 'the Gatekeeper'], ['M0RPHY_GHOST', 'the Ghost'], ['zugzwang.exe', 'the Machine'], ['IvoryQueen', 'the Champion']];
+function tarotSetup() {
+  if (S.tarotQ) return S.tarotQ;
+  const sh = a => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [b[i], b[j]] = [b[j], b[i]]; } return b; };
+  const used = new Set(), qs = [];
+  const right = sh(ARCANA.map((_, i) => i)).slice(0, 4); right.forEach(i => used.add(i));
+  for (const r of right) {
+    const pool = sh(ARCANA.map((_, i) => i).filter(i => !used.has(i) && ARCANA[i].grp !== ARCANA[r].grp));
+    const w = []; for (const i of pool) { if (w.length === 2) break; if (w.every(x => ARCANA[x].grp !== ARCANA[i].grp)) w.push(i); }
+    w.forEach(i => used.add(i));
+    qs.push({ card: r, opts: sh([r, ...w]) });
+  }
+  return (S.tarotQ = qs);
+}
+// Fortune.exe draws this card while a question is up
+const tarotRigged = () => (S.tq && S.tq.kind === 'tarot' && S.tarotQ ? S.tarotQ[S.tq.step].card : null);
+// during the reading she only takes notes; whether the plans worked comes the next night, after she plays them
+const TAROT_NOTE = ["{neutral}noted. plan saved.", "{neutral}...that's a strange plan. noted anyway.", "{neutral}logged. i'll test it.", "{shy}hm. ok. writing it down."];
+const TAROT_LATE = ["{neutral}clock. a flag falls. no plan for that one.", "{angry}time. even the cards are slower than him."];
+function tarotStart() {
+  tarotSetup(); S.tq = { id: 'trix_tarot', kind: 'tarot', g: 'trix', step: 0, right: 0, until: null }; save(); tarotAsk();
+}
+function tarotAsk() {
+  const T = S.tq, [nm, title] = ELITE4[T.step];
+  const m = { who: 'trix', text: `{neutral}${T.step + 1}/4. how do i beat ${nm}, "${title}"?`, t: clockStr() }; S.logs.trix.push(m); appendMsg('trix', m);
+  SFX.vibrate && SFX.vibrate(); T.until = null; save(); tarotRender();
+}
+function tarotRender() {
+  const T = S.tq; if (!T || T.kind !== 'tarot') return;
+  const views = liveViews(T.g); if (!views.length) return;
+  if (!T.until) T.until = Date.now() + TQ_SECS * 1000;
+  const q = S.tarotQ[T.step];
+  views.forEach(v => {
+    const box = $('.chat-choices', v.root); if (!box) return;
+    box.innerHTML = `<div class="tq"><div class="tq-bar"><i></i></div><div class="tq-opts">${q.opts.map((i, k) => `<button class="choice tq-opt" data-o="${i}"><b>${'ABC'[k]}</b> ${esc(ARCANA[i].ans)}</button>`).join('')}</div></div>`;
+    $$('.tq-opt', box).forEach(x => x.onclick = () => tarotAnswer(+x.dataset.o));
+    const bar = $('.tq-bar i', box), step = T.step;
+    const tick = () => {
+      if (!S.tq || S.tq.step !== step || !box.isConnected) return;
+      const left = Math.max(0, S.tq.until - Date.now());
+      bar.style.width = (left / (TQ_SECS * 1000) * 100) + '%'; bar.classList.toggle('hot', left < 10000);
+      if (left <= 0) { tarotAnswer(null); return; }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
+async function tarotAnswer(i) {
+  const T = S.tq; if (!T || T.kind !== 'tarot' || T.busy) return; T.busy = true;
+  const q = S.tarotQ[T.step], ok = i === q.card;
+  liveViews('trix').forEach(vw => { const box = $('.chat-choices', vw.root); if (box) box.innerHTML = ''; });
+  if (i != null) { const m = { who: 'me', text: ARCANA[i].ans, t: clockStr() }; S.logs.trix.push(m); appendMsg('trix', m); }
+  if (ok) T.right++; SFX.tick();
+  const r = { who: 'trix', text: pickRnd(i == null ? TAROT_LATE : TAROT_NOTE), t: clockStr() };
+  await wait(600); S.logs.trix.push(r); appendMsg('trix', r);
+  T.step++; T.busy = false;
+  if (T.step < 4) { await wait(900); tarotAsk(); return; }
+  // done: the results (2 keys per game won) come in her next night chat (trix_11_all / _some / _none)
+  const n = T.right; S.tq = null;
+  S.flags.trix_e4 = n; S.flags.trix_e4_done = true; S.flags[n === 4 ? 'trix_e4_all' : n === 0 ? 'trix_e4_none' : 'trix_e4_some'] = true; save();
+  const end = ["{neutral}four plans. i'll play them tomorrow night.", "{shy}don't ask how it went. i'll tell you. goodnight."];
+  runDialogue(seq('trix', 'trix', [{ lines: end }], 'NONE'));
 }
 
 /* ---------- Paige flips a coin at the start of every session ---------- */

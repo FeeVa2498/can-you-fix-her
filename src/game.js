@@ -513,6 +513,8 @@ function doAction(a) {
   else if (a.action === 'JOURNAL') { if (!S.journal.some(j => j.text === a.value)) S.journal.push({ day: S.day, text: a.value, g: a.g || null }); }
   else if (a.action === 'SET_FLAG') S.flags[a.value] = true;
   else if (a.action === 'COIN_PICK') { if (S.session) S.session.pick = a.value; }
+  else if (a.action === 'E4KEYS') { if (!S.flags.trix_e4_paid) { S.flags.trix_e4_paid = true; const k = 2 * (S.flags.trix_e4 || 0), L = S.g.trix.layer + 1; if (k) { S.g.trix.bonusKeys = S.g.trix.bonusKeys || {}; S.g.trix.bonusKeys[L] = (S.g.trix.bonusKeys[L] || 0) + k; SFX.item(); toast('Keys', `+${k} of Trix's keys (layer ${L})`); } } }
+  else if (a.action === 'QUIZ') { const id = a.value, go = () => { if (S.active || (S.queue && S.queue.length)) { setTimeout(go, 300); return; } if (id === 'trix_tarot') tarotStart(); else startTimedQ(id); }; setTimeout(go, 300); }
   else if (a.action === 'UNSET_FLAG') delete S.flags[a.value];
   else if (a.action === 'SHOW') { S.show[a.value[0]] = a.value[1]; renderShowcase(); }
   else if (a.action === 'GLITCH') glitch(a.value || 'soft');
@@ -837,6 +839,8 @@ function parseEffects(str, file, row) {
     else if (k === 'ping' && v) act.push({ action: 'PING', value: v });
     else if (k === 'glitch') act.push({ action: 'GLITCH', value: v || 'soft' });
     else if (k === 'show' && /^\w+\s*=\s*\w+$/.test(v)) act.push({ action: 'SHOW', value: v.split(/\s*=\s*/) });
+    else if (k === 'quiz' && v) act.push({ action: 'QUIZ', value: v });
+    else if (k === 'e4keys') act.push({ action: 'E4KEYS' });   // Trix's Elite Four result: 2 keys per game she won   // starts a timed question when the talk ends (e.g. quiz:trix_tarot)
     else if (k === 'pause' && !isNaN(+v)) pause = +v;
     else dataIssue(file, row, `unknown effect "${tok}" (use know:, flag:, unflag:, journal:, probation, ping:, glitch, show:, pause:)`);
   });
@@ -967,7 +971,7 @@ function showDataReport() {
 /* ---------- turning compiled entries into playable dialogue ---------- */
 function tplVars(extra) {
   const left = LAST_DAY - S.day + 1, pts = availableToday().map(k => GIRLS[k].name);
-  return { name: ROOKIE(), day: S.day, days_left: `${left} day${left === 1 ? '' : 's'}`, kpi: KPI(), patients: pts.length ? pts.join(', ') : 'nobody', ...extra };
+  return { name: ROOKIE(), day: S.day, days_left: `${left} day${left === 1 ? '' : 's'}`, kpi: KPI(), patients: pts.length ? pts.join(', ') : 'nobody', e4: S.flags.trix_e4 || 0, e4keys: 2 * (S.flags.trix_e4 || 0), ...extra };
 }
 const tpl = (s, v) => String(s).replace(/\{(\w+)\}/g, (m, k) => (k in v ? v[k] : m));
 // compiled steps -> seq() steps, with {vars} filled in
@@ -1112,7 +1116,7 @@ const REWARD = {
     3: { subject: 'gg', body: 'that was the last layer. q.e.d.\n\nyou covered more squares than i expected. that\'s a compliment. don\'t frame it.\n\n— t', atts: [] },
   },
   paige: {
-    1: { subject: 'pick a card', body: 'you look like someone who needs to know what\'s coming.\ni don\'t. that\'s the fun part. but here.\n\n— paige', atts: [{ kind: 'app', name: 'Fortune.exe' }] },
+    1: { subject: 'pick a card', body: 'counsellor,\n\nwhen boss made me "the mystic" she told me to study tarot and all that. i found this app for drawing cards. it\'s kind of fun, honestly. the subject just isn\'t really me.\nbut it also flips coins and rolls dice. so i kept it lmao. you keep it too.\n\n— p.', atts: [{ kind: 'app', name: 'Fortune.exe' }] },
     2: { subject: 'loaded', body: 'my lucky d20. it\'s not loaded. probably.\nroll it when you\'re in my head. sometimes the dice are kind.\n\n— paige', atts: [{ kind: 'mem', name: 'lucky_d20.mem' }] },
     3: { subject: 'stay', body: 'you didn\'t leave halfway.\nnobody ever didn\'t leave halfway.\n\n— p', atts: [] },
   },
@@ -1180,29 +1184,36 @@ function openMBox() {
   });
 }
 const ATLAS = [['Eiffel Tower', 'Paris, France', '330 m of iron. Not in Rome.'], ['Mount Everest', 'Nepal / China border', '8,849 m. There is no Swiss side.'], ['Santorini', 'Greece', 'Blue domes, white walls, a lot of cats.'], ['Reykjavik', 'Iceland', 'Northernmost capital of a sovereign state.'], ['Kyoto', 'Japan', 'Over 1,600 temples.'], ['Angkor Wat', 'Siem Reap, Cambodia', 'Largest religious monument on Earth.'], ['Lisbon', 'Portugal', 'Seven hills and yellow trams.'], ['Istanbul', 'Türkiye', 'One city, two continents.'], ['Machu Picchu', 'Cusco region, Peru', '2,430 m above sea level.'], ['Marrakech', 'Morocco', 'The red city.'], ['Hanoi', 'Vietnam', 'Old Quarter: 36 streets.'], ['Patagonia', 'Argentina & Chile', 'Wind up to 120 km/h.'], ['Trans-Siberian Railway', 'Moscow → Vladivostok', '9,289 km.'], ['Venice', 'Italy', '118 small islands.']];
-const TAROT = [['The Fool', 'Step off the edge. The floor might be glass.'], ['The Tower', 'Something comes down today. Stand clear.'], ['The Star', 'Somebody is still rooting for you.'], ['The Moon', 'Not everything you see is real. Check twice.'], ['Wheel of Fortune', 'Spin. Whatever lands, you were going to play anyway.'], ['Death', 'An ending. Not yours. Probably.'], ['The Lovers', 'A choice between two people. Or two versions of one.'], ['The Hermit', 'Stay in tonight. Someone will message.'], ['Strength', 'Gentle hands open stuck doors.'], ['The Sun', 'A good day. Don\'t waste it on worry.']];
-// Paige's tarot table: black velvet, candlelight, a card that flips, a coin that spins
-const TAROT_SIG = { 'The Fool': '✦', 'The Tower': '⚡', 'The Star': '★', 'The Moon': '☾', 'Wheel of Fortune': '☸', 'Death': '☠', 'The Lovers': '♡', 'The Hermit': '☉', 'Strength': '∞', 'The Sun': '☀' };
-const ROMAN = ['0', 'XVI', 'XVII', 'XVIII', 'X', 'XIII', 'VI', 'IX', 'VIII', 'XIX'];
+// Paige's tarot table: black velvet, candlelight, a card that flips, a coin that spins, a die that rolls.
+// The 22 Major Arcana live in ARCANA (src/extras.js). While Trix's tarot question is running, the deck "knows":
+// every draw shows the card for the opponent she just asked about.
+const DIE_PIPS = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
 function openFortune() {
   S.used = S.used || {}; S.used['Fortune.exe'] = true; save();
-  openWin('fortune', { title: 'Fortune.exe', icon: 'tarot', w: 340, h: 470, x: 280, y: 40, skin: true, render: b => {
+  openWin('fortune', { title: 'Fortune.exe', icon: 'tarot', w: 340, h: 500, x: 280, y: 40, skin: true, render: b => {
     b.innerHTML = `<div class="ftx"><div class="ftx-head"><span class="ftx-candle"><i></i></span><b>Fortune</b><span class="ftx-candle"><i></i></span></div>
       <div class="ftx-stage"><div class="ftx-card" id="ft-card"><div class="ftx-back"><span>✦</span></div><div class="ftx-front"><small id="ft-n"></small><span class="ftx-sig" id="ft-s"></span><b id="ft-t"></b><p id="ft-x"></p></div></div>
-        <div class="ftx-coin" id="ft-coinv" hidden><span class="coin"><b>?</b></span><b id="ft-cr"></b></div></div>
-      <div class="ftx-btns"><button class="ftb" id="ft-draw">✧ draw a card</button><button class="ftb" id="ft-coin">◐ flip a coin</button></div>
+        <div class="ftx-coin" id="ft-coinv" hidden><span class="coin"><b>?</b></span><b id="ft-cr"></b></div>
+        <div class="ftx-coin" id="ft-diev" hidden><span class="ftx-die" id="ft-die">⚀</span><b id="ft-dr"></b></div></div>
+      <div class="ftx-btns"><button class="ftb" id="ft-draw">✧ draw a card</button><button class="ftb" id="ft-coin">◐ flip a coin</button><button class="ftb" id="ft-dice">⚄ roll a die</button></div>
       <div class="ftx-foot">dealt by Paige · no refunds</div></div>`;
-    const card = $('#ft-card', b), cv = $('#ft-coinv', b);
+    const card = $('#ft-card', b), cv = $('#ft-coinv', b), dv = $('#ft-diev', b);
+    const show = el => { card.hidden = el !== card; cv.hidden = el !== cv; dv.hidden = el !== dv; };
     $('#ft-draw', b).onclick = () => {
-      SFX.pop(); cv.hidden = true; card.hidden = false; card.classList.remove('up');
-      setTimeout(() => { const k = Math.random() * TAROT.length | 0, c = TAROT[k];
-        $('#ft-n', b).textContent = ROMAN[k] || ''; $('#ft-s', b).textContent = TAROT_SIG[c[0]] || '✦'; $('#ft-t', b).textContent = c[0]; $('#ft-x', b).textContent = c[1];
+      SFX.pop(); show(card); card.classList.remove('up');
+      setTimeout(() => { const k = tarotRigged() ?? (Math.random() * ARCANA.length | 0), c = ARCANA[k];
+        $('#ft-n', b).textContent = c.n; $('#ft-s', b).textContent = c.sig; $('#ft-t', b).textContent = c.name; $('#ft-x', b).textContent = c.desc;
         card.classList.add('up'); SFX.tick(); }, 380);
     };
     $('#ft-coin', b).onclick = () => {
-      SFX.pop(); card.hidden = true; cv.hidden = false; const c = $('.coin', cv), r = Math.random() < .5 ? 'HEADS' : 'TAILS';
+      SFX.pop(); show(cv); const c = $('.coin', cv), r = Math.random() < .5 ? 'HEADS' : 'TAILS';
       c.classList.add('spin'); $('b', c).textContent = '?'; $('#ft-cr', b).textContent = 'flipping…';
       setTimeout(() => { c.classList.remove('spin'); $('b', c).textContent = r[0]; $('#ft-cr', b).textContent = r + ' · the coin doesn\'t care.'; SFX.tick(); }, REDUCED ? 100 : 1300);
+    };
+    $('#ft-dice', b).onclick = () => {
+      SFX.pop(); show(dv); const d = $('#ft-die', b), r = 1 + (Math.random() * 6 | 0); let t = 0;
+      $('#ft-dr', b).textContent = 'rolling…'; d.classList.add('roll');
+      const iv = setInterval(() => { d.textContent = DIE_PIPS[Math.random() * 6 | 0]; if (++t > (REDUCED ? 1 : 10)) { clearInterval(iv); d.classList.remove('roll'); d.textContent = DIE_PIPS[r - 1]; $('#ft-dr', b).textContent = `${r} · 1 in 6. always.`; SFX.tick(); } }, 110);
     };
   } });
 }
