@@ -1285,6 +1285,17 @@ const NEWS_AHEAD = {
   5: 'SAVE THE DATE 🎨\nHOBBY SHOWCASE in 5 days (day 12). Every patient will present one piece of their own.\nPatients usually bring what they feel sure of. Counsellors: a little encouragement goes a long way.',
   1: 'REMINDER 🎨\nHOBBY SHOWCASE is tomorrow. No sessions on the day.\nIf a patient has something she really loves, tonight is the night to tell her it\'s worth showing.',
 };
+// Postcard Day (day 7): [as Boss's role, as herself]
+const POSTCARDS = {
+  prim: [{ subject: 'postcard', body: 'boss made us write one.', text: 'to: a gallery in paris\nfrom: room 01\nmy drawings will hang\nthere someday.\n(boss said.)', stamp: '♡' },
+         { subject: 'postcard', body: 'boss made us write one.', text: 'to: the sea (19.3 km?)\nfrom: room 01\ni\'ll hum you\na song someday.', stamp: '♡' }],
+  trix: [{ subject: 'postcard (mandatory)', body: 'here.', text: 'to: twitchcon\nfrom: E-Queen ✧\ngg see u there :3\n(boss wrote the :3)', stamp: '♞' },
+         { subject: 'postcard (mandatory)', body: 'here.', text: 'to: any room with\na whiteboard.\nthat is all.', stamp: '♞' }],
+  paige: [{ subject: 'postcard', body: 'keep it. or don\'t. 50/50.', text: 'to: prague, at midnight\nthe candles are lit.\nthe cards say: soon.', stamp: '☾' },
+          { subject: 'postcard', body: 'keep it. or don\'t. 50/50.', text: 'to: anyone who stays.\n(odds: low.\ni\'m betting anyway.)', stamp: '⚄' }],
+  vel: [{ subject: 'postcard!!', body: 'srry my handwritting is bad lol', text: 'to: milan fashion week 💅\nfrom: ur fashion queen\nsee u on the runway!!', stamp: '✦' },
+        { subject: 'postcard!!', body: 'srry my handwritting is bad lol', text: 'to: the range\nwish u were here\n(here = the range) 🫡', stamp: '★' }],
+};
 const QUAKE_NEWS = [
   'SEISMIC NOTICE ⚠\nA minor tremor was recorded at {t}. No damage reported. Please continue working.',
   'SEISMIC NOTICE ⚠\nA second, stronger tremor was recorded at {t}. Exits remain closed for your safety. Patients are being monitored.',
@@ -1303,8 +1314,13 @@ function dayMail() {
   if (NEWS[SPECIAL[d]] && !S.flags['news' + d]) { S.flags['news' + d] = true; postNews(NEWS[SPECIAL[d]]); }
   if (SPECIAL[d] === 'postcard') {
     sendMail({ from: 'boss', subject: 'Greetings from Santorini!', body: 'Wish you were here. (You are not. Nobody is. Rules are rules.)', card: { text: 'Dear rookie,\nThe sea is so blue it hurts.\nThe cats followed me all\nthe way to Oia.\n— Boss', stamp: 'LOCAL MAIL\n0 km' } });
-    if (onSite('prim') && met('prim')) sendMail({ from: 'prim', subject: 'postcard', body: 'boss made us write one.', card: { text: 'to: the sea (19.3 km?)\nfrom: room 01\ni\'ll trace you\nsomeday.', stamp: '♡' } });
-    if (onSite('trix') && met('trix')) sendMail({ from: 'trix', subject: 'postcard (mandatory)', body: 'here.', card: { text: 'to: any room with\na whiteboard.\nthat is all.', stamp: '♞' } });
+    // every girl here writes one: the role Boss gave her until layer 1 breaks, herself after
+    PLAYABLE.forEach(g => {
+      if (!onSite(g) || !met(g)) return;
+      const real = (S.g[g].layer || 0) >= 1, c = POSTCARDS[g][real ? 1 : 0];
+      S.flags[`pc_${g}_${real ? 'true' : 'role'}`] = true;
+      sendMail({ from: g, subject: c.subject, body: c.body, card: { text: c.text, stamp: c.stamp } });
+    });
     if (!S.journal.some(j => j.text.startsWith('Postcard Day. I wrote'))) S.journal.push({ day: d, text: 'Postcard Day. I wrote to Santorini again. I always write to Santorini.' });
   }
   if (SPECIAL[d] === 'inspection') sendMail({ from: 'dive', subject: 'Inspection report', body: `D____ I___________ & V______ E_________ — internal report\n\nemendation progress:   ${layersTotal()}/${kpiMax()}\noperator vitals:       unstable\nhost vitals:           declining (${S.quakes} seismic events)\n\nThis message was not meant for you. Please delete it.` });
