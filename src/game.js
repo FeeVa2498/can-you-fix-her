@@ -1282,7 +1282,7 @@ function postNews(text) {
   toast('Yappy Yappy', '<b>#announcements</b> · ' + esc(text.split('\n')[0])); renderBuddies(); renderIcons();
 }
 const NEWS_AHEAD = {
-  3: 'SAVE THE DATE 🎨\nHOBBY SHOWCASE in 3 days (day 12). Every patient will present one piece of their own.\nPatients usually bring what they feel sure of. Counsellors: a little encouragement goes a long way.',
+  5: 'SAVE THE DATE 🎨\nHOBBY SHOWCASE in 5 days (day 12). Every patient will present one piece of their own.\nPatients usually bring what they feel sure of. Counsellors: a little encouragement goes a long way.',
   1: 'REMINDER 🎨\nHOBBY SHOWCASE is tomorrow. No sessions on the day.\nIf a patient has something she really loves, tonight is the night to tell her it\'s worth showing.',
 };
 const NEWS = {
