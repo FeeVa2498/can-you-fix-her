@@ -979,6 +979,18 @@ rect.pb-head{stroke:#fff;stroke-width:.03}
 .pj-vp{position:relative;padding:0;overflow:hidden;background:#12062b;border:3px solid;border-color:#3a2554 #f5eeff #f5eeff #3a2554;border-radius:4px;box-shadow:inset 0 0 0 1px #000}
 .pj-vp.flat{background:#fff8fc;padding:6px;border-color:var(--line-soft)}
 .pj-vp canvas{display:block;position:absolute;inset:0}
+.pj-left{position:absolute;left:12px;bottom:12px;z-index:5;pointer-events:none;display:grid;grid-template-columns:auto auto;align-items:end;column-gap:10px;padding:6px 12px 8px;border:2px solid #f5c9ff;border-radius:6px;background:rgba(18,6,43,.78);color:#fff;font-family:var(--mono);box-shadow:0 0 0 2px #12062b,0 0 14px rgba(255,120,220,.35)}
+.pj-left small{grid-column:1/3;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#f5c9ff}
+.pj-left b{font-size:34px;line-height:1;font-weight:700}
+.pj-left .pips{display:flex;flex-wrap:wrap;gap:3px;max-width:150px;padding-bottom:4px}
+.pj-left .ch{width:9px;height:9px;border-radius:50%;background:#ffd84a;box-shadow:inset 0 0 0 2px #b8860b}
+.pj-left .rd{width:4px;height:13px;border-radius:2px 2px 0 0;background:#ffcf6a;box-shadow:inset 0 -4px 0 #b06a1a}
+.pj-left .off{opacity:.18}
+.pj-left.vel{border-color:#ffb36b}.pj-left.vel small{color:#ffb36b}
+.pj-left.low{border-color:#ff4f7d;animation:pjLow .7s steps(2) infinite}.pj-left.low small,.pj-left.low b{color:#ff6a8f}
+.pj-left.out{animation:none;opacity:.85}
+@keyframes pjLow{50%{box-shadow:0 0 0 2px #12062b,0 0 22px rgba(255,60,110,.8)}}
+.pj-vp.flat .pj-left{background:rgba(255,248,252,.92);color:#3a2554;box-shadow:0 0 0 2px var(--line-soft)}
 .pj3-canvas{image-rendering:pixelated}
 .pj-vp:not(.flat)::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
 .pj3-hud{position:absolute;left:8px;top:6px;font-family:var(--mono);font-size:16px;color:#ffd3ea;text-shadow:0 0 6px #ff4fd8;pointer-events:none;letter-spacing:1px}
@@ -5320,6 +5332,17 @@ function pjMaxMoves(p) {
   const g = p.girl || (p.id || '').split('_')[0];
   return ['paige', 'vel'].includes(g) ? p.minMoves + Math.max(3, Math.ceil(p.minMoves * .4)) : 0;
 }
+// Paige and Vel: a big "moves left" counter on the board itself (chips for Paige, rounds for Vel)
+function pjLeftHud() {
+  const vp = $('#pj-vp'); if (!vp) return; const p = PJ.p, mx = pjMaxMoves(p);
+  let el = $('#pj-left', vp);
+  if (!mx) { if (el) el.remove(); return; }
+  if (!el) { el = document.createElement('div'); el.id = 'pj-left'; vp.appendChild(el); }
+  const g = p.girl || p.id.split('_')[0], n = PJ.bs ? PJ.bs.inputs.length : 0, left = Math.max(0, mx - n);
+  el.className = 'pj-left ' + g + (left <= 3 ? ' low' : '') + (left === 0 ? ' out' : '');
+  const pip = g === 'vel' ? 'rd' : 'ch';
+  el.innerHTML = `<small>moves left</small><b>${left}</b><span class="pips">${Array.from({ length: mx }, (_, i) => `<i class="${pip}${i < left ? '' : ' off'}"></i>`).join('')}</span>`;
+}
 function pjMovesText() {
   const p = PJ.p, n = p.boxes ? (PJ.bs ? PJ.bs.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0), mx = pjMaxMoves(p);
   return mx ? `moves left ${Math.max(0, mx - n)}` : p.moves ? `moves ${n}/${p.moves}` : `moves ${n}`;
@@ -5391,6 +5414,7 @@ function pjSide() {
   if (PJ.die3) PJ.die3.sync(pjRealDie());
 }
 function pjChrome() {
+  pjLeftHud();
   const mv = $('#pj-moves'); if (mv) { mv.textContent = pjMovesText(); mv.classList.toggle('bad', PJ.state === 'fail' && PJ.bad.some(b => b.kind === 'moves')); }
   const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
   const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';

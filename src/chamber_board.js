@@ -221,6 +221,17 @@ function pjMaxMoves(p) {
   const g = p.girl || (p.id || '').split('_')[0];
   return ['paige', 'vel'].includes(g) ? p.minMoves + Math.max(3, Math.ceil(p.minMoves * .4)) : 0;
 }
+// Paige and Vel: a big "moves left" counter on the board itself (chips for Paige, rounds for Vel)
+function pjLeftHud() {
+  const vp = $('#pj-vp'); if (!vp) return; const p = PJ.p, mx = pjMaxMoves(p);
+  let el = $('#pj-left', vp);
+  if (!mx) { if (el) el.remove(); return; }
+  if (!el) { el = document.createElement('div'); el.id = 'pj-left'; vp.appendChild(el); }
+  const g = p.girl || p.id.split('_')[0], n = PJ.bs ? PJ.bs.inputs.length : 0, left = Math.max(0, mx - n);
+  el.className = 'pj-left ' + g + (left <= 3 ? ' low' : '') + (left === 0 ? ' out' : '');
+  const pip = g === 'vel' ? 'rd' : 'ch';
+  el.innerHTML = `<small>moves left</small><b>${left}</b><span class="pips">${Array.from({ length: mx }, (_, i) => `<i class="${pip}${i < left ? '' : ' off'}"></i>`).join('')}</span>`;
+}
 function pjMovesText() {
   const p = PJ.p, n = p.boxes ? (PJ.bs ? PJ.bs.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0), mx = pjMaxMoves(p);
   return mx ? `moves left ${Math.max(0, mx - n)}` : p.moves ? `moves ${n}/${p.moves}` : `moves ${n}`;
@@ -292,6 +303,7 @@ function pjSide() {
   if (PJ.die3) PJ.die3.sync(pjRealDie());
 }
 function pjChrome() {
+  pjLeftHud();
   const mv = $('#pj-moves'); if (mv) { mv.textContent = pjMovesText(); mv.classList.toggle('bad', PJ.state === 'fail' && PJ.bad.some(b => b.kind === 'moves')); }
   const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
   const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';
