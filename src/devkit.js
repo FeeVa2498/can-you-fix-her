@@ -190,6 +190,7 @@ function kitTestRun(day, preset, passion) {
     if (passion) T.flags[g + '_true'] = true;
   });
   if (passion) T.flags.prim_music = true;
+  if (!T.apps.includes('MusicBox.exe')) T.apps.push('MusicBox.exe');   // from HR's welcome mail
   T.at = day >= RECKON_DAY ? 'reckoning' : 'am'; if (day >= RECKON_DAY) T.day = LAST_DAY;
   S = keep;
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(T)); sessionStorage.setItem('cyfh_autostart', '1'); } catch (e) { toast('Big days', 'Could not write the test save.'); return; }

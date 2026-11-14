@@ -215,17 +215,14 @@ function owStorySpend(kind) {
   if (kind === 'reset') OW.costs = [];
   return c;
 }
-function owStoryUndo() {
+function owStoryUndo() {   // unlocked by Prim's tracing paper, 20 a day; free, but it doesn't give minutes back
   if (owLocked()) { SFX.buzz(); return; }
   if (!pjCanUndo()) { SFX.buzz(); $('#pj-msg').textContent = 'Undo is locked. Someone here might lend you a way to take a move back.'; return; }
   if (undoLeft() <= 0) { SFX.buzz(); $('#pj-msg').textContent = 'No undos left today.'; return; }
   const before = pjHist(); pjUndo(); drawPJ();
-  const after = pjHist(); if (after >= before) return;
-  S.undoLeft--; OW.costs = OW.costs || [];
-  let back = 0; while (OW.costs.length > after) back += OW.costs.pop() || 0;
-  S.mins = Math.max(DAY_START, S.mins - back);
-  $('#pj-msg').textContent = `Undo · ${S.undoLeft} left today${back ? ` · +${back} min back` : ''}`;
-  save(); owHud(); renderTray(); if (WINS.brain) renderBrain();
+  if (pjHist() >= before) return;
+  S.undoLeft--; $('#pj-msg').textContent = `Undo · ${S.undoLeft} left today`;
+  save(); owHud();
 }
 const owLocked = () => S.dayOver || OW.frozen || !!S.flags.ended;
 function owOverloaded() {

@@ -1357,6 +1357,11 @@ body.reckon #app{animation:none}
 .prof-pic{position:relative;width:130px;flex:none;overflow:hidden;border-radius:8px;background:linear-gradient(180deg,#fff,var(--c));border:2px solid var(--line)}.prof-pic .sel-img{height:330px;top:-2px;transform:translateX(-50%);filter:none}
 .prof-body{flex:1;min-width:0;overflow:auto}.prof-head b{font:900 20px var(--display)}.prof-head small{display:block;color:var(--ink-soft);font:11px var(--mono)}
 .prof dl{display:grid;grid-template-columns:110px 1fr;gap:4px 10px;margin:8px 0;font-size:12.5px}.prof dt{font-weight:700;color:var(--ink-soft)}.prof dd{margin:0}.prof dd.unk{font-family:var(--mono);color:#9a8ab0;letter-spacing:2px}
+.pj-fail{position:absolute;inset:auto 0 0 0;top:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;pointer-events:none;z-index:6;background:radial-gradient(circle at 50% 50%,rgba(20,6,20,.55),rgba(20,6,20,.15) 70%,transparent);animation:pjfail-in .35s ease-out}
+.pj-fail b{font:900 34px var(--display);letter-spacing:4px;color:#fff;text-shadow:3px 3px 0 #e0465e,-2px -2px 0 #46c8ff,0 0 18px rgba(0,0,0,.6)}
+.pj-fail.boom b{color:#ffd86e}.pj-fail span{font:15px var(--mono);color:#fff;text-shadow:1px 1px 0 #000}.pj-fail i{margin-top:6px;padding:3px 10px;font:700 12px var(--mono);font-style:normal;letter-spacing:2px;color:#1a1020;background:#ffd86e;border:2px solid #1a1020;border-radius:6px;animation:pjfail-blink 1s steps(2) infinite}
+@keyframes pjfail-in{0%{opacity:0;transform:scale(1.2)}100%{opacity:1;transform:none}}@keyframes pjfail-blink{50%{opacity:.35}}
+.pj-lag{animation:pjlag .7s steps(7)}@keyframes pjlag{0%{transform:translate(0,0);filter:none}15%{transform:translate(-6px,2px);filter:hue-rotate(60deg) saturate(2)}30%{transform:translate(5px,-3px);filter:invert(.15)}45%{transform:translate(-3px,-2px) skewX(3deg)}60%{transform:translate(4px,3px);filter:hue-rotate(-60deg)}80%{transform:translate(-2px,0)}100%{transform:none;filter:none}}
 </style>
 </head>
 <body>
@@ -2487,14 +2492,14 @@ function startNightChat(g) {
 /* ---------------- mail, apps, mementos ---------------- */
 // one reward per gate: layer 1 → her software, layer 2 → her memento (it does something), layer 3 → a letter. All arrive at night.
 const MEMENTOS = {   // every memento does something in her memories; layer 2 gifts only
-  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): 20 a day, and each one gives the minute back.' },
+  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): 20 a day. Undo is free, but time already spent stays spent.' },
   'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Reset costs no time.' },
   'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five costs no time. Roll with it.' },
   'dog_tag.mem': { ic: 'tag', from: 'Vel', desc: 'Walking on a map costs half: every other step is free.' },
 };
 const REWARD = {
   prim: {
-    1: { subject: 'something to listen to', body: 'counsellor,\n\nit\'s so quiet in your room. i can hear your computer humming from here.\nthis is the little player i used when i traced. it plays by itself if you let it.\n\n— prim', atts: [{ kind: 'app', name: 'MusicBox.exe' }] },
+    1: { subject: 'thank you', body: 'counsellor,\n\nthank you for today. it felt like taking off a coat that was never mine.\ni wanted to give you something. i don\'t have anything yet. i\'ll find something.\n\n— prim', atts: [] },   // TODO: Prim's layer-1 app (proposal pending)
     2: { subject: 'something i traced', body: 'i kept the tracing paper. if a line goes wrong you just lift it off and start that bit again.\nyou don\'t have to get everything right the first time. i never do.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
     3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you once. not traced. drew. it was bad. i tore it up.\nmaybe i\'ll draw you again. maybe.\n\n— p.', atts: [] },
   },
@@ -3351,7 +3356,7 @@ function day1Start() {
   S.phase = 'day'; S.day = 1; S.mins = DAY_START; S.dayOver = false; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = [];
   S.night = { chats: 0, with: [], bossPending: false, bossDone: false };
   S.unread.boss = 1; S.flags.ping = 'yap';
-  if (!S.flags.welcomeMail) { S.flags.welcomeMail = true; sendMail({ from: 'dive', subject: 'Welcome to DIVE — your appointment', body: `Dear ${S.player ? S.player.name : 'Counsellor'},\n\nCongratulations. We are pleased to confirm your appointment as Counsellor (probationary, 14 days) at the DIVE patient care facility, effective today.\n\nYour duties:\n  · run treatment sessions with your assigned patients (Fix-it)\n  · clear each patient's layers of insecurity, one memory at a time\n  · report to your supervisor, Boss (@r.admin), every morning and night\n\nYour workstation, accommodation and meals are provided. You will not need to leave the premises.\n\nYour training is complete. You may not remember it. This is normal.\n\nWelcome aboard,\n— DIVE Human Resources\n\nP.S. Your supervisor is very excited to meet you.` }); }
+  if (!S.flags.welcomeMail) { S.flags.welcomeMail = true; sendMail({ from: 'dive', subject: 'Welcome to DIVE — your appointment', body: `Dear ${S.player ? S.player.name : 'Counsellor'},\n\nCongratulations. We are pleased to confirm your appointment as Counsellor (probationary, 14 days) at the DIVE patient care facility, effective today.\n\nYour duties:\n  · run treatment sessions with your assigned patients (Fix-it)\n  · clear each patient's layers of insecurity, one memory at a time\n  · report to your supervisor, Boss (@r.admin), every morning and night\n\nYour workstation, accommodation and meals are provided. You will not need to leave the premises.\n\nYour training is complete. You may not remember it. This is normal.\n\nYou can't work without a little bit of music. Attached is MusicBox, our special player with "vibe mode": it automatically chooses your music based on the situation. Enjoy.\n\nWelcome aboard,\n— DIVE Human Resources\n\nP.S. Your supervisor is very excited to meet you.`, atts: [{ kind: 'app', name: 'MusicBox.exe' }] }); }
   checkpoint('d1'); refresh();
 }
 async function main() {
@@ -4019,17 +4024,14 @@ function owStorySpend(kind) {
   if (kind === 'reset') OW.costs = [];
   return c;
 }
-function owStoryUndo() {
+function owStoryUndo() {   // unlocked by Prim's tracing paper, 20 a day; free, but it doesn't give minutes back
   if (owLocked()) { SFX.buzz(); return; }
   if (!pjCanUndo()) { SFX.buzz(); $('#pj-msg').textContent = 'Undo is locked. Someone here might lend you a way to take a move back.'; return; }
   if (undoLeft() <= 0) { SFX.buzz(); $('#pj-msg').textContent = 'No undos left today.'; return; }
   const before = pjHist(); pjUndo(); drawPJ();
-  const after = pjHist(); if (after >= before) return;
-  S.undoLeft--; OW.costs = OW.costs || [];
-  let back = 0; while (OW.costs.length > after) back += OW.costs.pop() || 0;
-  S.mins = Math.max(DAY_START, S.mins - back);
-  $('#pj-msg').textContent = `Undo · ${S.undoLeft} left today${back ? ` · +${back} min back` : ''}`;
-  save(); owHud(); renderTray(); if (WINS.brain) renderBrain();
+  if (pjHist() >= before) return;
+  S.undoLeft--; $('#pj-msg').textContent = `Undo · ${S.undoLeft} left today`;
+  save(); owHud();
 }
 const owLocked = () => S.dayOver || OW.frozen || !!S.flags.ended;
 function owOverloaded() {
@@ -5243,10 +5245,33 @@ function bridgeOver(p, path) {
 
 /* ---------------- state helpers ---------------- */
 const pjPath = () => PJ.st ? PJ.st.path : [];
-function pjMovesText() {
-  const p = PJ.p, n = p.boxes ? (PJ.bs ? PJ.bs.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0);
-  return p.moves ? `moves ${n}/${p.moves}` : `moves ${n}`;
+// Paige and Vel: a move limit (the shortest answer plus some room). Reaching it without erasing the memory loses the level.
+function pjMaxMoves(p) {
+  if (!p || !p.boxes || !p.minMoves) return 0;
+  const g = p.girl || (p.id || '').split('_')[0];
+  return ['paige', 'vel'].includes(g) ? p.minMoves + Math.max(3, Math.ceil(p.minMoves * .4)) : 0;
 }
+function pjMovesText() {
+  const p = PJ.p, n = p.boxes ? (PJ.bs ? PJ.bs.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0), mx = pjMaxMoves(p);
+  return mx ? `moves left ${Math.max(0, mx - n)}` : p.moves ? `moves ${n}/${p.moves}` : `moves ${n}`;
+}
+// a lost level: a big message on the board, then "press R to restart"
+const FAIL_LINES = {
+  boom: ['it went off in your hands.', 'the countdown didn\'t wait.', 'too slow. it blew.'],
+  stuck: ['nothing can move anymore.', 'every box is stuck.'],
+  limit: { paige: ['the house wins.', 'out of chips.', 'bust.'], vel: ['out of ammo.', 'mag empty. PING.', 'mission failed.'], ray: ['out of moves.'] },
+};
+function pjFail(kind, girl) {
+  const vp = $('#pj-vp'); if (!vp) return;
+  $$('.pj-fail', vp).forEach(e => e.remove());
+  const pool = kind === 'limit' ? (FAIL_LINES.limit[girl] || FAIL_LINES.limit.ray) : FAIL_LINES[kind];
+  const head = kind === 'boom' ? '✹ BOOM ✹' : kind === 'stuck' ? 'NO MORE MOVES' : 'OUT OF MOVES';
+  const el = document.createElement('div'); el.className = 'pj-fail ' + kind;
+  el.innerHTML = `<b>${head}</b><span>${esc(pickRnd(pool))}</span><i>press R to restart</i>`;
+  vp.appendChild(el);
+  if (kind !== 'stuck') { vp.classList.remove('pj-lag'); void vp.offsetWidth; vp.classList.add('pj-lag'); setTimeout(() => vp.classList.remove('pj-lag'), 700); }
+}
+function pjFailClear() { const vp = $('#pj-vp'); if (vp) $$('.pj-fail', vp).forEach(e => e.remove()); }
 /* Dice panels: the brief (which number each white tile must show) and a practice die: a little 3D die you can
    spin with the mouse. It snaps back to the real die's faces after every move (double-click does it too). */
 function pjSideHTML(p) {
@@ -5300,7 +5325,7 @@ function pjChrome() {
   const mv = $('#pj-moves'); if (mv) { mv.textContent = pjMovesText(); mv.classList.toggle('bad', PJ.state === 'fail' && PJ.bad.some(b => b.kind === 'moves')); }
   const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
   const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';
-  const st = $('#pj-st1'); if (st) st.textContent = PJ.solOn ? 'Replaying solution' : PJ.state === 'win' ? 'Erased' : PJ.state === 'fail' ? (PJ.bad.some(b => b.kind === 'boom') ? 'Box exploded' : 'Rule violation') : PJ.state === 'draw' ? 'Projecting…' : 'Ready';
+  const st = $('#pj-st1'); if (st) st.textContent = PJ.solOn ? 'Replaying solution' : PJ.state === 'win' ? 'Erased' : PJ.state === 'fail' ? (PJ.bad.some(b => b.kind === 'boom') ? 'Box exploded' : PJ.bad.some(b => b.kind === 'limit') ? 'Out of moves' : 'Rule violation') : PJ.state === 'draw' ? 'Projecting…' : 'Ready';
 }
 function drawPJ() {
   if (!PJ) return; const p = PJ.p;
@@ -5331,7 +5356,7 @@ function drawPJ() {
 }
 function pjReset() {
   if (!PJ) return;
-  PJ.st = null; PJ.bs = PJ.p.boxes ? PanelEngine.boxStart(PJ.p) : null; PJ.bsHist = []; PJ.animAt = null; $('#pj-msg').textContent = '';
+  PJ.st = null; PJ.bs = PJ.p.boxes ? PanelEngine.boxStart(PJ.p) : null; PJ.bsHist = []; PJ.animAt = null; $('#pj-msg').textContent = ''; pjFailClear();
   PJ.state = 'idle'; PJ.bad = []; drawPJ();
 }
 function svgPt(svg, e) { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const r = pt.matrixTransform(svg.getScreenCTM().inverse()); return [r.x, r.y]; }
@@ -5340,14 +5365,15 @@ const sameDir = (a, b) => a && b && a[0] === b[0] && a[1] === b[1];
 /* one key press. Returns true if something moved. */
 function pjMove(d) {
   const E = PanelEngine, p = PJ.p;
-  if (p.boxes && PJ.bs.dead >= 0) { SFX.tick(); $('#pj-msg').textContent = 'Mìn đã nổ. Ấn Z để lùi hoặc R để chơi lại.'; return false; }
+  if (p.boxes && PJ.bs.dead >= 0) { SFX.tick(); $('#pj-msg').textContent = 'Press R to restart.'; return false; }
+  if (p.boxes && PJ.state === 'fail' && PJ.bad.some(b => b.kind === 'limit')) { SFX.tick(); return false; }
   if (PJ.state === 'fail') { PJ.state = 'draw'; PJ.bad = []; }
   if (p.boxes) {
     const r = E.boxStep(p, PJ.bs, d);
     if (r.dead >= 0) {   // a countdown ran out: the box blows up and the level is lost (Z brings it back)
       PJ.bsHist.push(PJ.bs); PJ.bs = r.state; PJ.animAt = null; PJ.state = 'fail'; PJ.bad = [{ kind: 'boom', i: r.dead }];
       SFX.glitch(.45); SFX.buzz(); if (PJ.view) pj3Flash('✹ BOOM ✹', 'fail');
-      $('#pj-msg').textContent = 'Mìn nổ! Ấn Z để lùi hoặc R để chơi lại.';
+      $('#pj-msg').textContent = 'Press R to restart.'; pjFail('boom');
       return true;
     }
     if (!r.moved.some(Boolean)) { SFX.tick(); return false; }
@@ -5356,8 +5382,13 @@ function pjMove(d) {
     if (r.state.tracks.some((t, i) => t.length - prev.tracks[i].length > 1)) SFX.link();
     if (r.state.open !== prev.open) SFX.item && SFX.item();
     boxAnim(prev, PJ.bs);
+    const mx = pjMaxMoves(p);
     if (E.boxWon(p, PJ.bs)) pjSubmit();
-    else if (['R', 'L', 'U', 'D'].every(c => { const q = E.boxStep(p, PJ.bs, E.DK[c], false); return !q.moved.some(Boolean) && q.dead < 0; })) $('#pj-msg').textContent = 'Không hộp nào đi được nữa. Ấn Z để lùi hoặc R để chơi lại.';
+    else if (mx && PJ.bs.inputs.length >= mx) {   // out of moves: the memory glitches and the level is lost
+      PJ.state = 'fail'; PJ.bad = [{ kind: 'limit' }]; SFX.glitch(.5); SFX.buzz(); if (PJ.view) pj3Flash('OUT OF MOVES', 'fail');
+      $('#pj-msg').textContent = 'Press R to restart.'; pjFail('limit', p.girl || p.id.split('_')[0]);
+    }
+    else if (['R', 'L', 'U', 'D'].every(c => { const q = E.boxStep(p, PJ.bs, E.DK[c], false); return !q.moved.some(Boolean) && q.dead < 0; })) { $('#pj-msg').textContent = 'Press R to restart.'; pjFail('stuck'); }
     else $('#pj-msg').textContent = '';
     return true;
   }
@@ -5387,7 +5418,7 @@ function pjMove(d) {
 function pjUndo() {
   const E = PanelEngine, p = PJ.p;
   if (PJ.state === 'fail') { PJ.state = 'draw'; PJ.bad = []; }
-  if (p.boxes) { if (PJ.bsHist.length) { PJ.bs = PJ.bsHist.pop(); PJ.animAt = null; PJ.state = 'draw'; PJ.bad = []; $('#pj-msg').textContent = ''; SFX.tick(); } return; }
+  if (p.boxes) { if (PJ.bsHist.length) { PJ.bs = PJ.bsHist.pop(); PJ.animAt = null; PJ.state = 'draw'; PJ.bad = []; $('#pj-msg').textContent = ''; pjFailClear(); SFX.tick(); } return; }
   const st = PJ.st; if (!st) return;
   if (st.path.length <= 1) { PJ.st = null; return; }
   while (st.path.length > 1 && st.forced[st.forced.length - 1]) E.undo(p, st);
@@ -5447,7 +5478,7 @@ function pjKey(e) {
   const D = KEYDIR[k];
   // story: every input costs her stamina (moves, bumps, undo, reset); none once she's out
   if (PJ_STORY && (D || k === 'z' || k === 'Backspace' || k === 'r')) { if (PJ_STORY.locked()) { e.preventDefault(); SFX.buzz(); return; } }
-  if (D) { e.preventDefault(); pjMove(D); drawPJ(); if (PJ_STORY) PJ_STORY.spend('move'); }
+  if (D) { e.preventDefault(); const moved = pjMove(D); drawPJ(); if (PJ_STORY && moved) PJ_STORY.spend('move'); }   // a key that moves nothing costs no time
   else if (k === 'z' || k === 'Backspace') { e.preventDefault(); if (PJ_STORY) { PJ_STORY.undo(); return; } pjUndo(); drawPJ(); }
   else if (k === 'r') { e.preventDefault(); pjReset(); if (PJ_STORY) PJ_STORY.spend('reset'); }
   else if (k === 'Escape') { e.preventDefault(); if (PJ_STORY) PJ_STORY.back(); else pjReset(); }
@@ -6937,6 +6968,7 @@ function kitTestRun(day, preset, passion) {
     if (passion) T.flags[g + '_true'] = true;
   });
   if (passion) T.flags.prim_music = true;
+  if (!T.apps.includes('MusicBox.exe')) T.apps.push('MusicBox.exe');   // from HR's welcome mail
   T.at = day >= RECKON_DAY ? 'reckoning' : 'am'; if (day >= RECKON_DAY) T.day = LAST_DAY;
   S = keep;
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(T)); sessionStorage.setItem('cyfh_autostart', '1'); } catch (e) { toast('Big days', 'Could not write the test save.'); return; }

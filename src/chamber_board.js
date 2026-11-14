@@ -215,10 +215,33 @@ function bridgeOver(p, path) {
 
 /* ---------------- state helpers ---------------- */
 const pjPath = () => PJ.st ? PJ.st.path : [];
-function pjMovesText() {
-  const p = PJ.p, n = p.boxes ? (PJ.bs ? PJ.bs.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0);
-  return p.moves ? `moves ${n}/${p.moves}` : `moves ${n}`;
+// Paige and Vel: a move limit (the shortest answer plus some room). Reaching it without erasing the memory loses the level.
+function pjMaxMoves(p) {
+  if (!p || !p.boxes || !p.minMoves) return 0;
+  const g = p.girl || (p.id || '').split('_')[0];
+  return ['paige', 'vel'].includes(g) ? p.minMoves + Math.max(3, Math.ceil(p.minMoves * .4)) : 0;
 }
+function pjMovesText() {
+  const p = PJ.p, n = p.boxes ? (PJ.bs ? PJ.bs.inputs.length : 0) : (PJ.st ? PJ.st.moves : 0), mx = pjMaxMoves(p);
+  return mx ? `moves left ${Math.max(0, mx - n)}` : p.moves ? `moves ${n}/${p.moves}` : `moves ${n}`;
+}
+// a lost level: a big message on the board, then "press R to restart"
+const FAIL_LINES = {
+  boom: ['it went off in your hands.', 'the countdown didn\'t wait.', 'too slow. it blew.'],
+  stuck: ['nothing can move anymore.', 'every box is stuck.'],
+  limit: { paige: ['the house wins.', 'out of chips.', 'bust.'], vel: ['out of ammo.', 'mag empty. PING.', 'mission failed.'], ray: ['out of moves.'] },
+};
+function pjFail(kind, girl) {
+  const vp = $('#pj-vp'); if (!vp) return;
+  $$('.pj-fail', vp).forEach(e => e.remove());
+  const pool = kind === 'limit' ? (FAIL_LINES.limit[girl] || FAIL_LINES.limit.ray) : FAIL_LINES[kind];
+  const head = kind === 'boom' ? '✹ BOOM ✹' : kind === 'stuck' ? 'NO MORE MOVES' : 'OUT OF MOVES';
+  const el = document.createElement('div'); el.className = 'pj-fail ' + kind;
+  el.innerHTML = `<b>${head}</b><span>${esc(pickRnd(pool))}</span><i>press R to restart</i>`;
+  vp.appendChild(el);
+  if (kind !== 'stuck') { vp.classList.remove('pj-lag'); void vp.offsetWidth; vp.classList.add('pj-lag'); setTimeout(() => vp.classList.remove('pj-lag'), 700); }
+}
+function pjFailClear() { const vp = $('#pj-vp'); if (vp) $$('.pj-fail', vp).forEach(e => e.remove()); }
 /* Dice panels: the brief (which number each white tile must show) and a practice die: a little 3D die you can
    spin with the mouse. It snaps back to the real die's faces after every move (double-click does it too). */
 function pjSideHTML(p) {
@@ -272,7 +295,7 @@ function pjChrome() {
   const mv = $('#pj-moves'); if (mv) { mv.textContent = pjMovesText(); mv.classList.toggle('bad', PJ.state === 'fail' && PJ.bad.some(b => b.kind === 'moves')); }
   const tok = $('#pj-erase'); if (tok) tok.innerHTML = `${icon('queen')} ${PJ.eraseUsed ? 'used' : 'ready'}`;
   const hb = $('#pj-hint'); if (hb) hb.disabled = PJ.hintUsed || PJ.state === 'win';
-  const st = $('#pj-st1'); if (st) st.textContent = PJ.solOn ? 'Replaying solution' : PJ.state === 'win' ? 'Erased' : PJ.state === 'fail' ? (PJ.bad.some(b => b.kind === 'boom') ? 'Box exploded' : 'Rule violation') : PJ.state === 'draw' ? 'Projecting…' : 'Ready';
+  const st = $('#pj-st1'); if (st) st.textContent = PJ.solOn ? 'Replaying solution' : PJ.state === 'win' ? 'Erased' : PJ.state === 'fail' ? (PJ.bad.some(b => b.kind === 'boom') ? 'Box exploded' : PJ.bad.some(b => b.kind === 'limit') ? 'Out of moves' : 'Rule violation') : PJ.state === 'draw' ? 'Projecting…' : 'Ready';
 }
 function drawPJ() {
   if (!PJ) return; const p = PJ.p;
@@ -303,7 +326,7 @@ function drawPJ() {
 }
 function pjReset() {
   if (!PJ) return;
-  PJ.st = null; PJ.bs = PJ.p.boxes ? PanelEngine.boxStart(PJ.p) : null; PJ.bsHist = []; PJ.animAt = null; $('#pj-msg').textContent = '';
+  PJ.st = null; PJ.bs = PJ.p.boxes ? PanelEngine.boxStart(PJ.p) : null; PJ.bsHist = []; PJ.animAt = null; $('#pj-msg').textContent = ''; pjFailClear();
   PJ.state = 'idle'; PJ.bad = []; drawPJ();
 }
 function svgPt(svg, e) { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const r = pt.matrixTransform(svg.getScreenCTM().inverse()); return [r.x, r.y]; }
@@ -312,14 +335,15 @@ const sameDir = (a, b) => a && b && a[0] === b[0] && a[1] === b[1];
 /* one key press. Returns true if something moved. */
 function pjMove(d) {
   const E = PanelEngine, p = PJ.p;
-  if (p.boxes && PJ.bs.dead >= 0) { SFX.tick(); $('#pj-msg').textContent = 'Mìn đã nổ. Ấn Z để lùi hoặc R để chơi lại.'; return false; }
+  if (p.boxes && PJ.bs.dead >= 0) { SFX.tick(); $('#pj-msg').textContent = 'Press R to restart.'; return false; }
+  if (p.boxes && PJ.state === 'fail' && PJ.bad.some(b => b.kind === 'limit')) { SFX.tick(); return false; }
   if (PJ.state === 'fail') { PJ.state = 'draw'; PJ.bad = []; }
   if (p.boxes) {
     const r = E.boxStep(p, PJ.bs, d);
     if (r.dead >= 0) {   // a countdown ran out: the box blows up and the level is lost (Z brings it back)
       PJ.bsHist.push(PJ.bs); PJ.bs = r.state; PJ.animAt = null; PJ.state = 'fail'; PJ.bad = [{ kind: 'boom', i: r.dead }];
       SFX.glitch(.45); SFX.buzz(); if (PJ.view) pj3Flash('✹ BOOM ✹', 'fail');
-      $('#pj-msg').textContent = 'Mìn nổ! Ấn Z để lùi hoặc R để chơi lại.';
+      $('#pj-msg').textContent = 'Press R to restart.'; pjFail('boom');
       return true;
     }
     if (!r.moved.some(Boolean)) { SFX.tick(); return false; }
@@ -328,8 +352,13 @@ function pjMove(d) {
     if (r.state.tracks.some((t, i) => t.length - prev.tracks[i].length > 1)) SFX.link();
     if (r.state.open !== prev.open) SFX.item && SFX.item();
     boxAnim(prev, PJ.bs);
+    const mx = pjMaxMoves(p);
     if (E.boxWon(p, PJ.bs)) pjSubmit();
-    else if (['R', 'L', 'U', 'D'].every(c => { const q = E.boxStep(p, PJ.bs, E.DK[c], false); return !q.moved.some(Boolean) && q.dead < 0; })) $('#pj-msg').textContent = 'Không hộp nào đi được nữa. Ấn Z để lùi hoặc R để chơi lại.';
+    else if (mx && PJ.bs.inputs.length >= mx) {   // out of moves: the memory glitches and the level is lost
+      PJ.state = 'fail'; PJ.bad = [{ kind: 'limit' }]; SFX.glitch(.5); SFX.buzz(); if (PJ.view) pj3Flash('OUT OF MOVES', 'fail');
+      $('#pj-msg').textContent = 'Press R to restart.'; pjFail('limit', p.girl || p.id.split('_')[0]);
+    }
+    else if (['R', 'L', 'U', 'D'].every(c => { const q = E.boxStep(p, PJ.bs, E.DK[c], false); return !q.moved.some(Boolean) && q.dead < 0; })) { $('#pj-msg').textContent = 'Press R to restart.'; pjFail('stuck'); }
     else $('#pj-msg').textContent = '';
     return true;
   }
@@ -359,7 +388,7 @@ function pjMove(d) {
 function pjUndo() {
   const E = PanelEngine, p = PJ.p;
   if (PJ.state === 'fail') { PJ.state = 'draw'; PJ.bad = []; }
-  if (p.boxes) { if (PJ.bsHist.length) { PJ.bs = PJ.bsHist.pop(); PJ.animAt = null; PJ.state = 'draw'; PJ.bad = []; $('#pj-msg').textContent = ''; SFX.tick(); } return; }
+  if (p.boxes) { if (PJ.bsHist.length) { PJ.bs = PJ.bsHist.pop(); PJ.animAt = null; PJ.state = 'draw'; PJ.bad = []; $('#pj-msg').textContent = ''; pjFailClear(); SFX.tick(); } return; }
   const st = PJ.st; if (!st) return;
   if (st.path.length <= 1) { PJ.st = null; return; }
   while (st.path.length > 1 && st.forced[st.forced.length - 1]) E.undo(p, st);
@@ -419,7 +448,7 @@ function pjKey(e) {
   const D = KEYDIR[k];
   // story: every input costs her stamina (moves, bumps, undo, reset); none once she's out
   if (PJ_STORY && (D || k === 'z' || k === 'Backspace' || k === 'r')) { if (PJ_STORY.locked()) { e.preventDefault(); SFX.buzz(); return; } }
-  if (D) { e.preventDefault(); pjMove(D); drawPJ(); if (PJ_STORY) PJ_STORY.spend('move'); }
+  if (D) { e.preventDefault(); const moved = pjMove(D); drawPJ(); if (PJ_STORY && moved) PJ_STORY.spend('move'); }   // a key that moves nothing costs no time
   else if (k === 'z' || k === 'Backspace') { e.preventDefault(); if (PJ_STORY) { PJ_STORY.undo(); return; } pjUndo(); drawPJ(); }
   else if (k === 'r') { e.preventDefault(); pjReset(); if (PJ_STORY) PJ_STORY.spend('reset'); }
   else if (k === 'Escape') { e.preventDefault(); if (PJ_STORY) PJ_STORY.back(); else pjReset(); }

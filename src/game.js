@@ -1095,14 +1095,14 @@ function startNightChat(g) {
 /* ---------------- mail, apps, mementos ---------------- */
 // one reward per gate: layer 1 → her software, layer 2 → her memento (it does something), layer 3 → a letter. All arrive at night.
 const MEMENTOS = {   // every memento does something in her memories; layer 2 gifts only
-  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): 20 a day, and each one gives the minute back.' },
+  'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): 20 a day. Undo is free, but time already spent stays spent.' },
   'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Reset costs no time.' },
   'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five costs no time. Roll with it.' },
   'dog_tag.mem': { ic: 'tag', from: 'Vel', desc: 'Walking on a map costs half: every other step is free.' },
 };
 const REWARD = {
   prim: {
-    1: { subject: 'something to listen to', body: 'counsellor,\n\nit\'s so quiet in your room. i can hear your computer humming from here.\nthis is the little player i used when i traced. it plays by itself if you let it.\n\n— prim', atts: [{ kind: 'app', name: 'MusicBox.exe' }] },
+    1: { subject: 'thank you', body: 'counsellor,\n\nthank you for today. it felt like taking off a coat that was never mine.\ni wanted to give you something. i don\'t have anything yet. i\'ll find something.\n\n— prim', atts: [] },   // TODO: Prim's layer-1 app (proposal pending)
     2: { subject: 'something i traced', body: 'i kept the tracing paper. if a line goes wrong you just lift it off and start that bit again.\nyou don\'t have to get everything right the first time. i never do.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
     3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you once. not traced. drew. it was bad. i tore it up.\nmaybe i\'ll draw you again. maybe.\n\n— p.', atts: [] },
   },
@@ -1959,7 +1959,7 @@ function day1Start() {
   S.phase = 'day'; S.day = 1; S.mins = DAY_START; S.dayOver = false; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = [];
   S.night = { chats: 0, with: [], bossPending: false, bossDone: false };
   S.unread.boss = 1; S.flags.ping = 'yap';
-  if (!S.flags.welcomeMail) { S.flags.welcomeMail = true; sendMail({ from: 'dive', subject: 'Welcome to DIVE — your appointment', body: `Dear ${S.player ? S.player.name : 'Counsellor'},\n\nCongratulations. We are pleased to confirm your appointment as Counsellor (probationary, 14 days) at the DIVE patient care facility, effective today.\n\nYour duties:\n  · run treatment sessions with your assigned patients (Fix-it)\n  · clear each patient's layers of insecurity, one memory at a time\n  · report to your supervisor, Boss (@r.admin), every morning and night\n\nYour workstation, accommodation and meals are provided. You will not need to leave the premises.\n\nYour training is complete. You may not remember it. This is normal.\n\nWelcome aboard,\n— DIVE Human Resources\n\nP.S. Your supervisor is very excited to meet you.` }); }
+  if (!S.flags.welcomeMail) { S.flags.welcomeMail = true; sendMail({ from: 'dive', subject: 'Welcome to DIVE — your appointment', body: `Dear ${S.player ? S.player.name : 'Counsellor'},\n\nCongratulations. We are pleased to confirm your appointment as Counsellor (probationary, 14 days) at the DIVE patient care facility, effective today.\n\nYour duties:\n  · run treatment sessions with your assigned patients (Fix-it)\n  · clear each patient's layers of insecurity, one memory at a time\n  · report to your supervisor, Boss (@r.admin), every morning and night\n\nYour workstation, accommodation and meals are provided. You will not need to leave the premises.\n\nYour training is complete. You may not remember it. This is normal.\n\nYou can't work without a little bit of music. Attached is MusicBox, our special player with "vibe mode": it automatically chooses your music based on the situation. Enjoy.\n\nWelcome aboard,\n— DIVE Human Resources\n\nP.S. Your supervisor is very excited to meet you.`, atts: [{ kind: 'app', name: 'MusicBox.exe' }] }); }
   checkpoint('d1'); refresh();
 }
 async function main() {

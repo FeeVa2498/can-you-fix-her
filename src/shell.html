@@ -1352,6 +1352,11 @@ body.reckon #app{animation:none}
 .prof-pic{position:relative;width:130px;flex:none;overflow:hidden;border-radius:8px;background:linear-gradient(180deg,#fff,var(--c));border:2px solid var(--line)}.prof-pic .sel-img{height:330px;top:-2px;transform:translateX(-50%);filter:none}
 .prof-body{flex:1;min-width:0;overflow:auto}.prof-head b{font:900 20px var(--display)}.prof-head small{display:block;color:var(--ink-soft);font:11px var(--mono)}
 .prof dl{display:grid;grid-template-columns:110px 1fr;gap:4px 10px;margin:8px 0;font-size:12.5px}.prof dt{font-weight:700;color:var(--ink-soft)}.prof dd{margin:0}.prof dd.unk{font-family:var(--mono);color:#9a8ab0;letter-spacing:2px}
+.pj-fail{position:absolute;inset:auto 0 0 0;top:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;pointer-events:none;z-index:6;background:radial-gradient(circle at 50% 50%,rgba(20,6,20,.55),rgba(20,6,20,.15) 70%,transparent);animation:pjfail-in .35s ease-out}
+.pj-fail b{font:900 34px var(--display);letter-spacing:4px;color:#fff;text-shadow:3px 3px 0 #e0465e,-2px -2px 0 #46c8ff,0 0 18px rgba(0,0,0,.6)}
+.pj-fail.boom b{color:#ffd86e}.pj-fail span{font:15px var(--mono);color:#fff;text-shadow:1px 1px 0 #000}.pj-fail i{margin-top:6px;padding:3px 10px;font:700 12px var(--mono);font-style:normal;letter-spacing:2px;color:#1a1020;background:#ffd86e;border:2px solid #1a1020;border-radius:6px;animation:pjfail-blink 1s steps(2) infinite}
+@keyframes pjfail-in{0%{opacity:0;transform:scale(1.2)}100%{opacity:1;transform:none}}@keyframes pjfail-blink{50%{opacity:.35}}
+.pj-lag{animation:pjlag .7s steps(7)}@keyframes pjlag{0%{transform:translate(0,0);filter:none}15%{transform:translate(-6px,2px);filter:hue-rotate(60deg) saturate(2)}30%{transform:translate(5px,-3px);filter:invert(.15)}45%{transform:translate(-3px,-2px) skewX(3deg)}60%{transform:translate(4px,3px);filter:hue-rotate(-60deg)}80%{transform:translate(-2px,0)}100%{transform:none;filter:none}}
 </style>
 <div id="app">
   <main id="desktop" aria-label="DIVE OS desktop">
