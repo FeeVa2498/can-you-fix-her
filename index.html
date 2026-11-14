@@ -2681,6 +2681,10 @@ function postNews(text) {
   if (typeof liveViews === 'function' && liveViews('news').length) appendMsg('news', m); else S.unread.news = (S.unread.news || 0) + 1;
   toast('Yappy Yappy', '<b>#announcements</b> · ' + esc(text.split('\n')[0])); renderBuddies(); renderIcons();
 }
+const NEWS_AHEAD = {
+  3: 'SAVE THE DATE 🎨\nHOBBY SHOWCASE in 3 days (day 12). Every patient will present one piece of their own.\nPatients usually bring what they feel sure of. Counsellors: a little encouragement goes a long way.',
+  1: 'REMINDER 🎨\nHOBBY SHOWCASE is tomorrow. No sessions on the day.\nIf a patient has something she really loves, tonight is the night to tell her it\'s worth showing.',
+};
 const NEWS = {
   postcard: 'POSTCARD DAY 📮\nEveryone writes a postcard to somewhere they would go if they could leave. Cards will be delivered to your inbox.\nReminder: nobody leaves.',
   inspection: 'INSPECTION DAY 🗂\nInspectors from upstairs are on site today. Keep your workstation tidy and your answers short.\nPlease do not mention the seismic activity.',
@@ -2688,6 +2692,8 @@ const NEWS = {
 };
 function dayMail() {
   const d = S.day;
+  const pre = NEWS_AHEAD[SHOWCASE_DAY - d];   // the showcase is announced ahead so there's time to help them
+  if (pre && !S.flags['newsAhead' + d]) { S.flags['newsAhead' + d] = true; postNews(pre); }
   if (NEWS[SPECIAL[d]] && !S.flags['news' + d]) { S.flags['news' + d] = true; postNews(NEWS[SPECIAL[d]]); }
   if (SPECIAL[d] === 'postcard') {
     sendMail({ from: 'boss', subject: 'Greetings from Santorini!', body: 'Wish you were here. (You are not. Nobody is. Rules are rules.)', card: { text: 'Dear rookie,\nThe sea is so blue it hurts.\nThe cats followed me all\nthe way to Oia.\n— Boss', stamp: 'LOCAL MAIL\n0 km' } });
