@@ -7737,7 +7737,7 @@ async function revealDbInit() {
 // the last music (audio/sad_past.mp3, "Sad Past" by Silent Partner): starts when Ray's map opens and loops,
 // without stopping, through her levels, the 20 memories, the reveal ("Yes") and the last talk.
 // While it plays, the projector theme, MusicBox and the desktop hum stay quiet.
-const FIN_MUSIC = { el: null, iv: 0, active: false, LEVEL: .425 };   // volume (was .85; halved)
+const FIN_MUSIC = { el: null, iv: 0, active: false, LEVEL: .2125 };   // volume (was .85, halved twice)
 function finaleMusic(on) {
   clearInterval(FIN_MUSIC.iv);
   if (on) {
