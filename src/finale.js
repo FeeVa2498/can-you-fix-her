@@ -131,20 +131,27 @@ async function revealDbInit() {
   } catch (e) { }
 }
 
-// the last music: plays from the black "Yes" screen through the last talk (audio/sad_past.mp3, Silent Partner)
-const FIN_MUSIC = { el: null, iv: 0 };
+// the last music (audio/sad_past.mp3, "Sad Past" by Silent Partner): starts when Ray's map opens and loops,
+// without stopping, through her levels, the 20 memories, the reveal ("Yes") and the last talk.
+// While it plays, the projector theme, MusicBox and the desktop hum stay quiet.
+const FIN_MUSIC = { el: null, iv: 0, active: false };
 function finaleMusic(on) {
   clearInterval(FIN_MUSIC.iv);
   if (on) {
-    try { if (typeof mbStopTrack === 'function') mbStopTrack(); if (typeof BGM !== 'undefined' && BGM.el) BGM.el.pause(); } catch (e) { }
-    if (!FIN_MUSIC.el) { FIN_MUSIC.el = new Audio('audio/sad_past.mp3'); FIN_MUSIC.el.preload = 'auto'; }
-    const el = FIN_MUSIC.el, top = (typeof AU !== 'undefined' && !AU.on) ? 0 : .85; el.currentTime = 0; el.volume = 0; el.play().catch(() => { });
-    FIN_MUSIC.iv = setInterval(() => { el.volume = Math.min(top, el.volume + .04); if (el.volume >= top) clearInterval(FIN_MUSIC.iv); }, 80);
+    try { if (typeof mbStopTrack === 'function' && MB.el) mbStopTrack(); if (typeof MB !== 'undefined' && MB.playing && typeof mbPause === 'function') mbPause(); if (typeof bgmOff === 'function') bgmOff();
+      if (AU.ctx && AU.music) AU.music.gain.setTargetAtTime(0, AU.ctx.currentTime, .8); } catch (e) { }
+    if (!FIN_MUSIC.el) { FIN_MUSIC.el = new Audio('audio/sad_past.mp3'); FIN_MUSIC.el.preload = 'auto'; FIN_MUSIC.el.loop = true; }
+    const el = FIN_MUSIC.el, top = AU.on ? .85 : 0;
+    if (FIN_MUSIC.active && !el.paused) { el.volume = Math.max(el.volume, Math.min(top, el.volume)); return; }   // already playing: never restart it
+    FIN_MUSIC.active = true; el.volume = 0; el.play().catch(() => { });
+    FIN_MUSIC.iv = setInterval(() => { el.volume = Math.min(top, el.volume + .03); if (el.volume >= top) clearInterval(FIN_MUSIC.iv); }, 80);
   } else if (FIN_MUSIC.el) {
-    const el = FIN_MUSIC.el; FIN_MUSIC.iv = setInterval(() => { el.volume = Math.max(0, el.volume - .05); if (el.volume <= 0) { clearInterval(FIN_MUSIC.iv); el.pause(); } }, 60);
+    FIN_MUSIC.active = false; const el = FIN_MUSIC.el;
+    FIN_MUSIC.iv = setInterval(() => { el.volume = Math.max(0, el.volume - .05); if (el.volume <= 0) { clearInterval(FIN_MUSIC.iv); el.pause(); } }, 60);
+    if (AU.ctx && AU.music) AU.music.gain.setTargetAtTime(.15, AU.ctx.currentTime, 1.2);
   }
 }
-const finaleMusicOn = () => !!(FIN_MUSIC.el && !FIN_MUSIC.el.paused && FIN_MUSIC.el.volume > 0);
+const finaleMusicOn = () => !!(FIN_MUSIC.active && FIN_MUSIC.el && !FIN_MUSIC.el.paused);
 
 // the room, over Ray's shoulder (placeholder painting until the art exists)
 const RV_SCR = { x: 668, y: 150, w: 344, h: 258 };     // the CRT's glass, in stage pixels (1280 × 720)

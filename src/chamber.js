@@ -215,6 +215,7 @@ function bgmTick() {
 }
 function bgmRun() { if (!BGM.iv) BGM.iv = setInterval(bgmTick, 50); }
 function bgmOn() {
+  if (typeof FIN_MUSIC !== 'undefined' && FIN_MUSIC.active) return;   // Ray's music keeps playing
   try {
     if (!BGM.el) { BGM.el = new Audio('audio/projector_bgm.mp3'); BGM.el.loop = true; BGM.el.preload = 'auto'; BGM.el.volume = 0; }
     BGM.want = 1; if (BGM.el.paused) { const pr = BGM.el.play(); if (pr && pr.catch) pr.catch(() => { }); }

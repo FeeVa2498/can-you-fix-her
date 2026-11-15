@@ -104,6 +104,7 @@ function mbStopTrack() {
   if (MB.bus) MB.bus.gain.setTargetAtTime(0, AU.ctx.currentTime, .25);
 }
 function mbPlay(id) {
+  if (typeof FIN_MUSIC !== 'undefined' && FIN_MUSIC.active) return;   // Ray's music keeps playing
   auInit(); mbInit(); if (!AU.ctx) return;
   const T = TRACKS.find(t => t.id === id) || TRACKS[0];
   if (MB.cur === T.id && MB.playing) return;

@@ -139,6 +139,7 @@ function owReveal(g) {
 /* ---------------- the Fix-it window ---------------- */
 const OW = { g: null, mode: 'map', anim: null, raf: 0, frozen: false, msg: '', msgT: 0, shake: 0, keyFx: null, ro: null };
 function openWorld(g) {
+  if (g === 'ray') finaleMusic(true);
   OW.g = g; OW.mode = 'map'; owState(g); owReveal(g);
   const dk = $('#desktop'), W = dk.clientWidth, H = dk.clientHeight;
   const fw = W >= 1240 ? 380 : 340, cw = W >= 1240 ? 360 : 330;
@@ -169,7 +170,8 @@ function owRenderShell(b) {
 }
 function owDispose3() { if (OW.v3) { OW.v3.dispose(); OW.v3 = null; } }
 function owStop() { owDispose3(); cancelAnimationFrame(OW.raf); OW.raf = 0; if (OW.ro) OW.ro.disconnect(); OW.ro = null; document.removeEventListener('keydown', owKey); }
-function owClose() { if (PJ_STORY) { PJ_STORY = null; pjDispose(); document.removeEventListener('keydown', pjKey); } owStop(); OW.g = null; }
+function owClose() { if (OW.g === 'ray' && !reckoning()) finaleMusic(false);   // a test from the Designer kit
+  if (PJ_STORY) { PJ_STORY = null; pjDispose(); document.removeEventListener('keydown', pjKey); } owStop(); OW.g = null; }
 function owFocus() { const w = WINS.fixit; if (w) focusWin('fixit'); }
 function owHud() {
   const g = OW.g; if (!g || !$('#ow-keys')) return;
