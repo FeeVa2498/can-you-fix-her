@@ -234,7 +234,7 @@ function playReveal(opts = {}) {
         <div class="rv-scr" style="left:${RV_SCR.x}px;top:${RV_SCR.y}px;width:${RV_SCR.w}px;height:${RV_SCR.h}px"><div class="rv-guest"><div class="rv-desk"></div><div class="rv-cur"></div></div><div class="rv-glass"></div></div>
         <canvas class="rv-ray" width="1280" height="720"></canvas></div>
       <div class="rv-dark"></div><div class="rv-white"></div><div class="rv-yes"></div><div class="rv-np">♪ Sad Past — Silent Partner</div><div class="rv-title"></div><div class="rv-cap" aria-live="polite"></div>
-      <div class="rv-hint">${opts.preview ? '<span class="rv-bn"></span> · click: next beat · Esc: stop' : 'click ▸'}</div></div>`;
+      <div class="rv-hint">${opts.preview ? '<span class="rv-bn"></span> · Esc: stop the preview' : ''}</div></div>`;
     document.body.appendChild(el);
     const frame = $('.rv-frame', el), cam = $('.rv-cam', el), guest = $('.rv-guest', el), desk = $('.rv-desk', el), cur = $('.rv-cur', el);
     const yes = $('.rv-yes', el), np = $('.rv-np', el), ray = $('.rv-ray', el), dark = $('.rv-dark', el), white = $('.rv-white', el), cap = $('.rv-cap', el), title = $('.rv-title', el);
@@ -305,8 +305,8 @@ function playReveal(opts = {}) {
       white: async () => { white.style.transition = RV.skip ? 'none' : 'opacity 1.8s ease'; white.style.opacity = 1; await W(1800); },
     };
     const stop = () => { if (ended) return; ended = true; if (opts.preview && !opts.keepMusic) finaleMusic(false); document.removeEventListener('keydown', key); window.removeEventListener('resize', onResize); el.classList.add('out'); setTimeout(() => { el.remove(); res(); }, 500); };
-    const key = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); RV.skip = true; skipTyping = true; } else if (e.key === 'Escape' && opts.preview) stop(); };
-    el.onclick = () => { RV.skip = true; skipTyping = true; };
+    // it can't be skipped: no click or key moves it on (in the Designer kit, Esc stops a preview)
+    const key = e => { if (e.key === 'Escape' && opts.preview) stop(); };
     document.addEventListener('keydown', key);
     // fast-forward to the chosen beat: earlier beats run instantly and silently
     if (from > 0) { RV.skip = true; for (let i = 0; i < from; i++) { const a = ACT[beats[i].act]; if (a) await a(beats[i]); } RV.skip = false; white.style.opacity = 0; }

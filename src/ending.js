@@ -109,23 +109,23 @@ function rkEnd() {
   const bo = document.createElement('div'); bo.id = 'blackout'; document.body.appendChild(bo);
   setTimeout(() => { bo.remove(); document.body.classList.remove('reckon'); endGame('reckoning'); }, REDUCED ? 300 : 2600);
 }
-/* ---------- memories: still cutscenes, one caption per click ---------- */
+/* ---------- memories: still cutscenes; captions come by themselves (they can't be skipped) ---------- */
+const memHold = t => 1800 + String(t).length * 55;   // how long a line stays after it has typed out
 function playMemory(k) {
   return new Promise(res => {
     const steps = endSteps('memory_' + k), lines = steps.flatMap(s => s.lines || []).map(l => Array.isArray(l) ? l[1] : l).map(t => String(t).replace(/^\{\w+\}/, ''));
     const el = document.createElement('div'); el.id = 'memory'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', lines[0] || 'Memory');
-    el.innerHTML = `<div class="mm-frame"><canvas width="960" height="540"></canvas><div class="mm-title"></div><div class="mm-cap" aria-live="polite"></div><div class="mm-hint">click ▸</div></div>`;
+    el.innerHTML = `<div class="mm-frame"><canvas width="960" height="540"></canvas><div class="mm-title"></div><div class="mm-cap" aria-live="polite"></div></div>`;
     document.body.appendChild(el);
     const cv = $('canvas', el); drawMemory(cv, k);
     $('.mm-title', el).textContent = lines[0] || '';
     let i = 1; SFX.glitch(.3);
     const next = async () => {
-      if (i >= lines.length) { el.classList.add('out'); setTimeout(() => { el.remove(); res(); }, 600); document.removeEventListener('keydown', key); return; }
-      const cap = $('.mm-cap', el); cap.textContent = ''; await typeInto(cap, lines[i]); i++;
+      if (i >= lines.length) { el.classList.add('out'); setTimeout(() => { el.remove(); res(); }, 600); return; }
+      const cap = $('.mm-cap', el), line = lines[i]; cap.textContent = ''; await typeInto(cap, line); i++;
+      setTimeout(next, memHold(line));   // no skipping: each line stays up, then the next comes by itself
     };
-    const key = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); next(); } };
-    el.onclick = next; document.addEventListener('keydown', key);
-    setTimeout(next, 700);
+    setTimeout(next, 2200);   // the title first
   });
 }
 // placeholder paintings (to be replaced by hand-drawn art: watercolor manga, pale washes, ink lines)
