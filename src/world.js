@@ -265,7 +265,7 @@ async function owGate(G) {
   const g = OW.g, ks = owKeys(g)[G.layer - 1];
   if (g === 'ray') {
     if (ks.have < ks.need) { SFX.bump(); OW.shake = performance.now(); owSay(G.fin ? `locked · ${ks.have}/${ks.need} memories` : 'locked.'); if (!G.fin) runDialogue(seq('boss', 'boss', endSteps('ray_level_locked'), 'NONE')); return; }
-    OW.frozen = true; SFX.gate(); OW.gateFx = { G, t0: performance.now() }; await wait(REDUCED ? 100 : 1300);
+    OW.frozen = true; SFX.shatter(); glitch('soft'); OW.gateFx = { G, t0: performance.now() }; await wait(REDUCED ? 100 : 1300);   // Ray's gates shatter
     S.flags['rgate_' + (G.fin ? 'wall' : G.k)] = true; OW.frozen = false; OW.gateFx = null;
     owHud(); save(); owSay(G.fin ? 'the wall is open. one more.' : 'the gate is open.'); return;
   }

@@ -66,7 +66,19 @@ const OW3 = (() => {
       const dm = K.std(0x2a1636, { emissive: ACC, emissiveIntensity: .08 });
       const dA = K.edges(K.box(.22, 1.85, 1.35, dm, 0, .93, -.68), ACC, .6), dB = K.edges(K.box(.22, 1.85, 1.35, dm, 0, .93, .68), ACC, .6); G.add(dA, dB);
       const tag = sprite(label('', T.acc), 1.5, .56); tag.position.set(0, 2.75, 0); G.add(tag);
-      return { Gt, G, dA, dB, tag, key: '', open: 0 };
+      // Ray's gates don't open, they shatter: shards of the whole gate, hidden until it breaks
+      let shards = null;
+      if (g === 'ray') {
+        const sm = K.std(0x2a1636, { emissive: ACC, emissiveIntensity: .35 }); sm.transparent = true;
+        shards = new THREE.Group(); shards.visible = false; G.add(shards);
+        for (let i = 0; i < 46; i++) {
+          const s = .1 + Math.random() * .22, b = K.box(s * (.6 + Math.random()), s, s * (.6 + Math.random()), sm, 0, 0, 0);
+          b.userData = { p: [(Math.random() - .5) * .4, .1 + Math.random() * 2.1, (Math.random() - .5) * 3.2], v: [(Math.random() - .5) * 3.2, 1 + Math.random() * 3, (Math.random() - .5) * 3.6], r: [Math.random() * 9 - 4.5, Math.random() * 9 - 4.5, Math.random() * 9 - 4.5] };
+          shards.add(b);
+        }
+        shards.userData.m = sm;
+      }
+      return { Gt, G, dA, dB, tag, key: '', open: 0, shards };
     });
     /* ---- the core ---- */
     const core = new THREE.Mesh(new THREE.OctahedronGeometry(.42), K.std(0xffffff, { emissive: ACC, emissiveIntensity: .6 }));
@@ -128,7 +140,12 @@ const OW3 = (() => {
       seals3.forEach((q, i) => { q.G.visible = !owPassable(g, q.s.x, q.s.y); q.G.children.forEach((b, j) => b.material.opacity = .55 + .3 * Math.sin(t * 4 + i + j)); });
       gates3.forEach(q => {
         const open = owGateOpen(g, q.Gt), fx = OW.gateFx && OW.gateFx.G === q.Gt ? Math.min(1, (now - OW.gateFx.t0) / 1200) : open ? 1 : 0;
-        q.dA.position.z = -.68 - fx * 1.25; q.dB.position.z = .68 + fx * 1.25; q.dA.visible = q.dB.visible = fx < .98;
+        if (q.shards) {   // Ray's map: the gate bursts into pieces that fly, fall and fade
+          const whole = fx <= 0; q.G.children.forEach(c => { if (c !== q.shards && c !== q.tag) c.visible = whole; });
+          q.shards.visible = fx > 0 && fx < 1; q.tag.visible = !(fx > 0 && fx < 1);
+          if (q.shards.visible) { const tt = fx * 1.2; q.shards.userData.m.opacity = 1 - fx * fx;
+            q.shards.children.forEach(b => { const { p, v, r } = b.userData; b.position.set(p[0] + v[0] * tt, Math.max(.05, p[1] + v[1] * tt - 4.9 * tt * tt), p[2] + v[2] * tt); b.rotation.set(r[0] * tt, r[1] * tt, r[2] * tt); }); }
+        } else { q.dA.position.z = -.68 - fx * 1.25; q.dB.position.z = .68 + fx * 1.25; q.dA.visible = q.dB.visible = fx < .98; }
         const ks = owKeys(g)[q.Gt.layer - 1], txt = g === 'ray' ? rayGateLabel(q.Gt, fx >= 1) : fx >= 1 ? `LAYER ${q.Gt.layer} ✓` : `🔒 ${ks.have}/${q.Gt.need}`;
         if (txt !== q.key) { q.key = txt; if (q.tag.material.map) q.tag.material.map.dispose(); q.tag.material.map = label(txt, fx >= 1 ? '#c8f5da' : T.acc); q.tag.material.needsUpdate = true; }
       });
