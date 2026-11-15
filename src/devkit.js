@@ -209,7 +209,7 @@ function testRunBanner() {
 /* ---------- cutscenes ---------- */
 function kitCuts(el) {
   el.innerHTML = `<p class="kit-p">Play the cutscenes and screen effects on their own.</p>
-    <h4>Memories (the reckoning)</h4><div class="kit-list">${[1, 2, 3, 4].map(k => `<button class="btn" data-mem="${k}">Memory ${k}</button>`).join('')}<button class="btn primary" id="cu-reveal">The reveal (edit in Finale)</button></div>
+    <h4>Memories (the reckoning)</h4><div class="kit-list">${Array.from({ length: 20 }, (_, i) => i + 1).map(k => `<button class="btn" data-mem="${k}">Memory ${k}</button>`).join('')}<button class="btn primary" id="cu-reveal">The reveal (edit in Finale)</button></div>
     <h4>Screen effects</h4><div class="kit-list"><button class="btn" data-fx="quake">Earthquake</button><button class="btn" data-fx="soft">Glitch (soft)</button><button class="btn" data-fx="hard">Glitch (hard)</button><button class="btn" data-fx="wake">Wake up</button><button class="btn" data-fx="lock">Lock screen</button><button class="btn" data-fx="feed">Break-layer effect</button></div>
     <h4>Talks</h4><div class="kit-list">${['reckoning_morning', 'reckoning_reveal', 'reckoning_map', 'final_talk'].map(k => `<button class="btn" data-talk="${k}">${k}</button>`).join('')}</div>
     <h4>Endings</h4><div class="kit-list"><button class="btn" data-end="reckoning">Reckoning ending</button><button class="btn" data-end="deadline">Deadline ending</button><button class="btn" id="cu-journal">Boss's journal (sample)</button><button class="btn" id="cu-show">Showcase window</button></div>`;
@@ -241,22 +241,25 @@ function kitSample() {
 
 /* ---------- the boss's level ---------- */
 function kitBoss(el) {
-  const ps = rayPanels();
-  el.innerHTML = `<p class="kit-p">Ray's map on the last day: four memories, each copied from one girl's panel and locked until her journal is deleted in DiveVM. Each one cleared is a key; the wall takes four. Behind it: the last level, then the reveal.</p>
-    <div class="kit-grid">${RAY_SRC.map(([g, id], i) => `<div class="kit-card bevel"><b>${g === 'ray' ? 'The last level' : 'Memory ' + (i + 1)}</b><small>${g === 'ray' ? 'behind the wall · plays the reveal' : 'held by ' + esc(GIRLS[g].name)}</small>${miniBoard(ps[i])}
-      <label>copied from <select data-src="${i}">${(g === 'ray' ? PANELS.filter(p => p.layer === 3 && !p.ray && !p.tut) : panelsOf(g)).map(p => `<option value="${p.id}"${p.id === id ? ' selected' : ''}>${p.id}</option>`).join('')}</select></label>
-      <div class="row"><button class="btn primary" data-play="${i}">Play</button><button class="btn" data-edit="${i}">Edit</button></div></div>`).join('')}</div>
-    <div class="kit-row"><label><input type="checkbox" id="rb-lock"> locked like the story (files not deleted)</label><button class="btn primary" id="rb-map">Open Ray's map</button></div>
+  const ps = rayPanels(), card = (p, title, sub, extra = '') => `<div class="kit-card bevel"><b>${title}</b><small>${sub}</small>${miniBoard(p)}${extra}
+      <div class="row"><button class="btn primary" data-play="${p.id}">Play</button><button class="btn" data-edit="${p.id}">Edit</button></div></div>`;
+  const box = p => p.boxes.length + ' box' + (p.boxes.length > 1 ? 'es' : '') + ' · ' + (p.minMoves || '?') + ' moves';
+  el.innerHTML = `<p class="kit-p">Ray's map on the last day. Four gates, one per girl: each opens with the key from deleting her journal in DiveVM. Behind each, five levels in her mechanic (designed by tools/ray_v13.js). Every level cleared plays the next of Ray's 20 memories and counts toward the wall (20). Behind it: the last level, then the reveal.</p>
+    ${RAY_GATES.map((g, gi) => `<h4>${esc(GIRLS[g].name)}'s gate</h4><div class="kit-grid">${ps.slice(gi * RAY_PER, gi * RAY_PER + RAY_PER).map((p, k) => card(p, `${p.id}`, `level ${k + 1} · ${box(p)}`)).join('')}</div>`).join('')}
+    <h4>Behind the wall</h4><div class="kit-grid">${card(ps[RAY_ALL], 'The last level', 'plays the reveal · ' + box(ps[RAY_ALL]),
+      `<label>copied from <select id="rb-src">${PANELS.filter(p => p.layer === 3 && !p.ray && !p.tut).map(p => `<option value="${p.id}"${p.id === RAY_SRC[0][1] ? ' selected' : ''}>${p.id}</option>`).join('')}</select></label>`)}</div>
+    <div class="kit-row"><label><input type="checkbox" id="rb-lock"> gates locked like the story (journals not deleted)</label><label><input type="checkbox" id="rb-wall"> wall already open</label><button class="btn primary" id="rb-map">Open Ray's map</button></div>
     <p class="kit-p"><small>Edits are saved like the level editor's (this browser; export from the editor). "copied from" makes a fresh copy of that panel.</small></p>`;
-  $$('[data-src]', el).forEach(x => x.onchange = () => {
-    const i = +x.dataset.src; RAY_SRC[i][1] = x.value; CH.raySrc = RAY_SRC.map(r => r[1]); chSave();
-    const k = PANELS.findIndex(p => p.id === 'ray_' + (i + 1)); if (k >= 0) PANELS.splice(k, 1); delete OWMAP.ray; kitBoss(el);
-  });
-  $$('[data-play]', el).forEach(x => x.onclick = () => { SFX.click(); startPanel('ray_' + (+x.dataset.play + 1)); });
-  $$('[data-edit]', el).forEach(x => x.onclick = () => { SFX.click(); openEditor('ray_' + (+x.dataset.edit + 1)); });
+  $('#rb-src', el).onchange = e => {
+    RAY_SRC[0][1] = e.target.value; CH.rayLast = e.target.value; chSave();
+    const k = PANELS.findIndex(p => p.id === 'ray_21'); if (k >= 0) PANELS.splice(k, 1); delete OWMAP.ray; kitBoss(el);
+  };
+  $$('[data-play]', el).forEach(x => x.onclick = () => { SFX.click(); startPanel(x.dataset.play); });
+  $$('[data-edit]', el).forEach(x => x.onclick = () => { SFX.click(); openEditor(x.dataset.edit); });
   $('#rb-map', el).onclick = () => {
     SFX.click(); const lock = $('#rb-lock', el).checked;
-    PLAYABLE.forEach(g => { S.met[g] = true; S.flags['del_' + g] = !lock; });
+    PLAYABLE.forEach(g => { S.met[g] = true; S.flags['del_' + g] = !lock; delete S.flags['rgate_' + g]; });
+    S.flags.rgate_wall = $('#rb-wall', el).checked; if (S.flags.rgate_wall) PLAYABLE.forEach(g => { S.flags['del_' + g] = true; S.flags['rgate_' + g] = true; });
     S.g.ray = { layer: 0, sessions: 0, gone: false, nt: 0 }; delete OWMAP.ray; WHO.boss.name = 'Ray';
     if (WINS.fixit) { owClose(); closeWin('fixit'); }
     openWorld('ray');
@@ -268,7 +271,7 @@ function kitGallery(el) {
   el.innerHTML = `<h4>Showcase (day 12) · what each girl submits</h4>
     <div class="gal">${PLAYABLE.map(g => ['half', 'real'].map(k => `<figure class="bevel"><canvas width="160" height="120" data-ex="${g}" data-k="${k}"></canvas><figcaption><b>${esc(GIRLS[g].name)}</b> · ${k === 'real' ? 'her real passion' : 'half-hearted (as ordered)'}<br><small>${esc(SHOW_CAP[g][k === 'real' ? 1 : 0])}</small></figcaption></figure>`).join('')).join('')}</div>
     <h4>Portraits</h4><div class="gal">${PLAYABLE.map(g => `<figure class="bevel">${ART[g] ? `<img src="${ART[g].body}" alt="${esc(GIRLS[g].name)}" style="height:150px;image-rendering:pixelated">` : avHTML(g, 'big')}<figcaption><b>${esc(GIRLS[g].name)}</b> · ${esc(GIRLS[g].tag)}${ART[g] ? '' : ' <small>(placeholder)</small>'}</figcaption></figure>`).join('')}</div>
-    <h4>Memory cutscenes</h4><div class="gal">${[1, 2, 3, 4, 5].map(k => `<figure class="bevel"><canvas width="960" height="540" data-memc="${k}" style="width:240px;height:135px"></canvas><figcaption>Memory ${k}</figcaption></figure>`).join('')}</div>`;
+    <h4>Memory cutscenes</h4><div class="gal">${Array.from({ length: 20 }, (_, i) => i + 1).map(k => `<figure class="bevel"><canvas width="960" height="540" data-memc="${k}" style="width:240px;height:135px"></canvas><figcaption>Memory ${k}</figcaption></figure>`).join('')}</div>`;
   $$('[data-ex]', el).forEach(c => drawExhibit(c, c.dataset.ex, c.dataset.k === 'real'));
   $$('[data-memc]', el).forEach(c => { try { drawMemory(c, +c.dataset.memc); } catch (e) { } });
 }

@@ -2,10 +2,11 @@
    FINALE (day 15)
    1. DiveVM: Ray boots her own machine inside yours. In C:\RAY\JOURNALS there is one journal per girl:
       what Boss wrote about her from what you told Boss at night, her postcard, her Showcase piece.
-      Deleting a journal opens that girl's door on Ray's map.
-   2. The reveal: after the last level (behind the four-key wall), a played cutscene: Ray at a CRT,
-      filling in the same "Choose desired appearance" window you saw on your first morning.
-      Its beats (caption · action · seconds) are editable in Designer kit ▸ Finale.
+      Deleting a journal gives her key: it opens her gate on Ray's map.
+   2. The reveal: after the last level (behind the wall that takes all 20 memories), a played cutscene:
+      Ray at a computer, filling in the same "Choose desired appearance" window you saw on your first
+      morning; a warning that the avatar overwrites the user's looks and memories; black, and "Yes".
+      The music starts there (audio/sad_past.mp3). Beats are editable in Designer kit ▸ Finale.
    ========================================================= */
 
 /* ---------------- 1. the virtual machine ---------------- */
@@ -86,7 +87,9 @@ const REVEAL_ACTS = {
   random: 'she clicks Randomize a few times',
   pick: 'she sets your hair, colours, outfit one by one',
   name: 'she types your name',
-  confirm: 'she presses Confirm, then Yes',
+  confirm: 'she presses Confirm',
+  warn: 'a system warning pops up (the caption is its text); she moves to Yes and clicks',
+  yes: 'everything goes black; only the caption (Yes) at the bottom; the music starts',
   override: '"Creating avatar…" then "Overriding memor…"',
   pull: 'the camera pulls back; she leans back in her chair',
   desktop: 'the monitor shows your first morning: "Welcome back"',
@@ -94,20 +97,18 @@ const REVEAL_ACTS = {
   white: 'fade to white (the end of the cutscene)',
 };
 const REVEAL_DEFAULT = [
-  { act: 'black', text: 'MEMORY 05 · YOU', sec: 2.5 },
-  { act: 'wide', text: 'So Ray built a desk. A desktop. A job.', sec: 4 },
-  { act: 'push', text: 'And a chair. And someone to sit in it.', sec: 4 },
-  { act: 'screen', text: 'She opened the same window you did, on your first morning.', sec: 3.5 },
-  { act: 'random', text: 'She tried faces on. One after another.', sec: 3 },
-  { act: 'pick', text: 'Then she chose. Your hair. Your eyes. What you would wear.', sec: 3 },
-  { act: 'name', text: 'She gave you a name.', sec: 2.5 },
+  { act: 'black', text: '', sec: 1.5 },
+  { act: 'wide', text: '', sec: 4 },
+  { act: 'push', text: '', sec: 3.5 },
+  { act: 'screen', text: '', sec: 3 },
+  { act: 'random', text: '', sec: 3 },
+  { act: 'pick', text: '', sec: 3 },
+  { act: 'name', text: '', sec: 2.5 },
   { act: 'confirm', text: '', sec: 1 },
-  { act: 'override', text: 'And she wrote over whoever was there before.', sec: 2 },
-  { act: 'pull', text: 'Then she sat back, and waited for you to wake up.', sec: 4.5 },
-  { act: 'desktop', text: '"Welcome back."', sec: 3.5 },
-  { act: 'white', text: '', sec: 2 },
+  { act: 'warn', text: "The avatar will overwrite the user's appearance and memories on entering the brain-simulation environment. Are you sure you want to start the system?", sec: 6 },
+  { act: 'yes', text: 'Yes', sec: 9 },
 ];
-const REVEAL_KEY = 'cyfh_reveal';
+const REVEAL_KEY = 'cyfh_reveal2';   // v2: the warning + black "Yes" ending
 function revealScript() {
   try { const o = JSON.parse(localStorage.getItem(REVEAL_KEY)); if (o && Array.isArray(o.beats) && o.beats.length) return o.beats; } catch (e) { }
   return REVEAL_DEFAULT.map(b => ({ ...b }));
@@ -115,7 +116,7 @@ function revealScript() {
 function revealSaveScript(beats) {
   const o = { beats, t: Date.now() };
   try { localStorage.setItem(REVEAL_KEY, JSON.stringify(o)); } catch (e) { }
-  if (RV.db) RV.db.doc('reveal/script').set(o).catch(() => { });
+  if (RV.db) RV.db.doc('reveal/script2').set(o).catch(() => { });
 }
 const RV = { db: null, skip: false, el: null };
 async function revealDbInit() {
@@ -123,12 +124,27 @@ async function revealDbInit() {
   let db = null; try { db = await window.claude.use('db'); } catch (e) { db = null; }
   if (!db) return; RV.db = db;
   try {
-    const d = await db.doc('reveal/script').get(), o = d && d.data ? d.data() : null;
+    const d = await db.doc('reveal/script2').get(), o = d && d.data ? d.data() : null;
     let mine = null; try { mine = JSON.parse(localStorage.getItem(REVEAL_KEY)); } catch (e) { }
     if (o && o.beats && (!mine || (o.t || 0) > (mine.t || 0))) { try { localStorage.setItem(REVEAL_KEY, JSON.stringify(o)); } catch (e) { } }
-    else if (mine && mine.beats && (!o || (o.t || 0) < (mine.t || 0))) db.doc('reveal/script').set(mine).catch(() => { });
+    else if (mine && mine.beats && (!o || (o.t || 0) < (mine.t || 0))) db.doc('reveal/script2').set(mine).catch(() => { });
   } catch (e) { }
 }
+
+// the last music: plays from the black "Yes" screen through the last talk (audio/sad_past.mp3, Silent Partner)
+const FIN_MUSIC = { el: null, iv: 0 };
+function finaleMusic(on) {
+  clearInterval(FIN_MUSIC.iv);
+  if (on) {
+    try { if (typeof mbStopTrack === 'function') mbStopTrack(); if (typeof BGM !== 'undefined' && BGM.el) BGM.el.pause(); } catch (e) { }
+    if (!FIN_MUSIC.el) { FIN_MUSIC.el = new Audio('audio/sad_past.mp3'); FIN_MUSIC.el.preload = 'auto'; }
+    const el = FIN_MUSIC.el, top = (typeof AU !== 'undefined' && !AU.on) ? 0 : .85; el.currentTime = 0; el.volume = 0; el.play().catch(() => { });
+    FIN_MUSIC.iv = setInterval(() => { el.volume = Math.min(top, el.volume + .04); if (el.volume >= top) clearInterval(FIN_MUSIC.iv); }, 80);
+  } else if (FIN_MUSIC.el) {
+    const el = FIN_MUSIC.el; FIN_MUSIC.iv = setInterval(() => { el.volume = Math.max(0, el.volume - .05); if (el.volume <= 0) { clearInterval(FIN_MUSIC.iv); el.pause(); } }, 60);
+  }
+}
+const finaleMusicOn = () => !!(FIN_MUSIC.el && !FIN_MUSIC.el.paused && FIN_MUSIC.el.volume > 0);
 
 // the room, over Ray's shoulder (placeholder painting until the art exists)
 const RV_SCR = { x: 668, y: 150, w: 344, h: 258 };     // the CRT's glass, in stage pixels (1280 × 720)
@@ -210,11 +226,11 @@ function playReveal(opts = {}) {
     el.innerHTML = `<div class="rv-frame"><div class="rv-cam"><canvas class="rv-room" width="1280" height="720"></canvas>
         <div class="rv-scr" style="left:${RV_SCR.x}px;top:${RV_SCR.y}px;width:${RV_SCR.w}px;height:${RV_SCR.h}px"><div class="rv-guest"><div class="rv-desk"></div><div class="rv-cur"></div></div><div class="rv-glass"></div></div>
         <canvas class="rv-ray" width="1280" height="720"></canvas></div>
-      <div class="rv-dark"></div><div class="rv-white"></div><div class="rv-title"></div><div class="rv-cap" aria-live="polite"></div>
+      <div class="rv-dark"></div><div class="rv-white"></div><div class="rv-yes"></div><div class="rv-np">♪ Sad Past — Silent Partner</div><div class="rv-title"></div><div class="rv-cap" aria-live="polite"></div>
       <div class="rv-hint">${opts.preview ? '<span class="rv-bn"></span> · click: next beat · Esc: stop' : 'click ▸'}</div></div>`;
     document.body.appendChild(el);
     const frame = $('.rv-frame', el), cam = $('.rv-cam', el), guest = $('.rv-guest', el), desk = $('.rv-desk', el), cur = $('.rv-cur', el);
-    const ray = $('.rv-ray', el), dark = $('.rv-dark', el), white = $('.rv-white', el), cap = $('.rv-cap', el), title = $('.rv-title', el);
+    const yes = $('.rv-yes', el), np = $('.rv-np', el), ray = $('.rv-ray', el), dark = $('.rv-dark', el), white = $('.rv-white', el), cap = $('.rv-cap', el), title = $('.rv-title', el);
     rvRoom($('.rv-room', el)); rvRay(ray, 'sit');
     const P = { name: '', hair: 0, hc: 0, eye: 11, skin: 1, outfit: 0, oc: 7, acc: 0 }, ME = rvPlayer();
     let ended = false, hand = [0, 0];
@@ -262,11 +278,13 @@ function playReveal(opts = {}) {
         } Object.assign(P, { ...ME, name: P.name }); paint(); },
       name: async () => { showSetup(); Object.assign(P, { ...ME, name: P.name }); const inp = $('#rv-name', desk); await click(inp); inp.classList.add('focus');
         for (let i = 1; i <= ME.name.length; i++) { P.name = ME.name.slice(0, i); inp.value = P.name; paint(); if (!RV.skip) SFX.tick(); await W(170); } inp.classList.remove('focus'); },
-      confirm: async () => { showSetup(); Object.assign(P, ME); $('#rv-name', desk).value = ME.name; paint();
-        await click($('#rv-ok', desk));
+      confirm: async () => { showSetup(); Object.assign(P, ME); $('#rv-name', desk).value = ME.name; paint(); await click($('#rv-ok', desk)); },
+      warn: async (b) => { showSetup(); Object.assign(P, ME); $('#rv-name', desk).value = ME.name; paint();
         let m = $('.su-modal', desk); if (!m) { m = document.createElement('div'); m.className = 'su-modal'; $('.rv-win', desk).appendChild(m); }
-        m.innerHTML = `<div class="card bevel"><p>Is this how you want to look?<br>This can't be changed later.</p><div class="row"><button class="btn">No</button><button class="btn primary" id="rv-yes">Yes</button></div></div>`;
-        await W(700); await click($('#rv-yes', m)); },
+        m.innerHTML = `<div class="card bevel rv-warn"><b>⚠ DIVE · Avatar</b><p>${esc(b.text || '')}</p><div class="row"><button class="btn">No</button><button class="btn primary" id="rv-yes">Yes</button></div></div>`;
+        if (!RV.skip) SFX.buzz(); await W(Math.max(1200, (+b.sec || 0) * 1000 - 1400)); await click($('#rv-yes', m)); },
+      yes: async (b) => { dark.style.transition = 'none'; dark.style.opacity = 1; cur.style.opacity = 0; yes.textContent = b.text || 'Yes'; yes.classList.add('on');
+        if (!RV.skip || opts.music) { finaleMusic(true); np.classList.add('on'); } },
       override: async () => { showSetup(); Object.assign(P, ME); paint(); let m = $('.su-modal', desk); if (!m) { m = document.createElement('div'); m.className = 'su-modal'; $('.rv-win', desk).appendChild(m); }
         m.innerHTML = `<div class="card bevel load"><p id="rv-ld">Creating avatar…</p><div class="ldbar"><i id="rv-bar"></i></div></div>`;
         const bar = $('#rv-bar', m), t = $('#rv-ld', m);
@@ -279,21 +297,22 @@ function playReveal(opts = {}) {
       hold: async () => { },
       white: async () => { white.style.transition = RV.skip ? 'none' : 'opacity 1.8s ease'; white.style.opacity = 1; await W(1800); },
     };
-    const stop = () => { if (ended) return; ended = true; document.removeEventListener('keydown', key); window.removeEventListener('resize', onResize); el.classList.add('out'); setTimeout(() => { el.remove(); res(); }, 500); };
+    const stop = () => { if (ended) return; ended = true; if (opts.preview && !opts.keepMusic) finaleMusic(false); document.removeEventListener('keydown', key); window.removeEventListener('resize', onResize); el.classList.add('out'); setTimeout(() => { el.remove(); res(); }, 500); };
     const key = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); RV.skip = true; skipTyping = true; } else if (e.key === 'Escape' && opts.preview) stop(); };
     el.onclick = () => { RV.skip = true; skipTyping = true; };
     document.addEventListener('keydown', key);
     // fast-forward to the chosen beat: earlier beats run instantly and silently
-    if (from > 0) { RV.skip = true; for (let i = 0; i < from; i++) { const a = ACT[beats[i].act]; if (a) await a(); } RV.skip = false; white.style.opacity = 0; }
+    if (from > 0) { RV.skip = true; for (let i = 0; i < from; i++) { const a = ACT[beats[i].act]; if (a) await a(beats[i]); } RV.skip = false; white.style.opacity = 0; }
     for (let i = from; i < beats.length && !ended; i++) {
       const b = beats[i], t0 = performance.now(); RV.skip = false;
       const bn = $('.rv-bn', el); if (bn) bn.textContent = `beat ${i + 1}/${beats.length} · ${b.act}`;
-      const isTitle = b.act === 'black';
+      const isTitle = b.act === 'black', own = b.act === 'warn' || b.act === 'yes';   // these show their text themselves
       title.textContent = isTitle ? b.text || '' : ''; title.classList.toggle('on', isTitle && !!b.text);
-      cap.textContent = ''; cap.classList.toggle('on', !isTitle && !!b.text);
-      if (b.act !== 'black' && b.act !== 'wide' && +getComputedStyle(dark).opacity > .5) { dark.style.transition = 'opacity .8s ease'; dark.style.opacity = 0; }
-      const act = (ACT[b.act] || ACT.hold)();
-      if (!isTitle && b.text) await typeInto(cap, b.text);
+      cap.textContent = ''; cap.classList.toggle('on', !isTitle && !own && !!b.text);
+      if (b.act !== 'black' && b.act !== 'wide' && b.act !== 'yes' && b.act !== 'white' && +getComputedStyle(dark).opacity > .5) { dark.style.transition = 'opacity .8s ease'; dark.style.opacity = 0; }
+      if (b.act !== 'yes') yes.classList.remove('on');
+      const act = (ACT[b.act] || ACT.hold)(b);
+      if (!isTitle && !own && b.text) await typeInto(cap, b.text);
       await act;
       const left = (+b.sec || 0) * 1000 - (performance.now() - t0); if (left > 0) await W(left);
     }
@@ -305,9 +324,9 @@ function playReveal(opts = {}) {
 function kitFinale(el) {
   const beats = KIT.rv || (KIT.rv = revealScript()), saved = JSON.stringify(beats) === JSON.stringify(revealScript());
   const total = beats.reduce((a, b) => a + (+b.sec || 0), 0);
-  el.innerHTML = `<p class="kit-p">The last cutscene, after the final level behind Ray's four-key wall. Each beat shows a caption and does one thing on screen; it stays up at least its seconds (longer if the action takes longer). Edits are saved in this browser${RV.db ? ' and in the artifact\'s shared data (Claude can read them)' : ''}.</p>
+  el.innerHTML = `<p class="kit-p">The last cutscene, after the last level behind Ray's wall (20 memories). Each beat shows a caption and does one thing on screen; it stays up at least its seconds (longer if the action takes longer). Edits are saved in this browser${RV.db ? ' and in the artifact\'s shared data (Claude can read them)' : ''}.</p>
     <div class="kit-row"><button class="btn primary" id="fx-play">▶ Play the reveal</button><button class="btn" id="fx-full">▶ Play the whole finale (reveal → last talk → ending)</button>
-      <button class="btn" id="fx-vm">Open DiveVM (sample)</button><button class="btn" id="fx-map">Ray's map</button></div>
+      <button class="btn" id="fx-mus">${finaleMusicOn() ? '■ Stop the music' : '♪ Play the music'}</button><button class="btn" id="fx-vm">Open DiveVM (sample)</button><button class="btn" id="fx-map">Ray's map</button></div>
     <div class="kit-row"><b>${beats.length} beats · about ${Math.round(total)} s</b><span class="sp" style="flex:1"></span><span class="fx-msg" id="fx-msg">${saved ? '' : 'unsaved changes'}</span>
       <button class="btn primary" id="fx-save"${saved ? ' disabled' : ''}>Save</button><button class="btn" id="fx-copy">Copy script</button><button class="btn" id="fx-reset">Reset to default</button></div>
     <ol class="fx-list">${beats.map((b, i) => `<li class="fx-beat bevel"><span class="fx-n">${i + 1}</span>
@@ -330,7 +349,8 @@ function kitFinale(el) {
   $$('[data-del]', el).forEach(x => x.onclick = () => { beats.splice(+x.dataset.del, 1); re(); });
   $$('[data-from]', el).forEach(x => x.onclick = () => { SFX.click(); kitSample(); playReveal({ beats, from: +x.dataset.from, preview: true }); });
   $('#fx-play', el).onclick = () => { SFX.click(); kitSample(); playReveal({ beats, preview: true }); };
-  $('#fx-full', el).onclick = async () => { SFX.click(); kitSample(); await playReveal({ beats, preview: true }); yapCh = 'boss'; openYap('boss'); runDialogue(seq('boss', 'boss', endSteps('final_talk'), 'NONE')); };
+  $('#fx-mus', el).onclick = () => { SFX.click(); finaleMusic(!finaleMusicOn()); setTimeout(re, 300); };
+  $('#fx-full', el).onclick = async () => { SFX.click(); kitSample(); await playReveal({ beats, preview: true, keepMusic: true }); yapCh = 'boss'; openYap('boss'); runDialogue(seq('boss', 'boss', endSteps('final_talk'), 'NONE')); };
   $('#fx-vm', el).onclick = () => { SFX.click(); kitSample(); PLAYABLE.forEach(g => { delete S.flags['del_' + g]; }); VM.booted = false; VM.sel = null; VM.confirm = null; closeWin('vm'); openVM(); };
   $('#fx-map', el).onclick = () => { KIT.tab = 'boss'; const b = $('#kit-body'); if (b) kitBoss(b); $$('.kit-tab').forEach(t => t.classList.toggle('on', t.dataset.k === 'boss')); };
   $('#fx-save', el).onclick = () => { revealSaveScript(JSON.parse(JSON.stringify(beats))); re(); $('#fx-msg', el).textContent = 'saved ♡'; };

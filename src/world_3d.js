@@ -59,7 +59,7 @@ const OW3 = (() => {
     });
     /* ---- gates: two doors in a frame, a lock with the key count ---- */
     const gates3 = M.gates.map(Gt => {
-      const G = new THREE.Group(); G.position.set(Gt.x, 0, Gt.y); world.add(G);
+      const G = new THREE.Group(); G.position.set(Gt.x, 0, Gt.y); if (Gt.v) G.rotation.y = Math.PI / 2; world.add(G);   // v: a gate across an up/down passage
       const fr = K.std(0x120818, { emissive: ACC, emissiveIntensity: .12 });
       [-1.5, 1.5].forEach(z => G.add(K.edges(K.box(.5, 2, .3, fr, 0, 1, z), ACC, .9)));
       G.add(K.edges(K.box(.5, .3, 3.3, fr, 0, 2.1, 0), ACC, .9));
@@ -129,7 +129,7 @@ const OW3 = (() => {
       gates3.forEach(q => {
         const open = owGateOpen(g, q.Gt), fx = OW.gateFx && OW.gateFx.G === q.Gt ? Math.min(1, (now - OW.gateFx.t0) / 1200) : open ? 1 : 0;
         q.dA.position.z = -.68 - fx * 1.25; q.dB.position.z = .68 + fx * 1.25; q.dA.visible = q.dB.visible = fx < .98;
-        const ks = owKeys(g)[q.Gt.layer - 1], txt = fx >= 1 ? `LAYER ${q.Gt.layer} ✓` : `🔒 ${ks.have}/${q.Gt.need}`;
+        const ks = owKeys(g)[q.Gt.layer - 1], txt = g === 'ray' ? rayGateLabel(q.Gt, fx >= 1) : fx >= 1 ? `LAYER ${q.Gt.layer} ✓` : `🔒 ${ks.have}/${q.Gt.need}`;
         if (txt !== q.key) { q.key = txt; if (q.tag.material.map) q.tag.material.map.dispose(); q.tag.material.map = label(txt, fx >= 1 ? '#c8f5da' : T.acc); q.tag.material.needsUpdate = true; }
       });
       const coreOn = S.g[g].layer >= 3; core.rotation.y = t * 1.2; core.position.y = .8 + Math.sin(t * 2) * .08; core.material.emissiveIntensity = coreOn ? .9 : .25; coreGlow.visible = coreOn;

@@ -51,7 +51,7 @@ function titleScreen(hasSave) {
 let chGirl = 'prim';
 function openChamber() {
   S = fresh(); S.player = { name: 'tester', avatar: '' }; S.flags.chamber = true; S.flags.briefed = S.flags.briefStarted = S.flags.welcomeMail = true; S.phase = 'day';
-  if (CH.raySrc) CH.raySrc.forEach((id, i) => { if (RAY_SRC[i]) RAY_SRC[i][1] = id; });
+  if (CH.rayLast) RAY_SRC[0][1] = CH.rayLast;
   S.apps = ['MusicBox.exe', 'UnitConv.exe', 'Fortune.exe', 'Atlas.exe'];   // every app, as if installed
   PLAYABLE.forEach(g => { S.met[g] = true; });
   renderIcons();   // only the apps show on the chamber's desktop

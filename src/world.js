@@ -110,6 +110,7 @@ function owState(g) {
 }
 // keys per layer: { have, need, total }
 function owKeys(g) {
+  if (g === 'ray') return rayKeys();
   const M = owBuild(g), o = owState(g);
   const bonus = (S.g[g] && S.g[g].bonusKeys) || {};   // keys won at night (timed questions) count like solved memories
   return M.gates.map(G => ({ have: M.nodes.filter(n => n.layer === G.layer && o.solved[n.pid]).length + (bonus[G.layer] || 0), need: G.need, total: G.total }));
@@ -119,7 +120,7 @@ function owFirstOpen(g) {
   const n = M.nodes.find(n => n.layer === Math.min(3, L) && !o.solved[n.pid]) || M.nodes[0];
   return n && PANELS.find(p => p.id === n.pid);
 }
-const owGateOpen = (g, G) => S.g[g].layer >= G.layer;
+const owGateOpen = (g, G) => g === 'ray' ? rayGateOpen(G) : S.g[g].layer >= G.layer;
 function owPassable(g, x, y) {
   const M = owBuild(g); if (x < 0 || y < 0 || x >= M.W || y >= M.H) return false;
   const v = M.t[y * M.W + x]; if (v === 1) return true;
@@ -174,9 +175,15 @@ function owHud() {
   const g = OW.g; if (!g || !$('#ow-keys')) return;
   const M = owBuild(g), ks = owKeys(g), L = Math.min(M.gates.length, S.g[g].layer + 1), k = ks[L - 1], o = owState(g);
   const done = S.g[g].layer >= M.gates.length;
+  if (g === 'ray') {
+    $('#ow-keys').innerHTML = `${keyIcon(g)} <b>${RAY_GATES.filter(k => S.flags['del_' + k]).length}</b>/4 <small>keys</small> · <b>${raySolved()}</b>/${RAY_ALL} <small>memories</small>`;
+    const gi = M.gates.findIndex(G => !G.fin && Math.abs(o.x - G.x) <= 2 && (G.y < 7 ? o.y < 7 : o.y > 7));
+    $('#ow-reg').textContent = gi >= 0 ? `${GIRLS[M.gates[gi].k].name}'s room` : o.x > 22 ? 'the last room' : 'the hall';
+  } else {
   $('#ow-keys').innerHTML = done ? `${keyIcon(g)} <b>every gate open</b>` : `${keyIcon(g)} <b>${k.have}</b>/${k.need} <small>keys · gate ${L}</small>`;
   const region = M.gates.findIndex(G => o.x < G.x); const rg = region < 0 ? 'core' : OW_REGION[region];
   $('#ow-reg').textContent = `Layer ${region < 0 ? 3 : region + 1} · ${rg}`;
+  }
   const pct = staminaPct(), st = $('#ow-stam');
   st.querySelector('i').style.width = pct + '%'; st.querySelector('b').textContent = `${clockStr()} · ${pct}%`; st.classList.toggle('low', pct <= 15);
   // the card for the memory you're standing on
@@ -254,13 +261,18 @@ function owMove(dx, dy) {
 }
 async function owGate(G) {
   const g = OW.g, ks = owKeys(g)[G.layer - 1];
+  if (g === 'ray') {
+    if (ks.have < ks.need) { SFX.bump(); OW.shake = performance.now(); owSay(G.fin ? `locked · ${ks.have}/${ks.need} memories` : `locked · delete ${GIRLS[G.k].name}'s journal`); if (!G.fin) runDialogue(seq('boss', 'boss', endSteps('ray_level_locked'), 'NONE')); return; }
+    OW.frozen = true; SFX.gate(); OW.gateFx = { G, t0: performance.now() }; await wait(REDUCED ? 100 : 1300);
+    S.flags['rgate_' + (G.fin ? 'wall' : G.k)] = true; OW.frozen = false; OW.gateFx = null;
+    owHud(); save(); owSay(G.fin ? 'the wall is open. one more.' : `${GIRLS[G.k].name}'s gate is open.`); return;
+  }
   if (G.layer > S.g[g].layer + 1) { SFX.bump(); owSay('this gate is behind another one.'); return; }
   if (ks.have < G.need) { SFX.bump(); OW.shake = performance.now(); owSay(`locked · ${ks.have}/${G.need} keys`); return; }
   // open it: a layer of her comes off
   OW.frozen = true; SFX.gate(); OW.gateFx = { G, t0: performance.now() };
   await wait(REDUCED ? 100 : 1300);
   S.g[g].layer = Math.max(S.g[g].layer, G.layer); OW.frozen = false; OW.gateFx = null;
-  if (g === 'ray') { owHud(); save(); owSay('the wall is open. one more.'); return; }
   owSay(G.layer >= 3 ? 'the last gate is open.' : `gate ${G.layer} open · layer ${G.layer} faced`);
   owHud(); renderFeed(); save();
   sessionLayerOpened(g, G.layer);
@@ -389,7 +401,7 @@ function owDrawGate(x, G, ts, lift, now) {
     x.fillStyle = '#fff'; x.font = `bold ${Math.round(ts * .3)}px "Courier New", monospace`; x.textAlign = 'center'; x.textBaseline = 'middle';
     x.fillText(`${ks.have}/${G.need}`, cx, top + h * .78);
   }
-  x.fillStyle = 'rgba(255,255,255,.7)'; x.font = `bold ${Math.round(ts * .2)}px monospace`; x.textAlign = 'center'; x.fillText(`LAYER ${G.layer}`, px + ts / 2, top + ts * .3);
+  x.fillStyle = 'rgba(255,255,255,.7)'; x.font = `bold ${Math.round(ts * .2)}px monospace`; x.textAlign = 'center'; x.fillText(g === 'ray' ? (G.fin ? 'WALL' : GIRLS[G.k].name.toUpperCase()) : `LAYER ${G.layer}`, px + ts / 2, top + ts * .3);
   x.restore();
 }
 function owDrawBox(x, bx, by, ts, lift, T, now) {

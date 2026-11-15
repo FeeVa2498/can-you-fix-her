@@ -19,6 +19,9 @@ const PLAN = [
   ...[[5, 5, 1, 3, 1, [B, O]], [5, 5, 2, 2, 1, [D, B]], [6, 4, 1, 3, 1, [B, B]], [6, 4, 2, 3, 1, [D, O]], [6, 5, 1, 3, 1, [B, O]], [6, 5, 2, 3, 1, [D, B]], [5, 5, 1, 3, 2, [B, B, O]],
       [6, 5, 2, 3, 1, [B, O]], [6, 5, 2, 4, 2, [D, B]], [6, 4, 2, 3, 2, [D, O]], [6, 5, 1, 4, 1, [B, B, O]], [6, 5, 2, 3, 2, [D, B, O]], [6, 5, 2, 4, 1, [B, O]], [6, 5, 2, 4, 2, [D, O]]]
     .map(([c, r, g, l, pd, bx], k) => [`vel_3_m${k + 1}`, 3, 0, c, r, g, l, .18, pd, 10 + (k >> 2), null, '', bx]),
+  // v13 · Ray's map: Vel's five, 2–3 boxes, harder as they go (tools/ray_v13.js makes them ray_16 … ray_20)
+  ...[[5, 4, 1, 2, 0, 9, [B, B]], [5, 5, 1, 3, 0, 10, [B, O]], [6, 4, 2, 3, 1, 11, [D, B]], [6, 5, 1, 3, 1, 12, [B, B, O]], [6, 5, 2, 4, 1, 13, [D, B, O]]]
+    .map(([c, r, g, l, pd, len, bx], k) => [`rb_vel_${k + 1}`, 3, 0, c, r, g, l, .18, pd, len, null, '', bx]),
 ];
 function articulation(cells) {   // tiles whose removal splits the floor
   const ids = [...cells], idx = new Map(ids.map((k, i) => [k, i])), disc = Array(ids.length).fill(-1), low = [], out = new Set(); let t = 0;
