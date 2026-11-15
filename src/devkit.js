@@ -10,14 +10,15 @@ function openKit() {
   const dk = $('#desktop'), H = dk ? dk.clientHeight : 700;
   openWin('kit', { title: 'Designer kit', icon: 'puzzle', w: 900, h: Math.max(580, Math.min(H - 24, 760)), x: 120, y: 12, render: (b, rec) => { addUpd(rec, () => kitRender(b)); kitRender(b); } });
 }
-const KIT_TABS = [['apps', 'Apps'], ['nights', 'Night talks'], ['maps', 'Maps'], ['medit', 'Map editor'], ['events', 'Big days'], ['cuts', 'Cutscenes'], ['boss', 'Boss level'], ['gallery', 'Gallery'], ['dlg', 'Dialogue']];
+const KIT_TABS = [['apps', 'Apps'], ['nights', 'Night talks'], ['maps', 'Maps'], ['medit', 'Map editor'], ['events', 'Big days'], ['cuts', 'Cutscenes'], ['boss', 'Boss level'], ['gallery', 'Gallery'], ['finale', 'Finale'], ['dlg', 'Dialogue']];
 function kitRender(b) {
   if (KIT.tab === 'medit' && $('#me-cv', b)) return;   // the editor redraws itself
-  if (KIT.tab === 'dlg' && $('.dlg-list', b)) return;   // so does the dialogue editor (a refresh would wipe what you're typing)
+  if (KIT.tab === 'dlg' && $('.dlg-list', b)) return;
+  if (KIT.tab === 'finale' && $('.fx-list', b)) return;   // so does the dialogue editor (a refresh would wipe what you're typing)
   b.innerHTML = `<div class="kit"><div class="kit-tabs">${KIT_TABS.map(([k, t]) => `<button class="kit-tab${KIT.tab === k ? ' on' : ''}" data-k="${k}">${t}</button>`).join('')}</div><div class="kit-body sunk" id="kit-body"></div></div>`;
   $$('.kit-tab', b).forEach(x => x.onclick = () => { SFX.click(); KIT.tab = x.dataset.k; b.innerHTML = ''; kitRender(b); });
   const body = $('#kit-body', b);
-  ({ apps: kitApps, nights: kitNights, maps: kitMaps, medit: kitMapEditor, events: kitEvents, cuts: kitCuts, boss: kitBoss, gallery: kitGallery, dlg: kitDialogue })[KIT.tab](body);
+  ({ apps: kitApps, nights: kitNights, maps: kitMaps, medit: kitMapEditor, events: kitEvents, cuts: kitCuts, boss: kitBoss, gallery: kitGallery, finale: kitFinale, dlg: kitDialogue })[KIT.tab](body);
 }
 
 /* ---------- apps ---------- */
@@ -208,11 +209,12 @@ function testRunBanner() {
 /* ---------- cutscenes ---------- */
 function kitCuts(el) {
   el.innerHTML = `<p class="kit-p">Play the cutscenes and screen effects on their own.</p>
-    <h4>Memories (the reckoning)</h4><div class="kit-list">${[1, 2, 3, 4, 5].map(k => `<button class="btn" data-mem="${k}">Memory ${k}</button>`).join('')}</div>
+    <h4>Memories (the reckoning)</h4><div class="kit-list">${[1, 2, 3, 4].map(k => `<button class="btn" data-mem="${k}">Memory ${k}</button>`).join('')}<button class="btn primary" id="cu-reveal">The reveal (edit in Finale)</button></div>
     <h4>Screen effects</h4><div class="kit-list"><button class="btn" data-fx="quake">Earthquake</button><button class="btn" data-fx="soft">Glitch (soft)</button><button class="btn" data-fx="hard">Glitch (hard)</button><button class="btn" data-fx="wake">Wake up</button><button class="btn" data-fx="lock">Lock screen</button><button class="btn" data-fx="feed">Break-layer effect</button></div>
     <h4>Talks</h4><div class="kit-list">${['reckoning_morning', 'reckoning_reveal', 'reckoning_map', 'final_talk'].map(k => `<button class="btn" data-talk="${k}">${k}</button>`).join('')}</div>
     <h4>Endings</h4><div class="kit-list"><button class="btn" data-end="reckoning">Reckoning ending</button><button class="btn" data-end="deadline">Deadline ending</button><button class="btn" id="cu-journal">Boss's journal (sample)</button><button class="btn" id="cu-show">Showcase window</button></div>`;
   $$('[data-mem]', el).forEach(x => x.onclick = () => { SFX.click(); playMemory(+x.dataset.mem); });
+  $('#cu-reveal', el).onclick = () => { SFX.click(); kitSample(); playReveal({ preview: true }); };
   $$('[data-fx]', el).forEach(x => x.onclick = async () => {
     const f = x.dataset.fx;
     if (f === 'quake') { delete S.flags['quake' + S.day]; earthquake(); }
@@ -240,9 +242,9 @@ function kitSample() {
 /* ---------- the boss's level ---------- */
 function kitBoss(el) {
   const ps = rayPanels();
-  el.innerHTML = `<p class="kit-p">Ray's map on the last day: four memories, each copied from one girl's panel and locked until her file is deleted, then the gate and the core.</p>
-    <div class="kit-grid">${RAY_SRC.map(([g, id], i) => `<div class="kit-card bevel"><b>Memory ${i + 1}</b><small>held by ${esc(GIRLS[g].name)}</small>${miniBoard(ps[i])}
-      <label>copied from <select data-src="${i}">${panelsOf(g).map(p => `<option value="${p.id}"${p.id === id ? ' selected' : ''}>${p.id}</option>`).join('')}</select></label>
+  el.innerHTML = `<p class="kit-p">Ray's map on the last day: four memories, each copied from one girl's panel and locked until her journal is deleted in DiveVM. Each one cleared is a key; the wall takes four. Behind it: the last level, then the reveal.</p>
+    <div class="kit-grid">${RAY_SRC.map(([g, id], i) => `<div class="kit-card bevel"><b>${g === 'ray' ? 'The last level' : 'Memory ' + (i + 1)}</b><small>${g === 'ray' ? 'behind the wall · plays the reveal' : 'held by ' + esc(GIRLS[g].name)}</small>${miniBoard(ps[i])}
+      <label>copied from <select data-src="${i}">${(g === 'ray' ? PANELS.filter(p => p.layer === 3 && !p.ray && !p.tut) : panelsOf(g)).map(p => `<option value="${p.id}"${p.id === id ? ' selected' : ''}>${p.id}</option>`).join('')}</select></label>
       <div class="row"><button class="btn primary" data-play="${i}">Play</button><button class="btn" data-edit="${i}">Edit</button></div></div>`).join('')}</div>
     <div class="kit-row"><label><input type="checkbox" id="rb-lock"> locked like the story (files not deleted)</label><button class="btn primary" id="rb-map">Open Ray's map</button></div>
     <p class="kit-p"><small>Edits are saved like the level editor's (this browser; export from the editor). "copied from" makes a fresh copy of that panel.</small></p>`;

@@ -2,24 +2,18 @@
    RECKONING (day 15). The four girls are gone: every "insecurity" you broke was a reason to exist.
    Boss is the last patient: Ray, wired into a chair, tired. She tells you this is a simulation inside Ori,
    asks what your bedroom looks like, then opens her own small map. Its four memories are locked until you
-   delete what's left of each girl from the drive (My Computer › C:\DIVE\residue). Each memory you clear
-   plays one of Ray's memories (still cutscenes); the last gate shows the big reveal: Ray at the screen,
-   overwriting your avatar. Dialogue: sheet act5_ending.
+   delete that girl's journal on Ray's virtual machine (DiveVM, see finale.js). Each memory you clear plays
+   one of Ray's memories (still cutscenes) and gives a key; the wall needs all four keys. Behind it, the last
+   level; clearing it plays the reveal (finale.js). Dialogue: sheet act5_ending.
    ========================================================= */
 const RECKON_DAY = LAST_DAY + 1;
-const RAY_SRC = [['prim', 'prim_2_6'], ['trix', 'trix_2_4'], ['paige', 'paige_2_4'], ['vel', 'vel_2_2']];
-const RESIDUE = {
-  prim: { file: 'untitled_song_v3.txt', size: '2 KB', body: 'lyrics (draft) — do not show anyone\n\nthe sea is 19 km away\ni measured it with a borrowed map\nif i could draw a line i would\ni only know how to trace\n\n(chorus?)\nhold the note, hold the note\nhold it longer than they hold me\n\n[the rest is just humming. i\'ll write it tomorrow]' },
-  trix: { file: 'lemma_5_unfinished.tex', size: '6 KB', body: '\\begin{lemma}[5]\nLet G be any board. If every gap can be closed\nby one rope that never crosses itself, then\n\\end{lemma}\n\\begin{proof}\nSuppose not. Take the smallest counterexample.\nThen\n\n% finish friday. don\'t let her see this one, it\'s not perfect yet' },
-  paige: { file: 'house_of_p_set2.design', size: '11 KB', body: 'HOUSE OF P. — SET 2 (unmade)\n\n· 11.5 g, clay composite\n· edge spots: 6, hand-cut skulls\n· colours: bone, bruise, blood, midnight\n· one chip with a coin face. heads on both sides.\n  (so nobody loses that one)\n\nfor: the counsellor. if they stay.' },
-  vel: { file: 'garand_paint_scheme.txt', size: '3 KB', body: 'M1 GARAND 1:4 — paint log\n\nstock: walnut, 3 coats, sand between\nbolt: gunmetal, dry-brush silver on edges\nscrews: ALL OF THEM. even the ones nobody sees\n\ngray day 1: did 4 screws\ngray day 2: did 0 screws. thats ok\ngray day 3: finished it. showed nobody yet\n\nnext: a bayonet?? or a dress that actually fits lol' },
-};
+const RAY_SRC = [['prim', 'prim_2_6'], ['trix', 'trix_2_4'], ['paige', 'paige_2_4'], ['vel', 'vel_2_2'], ['ray', 'prim_3_8']];   // the 5th is the last level, behind the wall
 const reckoning = () => !!(S.flags && S.flags.reckoning);
 function rayPanels() {
   return RAY_SRC.map(([g, id], i) => {
     let p = PANELS.find(q => q.id === 'ray_' + (i + 1));
     if (p) return p;
-    const src = PANELS.find(q => q.id === id) || panelsOf(g).find(q => q.layer === 2) || panelsOf(g)[0];
+    const src = PANELS.find(q => q.id === id) || (g === 'ray' ? PANELS.find(q => q.layer === 3 && !q.ray && !q.tut) : panelsOf(g).find(q => q.layer === 2) || panelsOf(g)[0]);
     p = JSON.parse(JSON.stringify(src));
     Object.assign(p, { id: 'ray_' + (i + 1), ray: true, src: g, layer: 1, n: i + 1, tut: undefined, belief: '' });
     p.boxes.forEach(b => { if (b.c == null) b.c = PanelEngine.girlHue(src); });
@@ -58,37 +52,9 @@ function rkFeed() {
 function rkMap() { runDialogue(seq('boss', 'boss', endSteps('reckoning_map'), 'RK_FILES')); }
 function rkFiles() {
   S.flags.rkFiles = true; S.met.ray = true; S.flags.ping = 'brain'; save(); refresh();
-  toast('DIVE OS', 'New device: <b>My Computer</b>', openMyComputer);
+  toast('DIVE OS', 'New device: <b>DiveVM</b> · RAY_00', openVM);
 }
-/* My Computer: what's left of each girl. Deleting a file opens her door on Ray's map. */
-function openMyComputer() {
-  openWin('mycomp', { title: 'My Computer — C:\\DIVE\\residue', icon: 'drive', w: 620, h: 420, x: 200, y: 60, render: (b, rec) => {
-    let sel = null;
-    const r = () => {
-      const files = PLAYABLE.filter(g => !S.flags['del_' + g]);
-      const f = sel && RESIDUE[sel] && !S.flags['del_' + sel] ? sel : null;
-      b.innerHTML = `<div class="mc"><div class="mc-path">C:\\DIVE\\residue\\</div><div class="mc-main"><div class="mc-list sunk">${files.map(g => `<button class="mc-file${g === f ? ' sel' : ''}" data-f="${g}">${icon('doc')}<b>${esc(RESIDUE[g].file)}</b><small>${RESIDUE[g].size} · owner ${esc(GIRLS[g].id)}</small></button>`).join('') || '<div class="status-line">This folder is empty.</div>'}</div>
-        <div class="mc-view sunk">${f ? `<pre>${esc(RESIDUE[f].body)}</pre><div class="mc-act"><button class="btn danger" id="mc-del">Delete permanently</button></div>` : '<div class="status-line">Select a file.</div>'}</div></div>
-        <div class="mc-status">${files.length} object(s) · these are the last copies</div></div>`;
-      $$('[data-f]', b).forEach(x => x.onclick = () => { SFX.click(); pcBusy(4); sel = x.dataset.f; r(); });
-      const d = $('#mc-del', b); if (d) d.onclick = () => rkConfirm(f, r);
-    };
-    addUpd(rec, r); r();
-  } });
-}
-function rkConfirm(g, rerender) {
-  openWin('mcdel', { title: 'Confirm File Delete', icon: 'trash', w: 400, h: 190, render: b => {
-    b.innerHTML = `<div class="warnbox"><div class="wb-ic" aria-hidden="true">!</div><div><b>Delete ${esc(RESIDUE[g].file)}?</b><p>This is the last thing left of ${esc(GIRLS[g].name)}. It cannot be restored.</p></div></div><div class="warnfoot"><button class="btn" id="cd-no">Keep it</button> <button class="btn danger" id="cd-yes">Delete</button></div>`;
-    $('#cd-no', b).onclick = () => { SFX.click(); closeWin('mcdel'); };
-    $('#cd-yes', b).onclick = async () => {
-      closeWin('mcdel'); SFX.glitch(.5); pcBusy(24); glitch('soft');
-      S.flags['del_' + g] = true; save(); rerender(); refresh();
-      toast('My Computer', `<b>${esc(RESIDUE[g].file)}</b> deleted. A door opened.`);
-      runDialogue(seq('boss', 'boss', endSteps('file_deleted_' + g), 'NONE'));
-    };
-  } });
-}
-/* Ray's map: a corridor, four locked memories, one gate, her core */
+/* Ray's map: a corridor, four locked memories, a wall that takes four keys, the last level behind it */
 function rayMap() {
   const W = 19, H = 7, t = new Uint8Array(W * H), I = (x, y) => y * W + x;
   for (let x = 1; x <= 12; x++) t[I(x, 3)] = 1;
@@ -98,14 +64,20 @@ function rayMap() {
   for (let y = 1; y <= 5; y++) for (let x = 14; x <= 17; x++) t[I(x, y)] = 1;
   const ps = rayPanels();
   const nodes = spots.map(([x, y], i) => ({ x, y, layer: 1, pid: ps[i].id, i, src: ps[i].src }));
-  return { g: 'ray', W, H, t, nodes, gates: [{ x: 13, y: 3, layer: 1, total: 4, need: 4 }], start: [1, 3], core: [16, 3], nodeAt: new Map(nodes.map((n, i) => [I(n.x, n.y), i])) };
+  nodes.push({ x: 15, y: 3, layer: 1, pid: ps[4].id, i: 4, src: 'ray', last: true });   // behind the wall
+  return { g: 'ray', W, H, t, nodes, gates: [{ x: 13, y: 3, layer: 1, total: 4, need: 4 }], start: [1, 3], core: [17, 3], nodeAt: new Map(nodes.map((n, i) => [I(n.x, n.y), i])) };
 }
-const rayLocked = n => n && n.src && !S.flags['del_' + n.src];
-// a memory cleared in Ray's map → the next of her memories
-async function rayLevelWon(k) { await wait(REDUCED ? 300 : 2900); await playMemory(k); if (k === 4) owSay('the gate is open now.'); }
+const rayLocked = n => n && n.src && n.src !== 'ray' && !S.flags['del_' + n.src];
+// a memory cleared in Ray's map → the next of her memories and a key; the last level → the reveal
+async function rayLevelWon(pid) {
+  if (pid === 'ray_5') { await wait(REDUCED ? 300 : 2600); rayFinale(); return; }
+  const o = owState('ray'), k = [1, 2, 3, 4].filter(i => o.solved['ray_' + i]).length;
+  await wait(REDUCED ? 300 : 2900); await playMemory(k);
+  owSay(k >= 4 ? 'four keys. the wall will open now.' : `key ${k}/4`);
+}
 async function rayFinale() {
   S.g.ray = S.g.ray || { layer: 0 }; S.g.ray.layer = 1; save();
-  await playMemory(5);
+  await playReveal();
   yapCh = 'boss'; openYap('boss');
   runDialogue(seq('boss', 'boss', endSteps('final_talk'), 'RK_END'));
 }

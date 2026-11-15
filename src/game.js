@@ -623,7 +623,7 @@ function renderIcons() {
   if (S.apps.includes('MusicBox.exe')) list.push({ id: 'music', label: 'MusicBox.exe', ic: 'note', fn: () => launchApp('MusicBox.exe', openMusicBox) });
   if (S.apps.includes('Fortune.exe')) list.push({ id: 'fortune', label: 'Fortune.exe', ic: 'tarot', fn: () => launchApp('Fortune.exe', openFortune) });
   list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
-  if (S.flags.rkFiles) list.push({ id: 'mycomp', label: 'My Computer', ic: 'drive', fn: openMyComputer, isNew: PLAYABLE.some(g => !S.flags['del_' + g]) });
+  if (S.flags.rkFiles) list.push({ id: 'vm', label: 'DiveVM', ic: 'drive', fn: openVM, isNew: PLAYABLE.some(g => !S.flags['del_' + g]) });
   if (S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
   if (S.flags.chamber) { const keep = ['music', 'conv', 'fortune', 'atlas', 'profiles']; list.splice(0, list.length, ...list.filter(i => keep.includes(i.id))); }   // test chamber: every app, installed
   const sig = JSON.stringify(list.map(i => [i.id, i.badge, i.isNew, i.label, i.ic, i.ping]));
@@ -955,7 +955,7 @@ async function loadDialogueData() {
     }
   }
   DD = compileData(dlgApply(texts)); DD.source = src + (dlgCount() ? ` + ${dlgCount()} edits from the dialogue editor` : '');
-  dlgDbInit();
+  dlgDbInit(); revealDbInit();
   const check = /[?&]check\b/.test(location.search);
   if (DATA_ISSUES.length) console.warn('Dialogue data problems:', DATA_ISSUES);
   if (DATA_ISSUES.length || check) showDataReport();

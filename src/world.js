@@ -260,7 +260,7 @@ async function owGate(G) {
   OW.frozen = true; SFX.gate(); OW.gateFx = { G, t0: performance.now() };
   await wait(REDUCED ? 100 : 1300);
   S.g[g].layer = Math.max(S.g[g].layer, G.layer); OW.frozen = false; OW.gateFx = null;
-  if (g === 'ray') { owHud(); save(); rayFinale(); return; }
+  if (g === 'ray') { owHud(); save(); owSay('the wall is open. one more.'); return; }
   owSay(G.layer >= 3 ? 'the last gate is open.' : `gate ${G.layer} open · layer ${G.layer} faced`);
   owHud(); renderFeed(); save();
   sessionLayerOpened(g, G.layer);
@@ -305,7 +305,7 @@ function owLevelWon(p) {
   o.solved[p.id] = true; save();
   if (first) { SFX.key(); OW.keyFx = performance.now(); }
   renderFeed();
-  if (g === 'ray') { if (first) rayLevelWon(Object.keys(o.solved).length); }
+  if (g === 'ray') { if (first) rayLevelWon(p.id); }
   else sessionLevelWon(g, p, first);
   setTimeout(() => { if (PJ_STORY && PJ && PJ.p === p) { owBack(); } }, REDUCED ? 600 : 2600);
 }
