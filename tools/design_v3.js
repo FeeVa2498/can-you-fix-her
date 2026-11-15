@@ -903,13 +903,12 @@ const old = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
   RB('prim', 4, BX(5, 4, [M, MT, M], RR({ gen: { walls: .15, litR: 2, holes: 2, bites: 2 }, distinct: 1, minLen: 12, feature: 'lights', cap: 300000 })));
   RB('prim', 5, BX(5, 4, [M, M, MT], RR({ gen: { walls: .18, portals: 1, holes: 2, bites: 2 }, uses: { portals: 1 }, need: 1, slack: 1, minLen: 12, feature: 'opp', cap: 200000 })));
   // TRIX: one rope box: built route-first by tools/trix_v10.js (rb_trix_1 … 5: room, dense, room, dense, dense)
-  // PAIGE: two (then three) dice that must print the paper tiles, arrow tiles, portals
-  const DIE2 = { die: true, c: 2 };
-  RB('paige', 1, BX(4, 3, [DIE, DIE1], CL(RR({ gen: { walls: .12, dice: 2, bites: 1 }, minLen: 8, feature: 'dice' }))));
-  RB('paige', 2, BX(4, 4, [DIE, DIE1], CL(RR({ gen: { walls: .12, dice: 3, pads: 1, bites: 2 }, minLen: 9, feature: 'dice' }))));
-  RB('paige', 3, BX(5, 4, [DIE, DIE1], CL(RR({ gen: { walls: .12, dice: 3, portals: 1, bites: 2 }, minLen: 10, feature: 'dice' }))));
-  RB('paige', 4, BX(5, 4, [DIE, DIE1, DIE2], CL(RR({ gen: { walls: .12, dice: 3, bites: 2 }, minLen: 10, feature: 'dice', cap: 400000 }))));
-  RB('paige', 5, BX(5, 4, [DIE, DIE1, DIE2], CL(RR({ gen: { walls: .12, dice: 3, pads: 1, bites: 2 }, minLen: 11, feature: 'dice', cap: 400000 }))));
+  // PAIGE: one die that must print the paper tiles; arrow tiles and portals, bigger maps as k grows
+  RB('paige', 1, BX(4, 3, [DIE], RR({ gen: { walls: .12, dice: 3, pads: 1, bites: 1 }, uses: { pads: 1 }, need: 2, minLen: 10, feature: 'dice' })));
+  RB('paige', 2, BX(4, 4, [DIE], RR({ gen: { walls: .12, dice: 3, portals: 1, bites: 2 }, uses: { portals: 1 }, need: 2, minLen: 11, feature: 'dice' })));
+  RB('paige', 3, BX(5, 4, [DIE], RR({ gen: { walls: .12, dice: 4, pads: 2, bites: 2 }, uses: { pads: 1 }, need: 2, minLen: 12, feature: 'dice' })));
+  RB('paige', 4, BX(5, 4, [DIE], RR({ gen: { walls: .12, dice: 4, pads: 1, portals: 1, bites: 3 }, uses: { portals: 1, pads: 1 }, need: 2, minLen: 13, feature: 'dice' })));
+  RB('paige', 5, BX(5, 5, [DIE], RR({ gen: { walls: .12, dice: 4, pads: 1, portals: 1, bites: 3 }, uses: { portals: 1 }, need: 2, minLen: 14, time: 120000, tries: 12000, feature: 'dice' })));
 }
 const ord = { prim: 0, trix: 1, paige: 2, vel: 3, myne: 4 };
 const sortP = a => a.sort((x, y) => ord[x.girl] - ord[y.girl] || x.layer - y.layer || x.n - y.n);

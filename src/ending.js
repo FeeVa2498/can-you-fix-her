@@ -90,7 +90,7 @@ const raySolved = () => { const o = owState('ray'); return Array.from({ length: 
 // Ray's gates: a girl's gate needs her journal deleted (her key); the wall needs every level cleared
 function rayKeys() { const n = raySolved(); return owBuild('ray').gates.map(G => G.fin ? { have: n, need: RAY_ALL, total: RAY_ALL } : { have: S.flags['del_' + G.k] ? 1 : 0, need: 1, total: 1 }); }
 const rayGateOpen = G => !!S.flags['rgate_' + (G.fin ? 'wall' : G.k)];
-function rayGateLabel(G, open) { return G.fin ? (open ? 'OPEN ✓' : `🔒 ${raySolved()}/${RAY_ALL}`) : `${open ? '' : '🔒 '}${GIRLS[G.k].name.toUpperCase()}${open ? ' ✓' : ''}`; }
+function rayGateLabel(G, open) { return G.fin ? (open ? '✓' : `🔒 ${raySolved()}/${RAY_ALL}`) : open ? '✓' : '🔒'; }   // no names: just locked doors
 // a level cleared on Ray's map → the next of her memories (in order, whichever level it was); the last level → the reveal
 async function rayLevelWon(pid) {
   if (pid === 'ray_21') { await wait(REDUCED ? 300 : 2600); rayFinale(); return; }
