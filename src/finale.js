@@ -134,14 +134,14 @@ async function revealDbInit() {
 // the last music (audio/sad_past.mp3, "Sad Past" by Silent Partner): starts when Ray's map opens and loops,
 // without stopping, through her levels, the 20 memories, the reveal ("Yes") and the last talk.
 // While it plays, the projector theme, MusicBox and the desktop hum stay quiet.
-const FIN_MUSIC = { el: null, iv: 0, active: false };
+const FIN_MUSIC = { el: null, iv: 0, active: false, LEVEL: .425 };   // volume (was .85; halved)
 function finaleMusic(on) {
   clearInterval(FIN_MUSIC.iv);
   if (on) {
     try { if (typeof mbStopTrack === 'function' && MB.el) mbStopTrack(); if (typeof MB !== 'undefined' && MB.playing && typeof mbPause === 'function') mbPause(); if (typeof bgmOff === 'function') bgmOff();
       if (AU.ctx && AU.music) AU.music.gain.setTargetAtTime(0, AU.ctx.currentTime, .8); } catch (e) { }
     if (!FIN_MUSIC.el) { FIN_MUSIC.el = new Audio('audio/sad_past.mp3'); FIN_MUSIC.el.preload = 'auto'; FIN_MUSIC.el.loop = true; }
-    const el = FIN_MUSIC.el, top = AU.on ? .85 : 0;
+    const el = FIN_MUSIC.el, top = AU.on ? FIN_MUSIC.LEVEL : 0;
     if (FIN_MUSIC.active && !el.paused) { el.volume = Math.max(el.volume, Math.min(top, el.volume)); return; }   // already playing: never restart it
     FIN_MUSIC.active = true; el.volume = 0; el.play().catch(() => { });
     FIN_MUSIC.iv = setInterval(() => { el.volume = Math.min(top, el.volume + .03); if (el.volume >= top) clearInterval(FIN_MUSIC.iv); }, 80);
