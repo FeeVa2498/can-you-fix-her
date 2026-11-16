@@ -155,7 +155,7 @@ function owRenderShell(b) {
     <div class="ow-top"><span class="ow-keys" id="ow-keys"></span><span class="ow-reg" id="ow-reg"></span><span class="sp"></span>
       <span class="ow-stam" id="ow-stam" title="Her stamina for today. Every input costs a little."><i></i><b></b></span>
       <button class="btn" id="ow-end">End session</button></div>
-    <div class="ow-main" id="ow-main"><div class="ow-view" id="ow-view"><canvas id="ow-cv"></canvas><canvas class="ow-mini" id="ow-mini"></canvas><div class="ow-card" id="ow-card" hidden></div><div class="ow-msg" id="ow-msg" aria-live="polite"></div></div></div>
+    <div class="ow-main" id="ow-main"><div class="ow-view" id="ow-view"><canvas id="ow-cv"></canvas><canvas class="ow-mini" id="ow-mini"></canvas><div class="ow-card" id="ow-card" hidden></div><div class="ow-sub" id="ow-sub" aria-live="polite"></div><div class="ow-msg" id="ow-msg" aria-live="polite"></div></div></div>
     <div class="ow-help">W A S D / arrows: move · Enter: dive into a memory · Esc (in a memory): back to the map</div></div>`;
   $('#ow-end', b).onclick = () => { SFX.click(); endSessionEarly(); };
   const cv = $('#ow-cv', b), view = $('#ow-view', b);
@@ -174,6 +174,7 @@ function owClose() { if (OW.g === 'ray' && !reckoning()) finaleMusic(false);   /
   if (PJ_STORY) { PJ_STORY = null; pjDispose(); document.removeEventListener('keydown', pjKey); } owStop(); OW.g = null; }
 function owFocus() { const w = WINS.fixit; if (w) focusWin('fixit'); }
 function owHud() {
+  if (OW.g && S.flags['mapmorse_' + OW.g] && !$('.ow-morse') && typeof mapMorseShow === 'function') setTimeout(() => mapMorseShow(OW.g), 50);   // Pixie read this map's Morse
   const g = OW.g; if (!g || !$('#ow-keys')) return;
   const M = owBuild(g), ks = owKeys(g), L = Math.min(M.gates.length, S.g[g].layer + 1), k = ks[L - 1], o = owState(g);
   const done = S.g[g].layer >= M.gates.length;
@@ -198,6 +199,11 @@ function owHud() {
   } else card.hidden = true;
 }
 function keyIcon(g) { return `<svg class="kic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="5" cy="8" r="3.4" fill="none" stroke="${OW_THEME[g].acc}" stroke-width="2"/><path d="M8 8h7M12 8v3M14.5 8v2" stroke="${OW_THEME[g].acc}" stroke-width="2" fill="none"/></svg>`; }
+// Ray's map: what goes through her head when a door won't open (a subtitle at the bottom)
+const RAY_DOUBTS = ['Why am I still resisting?', 'Aren\'t I ready to disappear?', 'I have to save Ori, but why...', 'I... I still want to travel...',
+  'Just one more day. Just one.', 'If I open this, who will remember them?', 'I made them. Why does letting go hurt?', 'She\'ll be fine without me. Won\'t she?',
+  'My hands won\'t move.', 'I\'m scared.', 'Is this what they felt?', 'Not yet. Please, not yet.', 'I promised to protect her. I never promised to leave.', 'The door is cold. Like the hospital floor.'];
+function owSub(t) { const m = $('#ow-sub'); if (!m) return; m.textContent = t; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); }
 function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-msg'); if (m) { m.textContent = t; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); } }
 
 /* every gameplay input costs a minute of her day */
@@ -264,7 +270,10 @@ function owMove(dx, dy) {
 async function owGate(G) {
   const g = OW.g, ks = owKeys(g)[G.layer - 1];
   if (g === 'ray') {
-    if (ks.have < ks.need) { SFX.bump(); OW.shake = performance.now(); owSay(G.fin ? `locked · ${ks.have}/${ks.need} memories` : 'locked.'); if (!G.fin) runDialogue(seq('boss', 'boss', endSteps('ray_level_locked'), 'NONE')); return; }
+    if (ks.have < ks.need) { SFX.bump(); OW.shake = performance.now();
+      if (G.fin) owSay(`locked · ${ks.have}/${ks.need} memories`);
+      else { let t; do t = pickRnd(RAY_DOUBTS); while (RAY_DOUBTS.length > 1 && t === OW.lastDoubt); OW.lastDoubt = t; owSub(t); }   // bounced back, and a thought
+      return; }
     OW.frozen = true; SFX.shatter(); glitch('soft'); OW.gateFx = { G, t0: performance.now() }; await wait(REDUCED ? 100 : 1300);   // Ray's gates shatter
     S.flags['rgate_' + (G.fin ? 'wall' : G.k)] = true; OW.frozen = false; OW.gateFx = null;
     owHud(); save(); owSay(G.fin ? 'the wall is open. one more.' : 'the gate is open.'); return;

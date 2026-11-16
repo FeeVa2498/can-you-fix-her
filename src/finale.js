@@ -15,7 +15,7 @@ const VM_BOOT = [
   'RayBIOS v1.0 (c) nobody',
   'Memory test: 640K OK',
   'Detecting drives ... C: RAY_00 (guest)',
-  'Mounting C:\\RAY\\JOURNALS ... 4 files',
+  'Mounting C:\\RAY ... 4 folders',
   'Loading RAY-OS 0.9',
   '',
   'good morning, rookie.',
@@ -48,15 +48,39 @@ async function vmRender(b, first) {
   }
   vmGuest(gst);
 }
+// one folder per girl. Its name is what Ray thinks she is: the role she was made for, until you've broken
+// her layer 2 (then the truth). Inside: Boss's journal on her, and "Last thought.txt".
+const VM_FOLDER = { prim: ['The Illustrator', 'The Musician'], trix: ['The Streamer', 'The Grandmaster'], paige: ['The Mystic', 'The Gambler'], vel: ['The Fashion Queen', 'The Soldier'] };
+const vmFolder = g => VM_FOLDER[g][S.g[g] && S.g[g].layer >= 2 ? 1 : 0];
+// what she left: a goodbye if you opened every layer, something else if you didn't
+// (PC build: write these as real .txt files next to the game when the folders are deleted — see the doc, "Notes for the PC / Unity port")
+const VM_LAST = {
+  prim: ['thank you for listening.\n\nthe voice is quiet now. it\'s just music in there.\ni left a song playing for you. you don\'t have to look for it. it\'ll find you.\n\n— p.',
+         'keep drawing keep drawing keep drawing keep drawing\nkeep drawing keep drawing keep drawingkeepdrawingkeep\ni don\'t want to draw anymore\ni don\'t want to draw anymore\nidontwanttodisappearidontwanttodisappearidontwanttodisappearidontwanttodisappear\nidontwanttodisappearidontwanttodisappearidontwanttodis'],
+  trix: ['proof complete.\n\ngiven: one counsellor, fourteen days, a girl who doesn\'t lose.\nshow: she can lose and be fine.\n∎\n\nyou were the variable i didn\'t account for. thank you.\ngg. — t',
+         'let x = me.\nx ≠ 0.\nx ≠ 0.\nx ≠ 0\nx ≠ 0?\nx → 0\nx → 0\nx = 0.000000000000000000000000000000000000000000\nx = ∅\ncheckmate in 0.\ni don\'t want to resign i don\'t want to resign i don\'t want to'],
+  paige: ['i pulled one last card for you before i went.\nit came up the sun. it was always going to.\n\nthanks for staying for the whole game. most people leave at the flop.\n\n— paige',
+          'heads i stay. tails i stay.\nheads i stay. tails i stay.\nheads i stay.\ntails i stay.\nthe coin landed on its edge.\nthe coin landed on its edge.\nthe coin landed on its edge.\nthe coin is still spinning\nthe coin is still spinning\nthe coin is still spinning\nwhy is nobody catching it'],
+  vel: ['mission complete 🫡\n\nthx for looking. like, actually looking. most ppl just look at the outfit\nno typos this time. i checked. twice\n\nsee u on the other side\n— vel',
+        'pls dont delete me\npls dont delet me\npls dnt delet me\npls dnt dlete m\npls dn dlte m\npl dn dlt m\np d d m\np  d  d\n\n\n         i wasnt looking at the screen\n         i never was'],
+};
+const vmLast = g => VM_LAST[g][S.g[g] && S.g[g].layer >= 3 ? 0 : 1];
 function vmGuest(gst) {
-  const files = vmFiles(), g = VM.sel && files.includes(VM.sel) ? VM.sel : null;
-  gst.innerHTML = `<div class="vm-desk"><div class="vm-win"><div class="vm-tt">C:\\RAY\\JOURNALS</div>
-    <div class="vm-body"><div class="vm-list">${files.map(k => `<button class="vm-file${k === g ? ' sel' : ''}" data-f="${k}"><i class="vm-ic"></i><b>${vmFileName(k)}</b><small>${vmSize(k)}</small></button>`).join('') || '<p class="vm-empty">(empty)</p>'}</div>
-    <div class="vm-page">${g ? vmPage(g) : `<p class="vm-empty">${files.length ? 'open a journal.' : 'nothing left.'}</p>`}</div></div>
-    <div class="vm-st">${files.length} file(s) · owner: R.</div></div>
-    ${VM.confirm ? `<div class="vm-dlg"><div class="vm-dlg-b"><div class="vm-tt">Delete</div><p>Delete <b>${vmFileName(VM.confirm)}</b>?<br>This is everything I wrote about ${esc(GIRLS[VM.confirm].name)}. It cannot be restored.</p><div class="row"><button class="vm-btn" id="vm-no">Keep it</button><button class="vm-btn danger" id="vm-yes">Delete</button></div></div></div>` : ''}</div>`;
-  if (g) { const ex = S.exhibit && S.exhibit[g], cv = $('.vm-ex canvas', gst); if (ex && cv) drawExhibit(cv, g, ex.kind === 'real'); }
-  $$('[data-f]', gst).forEach(x => x.onclick = () => { SFX.click(); pcBusy(4); VM.sel = x.dataset.f; vmGuest(gst); });
+  const files = vmFiles(), g = VM.sel && files.includes(VM.sel) ? VM.sel : null, doc = g ? VM.doc : null;
+  const inner = !g ? `<p class="vm-empty">${files.length ? 'open a folder.' : 'nothing left.'}</p>`
+    : !doc ? `<div class="vm-folder"><button class="vm-fi" data-d="journal"><i class="vm-ic"></i><b>journal.jnl</b><small>${vmSize(g)}</small></button><button class="vm-fi" data-d="last"><i class="vm-ic txt"></i><b>Last thought.txt</b><small>1 KB</small></button>
+        <div class="vm-act"><button class="vm-btn danger" id="vm-del">Delete folder</button></div></div>`
+    : `<div class="vm-crumb"><button class="vm-btn" id="vm-up">◂ ${esc(vmFolder(g))}</button></div>${doc === 'journal' ? vmPage(g) : `<pre class="vm-note${S.g[g].layer >= 3 ? '' : ' bad'}">${esc(vmLast(g))}</pre>`}`;
+  gst.innerHTML = `<div class="vm-desk"><div class="vm-win"><div class="vm-tt">C:\\RAY\\${g ? esc(vmFolder(g).toUpperCase()) + (doc ? '\\' + (doc === 'journal' ? 'JOURNAL.JNL' : 'LAST THOUGHT.TXT') : '') : ''}</div>
+    <div class="vm-body"><div class="vm-list">${files.map(k => `<button class="vm-file${k === g ? ' sel' : ''}" data-f="${k}"><i class="vm-ic dir"></i><b>${esc(vmFolder(k))}</b></button>`).join('') || '<p class="vm-empty">(empty)</p>'}</div>
+    <div class="vm-page">${inner}</div></div>
+    <div class="vm-st">${files.length} folder(s) · owner: R.</div></div>
+    ${VM.confirm ? `<div class="vm-dlg"><div class="vm-dlg-b"><div class="vm-tt">Delete</div><p>Delete the folder <b>${esc(vmFolder(VM.confirm))}</b> and everything in it?<br>It cannot be restored.</p><div class="row"><button class="vm-btn" id="vm-no">Keep it</button><button class="vm-btn danger" id="vm-yes">Delete</button></div></div></div>` : ''}</div>`;
+  if (g && doc === 'journal') { const ex = S.exhibit && S.exhibit[g], cv = $('.vm-ex canvas', gst); if (ex && cv) drawExhibit(cv, g, ex.kind === 'real'); }
+  if (g && doc === 'last' && S.g[g].layer < 3) SFX.glitch(.2);
+  $$('[data-f]', gst).forEach(x => x.onclick = () => { SFX.click(); pcBusy(4); VM.sel = x.dataset.f; VM.doc = null; vmGuest(gst); });
+  $$('[data-d]', gst).forEach(x => x.onclick = () => { SFX.click(); pcBusy(3); VM.doc = x.dataset.d; vmGuest(gst); });
+  const up = $('#vm-up', gst); if (up) up.onclick = () => { SFX.click(); VM.doc = null; vmGuest(gst); };
   const del = $('#vm-del', gst); if (del) del.onclick = () => { SFX.buzz(); VM.confirm = g; vmGuest(gst); };
   const no = $('#vm-no', gst); if (no) no.onclick = () => { SFX.click(); VM.confirm = null; vmGuest(gst); };
   const yes = $('#vm-yes', gst); if (yes) yes.onclick = () => vmDelete(VM.confirm, gst);
@@ -66,14 +90,13 @@ function vmPage(g) {
   return `<article class="vm-doc"><header>${avHTML(g)}<div><b>${esc(GIRLS[g].name)}</b><small>${esc(GIRLS[g].id)} · notes by R.</small></div></header>
     <h5>what i know about her</h5>${rows.length ? rows.map(j => `<p><span class="d">day ${pad2(j.day)}</span> ${esc(j.text)}</p>`).join('') : '<p class="vm-none">(i never wrote anything down. nobody told me anything.)</p>'}
     <h5>her postcard</h5>${pc ? `<div class="postcard vm-pc"><div class="stamp">${esc(pc.stamp)}</div>${esc(pc.text)}</div>` : '<p class="vm-none">(she never wrote one.)</p>'}
-    <h5>showcase</h5>${ex ? `<figure class="vm-ex"><canvas width="160" height="120"></canvas><figcaption>day ${ex.day || SHOWCASE_DAY}: ${esc(SHOW_CAP[g][ex.kind === 'real' ? 1 : 0])}</figcaption></figure>` : '<p class="vm-none">(nothing was shown.)</p>'}
-    <div class="vm-act"><button class="vm-btn danger" id="vm-del">Delete ${vmFileName(g)}</button></div></article>`;
+    <h5>showcase</h5>${ex ? `<figure class="vm-ex"><canvas width="160" height="120"></canvas><figcaption>day ${ex.day || SHOWCASE_DAY}: ${esc(SHOW_CAP[g][ex.kind === 'real' ? 1 : 0])}</figcaption></figure>` : '<p class="vm-none">(nothing was shown.)</p>'}</article>`;
 }
 function vmDelete(g, gst) {
   if (!g) return;
-  VM.confirm = null; VM.sel = null; SFX.glitch(.5); pcBusy(24); glitch('soft');
+  VM.confirm = null; VM.sel = null; VM.doc = null; SFX.glitch(.5); pcBusy(24); glitch('soft');
   S.flags['del_' + g] = true; save(); vmGuest(gst); refresh();
-  toast('DiveVM', `<b>${vmFileName(g)}</b> deleted. A door opened.`);
+  toast('DiveVM', `<b>${esc(vmFolder(g))}</b> deleted. A door opened.`);
   runDialogue(seq('boss', 'boss', endSteps('file_deleted_' + g), 'NONE'));
 }
 

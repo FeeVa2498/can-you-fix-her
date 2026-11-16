@@ -196,9 +196,34 @@ function morseTargets() {
     return r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth; };
   return $$('.msg .tx, .choice .ch-text, [data-morse]').filter(n => !n.closest('.morse-dec') && isMorse(n.dataset.morse || n.textContent) && vis(n));
 }
+// a girl's map: her layer-3 ledges spell two letters of Morse; read them over the minimap
+function mapMorseTarget() {
+  const mini = $('#ow-mini'), g = OW && OW.g; if (!mini || !g || !OW_MORSE[g] || !mini.offsetParent) return null;
+  const w = mini.closest('.win'); if (w && w.hidden) return null;
+  if (!(S.g[g] && S.g[g].layer >= 2)) return null;   // she has to have reached the part of the map where the letters are
+  return { mini, g };
+}
+function mapMorseText(g) { return OW_MORSE[g].map((c, i) => fromMorse(c) + (OW_WORDGAP[g] === i ? ' ' : '')).join('').trim(); }
+function mapMorseShow(g) {
+  const view = $('#ow-view'), mini = $('#ow-mini'); if (!view || !mini) return;
+  let b = $('.ow-morse', view); if (!b) { b = document.createElement('div'); b.className = 'ow-morse'; view.appendChild(b); }
+  const r = mini.getBoundingClientRect(), V = view.getBoundingClientRect(), pad = 10;
+  const h = Math.max(r.height + pad * 2, 78), left = Math.max(6, r.left - V.left - pad), right = Math.min(V.width - 6, r.right - V.left + pad);
+  const top = Math.max(6, Math.min(V.height - h - 6, r.bottom - V.top + pad - h));   // cover the minimap, stay inside the view
+  Object.assign(b.style, { left: left + 'px', top: top + 'px', width: (right - left) + 'px', height: h + 'px' });
+  b.innerHTML = `<b>${esc(mapMorseText(g))}</b><small>${esc(OW_MORSE[g].join(OW_WORDGAP[g] === 0 ? ' / ' : ' '))}</small>`;
+}
 async function pixieMorse() {
-  const ts = morseTargets();
-  if (!ts.length) { pixieSay('? no morse here'); return; }
+  const ts = morseTargets(), mm = mapMorseTarget();
+  if (!ts.length && !mm) { pixieSay('? no morse here'); return; }
+  if (mm) {
+    pixieSay('·–· let me see…', 1200); PIX.mode = 'go';
+    const r = mm.mini.getBoundingClientRect(); PIX.tx = r.left + r.width / 2 - 24; PIX.ty = r.top - 46;
+    const t0 = performance.now(); while (performance.now() - t0 < 1600 && Math.hypot(PIX.tx - PIX.x, PIX.ty - PIX.y) > 18) await wait(30);
+    for (let i = 0; i < 8; i++) { pixieDust(r.left + Math.random() * r.width, r.top + Math.random() * r.height, 6, 24); await wait(60); }
+    S.flags['mapmorse_' + mm.g] = true; save(); mapMorseShow(mm.g); SFX.tick();
+    if (!ts.length) { PIX.mode = 'fly'; PIX.until = 0; pixieSay('✨ ' + mapMorseText(mm.g)); return; }
+  }
   pixieSay('·–· let me see…', 1200); PIX.mode = 'go';
   for (const n of ts) {
     const r = n.getBoundingClientRect(); PIX.tx = r.left + Math.min(r.width - 30, 30); PIX.ty = r.top - 40;

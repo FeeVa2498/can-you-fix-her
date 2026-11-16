@@ -248,7 +248,7 @@ function kitBoss(el) {
     ${RAY_GATES.map((g, gi) => `<h4>${esc(GIRLS[g].name)}'s gate</h4><div class="kit-grid">${ps.slice(gi * RAY_PER, gi * RAY_PER + RAY_PER).map((p, k) => card(p, `${p.id}`, `level ${k + 1} · ${box(p)}`)).join('')}</div>`).join('')}
     <h4>Behind the wall</h4><div class="kit-grid">${card(ps[RAY_ALL], 'The last level', 'plays the reveal · ' + box(ps[RAY_ALL]),
       `<label>copied from <select id="rb-src">${PANELS.filter(p => p.layer === 3 && !p.ray && !p.tut).map(p => `<option value="${p.id}"${p.id === RAY_SRC[0][1] ? ' selected' : ''}>${p.id}</option>`).join('')}</select></label>`)}</div>
-    <div class="kit-row"><label><input type="checkbox" id="rb-lock"> gates locked like the story (journals not deleted)</label><label><input type="checkbox" id="rb-wall"> wall already open</label><button class="btn primary" id="rb-map">Open Ray's map</button></div>
+    <div class="kit-row"><label><input type="checkbox" id="rb-lock"> pretend the folders are not deleted yet (gates locked: bump into one to see Ray's thoughts)</label><label><input type="checkbox" id="rb-wall"> wall already open</label><button class="btn primary" id="rb-map">Open Ray's map</button></div>
     <p class="kit-p"><small>Edits are saved like the level editor's (this browser; export from the editor). "copied from" makes a fresh copy of that panel.</small></p>`;
   $('#rb-src', el).onchange = e => {
     RAY_SRC[0][1] = e.target.value; CH.rayLast = e.target.value; chSave();

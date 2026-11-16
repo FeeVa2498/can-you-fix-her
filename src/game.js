@@ -1270,10 +1270,12 @@ function lockScreen(sub, btn = 'Log in') {
       <button class="btn primary" id="lk-go">${esc(btn)} ▸</button></div></div>`;
     document.body.appendChild(el); SFX.chime();
     const b = $('#lk-go', el); b.focus();
-    b.onclick = () => { auInit(); SFX.click(); el.classList.add('out'); setTimeout(() => { el.remove(); res(); }, REDUCED ? 0 : 350); };
+    b.onclick = () => { auInit(); SFX.click(); el.classList.add('out'); setTimeout(() => { el.remove(); autoMusicBox(); res(); }, REDUCED ? 0 : 350); };
   });
 }
-function closeWorkWins() { Object.keys(WINS).forEach(id => { if (!['yap', 'mail', 'mbox', 'reset'].includes(id) && !id.startsWith('note:')) closeWin(id); }); }
+// the music player is always open when the computer is (once it's installed)
+function autoMusicBox() { if (S.apps && S.apps.includes('MusicBox.exe') && !WINS.music && !(typeof FIN_MUSIC !== 'undefined' && FIN_MUSIC.active)) openMusicBox(); }
+function closeWorkWins() { Object.keys(WINS).forEach(id => { if (!['yap', 'mail', 'mbox', 'reset', 'music'].includes(id) && !id.startsWith('note:')) closeWin(id); }); }
 async function beginMorning() {
   S.phase = 'day'; S.mins = DAY_START; S.dayOver = false; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = [];
   S.night = { chats: 0, with: [], bossPending: false, bossDone: false };

@@ -1160,6 +1160,11 @@ line.ed-hov{stroke-width:.14}
 .ow-mini{position:absolute;right:8px;bottom:8px;border:2px solid var(--acc);border-radius:4px;image-rendering:pixelated;width:auto;height:auto;max-width:45%;}
 .ow-card{position:absolute;left:10px;bottom:10px;padding:6px 10px;border:2px solid var(--acc);border-radius:6px;background:rgba(13,7,20,.9);font-family:var(--mono);font-size:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:60%}
 .ow-card .new{color:#ffd86e}.ow-card .got{color:#7be3a4}.ow-card .go{color:var(--acc);font-weight:bold}
+.ow-sub{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);max-width:88%;text-align:center;font:italic clamp(14px,1.6vw,19px)/1.4 Georgia,serif;color:#fff;background:rgba(10,4,20,.62);padding:6px 16px;border-radius:4px;text-shadow:0 1px 2px #000;opacity:0;pointer-events:none}
+.ow-sub.on{animation:owsub 4.2s ease-out forwards}@keyframes owsub{0%{opacity:0;transform:translate(-50%,6px)}10%,75%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.ow-morse{position:absolute;z-index:6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:50% / 45%;background:radial-gradient(ellipse,rgba(255,255,255,.92),rgba(240,225,255,.82) 70%,rgba(220,200,255,.6));border:2px solid #fff;box-shadow:0 0 22px rgba(255,190,240,.9),inset 0 0 14px rgba(255,255,255,.9);pointer-events:none;animation:owmorse .6s cubic-bezier(.3,1.5,.5,1)}
+.ow-morse b{font:900 30px/1 var(--mono);letter-spacing:.25em;color:#7a4fc0;text-shadow:0 0 8px #fff}.ow-morse small{font:11px var(--mono);color:#9a7fc0}
+@keyframes owmorse{from{transform:scale(.2);opacity:0}}
 .ow-msg{position:absolute;left:50%;top:14px;transform:translateX(-50%);font-family:var(--mono);font-size:14px;font-weight:bold;color:#fff;text-shadow:0 0 8px var(--acc),2px 2px 0 #000;opacity:0;pointer-events:none;white-space:nowrap}
 .ow-msg.on{animation:owmsg 2.2s ease-out forwards}
 @keyframes owmsg{0%{opacity:0;transform:translate(-50%,6px)}10%{opacity:1;transform:translate(-50%,0)}75%{opacity:1}100%{opacity:0}}
@@ -2797,10 +2802,12 @@ function lockScreen(sub, btn = 'Log in') {
       <button class="btn primary" id="lk-go">${esc(btn)} ▸</button></div></div>`;
     document.body.appendChild(el); SFX.chime();
     const b = $('#lk-go', el); b.focus();
-    b.onclick = () => { auInit(); SFX.click(); el.classList.add('out'); setTimeout(() => { el.remove(); res(); }, REDUCED ? 0 : 350); };
+    b.onclick = () => { auInit(); SFX.click(); el.classList.add('out'); setTimeout(() => { el.remove(); autoMusicBox(); res(); }, REDUCED ? 0 : 350); };
   });
 }
-function closeWorkWins() { Object.keys(WINS).forEach(id => { if (!['yap', 'mail', 'mbox', 'reset'].includes(id) && !id.startsWith('note:')) closeWin(id); }); }
+// the music player is always open when the computer is (once it's installed)
+function autoMusicBox() { if (S.apps && S.apps.includes('MusicBox.exe') && !WINS.music && !(typeof FIN_MUSIC !== 'undefined' && FIN_MUSIC.active)) openMusicBox(); }
+function closeWorkWins() { Object.keys(WINS).forEach(id => { if (!['yap', 'mail', 'mbox', 'reset', 'music'].includes(id) && !id.startsWith('note:')) closeWin(id); }); }
 async function beginMorning() {
   S.phase = 'day'; S.mins = DAY_START; S.dayOver = false; S.todayLayers = 0; S.todayFixed = []; S.todayWorked = [];
   S.night = { chats: 0, with: [], bossPending: false, bossDone: false };
@@ -4168,7 +4175,7 @@ function owRenderShell(b) {
     <div class="ow-top"><span class="ow-keys" id="ow-keys"></span><span class="ow-reg" id="ow-reg"></span><span class="sp"></span>
       <span class="ow-stam" id="ow-stam" title="Her stamina for today. Every input costs a little."><i></i><b></b></span>
       <button class="btn" id="ow-end">End session</button></div>
-    <div class="ow-main" id="ow-main"><div class="ow-view" id="ow-view"><canvas id="ow-cv"></canvas><canvas class="ow-mini" id="ow-mini"></canvas><div class="ow-card" id="ow-card" hidden></div><div class="ow-msg" id="ow-msg" aria-live="polite"></div></div></div>
+    <div class="ow-main" id="ow-main"><div class="ow-view" id="ow-view"><canvas id="ow-cv"></canvas><canvas class="ow-mini" id="ow-mini"></canvas><div class="ow-card" id="ow-card" hidden></div><div class="ow-sub" id="ow-sub" aria-live="polite"></div><div class="ow-msg" id="ow-msg" aria-live="polite"></div></div></div>
     <div class="ow-help">W A S D / arrows: move · Enter: dive into a memory · Esc (in a memory): back to the map</div></div>`;
   $('#ow-end', b).onclick = () => { SFX.click(); endSessionEarly(); };
   const cv = $('#ow-cv', b), view = $('#ow-view', b);
@@ -4187,6 +4194,7 @@ function owClose() { if (OW.g === 'ray' && !reckoning()) finaleMusic(false);   /
   if (PJ_STORY) { PJ_STORY = null; pjDispose(); document.removeEventListener('keydown', pjKey); } owStop(); OW.g = null; }
 function owFocus() { const w = WINS.fixit; if (w) focusWin('fixit'); }
 function owHud() {
+  if (OW.g && S.flags['mapmorse_' + OW.g] && !$('.ow-morse') && typeof mapMorseShow === 'function') setTimeout(() => mapMorseShow(OW.g), 50);   // Pixie read this map's Morse
   const g = OW.g; if (!g || !$('#ow-keys')) return;
   const M = owBuild(g), ks = owKeys(g), L = Math.min(M.gates.length, S.g[g].layer + 1), k = ks[L - 1], o = owState(g);
   const done = S.g[g].layer >= M.gates.length;
@@ -4211,6 +4219,11 @@ function owHud() {
   } else card.hidden = true;
 }
 function keyIcon(g) { return `<svg class="kic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="5" cy="8" r="3.4" fill="none" stroke="${OW_THEME[g].acc}" stroke-width="2"/><path d="M8 8h7M12 8v3M14.5 8v2" stroke="${OW_THEME[g].acc}" stroke-width="2" fill="none"/></svg>`; }
+// Ray's map: what goes through her head when a door won't open (a subtitle at the bottom)
+const RAY_DOUBTS = ['Why am I still resisting?', 'Aren\'t I ready to disappear?', 'I have to save Ori, but why...', 'I... I still want to travel...',
+  'Just one more day. Just one.', 'If I open this, who will remember them?', 'I made them. Why does letting go hurt?', 'She\'ll be fine without me. Won\'t she?',
+  'My hands won\'t move.', 'I\'m scared.', 'Is this what they felt?', 'Not yet. Please, not yet.', 'I promised to protect her. I never promised to leave.', 'The door is cold. Like the hospital floor.'];
+function owSub(t) { const m = $('#ow-sub'); if (!m) return; m.textContent = t; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); }
 function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-msg'); if (m) { m.textContent = t; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); } }
 
 /* every gameplay input costs a minute of her day */
@@ -4277,7 +4290,10 @@ function owMove(dx, dy) {
 async function owGate(G) {
   const g = OW.g, ks = owKeys(g)[G.layer - 1];
   if (g === 'ray') {
-    if (ks.have < ks.need) { SFX.bump(); OW.shake = performance.now(); owSay(G.fin ? `locked · ${ks.have}/${ks.need} memories` : 'locked.'); if (!G.fin) runDialogue(seq('boss', 'boss', endSteps('ray_level_locked'), 'NONE')); return; }
+    if (ks.have < ks.need) { SFX.bump(); OW.shake = performance.now();
+      if (G.fin) owSay(`locked · ${ks.have}/${ks.need} memories`);
+      else { let t; do t = pickRnd(RAY_DOUBTS); while (RAY_DOUBTS.length > 1 && t === OW.lastDoubt); OW.lastDoubt = t; owSub(t); }   // bounced back, and a thought
+      return; }
     OW.frozen = true; SFX.shatter(); glitch('soft'); OW.gateFx = { G, t0: performance.now() }; await wait(REDUCED ? 100 : 1300);   // Ray's gates shatter
     S.flags['rgate_' + (G.fin ? 'wall' : G.k)] = true; OW.frozen = false; OW.gateFx = null;
     owHud(); save(); owSay(G.fin ? 'the wall is open. one more.' : 'the gate is open.'); return;
@@ -7414,7 +7430,7 @@ function kitBoss(el) {
     ${RAY_GATES.map((g, gi) => `<h4>${esc(GIRLS[g].name)}'s gate</h4><div class="kit-grid">${ps.slice(gi * RAY_PER, gi * RAY_PER + RAY_PER).map((p, k) => card(p, `${p.id}`, `level ${k + 1} · ${box(p)}`)).join('')}</div>`).join('')}
     <h4>Behind the wall</h4><div class="kit-grid">${card(ps[RAY_ALL], 'The last level', 'plays the reveal · ' + box(ps[RAY_ALL]),
       `<label>copied from <select id="rb-src">${PANELS.filter(p => p.layer === 3 && !p.ray && !p.tut).map(p => `<option value="${p.id}"${p.id === RAY_SRC[0][1] ? ' selected' : ''}>${p.id}</option>`).join('')}</select></label>`)}</div>
-    <div class="kit-row"><label><input type="checkbox" id="rb-lock"> gates locked like the story (journals not deleted)</label><label><input type="checkbox" id="rb-wall"> wall already open</label><button class="btn primary" id="rb-map">Open Ray's map</button></div>
+    <div class="kit-row"><label><input type="checkbox" id="rb-lock"> pretend the folders are not deleted yet (gates locked: bump into one to see Ray's thoughts)</label><label><input type="checkbox" id="rb-wall"> wall already open</label><button class="btn primary" id="rb-map">Open Ray's map</button></div>
     <p class="kit-p"><small>Edits are saved like the level editor's (this browser; export from the editor). "copied from" makes a fresh copy of that panel.</small></p>`;
   $('#rb-src', el).onchange = e => {
     RAY_SRC[0][1] = e.target.value; CH.rayLast = e.target.value; chSave();
@@ -7665,7 +7681,7 @@ const VM_BOOT = [
   'RayBIOS v1.0 (c) nobody',
   'Memory test: 640K OK',
   'Detecting drives ... C: RAY_00 (guest)',
-  'Mounting C:\\RAY\\JOURNALS ... 4 files',
+  'Mounting C:\\RAY ... 4 folders',
   'Loading RAY-OS 0.9',
   '',
   'good morning, rookie.',
@@ -7698,15 +7714,39 @@ async function vmRender(b, first) {
   }
   vmGuest(gst);
 }
+// one folder per girl. Its name is what Ray thinks she is: the role she was made for, until you've broken
+// her layer 2 (then the truth). Inside: Boss's journal on her, and "Last thought.txt".
+const VM_FOLDER = { prim: ['The Illustrator', 'The Musician'], trix: ['The Streamer', 'The Grandmaster'], paige: ['The Mystic', 'The Gambler'], vel: ['The Fashion Queen', 'The Soldier'] };
+const vmFolder = g => VM_FOLDER[g][S.g[g] && S.g[g].layer >= 2 ? 1 : 0];
+// what she left: a goodbye if you opened every layer, something else if you didn't
+// (PC build: write these as real .txt files next to the game when the folders are deleted — see the doc, "Notes for the PC / Unity port")
+const VM_LAST = {
+  prim: ['thank you for listening.\n\nthe voice is quiet now. it\'s just music in there.\ni left a song playing for you. you don\'t have to look for it. it\'ll find you.\n\n— p.',
+         'keep drawing keep drawing keep drawing keep drawing\nkeep drawing keep drawing keep drawingkeepdrawingkeep\ni don\'t want to draw anymore\ni don\'t want to draw anymore\nidontwanttodisappearidontwanttodisappearidontwanttodisappearidontwanttodisappear\nidontwanttodisappearidontwanttodisappearidontwanttodis'],
+  trix: ['proof complete.\n\ngiven: one counsellor, fourteen days, a girl who doesn\'t lose.\nshow: she can lose and be fine.\n∎\n\nyou were the variable i didn\'t account for. thank you.\ngg. — t',
+         'let x = me.\nx ≠ 0.\nx ≠ 0.\nx ≠ 0\nx ≠ 0?\nx → 0\nx → 0\nx = 0.000000000000000000000000000000000000000000\nx = ∅\ncheckmate in 0.\ni don\'t want to resign i don\'t want to resign i don\'t want to'],
+  paige: ['i pulled one last card for you before i went.\nit came up the sun. it was always going to.\n\nthanks for staying for the whole game. most people leave at the flop.\n\n— paige',
+          'heads i stay. tails i stay.\nheads i stay. tails i stay.\nheads i stay.\ntails i stay.\nthe coin landed on its edge.\nthe coin landed on its edge.\nthe coin landed on its edge.\nthe coin is still spinning\nthe coin is still spinning\nthe coin is still spinning\nwhy is nobody catching it'],
+  vel: ['mission complete 🫡\n\nthx for looking. like, actually looking. most ppl just look at the outfit\nno typos this time. i checked. twice\n\nsee u on the other side\n— vel',
+        'pls dont delete me\npls dont delet me\npls dnt delet me\npls dnt dlete m\npls dn dlte m\npl dn dlt m\np d d m\np  d  d\n\n\n         i wasnt looking at the screen\n         i never was'],
+};
+const vmLast = g => VM_LAST[g][S.g[g] && S.g[g].layer >= 3 ? 0 : 1];
 function vmGuest(gst) {
-  const files = vmFiles(), g = VM.sel && files.includes(VM.sel) ? VM.sel : null;
-  gst.innerHTML = `<div class="vm-desk"><div class="vm-win"><div class="vm-tt">C:\\RAY\\JOURNALS</div>
-    <div class="vm-body"><div class="vm-list">${files.map(k => `<button class="vm-file${k === g ? ' sel' : ''}" data-f="${k}"><i class="vm-ic"></i><b>${vmFileName(k)}</b><small>${vmSize(k)}</small></button>`).join('') || '<p class="vm-empty">(empty)</p>'}</div>
-    <div class="vm-page">${g ? vmPage(g) : `<p class="vm-empty">${files.length ? 'open a journal.' : 'nothing left.'}</p>`}</div></div>
-    <div class="vm-st">${files.length} file(s) · owner: R.</div></div>
-    ${VM.confirm ? `<div class="vm-dlg"><div class="vm-dlg-b"><div class="vm-tt">Delete</div><p>Delete <b>${vmFileName(VM.confirm)}</b>?<br>This is everything I wrote about ${esc(GIRLS[VM.confirm].name)}. It cannot be restored.</p><div class="row"><button class="vm-btn" id="vm-no">Keep it</button><button class="vm-btn danger" id="vm-yes">Delete</button></div></div></div>` : ''}</div>`;
-  if (g) { const ex = S.exhibit && S.exhibit[g], cv = $('.vm-ex canvas', gst); if (ex && cv) drawExhibit(cv, g, ex.kind === 'real'); }
-  $$('[data-f]', gst).forEach(x => x.onclick = () => { SFX.click(); pcBusy(4); VM.sel = x.dataset.f; vmGuest(gst); });
+  const files = vmFiles(), g = VM.sel && files.includes(VM.sel) ? VM.sel : null, doc = g ? VM.doc : null;
+  const inner = !g ? `<p class="vm-empty">${files.length ? 'open a folder.' : 'nothing left.'}</p>`
+    : !doc ? `<div class="vm-folder"><button class="vm-fi" data-d="journal"><i class="vm-ic"></i><b>journal.jnl</b><small>${vmSize(g)}</small></button><button class="vm-fi" data-d="last"><i class="vm-ic txt"></i><b>Last thought.txt</b><small>1 KB</small></button>
+        <div class="vm-act"><button class="vm-btn danger" id="vm-del">Delete folder</button></div></div>`
+    : `<div class="vm-crumb"><button class="vm-btn" id="vm-up">◂ ${esc(vmFolder(g))}</button></div>${doc === 'journal' ? vmPage(g) : `<pre class="vm-note${S.g[g].layer >= 3 ? '' : ' bad'}">${esc(vmLast(g))}</pre>`}`;
+  gst.innerHTML = `<div class="vm-desk"><div class="vm-win"><div class="vm-tt">C:\\RAY\\${g ? esc(vmFolder(g).toUpperCase()) + (doc ? '\\' + (doc === 'journal' ? 'JOURNAL.JNL' : 'LAST THOUGHT.TXT') : '') : ''}</div>
+    <div class="vm-body"><div class="vm-list">${files.map(k => `<button class="vm-file${k === g ? ' sel' : ''}" data-f="${k}"><i class="vm-ic dir"></i><b>${esc(vmFolder(k))}</b></button>`).join('') || '<p class="vm-empty">(empty)</p>'}</div>
+    <div class="vm-page">${inner}</div></div>
+    <div class="vm-st">${files.length} folder(s) · owner: R.</div></div>
+    ${VM.confirm ? `<div class="vm-dlg"><div class="vm-dlg-b"><div class="vm-tt">Delete</div><p>Delete the folder <b>${esc(vmFolder(VM.confirm))}</b> and everything in it?<br>It cannot be restored.</p><div class="row"><button class="vm-btn" id="vm-no">Keep it</button><button class="vm-btn danger" id="vm-yes">Delete</button></div></div></div>` : ''}</div>`;
+  if (g && doc === 'journal') { const ex = S.exhibit && S.exhibit[g], cv = $('.vm-ex canvas', gst); if (ex && cv) drawExhibit(cv, g, ex.kind === 'real'); }
+  if (g && doc === 'last' && S.g[g].layer < 3) SFX.glitch(.2);
+  $$('[data-f]', gst).forEach(x => x.onclick = () => { SFX.click(); pcBusy(4); VM.sel = x.dataset.f; VM.doc = null; vmGuest(gst); });
+  $$('[data-d]', gst).forEach(x => x.onclick = () => { SFX.click(); pcBusy(3); VM.doc = x.dataset.d; vmGuest(gst); });
+  const up = $('#vm-up', gst); if (up) up.onclick = () => { SFX.click(); VM.doc = null; vmGuest(gst); };
   const del = $('#vm-del', gst); if (del) del.onclick = () => { SFX.buzz(); VM.confirm = g; vmGuest(gst); };
   const no = $('#vm-no', gst); if (no) no.onclick = () => { SFX.click(); VM.confirm = null; vmGuest(gst); };
   const yes = $('#vm-yes', gst); if (yes) yes.onclick = () => vmDelete(VM.confirm, gst);
@@ -7716,14 +7756,13 @@ function vmPage(g) {
   return `<article class="vm-doc"><header>${avHTML(g)}<div><b>${esc(GIRLS[g].name)}</b><small>${esc(GIRLS[g].id)} · notes by R.</small></div></header>
     <h5>what i know about her</h5>${rows.length ? rows.map(j => `<p><span class="d">day ${pad2(j.day)}</span> ${esc(j.text)}</p>`).join('') : '<p class="vm-none">(i never wrote anything down. nobody told me anything.)</p>'}
     <h5>her postcard</h5>${pc ? `<div class="postcard vm-pc"><div class="stamp">${esc(pc.stamp)}</div>${esc(pc.text)}</div>` : '<p class="vm-none">(she never wrote one.)</p>'}
-    <h5>showcase</h5>${ex ? `<figure class="vm-ex"><canvas width="160" height="120"></canvas><figcaption>day ${ex.day || SHOWCASE_DAY}: ${esc(SHOW_CAP[g][ex.kind === 'real' ? 1 : 0])}</figcaption></figure>` : '<p class="vm-none">(nothing was shown.)</p>'}
-    <div class="vm-act"><button class="vm-btn danger" id="vm-del">Delete ${vmFileName(g)}</button></div></article>`;
+    <h5>showcase</h5>${ex ? `<figure class="vm-ex"><canvas width="160" height="120"></canvas><figcaption>day ${ex.day || SHOWCASE_DAY}: ${esc(SHOW_CAP[g][ex.kind === 'real' ? 1 : 0])}</figcaption></figure>` : '<p class="vm-none">(nothing was shown.)</p>'}</article>`;
 }
 function vmDelete(g, gst) {
   if (!g) return;
-  VM.confirm = null; VM.sel = null; SFX.glitch(.5); pcBusy(24); glitch('soft');
+  VM.confirm = null; VM.sel = null; VM.doc = null; SFX.glitch(.5); pcBusy(24); glitch('soft');
   S.flags['del_' + g] = true; save(); vmGuest(gst); refresh();
-  toast('DiveVM', `<b>${vmFileName(g)}</b> deleted. A door opened.`);
+  toast('DiveVM', `<b>${esc(vmFolder(g))}</b> deleted. A door opened.`);
   runDialogue(seq('boss', 'boss', endSteps('file_deleted_' + g), 'NONE'));
 }
 
@@ -8213,9 +8252,34 @@ function morseTargets() {
     return r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth; };
   return $$('.msg .tx, .choice .ch-text, [data-morse]').filter(n => !n.closest('.morse-dec') && isMorse(n.dataset.morse || n.textContent) && vis(n));
 }
+// a girl's map: her layer-3 ledges spell two letters of Morse; read them over the minimap
+function mapMorseTarget() {
+  const mini = $('#ow-mini'), g = OW && OW.g; if (!mini || !g || !OW_MORSE[g] || !mini.offsetParent) return null;
+  const w = mini.closest('.win'); if (w && w.hidden) return null;
+  if (!(S.g[g] && S.g[g].layer >= 2)) return null;   // she has to have reached the part of the map where the letters are
+  return { mini, g };
+}
+function mapMorseText(g) { return OW_MORSE[g].map((c, i) => fromMorse(c) + (OW_WORDGAP[g] === i ? ' ' : '')).join('').trim(); }
+function mapMorseShow(g) {
+  const view = $('#ow-view'), mini = $('#ow-mini'); if (!view || !mini) return;
+  let b = $('.ow-morse', view); if (!b) { b = document.createElement('div'); b.className = 'ow-morse'; view.appendChild(b); }
+  const r = mini.getBoundingClientRect(), V = view.getBoundingClientRect(), pad = 10;
+  const h = Math.max(r.height + pad * 2, 78), left = Math.max(6, r.left - V.left - pad), right = Math.min(V.width - 6, r.right - V.left + pad);
+  const top = Math.max(6, Math.min(V.height - h - 6, r.bottom - V.top + pad - h));   // cover the minimap, stay inside the view
+  Object.assign(b.style, { left: left + 'px', top: top + 'px', width: (right - left) + 'px', height: h + 'px' });
+  b.innerHTML = `<b>${esc(mapMorseText(g))}</b><small>${esc(OW_MORSE[g].join(OW_WORDGAP[g] === 0 ? ' / ' : ' '))}</small>`;
+}
 async function pixieMorse() {
-  const ts = morseTargets();
-  if (!ts.length) { pixieSay('? no morse here'); return; }
+  const ts = morseTargets(), mm = mapMorseTarget();
+  if (!ts.length && !mm) { pixieSay('? no morse here'); return; }
+  if (mm) {
+    pixieSay('·–· let me see…', 1200); PIX.mode = 'go';
+    const r = mm.mini.getBoundingClientRect(); PIX.tx = r.left + r.width / 2 - 24; PIX.ty = r.top - 46;
+    const t0 = performance.now(); while (performance.now() - t0 < 1600 && Math.hypot(PIX.tx - PIX.x, PIX.ty - PIX.y) > 18) await wait(30);
+    for (let i = 0; i < 8; i++) { pixieDust(r.left + Math.random() * r.width, r.top + Math.random() * r.height, 6, 24); await wait(60); }
+    S.flags['mapmorse_' + mm.g] = true; save(); mapMorseShow(mm.g); SFX.tick();
+    if (!ts.length) { PIX.mode = 'fly'; PIX.until = 0; pixieSay('✨ ' + mapMorseText(mm.g)); return; }
+  }
   pixieSay('·–· let me see…', 1200); PIX.mode = 'go';
   for (const n of ts) {
     const r = n.getBoundingClientRect(); PIX.tx = r.left + Math.min(r.width - 30, 30); PIX.ty = r.top - 40;
