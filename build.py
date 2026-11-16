@@ -7,7 +7,7 @@ packed inside index.html for offline play (opening the file directly)."""
 import base64, json, os, subprocess, sys  # needs openpyxl to read data/dialogue.xlsx
 ROOT = os.path.dirname(os.path.abspath(__file__))
 P = lambda *a: os.path.join(ROOT, *a)
-CSV = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal', 'act5_ending']
+CSV = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal', 'act5_ending', 'news']
 
 # game + the new panel engine + title/test chamber; main() runs last
 js = '\n'.join(open(P('src', f), encoding='utf-8').read() for f in ('game.js', 'panel_engine.js', 'world.js', 'ending.js', 'music.js', 'chamber.js', 'chamber_board.js', 'chamber_solution.js', 'chamber_3d.js', 'world_3d.js', 'extras.js', 'devkit.js', 'dlgedit.js', 'finale.js', 'apps2.js', 'editor.js')) + '\nmain();\n'

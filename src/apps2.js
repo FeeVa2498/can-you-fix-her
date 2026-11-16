@@ -75,24 +75,59 @@ const NEWS_SECTIONS = {
     ['Codes and ciphers, a short history', 'Armies have hidden their messages in hundreds of ways. Some are still in use today.'],
   ],
 };
+// the sheet "news" (dialogue.xlsx) wins over the lists above; they're only the fallback
+function newsRows(txt) {
+  if (!txt) return null; const rows = parseCSV(txt); const head = (rows[0] || []).map(h => h.trim().toLowerCase());
+  const out = rows.slice(1).map(r => Object.fromEntries(head.map((h, k) => [h, (r[k] || '').trim()]))).filter(r => r.tab && r.title);
+  return out.length ? out : null;
+}
+const newsSheet = () => (DD && DD.news) || null;
+function newsFront() { const N = newsSheet(); if (!N) return NEWS_DAYS; const f = N.filter(r => r.tab === 'front').sort((a, b) => (+a.day || 0) - (+b.day || 0)).map(r => [r.title, r.body, r.reply || r.title]); return f.length ? f : NEWS_DAYS; }
+function newsBriefs() { const N = newsSheet(); if (!N) return NEWS_BRIEF; const f = N.filter(r => r.tab === 'brief').sort((a, b) => (+a.day || 0) - (+b.day || 0)).map(r => r.title); return f.length ? f : NEWS_BRIEF; }
+function newsFiller() { const N = newsSheet(); const f = N ? N.filter(r => r.tab === 'filler').map(r => r.title) : []; return f.length ? f : NEWS_FILLER; }
+function newsTab(tab) {   // a section's stories; "day" = it shows up from that day on
+  const N = newsSheet(), d = S.day || 1;
+  const rows = N ? N.filter(r => r.tab === tab && (!r.day || +r.day <= d)).map(r => [r.title, r.body || '']) : (NEWS_SECTIONS[tab] || []);
+  return rows;
+}
+// the magazine's sections: [key, label, sticker, colour, tagline]
+const NEWS_TABS = [
+  ['front', 'Cover', '★', '#ff3d8f', ''], ['fashion', 'Fashion', '💅', '#ff7ac8', 'what everyone is wearing (and why)'], ['military', 'Military', '🎖', '#6b7a3a', 'gear · drills · field notes'],
+  ['music', 'Music', '🎧', '#8a5cff', 'turn it up'], ['games', 'Games', '🎮', '#00b4e6', 'gg, no re'], ['odds', 'Odds', '🎲', '#17a463', 'place your bets'],
+  ['travel', 'Travel', '✈', '#ff9a2e', 'go somewhere. anywhere.'], ['health', 'Health', '🩺', '#26b5a8', 'for body and brain'], ['tech', 'Tech', '💾', '#3a6cff', 'have you tried turning it off and on'],
+  ['classifieds', 'Classifieds', '✂', '#b8a17a', 'small print, big feelings'],
+];
 const NEWSIE = { tab: 'front' };
-const newsDay = () => clamp(S.day || 1, 1, NEWS_DAYS.length);
+const newsDay = () => clamp(S.day || 1, 1, newsFront().length);
 function openNews() {
   S.used = S.used || {}; S.used['Newsie.exe'] = true; S.newsRead = S.day; save();   // "read today" (Prim asks)
   const dk = $('#desktop');
-  openWin('news', { title: 'Newsie.exe', icon: 'news', w: Math.min(620, dk.clientWidth - 40), h: Math.min(560, dk.clientHeight - 30), x: 200, y: 24, skin: true, render: b => newsRender(b) });
+  openWin('news', { title: 'Newsie.exe', icon: 'news', w: Math.min(760, dk.clientWidth - 30), h: Math.min(580, dk.clientHeight - 20), x: 160, y: 14, skin: true, render: b => newsRender(b) });
 }
 function newsRender(b) {
-  const d = newsDay(), [hl, sub] = NEWS_DAYS[d - 1];
-  const briefs = [NEWS_BRIEF[d - 1], NEWS_FILLER[d % NEWS_FILLER.length], NEWS_FILLER[(d + 3) % NEWS_FILLER.length]];
-  const tabs = [['front', 'Headlines'], ['fashion', 'Fashion'], ['military', 'Military']];
-  const sec = NEWSIE.tab === 'front' ? `<div class="nw-front"><article class="nw-lead"><span class="nw-kick">BREAKING</span><h2>${esc(hl)}</h2><p class="nw-sub">${esc(sub)}</p>
-      <figure class="nw-photo"><canvas width="96" height="64" id="nw-cat"></canvas><figcaption>Our cat of the day. He has been asked for comment.</figcaption></figure></article>
-      <aside class="nw-side"><h6>In brief</h6>${briefs.map((t, i) => `<p class="nw-brief${i ? '' : ' first'}">${esc(t)}</p>`).join('')}<h6>Elsewhere</h6><button class="nw-go" data-t="fashion">Fashion ›</button><button class="nw-go" data-t="military">Military ›</button></aside></div>`
-    : `<div class="nw-sec ${NEWSIE.tab}">${NEWS_SECTIONS[NEWSIE.tab].map(([t, x], i) => `<article class="nw-art${i ? '' : ' big'}"><h3>${esc(t)}</h3><p>${esc(x)}</p></article>`).join('')}</div>`;
-  b.innerHTML = `<div class="nw"><header class="nw-mast"><b>NEWSIE</b><small>online edition · vol. 1 · day ${d}</small></header>
-    <nav class="nw-tabs">${tabs.map(([k, l]) => `<button class="nw-tab${NEWSIE.tab === k ? ' on' : ''}" data-t="${k}">${l}</button>`).join('')}</nav><div class="nw-body">${sec}</div></div>`;
-  $$('[data-t]', b).forEach(x => x.onclick = () => { SFX.click(); NEWSIE.tab = x.dataset.t; newsRender(b); });
+  const d = newsDay(), F = newsFront(), [hl, sub] = F[d - 1], tab = NEWS_TABS.find(t => t[0] === NEWSIE.tab) || NEWS_TABS[0];
+  const fill = newsFiller(), ticker = [newsBriefs()[d - 1], fill[d % fill.length], fill[(d + 2) % fill.length], fill[(d + 4) % fill.length]].filter(Boolean);
+  const by = '<span class="nz-by">by staff writer R.</span>';
+  const tickerHTML = `<div class="nz-ticker"><b>IN BRIEF</b><div class="nz-tk"><span>${ticker.map(esc).join(' ✦ ')} ✦ </span><span>${ticker.map(esc).join(' ✦ ')} ✦ </span></div></div>`;
+  let page;
+  if (tab[0] === 'front') {
+    const picks = ['travel', 'games', 'music', 'odds', 'health', 'tech'].map((k, i) => [k, newsTab(k)[(d + i) % Math.max(1, newsTab(k).length)]]).filter(x => x[1]).slice(d % 2, d % 2 + 4);
+    page = `<div class="nz-cover"><div class="nz-mast">Newsie<i>!</i></div><div class="nz-issue">ISSUE #${String(d).padStart(2, '0')} · DAY ${d} · FREE · 100% TRUE*</div>
+      <figure class="nz-pola"><canvas width="96" height="64" id="nw-cat"></canvas><figcaption>cat of the day ♡</figcaption><span class="nz-tape"></span></figure>
+      <div class="nz-hl"><span class="nz-burst">BREAKING!!</span><h2><mark>${esc(hl)}</mark></h2><p>${esc(sub)}</p>${by}</div>
+      <ul class="nz-lines">${picks.map(([k, s]) => { const T = NEWS_TABS.find(t => t[0] === k); return `<li><button data-t="${k}" style="--c:${T[3]}"><b>${T[2]} ${esc(T[1].toUpperCase())}</b> ${esc(s[0])} →</button></li>`; }).join('')}</ul>
+      <span class="nz-stk s1">NEW!</span><span class="nz-stk s2">*probably</span></div>`;
+  } else if (tab[0] === 'classifieds') {
+    page = `<div class="nz-sec nz-clas"><header class="nz-sh"><b>${tab[2]} ${esc(tab[1])}</b><small>${esc(tab[4])}</small></header>
+      <div class="nz-ads">${newsTab('classifieds').map(([t], i) => `<p class="nz-ad" style="--r:${((i * 7) % 5 - 2) * .5}deg">${esc(t)}</p>`).join('')}</div></div>`;
+  } else {
+    const rows = newsTab(tab[0]);
+    page = `<div class="nz-sec"><header class="nz-sh"><b>${tab[2]} ${esc(tab[1])}</b><small>${esc(tab[4])}</small></header>
+      <div class="nz-grid">${rows.map(([t, x], i) => `<article class="nz-card${i ? '' : ' lead'}" style="--r:${i ? ((i % 2 ? 1 : -1) * (.4 + (i % 3) * .3)) : 0}deg">${i ? '' : '<span class="nz-rib">COVER STORY</span>'}<h3>${esc(t)}</h3><p>${esc(x)}</p>${by}</article>`).join('')}</div></div>`;
+  }
+  b.innerHTML = `<div class="nz" style="--c:${tab[3]}"><div class="nz-page">${page}${tab[0] === 'front' ? tickerHTML : ''}</div>
+    <nav class="nz-tabs">${NEWS_TABS.map(([k, l, ic, c]) => `<button class="nz-tab${k === tab[0] ? ' on' : ''}" data-t="${k}" style="--c:${c}"><span>${ic}</span>${esc(l)}</button>`).join('')}</nav></div>`;
+  $$('[data-t]', b).forEach(x => x.onclick = () => { SFX.click(); NEWSIE.tab = x.dataset.t; newsRender(b); const pg = $('.nz-page', b); if (pg) pg.scrollTop = 0; });
   const cv = $('#nw-cat', b); if (cv) drawLoafCat(cv);
 }
 // a black-and-white cat, loafed (the front-page photo)
@@ -248,18 +283,18 @@ function morseDecode(n) {
 const PRIM_NEWS_RIGHT = ['{happy}...huh.', '{happy}that\'s nice. that\'s really nice.', '{shy}tell me tomorrow\'s too. if you want.'];
 const PRIM_NEWS_WRONG = ['{neutral}...that was days ago.', '{sad}you don\'t have to pretend. it\'s ok.'];
 function newsQuizStart() {
-  const d = newsDay(), others = NEWS_DAYS.map((_, i) => i).filter(i => i !== d - 1).sort(() => Math.random() - .5).slice(0, 2);
+  const F = newsFront(), d = newsDay(), others = F.map((_, i) => i).filter(i => i !== d - 1).sort(() => Math.random() - .5).slice(0, 2);
   S.tq = { kind: 'news', g: 'prim', opts: [d - 1, ...others].sort(() => Math.random() - .5), ans: d - 1 }; save(); tqRender();
 }
 function newsQuizRender() {
   const T = S.tq; liveViews(T.g).forEach(v => { const box = $('.chat-choices', v.root); if (!box) return;
-    box.innerHTML = `<div class="tq"><div class="tq-opts">${T.opts.map((i, k) => `<button class="choice tq-opt" data-o="${i}"><b>${'ABC'[k]}</b> ${esc(NEWS_DAYS[i][2])}</button>`).join('')}</div></div>`;
+    box.innerHTML = `<div class="tq"><div class="tq-opts">${T.opts.map((i, k) => `<button class="choice tq-opt" data-o="${i}"><b>${'ABC'[k]}</b> ${esc(newsFront()[i][2])}</button>`).join('')}</div></div>`;
     $$('.tq-opt', box).forEach(x => x.onclick = () => newsQuizAnswer(+x.dataset.o)); });
 }
 function newsQuizAnswer(i) {
   const T = S.tq; if (!T || T.kind !== 'news') return; S.tq = null;
   liveViews('prim').forEach(v => { const box = $('.chat-choices', v.root); if (box) box.innerHTML = ''; });
-  const m = { who: 'me', text: NEWS_DAYS[i][2], t: clockStr() }; S.logs.prim.push(m); appendMsg('prim', m);
+  const m = { who: 'me', text: newsFront()[i][2], t: clockStr() }; S.logs.prim.push(m); appendMsg('prim', m);
   const ok = i === T.ans; if (ok) { giveKeys('prim', 5); S.flags.prim_news_right = true; } else SFX.buzz();
   save(); runDialogue(seq('prim', 'prim', [{ lines: ok ? PRIM_NEWS_RIGHT : PRIM_NEWS_WRONG }], 'NONE'));
 }

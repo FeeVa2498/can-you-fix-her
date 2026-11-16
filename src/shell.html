@@ -1,7 +1,7 @@
 <title>Can You Fix Her</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Pixelify+Sans:wght@400;500;700&family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Caveat:wght@600&family=DotGothic16&family=Pixelify+Sans:wght@400;500;700&family=VT323&display=swap" rel="stylesheet">
 <style>
 /* Layout: a single-screen cute late-90s desktop (DIVE OS v2.4) — pastel pink/lavender patterned wallpaper, chunky outlined windows with candy title bars, pixel fonts. Deliberately one visual world (light only); stress states dirty it up with noise and desaturation. */
 :root{
@@ -1229,24 +1229,45 @@ body.reckon #app{animation:none}
 .mc-view{overflow:auto;padding:8px;display:flex;flex-direction:column}.mc-view pre{flex:1;margin:0;white-space:pre-wrap;font:12px/1.5 var(--mono)}
 .mc-act{display:flex;justify-content:flex-end;padding-top:6px}
 .mc-status{font-size:11px;color:var(--ink-soft)}
-/* ---- Newsie.exe ---- */
-.nw{display:flex;flex-direction:column;height:100%;background:#f7f2e6;color:#231c18;font-family:Georgia,'Times New Roman',serif;background-image:radial-gradient(rgba(0,0,0,.035) 1px,transparent 1px);background-size:3px 3px}
-.nw-mast{display:flex;align-items:baseline;justify-content:space-between;padding:10px 16px 6px;border-bottom:3px double #231c18}
-.nw-mast b{font:900 30px/1 Georgia,serif;letter-spacing:.12em}.nw-mast small{font:11px var(--mono);color:#6d6156;text-transform:uppercase;letter-spacing:.08em}
-.nw-tabs{display:flex;gap:0;border-bottom:1px solid #231c18;padding:0 10px}
-.nw-tab{border:0;background:none;font:bold 12px var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:7px 12px;color:#6d6156;cursor:pointer;border-bottom:3px solid transparent}
-.nw-tab.on{color:#231c18;border-bottom-color:#ff5fa2}.nw-tab[data-t=military].on{border-bottom-color:#6b7a3a}
-.nw-body{flex:1;min-height:0;overflow:auto;padding:12px 16px}
-.nw-front{display:grid;grid-template-columns:1fr 170px;gap:14px}
-.nw-kick{font:bold 10px var(--mono);letter-spacing:.2em;color:#c4002e}
-.nw-lead h2{font:900 30px/1.08 Georgia,serif;margin:4px 0 6px}.nw-sub{font-style:italic;color:#4a4038;margin:0 0 10px}
-.nw-photo{margin:0}.nw-photo canvas{width:100%;aspect-ratio:3/2;image-rendering:pixelated;border:1px solid #231c18;filter:grayscale(.2) contrast(1.05)}.nw-photo figcaption{font-size:11px;color:#6d6156;margin-top:3px}
-.nw-side{border-left:1px solid #231c18;padding-left:12px}.nw-side h6{font:bold 10px var(--mono);letter-spacing:.16em;text-transform:uppercase;margin:0 0 6px;border-bottom:1px solid #231c18;padding-bottom:3px}
-.nw-brief{font-size:10.5px;line-height:1.35;margin:0 0 8px;padding-bottom:6px;border-bottom:1px dotted #9b8f82;color:#3a322c}
-.nw-go{display:block;border:0;background:none;padding:2px 0;font:bold 12px Georgia,serif;cursor:pointer;color:#231c18}.nw-go:hover{color:#ff3d8f}
-.nw-sec{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}.nw-art{border-top:1px solid #231c18;padding-top:6px}.nw-art.big{grid-column:1/-1}
-.nw-art h3{font:900 17px/1.15 Georgia,serif;margin:0 0 4px}.nw-art.big h3{font-size:24px}.nw-art p{font-size:13px;line-height:1.45;margin:0}
-.nw-sec.fashion .nw-art h3{color:#d0257a}.nw-sec.military{--ink:#3b4220}.nw-sec.military .nw-art h3{color:#4b5a1f;font-family:var(--mono);text-transform:uppercase;letter-spacing:.04em;font-size:14px}.nw-sec.military .nw-art.big h3{font-size:18px}
+/* ---- Newsie.exe: a fun magazine ---- */
+.nz{display:flex;height:100%;background:#fff6fb;color:#22121c;font-family:Georgia,'Times New Roman',serif;--fun:'Bagel Fat One','Pixelify Sans',sans-serif;--hand:'Caveat',cursive}
+.nz-page{flex:1;min-width:0;overflow:auto;position:relative}
+.nz-tabs{flex:0 0 94px;display:flex;flex-direction:column;gap:3px;padding:8px 0 8px 0;background:#2a1430;overflow:auto}
+.nz-tab{display:flex;align-items:center;gap:5px;border:0;margin-left:6px;padding:6px 8px;border-radius:8px 0 0 8px;background:color-mix(in srgb,var(--c) 75%,#000 10%);color:#fff;font:bold 11px var(--mono);text-align:left;cursor:pointer;transform:translateX(8px);transition:transform .15s,filter .15s;filter:saturate(.75) brightness(.85)}
+.nz-tab span{font-size:14px;width:16px;text-align:center}.nz-tab:hover{transform:translateX(2px);filter:none}.nz-tab.on{transform:translateX(0);filter:none;background:var(--c);box-shadow:-3px 0 0 #fff inset}
+/* cover */
+.nz-cover{position:relative;min-height:calc(100% - 28px);padding:12px 18px 40px;background:var(--c);background-image:radial-gradient(rgba(255,255,255,.22) 1.5px,transparent 1.6px);background-size:10px 10px;color:#fff;overflow:hidden}
+.nz-mast{font:400 64px/0.9 var(--fun);letter-spacing:-.01em;color:#fff;text-shadow:4px 4px 0 #2a1430;-webkit-text-stroke:2px #2a1430}.nz-mast i{color:#ffe14d;font-style:normal}
+.nz-issue{font:bold 11px var(--mono);letter-spacing:.14em;margin:4px 0 10px;color:#2a1430;background:#ffe14d;display:inline-block;padding:2px 8px;transform:rotate(-1deg)}
+.nz-pola{position:absolute;right:18px;top:16px;width:200px;margin:0;background:#fff;padding:8px 8px 4px;transform:rotate(4deg);box-shadow:4px 6px 0 rgba(42,20,48,.35)}
+.nz-pola canvas{width:100%;aspect-ratio:3/2;image-rendering:pixelated;display:block}.nz-pola figcaption{font:600 18px var(--hand);color:#2a1430;text-align:center}
+.nz-tape{position:absolute;left:50%;top:-10px;width:70px;height:20px;transform:translateX(-50%) rotate(-6deg);background:rgba(255,240,170,.85)}
+.nz-hl{max-width:calc(100% - 230px);position:relative}.nz-burst{display:inline-block;font:400 15px var(--fun);color:#2a1430;background:#ffe14d;padding:4px 10px;border-radius:40% 60% 50% 50%;transform:rotate(-4deg);box-shadow:2px 2px 0 #2a1430}
+.nz-hl h2{font:400 34px/1.05 var(--fun);margin:8px 0 6px;color:#2a1430}.nz-hl mark{background:linear-gradient(transparent 55%,#fff 55%,#fff 92%,transparent 92%);color:#2a1430;padding:0 2px}
+.nz-hl p{font:italic 15px/1.4 Georgia,serif;color:#fff;margin:0 0 4px;text-shadow:1px 1px 0 rgba(42,20,48,.4)}
+.nz-by{display:block;font:10px var(--mono);letter-spacing:.06em;opacity:.7;margin-top:4px}
+.nz-lines{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:6px;max-width:calc(100% - 20px)}
+.nz-lines button{border:0;background:#fff;color:#2a1430;font:13px Georgia,serif;text-align:left;padding:6px 10px;border-left:8px solid var(--c);box-shadow:3px 3px 0 #2a1430;cursor:pointer;transition:transform .1s}.nz-lines button:hover{transform:translate(-1px,-1px)}
+.nz-lines b{font:400 12px var(--fun);color:var(--c);filter:brightness(.8);margin-right:4px}
+.nz-stk{position:absolute;font:600 22px var(--hand);color:#2a1430;pointer-events:none}.nz-stk.s1{right:34px;top:170px;background:#7dffb0;padding:2px 12px;border-radius:50%;transform:rotate(-12deg);box-shadow:2px 2px 0 #2a1430;font:400 16px var(--fun)}
+.nz-stk.s2{right:30px;top:236px;color:#fff;transform:rotate(-4deg);font-size:18px}
+.nz-ticker{position:sticky;left:0;right:0;bottom:0;z-index:3;display:flex;align-items:center;background:#2a1430;color:#fff;height:28px;overflow:hidden}
+.nz-ticker>b{flex:0 0 auto;font:400 12px var(--fun);background:#ffe14d;color:#2a1430;padding:0 10px;height:100%;display:grid;place-items:center;z-index:1}
+.nz-tk{display:flex;white-space:nowrap;animation:nztk 38s linear infinite;font:10px var(--mono);letter-spacing:.04em;opacity:.85}.nz-tk span{padding-right:20px}
+@keyframes nztk{to{transform:translateX(-50%)}}
+/* sections */
+.nz-sec{padding:0 16px 20px}
+.nz-sh{position:sticky;top:0;z-index:2;margin:0 -16px 12px;padding:12px 16px 10px;background:var(--c);color:#fff;display:flex;align-items:baseline;gap:12px;box-shadow:0 3px 0 #2a1430}
+.nz-sh b{font:400 30px/1 var(--fun);text-shadow:3px 3px 0 #2a1430}.nz-sh small{font:600 18px var(--hand);opacity:.95}
+.nz-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.nz-card{position:relative;background:#fff;border:2px solid #2a1430;border-radius:6px;padding:10px 12px;box-shadow:4px 4px 0 var(--c);transform:rotate(var(--r))}
+.nz-card.lead{grid-column:1/-1;background:color-mix(in srgb,var(--c) 14%,#fff);padding:14px 16px}
+.nz-card h3{font:400 18px/1.1 var(--fun);margin:0 0 6px;color:#2a1430}.nz-card.lead h3{font-size:26px}
+.nz-card p{font:13px/1.45 Georgia,serif;margin:0;color:#3a2a34}
+.nz-rib{position:absolute;right:-6px;top:-10px;font:400 11px var(--fun);background:#ffe14d;color:#2a1430;padding:3px 9px;border:2px solid #2a1430;transform:rotate(3deg)}
+.nz-clas{background:#f6efe0;min-height:100%}.nz-clas .nz-sh{color:#2a1430}.nz-clas .nz-sh b{text-shadow:2px 2px 0 #fff}
+.nz-ads{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.nz-ad{margin:0;padding:10px;border:2px dashed #6b5a44;background:#fffaf0;font:12px/1.4 'Courier New',monospace;color:#3a2e22;transform:rotate(var(--r))}
 /* ---- Pixie.exe ---- */
 #pixie{position:fixed;left:0;top:0;width:48px;height:48px;z-index:390;cursor:grab;touch-action:none;user-select:none;transition:opacity .4s}
 #pixie canvas{width:48px;height:48px;image-rendering:pixelated;filter:drop-shadow(0 0 6px rgba(255,200,240,.9));transition:transform .2s}

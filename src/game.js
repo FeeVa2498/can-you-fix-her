@@ -712,7 +712,7 @@ const ROOKIE = () => (S.player && S.player.name && S.player.name !== 'Newbie') ?
    On a web server the game reads data/*.csv fresh on every load;
    opened as a local file it uses the copy built into this page.
    ========================================================= */
-const CSV_FILES = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal', 'act5_ending'];
+const CSV_FILES = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal', 'act5_ending', 'news'];
 let DATA_EMPTY = 0; // blank placeholder rows (not written yet) are skipped quietly
 const CSV_EMBED = __CSV_EMBED__;
 const DATA_ISSUES = [];
@@ -932,6 +932,7 @@ function compileData(texts) {
     if (!r.text) DATA_EMPTY++;
     return { id: r.id || 'j' + r._row, kind, day: r.day || '', if: r.if || '', text: r.text || '' };
   }).filter(j => j.text);
+  d.news = newsRows(texts.news);   // Newsie.exe (src/apps2.js)
   return d;
 }
 function loadScript(src) { return new Promise((ok, no) => { const el = document.createElement('script'); el.src = src; el.onload = ok; el.onerror = no; document.head.appendChild(el); }); }

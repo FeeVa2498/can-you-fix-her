@@ -8,7 +8,7 @@
    and straight away with "Apply".
    ========================================================= */
 const DLG_KEY = 'cyfh_dlg_edits';
-const DLG_SHEETS = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal', 'act5_ending'];
+const DLG_SHEETS = ['session', 'morning', 'night_boss', 'night_index', 'night_lines', 'first_message', 'journal', 'act5_ending', 'news'];
 const DLG_LINE = ['type', 'who', 'emo', 'text'];                 // shown on every line
 const DLG_MORE = ['requires', 'effects', 'journal', 'note'];      // under "more"
 let DLG_BASE = null;                                              // the workbook's own text, before edits
