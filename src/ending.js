@@ -110,7 +110,7 @@ function rkEnd() {
   setTimeout(() => { bo.remove(); document.body.classList.remove('reckon'); endGame('reckoning'); }, REDUCED ? 300 : 900);
 }
 /* ---------- memories: still cutscenes; captions come by themselves (they can't be skipped) ---------- */
-const memHold = t => 1800 + String(t).length * 55;   // how long a line stays after it has typed out
+const memHold = t => 900 + String(t).length * 30;   // how long a line stays after it has typed out (was 1800 + 55 per character)
 function playMemory(k) {
   return new Promise(res => {
     const steps = endSteps('memory_' + k), lines = steps.flatMap(s => s.lines || []).map(l => Array.isArray(l) ? l[1] : l).map(t => String(t).replace(/^\{\w+\}/, ''));
@@ -125,7 +125,7 @@ function playMemory(k) {
       const cap = $('.mm-cap', el), line = lines[i]; cap.textContent = ''; await typeInto(cap, line); i++;
       setTimeout(next, memHold(line));   // no skipping: each line stays up, then the next comes by itself
     };
-    setTimeout(next, 2200);   // the title first
+    setTimeout(next, 1400);   // the title first
   });
 }
 // placeholder paintings (to be replaced by hand-drawn art: watercolor manga, pale washes, ink lines)
