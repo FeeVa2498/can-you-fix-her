@@ -633,7 +633,7 @@ function renderIcons() {
   if (SHOW_BIN) list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
   if (S.flags.rkFiles) list.push({ id: 'vm', label: 'DiveVM', ic: 'drive', fn: openVM, isNew: PLAYABLE.some(g => !S.flags['del_' + g]) });
   if (SHOW_BIN && S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
-  if (S.flags.chamber) { const keep = ['music', 'conv', 'fortune', 'news', 'pixie', 'profiles']; list.splice(0, list.length, ...list.filter(i => keep.includes(i.id))); }   // test chamber: every app, installed
+  if (S.flags.chamber) { const keep = ['music', 'conv', 'fortune', 'news', 'pixie', 'profiles', 'mbox']; list.splice(0, list.length, ...list.filter(i => keep.includes(i.id))); }   // test chamber: every app, installed
   const sig = JSON.stringify(list.map(i => [i.id, i.badge, i.isNew, i.label, i.ic, i.ping]));
   if (box.dataset.sig === sig) return; box.dataset.sig = sig;
   box.innerHTML = list.map(i => `<button class="dicon${i.isNew ? ' new' : ''}${i.ping ? ' ping' : ''}" data-id="${i.id}">${icon(i.ic)}<span>${esc(i.label)}</span>${i.badge ? `<span class="badge">${i.badge} new</span>` : ''}</button>`).join('');
@@ -1201,7 +1201,9 @@ function download(m, i = 0) {
 
 function openMBox() {
   openWin('mbox', {
-    title: 'MementoBox', icon: 'box', w: 520, h: 400, x: 210, y: 60, render: (b, rec) => {
+    title: 'MementoBox', icon: 'box', w: S.flags.chamber ? 760 : 520, h: S.flags.chamber ? 460 : 400, x: 210, y: 40, render: (b, rec) => {
+      // test chamber: a catalogue of every memento (layer 2 and its layer-3 upgrade, side by side)
+      if (S.flags.chamber) { b.innerHTML = `<div class="mbox">${memShown().flatMap(k => [k, MEM_UP[k]]).map(k => { const v = MEMENTOS[k]; return `<div class="mem bevel">${icon(v.ic)}<b>${esc(k)}</b><span>${esc(v.desc)}</span><small>from ${esc(v.from)} · ${v.up ? 'layer 3 (upgrade)' : 'layer 2'} · story only</small></div>`; }).join('')}</div>`; return; }
       const r = () => { b.innerHTML = `<div class="mbox">${memShown().map(k => [hasMem(MEM_UP[k]) ? MEM_UP[k] : k, MEMENTOS[hasMem(MEM_UP[k]) ? MEM_UP[k] : k]]).map(([k, v]) => hasMem(k) ? `<div class="mem bevel">${icon(v.ic)}<b>${esc(k)}</b><span>${esc(v.desc)}</span><small>from ${esc(v.from)} · active</small></div>` : `<div class="mem bevel empty">${icon('box')}<b>???.mem</b><small>empty slot</small></div>`).join('')}</div>`; };
       addUpd(rec, r); r();
     }
