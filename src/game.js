@@ -1861,7 +1861,10 @@ LOG  operator memory overwritten from
      inside the dream (unauthorised)
 LOG  operator now believes they are an
      "a counsellor on probation"
-LOG  persona "BOSS" holds admin rights`;
+LOG  persona "BOSS" holds admin rights
+
+note: time runs fast inside the dream.
+      days in here are hours out there.`;
 const JOURNAL_FALLBACK = {
   ending_few: 'You didn\'t tell me much.\nI made them. I gave them faces and\nprofiles and names. And I don\'t know\nwho they were. Nobody does now.',
   ending_many: 'I can\'t keep them. But I kept what you\ntold me about them. That has to count.',

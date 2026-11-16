@@ -360,8 +360,10 @@ const THANK_YOU = `doctor,
 
 this is the last page. it's for you, not about anyone.
 
-it was short. fourteen days, the way the clock in here counts them.
-but it was the first time anyone looked after me. not after ori. not after the girls. me.
+in here it felt like fourteen days. it wasn't. in here is only a dream.
+out there it was probably a few hours, while you sat by the bed.
+and before that, all the days you came to see me in that room.
+it was the first time anyone looked after me. not after ori. not after the girls. me.
 you asked me what my dream was. nobody had ever asked me that.
 
 thank you for every night you stayed. for the chair. for the dental plan joke.
