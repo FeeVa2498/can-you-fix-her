@@ -3,8 +3,8 @@
    jump to the big days, cutscenes, the boss's level, a gallery.
    Plus Boss's journal as a book: one page per girl.
    ========================================================= */
-const KIT_APPS = ['MusicBox.exe', 'UnitConv.exe', 'Fortune.exe', 'Atlas.exe'];
-const KIT_OPEN = { 'MusicBox.exe': () => openMusicBox(), 'UnitConv.exe': () => openConv(), 'Fortune.exe': () => openFortune(), 'Atlas.exe': () => openAtlas() };
+const KIT_APPS = ['MusicBox.exe', 'UnitConv.exe', 'Fortune.exe', 'Newsie.exe', 'Pixie.exe'];
+const KIT_OPEN = { 'MusicBox.exe': () => openMusicBox(), 'UnitConv.exe': () => openConv(), 'Fortune.exe': () => openFortune(), 'Newsie.exe': () => openNews(), 'Pixie.exe': () => PIX.on ? pixieOff() : pixieOn() };
 const KIT = { tab: 'apps', g: 'prim' };
 function openKit() {
   const dk = $('#desktop'), H = dk ? dk.clientHeight : 700;

@@ -6,11 +6,12 @@
 /* ---------- every app takes a moment to start (visual only: no work minutes) ---------- */
 const APP_BOOT = {
   'UnitConv.exe': ['conv', 'UnitConv 2.1 · loading conversion tables', 'loading crypto feed…'],
-  'Atlas.exe': ['atlas', 'Atlas · unfolding pages', 'tracing coastlines…'],
+  'Newsie.exe': ['news', 'Newsie · fetching today\'s edition', 'inking the front page…'],
+  'Pixie.exe': ['pixie', 'Pixie · waking her up', 'shaking off the sparkles…'],
   'Fortune.exe': ['tarot', 'Fortune · shuffling the deck', 'cutting the deck…'],
   'MusicBox.exe': ['note', 'MusicBox · warming up the EQ', 'spinning the disc…'],
 };
-const APP_WIN = { 'UnitConv.exe': 'conv', 'Atlas.exe': 'atlas', 'Fortune.exe': 'fortune', 'MusicBox.exe': 'music' };
+const APP_WIN = { 'UnitConv.exe': 'conv', 'Newsie.exe': 'news', 'Fortune.exe': 'fortune', 'MusicBox.exe': 'music' };
 function launchApp(name, open) {
   const wid = APP_WIN[name];
   if (wid && WINS[wid]) { open(); return; }                  // already running
@@ -123,6 +124,8 @@ function startTimedQ(id) {
 function tqRender() {
   const T = S.tq; if (!T) return;
   if (T.kind === 'tarot') return tarotRender();
+  if (T.kind === 'news') return newsQuizRender();
+  if (T.kind === 'morse') return morseQuizRender();
   const views = liveViews(T.g); if (!views.length) return;
   if (!T.until) T.until = Date.now() + TQ_SECS * 1000;
   views.forEach(v => {
@@ -155,7 +158,7 @@ function tqAnswer(v) {
   }
   const act = [];
   if (ok) {
-    const k = 3 + (Math.random() * 3 | 0), L = S.g[g].layer + 1;
+    const k = 5, L = S.g[g].layer + 1;   // a right answer: 5 keys
     S.g[g].bonusKeys = S.g[g].bonusKeys || {}; S.g[g].bonusKeys[L] = (S.g[g].bonusKeys[L] || 0) + k;
     SFX.item(); toast('Keys', `+${k} of ${esc(GIRLS[g].name)}'s keys (layer ${L})`);
   } else SFX.buzz();

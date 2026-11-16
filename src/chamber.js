@@ -52,7 +52,7 @@ let chGirl = 'prim';
 function openChamber() {
   S = fresh(); S.player = { name: 'tester', avatar: '' }; S.flags.chamber = true; S.flags.briefed = S.flags.briefStarted = S.flags.welcomeMail = true; S.phase = 'day';
   if (CH.rayLast) RAY_SRC[0][1] = CH.rayLast;
-  S.apps = ['MusicBox.exe', 'UnitConv.exe', 'Fortune.exe', 'Atlas.exe'];   // every app, as if installed
+  S.apps = ['MusicBox.exe', 'UnitConv.exe', 'Fortune.exe', 'Newsie.exe', 'Pixie.exe'];   // every app, as if installed
   PLAYABLE.forEach(g => { S.met[g] = true; });
   renderIcons();   // only the apps show on the chamber's desktop
   openWin('chamber', { title: 'Test chamber', icon: 'puzzle', w: 640, h: 500, x: 120, y: 20, render: (b, rec) => { addUpd(rec, () => renderChamber(b)); renderChamber(b); } });

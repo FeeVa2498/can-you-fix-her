@@ -167,6 +167,8 @@ function drawCracks() {
 
 /* ---------------- pixel icons ---------------- */
 const ICONS = {
+  news: '<rect x="4" y="5" width="22" height="22" rx="2" fill="#fbf6ea" stroke="#3a2d4a" stroke-width="2"/><rect x="7" y="8" width="16" height="4" fill="#3a2d4a"/><rect x="7" y="14" width="7" height="6" fill="#ff8cc6"/><path d="M16 15h7M16 18h7M7 23h16" stroke="#3a2d4a" stroke-width="1.6"/><rect x="24" y="9" width="4" height="16" rx="1" fill="#e6dccb" stroke="#3a2d4a" stroke-width="1.5"/>',
+  pixie: '<path d="M6 10q6-6 9 4q-7 4-9-4zM26 10q-6-6-9 4q7 4 9-4z" fill="#bfeaff" stroke="#6ab7d8" stroke-width="1.2"/><circle cx="16" cy="11" r="4" fill="#ffe2cf"/><path d="M12 10q4-6 8 0" fill="#ff9ccf"/><path d="M12 16h8l2 9H10z" fill="#ff9ccf"/><path d="M22 14l4-6" stroke="#c69cff" stroke-width="1.6"/><path d="M26 6l1 2 2 .5-2 .7-1 2-.6-2-2-.6 2-.6z" fill="#fff17a"/>',
   folder: '<rect x="3" y="8" width="11" height="4" fill="#ff8cc6"/><rect x="3" y="11" width="26" height="16" fill="#ffb3d9"/><rect x="3" y="11" width="26" height="2" fill="#ffe3f1"/>',
   folderlock: '<rect x="3" y="8" width="11" height="4" fill="#b693ef"/><rect x="3" y="11" width="26" height="16" fill="#d8c6f4"/><rect x="18" y="15" width="10" height="9" fill="#e2458f"/><rect x="20" y="12" width="6" height="4" fill="none" stroke="#e2458f" stroke-width="2"/>',
   chat: '<rect x="2" y="5" width="19" height="13" fill="#8fdcf7"/><rect x="5" y="18" width="4" height="4" fill="#8fdcf7"/><rect x="5" y="9" width="12" height="2" fill="#6b4a9e"/><rect x="5" y="13" width="8" height="2" fill="#6b4a9e"/><rect x="12" y="13" width="18" height="12" fill="#ff8cc6"/><rect x="23" y="25" width="4" height="4" fill="#ff8cc6"/><rect x="15" y="17" width="11" height="2" fill="#fff"/>',
@@ -325,7 +327,7 @@ function avHTML(who, cls = '', emo) {
 const nameOf = w => w === 'me' ? (S.player ? S.player.name : 'Newbie') : (WHO[w] ? WHO[w].name : w);
 function msgHTML(m) {
   if (m.who === 'sys') return `<div class="msg sys${m.del ? ' del' : ''}">${esc(m.text)}</div>`;
-  return `<div class="msg ${m.who === 'me' ? 'me' : m.who}">${avHTML(m.who, '', m.emo)}<div class="bub"><div class="meta"><b>${esc(nameOf(m.who))}</b><span>${m.t}</span></div><div class="tx">${esc(m.text)}</div></div></div>`;
+  return `<div class="msg ${m.who === 'me' ? 'me' : m.who}${m.en ? ' morse-dec-msg' : ''}">${avHTML(m.who, '', m.emo)}<div class="bub"><div class="meta"><b>${esc(nameOf(m.who))}</b><span>${m.t}</span></div>${m.en ? `<div class="morse-en">${esc(m.en)}</div>` : ''}<div class="tx">${esc(m.text)}</div></div></div>`;
 }
 const VIEWS = {};
 function mountChat(key, root, ch) {
@@ -463,7 +465,7 @@ function renderChoicesIn(v) {
     if (n && n.type === 'ANSWER') {
       el.innerHTML = n.choices.map((c, i) => {
         const reqs = reqList(c.requirements), miss = reqs.find(r => !r.ok);
-        if (miss) return `<button class="btn choice locked" disabled aria-label="Locked choice"><span class="k">${LOCK_SVG}</span><span class="lockbar">▒▒▒▒▒▒▒▒▒▒▒▒▒▒</span></button>`;
+        if (miss) return `<button class="btn choice locked" disabled aria-label="Locked choice"><span class="k">${LOCK_SVG}</span><span class="lockbar">Not enough knowledge</span></button>`;
         const chips = reqs.filter(r => !r.hide).map(r => `<span class="chip ok${r.app ? ' app' : ''}">✓ ${esc(r.label)}</span>`).join('');
         return `<button class="btn choice" data-i="${i}"><span class="k">${i + 1}</span><span class="ch-text">${esc(c.text)}</span>${chips ? `<span class="chips">${chips}</span>` : ''}</button>`;
       }).join('');
@@ -517,7 +519,8 @@ function doAction(a) {
   else if (a.action === 'SET_FLAG') S.flags[a.value] = true;
   else if (a.action === 'COIN_PICK') { if (S.session) S.session.pick = a.value; }
   else if (a.action === 'E4KEYS') { if (!S.flags.trix_e4_paid) { S.flags.trix_e4_paid = true; const k = 2 * (S.flags.trix_e4 || 0), L = S.g.trix.layer + 1; if (k) { S.g.trix.bonusKeys = S.g.trix.bonusKeys || {}; S.g.trix.bonusKeys[L] = (S.g.trix.bonusKeys[L] || 0) + k; SFX.item(); toast('Keys', `+${k} of Trix's keys (layer ${L})`); } } }
-  else if (a.action === 'QUIZ') { const id = a.value, go = () => { if (S.active || (S.queue && S.queue.length)) { setTimeout(go, 300); return; } if (id === 'trix_tarot') tarotStart(); else startTimedQ(id); }; setTimeout(go, 300); }
+  else if (a.action === 'QUIZ') { const id = a.value, go = () => { if (S.active || (S.queue && S.queue.length)) { setTimeout(go, 300); return; } if (id === 'trix_tarot') tarotStart(); else if (id === 'prim_news') newsQuizStart(); else if (id === 'vel_morse') morseQuizStart(); else startTimedQ(id); }; setTimeout(go, 300); }
+  else if (a.action === 'KEYS') { const g = S.active && S.active.ch; if (g && S.g[g]) giveKeys(g, a.value); }
   else if (a.action === 'UNSET_FLAG') delete S.flags[a.value];
   else if (a.action === 'SHOW') { S.show[a.value[0]] = a.value[1]; renderShowcase(); }
   else if (a.action === 'GLITCH') glitch(a.value || 'soft');
@@ -619,13 +622,14 @@ function renderIcons() {
   if (S.session) list.splice(3, 0, { id: 'ses', label: 'session_' + S.session.g + '.tmp', ic: 'tmp', fn: focusSessionChat, isNew: true });
   if (SPECIAL[S.day] === 'showcase' && S.phase === 'day') list.push({ id: 'show', label: 'Showcase.exe', ic: 'gallery', fn: openShowcase, isNew: PLAYABLE.filter(k => onSite(k) && met(k)).some(k => !S.show[k]) });
   if (S.apps.includes('UnitConv.exe')) list.push({ id: 'conv', label: 'UnitConv.exe', ic: 'conv', fn: () => launchApp('UnitConv.exe', openConv) });
-  if (S.apps.includes('Atlas.exe')) list.push({ id: 'atlas', label: 'Atlas.exe', ic: 'atlas', fn: () => launchApp('Atlas.exe', openAtlas) });
+  if (S.apps.includes('Newsie.exe')) list.push({ id: 'news', label: 'Newsie.exe', ic: 'news', fn: () => launchApp('Newsie.exe', openNews) });
+  if (S.apps.includes('Pixie.exe')) list.push({ id: 'pixie', label: 'Pixie.exe', ic: 'pixie', fn: () => PIX.on ? pixieOff() : launchApp('Pixie.exe', pixieOn), isNew: PIX.on });
   if (S.apps.includes('MusicBox.exe')) list.push({ id: 'music', label: 'MusicBox.exe', ic: 'note', fn: () => launchApp('MusicBox.exe', openMusicBox) });
   if (S.apps.includes('Fortune.exe')) list.push({ id: 'fortune', label: 'Fortune.exe', ic: 'tarot', fn: () => launchApp('Fortune.exe', openFortune) });
   list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
   if (S.flags.rkFiles) list.push({ id: 'vm', label: 'DiveVM', ic: 'drive', fn: openVM, isNew: PLAYABLE.some(g => !S.flags['del_' + g]) });
   if (S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
-  if (S.flags.chamber) { const keep = ['music', 'conv', 'fortune', 'atlas', 'profiles']; list.splice(0, list.length, ...list.filter(i => keep.includes(i.id))); }   // test chamber: every app, installed
+  if (S.flags.chamber) { const keep = ['music', 'conv', 'fortune', 'news', 'pixie', 'profiles']; list.splice(0, list.length, ...list.filter(i => keep.includes(i.id))); }   // test chamber: every app, installed
   const sig = JSON.stringify(list.map(i => [i.id, i.badge, i.isNew, i.label, i.ic, i.ping]));
   if (box.dataset.sig === sig) return; box.dataset.sig = sig;
   box.innerHTML = list.map(i => `<button class="dicon${i.isNew ? ' new' : ''}${i.ping ? ' ping' : ''}" data-id="${i.id}">${icon(i.ic)}<span>${esc(i.label)}</span>${i.badge ? `<span class="badge">${i.badge} new</span>` : ''}</button>`).join('');
@@ -759,7 +763,7 @@ function entries(rows) {
 }
 
 /* ---------- conditions: "know:prim_sea; day>=5; !flag:x; used:Atlas.exe|app:Atlas.exe" ---------- */
-const COND_HAS = ['know', 'flag', 'app', 'used', 'memento', 'item', 'met', 'gone', 'worked', 'special'];
+const COND_HAS = ['know', 'flag', 'app', 'used', 'memento', 'item', 'met', 'gone', 'worked', 'special', 'read'];
 const COND_VARS = ['day', 'quakes', 'kpi', 'patients', 'fixes', 'layers', 'sessions', 'special'];
 const condCache = {};
 function parseCond(str, file, row) {
@@ -815,6 +819,7 @@ function condAlt(a) {
     case 'gone': return !!(S.g[v] && S.g[v].gone);
     case 'worked': return (S.todayWorked || []).includes(v);
     case 'special': return (SPECIAL[S.day] || 'none') === v.toLowerCase();
+    case 'read': return v === 'news' && S.newsRead === S.day;   // read:news — opened Newsie.exe today
   }
   return false;
 }
@@ -843,6 +848,7 @@ function parseEffects(str, file, row) {
     else if (k === 'glitch') act.push({ action: 'GLITCH', value: v || 'soft' });
     else if (k === 'show' && /^\w+\s*=\s*\w+$/.test(v)) act.push({ action: 'SHOW', value: v.split(/\s*=\s*/) });
     else if (k === 'quiz' && v) act.push({ action: 'QUIZ', value: v });
+    else if (k === 'keys' && +v > 0) act.push({ action: 'KEYS', value: +v });   // keys:5 — keys for the girl you're talking to
     else if (k === 'e4keys') act.push({ action: 'E4KEYS' });   // Trix's Elite Four result: 2 keys per game she won   // starts a timed question when the talk ends (e.g. quiz:trix_tarot)
     else if (k === 'pause' && !isNaN(+v)) pause = +v;
     else dataIssue(file, row, `unknown effect "${tok}" (use know:, flag:, unflag:, journal:, probation, ping:, glitch, show:, pause:)`);
@@ -912,7 +918,8 @@ function compileData(texts) {
   }).filter(c => lines[c.id]);
   d.nightIdx.forEach((c, i) => c._i = i);
   d.nightIdx.sort((a, b) => a.order - b.order || a._i - b._i);
-  Object.keys(lines).forEach(id => { if (!d.nightIdx.some(c => c.id === id)) dataIssue('night_lines', lines[id]._row, `"${id}" is not listed in night_index, so it never plays`); });
+  Object.keys(lines).forEach(id => { if (!d.nightIdx.some(c => c.id === id || id.startsWith(c.id + '_')))   // vel_morse_yes: a follow-up the code plays
+ dataIssue('night_lines', lines[id]._row, `"${id}" is not listed in night_index, so it never plays`); });
   d.night = lines;
   d.first = compileEntries('first_message', texts.first_message, ['girl', 'day', 'if']);
   d.first.forEach(e => e.girl = e.girl.toLowerCase());
@@ -1110,7 +1117,7 @@ const MEMENTOS = {   // every memento does something in her memories; layer 2 gi
 };
 const REWARD = {
   prim: {
-    1: { subject: 'thank you', body: 'counsellor,\n\nthank you for today. it felt like taking off a coat that was never mine.\ni wanted to give you something. i don\'t have anything yet. i\'ll find something.\n\n— prim', atts: [] },   // TODO: Prim's layer-1 app (proposal pending)
+    1: { subject: 'a little friend', body: 'counsellor,\n\nthank you for today. it felt like taking off a coat that was never mine.\nboss wanted me to draw cute things. so i drew a fairy. then she wouldn\'t stay on the page.\nshe\'s yours now. she likes to help. click her.\n\n— prim', atts: [{ kind: 'app', name: 'Pixie.exe' }] },
     2: { subject: 'something i traced', body: 'i kept the tracing paper. if a line goes wrong you just lift it off and start that bit again.\nyou don\'t have to get everything right the first time. i never do.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
     3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you once. not traced. drew. it was bad. i tore it up.\nmaybe i\'ll draw you again. maybe.\n\n— p.', atts: [] },
   },
@@ -1125,13 +1132,13 @@ const REWARD = {
     3: { subject: 'stay', body: 'you didn\'t leave halfway.\nnobody ever didn\'t leave halfway.\n\n— p', atts: [] },
   },
   vel: {
-    1: { subject: 'maps r life', body: 'omg u dont even have a MAP?? every soldier needs a map\nprim said she traced this one. its so pretty. dont tell her i cried\n\n— vel 🫡', atts: [{ kind: 'app', name: 'Atlas.exe' }] },
+    1: { subject: 'news 4 u', body: 'boss told me to read this 4 fashion news. like a good fashion queen 💅\nbut it has a military section. guns, gear, camo, all of it. so i kept reading lol\nu should read it too. its like a window. to outside\n\n— vel 🫡', atts: [{ kind: 'app', name: 'Newsie.exe' }] },
     2: { subject: 'dog tag', body: 'my dog tag. its fake obvs lol\nwear it in my head. u walk lighter w/ it. trust\n\n— vel', atts: [{ kind: 'mem', name: 'dog_tag.mem' }] },
     3: { subject: 'mission complete', body: 'all clear.\nthx for not giving up on the gray days.\n\n— v', atts: [] },
   },
 };
 
-const APPICON = { 'Atlas.exe': 'atlas', 'UnitConv.exe': 'conv', 'MusicBox.exe': 'note', 'Fortune.exe': 'tarot' };
+const APPICON = { 'Newsie.exe': 'news', 'Pixie.exe': 'pixie', 'UnitConv.exe': 'conv', 'MusicBox.exe': 'note', 'Fortune.exe': 'tarot' };
 function sendMail(m) {
   m.id = 'm' + S.mail.length; m.read = false; m.day = S.day; m.t = clockStr();
   if (m.att) { m.atts = [m.att]; delete m.att; }
