@@ -626,9 +626,10 @@ function renderIcons() {
   if (S.apps.includes('Pixie.exe')) list.push({ id: 'pixie', label: 'Pixie.exe', ic: 'pixie', fn: () => PIX.on ? pixieOff() : launchApp('Pixie.exe', pixieOn), isNew: PIX.on });
   if (S.apps.includes('MusicBox.exe')) list.push({ id: 'music', label: 'MusicBox.exe', ic: 'note', fn: () => launchApp('MusicBox.exe', openMusicBox) });
   if (S.apps.includes('Fortune.exe')) list.push({ id: 'fortune', label: 'Fortune.exe', ic: 'tarot', fn: () => launchApp('Fortune.exe', openFortune) });
-  list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
+  const SHOW_BIN = false;   // Recycle Bin and the locked personal_log.txt: hidden for now (the code stays)
+  if (SHOW_BIN) list.push({ id: 'bin', label: 'Recycle Bin', ic: 'trash', fn: openBin });
   if (S.flags.rkFiles) list.push({ id: 'vm', label: 'DiveVM', ic: 'drive', fn: openVM, isNew: PLAYABLE.some(g => !S.flags['del_' + g]) });
-  if (S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
+  if (SHOW_BIN && S.flags.logRestored) list.push({ id: 'log', label: 'personal_log.txt', ic: 'lockdoc', fn: openLog });
   if (S.flags.chamber) { const keep = ['music', 'conv', 'fortune', 'news', 'pixie', 'profiles']; list.splice(0, list.length, ...list.filter(i => keep.includes(i.id))); }   // test chamber: every app, installed
   const sig = JSON.stringify(list.map(i => [i.id, i.badge, i.isNew, i.label, i.ic, i.ping]));
   if (box.dataset.sig === sig) return; box.dataset.sig = sig;

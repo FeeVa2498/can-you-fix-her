@@ -147,7 +147,7 @@ function drawLoafCat(cv) {
 /* ---------------- Pixie.exe: a fairy that lives on the desktop ---------------- */
 const PIX = { on: false, el: null, x: 300, y: 200, tx: 300, ty: 200, vx: 0, vy: 0, mode: 'fly', raf: 0, t: 0, until: 0, menu: null };
 const PIX_EMOTES = [['wave', '👋', 'Wave'], ['sparkle', '✨', 'Sparkle'], ['twirl', '🌀', 'Twirl'], ['heart', '💖', 'Heart'], ['nap', '💤', 'Nap'], ['morse', '·–', 'Morse Decypher']];
-function pixieBounds() { const r = $('#desktop').getBoundingClientRect(); return { l: r.left + 20, t: r.top + 20, r: r.right - 60, b: r.bottom - 70 }; }
+function pixieBounds() { const r = $('#desktop').getBoundingClientRect(); return { l: r.left + 20, t: r.top + 20, r: r.right - 110, b: r.bottom - 120 }; }
 function pixieOn() {
   if (PIX.on) return; PIX.on = true;
   const el = document.createElement('div'); el.id = 'pixie'; el.innerHTML = `<canvas width="24" height="24"></canvas><div class="px-say"></div>`; document.body.appendChild(el); PIX.el = el;
@@ -156,7 +156,7 @@ function pixieOn() {
   el.addEventListener('pointerdown', e => { e.preventDefault(); el.setPointerCapture(e.pointerId); down = { x: e.clientX, y: e.clientY, t: performance.now(), drag: false }; });
   el.addEventListener('pointermove', e => { if (!down) return;
     if (!down.drag && (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 5 || performance.now() - down.t > 220)) { down.drag = true; pixieMenu(false); PIX.mode = 'held'; el.classList.add('held'); }
-    if (down.drag) { PIX.x = e.clientX - 22; PIX.y = e.clientY - 18; } });
+    if (down.drag) { PIX.x = e.clientX - 48; PIX.y = e.clientY - 40; } });
   el.addEventListener('pointerup', () => { if (!down) return; const d = down; down = null; el.classList.remove('held');
     if (d.drag) { PIX.mode = 'fly'; PIX.tx = PIX.x; PIX.ty = PIX.y; PIX.until = performance.now() + 1500; SFX.pop(); }
     else pixieMenu(!PIX.menu); });
@@ -171,19 +171,20 @@ function pixieStep(now) {
   if (PIX.mode === 'fly' && !PIX.menu) {
     if (now > PIX.until || Math.hypot(PIX.tx - PIX.x, PIX.ty - PIX.y) < 8) { PIX.tx = B.l + Math.random() * (B.r - B.l); PIX.ty = B.t + Math.random() * (B.b - B.t); PIX.until = now + 3000 + Math.random() * 4000; }
   }
-  if (PIX.mode === 'fly' || PIX.mode === 'go') {
-    const acc = PIX.mode === 'go' ? .01 : .0025, ax = (PIX.tx - PIX.x) * acc, ay = (PIX.ty - PIX.y) * acc;
+  if (PIX.menu && PIX.mode === 'fly') { PIX.vx = PIX.vy = 0; }   // menu open: she holds still so the bubbles can be clicked
+  else if (PIX.mode === 'fly' || PIX.mode === 'go') {
+    const acc = PIX.mode === 'go' ? .008 : .0014, ax = (PIX.tx - PIX.x) * acc, ay = (PIX.ty - PIX.y) * acc;
     PIX.vx = (PIX.vx + ax) * .93; PIX.vy = (PIX.vy + ay) * .93;
-    const sp = Math.hypot(PIX.vx, PIX.vy), max = PIX.mode === 'go' ? 16 : 3.2; if (sp > max) { PIX.vx *= max / sp; PIX.vy *= max / sp; }
+    const sp = Math.hypot(PIX.vx, PIX.vy), max = PIX.mode === 'go' ? 11 : 1.7; if (sp > max) { PIX.vx *= max / sp; PIX.vy *= max / sp; }
     PIX.x += PIX.vx; PIX.y += PIX.vy;
   }
   if (PIX.mode !== 'held') { PIX.x = clamp(PIX.x, B.l - 10, B.r + 10); PIX.y = clamp(PIX.y, B.t - 10, B.b + 10); }
-  const bob = PIX.mode === 'nap' ? 0 : Math.sin(now / 260) * 4;
+  const bob = PIX.mode === 'nap' || PIX.menu ? 0 : Math.sin(now / 320) * 6;
   el.style.transform = `translate(${PIX.x}px,${PIX.y + bob}px)`;
   el.classList.toggle('left', PIX.vx < -.3);
   if ((now / 110 | 0) !== PIX.t) { PIX.t = now / 110 | 0; pixieDraw($('canvas', el), PIX.t % 2, PIX.mode === 'nap'); }
-  if (PIX.mode !== 'nap' && Math.random() < (PIX.mode === 'go' ? .5 : .08)) pixieDust(PIX.x + 20, PIX.y + 26 + bob, 1);
-  if (PIX.menu) PIX.menu.style.transform = `translate(${PIX.x + 22}px,${PIX.y + 20}px)`;
+  if (PIX.mode !== 'nap' && Math.random() < (PIX.mode === 'go' ? .5 : .08)) pixieDust(PIX.x + 44, PIX.y + 64 + bob, 1);
+  if (PIX.menu) PIX.menu.style.transform = `translate(${PIX.x + 48}px,${PIX.y + 46}px)`;
 }
 function pixieDraw(cv, f, sleep) {
   const x = cv.getContext('2d'); x.clearRect(0, 0, 24, 24); const p = (a, b, w, h, c) => { x.fillStyle = c; x.fillRect(a, b, w, h); };
@@ -207,7 +208,7 @@ function pixieMenu(open) {
   if (PIX.menu) { PIX.menu.remove(); PIX.menu = null; document.removeEventListener('pointerdown', pixieMenuAway, true); }
   if (!open || !PIX.el) return;
   const m = document.createElement('div'); m.id = 'px-menu';
-  m.innerHTML = PIX_EMOTES.map(([k, e, name], i) => { const a = -Math.PI / 2 + i * Math.PI * 2 / PIX_EMOTES.length; return `<button class="px-b${k === 'morse' ? ' morse' : ''}" data-e="${k}" style="--x:${Math.cos(a) * 64}px;--y:${Math.sin(a) * 64}px;--d:${i * 40}ms" aria-label="${name}">${e}<span class="px-tip">${name}</span></button>`; }).join('');
+  m.innerHTML = PIX_EMOTES.map(([k, e, name], i) => { const a = -Math.PI / 2 + i * Math.PI * 2 / PIX_EMOTES.length; return `<button class="px-b${k === 'morse' ? ' morse' : ''}" data-e="${k}" style="--x:${Math.cos(a) * 92}px;--y:${Math.sin(a) * 92}px;--d:${i * 40}ms" aria-label="${name}">${e}<span class="px-tip">${name}</span></button>`; }).join('');
   document.body.appendChild(m); PIX.menu = m; SFX.pop();
   $$('.px-b', m).forEach(b => b.onclick = e => { e.stopPropagation(); pixieMenu(false); pixieEmote(b.dataset.e); });
   setTimeout(() => document.addEventListener('pointerdown', pixieMenuAway, true), 0);
@@ -217,9 +218,9 @@ async function pixieEmote(k) {
   const el = PIX.el; if (!el) return; SFX.click();
   el.classList.remove('e-wave', 'e-twirl', 'e-heart');
   if (k === 'wave') { el.classList.add('e-wave'); pixieSay('👋 hi!'); }
-  else if (k === 'sparkle') { pixieSay('✨'); for (let i = 0; i < 4; i++) { pixieDust(PIX.x + 20, PIX.y + 18, 10, 50); await wait(120); } }
+  else if (k === 'sparkle') { pixieSay('✨'); for (let i = 0; i < 4; i++) { pixieDust(PIX.x + 48, PIX.y + 40, 12, 90); await wait(120); } }
   else if (k === 'twirl') { el.classList.add('e-twirl'); pixieSay('🌀 wheee'); }
-  else if (k === 'heart') { el.classList.add('e-heart'); pixieSay('💖'); for (let i = 0; i < 5; i++) { const h = document.createElement('i'); h.className = 'px-heart'; h.textContent = '♥'; h.style.left = (PIX.x + 10 + Math.random() * 24) + 'px'; h.style.top = (PIX.y) + 'px'; document.body.appendChild(h); setTimeout(() => h.remove(), 1500); await wait(140); } }
+  else if (k === 'heart') { el.classList.add('e-heart'); pixieSay('💖'); for (let i = 0; i < 5; i++) { const h = document.createElement('i'); h.className = 'px-heart'; h.textContent = '♥'; h.style.left = (PIX.x + 24 + Math.random() * 48) + 'px'; h.style.top = (PIX.y) + 'px'; document.body.appendChild(h); setTimeout(() => h.remove(), 1500); await wait(140); } }
   else if (k === 'nap') { PIX.mode = 'nap'; pixieSay('💤 z z z', 4000); await wait(4200); if (PIX.mode === 'nap') { PIX.mode = 'fly'; PIX.until = 0; } }
   else if (k === 'morse') await pixieMorse();
   setTimeout(() => el.classList.remove('e-wave', 'e-twirl', 'e-heart'), 1200);
@@ -253,7 +254,7 @@ async function pixieMorse() {
   if (!ts.length && !mm) { pixieSay('? no morse here'); return; }
   if (mm) {
     pixieSay('·–· let me see…', 1200); PIX.mode = 'go';
-    const r = mm.mini.getBoundingClientRect(); PIX.tx = r.left + r.width / 2 - 24; PIX.ty = r.top - 46;
+    const r = mm.mini.getBoundingClientRect(); PIX.tx = r.left + r.width / 2 - 48; PIX.ty = r.top - 92;
     const t0 = performance.now(); while (performance.now() - t0 < 1600 && Math.hypot(PIX.tx - PIX.x, PIX.ty - PIX.y) > 18) await wait(30);
     for (let i = 0; i < 8; i++) { pixieDust(r.left + Math.random() * r.width, r.top + Math.random() * r.height, 6, 24); await wait(60); }
     S.flags['mapmorse_' + mm.g] = true; save(); mapMorseShow(mm.g); SFX.tick();
@@ -261,7 +262,7 @@ async function pixieMorse() {
   }
   pixieSay('·–· let me see…', 1200); PIX.mode = 'go';
   for (const n of ts) {
-    const r = n.getBoundingClientRect(); PIX.tx = r.left + Math.min(r.width - 30, 30); PIX.ty = r.top - 40;
+    const r = n.getBoundingClientRect(); PIX.tx = r.left + Math.min(r.width - 60, 30); PIX.ty = r.top - 84;
     const t0 = performance.now(); while (performance.now() - t0 < 1400 && Math.hypot(PIX.tx - PIX.x, PIX.ty - PIX.y) > 18) await wait(30);
     for (let i = 0; i < 4; i++) { pixieDust(r.left + Math.random() * r.width, r.top - 6, 6, 20); await wait(60); }
     morseDecode(n); SFX.tick(); await wait(120);
