@@ -195,6 +195,10 @@ const ICONS = {
   soul: '<circle cx="16" cy="16" r="12" fill="#ff8cc6"/><path d="M16 4a12 12 0 0 0 0 24a6 6 0 0 1 0-12a6 6 0 0 0 0-12z" fill="#8fdcf7"/><circle cx="16" cy="10" r="2" fill="#ff8cc6"/><circle cx="16" cy="22" r="2" fill="#8fdcf7"/>',
   tmp: '<rect x="6" y="3" width="20" height="26" fill="#fff"/><rect x="6" y="3" width="20" height="6" fill="#ff8cc6"/><path d="M10 14h12M10 18h9M10 22h11" stroke="#e2458f" stroke-width="2" stroke-dasharray="2 2"/>',
   charm: '<path d="M16 28L5 17Q1 12 5 8T16 9Q22 4 27 8T27 17Z" fill="#ff8cc6"/><rect x="10" y="10" width="4" height="3" fill="#fff"/><rect x="15" y="2" width="2" height="6" fill="#ffd86e"/>',
+  repeat: '<rect x="4" y="6" width="24" height="20" rx="2" fill="#fff8fc" stroke="#6b4a9e" stroke-width="1.5"/><path d="M7 11h18M7 14h18M7 17h18M7 20h18" stroke="#cdb6ec" stroke-width="1"/><rect x="9" y="10" width="2" height="12" fill="#6b4a9e"/><rect x="12" y="10" width="1" height="12" fill="#6b4a9e"/><circle cx="15.5" cy="14.5" r="1.2" fill="#ff5fa8"/><circle cx="15.5" cy="17.5" r="1.2" fill="#ff5fa8"/><ellipse cx="21" cy="18" rx="2" ry="1.5" fill="#6b4a9e"/><rect x="22.5" y="11" width="1" height="7" fill="#6b4a9e"/>',
+  chessclock: '<rect x="3" y="11" width="26" height="15" rx="2" fill="#6b4a9e"/><circle cx="10" cy="18.5" r="5" fill="#fff8fc"/><circle cx="22" cy="18.5" r="5" fill="#fff8fc"/><path d="M10 18.5V15M10 18.5l2 1.5M22 18.5V15.5M22 18.5l-2.5 1" stroke="#4a2d6e" stroke-width="1.4"/><rect x="7" y="7" width="6" height="4" fill="#ff4d5e"/><rect x="19" y="9" width="6" height="2" fill="#cdb6ec"/>',
+  loaded: '<path d="M16 2l12 7v14l-12 7-12-7V9z" fill="#b48cff"/><path d="M16 2l12 7-12 7L4 9z" fill="#d8c6f4"/><path d="M16 16v14" stroke="#6b4a9e" stroke-width="1.2"/><text x="16" y="12" font-size="7" font-family="monospace" font-weight="bold" text-anchor="middle" fill="#4a2d6e">20</text><circle cx="22" cy="21" r="2.2" fill="#ff4d5e"/>',
+  compass: '<circle cx="16" cy="16" r="12" fill="#c9b27a" stroke="#6b5a33" stroke-width="2"/><circle cx="16" cy="16" r="9" fill="#fff8e8"/><path d="M16 8l3 8-3 8-3-8z" fill="#ff4d5e"/><path d="M16 16l3 0-3 8-3-8z" fill="#4a2d6e"/><circle cx="16" cy="16" r="1.5" fill="#6b5a33"/>',
   hourglass: '<rect x="7" y="3" width="18" height="3" fill="#b693ef"/><rect x="7" y="26" width="18" height="3" fill="#b693ef"/><path d="M9 6h14l-6 10 6 10H9l6-10z" fill="#f5eeff"/><path d="M12 22h8l-4-5z" fill="#ffd86e"/>',
   thread: '<rect x="9" y="6" width="14" height="20" fill="#ff5fa8"/><rect x="7" y="4" width="18" height="3" fill="#c7a17a"/><rect x="7" y="25" width="18" height="3" fill="#c7a17a"/><path d="M9 10h14M9 14h14M9 18h14M9 22h14" stroke="#e2458f" stroke-width="1"/><path d="M23 16q6 2 3 8" stroke="#ff5fa8" stroke-width="2" fill="none"/>',
   note: '<rect x="6" y="4" width="20" height="24" rx="10" fill="#c9d6f2"/><rect x="8" y="7" width="16" height="9" fill="#3a2a6e"/><rect x="10" y="12" width="2" height="3" fill="#ff8cc6"/><rect x="13" y="10" width="2" height="5" fill="#8fdcf7"/><rect x="16" y="9" width="2" height="6" fill="#ff8cc6"/><rect x="19" y="11" width="2" height="4" fill="#8fdcf7"/><circle cx="16" cy="22" r="3" fill="#ff5fa8"/>',
@@ -1110,32 +1114,39 @@ function startNightChat(g) {
 
 /* ---------------- mail, apps, mementos ---------------- */
 // one reward per gate: layer 1 → her software, layer 2 → her memento (it does something), layer 3 → a letter. All arrive at night.
-const MEMENTOS = {   // every memento does something in her memories; layer 2 gifts only
+const MEMENTOS = {   // every memento does something in her memories. layer 2 → her memento, layer 3 → its upgrade (same slot)
   'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): 20 a day. Undo is free, but time already spent stays spent.' },
-  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Reset costs no time.' },
+  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Resetting a memory costs no time, 10 times a day.' },
   'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five costs no time. Roll with it.' },
   'dog_tag.mem': { ic: 'tag', from: 'Vel', desc: 'Walking on a map costs half: every other step is free.' },
+  // layer 3: the same gift, as she really is (replaces the layer-2 one in MementoBox; the old name still counts)
+  'repeat_sign.mem': { ic: 'repeat', from: 'Prim', up: 'tracing_paper.mem', desc: 'Undo in memories: 50 a day, and each undo gives back the minute that step cost.' },
+  'chess_clock.mem': { ic: 'chessclock', from: 'Trix', up: 'hourglass.mem', desc: 'Resetting a memory never costs time.' },
+  'loaded_d20.mem': { ic: 'loaded', from: 'Paige', up: 'lucky_d20.mem', desc: 'One input in three costs no time. It was always loaded.' },
+  'field_compass.mem': { ic: 'compass', from: 'Vel', up: 'dog_tag.mem', desc: 'Walking on a map costs nothing.' },
 };
+const MEM_UP = Object.fromEntries(Object.entries(MEMENTOS).filter(([, v]) => v.up).map(([k, v]) => [v.up, k]));   // base → upgrade
+const memShown = () => Object.keys(MEMENTOS).filter(k => !MEMENTOS[k].up);   // one slot per girl: show the upgrade once you have it
 const REWARD = {
   prim: {
     1: { subject: 'a little friend', body: 'counsellor,\n\nthank you for today. it felt like taking off a coat that was never mine.\nboss wanted me to draw cute things. so i drew a fairy. then she wouldn\'t stay on the page.\nshe\'s yours now. she likes to help. click her.\n\n— prim', atts: [{ kind: 'app', name: 'Pixie.exe' }] },
     2: { subject: 'something i traced', body: 'i kept the tracing paper. if a line goes wrong you just lift it off and start that bit again.\nyou don\'t have to get everything right the first time. i never do.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
-    3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you once. not traced. drew. it was bad. i tore it up.\nmaybe i\'ll draw you again. maybe.\n\n— p.', atts: [] },
+    3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you once. not traced. drew. it was bad. i tore it up.\nmaybe i\'ll draw you again. maybe.\n\np.s. the tracing paper was the old me. this is the real one: a repeat sign. go back as many times as you need.\n\n— p.', atts: [{ kind: 'mem', name: 'repeat_sign.mem' }] },
   },
   trix: {
     1: { subject: 'you\'re going to need this', body: 'you answer like someone who has never converted a unit in their life. here. UnitConv.\n\n— t', atts: [{ kind: 'app', name: 'UnitConv.exe' }] },
     2: { subject: 'spare time', body: 'found an hourglass in my head. it flips itself when you go back a step.\ntake it. i don\'t make mistakes, so i don\'t need it.\n\n— t', atts: [{ kind: 'mem', name: 'hourglass.mem' }] },
-    3: { subject: 'gg', body: 'that was the last layer. q.e.d.\n\nyou covered more squares than i expected. that\'s a compliment. don\'t frame it.\n\n— t', atts: [] },
+    3: { subject: 'gg', body: 'that was the last layer. q.e.d.\n\nyou covered more squares than i expected. that\'s a compliment. don\'t frame it.\nthe hourglass was cute. here\'s a real chess clock. your clock stops when you start over.\n\n— t', atts: [{ kind: 'mem', name: 'chess_clock.mem' }] },
   },
   paige: {
     1: { subject: 'pick a card', body: 'counsellor,\n\nwhen boss made me "the mystic" she told me to study tarot and all that. i found this app for drawing cards. it\'s kind of fun, honestly. the subject just isn\'t really me.\nbut it also flips coins and rolls dice. so i kept it lmao. you keep it too.\n\n— p.', atts: [{ kind: 'app', name: 'Fortune.exe' }] },
     2: { subject: 'loaded', body: 'my lucky d20. it\'s not loaded. probably.\nroll it when you\'re in my head. sometimes the dice are kind.\n\n— paige', atts: [{ kind: 'mem', name: 'lucky_d20.mem' }] },
-    3: { subject: 'stay', body: 'you didn\'t leave halfway.\nnobody ever didn\'t leave halfway.\n\n— p', atts: [] },
+    3: { subject: 'stay', body: 'you didn\'t leave halfway.\nnobody ever didn\'t leave halfway.\nok. it was loaded. here\'s the real one. the house always wins, and now you\'re the house.\n\n— p', atts: [{ kind: 'mem', name: 'loaded_d20.mem' }] },
   },
   vel: {
     1: { subject: 'news 4 u', body: 'boss told me to read this 4 fashion news. like a good fashion queen 💅\nbut it has a military section. guns, gear, camo, all of it. so i kept reading lol\nu should read it too. its like a window. to outside\n\n— vel 🫡', atts: [{ kind: 'app', name: 'Newsie.exe' }] },
     2: { subject: 'dog tag', body: 'my dog tag. its fake obvs lol\nwear it in my head. u walk lighter w/ it. trust\n\n— vel', atts: [{ kind: 'mem', name: 'dog_tag.mem' }] },
-    3: { subject: 'mission complete', body: 'all clear.\nthx for not giving up on the gray days.\n\n— v', atts: [] },
+    3: { subject: 'mission complete', body: 'all clear.\nthx for not giving up on the gray days.\nthe tag was fake. this compass isnt. u know the way now, walk free\n\n— v', atts: [{ kind: 'mem', name: 'field_compass.mem' }] },
   },
 };
 
@@ -1184,14 +1195,14 @@ function download(m, i = 0) {
     });
     SFX.item(); save(); return;
   }
-  else { if (!hasMem(a.name)) S.mementos.push(a.name); toast('MementoBox', `<b>${esc(a.name)}</b> added. ${esc(MEMENTOS[a.name].desc)}`, openMBox); }
+  else { if (!hasMem(a.name)) S.mementos.push(a.name); const up = MEMENTOS[a.name].up; toast('MementoBox', up ? `<b>${esc(up)}</b> → <b>${esc(a.name)}</b> (upgraded). ${esc(MEMENTOS[a.name].desc)}` : `<b>${esc(a.name)}</b> added. ${esc(MEMENTOS[a.name].desc)}`, openMBox); }
   SFX.item(); save(); refresh(); renderMail();
 }
 
 function openMBox() {
   openWin('mbox', {
     title: 'MementoBox', icon: 'box', w: 520, h: 400, x: 210, y: 60, render: (b, rec) => {
-      const r = () => { b.innerHTML = `<div class="mbox">${Object.entries(MEMENTOS).map(([k, v]) => hasMem(k) ? `<div class="mem bevel">${icon(v.ic)}<b>${esc(k)}</b><span>${esc(v.desc)}</span><small>from ${esc(v.from)} · active</small></div>` : `<div class="mem bevel empty">${icon('box')}<b>???.mem</b><small>empty slot</small></div>`).join('')}</div>`; };
+      const r = () => { b.innerHTML = `<div class="mbox">${memShown().map(k => [hasMem(MEM_UP[k]) ? MEM_UP[k] : k, MEMENTOS[hasMem(MEM_UP[k]) ? MEM_UP[k] : k]]).map(([k, v]) => hasMem(k) ? `<div class="mem bevel">${icon(v.ic)}<b>${esc(k)}</b><span>${esc(v.desc)}</span><small>from ${esc(v.from)} · active</small></div>` : `<div class="mem bevel empty">${icon('box')}<b>???.mem</b><small>empty slot</small></div>`).join('')}</div>`; };
       addUpd(rec, r); r();
     }
   });

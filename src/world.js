@@ -128,13 +128,7 @@ function owPassable(g, x, y) {
   if (v === 3) { const sl = M.seals.find(q => q.x === x && q.y === y); return !!owState(g).solved[sl.pid]; }
   return false;
 }
-function owReveal(g) {
-  const M = owBuild(g), o = owState(g), a = o.seen.split(''); let ch = false;
-  for (let y = o.y - 3; y <= o.y + 3; y++) for (let x = o.x - 4; x <= o.x + 4; x++) {
-    if (x < 0 || y < 0 || x >= M.W || y >= M.H) continue; const k = y * M.W + x; if (a[k] !== '1') { a[k] = '1'; ch = true; }
-  }
-  if (ch) o.seen = a.join('');
-}
+function owReveal() { }   // no fog of war: the whole map is always visible
 
 /* ---------------- the Fix-it window ---------------- */
 const OW = { g: null, mode: 'map', anim: null, raf: 0, frozen: false, msg: '', msgT: 0, shake: 0, keyFx: null, ro: null };
@@ -209,11 +203,17 @@ function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-ms
 /* every gameplay input costs a minute of her day */
 function owSpend(kind = 'move') {
   if (S.phase !== 'day' || S.dayOver || reckoning()) return;
-  // mementos: hourglass (undo is free), dog tag (every other step on the map is free), d20 (one in five is free)
-  let free = kind === 'reset' && hasMem('hourglass.mem');
+  // mementos (layer 2 → layer 3 upgrade): hourglass 10 free resets a day → chess clock, every reset free;
+  // dog tag every other map step free → field compass, every map step free; d20 one in five free → loaded d20, one in three
+  let free = false;
+  if (kind === 'reset') {
+    if (hasMem('chess_clock.mem')) free = true;
+    else if (hasMem('hourglass.mem') && resetsLeft() > 0) { S.resetLeft--; free = true; owSay(`⌛ free reset · ${S.resetLeft} left today`); }
+  }
+  if (!free && kind === 'map' && hasMem('field_compass.mem')) free = true;
   if (!free && kind === 'map' && hasMem('dog_tag.mem')) { OW.dog = (OW.dog || 0) + 1; free = OW.dog % 2 === 0; }
   if (!free && S.session && S.session.lucky) { OW.hot = (OW.hot || 0) + 1; free = OW.hot % 2 === 0; }   // Paige's coin: every 2 inputs cost 1 minute
-  if (!free && hasMem('lucky_d20.mem') && Math.random() < .2) { free = true; owSay('🎲 lucky · free move'); }
+  if (!free && hasMem('lucky_d20.mem') && Math.random() < (hasMem('loaded_d20.mem') ? 1 / 3 : .2)) { free = true; owSay('🎲 lucky · free move'); }
   if (!free) S.mins += 1;
   if (S.mins >= DAY_END) overload();
   owHud(); renderTray();
@@ -221,8 +221,14 @@ function owSpend(kind = 'move') {
   return free ? 0 : 1;
 }
 /* undo in her memories: unlocked by Prim's tracing paper, 20 a day, and it gives the minute back */
-const UNDO_PER_DAY = 20;
-function undoLeft() { if (S.undoDay !== S.day) { S.undoDay = S.day; S.undoLeft = UNDO_PER_DAY; } return S.undoLeft; }
+const UNDO_PER_DAY = 20, UNDO_PER_DAY_UP = 50, RESET_FREE_PER_DAY = 10;
+const undoMax = () => hasMem('repeat_sign.mem') ? UNDO_PER_DAY_UP : UNDO_PER_DAY;
+function undoLeft() {
+  if (S.undoDay !== S.day) { S.undoDay = S.day; S.undoLeft = undoMax(); S.undoUp = hasMem('repeat_sign.mem'); }
+  else if (hasMem('repeat_sign.mem') && !S.undoUp) { S.undoUp = true; S.undoLeft += UNDO_PER_DAY_UP - UNDO_PER_DAY; }   // upgraded mid-day: top up
+  return S.undoLeft;
+}
+function resetsLeft() { if (S.resetDay !== S.day) { S.resetDay = S.day; S.resetLeft = RESET_FREE_PER_DAY; } return S.resetLeft; }
 const pjHist = () => PJ.p.boxes ? PJ.bsHist.length : (PJ.st ? PJ.st.path.length - 1 : 0);
 function owStorySpend(kind) {
   const c = owSpend(kind);
@@ -230,13 +236,17 @@ function owStorySpend(kind) {
   if (kind === 'reset') OW.costs = [];
   return c;
 }
-function owStoryUndo() {   // unlocked by Prim's tracing paper, 20 a day; free, but it doesn't give minutes back
+function owStoryUndo() {   // unlocked by Prim's tracing paper (20 a day, no minutes back); her repeat sign: 50 a day, minutes back
   if (owLocked()) { SFX.buzz(); return; }
   if (!pjCanUndo()) { SFX.buzz(); $('#pj-msg').textContent = 'Undo is locked. Someone here might lend you a way to take a move back.'; return; }
   if (undoLeft() <= 0) { SFX.buzz(); $('#pj-msg').textContent = 'No undos left today.'; return; }
   const before = pjHist(); pjUndo(); drawPJ();
   if (pjHist() >= before) return;
-  S.undoLeft--; $('#pj-msg').textContent = `Undo · ${S.undoLeft} left today`;
+  S.undoLeft--;
+  // Prim's repeat sign: the undone step gives its minute back
+  let back = 0; if (hasMem('repeat_sign.mem') && OW.costs && OW.costs.length > pjHist()) { back = OW.costs.slice(pjHist()).reduce((t, c) => t + c, 0); S.mins = Math.max(DAY_START, S.mins - back); }
+  if (OW.costs && OW.costs.length > pjHist()) OW.costs.length = pjHist();
+  $('#pj-msg').textContent = `Undo · ${S.undoLeft} left today${back ? ` · +${back} min back` : ''}`;
   save(); owHud();
 }
 const owLocked = () => S.dayOver || OW.frozen || !!S.flags.ended;
@@ -390,7 +400,7 @@ function owDraw() {
     M.gates.forEach(G => { if (G.y - 1 <= y && y === G.y + 1 && seen[I(G.x, G.y)] === '1') owDrawGate(x, G, ts, lift, now); });
     if (y === boxRow) owDrawBox(x, bx, by, ts, lift, T, now);
   }
-  // fog edge: a soft vignette
+  // a soft vignette at the edges
   x.setTransform(1, 0, 0, 1, 0, 0);
   const vg = x.createRadialGradient(Wp / 2, Hp / 2, Math.min(Wp, Hp) * .35, Wp / 2, Hp / 2, Math.max(Wp, Hp) * .75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.45)'); x.fillStyle = vg; x.fillRect(0, 0, Wp, Hp);
   if (OW.keyFx && now - OW.keyFx < 1400) { const k = (now - OW.keyFx) / 1400; x.globalAlpha = 1 - k; x.fillStyle = T.acc; x.font = `bold ${Math.round(28 + k * 10)}px "Courier New", monospace`; x.textAlign = 'center'; x.fillText('+1 KEY', Wp / 2, Hp * .35 - k * 30); x.globalAlpha = 1; }

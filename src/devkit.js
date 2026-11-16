@@ -190,6 +190,7 @@ function kitTestRun(day, preset, passion) {
     for (let Ly = 1; Ly <= L; Ly++) { const ns = M.nodes.filter(n => n.layer === Ly), G = M.gates[Ly - 1]; ns.filter(n => n.tut).concat(ns.filter(n => !n.tut)).slice(0, Math.max(G ? G.need : 0, ns.filter(n => n.tut).length)).forEach(n => o.solved[n.pid] = true); }
     if (L >= 1) (REWARD[g][1].atts || []).forEach(a => { if (a.kind === 'app' && !T.apps.includes(a.name)) T.apps.push(a.name); });
     if (L >= 2) (REWARD[g][2].atts || []).forEach(a => { if (a.kind === 'mem' && !T.mementos.includes(a.name)) T.mementos.push(a.name); });
+    if (L >= 3) (REWARD[g][3].atts || []).forEach(a => { if (a.kind === 'mem' && !T.mementos.includes(a.name)) T.mementos.push(a.name); });
     if (passion) T.flags[g + '_true'] = true;
   });
   if (passion) T.flags.prim_music = true;
