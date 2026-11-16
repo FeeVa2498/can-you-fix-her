@@ -207,7 +207,7 @@ function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-ms
    Test chamber: in CH.tips. Not on Ray's map (by then Boss is Ray).
    --------------------------------------------------------- */
 const BOSS_TIPS = [   // order = priority when one memory brings several at once (the plain map things last)
-  { id: 'start', has: () => true, say: ['Pretty intuitive, huh?', 'Come on. Did you really think you\'d get a video game tutorial telling you to press WASD to move? You\'ve got this.', 'Oh, and everything you do in here costs her a little energy. Keep an eye on that bar.'] },
+  { id: 'start', has: () => true, say: ['Navigate your way to reach the gate.', 'Oh, and everything you do in here costs her a little energy. Keep an eye on that bar.'] },
   { id: 'mine', has: p => p.boxes.some(b => b.n != null), say: ['See the number on that box? That\'s how many moves it has left in it.', 'It\'s fine sitting at zero. Just don\'t ask it for one more.'] },
   { id: 'portals', has: p => (p.portals || []).length, say: ['Don\'t tell me you don\'t know what portals do.'] },
   { id: 'pads', has: p => (p.pads || []).length, say: ['Arrows on the floor. Roll onto one and you\'re going where it points, whether you like it or not.'] },
@@ -229,7 +229,7 @@ const BOSS_TIPS = [   // order = priority when one memory brings several at once
   { id: 'colors', has: p => (p.exit || []).some(e => e[2] != null), say: ['Coloured goals only take a box of the same colour. Don\'t mix them up. She\'d notice.'] },
 ];
 const BOSS_SAY = {   // not tied to a memory
-  map: ['Okay rookie, this is her head. Well, a map of it. Like the Tokyo metro, but with feelings.', 'Those glowing tiles are her memories. Go on in. They don\'t bite. Most of them.'],
+  map: ['Pretty intuitive, huh?', 'Come on. Did you really think you\'d get a video game tutorial telling you to press WASD to move? You\'ve got this.', 'Those glowing tiles are her memories. Go on in. They don\'t bite. Most of them.'],
   gate: ['Big gate. It wants keys, and you get one for every memory you fix.', 'You don\'t need all of them. Just enough.'],
 };
 const tipSeen = id => S.flags.chamber ? !!(CH.tips && CH.tips[id]) : !!S.flags['tip_' + id];
