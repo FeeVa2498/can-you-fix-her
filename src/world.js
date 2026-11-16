@@ -203,12 +203,12 @@ function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-ms
 /* every gameplay input costs a minute of her day */
 function owSpend(kind = 'move') {
   if (S.phase !== 'day' || S.dayOver || reckoning()) return;
-  // mementos (layer 2 → layer 3 upgrade): hourglass 10 free resets a day → chess clock, every reset free;
+  // mementos (layer 2 → layer 3 upgrade): hourglass 10 free resets per memory → chess clock, every reset free;
   // dog tag every other map step free → field compass, every map step free; d20 one in five free → loaded d20, one in three
   let free = false;
   if (kind === 'reset') {
     if (hasMem('chess_clock.mem')) free = true;
-    else if (hasMem('hourglass.mem') && resetsLeft() > 0) { S.resetLeft--; free = true; owSay(`⌛ free reset · ${S.resetLeft} left today`); }
+    else if (hasMem('hourglass.mem') && resetsLeft() > 0) { const id = PJ_STORY.node.pid; S.resetFree[id] = (S.resetFree[id] || 0) + 1; free = true; owSay(`⌛ free reset · ${resetsLeft()} left in this memory`); }
   }
   if (!free && kind === 'map' && hasMem('field_compass.mem')) free = true;
   if (!free && kind === 'map' && hasMem('dog_tag.mem')) { OW.dog = (OW.dog || 0) + 1; free = OW.dog % 2 === 0; }
@@ -221,14 +221,15 @@ function owSpend(kind = 'move') {
   return free ? 0 : 1;
 }
 /* undo in her memories: unlocked by Prim's tracing paper, 20 a day, and it gives the minute back */
-const UNDO_PER_DAY = 20, UNDO_PER_DAY_UP = 50, RESET_FREE_PER_DAY = 10;
+const UNDO_PER_DAY = 20, UNDO_PER_DAY_UP = 50, RESET_FREE_PER_LEVEL = 10;
 const undoMax = () => hasMem('repeat_sign.mem') ? UNDO_PER_DAY_UP : UNDO_PER_DAY;
 function undoLeft() {
   if (S.undoDay !== S.day) { S.undoDay = S.day; S.undoLeft = undoMax(); S.undoUp = hasMem('repeat_sign.mem'); }
   else if (hasMem('repeat_sign.mem') && !S.undoUp) { S.undoUp = true; S.undoLeft += UNDO_PER_DAY_UP - UNDO_PER_DAY; }   // upgraded mid-day: top up
   return S.undoLeft;
 }
-function resetsLeft() { if (S.resetDay !== S.day) { S.resetDay = S.day; S.resetLeft = RESET_FREE_PER_DAY; } return S.resetLeft; }
+// Trix's hourglass: 10 free resets per memory (counted per memory for the day, so stepping out and back in doesn't refill them)
+function resetsLeft() { if (!PJ_STORY) return 0; if (S.resetDay !== S.day || !S.resetFree) { S.resetDay = S.day; S.resetFree = {}; } return Math.max(0, RESET_FREE_PER_LEVEL - (S.resetFree[PJ_STORY.node.pid] || 0)); }
 const pjHist = () => PJ.p.boxes ? PJ.bsHist.length : (PJ.st ? PJ.st.path.length - 1 : 0);
 function owStorySpend(kind) {
   const c = owSpend(kind);

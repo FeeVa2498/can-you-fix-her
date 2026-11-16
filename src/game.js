@@ -1116,7 +1116,7 @@ function startNightChat(g) {
 // one reward per gate: layer 1 → her software, layer 2 → her memento (it does something), layer 3 → a letter. All arrive at night.
 const MEMENTOS = {   // every memento does something in her memories. layer 2 → her memento, layer 3 → its upgrade (same slot)
   'tracing_paper.mem': { ic: 'thread', from: 'Prim', desc: 'Unlocks Undo in memories (Z): 20 a day. Undo is free, but time already spent stays spent.' },
-  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Resetting a memory costs no time, 10 times a day.' },
+  'hourglass.mem': { ic: 'hourglass', from: 'Trix', desc: 'Resetting a memory costs no time: 10 free resets in each memory.' },
   'lucky_d20.mem': { ic: 'dice', from: 'Paige', desc: 'One input in five costs no time. Roll with it.' },
   'dog_tag.mem': { ic: 'tag', from: 'Vel', desc: 'Walking on a map costs half: every other step is free.' },
   // layer 3: the same gift, as she really is (replaces the layer-2 one in MementoBox; the old name still counts)
