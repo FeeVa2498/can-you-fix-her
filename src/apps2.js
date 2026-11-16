@@ -87,8 +87,9 @@ function newsBriefs() { const N = newsSheet(); if (!N) return NEWS_BRIEF; const 
 function newsFiller() { const N = newsSheet(); const f = N ? N.filter(r => r.tab === 'filler').map(r => r.title) : []; return f.length ? f : NEWS_FILLER; }
 function newsTab(tab) {   // a section's stories; "day" = it shows up from that day on
   const N = newsSheet(), d = S.day || 1;
-  const rows = N ? N.filter(r => r.tab === tab && (!r.day || +r.day <= d)).map(r => [r.title, r.body || '']) : (NEWS_SECTIONS[tab] || []);
-  return rows;
+  const rows = N ? N.filter(r => r.tab === tab && (!r.day || +r.day <= d)).map((r, i) => [r.title, r.body || '', +r.day || 1, i]) : (NEWS_SECTIONS[tab] || []).map((r, i) => [...r, 1, i]);
+  // every 4 days a section gets a new story: the newest is the cover story, older ones move down
+  return tab === 'classifieds' ? rows : rows.sort((a, b) => b[2] - a[2] || a[3] - b[3]);
 }
 // the magazine's sections: [key, label, sticker, colour, tagline]
 const NEWS_TABS = [
@@ -111,7 +112,7 @@ function newsRender(b) {
   const tickerHTML = `<div class="nz-ticker"><b>IN BRIEF</b><div class="nz-tk"><span>${ticker.map(esc).join(' ✦ ')} ✦ </span><span>${ticker.map(esc).join(' ✦ ')} ✦ </span></div></div>`;
   let page;
   if (tab[0] === 'front') {
-    const picks = ['travel', 'games', 'music', 'odds', 'health', 'tech'].map((k, i) => [k, newsTab(k)[(d + i) % Math.max(1, newsTab(k).length)]]).filter(x => x[1]).slice(d % 2, d % 2 + 4);
+    const picks = ['travel', 'games', 'music', 'odds', 'health', 'tech'].map(k => [k, newsTab(k)[0]])   // each section's current cover story.filter(x => x[1]).slice(d % 2, d % 2 + 4);
     page = `<div class="nz-cover"><div class="nz-mast">Newsie<i>!</i></div><div class="nz-issue">ISSUE #${String(d).padStart(2, '0')} · DAY ${d} · FREE · 100% TRUE*</div>
       <figure class="nz-pola"><canvas width="96" height="64" id="nw-cat"></canvas><figcaption>cat of the day ♡</figcaption><span class="nz-tape"></span></figure>
       <div class="nz-hl"><span class="nz-burst">BREAKING!!</span><h2><mark>${esc(hl)}</mark></h2><p>${esc(sub)}</p>${by}</div>
@@ -123,7 +124,7 @@ function newsRender(b) {
   } else {
     const rows = newsTab(tab[0]);
     page = `<div class="nz-sec"><header class="nz-sh"><b>${tab[2]} ${esc(tab[1])}</b><small>${esc(tab[4])}</small></header>
-      <div class="nz-grid">${rows.map(([t, x], i) => `<article class="nz-card${i ? '' : ' lead'}" style="--r:${i ? ((i % 2 ? 1 : -1) * (.4 + (i % 3) * .3)) : 0}deg">${i ? '' : '<span class="nz-rib">COVER STORY</span>'}<h3>${esc(t)}</h3><p>${esc(x)}</p>${by}</article>`).join('')}</div></div>`;
+      <div class="nz-grid">${rows.map(([t, x, day], i) => `<article class="nz-card${i ? '' : ' lead'}" style="--r:${i ? ((i % 2 ? 1 : -1) * (.4 + (i % 3) * .3)) : 0}deg">${i ? '' : `<span class="nz-rib">${day > 1 && (S.day || 1) - day < 4 ? 'NEW · ' : ''}COVER STORY</span>`}<h3>${esc(t)}</h3><p>${esc(x)}</p>${by}</article>`).join('')}</div></div>`;
   }
   b.innerHTML = `<div class="nz" style="--c:${tab[3]}"><div class="nz-page">${page}${tab[0] === 'front' ? tickerHTML : ''}</div>
     <nav class="nz-tabs">${NEWS_TABS.map(([k, l, ic, c]) => `<button class="nz-tab${k === tab[0] ? ' on' : ''}" data-t="${k}" style="--c:${c}"><span>${ic}</span>${esc(l)}</button>`).join('')}</nav></div>`;
