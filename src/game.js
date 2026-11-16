@@ -1613,44 +1613,7 @@ async function sessionScan() {
   ['magnifier', 'feedcam'].forEach(closeWin);
   if (!S.session) return;
   openWorld(g);
-  if (!S.flags.owTutorial) { S.flags.owTutorial = true; await runTutorial(); }
-}
-// first time on the map: Boss walks you through it
-const TUTORIAL = [
-  { t: 'Okay rookie, this is her head. Well, a map of it. Like the Tokyo metro, but with feelings.', hl: '.ow-view' },
-  { t: 'That little box is you. W A S D or the arrow keys. Step on a glowing tile and press Enter to dive into that memory.', hl: '.ow-view' },
-  { t: 'Clear a memory and you keep its key. Her colour, her keys.', hl: '.ow-keys' },
-  { t: 'Each layer of her is a big locked gate. It shows how many keys you have and how many it wants. You don\'t need every memory, just enough.', hl: '.ow-keys' },
-  { t: 'Every move costs her energy. On the map and inside the memories, resets included. And no take-backs in there, not yet. That bar is how much she has left today.', hl: '.ow-stam' },
-  { t: 'When she runs out, she runs out. Then it\'s Start ▸ Shut down and we call it a day. Like a siesta in Madrid, but longer.', hl: '.ow-stam' },
-  { t: 'And that little map in the corner is the bit you\'ve seen so far. Go explore. Supportively.', hl: '.ow-mini' },
-];
-async function runTutorial() {
-  const dk = $('#desktop'), win = WINS.fixit; if (!win) return;
-  document.body.classList.add('tutorial');
-  const dim = document.createElement('div'); dim.id = 'tut-dim'; dk.appendChild(dim);
-  win.el.style.zIndex = 950;
-  const box = document.createElement('div'); box.id = 'tut-box'; box.className = 'bevel'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Boss explains the map');
-  box.innerHTML = `<div class="tut-head">${avHTML('boss')}<div><b>Boss</b><span>walking you through it</span></div></div><div class="tut-log" id="tut-log"></div><div class="tut-foot"><span id="tut-n"></span><button class="btn primary" id="tut-next">Next ▸</button></div>`;
-  dk.appendChild(box);
-  const r = win.el.getBoundingClientRect(), d = dk.getBoundingClientRect();
-  if (!narrow() && d.right - r.right > 300) { box.style.left = (r.right - d.left + 10) + 'px'; box.style.top = (r.top - d.top + 30) + 'px'; } else box.classList.add('bottom');
-  OW.frozen = true;
-  for (let i = 0; i < TUTORIAL.length; i++) {
-    const T = TUTORIAL[i];
-    $('#tut-n', box).textContent = `${i + 1}/${TUTORIAL.length}`;
-    $$('.tut-hl').forEach(e => e.classList.remove('tut-hl'));
-    if (T.hl) { const h = $(T.hl, win.el); if (h) h.classList.add('tut-hl'); }
-    const m = document.createElement('div'); m.className = 'tut-msg'; $('#tut-log', box).appendChild(m);
-    S.logs.boss.push({ who: 'boss', text: T.t, t: clockStr() });
-    SFX.chime(); await typeInto(m, T.t); $('#tut-log', box).scrollTop = 1e6;
-    const btn = $('#tut-next', box); btn.textContent = i === TUTORIAL.length - 1 ? 'Let\'s go!' : 'Next ▸'; btn.focus();
-    await new Promise(res => { btn.onclick = () => { SFX.click(); res(); }; });
-  }
-  $$('.tut-hl').forEach(e => e.classList.remove('tut-hl'));
-  dim.remove(); box.remove(); document.body.classList.remove('tutorial'); win.el.style.zIndex = ++zTop;
-  OW.frozen = false; owFocus();
-  save();
+  if (g !== 'ray') bossTip('map');
 }
 function focusSessionChat() { openYap('session'); }
 function placeWin(id, x, y, w, h) { const W = WINS[id]; if (!W || narrow()) return; const dk = $('#desktop'); Object.assign(W.el.style, { left: clamp(x, 6, Math.max(6, dk.clientWidth - w - 6)) + 'px', top: y + 'px', width: Math.min(w, dk.clientWidth - 16) + 'px', height: Math.min(h, dk.clientHeight - 16) + 'px' }); }

@@ -1160,6 +1160,8 @@ line.ed-hov{stroke-width:.14}
 .ow-mini{position:absolute;right:8px;bottom:8px;border:2px solid var(--acc);border-radius:4px;image-rendering:pixelated;width:auto;height:auto;max-width:45%;}
 .ow-card{position:absolute;left:10px;bottom:10px;padding:6px 10px;border:2px solid var(--acc);border-radius:6px;background:rgba(13,7,20,.9);font-family:var(--mono);font-size:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:60%}
 .ow-card .new{color:#ffd86e}.ow-card .got{color:#7be3a4}.ow-card .go{color:var(--acc);font-weight:bold}
+.boss-sub{position:absolute;left:50%;bottom:22px;transform:translate(-50%,6px);max-width:86%;text-align:center;font:italic clamp(14px,1.55vw,19px)/1.45 Georgia,serif;color:#fff;background:rgba(10,4,20,.66);padding:7px 18px;border-radius:4px;text-shadow:0 1px 2px #000;opacity:0;pointer-events:none;z-index:6;transition:opacity .45s,transform .45s}
+.boss-sub.on{opacity:1;transform:translate(-50%,0)}
 .ow-sub{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);max-width:88%;text-align:center;font:italic clamp(14px,1.6vw,19px)/1.4 Georgia,serif;color:#fff;background:rgba(10,4,20,.62);padding:6px 16px;border-radius:4px;text-shadow:0 1px 2px #000;opacity:0;pointer-events:none}
 .ow-sub.on{animation:owsub 4.2s ease-out forwards}@keyframes owsub{0%{opacity:0;transform:translate(-50%,6px)}10%,75%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
 .ow-morse{position:absolute;z-index:6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:50% / 45%;background:radial-gradient(ellipse,rgba(255,255,255,.92),rgba(240,225,255,.82) 70%,rgba(220,200,255,.6));border:2px solid #fff;box-shadow:0 0 22px rgba(255,190,240,.9),inset 0 0 14px rgba(255,255,255,.9);pointer-events:none;animation:owmorse .6s cubic-bezier(.3,1.5,.5,1)}
@@ -3178,44 +3180,7 @@ async function sessionScan() {
   ['magnifier', 'feedcam'].forEach(closeWin);
   if (!S.session) return;
   openWorld(g);
-  if (!S.flags.owTutorial) { S.flags.owTutorial = true; await runTutorial(); }
-}
-// first time on the map: Boss walks you through it
-const TUTORIAL = [
-  { t: 'Okay rookie, this is her head. Well, a map of it. Like the Tokyo metro, but with feelings.', hl: '.ow-view' },
-  { t: 'That little box is you. W A S D or the arrow keys. Step on a glowing tile and press Enter to dive into that memory.', hl: '.ow-view' },
-  { t: 'Clear a memory and you keep its key. Her colour, her keys.', hl: '.ow-keys' },
-  { t: 'Each layer of her is a big locked gate. It shows how many keys you have and how many it wants. You don\'t need every memory, just enough.', hl: '.ow-keys' },
-  { t: 'Every move costs her energy. On the map and inside the memories, resets included. And no take-backs in there, not yet. That bar is how much she has left today.', hl: '.ow-stam' },
-  { t: 'When she runs out, she runs out. Then it\'s Start ▸ Shut down and we call it a day. Like a siesta in Madrid, but longer.', hl: '.ow-stam' },
-  { t: 'And that little map in the corner is the bit you\'ve seen so far. Go explore. Supportively.', hl: '.ow-mini' },
-];
-async function runTutorial() {
-  const dk = $('#desktop'), win = WINS.fixit; if (!win) return;
-  document.body.classList.add('tutorial');
-  const dim = document.createElement('div'); dim.id = 'tut-dim'; dk.appendChild(dim);
-  win.el.style.zIndex = 950;
-  const box = document.createElement('div'); box.id = 'tut-box'; box.className = 'bevel'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Boss explains the map');
-  box.innerHTML = `<div class="tut-head">${avHTML('boss')}<div><b>Boss</b><span>walking you through it</span></div></div><div class="tut-log" id="tut-log"></div><div class="tut-foot"><span id="tut-n"></span><button class="btn primary" id="tut-next">Next ▸</button></div>`;
-  dk.appendChild(box);
-  const r = win.el.getBoundingClientRect(), d = dk.getBoundingClientRect();
-  if (!narrow() && d.right - r.right > 300) { box.style.left = (r.right - d.left + 10) + 'px'; box.style.top = (r.top - d.top + 30) + 'px'; } else box.classList.add('bottom');
-  OW.frozen = true;
-  for (let i = 0; i < TUTORIAL.length; i++) {
-    const T = TUTORIAL[i];
-    $('#tut-n', box).textContent = `${i + 1}/${TUTORIAL.length}`;
-    $$('.tut-hl').forEach(e => e.classList.remove('tut-hl'));
-    if (T.hl) { const h = $(T.hl, win.el); if (h) h.classList.add('tut-hl'); }
-    const m = document.createElement('div'); m.className = 'tut-msg'; $('#tut-log', box).appendChild(m);
-    S.logs.boss.push({ who: 'boss', text: T.t, t: clockStr() });
-    SFX.chime(); await typeInto(m, T.t); $('#tut-log', box).scrollTop = 1e6;
-    const btn = $('#tut-next', box); btn.textContent = i === TUTORIAL.length - 1 ? 'Let\'s go!' : 'Next ▸'; btn.focus();
-    await new Promise(res => { btn.onclick = () => { SFX.click(); res(); }; });
-  }
-  $$('.tut-hl').forEach(e => e.classList.remove('tut-hl'));
-  dim.remove(); box.remove(); document.body.classList.remove('tutorial'); win.el.style.zIndex = ++zTop;
-  OW.frozen = false; owFocus();
-  save();
+  if (g !== 'ray') bossTip('map');
 }
 function focusSessionChat() { openYap('session'); }
 function placeWin(id, x, y, w, h) { const W = WINS[id]; if (!W || narrow()) return; const dk = $('#desktop'); Object.assign(W.el.style, { left: clamp(x, 6, Math.max(6, dk.clientWidth - w - 6)) + 'px', top: y + 'px', width: Math.min(w, dk.clientWidth - 16) + 'px', height: Math.min(h, dk.clientHeight - 16) + 'px' }); }
@@ -4242,7 +4207,7 @@ function owHud() {
   if (OW.mode === 'map' && ni != null) {
     const n = M.nodes[ni], p = PANELS.find(q => q.id === n.pid);
     card.hidden = false;
-    card.innerHTML = `<b>Memory ${n.layer}·${n.i + 1}</b>${p && p.tut ? ` <span class="new">NEW · ${esc(TEACH[p.tut] || p.tut)}</span>` : ''}${o.solved[n.pid] ? ' <span class="got">key taken ✓</span>' : ''}<span class="go">Enter ▸ dive in</span>`;
+    card.innerHTML = `<b>Memory ${n.layer}·${n.i + 1}</b>${o.solved[n.pid] ? ' <span class="got">key taken ✓</span>' : ''}<span class="go">Enter ▸ dive in</span>`;
   } else card.hidden = true;
 }
 function keyIcon(g) { return `<svg class="kic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="5" cy="8" r="3.4" fill="none" stroke="${OW_THEME[g].acc}" stroke-width="2"/><path d="M8 8h7M12 8v3M14.5 8v2" stroke="${OW_THEME[g].acc}" stroke-width="2" fill="none"/></svg>`; }
@@ -4252,6 +4217,64 @@ const RAY_DOUBTS = ['Why am I still resisting?', 'Aren\'t I ready to disappear?'
   'My hands won\'t move.', 'I\'m scared.', 'Is this what they felt?', 'Not yet. Please, not yet.', 'I promised to protect her. I never promised to leave.', 'The door is cold. Like the hospital floor.'];
 function owSub(t) { const m = $('#ow-sub'); if (!m) return; m.textContent = t; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); }
 function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-msg'); if (m) { m.textContent = t; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); } }
+
+/* ---------------------------------------------------------
+   BOSS IN YOUR EAR · the tutorial that isn't one.
+   The first time a mechanic shows up, Boss says a line or two: italic, in quotes, under the gameplay.
+   No keys, no buttons, no "press X": just a colleague talking. Story: remembered in S.flags.tip_<id>;
+   Test chamber: in CH.tips. Not on Ray's map (by then Boss is Ray).
+   --------------------------------------------------------- */
+const BOSS_TIPS = [   // order = priority when one memory brings several at once (the plain map things last)
+  { id: 'start', has: () => true, say: ['Pretty intuitive, huh?', 'Come on. Did you really think you\'d get a video game tutorial telling you to press WASD to move? You\'ve got this.', 'Oh, and everything you do in here costs her a little energy. Keep an eye on that bar.'] },
+  { id: 'mine', has: p => p.boxes.some(b => b.n != null), say: ['See the number on that box? That\'s how many moves it has left in it.', 'It\'s fine sitting at zero. Just don\'t ask it for one more.'] },
+  { id: 'portals', has: p => (p.portals || []).length, say: ['Don\'t tell me you don\'t know what portals do.'] },
+  { id: 'pads', has: p => (p.pads || []).length, say: ['Arrows on the floor. Roll onto one and you\'re going where it points, whether you like it or not.'] },
+  { id: 'stops', has: p => (p.stops || []).length, say: ['That orange bar is a brake. Anything sliding stops right there.'] },
+  { id: 'lights', has: p => (p.lights || []).length, say: ['See those lights? Every single one of them needs to be on if you want to pass the gate.', 'Careful. Roll over a lit one and it goes dark again.'] },
+  { id: 'oneway', has: p => (p.oneway || []).length, say: ['One-way streets. Some doors in her head only open from one side.'] },
+  { id: 'switches', has: p => (p.switches || []).length || (p.doors || []).length, say: ['Coloured switch, coloured doors. You can figure out the rest. You\'re the professional.'] },
+  { id: 'rope', has: p => p.boxes.some(b => b.trail), say: ['That one leaves a rope behind it. Ropes don\'t move, and nothing gets past them. Not even the box that made it.', 'No backing up. Think the whole walk through before the first step.'] },
+  { id: 'touch', has: p => (p.touch || []).length, say: ['Those blocks with numbers want company. Exactly that many of their sides covered in rope. Not one more, not one less.'] },
+  { id: 'twin', has: p => p.boxes.some(b => b.m), say: ['See the X on that one? It does the exact opposite of whatever you tell it.', 'Relatable, honestly.'] },
+  { id: 'dash', has: p => p.boxes.some(b => b.dash), say: ['Rocket box. Once it goes, it doesn\'t stop until something stops it.'] },
+  { id: 'dice', has: p => p.boxes.some(b => b.die) || (p.dice || []).length, say: ['That box is a die. Every roll turns it over, and every tile it lands on gets stamped with the face underneath.', 'The brief says which number she wants where. Paige would give you the odds. I\'ll just say good luck.'] },
+  { id: 'paints', has: p => (p.paints || []).length, say: ['Paint on the floor. Roll through it and the box takes the colour. An identity crisis in one step.'] },
+  { id: 'cracks', has: p => (p.cracks || []).length, say: ['Cracked tiles. Leave one and it\'s gone for good.'] },
+  { id: 'fragile', has: p => (p.fragile || []).length, say: ['Glass floor. The first time something rolls off it, it cracks. The second time... well. Let\'s not find out.'] },
+  { id: 'many', has: p => p.boxes.length > 1, say: ['Two of them now. They both listen to you, every single move.', 'Keeping two boxes happy at once. Welcome to the job.'] },
+  { id: 'holes', has: p => (p.holes || []).length, say: ['Holes in the floor. Bits of her she doesn\'t remember. Nothing to stand on there.'] },
+  { id: 'walls', has: p => (p.broken || []).length, say: ['Glass walls. You can see right through them. You still can\'t walk through them.'] },
+  { id: 'colors', has: p => (p.exit || []).some(e => e[2] != null), say: ['Coloured goals only take a box of the same colour. Don\'t mix them up. She\'d notice.'] },
+];
+const BOSS_SAY = {   // not tied to a memory
+  map: ['Okay rookie, this is her head. Well, a map of it. Like the Tokyo metro, but with feelings.', 'Those glowing tiles are her memories. Go on in. They don\'t bite. Most of them.'],
+  gate: ['Big gate. It wants keys, and you get one for every memory you fix.', 'You don\'t need all of them. Just enough.'],
+};
+const tipSeen = id => S.flags.chamber ? !!(CH.tips && CH.tips[id]) : !!S.flags['tip_' + id];
+function tipMark(id) { if (S.flags.chamber) { CH.tips = CH.tips || {}; CH.tips[id] = 1; chSave(); } else { S.flags['tip_' + id] = true; save(); } }
+function bossTipsFor(p) {
+  if (!p || !p.boxes || (PJ_STORY && PJ_STORY.g === 'ray')) return;
+  const lines = [];
+  BOSS_TIPS.forEach(t => { if (lines.length < 4 && !tipSeen(t.id) && t.has(p)) { tipMark(t.id); lines.push(...t.say); } });
+  if (lines.length) bossVoice(lines);
+}
+function bossTip(id) { if (tipSeen(id) || !BOSS_SAY[id]) return; tipMark(id); bossVoice(BOSS_SAY[id]); }
+// one line at a time, at the bottom of whatever you're playing (a memory, else the map); a new batch waits its turn
+const BV = { q: [], on: false, el: null, tm: 0 };
+function bossVoice(lines) {
+  if (BV.on && !(BV.el && BV.el.isConnected)) bvStop();   // the window under the last line went away (map → memory): start fresh
+  BV.q.push(...lines); if (!BV.on) bvNext();
+}
+function bvStop() { clearTimeout(BV.tm); if (BV.el) BV.el.remove(); BV.el = null; BV.q = []; BV.on = false; }
+function bvNext() {
+  const t = BV.q.shift(); if (t == null) { BV.on = false; BV.el = null; return; }
+  const host = $('#pj-vp') || $('#ow-view'); if (!host) { bvStop(); return; }
+  BV.on = true;
+  const el = BV.el = document.createElement('div'); el.className = 'boss-sub'; el.textContent = `“${t}”`; host.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('on'));
+  if (!S.flags.chamber && S.logs && S.logs.boss) S.logs.boss.push({ who: 'boss', text: t, t: clockStr() });
+  BV.tm = setTimeout(() => { el.classList.remove('on'); BV.tm = setTimeout(() => { el.remove(); bvNext(); }, 450); }, 2200 + 50 * t.length);
+}
 
 /* every gameplay input costs a minute of her day */
 function owSpend(kind = 'move') {
@@ -4343,7 +4366,7 @@ async function owGate(G) {
     owHud(); save(); owSay(G.fin ? 'the wall is open. one more.' : 'the gate is open.'); return;
   }
   if (G.layer > S.g[g].layer + 1) { SFX.bump(); owSay('this gate is behind another one.'); return; }
-  if (ks.have < G.need) { SFX.bump(); OW.shake = performance.now(); owSay(`locked · ${ks.have}/${G.need} keys`); return; }
+  if (ks.have < G.need) { SFX.bump(); OW.shake = performance.now(); owSay(`locked · ${ks.have}/${G.need} keys`); bossTip('gate'); return; }
   // open it: a layer of her comes off
   OW.frozen = true; SFX.gate(); OW.gateFx = { G, t0: performance.now() };
   await wait(REDUCED ? 100 : 1300);
@@ -4359,6 +4382,7 @@ function owEnter() {
   if (ni == null) { owSay('nothing here. find a glowing tile.'); SFX.tick(); return; }
   const n = M.nodes[ni], p = PANELS.find(q => q.id === n.pid); if (!p) return;
   if (g === 'ray' && rayLocked(n)) { SFX.bump(); OW.shake = performance.now(); owSay(`locked · held by ${n.src}`); runDialogue(seq('boss', 'boss', endSteps('ray_level_locked'), 'NONE')); return; }
+  bvStop();
   OW.mode = 'level'; cancelAnimationFrame(OW.raf); OW.raf = 0; owDispose3();
   SFX.link(); glitch('soft');
   const host = $('#ow-main'); if (!host) return;
@@ -4436,7 +4460,6 @@ function owDraw() {
     x.globalAlpha = 1; x.strokeStyle = got ? 'rgba(255,255,255,.35)' : T.acc; x.lineWidth = 2; x.strokeRect(px + 4, py + 4, ts - 8, ts - 8); x.restore();
     x.fillStyle = got ? 'rgba(255,255,255,.55)' : '#fff'; x.font = `bold ${Math.round(ts * .34)}px "Courier New", monospace`; x.textAlign = 'center'; x.textBaseline = 'middle';
     x.fillText(got ? '✓' : g === 'ray' && rayLocked(n) ? '🔒' : String(n.i + 1), px + ts / 2, py + ts / 2 + 1);
-    if (p && p.tut && !got) { x.fillStyle = '#ffd86e'; x.font = `bold ${Math.round(ts * .2)}px monospace`; x.fillText('NEW', px + ts / 2, py + ts * .2); }
   });
   // core
   if (seen[I(...M.core)] === '1') { const [cx, cy] = M.core, px = cx * ts + ts / 2, py = cy * ts + ts / 2, r = ts * (.32 + .04 * Math.sin(now / 300)); x.save(); x.shadowColor = T.acc; x.shadowBlur = 18; x.fillStyle = S.g[g].layer >= 3 ? T.acc : '#fff'; x.beginPath(); x.moveTo(px, py - r); x.lineTo(px + r, py); x.lineTo(px, py + r); x.lineTo(px - r, py); x.closePath(); x.fill(); x.restore(); }
@@ -4981,7 +5004,7 @@ const CH_GIRLS = [
   { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'glass tiles (crack, then break) · light tiles · arrow tiles' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
-// what each tutorial panel teaches (shown as a NEW tag)
+// what each tutorial panel teaches (the level editor's tag list; no longer shown to the player)
 const TEACH = { basic: 'roll to the gold tile', sketch: 'trace the pencil', plates: 'switches open gates', avoid: 'black pencil: keep off', mirror: 'the other hand', swap: 'striped gates swap', nums: 'edge count', ends: 'goal anywhere', holes: 'holes in the map', oneway: 'one-way', portals: 'portals', bridges: 'overpass', boxes: 'every key moves the box', pads: 'dash tiles', stops: 'brake tiles', dash: 'rocket box', budget: 'landmine: exact moves', dice: 'dice: print the brief', lightAll: 'light the whole map', touch: 'sensor blocks: touch n sides', many: 'more boxes', twin: 'twin boxes', nolock: 'goals never lock', opp: 'opposite twin', my: 'up/down twin', trail: 'rope box', switches: 'locks & doors', dbl: 'two-colour switch', colors: 'colour goals', paints: 'paint tiles', cracks: 'cracked tiles', fragile: 'glass: cracks, then breaks', lights: 'light tiles', twinrope: 'two ropes, one reversed', goal: 'every key moves every box' };
 const CH_MEM = {
   tracing_paper: { name: 'tracing_paper.mem', ic: 'thread', desc: 'Once per panel: lay it over the board and the next few strokes of the answer show through.' },
@@ -5034,7 +5057,7 @@ function renderChamber(b) {
       <div class="chm-head"><b>${G.name}</b> <span>${esc(G.tag)}${G.rules ? ' · ' + esc(G.rules) : ''}</span></div>
       ${layers.map(L => `<div class="chm-layer"><h4>Layer ${L} · ${REGION[L]}</h4><div class="chm-cards">${list.filter(p => p.layer === L).sort((a, c) => a.n - c.n).map((p, idx) => {
         const d = CH.done[p.id];
-        return `<button class="chm-card bevel${d ? ' done' : ''}${p.tut ? ' tut' : ''}" data-p="${p.id}" title="${p.tut ? 'Tutorial: ' + esc(TEACH[p.tut] || p.tut) : ''}"><span class="no">${idx + 1}${p.tut ? '<i>NEW</i>' : ''}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}${d.peek ? '<br><i>saw solution</i>' : ''}` : 'not solved<br>&nbsp;'}</small></button>`;
+        return `<button class="chm-card bevel${d ? ' done' : ''}" data-p="${p.id}"><span class="no">${idx + 1}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}${d.peek ? '<br><i>saw solution</i>' : ''}` : 'not solved<br>&nbsp;'}</small></button>`;
       }).join('')}</div></div>`).join('')}
       <div class="chm-opts sunk">
         <label><input type="checkbox" id="co-debug" ${CH.opt.debug ? 'checked' : ''}> Designer info (solution count, notes, show answer)</label>
@@ -5326,13 +5349,14 @@ function mountStage() {
   const side = (PJ.p.dice || []).length > 0; vp.classList.toggle('has-side', side);
   const host = vp;
   if (CH.opt.view3d && P3.has()) {
-    try { PJ.view = P3.create(host, PJ.p); PJ.view.setRetro(!!CH.opt.retro); bindPJ(PJ.view.canvas, PJ.view.toBoard); vp.classList.remove('flat'); vp.insertAdjacentHTML('beforeend', `<div class="pj3-hud">◉ DIVE·PROJ 3D <i>${PJ.p.boxes ? 'BOX' : 'LINE'} MODE</i>${PJ.p.tut ? `<b class="tut">NEW · ${esc(TEACH[PJ.p.tut] || PJ.p.tut)}</b>` : ''}</div>`); }
+    try { PJ.view = P3.create(host, PJ.p); PJ.view.setRetro(!!CH.opt.retro); bindPJ(PJ.view.canvas, PJ.view.toBoard); vp.classList.remove('flat'); vp.insertAdjacentHTML('beforeend', `<div class="pj3-hud">◉ DIVE·PROJ 3D <i>${PJ.p.boxes ? 'BOX' : 'LINE'} MODE</i></div>`); }
     catch (e) { console.warn('3D projection failed, using the flat board', e); if (PJ.view) PJ.view.dispose(); PJ.view = null; host.innerHTML = ''; }
   }
   if (!PJ.view) { host.innerHTML = `<svg id="pj-svg" viewBox="${side ? vbSide(PJ.p) : vb(PJ.p)}" role="img" aria-label="Puzzle board. Move with WASD or the arrow keys."></svg>`; bindPJ($('#pj-svg')); }
   vp.insertAdjacentHTML('beforeend', pjSideHTML(PJ.p)); pjSideBind();
   const f = $('#pj-fps'); if (f) f.textContent = PJ.view ? 'WebGL' : '2D view';
   drawPJ();
+  bossTipsFor(PJ.p);
 }
 async function pjSubmit() {
   const p = PJ.p, r = p.boxes ? { ok: PanelEngine.boxWon(p, PJ.bs), bad: [{ kind: 'path' }] } : PanelEngine.validate(p, pjPath()); PJ.tries++;
@@ -6780,7 +6804,6 @@ const OW3 = (() => {
       o.top.color.setHex(solved ? 0x3a2a4a : ACC); o.top.emissive.setHex(solved ? 0x000000 : ACC);
       o.glow.visible = !solved;
       if (o.tag) { world.remove(o.tag); o.tag = null; }
-      if (p && p.tut && !solved) { o.tag = sprite(label('NEW', '#ffd86e', 160, 72, 44), .7, .32); o.tag.position.set(o.n.x, .85, o.n.y); world.add(o.tag); anim.spin.push({ m: o.tag, bob: true }); }
     }
     /* ---- seals: bars of light ---- */
     const seals3 = M.seals.map(s => {

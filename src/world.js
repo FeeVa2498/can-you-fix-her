@@ -189,7 +189,7 @@ function owHud() {
   if (OW.mode === 'map' && ni != null) {
     const n = M.nodes[ni], p = PANELS.find(q => q.id === n.pid);
     card.hidden = false;
-    card.innerHTML = `<b>Memory ${n.layer}·${n.i + 1}</b>${p && p.tut ? ` <span class="new">NEW · ${esc(TEACH[p.tut] || p.tut)}</span>` : ''}${o.solved[n.pid] ? ' <span class="got">key taken ✓</span>' : ''}<span class="go">Enter ▸ dive in</span>`;
+    card.innerHTML = `<b>Memory ${n.layer}·${n.i + 1}</b>${o.solved[n.pid] ? ' <span class="got">key taken ✓</span>' : ''}<span class="go">Enter ▸ dive in</span>`;
   } else card.hidden = true;
 }
 function keyIcon(g) { return `<svg class="kic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="5" cy="8" r="3.4" fill="none" stroke="${OW_THEME[g].acc}" stroke-width="2"/><path d="M8 8h7M12 8v3M14.5 8v2" stroke="${OW_THEME[g].acc}" stroke-width="2" fill="none"/></svg>`; }
@@ -199,6 +199,64 @@ const RAY_DOUBTS = ['Why am I still resisting?', 'Aren\'t I ready to disappear?'
   'My hands won\'t move.', 'I\'m scared.', 'Is this what they felt?', 'Not yet. Please, not yet.', 'I promised to protect her. I never promised to leave.', 'The door is cold. Like the hospital floor.'];
 function owSub(t) { const m = $('#ow-sub'); if (!m) return; m.textContent = t; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); }
 function owSay(t) { OW.msg = t; OW.msgT = performance.now(); const m = $('#ow-msg'); if (m) { m.textContent = t; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); } }
+
+/* ---------------------------------------------------------
+   BOSS IN YOUR EAR · the tutorial that isn't one.
+   The first time a mechanic shows up, Boss says a line or two: italic, in quotes, under the gameplay.
+   No keys, no buttons, no "press X": just a colleague talking. Story: remembered in S.flags.tip_<id>;
+   Test chamber: in CH.tips. Not on Ray's map (by then Boss is Ray).
+   --------------------------------------------------------- */
+const BOSS_TIPS = [   // order = priority when one memory brings several at once (the plain map things last)
+  { id: 'start', has: () => true, say: ['Pretty intuitive, huh?', 'Come on. Did you really think you\'d get a video game tutorial telling you to press WASD to move? You\'ve got this.', 'Oh, and everything you do in here costs her a little energy. Keep an eye on that bar.'] },
+  { id: 'mine', has: p => p.boxes.some(b => b.n != null), say: ['See the number on that box? That\'s how many moves it has left in it.', 'It\'s fine sitting at zero. Just don\'t ask it for one more.'] },
+  { id: 'portals', has: p => (p.portals || []).length, say: ['Don\'t tell me you don\'t know what portals do.'] },
+  { id: 'pads', has: p => (p.pads || []).length, say: ['Arrows on the floor. Roll onto one and you\'re going where it points, whether you like it or not.'] },
+  { id: 'stops', has: p => (p.stops || []).length, say: ['That orange bar is a brake. Anything sliding stops right there.'] },
+  { id: 'lights', has: p => (p.lights || []).length, say: ['See those lights? Every single one of them needs to be on if you want to pass the gate.', 'Careful. Roll over a lit one and it goes dark again.'] },
+  { id: 'oneway', has: p => (p.oneway || []).length, say: ['One-way streets. Some doors in her head only open from one side.'] },
+  { id: 'switches', has: p => (p.switches || []).length || (p.doors || []).length, say: ['Coloured switch, coloured doors. You can figure out the rest. You\'re the professional.'] },
+  { id: 'rope', has: p => p.boxes.some(b => b.trail), say: ['That one leaves a rope behind it. Ropes don\'t move, and nothing gets past them. Not even the box that made it.', 'No backing up. Think the whole walk through before the first step.'] },
+  { id: 'touch', has: p => (p.touch || []).length, say: ['Those blocks with numbers want company. Exactly that many of their sides covered in rope. Not one more, not one less.'] },
+  { id: 'twin', has: p => p.boxes.some(b => b.m), say: ['See the X on that one? It does the exact opposite of whatever you tell it.', 'Relatable, honestly.'] },
+  { id: 'dash', has: p => p.boxes.some(b => b.dash), say: ['Rocket box. Once it goes, it doesn\'t stop until something stops it.'] },
+  { id: 'dice', has: p => p.boxes.some(b => b.die) || (p.dice || []).length, say: ['That box is a die. Every roll turns it over, and every tile it lands on gets stamped with the face underneath.', 'The brief says which number she wants where. Paige would give you the odds. I\'ll just say good luck.'] },
+  { id: 'paints', has: p => (p.paints || []).length, say: ['Paint on the floor. Roll through it and the box takes the colour. An identity crisis in one step.'] },
+  { id: 'cracks', has: p => (p.cracks || []).length, say: ['Cracked tiles. Leave one and it\'s gone for good.'] },
+  { id: 'fragile', has: p => (p.fragile || []).length, say: ['Glass floor. The first time something rolls off it, it cracks. The second time... well. Let\'s not find out.'] },
+  { id: 'many', has: p => p.boxes.length > 1, say: ['Two of them now. They both listen to you, every single move.', 'Keeping two boxes happy at once. Welcome to the job.'] },
+  { id: 'holes', has: p => (p.holes || []).length, say: ['Holes in the floor. Bits of her she doesn\'t remember. Nothing to stand on there.'] },
+  { id: 'walls', has: p => (p.broken || []).length, say: ['Glass walls. You can see right through them. You still can\'t walk through them.'] },
+  { id: 'colors', has: p => (p.exit || []).some(e => e[2] != null), say: ['Coloured goals only take a box of the same colour. Don\'t mix them up. She\'d notice.'] },
+];
+const BOSS_SAY = {   // not tied to a memory
+  map: ['Okay rookie, this is her head. Well, a map of it. Like the Tokyo metro, but with feelings.', 'Those glowing tiles are her memories. Go on in. They don\'t bite. Most of them.'],
+  gate: ['Big gate. It wants keys, and you get one for every memory you fix.', 'You don\'t need all of them. Just enough.'],
+};
+const tipSeen = id => S.flags.chamber ? !!(CH.tips && CH.tips[id]) : !!S.flags['tip_' + id];
+function tipMark(id) { if (S.flags.chamber) { CH.tips = CH.tips || {}; CH.tips[id] = 1; chSave(); } else { S.flags['tip_' + id] = true; save(); } }
+function bossTipsFor(p) {
+  if (!p || !p.boxes || (PJ_STORY && PJ_STORY.g === 'ray')) return;
+  const lines = [];
+  BOSS_TIPS.forEach(t => { if (lines.length < 4 && !tipSeen(t.id) && t.has(p)) { tipMark(t.id); lines.push(...t.say); } });
+  if (lines.length) bossVoice(lines);
+}
+function bossTip(id) { if (tipSeen(id) || !BOSS_SAY[id]) return; tipMark(id); bossVoice(BOSS_SAY[id]); }
+// one line at a time, at the bottom of whatever you're playing (a memory, else the map); a new batch waits its turn
+const BV = { q: [], on: false, el: null, tm: 0 };
+function bossVoice(lines) {
+  if (BV.on && !(BV.el && BV.el.isConnected)) bvStop();   // the window under the last line went away (map → memory): start fresh
+  BV.q.push(...lines); if (!BV.on) bvNext();
+}
+function bvStop() { clearTimeout(BV.tm); if (BV.el) BV.el.remove(); BV.el = null; BV.q = []; BV.on = false; }
+function bvNext() {
+  const t = BV.q.shift(); if (t == null) { BV.on = false; BV.el = null; return; }
+  const host = $('#pj-vp') || $('#ow-view'); if (!host) { bvStop(); return; }
+  BV.on = true;
+  const el = BV.el = document.createElement('div'); el.className = 'boss-sub'; el.textContent = `“${t}”`; host.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('on'));
+  if (!S.flags.chamber && S.logs && S.logs.boss) S.logs.boss.push({ who: 'boss', text: t, t: clockStr() });
+  BV.tm = setTimeout(() => { el.classList.remove('on'); BV.tm = setTimeout(() => { el.remove(); bvNext(); }, 450); }, 2200 + 50 * t.length);
+}
 
 /* every gameplay input costs a minute of her day */
 function owSpend(kind = 'move') {
@@ -290,7 +348,7 @@ async function owGate(G) {
     owHud(); save(); owSay(G.fin ? 'the wall is open. one more.' : 'the gate is open.'); return;
   }
   if (G.layer > S.g[g].layer + 1) { SFX.bump(); owSay('this gate is behind another one.'); return; }
-  if (ks.have < G.need) { SFX.bump(); OW.shake = performance.now(); owSay(`locked · ${ks.have}/${G.need} keys`); return; }
+  if (ks.have < G.need) { SFX.bump(); OW.shake = performance.now(); owSay(`locked · ${ks.have}/${G.need} keys`); bossTip('gate'); return; }
   // open it: a layer of her comes off
   OW.frozen = true; SFX.gate(); OW.gateFx = { G, t0: performance.now() };
   await wait(REDUCED ? 100 : 1300);
@@ -306,6 +364,7 @@ function owEnter() {
   if (ni == null) { owSay('nothing here. find a glowing tile.'); SFX.tick(); return; }
   const n = M.nodes[ni], p = PANELS.find(q => q.id === n.pid); if (!p) return;
   if (g === 'ray' && rayLocked(n)) { SFX.bump(); OW.shake = performance.now(); owSay(`locked · held by ${n.src}`); runDialogue(seq('boss', 'boss', endSteps('ray_level_locked'), 'NONE')); return; }
+  bvStop();
   OW.mode = 'level'; cancelAnimationFrame(OW.raf); OW.raf = 0; owDispose3();
   SFX.link(); glitch('soft');
   const host = $('#ow-main'); if (!host) return;
@@ -383,7 +442,6 @@ function owDraw() {
     x.globalAlpha = 1; x.strokeStyle = got ? 'rgba(255,255,255,.35)' : T.acc; x.lineWidth = 2; x.strokeRect(px + 4, py + 4, ts - 8, ts - 8); x.restore();
     x.fillStyle = got ? 'rgba(255,255,255,.55)' : '#fff'; x.font = `bold ${Math.round(ts * .34)}px "Courier New", monospace`; x.textAlign = 'center'; x.textBaseline = 'middle';
     x.fillText(got ? '✓' : g === 'ray' && rayLocked(n) ? '🔒' : String(n.i + 1), px + ts / 2, py + ts / 2 + 1);
-    if (p && p.tut && !got) { x.fillStyle = '#ffd86e'; x.font = `bold ${Math.round(ts * .2)}px monospace`; x.fillText('NEW', px + ts / 2, py + ts * .2); }
   });
   // core
   if (seen[I(...M.core)] === '1') { const [cx, cy] = M.core, px = cx * ts + ts / 2, py = cy * ts + ts / 2, r = ts * (.32 + .04 * Math.sin(now / 300)); x.save(); x.shadowColor = T.acc; x.shadowBlur = 18; x.fillStyle = S.g[g].layer >= 3 ? T.acc : '#fff'; x.beginPath(); x.moveTo(px, py - r); x.lineTo(px + r, py); x.lineTo(px, py + r); x.lineTo(px - r, py); x.closePath(); x.fill(); x.restore(); }

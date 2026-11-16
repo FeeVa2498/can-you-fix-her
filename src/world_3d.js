@@ -49,7 +49,6 @@ const OW3 = (() => {
       o.top.color.setHex(solved ? 0x3a2a4a : ACC); o.top.emissive.setHex(solved ? 0x000000 : ACC);
       o.glow.visible = !solved;
       if (o.tag) { world.remove(o.tag); o.tag = null; }
-      if (p && p.tut && !solved) { o.tag = sprite(label('NEW', '#ffd86e', 160, 72, 44), .7, .32); o.tag.position.set(o.n.x, .85, o.n.y); world.add(o.tag); anim.spin.push({ m: o.tag, bob: true }); }
     }
     /* ---- seals: bars of light ---- */
     const seals3 = M.seals.map(s => {

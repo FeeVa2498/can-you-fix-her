@@ -18,7 +18,7 @@ const CH_GIRLS = [
   { g: 'vel', name: 'Vel', tag: 'Gyaru', rules: 'glass tiles (crack, then break) · light tiles · arrow tiles' },
 ];
 const REGION = { 1: 'memory', 2: 'feeling', 3: 'self' };
-// what each tutorial panel teaches (shown as a NEW tag)
+// what each tutorial panel teaches (the level editor's tag list; no longer shown to the player)
 const TEACH = { basic: 'roll to the gold tile', sketch: 'trace the pencil', plates: 'switches open gates', avoid: 'black pencil: keep off', mirror: 'the other hand', swap: 'striped gates swap', nums: 'edge count', ends: 'goal anywhere', holes: 'holes in the map', oneway: 'one-way', portals: 'portals', bridges: 'overpass', boxes: 'every key moves the box', pads: 'dash tiles', stops: 'brake tiles', dash: 'rocket box', budget: 'landmine: exact moves', dice: 'dice: print the brief', lightAll: 'light the whole map', touch: 'sensor blocks: touch n sides', many: 'more boxes', twin: 'twin boxes', nolock: 'goals never lock', opp: 'opposite twin', my: 'up/down twin', trail: 'rope box', switches: 'locks & doors', dbl: 'two-colour switch', colors: 'colour goals', paints: 'paint tiles', cracks: 'cracked tiles', fragile: 'glass: cracks, then breaks', lights: 'light tiles', twinrope: 'two ropes, one reversed', goal: 'every key moves every box' };
 const CH_MEM = {
   tracing_paper: { name: 'tracing_paper.mem', ic: 'thread', desc: 'Once per panel: lay it over the board and the next few strokes of the answer show through.' },
@@ -71,7 +71,7 @@ function renderChamber(b) {
       <div class="chm-head"><b>${G.name}</b> <span>${esc(G.tag)}${G.rules ? ' · ' + esc(G.rules) : ''}</span></div>
       ${layers.map(L => `<div class="chm-layer"><h4>Layer ${L} · ${REGION[L]}</h4><div class="chm-cards">${list.filter(p => p.layer === L).sort((a, c) => a.n - c.n).map((p, idx) => {
         const d = CH.done[p.id];
-        return `<button class="chm-card bevel${d ? ' done' : ''}${p.tut ? ' tut' : ''}" data-p="${p.id}" title="${p.tut ? 'Tutorial: ' + esc(TEACH[p.tut] || p.tut) : ''}"><span class="no">${idx + 1}${p.tut ? '<i>NEW</i>' : ''}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}${d.peek ? '<br><i>saw solution</i>' : ''}` : 'not solved<br>&nbsp;'}</small></button>`;
+        return `<button class="chm-card bevel${d ? ' done' : ''}" data-p="${p.id}"><span class="no">${idx + 1}</span>${miniBoard(p)}<small>${d ? `✓ ${fmtT(d.t)}<br>${d.tries} ${d.tries === 1 ? 'try' : 'tries'}${d.peek ? '<br><i>saw solution</i>' : ''}` : 'not solved<br>&nbsp;'}</small></button>`;
       }).join('')}</div></div>`).join('')}
       <div class="chm-opts sunk">
         <label><input type="checkbox" id="co-debug" ${CH.opt.debug ? 'checked' : ''}> Designer info (solution count, notes, show answer)</label>
@@ -363,13 +363,14 @@ function mountStage() {
   const side = (PJ.p.dice || []).length > 0; vp.classList.toggle('has-side', side);
   const host = vp;
   if (CH.opt.view3d && P3.has()) {
-    try { PJ.view = P3.create(host, PJ.p); PJ.view.setRetro(!!CH.opt.retro); bindPJ(PJ.view.canvas, PJ.view.toBoard); vp.classList.remove('flat'); vp.insertAdjacentHTML('beforeend', `<div class="pj3-hud">◉ DIVE·PROJ 3D <i>${PJ.p.boxes ? 'BOX' : 'LINE'} MODE</i>${PJ.p.tut ? `<b class="tut">NEW · ${esc(TEACH[PJ.p.tut] || PJ.p.tut)}</b>` : ''}</div>`); }
+    try { PJ.view = P3.create(host, PJ.p); PJ.view.setRetro(!!CH.opt.retro); bindPJ(PJ.view.canvas, PJ.view.toBoard); vp.classList.remove('flat'); vp.insertAdjacentHTML('beforeend', `<div class="pj3-hud">◉ DIVE·PROJ 3D <i>${PJ.p.boxes ? 'BOX' : 'LINE'} MODE</i></div>`); }
     catch (e) { console.warn('3D projection failed, using the flat board', e); if (PJ.view) PJ.view.dispose(); PJ.view = null; host.innerHTML = ''; }
   }
   if (!PJ.view) { host.innerHTML = `<svg id="pj-svg" viewBox="${side ? vbSide(PJ.p) : vb(PJ.p)}" role="img" aria-label="Puzzle board. Move with WASD or the arrow keys."></svg>`; bindPJ($('#pj-svg')); }
   vp.insertAdjacentHTML('beforeend', pjSideHTML(PJ.p)); pjSideBind();
   const f = $('#pj-fps'); if (f) f.textContent = PJ.view ? 'WebGL' : '2D view';
   drawPJ();
+  bossTipsFor(PJ.p);
 }
 async function pjSubmit() {
   const p = PJ.p, r = p.boxes ? { ok: PanelEngine.boxWon(p, PJ.bs), bad: [{ kind: 'path' }] } : PanelEngine.validate(p, pjPath()); PJ.tries++;
