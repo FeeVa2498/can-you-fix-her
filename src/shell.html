@@ -1229,6 +1229,18 @@ body.reckon #app{animation:none}
 .mc-view{overflow:auto;padding:8px;display:flex;flex-direction:column}.mc-view pre{flex:1;margin:0;white-space:pre-wrap;font:12px/1.5 var(--mono)}
 .mc-act{display:flex;justify-content:flex-end;padding-top:6px}
 .mc-status{font-size:11px;color:var(--ink-soft)}
+#fdesk{position:fixed;inset:0;z-index:395;overflow:hidden;user-select:none}
+.fd-file,.fd-bin{position:absolute;width:90px;display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:none;cursor:grab;touch-action:none;padding:4px}
+.fd-file.drag{cursor:grabbing;filter:drop-shadow(0 6px 8px rgba(60,20,80,.35));z-index:3}.fd-file.gone{transition:transform .5s ease,opacity .5s;transform:scale(.1) translate(400px,400px);opacity:0}
+.fd-ic svg{width:52px;height:52px}.fd-lb{font:12px var(--mono);color:#4a2d6e;background:rgba(255,255,255,.85);padding:1px 6px;border-radius:8px;white-space:nowrap}
+.fd-bin{right:28px;bottom:28px;cursor:default}.fd-bin.hot .fd-ic{transform:scale(1.18) rotate(-6deg)}.fd-bin.full .fd-ic{animation:fdBin .5s ease}.fd-bin .fd-ic{transition:transform .15s}
+@keyframes fdBin{30%{transform:scale(1.25) rotate(8deg)}60%{transform:scale(.95) rotate(-4deg)}}
+.fd-note{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,90vw);max-height:80vh;display:flex;flex-direction:column;background:#fffdf7;border:2px solid var(--line);border-radius:10px;box-shadow:6px 7px 0 rgba(90,40,110,.25);z-index:2}
+.fd-note pre{margin:0;padding:16px 20px;overflow:auto;font:15px/1.6 'Courier New',monospace;color:#2a1e28;white-space:pre-wrap}
+.fd-white{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 1.6s ease;z-index:5}.fd-white.on{opacity:1;transition:none}.fd-white.slow.on{transition:opacity 3s ease}
+.fd-hold{position:fixed;inset:0;background:#fff;z-index:399;animation:fdhold .9s ease forwards;pointer-events:none}@keyframes fdhold{to{opacity:0}}
+.fd-esc{position:absolute;right:12px;top:10px;font:11px var(--mono);color:rgba(74,45,110,.6)}
+.rv-yes{top:50%!important;bottom:auto!important;transform:translateY(-50%)}
 /* ---- Newsie.exe: a fun magazine ---- */
 .nz{display:flex;height:100%;background:#fff6fb;color:#22121c;font-family:Georgia,'Times New Roman',serif;--fun:'Bagel Fat One','Pixelify Sans',sans-serif;--hand:'Caveat',cursive}
 .nz-page{flex:1;min-width:0;overflow:auto;position:relative}

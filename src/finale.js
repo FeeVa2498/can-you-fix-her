@@ -112,7 +112,7 @@ const REVEAL_ACTS = {
   name: 'she types your name',
   confirm: 'she presses Confirm',
   warn: 'a system warning pops up (the caption is its text); she moves to Yes and clicks',
-  yes: 'everything goes black; only the caption (Yes) at the bottom; the music starts',
+  yes: 'everything goes black; only "Yes" in the middle of the screen; the music starts',
   override: '"Creating avatar…" then "Overriding memor…"',
   pull: 'the camera pulls back; she leans back in her chair',
   desktop: 'the monitor shows your first morning: "Welcome back"',
@@ -313,7 +313,8 @@ function playReveal(opts = {}) {
         let m = $('.su-modal', desk); if (!m) { m = document.createElement('div'); m.className = 'su-modal'; $('.rv-win', desk).appendChild(m); }
         m.innerHTML = `<div class="card bevel rv-warn"><b>⚠ DIVE · Avatar</b><p>${esc(b.text || '')}</p><div class="row"><button class="btn">No</button><button class="btn primary" id="rv-yes">Yes</button></div></div>`;
         if (!RV.skip) SFX.buzz(); await W(Math.max(1200, (+b.sec || 0) * 1000 - 1400)); await click($('#rv-yes', m)); },
-      yes: async (b) => { dark.style.transition = 'none'; dark.style.opacity = 1; cur.style.opacity = 0; yes.textContent = b.text || 'Yes'; yes.classList.add('on');
+      yes: async (b) => { dark.style.transition = 'none'; dark.style.opacity = 1; cur.style.opacity = 0; yes.textContent = '"' + String(b.text || 'Yes').replace(/^["“”']+|["“”']+$/g, '') + '"'; yes.classList.add('on');   // always in quotes, in the middle of the screen
+
         if (!RV.skip || opts.music) { finaleMusic(true); np.classList.add('on'); } },
       override: async () => { showSetup(); Object.assign(P, ME); paint(); let m = $('.su-modal', desk); if (!m) { m = document.createElement('div'); m.className = 'su-modal'; $('.rv-win', desk).appendChild(m); }
         m.innerHTML = `<div class="card bevel load"><p id="rv-ld">Creating avatar…</p><div class="ldbar"><i id="rv-bar"></i></div></div>`;
@@ -327,7 +328,8 @@ function playReveal(opts = {}) {
       hold: async () => { },
       white: async () => { white.style.transition = RV.skip ? 'none' : 'opacity 1.8s ease'; white.style.opacity = 1; await W(1800); },
     };
-    const stop = () => { if (ended) return; ended = true; if (opts.preview && !opts.keepMusic) finaleMusic(false); document.removeEventListener('keydown', key); window.removeEventListener('resize', onResize); el.classList.add('out'); setTimeout(() => { el.remove(); res(); }, 500); };
+    const stop = () => { if (ended) return; ended = true; if (opts.preview && !opts.keepMusic) finaleMusic(false); document.removeEventListener('keydown', key); window.removeEventListener('resize', onResize); if (opts.flash) { SFX.glitch(.5); white.style.transition = 'opacity .18s ease-in'; white.style.opacity = 1; setTimeout(() => { el.remove(); res(); }, 260); return; }   // a hard white flash into the last desktop
+      el.classList.add('out'); setTimeout(() => { el.remove(); res(); }, 500); };
     // it can't be skipped: no click or key moves it on (in the Designer kit, Esc stops a preview)
     const key = e => { if (e.key === 'Escape' && opts.preview) stop(); };
     document.addEventListener('keydown', key);
@@ -350,12 +352,79 @@ function playReveal(opts = {}) {
   });
 }
 
+/* ---------------- 3. the last desktop ----------------
+   After "Yes": a white flash, and the desktop is empty but for one file, "thank you.txt" (the last page of
+   Ray's journal, to the doctor), and a Recycle Bin in the corner. Dragging the file into the bin ends it:
+   everything goes white, and Ori wakes up (memory_21). */
+const THANK_YOU = `doctor,
+
+this is the last page. it's for you, not about anyone.
+
+it was short. fourteen days, the way the clock in here counts them.
+but it was the first time anyone looked after me. not after ori. not after the girls. me.
+you asked me what my dream was. nobody had ever asked me that.
+
+thank you for every night you stayed. for the chair. for the dental plan joke.
+i laughed. i never told you.
+
+i'm sorry it had to be you who finished this.
+i'm sorry i made you forget.
+
+if i ever get to exist again, even for a little while,
+i'm going to travel. everywhere. every place i only ever saw on a screen.
+the sea first. it's only 19.3 km.
+
+goodbye, doctor.
+take care of her.
+
+— ray`;
+function finalDesk(opts = {}) {
+  return new Promise(res => {
+    Object.keys(WINS).forEach(id => { try { closeWin(id); } catch (e) { } }); if (PIX.on) pixieOff();
+    const dk = $('#desktop'), bg = dk ? getComputedStyle(dk) : null;
+    const el = document.createElement('div'); el.id = 'fdesk';
+    if (bg) { el.style.backgroundColor = bg.backgroundColor; el.style.backgroundImage = bg.backgroundImage; el.style.backgroundSize = bg.backgroundSize; }
+    el.innerHTML = `<button class="fd-file" id="fd-file" aria-label="thank you.txt"><span class="fd-ic">${icon('doc')}</span><span class="fd-lb">thank you.txt</span></button>
+      <div class="fd-bin" id="fd-bin" aria-label="Recycle Bin"><span class="fd-ic">${icon('trash')}</span><span class="fd-lb">Recycle Bin</span></div>
+      <div class="fd-note" id="fd-note" hidden><div class="titlebar">${icon('doc')}<span class="tt">thank you.txt — Notepad</span><button class="btn tbtn" id="fd-x">×</button></div><pre>${esc(THANK_YOU)}</pre></div>
+      <div class="fd-white on"></div>${opts.preview ? '<div class="fd-esc">Esc: stop the preview</div>' : ''}`;
+    document.body.appendChild(el); SFX.glitch(.4);
+    const white = $('.fd-white', el), file = $('#fd-file', el), bin = $('#fd-bin', el), note = $('#fd-note', el);
+    setTimeout(() => white.classList.remove('on'), 120);   // the flash fades, leaving the empty desktop
+    const W = el.clientWidth, H = el.clientHeight; let fx = W / 2 - 45, fy = H / 2 - 60; const place = () => { file.style.left = fx + 'px'; file.style.top = fy + 'px'; }; place();
+    let down = null, done = false;
+    file.addEventListener('pointerdown', e => { e.preventDefault(); file.setPointerCapture(e.pointerId); down = { x: e.clientX, y: e.clientY, ox: fx, oy: fy, drag: false }; });
+    file.addEventListener('pointermove', e => { if (!down || done) return; const dx = e.clientX - down.x, dy = e.clientY - down.y;
+      if (!down.drag && Math.hypot(dx, dy) > 5) { down.drag = true; file.classList.add('drag'); }
+      if (down.drag) { fx = down.ox + dx; fy = down.oy + dy; place(); const r = bin.getBoundingClientRect(); bin.classList.toggle('hot', e.clientX > r.left - 10 && e.clientX < r.right + 10 && e.clientY > r.top - 10 && e.clientY < r.bottom + 10); } });
+    file.addEventListener('pointerup', e => { if (!down || done) return; const d = down; down = null; file.classList.remove('drag');
+      if (!d.drag) { SFX.click(); note.hidden = false; return; }
+      if (bin.classList.contains('hot')) finish(); });
+    $('#fd-x', el).onclick = () => { SFX.click(); note.hidden = true; };
+    const stop = () => { document.removeEventListener('keydown', key); el.remove(); res(); };
+    const key = e => { if (e.key === 'Escape' && opts.preview) stop(); };
+    document.addEventListener('keydown', key);
+    async function finish() {
+      done = true; note.hidden = true; bin.classList.remove('hot'); bin.classList.add('full'); file.classList.add('gone'); SFX.pop(); glitch('soft');
+      await wait(1400); white.classList.add('slow', 'on'); await wait(3200);
+      document.removeEventListener('keydown', key); el.remove(); res();
+    }
+  });
+}
+// the one ending: the last desktop, then Ori wakes up, then the end card
+async function lastScenes(opts = {}) {
+  await finalDesk(opts);
+  const wh = document.createElement('div'); wh.className = 'fd-hold'; document.body.appendChild(wh);   // stay white until the memory is up
+  setTimeout(() => wh.remove(), 900);
+  await playMemory(21);
+}
+
 /* ---------------- Designer kit ▸ Finale ---------------- */
 function kitFinale(el) {
   const beats = KIT.rv || (KIT.rv = revealScript()), saved = JSON.stringify(beats) === JSON.stringify(revealScript());
   const total = beats.reduce((a, b) => a + (+b.sec || 0), 0);
   el.innerHTML = `<p class="kit-p">The last cutscene, after the last level behind Ray's wall (20 memories). Each beat shows a caption and does one thing on screen; it stays up at least its seconds (longer if the action takes longer). Edits are saved in this browser${RV.db ? ' and in the artifact\'s shared data (Claude can read them)' : ''}.</p>
-    <div class="kit-row"><button class="btn primary" id="fx-play">▶ Play the reveal</button><button class="btn" id="fx-full">▶ Play the whole finale (reveal → last talk → ending)</button>
+    <div class="kit-row"><button class="btn primary" id="fx-play">▶ Play the reveal</button><button class="btn" id="fx-full">▶ Play the whole ending (reveal → last desktop → Ori wakes → end card)</button><button class="btn" id="fx-desk">▶ Last desktop + Ori wakes</button>
       <button class="btn" id="fx-mus">${finaleMusicOn() ? '■ Stop the music' : '♪ Play the music'}</button><button class="btn" id="fx-vm">Open DiveVM (sample)</button><button class="btn" id="fx-map">Ray's map</button></div>
     <div class="kit-row"><b>${beats.length} beats · about ${Math.round(total)} s</b><span class="sp" style="flex:1"></span><span class="fx-msg" id="fx-msg">${saved ? '' : 'unsaved changes'}</span>
       <button class="btn primary" id="fx-save"${saved ? ' disabled' : ''}>Save</button><button class="btn" id="fx-copy">Copy script</button><button class="btn" id="fx-reset">Reset to default</button></div>
@@ -380,7 +449,8 @@ function kitFinale(el) {
   $$('[data-from]', el).forEach(x => x.onclick = () => { SFX.click(); kitSample(); playReveal({ beats, from: +x.dataset.from, preview: true }); });
   $('#fx-play', el).onclick = () => { SFX.click(); kitSample(); playReveal({ beats, preview: true }); };
   $('#fx-mus', el).onclick = () => { SFX.click(); finaleMusic(!finaleMusicOn()); setTimeout(re, 300); };
-  $('#fx-full', el).onclick = async () => { SFX.click(); kitSample(); await playReveal({ beats, preview: true, keepMusic: true }); yapCh = 'boss'; openYap('boss'); runDialogue(seq('boss', 'boss', endSteps('final_talk'), 'NONE')); };
+  $('#fx-full', el).onclick = async () => { SFX.click(); kitSample(); await playReveal({ beats, preview: true, keepMusic: true, flash: true }); await lastScenes({ preview: true }); endGame('reckoning'); };
+  $('#fx-desk', el).onclick = async () => { SFX.click(); kitSample(); await lastScenes({ preview: true }); };
   $('#fx-vm', el).onclick = () => { SFX.click(); kitSample(); PLAYABLE.forEach(g => { delete S.flags['del_' + g]; }); VM.booted = false; VM.sel = null; VM.confirm = null; closeWin('vm'); openVM(); };
   $('#fx-map', el).onclick = () => { KIT.tab = 'boss'; const b = $('#kit-body'); if (b) kitBoss(b); $$('.kit-tab').forEach(t => t.classList.toggle('on', t.dataset.k === 'boss')); };
   $('#fx-save', el).onclick = () => { revealSaveScript(JSON.parse(JSON.stringify(beats))); re(); $('#fx-msg', el).textContent = 'saved ♡'; };

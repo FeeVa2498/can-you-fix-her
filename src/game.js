@@ -548,7 +548,6 @@ function handleEnd(n) {
     case 'RK_FILES': rkFiles(); break;
     case 'RK_END': rkEnd(); break;
     case 'SHOW_DONE': renderShowcase(); if (PLAYABLE.filter(k => met(k)).every(k => S.show[k])) setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: ['Lovely! Like the Louvre, but with more glitter and fewer Mona Lisas.', 'I\'m keeping everyone\'s pieces. That\'s it for today. Go rest.'] }])), 900), setTimeout(() => { S.flags.nightAfter = true; }, 1500); break;
-    case 'PROTO_END': endGame('proto'); break;
   }
   save();
 }
@@ -1903,44 +1902,27 @@ function openLog() {
 /* =========================================================
    ENDINGS
    ========================================================= */
-function protoEndBoss() {
-  S.flags.protoEnd = true;
-  runDialogue(seq('boss', 'boss', [{ lines: ['Both of them faced everything and checked out. New patients are on their way.', 'You\'re doing so well, rookie.', '...I almost don\'t want this to end. Haha. Kidding. Mostly.'] }], 'PROTO_END'));
-}
-function endGame(kind) {
-  S.flags.ended = true; S.flags.endKind = kind; checkpoint('ended'); refresh();
-  glitch('hard');
+// there is only one ending: Ray goes, the girls go, Ori wakes up
+function endGame() {
+  S.flags.ended = true; S.flags.endKind = 'reckoning'; checkpoint('ended'); refresh();
   setTimeout(() => {
     openJournal();
-    const fixed = PLAYABLE.filter(k => S.g[k].gone).map(k => GIRLS[k].name);
     openWin('end', {
-      title: kind === 'reckoning' ? 'Reckoning' : kind === 'proto' ? 'End of prototype' : 'Deadline', icon: 'soul', w: 500, h: 560, x: 110, y: 16, render: b => {
-        if (kind === 'reckoning') { b.innerHTML = `<div class="endc"><div class="chapter"><div class="hero"><small>DAY ${RECKON_DAY} · RECKONING</small><h2>Ori opened her eyes.</h2></div></div>
+      title: 'The end', icon: 'soul', w: 460, h: 420, x: 110, y: 16, render: b => {
+        b.innerHTML = `<div class="endc"><div class="chapter"><div class="hero"><small>DAY ${RECKON_DAY}</small><h2>Ori woke up.</h2></div></div>
         <div class="panel sunk" style="padding:0"><div class="term">patients      Prim · Trix · Paige · Vel · Ray
-status        erased
+status        gone
 host          Ori · awake
-showcase      ${PLAYABLE.map(k => GIRLS[k].name + ': ' + (S.show[k] === 'true' ? 'her own passion' : S.show[k] === 'empty' ? 'nothing' : S.show[k] ? 'as ordered' : '—')).join(' · ')}
 journal       ${S.journal.filter(j => !j.miss).length} entries
 <span class="m">doctor        in the chair next to her bed</span></div></div>
-        <p style="margin:0;font-size:13px;line-height:1.6">The room smells like bleach. Somebody is holding her hand. She doesn't know who any of us were. She is alive.</p>
-        <p style="margin:0;font-size:12px;color:var(--ink-soft);line-height:1.5">Ray kept a journal. It's open behind this window.</p>
-        <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap"><button class="btn" id="en-dive">about_dive.txt</button><button class="btn primary" id="en-new">New game</button></div></div>`;
-          $('#en-dive', b).onclick = () => openNote('dive', 'about_dive.txt', ABOUT_DIVE); $('#en-new', b).onclick = confirmReset; return; }
-        b.innerHTML = `<div class="endc"><div class="chapter"><div class="hero"><small>${kind === 'proto' ? 'DAY ' + S.day + ' / ' + LAST_DAY : 'DAY ' + LAST_DAY + ' · TIME UP'}</small><h2>${kind === 'proto' ? 'Two patients "discharged"' : 'KPI missed'}</h2></div></div>
-        <div class="panel sunk" style="padding:0"><div class="term">KPI           ${layersTotal()}/${kpiMax()}
-discharged    ${esc(fixed.join(', ') || 'none')}
-journal       ${S.journal.filter(j => !j.miss).length} entries
-showcase      ${PLAYABLE.map(k => GIRLS[k].name + ': ' + (S.show[k] === 'true' ? 'her own passion' : S.show[k] === 'empty' ? 'nothing' : S.show[k] ? 'as ordered' : '—')).join(' · ')}
-mementos      ${S.mementos.length}/${Object.keys(MEMENTOS).length} · software ${S.apps.length}/2
-<span class="m">earthquakes   ${S.quakes}</span></div></div>
-        <p style="margin:0;font-size:13px;line-height:1.6">They didn't leave the facility. Every layer you removed was her will to live. She went back to the person who made her, and stopped.</p>
-        <p style="margin:0;font-size:12px;color:var(--ink-soft);line-height:1.5">Boss kept a journal. It's open behind this window.</p>
+        <p style="margin:0;font-size:13px;line-height:1.6">Thank you for playing <b>Can You Fix Her</b>.</p>
+        <p style="margin:0;font-size:12px;color:var(--ink-soft);line-height:1.5">Ray's journal is open behind this window.</p>
         <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap"><button class="btn" id="en-dive">about_dive.txt</button><button class="btn primary" id="en-new">New game</button></div></div>`;
         $('#en-dive', b).onclick = () => openNote('dive', 'about_dive.txt', ABOUT_DIVE); $('#en-new', b).onclick = confirmReset;
       }
     });
     SFX.win();
-  }, 900);
+  }, 400);
 }
 
 /* =========================================================
@@ -2054,7 +2036,7 @@ async function main() {
     S.active = null; S.queue = []; S.dyn = {}; S.session = null;
     await bootOS();
     if (S.flags.testRun) testRunBanner();
-    if (S.flags.ended) { refresh(); endGame(S.flags.endKind || 'proto'); return; }
+    if (S.flags.ended) { refresh(); endGame(); return; }
     if (S.flags.rayFace) WHO.boss.name = 'Ray';
     if (S.at === 'reckoning') { S.day = LAST_DAY; await beginReckoning(); return; }
     if (S.at === 'd1') { S.flags.briefStarted = false; S.logs.boss = []; day1Start(); await lockScreen('Welcome back'); day1Arrive(); return; }

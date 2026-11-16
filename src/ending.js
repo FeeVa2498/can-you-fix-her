@@ -100,14 +100,14 @@ async function rayLevelWon(pid) {
 }
 async function rayFinale() {
   S.g.ray = S.g.ray || { layer: 0 }; S.g.ray.layer = 1; save();
-  await playReveal();
-  yapCh = 'boss'; openYap('boss');
-  runDialogue(seq('boss', 'boss', endSteps('final_talk'), 'RK_END'));
+  await playReveal({ flash: true });
+  await lastScenes();   // thank you.txt → Recycle Bin → Ori wakes
+  rkEnd();
 }
 function rkEnd() {
   S.flags.rkDone = true; save();
   const bo = document.createElement('div'); bo.id = 'blackout'; document.body.appendChild(bo);
-  setTimeout(() => { bo.remove(); document.body.classList.remove('reckon'); endGame('reckoning'); }, REDUCED ? 300 : 2600);
+  setTimeout(() => { bo.remove(); document.body.classList.remove('reckon'); endGame('reckoning'); }, REDUCED ? 300 : 900);
 }
 /* ---------- memories: still cutscenes; captions come by themselves (they can't be skipped) ---------- */
 const memHold = t => 1800 + String(t).length * 55;   // how long a line stays after it has typed out
@@ -197,6 +197,17 @@ function drawMemory(cv, k) {
       [200, 300, 400, 560, 660, 760].forEach(cx => person(cx, 340, .7, 'rgba(60,50,55,.55)')); screen(380, 60, 200, 120, '#ffd9d9', 'ORI\n!!'); },
     18: () => { wash(['#ece6e0', '#cbbfb6', '#958780']); coat(480, 540, 1.8); x.fillStyle = 'rgba(240,226,214,.95)'; x.beginPath(); x.ellipse(452, 330, 30, 22, -.4, 0, 7); x.fill(); },
     19: () => { wash(['#e3e8ee', '#b8c2cf', '#7b8698']); person(300, 520, 1.5, RAY); coat(640, 540, 1.6); tears(632, 290); tears(652, 292); },
+    21: () => { wash(['#fbf7ee', '#eef2f4', '#d9e6ee']); x.fillStyle = '#cfe8ff'; x.fillRect(560, 60, 330, 300); const sky = x.createLinearGradient(0, 60, 0, 360); sky.addColorStop(0, '#9fd3ff'); sky.addColorStop(1, '#fff3d6'); x.fillStyle = sky; x.fillRect(570, 70, 310, 280);
+      x.fillStyle = 'rgba(255,240,200,.9)'; x.beginPath(); x.arc(800, 150, 34, 0, 7); x.fill(); x.fillStyle = 'rgba(255,255,255,.85)'; [[640, 120, 50], [700, 110, 36], [760, 250, 44]].forEach(([a, b, r]) => { x.beginPath(); x.ellipse(a, b, r, r * .4, 0, 0, 7); x.fill(); });
+      x.strokeStyle = '#e8e2d6'; x.lineWidth = 10; x.strokeRect(565, 65, 320, 290); x.beginPath(); x.moveTo(725, 65); x.lineTo(725, 355); x.stroke();
+      const sun = x.createLinearGradient(560, 360, 360, 540); sun.addColorStop(0, 'rgba(255,240,190,.45)'); sun.addColorStop(1, 'rgba(255,240,190,0)'); x.fillStyle = sun; x.beginPath(); x.moveTo(565, 355); x.lineTo(885, 355); x.lineTo(700, 540); x.lineTo(200, 540); x.fill();
+      x.fillStyle = 'rgba(120,110,120,.45)'; x.fillRect(64, 400, 14, 90); x.fillRect(104, 400, 14, 90); x.fillRect(56, 380, 70, 22); x.fillRect(56, 320, 14, 70);   // the empty chair
+      bed(150, 400);
+      x.fillStyle = '#e9d6c8'; x.beginPath(); x.roundRect(450, 300, 74, 110, 26); x.fill();   // Ori, sitting up, turned to the window
+      x.fillStyle = '#f3e3d6'; x.beginPath(); x.ellipse(492, 262, 30, 34, 0, 0, 7); x.fill();
+      x.fillStyle = '#5b4652'; x.beginPath(); x.ellipse(482, 252, 33, 30, 0, Math.PI * .9, Math.PI * 2.15); x.fill(); x.fillRect(452, 252, 16, 70);
+      x.fillStyle = 'rgba(255,255,255,.9)'; x.fillRect(400, 395, 230, 26);   // the blanket over her legs
+      ink(() => { x.beginPath(); x.moveTo(520, 262); x.lineTo(540, 258); x.stroke(); }, 'rgba(91,70,82,.6)', 2); },
     20: () => { wash(['#151020', '#251a36', '#0b0812']); screen(330, 120, 380, 260, '#e9ddff', 'AVATAR FEATURE\nBE ANOTHER PERSON'); x.globalAlpha = .95; person(520, 560, 1.4, 'rgba(30,24,40,.95)', 'sit'); x.globalAlpha = 1; },
   }[k] || (() => wash(['#ddd', '#bbb', '#999'])))();
   x.fillStyle = 'rgba(0,0,0,.06)'; for (let i = 0; i < H; i += 3) x.fillRect(0, i, W, 1);

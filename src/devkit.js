@@ -209,10 +209,10 @@ function testRunBanner() {
 /* ---------- cutscenes ---------- */
 function kitCuts(el) {
   el.innerHTML = `<p class="kit-p">Play the cutscenes and screen effects on their own.</p>
-    <h4>Memories (the reckoning)</h4><div class="kit-list">${Array.from({ length: 20 }, (_, i) => i + 1).map(k => `<button class="btn" data-mem="${k}">Memory ${k}</button>`).join('')}<button class="btn primary" id="cu-reveal">The reveal (edit in Finale)</button></div>
+    <h4>Memories (the reckoning)</h4><div class="kit-list">${Array.from({ length: 21 }, (_, i) => i + 1).map(k => `<button class="btn" data-mem="${k}">${k === 21 ? 'Ori wakes (21)' : 'Memory ' + k}</button>`).join('')}<button class="btn primary" id="cu-reveal">The reveal (edit in Finale)</button></div>
     <h4>Screen effects</h4><div class="kit-list"><button class="btn" data-fx="quake">Earthquake</button><button class="btn" data-fx="soft">Glitch (soft)</button><button class="btn" data-fx="hard">Glitch (hard)</button><button class="btn" data-fx="wake">Wake up</button><button class="btn" data-fx="lock">Lock screen</button><button class="btn" data-fx="feed">Break-layer effect</button></div>
     <h4>Talks</h4><div class="kit-list">${['reckoning_morning', 'reckoning_reveal', 'reckoning_map', 'final_talk'].map(k => `<button class="btn" data-talk="${k}">${k}</button>`).join('')}</div>
-    <h4>Endings</h4><div class="kit-list"><button class="btn" data-end="reckoning">Reckoning ending</button><button class="btn" data-end="deadline">Deadline ending</button><button class="btn" id="cu-journal">Boss's journal (sample)</button><button class="btn" id="cu-show">Showcase window</button></div>`;
+    <h4>Endings</h4><div class="kit-list"><button class="btn" data-end="reckoning">The ending (end card)</button><button class="btn" id="cu-last">Last desktop + Ori wakes</button><button class="btn" id="cu-journal">Boss's journal (sample)</button><button class="btn" id="cu-show">Showcase window</button></div>`;
   $$('[data-mem]', el).forEach(x => x.onclick = () => { SFX.click(); playMemory(+x.dataset.mem); });
   $('#cu-reveal', el).onclick = () => { SFX.click(); kitSample(); playReveal({ preview: true }); };
   $$('[data-fx]', el).forEach(x => x.onclick = async () => {
@@ -224,7 +224,8 @@ function kitCuts(el) {
     else if (f === 'feed') { S.met.prim = true; if (typeof breakLayerFx === 'function') breakLayerFx('prim', 1); }
   });
   $$('[data-talk]', el).forEach(x => x.onclick = () => { SFX.click(); openYap('boss'); runDialogue(seq('boss', 'boss', endSteps(x.dataset.talk), 'NONE')); });
-  $$('[data-end]', el).forEach(x => x.onclick = () => { kitSample(); endGame(x.dataset.end); });
+  $$('[data-end]', el).forEach(x => x.onclick = () => { kitSample(); endGame(); });
+  $('#cu-last', el).onclick = () => { SFX.click(); kitSample(); lastScenes({ preview: true }); };
   $('#cu-journal', el).onclick = () => { kitSample(); openJournal(); };
   $('#cu-show', el).onclick = () => { kitSample(); S.day = SHOWCASE_DAY; openShowcase(); };
 }
