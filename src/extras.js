@@ -50,7 +50,7 @@ const UNITS = [
   ['mi', 'km', v => v * 1.609344], ['ft', 'm', v => v * 0.3048], ['in', 'cm', v => v * 2.54], ['lb', 'kg', v => v * 0.45359237], ['oz', 'g', v => v * 28.349523],
   ['°F', '°C', v => (v - 32) * 5 / 9], ['gal', 'L', v => v * 3.785412], ['mph', 'km/h', v => v * 1.609344], ['acre', 'm²', v => v * 4046.8564], ['cup', 'mL', v => v * 236.5882],
 ];
-// Trix's calculator: a chunky Y2K pocket device, black shell + candy pink keys, a green LCD
+// UnitConv.exe: a chunky Y2K pocket calculator, black shell + candy pink keys, a green LCD
 function openConv() {
   S.used = S.used || {}; S.used['UnitConv.exe'] = true; save();
   const U = S.ucx = S.ucx || { tab: 0, u: 0, rev: false, n: '1', cn: '100', a: 'HEX', b: 'BUNNY' };
@@ -66,11 +66,11 @@ function openConv() {
       : `<div class="ux-lab">FROM</div><div class="ux-row">${COINS.map(c => `<button class="uk coin${U.a === c.id ? ' on' : ''}" data-a="${c.id}">${c.id}</button>`).join('')}</div>
          <div class="ux-lab">TO</div><div class="ux-row">${COINS.map(c => `<button class="uk coin${U.b === c.id ? ' on' : ''}" data-b="${c.id}">${c.id}</button>`).join('')}</div><div class="ux-row"><button class="uk wide" data-k="rev">⇄ SWAP</button><button class="uk wide" data-k="clr">C</button></div>`;
     const draw = () => {
-      b.innerHTML = `<div class="ucx"><div class="ucx-top"><span class="ucx-brand">TRIX<b>CALC</b> <i>UC-2001</i></span><span class="ucx-solar" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
+      b.innerHTML = `<div class="ucx"><div class="ucx-top"><span class="ucx-brand">UNI<b>CALC</b> <i>UC-2001</i></span><span class="ucx-solar" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
         <div class="ucx-lcd">${U.tab === 0 ? unitsLCD() : cryptoLCD()}</div>
         <div class="ucx-mode" role="tablist"><button role="tab" data-t="0" class="${U.tab ? '' : 'on'}">UNIT</button><span class="ucx-led${U.tab ? ' r' : ''}"></span><button role="tab" data-t="1" class="${U.tab ? 'on' : ''}">CRYPTO</button></div>
         <div class="ucx-keys">${keys()}</div>
-        <div class="ucx-foot">✧ property of trix · do not lick ✧</div></div>`;
+        <div class="ucx-foot">✧ solar powered · do not lick ✧</div></div>`;
       $$('[data-t]', b).forEach(x => x.onclick = () => { SFX.click(); U.tab = +x.dataset.t; draw(); });
       $$('[data-u]', b).forEach(x => x.onclick = () => { SFX.tick(); U.u = +x.dataset.u; draw(); });
       $$('[data-a]', b).forEach(x => x.onclick = () => { SFX.tick(); U.a = x.dataset.a; draw(); });

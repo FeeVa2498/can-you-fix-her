@@ -1160,6 +1160,7 @@ line.ed-hov{stroke-width:.14}
 .ow-mini{position:absolute;right:8px;bottom:8px;border:2px solid var(--acc);border-radius:4px;image-rendering:pixelated;width:auto;height:auto;max-width:45%;}
 .ow-card{position:absolute;left:10px;bottom:10px;padding:6px 10px;border:2px solid var(--acc);border-radius:6px;background:rgba(13,7,20,.9);font-family:var(--mono);font-size:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:60%}
 .ow-card .new{color:#ffd86e}.ow-card .got{color:#7be3a4}.ow-card .go{color:var(--acc);font-weight:bold}
+.nz-testing{display:flex;flex-direction:column}.nz-testing>.nz{flex:1;min-height:0;height:auto}.nz-test{flex:none;display:flex;align-items:center;gap:6px;padding:4px 8px;background:#1d1030;color:#ffd86e;font:12px var(--mono)}.nz-test b{letter-spacing:.06em}.nz-test button,.nz-test select{font:12px var(--mono);padding:1px 6px}.nz-test small{margin-left:auto;opacity:.6}
 .boss-sub{position:absolute;left:50%;bottom:22px;transform:translate(-50%,6px);max-width:86%;text-align:center;font:italic clamp(14px,1.55vw,19px)/1.45 Georgia,serif;color:#fff;background:rgba(10,4,20,.66);padding:7px 18px;border-radius:4px;text-shadow:0 1px 2px #000;opacity:0;pointer-events:none;z-index:6;transition:opacity .45s,transform .45s}
 .boss-sub.on{opacity:1;transform:translate(-50%,0)}
 .ow-sub{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);max-width:88%;text-align:center;font:italic clamp(14px,1.6vw,19px)/1.4 Georgia,serif;color:#fff;background:rgba(10,4,20,.62);padding:6px 16px;border-radius:4px;text-shadow:0 1px 2px #000;opacity:0;pointer-events:none}
@@ -2696,7 +2697,7 @@ const MEM_UP = Object.fromEntries(Object.entries(MEMENTOS).filter(([, v]) => v.u
 const memShown = () => Object.keys(MEMENTOS).filter(k => !MEMENTOS[k].up);   // one slot per girl: show the upgrade once you have it
 const REWARD = {
   prim: {
-    1: { subject: 'a little friend', body: 'counsellor,\n\nthank you for today. it felt like taking off a coat that was never mine.\nboss wanted me to draw cute things. so i drew a fairy. then she wouldn\'t stay on the page.\nshe\'s yours now. she likes to help. click her.\n\n— prim', atts: [{ kind: 'app', name: 'Pixie.exe' }] },
+    1: { subject: 'a little friend', body: 'counsellor,\n\nthank you for today. it felt like taking off a coat that was never mine.\nboss wanted me to draw cute things. so i kept this little desktop fairy around as a model. she never sits still long enough to draw.\nshe\'s yours now. she likes to help. click her.\n\n— prim', atts: [{ kind: 'app', name: 'Pixie.exe' }] },
     2: { subject: 'something i traced', body: 'i kept the tracing paper. if a line goes wrong you just lift it off and start that bit again.\nyou don\'t have to get everything right the first time. i never do.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
     3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you once. not traced. drew. it was bad. i tore it up.\nmaybe i\'ll draw you again. maybe.\n\np.s. the tracing paper was the old me. this is the real one: a repeat sign. go back as many times as you need.\n\n— p.', atts: [{ kind: 'mem', name: 'repeat_sign.mem' }] },
   },
@@ -2789,7 +2790,7 @@ function openFortune() {
         <div class="ftx-coin" id="ft-coinv" hidden><span class="coin"><b>?</b></span><b id="ft-cr"></b></div>
         <div class="ftx-coin" id="ft-diev" hidden><span class="ftx-die" id="ft-die">⚀</span><b id="ft-dr"></b></div></div>
       <div class="ftx-btns"><button class="ftb" id="ft-draw">✧ draw a card</button><button class="ftb" id="ft-coin">◐ flip a coin</button><button class="ftb" id="ft-dice">⚄ roll a die</button></div>
-      <div class="ftx-foot">dealt by Paige · no refunds</div></div>`;
+      <div class="ftx-foot">for entertainment only · no refunds</div></div>`;
     const card = $('#ft-card', b), cv = $('#ft-coinv', b), dv = $('#ft-diev', b);
     const show = el => { card.hidden = el !== card; cv.hidden = el !== cv; dv.hidden = el !== dv; };
     $('#ft-draw', b).onclick = () => {
@@ -2810,17 +2811,17 @@ function openFortune() {
     };
   } });
 }
-// Vel's field atlas: olive canvas cover, stencil type, a spinning compass, pinned index cards
+// Atlas.exe, a field atlas: olive canvas cover, stencil type, a spinning compass, pinned index cards
 function openAtlas() {
   S.used = S.used || {}; S.used['Atlas.exe'] = true; save();
   openWin('atlas', { title: 'Atlas.exe', icon: 'atlas', w: 400, h: 500, x: 260, y: 40, skin: true, render: b => {
-    b.innerHTML = `<div class="atx"><div class="atx-head"><div class="atx-compass" aria-hidden="true"><i></i><span>N</span></div><div><b>ATLAS</b><small>FIELD EDITION · VOL. 1</small></div><span class="atx-stamp">TRACED<br>BY PRIM</span></div>
+    b.innerHTML = `<div class="atx"><div class="atx-head"><div class="atx-compass" aria-hidden="true"><i></i><span>N</span></div><div><b>ATLAS</b><small>FIELD EDITION · VOL. 1</small></div><span class="atx-stamp">FIELD<br>COPY</span></div>
       <label class="atx-search"><span>SEARCH //</span><input id="atlas-q" placeholder="eiffel, everest…" autocomplete="off" aria-label="Search a place"></label>
-      <div class="atx-list" id="atlas-l"></div><div class="atx-foot">every soldier needs a map ✦ — V.</div></div>`;
+      <div class="atx-list" id="atlas-l"></div><div class="atx-foot">every traveller needs a map ✦</div></div>`;
     const coord = s => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return `${(h % 90)}°${(h >> 8) % 60}′${h % 2 ? 'N' : 'S'} · ${(h >> 4) % 180}°${(h >> 12) % 60}′${(h >> 3) % 2 ? 'E' : 'W'}`; };
     const r = () => { const q = $('#atlas-q', b).value.toLowerCase();
       const hits = ATLAS.filter(a => !q || a.join(' ').toLowerCase().includes(q));
-      $('#atlas-l', b).innerHTML = hits.length ? hits.map((a, i) => `<div class="atx-card" style="--r:${(i % 3 - 1) * .6}deg"><i class="atx-pin"></i><b>${esc(a[0])}</b><span>${esc(a[1])}</span><p>${esc(a[2])}</p><small>${coord(a[0])}</small></div>`).join('') : '<div class="atx-none">NO RECORD. CHECK SPELLING. (vel never does)</div>'; };
+      $('#atlas-l', b).innerHTML = hits.length ? hits.map((a, i) => `<div class="atx-card" style="--r:${(i % 3 - 1) * .6}deg"><i class="atx-pin"></i><b>${esc(a[0])}</b><span>${esc(a[1])}</span><p>${esc(a[2])}</p><small>${coord(a[0])}</small></div>`).join('') : '<div class="atx-none">NO RECORD. CHECK SPELLING.</div>'; };
     $('#atlas-q', b).addEventListener('input', r); r();
   } });
 }
@@ -6968,7 +6969,7 @@ const UNITS = [
   ['mi', 'km', v => v * 1.609344], ['ft', 'm', v => v * 0.3048], ['in', 'cm', v => v * 2.54], ['lb', 'kg', v => v * 0.45359237], ['oz', 'g', v => v * 28.349523],
   ['°F', '°C', v => (v - 32) * 5 / 9], ['gal', 'L', v => v * 3.785412], ['mph', 'km/h', v => v * 1.609344], ['acre', 'm²', v => v * 4046.8564], ['cup', 'mL', v => v * 236.5882],
 ];
-// Trix's calculator: a chunky Y2K pocket device, black shell + candy pink keys, a green LCD
+// UnitConv.exe: a chunky Y2K pocket calculator, black shell + candy pink keys, a green LCD
 function openConv() {
   S.used = S.used || {}; S.used['UnitConv.exe'] = true; save();
   const U = S.ucx = S.ucx || { tab: 0, u: 0, rev: false, n: '1', cn: '100', a: 'HEX', b: 'BUNNY' };
@@ -6984,11 +6985,11 @@ function openConv() {
       : `<div class="ux-lab">FROM</div><div class="ux-row">${COINS.map(c => `<button class="uk coin${U.a === c.id ? ' on' : ''}" data-a="${c.id}">${c.id}</button>`).join('')}</div>
          <div class="ux-lab">TO</div><div class="ux-row">${COINS.map(c => `<button class="uk coin${U.b === c.id ? ' on' : ''}" data-b="${c.id}">${c.id}</button>`).join('')}</div><div class="ux-row"><button class="uk wide" data-k="rev">⇄ SWAP</button><button class="uk wide" data-k="clr">C</button></div>`;
     const draw = () => {
-      b.innerHTML = `<div class="ucx"><div class="ucx-top"><span class="ucx-brand">TRIX<b>CALC</b> <i>UC-2001</i></span><span class="ucx-solar" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
+      b.innerHTML = `<div class="ucx"><div class="ucx-top"><span class="ucx-brand">UNI<b>CALC</b> <i>UC-2001</i></span><span class="ucx-solar" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
         <div class="ucx-lcd">${U.tab === 0 ? unitsLCD() : cryptoLCD()}</div>
         <div class="ucx-mode" role="tablist"><button role="tab" data-t="0" class="${U.tab ? '' : 'on'}">UNIT</button><span class="ucx-led${U.tab ? ' r' : ''}"></span><button role="tab" data-t="1" class="${U.tab ? 'on' : ''}">CRYPTO</button></div>
         <div class="ucx-keys">${keys()}</div>
-        <div class="ucx-foot">✧ property of trix · do not lick ✧</div></div>`;
+        <div class="ucx-foot">✧ solar powered · do not lick ✧</div></div>`;
       $$('[data-t]', b).forEach(x => x.onclick = () => { SFX.click(); U.tab = +x.dataset.t; draw(); });
       $$('[data-u]', b).forEach(x => x.onclick = () => { SFX.tick(); U.u = +x.dataset.u; draw(); });
       $$('[data-a]', b).forEach(x => x.onclick = () => { SFX.tick(); U.a = x.dataset.a; draw(); });
@@ -8207,7 +8208,7 @@ function kitFinale(el) {
 }
 
 /* =========================================================
-   APPS 2 · Newsie.exe (Vel's layer-1 gift), Pixie.exe (Prim's layer-1 gift),
+   APPS 2 · Newsie.exe (Vel's layer-1 gift), Pixie.exe (Prim's layer-1 gift; the apps are ordinary software, not made by the girls),
    Morse code, and two night questions that use them:
      · Prim asks whether you care about the world outside. "Of course" is only there if you opened
        Newsie today; then she asks what's new, and today's headline is the right answer (5 keys).
@@ -8313,7 +8314,19 @@ function openNews() {
   const dk = $('#desktop');
   openWin('news', { title: 'Newsie.exe', icon: 'news', w: Math.min(760, dk.clientWidth - 30), h: Math.min(580, dk.clientHeight - 20), x: 160, y: 14, skin: true, render: b => newsRender(b) });
 }
+// Test chamber: a day picker on top, so every issue (cover stories, rotations, classifieds) can be checked
 function newsRender(b) {
+  if (!S.flags.chamber) return newsRender1(b);
+  const real = S.day; NEWSIE.day = clamp(NEWSIE.day || 1, 1, newsFront().length); S.day = NEWSIE.day;
+  try { newsRender1(b); } finally { S.day = real; }
+  const n = newsFront().length, bar = document.createElement('div'); bar.className = 'nz-test';
+  bar.innerHTML = `<b>TEST · preview day</b><button data-d="-1" aria-label="Previous day">◂</button><select aria-label="Day">${Array.from({ length: n }, (_, i) => `<option value="${i + 1}"${i + 1 === NEWSIE.day ? ' selected' : ''}>day ${i + 1}</option>`).join('')}</select><button data-d="1" aria-label="Next day">▸</button><small>only in the Test chamber</small>`;
+  b.prepend(bar); b.classList.add('nz-testing');
+  const go = d => { NEWSIE.day = clamp(d, 1, n); SFX.click(); newsRender(b); };
+  $$('[data-d]', bar).forEach(x => x.onclick = () => go(NEWSIE.day + +x.dataset.d));
+  $('select', bar).onchange = e => go(+e.target.value);
+}
+function newsRender1(b) {
   const d = newsDay(), F = newsFront(), [hl, sub] = F[d - 1], tab = NEWS_TABS.find(t => t[0] === NEWSIE.tab) || NEWS_TABS[0];
   const fill = newsFiller(), ticker = [newsBriefs()[d - 1], fill[d % fill.length], fill[(d + 2) % fill.length], fill[(d + 4) % fill.length]].filter(Boolean);
   const by = '<span class="nz-by">by staff writer R.</span>';

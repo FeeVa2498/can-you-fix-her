@@ -1129,7 +1129,7 @@ const MEM_UP = Object.fromEntries(Object.entries(MEMENTOS).filter(([, v]) => v.u
 const memShown = () => Object.keys(MEMENTOS).filter(k => !MEMENTOS[k].up);   // one slot per girl: show the upgrade once you have it
 const REWARD = {
   prim: {
-    1: { subject: 'a little friend', body: 'counsellor,\n\nthank you for today. it felt like taking off a coat that was never mine.\nboss wanted me to draw cute things. so i drew a fairy. then she wouldn\'t stay on the page.\nshe\'s yours now. she likes to help. click her.\n\n— prim', atts: [{ kind: 'app', name: 'Pixie.exe' }] },
+    1: { subject: 'a little friend', body: 'counsellor,\n\nthank you for today. it felt like taking off a coat that was never mine.\nboss wanted me to draw cute things. so i kept this little desktop fairy around as a model. she never sits still long enough to draw.\nshe\'s yours now. she likes to help. click her.\n\n— prim', atts: [{ kind: 'app', name: 'Pixie.exe' }] },
     2: { subject: 'something i traced', body: 'i kept the tracing paper. if a line goes wrong you just lift it off and start that bit again.\nyou don\'t have to get everything right the first time. i never do.\n\n— prim', atts: [{ kind: 'mem', name: 'tracing_paper.mem' }] },
     3: { subject: 'for you', body: 'boss says i faced everything.\n\ni drew you once. not traced. drew. it was bad. i tore it up.\nmaybe i\'ll draw you again. maybe.\n\np.s. the tracing paper was the old me. this is the real one: a repeat sign. go back as many times as you need.\n\n— p.', atts: [{ kind: 'mem', name: 'repeat_sign.mem' }] },
   },
@@ -1222,7 +1222,7 @@ function openFortune() {
         <div class="ftx-coin" id="ft-coinv" hidden><span class="coin"><b>?</b></span><b id="ft-cr"></b></div>
         <div class="ftx-coin" id="ft-diev" hidden><span class="ftx-die" id="ft-die">⚀</span><b id="ft-dr"></b></div></div>
       <div class="ftx-btns"><button class="ftb" id="ft-draw">✧ draw a card</button><button class="ftb" id="ft-coin">◐ flip a coin</button><button class="ftb" id="ft-dice">⚄ roll a die</button></div>
-      <div class="ftx-foot">dealt by Paige · no refunds</div></div>`;
+      <div class="ftx-foot">for entertainment only · no refunds</div></div>`;
     const card = $('#ft-card', b), cv = $('#ft-coinv', b), dv = $('#ft-diev', b);
     const show = el => { card.hidden = el !== card; cv.hidden = el !== cv; dv.hidden = el !== dv; };
     $('#ft-draw', b).onclick = () => {
@@ -1243,17 +1243,17 @@ function openFortune() {
     };
   } });
 }
-// Vel's field atlas: olive canvas cover, stencil type, a spinning compass, pinned index cards
+// Atlas.exe, a field atlas: olive canvas cover, stencil type, a spinning compass, pinned index cards
 function openAtlas() {
   S.used = S.used || {}; S.used['Atlas.exe'] = true; save();
   openWin('atlas', { title: 'Atlas.exe', icon: 'atlas', w: 400, h: 500, x: 260, y: 40, skin: true, render: b => {
-    b.innerHTML = `<div class="atx"><div class="atx-head"><div class="atx-compass" aria-hidden="true"><i></i><span>N</span></div><div><b>ATLAS</b><small>FIELD EDITION · VOL. 1</small></div><span class="atx-stamp">TRACED<br>BY PRIM</span></div>
+    b.innerHTML = `<div class="atx"><div class="atx-head"><div class="atx-compass" aria-hidden="true"><i></i><span>N</span></div><div><b>ATLAS</b><small>FIELD EDITION · VOL. 1</small></div><span class="atx-stamp">FIELD<br>COPY</span></div>
       <label class="atx-search"><span>SEARCH //</span><input id="atlas-q" placeholder="eiffel, everest…" autocomplete="off" aria-label="Search a place"></label>
-      <div class="atx-list" id="atlas-l"></div><div class="atx-foot">every soldier needs a map ✦ — V.</div></div>`;
+      <div class="atx-list" id="atlas-l"></div><div class="atx-foot">every traveller needs a map ✦</div></div>`;
     const coord = s => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return `${(h % 90)}°${(h >> 8) % 60}′${h % 2 ? 'N' : 'S'} · ${(h >> 4) % 180}°${(h >> 12) % 60}′${(h >> 3) % 2 ? 'E' : 'W'}`; };
     const r = () => { const q = $('#atlas-q', b).value.toLowerCase();
       const hits = ATLAS.filter(a => !q || a.join(' ').toLowerCase().includes(q));
-      $('#atlas-l', b).innerHTML = hits.length ? hits.map((a, i) => `<div class="atx-card" style="--r:${(i % 3 - 1) * .6}deg"><i class="atx-pin"></i><b>${esc(a[0])}</b><span>${esc(a[1])}</span><p>${esc(a[2])}</p><small>${coord(a[0])}</small></div>`).join('') : '<div class="atx-none">NO RECORD. CHECK SPELLING. (vel never does)</div>'; };
+      $('#atlas-l', b).innerHTML = hits.length ? hits.map((a, i) => `<div class="atx-card" style="--r:${(i % 3 - 1) * .6}deg"><i class="atx-pin"></i><b>${esc(a[0])}</b><span>${esc(a[1])}</span><p>${esc(a[2])}</p><small>${coord(a[0])}</small></div>`).join('') : '<div class="atx-none">NO RECORD. CHECK SPELLING.</div>'; };
     $('#atlas-q', b).addEventListener('input', r); r();
   } });
 }

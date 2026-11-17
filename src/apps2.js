@@ -1,5 +1,5 @@
 /* =========================================================
-   APPS 2 · Newsie.exe (Vel's layer-1 gift), Pixie.exe (Prim's layer-1 gift),
+   APPS 2 · Newsie.exe (Vel's layer-1 gift), Pixie.exe (Prim's layer-1 gift; the apps are ordinary software, not made by the girls),
    Morse code, and two night questions that use them:
      · Prim asks whether you care about the world outside. "Of course" is only there if you opened
        Newsie today; then she asks what's new, and today's headline is the right answer (5 keys).
@@ -105,7 +105,19 @@ function openNews() {
   const dk = $('#desktop');
   openWin('news', { title: 'Newsie.exe', icon: 'news', w: Math.min(760, dk.clientWidth - 30), h: Math.min(580, dk.clientHeight - 20), x: 160, y: 14, skin: true, render: b => newsRender(b) });
 }
+// Test chamber: a day picker on top, so every issue (cover stories, rotations, classifieds) can be checked
 function newsRender(b) {
+  if (!S.flags.chamber) return newsRender1(b);
+  const real = S.day; NEWSIE.day = clamp(NEWSIE.day || 1, 1, newsFront().length); S.day = NEWSIE.day;
+  try { newsRender1(b); } finally { S.day = real; }
+  const n = newsFront().length, bar = document.createElement('div'); bar.className = 'nz-test';
+  bar.innerHTML = `<b>TEST · preview day</b><button data-d="-1" aria-label="Previous day">◂</button><select aria-label="Day">${Array.from({ length: n }, (_, i) => `<option value="${i + 1}"${i + 1 === NEWSIE.day ? ' selected' : ''}>day ${i + 1}</option>`).join('')}</select><button data-d="1" aria-label="Next day">▸</button><small>only in the Test chamber</small>`;
+  b.prepend(bar); b.classList.add('nz-testing');
+  const go = d => { NEWSIE.day = clamp(d, 1, n); SFX.click(); newsRender(b); };
+  $$('[data-d]', bar).forEach(x => x.onclick = () => go(NEWSIE.day + +x.dataset.d));
+  $('select', bar).onchange = e => go(+e.target.value);
+}
+function newsRender1(b) {
   const d = newsDay(), F = newsFront(), [hl, sub] = F[d - 1], tab = NEWS_TABS.find(t => t[0] === NEWSIE.tab) || NEWS_TABS[0];
   const fill = newsFiller(), ticker = [newsBriefs()[d - 1], fill[d % fill.length], fill[(d + 2) % fill.length], fill[(d + 4) % fill.length]].filter(Boolean);
   const by = '<span class="nz-by">by staff writer R.</span>';
