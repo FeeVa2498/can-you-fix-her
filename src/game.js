@@ -389,6 +389,23 @@ function seq(ch, sp, steps, trig, param) {
   nodes.e = { type: 'END', trigger_event: trig || 'NONE', event_parameter: param || null };
   return mkDlg(ch, nodes);
 }
+/* the session temp chat moves on without you: if she asked something and you didn't answer before the next thing
+   happens (a memory cleared, a layer coming off…), she just keeps talking and the question is gone. */
+const isSesDlg = id => { const d = getDlg(id); return !!d && d.character_id === 'session'; };
+const sesSkippable = id => { const d = getDlg(id); return !!d && d.character_id === 'session' && d.nodes.e && d.nodes.e.trigger_event === 'NONE'; };
+function sesOverwrite() {
+  const a = S.active; if (!a) return;
+  delete S.dyn[a.id]; S.active = null; runToken++; renderAllChoices();
+  const i = S.queue.findIndex(isSesDlg), nx = i >= 0 ? S.queue.splice(i, 1)[0] : S.queue.shift();
+  if (nx) runDialogue(nx); else save();
+}
+// everything she says during a session goes through here
+function sessionTalk(steps) {
+  const id = seq('session', S.session.g, steps, 'NONE');
+  const a = S.active, n = a && getDlg(a.id) && getDlg(a.id).nodes[a.node];
+  if (a && n && n.type === 'ANSWER' && sesSkippable(a.id)) { S.queue.unshift(id); sesOverwrite(); return; }
+  runDialogue(id);
+}
 function runDialogue(id) {
   if (S.active) { if (!S.queue.includes(id)) S.queue.push(id); save(); return; }
   const d = getDlg(id); if (!d) return;
@@ -404,7 +421,7 @@ async function step() {
     (n.actions_on_enter || []).forEach(doAction);
     if (n.type === 'START') { a.node = n.next_node; await wait(n.pause || 120); if (tok !== runToken) return; continue; }
     if (n.type === 'AUTO') { const ok = await say(a.ch, n, tok); if (!ok) return; a.node = n.next_node; continue; }
-    if (n.type === 'ANSWER') { save(); renderAllChoices(); return; }
+    if (n.type === 'ANSWER') { if (sesSkippable(a.id) && S.queue.some(isSesDlg)) { sesOverwrite(); return; } save(); renderAllChoices(); return; }
     if (n.type === 'END') {
       S.active = null; delete S.dyn[a.id]; save(); renderAllChoices();
       handleEnd(n);
@@ -524,6 +541,7 @@ function doAction(a) {
   else if (a.action === 'COIN_PICK') { if (S.session) S.session.pick = a.value; }
   else if (a.action === 'E4KEYS') { if (!S.flags.trix_e4_paid) { S.flags.trix_e4_paid = true; const k = 2 * (S.flags.trix_e4 || 0), L = S.g.trix.layer + 1; if (k) { S.g.trix.bonusKeys = S.g.trix.bonusKeys || {}; S.g.trix.bonusKeys[L] = (S.g.trix.bonusKeys[L] || 0) + k; SFX.item(); toast('Keys', `+${k} of Trix's keys (layer ${L})`); } } }
   else if (a.action === 'QUIZ') { const id = a.value, go = () => { if (S.active || (S.queue && S.queue.length)) { setTimeout(go, 300); return; } if (id === 'trix_tarot') tarotStart(); else if (id === 'prim_news') newsQuizStart(); else if (id === 'vel_morse') morseQuizStart(); else startTimedQ(id); }; setTimeout(go, 300); }
+  else if (a.action === 'BUFF') sessionBuff();
   else if (a.action === 'KEYS') { const g = S.active && S.active.ch; if (g && S.g[g]) giveKeys(g, a.value); }
   else if (a.action === 'UNSET_FLAG') delete S.flags[a.value];
   else if (a.action === 'SHOW') { S.show[a.value[0]] = a.value[1]; renderShowcase(); }
@@ -544,7 +562,7 @@ function handleEnd(n) {
     case 'SES_SCAN': sessionScan(); break;
     case 'SES_COIN': paigeSessionCoin(); break;
     case 'TIMED_Q': startTimedQ(S.tqNext); S.tqNext = null; break;
-    case 'SES_CLOSE': closeSession(); break;
+    case 'SES_CLOSE': endSessionDay(); break;
     case 'OVERLOAD_DONE': closeSession(); break;
     case 'BOSS_NIGHT_DONE': S.night.bossDone = true; break;
     case 'RK_FEED': rkFeed(); break;
@@ -574,7 +592,7 @@ function openWin(id, o) {
   const rec = { el, o, body: el.querySelector('.win-body'), upd: [] }; WINS[id] = rec;
   el.addEventListener('pointerdown', () => focusWin(id), true);
   const minimize = () => { el.hidden = true; renderTasks(); };
-  el.querySelector('[data-a=close]').onclick = () => { SFX.click(); if (o.noClose && o.noClose()) { minimize(); toast(o.title, o.closeMsg || 'This window stays open until the session ends.'); } else closeWin(id); };
+  el.querySelector('[data-a=close]').onclick = () => { SFX.click(); if (o.tray) { rec.tray = true; el.hidden = true; renderTasks(); renderTrayApps(); return; } if (o.noClose && o.noClose()) { minimize(); toast(o.title, o.closeMsg || 'This window stays open until the session ends.'); } else closeWin(id); };
   el.querySelector('[data-a=min]').onclick = () => { SFX.click(); minimize(); };
   const tb = el.querySelector('.titlebar');
   tb.addEventListener('pointerdown', e => {
@@ -594,7 +612,7 @@ function renderTasks() {
   const t = $('#tasks'); if (!t) return;
   const top = Object.entries(WINS).filter(([, w]) => !w.el.hidden).sort((a, b) => b[1].el.style.zIndex - a[1].el.style.zIndex)[0];
   const unread = Object.values(S.unread).reduce((a, b) => a + b, 0);
-  t.innerHTML = Object.entries(WINS).map(([id, w]) => `<button class="btn task${top && top[0] === id ? ' on' : ''}${id === 'yap' && unread ? ' flash' : ''}" data-id="${id}" title="${esc(w.o.title)}">${icon(w.o.icon)}<span>${esc(w.o.title)}</span></button>`).join('');
+  t.innerHTML = Object.entries(WINS).filter(([, w]) => !w.tray).map(([id, w]) => `<button class="btn task${top && top[0] === id ? ' on' : ''}${id === 'yap' && unread ? ' flash' : ''}" data-id="${id}" title="${esc(w.o.title)}">${icon(w.o.icon)}<span>${esc(w.o.title)}</span></button>`).join('');
   $$('.task', t).forEach(b => b.onclick = () => {
     const w = WINS[b.dataset.id]; SFX.click();
     if (!w.el.hidden && top && top[0] === b.dataset.id) { w.el.hidden = true; renderTasks(); } else { focusWin(b.dataset.id); if (b.dataset.id === 'yap') setViewCh('yap', yapCh); if (b.dataset.id === 'sess') renderView('sess'); }
@@ -640,11 +658,32 @@ function renderIcons() {
   list.forEach(i => box.querySelector(`[data-id="${i.id}"]`).onclick = () => { SFX.click(); i.fn(); });
 }
 function renderTray() {
-  const el = $('#trayStats'); if (!el) return;
-  // just a date, like any desktop. (day 1 = Mon 07/06)
-  const d = new Date(2004, 5, 6 + S.day), wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d.getDay()];
-  el.innerHTML = `<span class="ts-s">${wd} ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}</span>`;
-  $('#clock').textContent = (S.phase === 'night' ? '☾ ' : '') + clockStr();
+  const el = $('#trayStats'); if (el) el.innerHTML = '';
+  // the clock is just the day and whether it's day or night (no hours on this desktop)
+  const night = S.phase === 'night';
+  $('#clock').innerHTML = `Day ${S.day || 1}<span class="cl-ic" title="${night ? 'night' : 'day'}">${night ? '☾' : '☀'}</span>`;
+  renderTrayApps();
+}
+/* apps that live in the tray (bottom right): MusicBox when you close its window, Pixie while she's out.
+   MusicBox: Maximize / Exit. Pixie: Exit only. Everything else just closes. */
+function renderTrayApps() {
+  const box = $('#trayApps'); if (!box) return;
+  const items = [];
+  if (WINS.music && WINS.music.tray) items.push(['music', 'note', 'MusicBox.exe']);
+  if (typeof PIX !== 'undefined' && PIX.on) items.push(['pixie', 'pixie', 'Pixie.exe']);
+  box.innerHTML = items.map(([k, ic, t]) => `<button data-tray="${k}" title="${t}" aria-label="${t}">${icon(ic)}</button>`).join('');
+  $$('[data-tray]', box).forEach(btn => btn.onclick = e => { e.stopPropagation(); SFX.click(); trayMenu(btn.dataset.tray, btn); });
+}
+function trayMenu(k, btn) {
+  const old = $('#traymenu'); if (old) { const same = old.dataset.k === k; old.remove(); if (same) return; }
+  const m = document.createElement('div'); m.id = 'traymenu'; m.dataset.k = k; m.setAttribute('role', 'menu');
+  const opts = k === 'music' ? [['Maximize', () => { const w = WINS.music; if (w) { w.tray = false; focusWin('music'); } renderTrayApps(); }], ['Exit', () => { if (typeof mbPause === 'function') mbPause(); const w = WINS.music; if (w) w.tray = false; closeWin('music'); renderTrayApps(); }]]
+    : [['Exit', () => { pixieOff(); renderTrayApps(); }]];
+  m.innerHTML = `<b>${k === 'music' ? 'MusicBox.exe' : 'Pixie.exe'}</b>` + opts.map(([t], i) => `<button data-i="${i}" role="menuitem">${t}</button>`).join('');
+  document.body.appendChild(m);
+  const r = btn.getBoundingClientRect(); m.style.left = Math.min(r.left, innerWidth - m.offsetWidth - 8) + 'px'; m.style.top = (r.top - m.offsetHeight - 6) + 'px';
+  $$('button', m).forEach(b => b.onclick = () => { SFX.click(); m.remove(); opts[+b.dataset.i][1](); });
+  setTimeout(() => document.addEventListener('pointerdown', function off(e) { if (!m.contains(e.target)) { m.remove(); document.removeEventListener('pointerdown', off); } }), 0);
 }
 function buildTaskbar() {
   $('#startbtn').innerHTML = `${icon('soul')}<span>Start</span>`;
@@ -853,9 +892,10 @@ function parseEffects(str, file, row) {
     else if (k === 'show' && /^\w+\s*=\s*\w+$/.test(v)) act.push({ action: 'SHOW', value: v.split(/\s*=\s*/) });
     else if (k === 'quiz' && v) act.push({ action: 'QUIZ', value: v });
     else if (k === 'keys' && +v > 0) act.push({ action: 'KEYS', value: +v });   // keys:5 — keys for the girl you're talking to
-    else if (k === 'e4keys') act.push({ action: 'E4KEYS' });   // Trix's Elite Four result: 2 keys per game she won   // starts a timed question when the talk ends (e.g. quiz:trix_tarot)
+    else if (k === 'e4keys') act.push({ action: 'E4KEYS' });
+    else if (k === 'buff') act.push({ action: 'BUFF' });   // a good answer in the session chat: a little stamina back, or (rarely) a solution   // Trix's Elite Four result: 2 keys per game she won   // starts a timed question when the talk ends (e.g. quiz:trix_tarot)
     else if (k === 'pause' && !isNaN(+v)) pause = +v;
-    else dataIssue(file, row, `unknown effect "${tok}" (use know:, flag:, unflag:, journal:, probation, ping:, glitch, show:, pause:)`);
+    else dataIssue(file, row, `unknown effect "${tok}" (use know:, flag:, unflag:, journal:, probation, ping:, glitch, show:, keys:, buff, pause:)`);
   });
   return { act, pause };
 }
@@ -1092,14 +1132,16 @@ function nightConvo(g) {
 function nightAvail(g) { return S.phase === 'night' && PLAYABLE.includes(g) && !S.g[g].gone && S.g[g].sessions > 0; }
 // the girl you worked with today writes to you at night, and she can't be ignored (Boss can)
 function nightMust(g) { return nightAvail(g) && (S.todayWorked || []).includes(g) && !S.night.with.includes(g) && !!nightConvo(g); }
-function canNightChat(g) { return nightAvail(g) && (S.night.chats < NIGHT_CHATS || nightMust(g)) && !S.night.with.includes(g) && !S.active && !!nightConvo(g); }
+// two girls a night, in all. The one you worked with today has to be one of them (she writes first)
+const nightSlots = g => NIGHT_CHATS - (PLAYABLE.some(k => k !== g && nightMust(k)) ? 1 : 0);
+function canNightChat(g) { return nightAvail(g) && (S.night.chats < nightSlots(g) || nightMust(g)) && !S.night.with.includes(g) && !S.active && !!nightConvo(g); }
 function girlWaiting(g) { const c = nightConvo(g); return nightAvail(g) && c && (c.by === 'girl' || nightMust(g)) && !S.night.with.includes(g); }
 function nightChatWhyNot(g) {
   if (S.g[g].gone) return `${GIRLS[g].name} left the facility.`;
   if (S.active) return 'Waiting… another conversation is active.';
   if (S.night.with.includes(g)) return `${GIRLS[g].name} is offline.`;
   if (!nightConvo(g)) return `${GIRLS[g].name} is offline.`;
-  if (S.night.chats >= NIGHT_CHATS) return 'It\'s late. Get some sleep.';
+  if (S.night.chats >= nightSlots(g)) return S.night.chats >= NIGHT_CHATS ? 'It\'s late. Get some sleep.' : 'Talk to today\'s patient first.';
   return '';
 }
 function startNightChat(g) {
@@ -1265,7 +1307,8 @@ function openAtlas() {
 const met = g => !!(S.met && S.met[g]);
 // every girl you've met is there every day, until the last one; you pick who to work with (one session at a time)
 const complete = k => S.g[k].layer >= 3;
-function availableToday() { if (reckoning()) return S.flags.rkFiles && S.phase === 'day' && !(S.g.ray && S.g.ray.layer >= 1) ? ['ray'] : []; if (SPECIAL[S.day] === 'showcase' || !S.flags.briefed || S.phase !== 'day' || S.dayOver) return []; return PLAYABLE.filter(k => met(k) && S.day >= GIRLS[k].from && !complete(k)); }
+function availableToday() { if (reckoning()) return S.flags.rkFiles && S.phase === 'day' && !(S.g.ray && S.g.ray.layer >= 1) ? ['ray'] : []; if (SPECIAL[S.day] === 'showcase' || !S.flags.briefed || S.phase !== 'day' || S.dayOver) return []; if ((S.todayWorked || []).length) return [];   // one patient a day: once her session is over, the work day is over
+  return PLAYABLE.filter(k => met(k) && S.day >= GIRLS[k].from && !complete(k)); }
 function checkpoint(at) {
   S.at = at;
   if (S.flags.chamber) return;   // the test chamber's sandbox never touches the real save
@@ -1279,7 +1322,7 @@ function lockScreen(sub, btn = 'Log in') {
   return new Promise(res => {
     const el = document.createElement('div'); el.id = 'lock';
     const dl = S.flags.probation ? `Probation · day ${S.day} of ${LAST_DAY}` : '';
-    el.innerHTML = `<div class="lk"><div class="lk-time">${clockStr()}</div><div class="lk-date">${esc(dl)}</div>
+    el.innerHTML = `<div class="lk"><div class="lk-time">Day ${S.day || 1} ${S.phase === 'night' ? '☾' : '☀'}</div><div class="lk-date">${esc(dl)}</div>
       <div class="lk-user"><img class="av" src="${S.player ? S.player.avatar : ''}" alt=""><b>${esc(S.player ? S.player.name : '')}</b><span>${esc(sub)}</span>
       <button class="btn primary" id="lk-go">${esc(btn)} ▸</button></div></div>`;
     document.body.appendChild(el); SFX.chime();
@@ -1413,13 +1456,11 @@ setInterval(() => { if (S.flags && S.flags.nightAfter && !S.active && !S.queue.l
 function startShutDown() {
   if (S.flags.ended) return;
   if (S.phase === 'night') { shutDown(); return; }
-  if (S.dayOver || SPECIAL[S.day] === 'showcase' && S.flags.showDone) { if (S.active && S.active.ch !== 'session') { SFX.buzz(); toast('DIVE OS', 'Finish the conversation first.'); return; } goNight(); return; }
-  SFX.buzz();
-  openWin('warn', { title: 'DIVE Administration', icon: 'lock', w: 380, h: 210, render: b => {
-    b.innerHTML = `<div class="warnbox"><div class="wb-ic" aria-hidden="true">!</div><div><b>Shift still in progress.</b><p>Your patients have not reached today's work quota. Shutting down a workstation during a shift will be reported to your supervisor.</p><p class="sig">— DIVE Administration</p></div></div><div class="warnfoot"><button class="btn primary" id="wb-ok">Back to work</button></div>`;
-    $('#wb-ok', b).onclick = () => { SFX.click(); closeWin('warn'); };
-    $('#wb-ok', b).focus();
-  } });
+  // in the day: Shut down ends the work day (so does End session in Fix-it)
+  if (!reckoning() && !S.flags.briefed) { SFX.buzz(); toast('DIVE OS', 'Read the morning briefing first.'); return; }
+  if (S.active && S.active.ch !== 'session') { SFX.buzz(); toast('DIVE OS', 'Finish the conversation first.'); return; }
+  if (S.session && S.session.g !== 'ray') { dropSessionTalk(); if (typeof owClose === 'function') owClose(); runDialogue(seq('session', S.session.g, sesOutro(S.session.g), 'SES_CLOSE')); return; }
+  S.dayOver = true; goNight();
 }
 async function shutDown() {
   if (S.phase !== 'night' || S.active || S.flags.ended) return;
@@ -1473,7 +1514,7 @@ function renderBrain() {
   }).join('') || '<div class="status-line">No patients assigned yet.</div>';
   const pk = S.selPick && info(S.selPick);
   const part = night ? 'Closed until 09:00' : sp === 'showcase' ? 'Hobby Showcase' : S.dayOver ? 'Work day over · Start ▸ Shut down' : `Work day · stamina ${staminaPct()}%`;
-  b.innerHTML = `<div class="bd selscr"><div class="bd-head"><div><div class="day">${S.flags.probation ? 'Day ' + S.day : 'Fix-it'}</div><div class="ph">${esc(part)} · ${clockStr()}</div></div><div class="sel-title">SELECT YOUR PATIENT</div></div>
+  b.innerHTML = `<div class="bd selscr"><div class="bd-head"><div><div class="day">${S.flags.probation ? 'Day ' + S.day : 'Fix-it'}</div><div class="ph">${esc(part)}</div></div><div class="sel-title">SELECT YOUR PATIENT<small class="sel-one">one patient a day</small></div></div>
     <div class="sel-row">${cards}</div>
     <div class="bd-foot">${S.flags.ended ? '<button class="btn primary" id="bd-new">New game</button>' : night ? `<button class="btn" id="bd-sleep" ${S.active ? 'disabled' : ''}>Shut down for the night</button>` : sp === 'showcase' ? '<button class="btn" id="bd-show">Open Showcase.exe</button>'
       : pk && pk.go ? `<button class="btn primary sel-go" data-go="${S.selPick}">Return to ${esc(GIRLS[S.selPick].name)} ▶</button>` : pk && pk.dive ? `<button class="btn primary sel-go" data-dive="${S.selPick}">DIVE · ${esc(GIRLS[S.selPick].name)} ▶</button>` : ''}</div></div>`;
@@ -1617,18 +1658,43 @@ async function sessionScan() {
 }
 function focusSessionChat() { openYap('session'); }
 function placeWin(id, x, y, w, h) { const W = WINS[id]; if (!W || narrow()) return; const dk = $('#desktop'); Object.assign(W.el.style, { left: clamp(x, 6, Math.max(6, dk.clientWidth - w - 6)) + 'px', top: y + 'px', width: Math.min(w, dk.clientWidth - 16) + 'px', height: Math.min(h, dk.clientHeight - 16) + 'px' }); }
+/* buffs: answer her right in the session chat and she perks up. Usually a bit of today's stamina comes back;
+   rarely you get a SOLUTION (one per day at most), kept until you use it on any memory. */
+const BUFF_MINS = 15, SOL_CHANCE = .15;
+function sessionBuff() {
+  if (!S.session || S.phase !== 'day' || S.dayOver) return;
+  const sys = t => { const m = { who: 'sys', text: t, t: clockStr() }; S.logs.session.push(m); appendMsg('session', m); };
+  if (S.solDay !== S.day && Math.random() < SOL_CHANCE) {
+    S.solDay = S.day; S.solutions = (S.solutions || 0) + 1; SFX.item();
+    setTimeout(() => { sys(`*** lucky · +1 SOLUTION (you have ${S.solutions}) · use it in any memory ***`); toast('DIVE OS', `<b>+1 solution.</b> Open it from the projector bar in any memory.`); }, 300);
+  } else {
+    const back = Math.min(BUFF_MINS, S.mins - DAY_START); S.mins -= back; SFX.chime();
+    setTimeout(() => sys(`*** she perks up · +${back} min stamina ***`), 300);
+  }
+  save(); refresh(); if (typeof owHud === 'function') owHud();
+}
+// a question she might ask after a memory (kind "quiz" in the session sheet): not every time, never the same one twice a day
+const ASK_CHANCE = .4;
+function sesAsk(g) {
+  S.askedToday = S.askedDay === S.day ? (S.askedToday || []) : []; S.askedDay = S.day;
+  const pool = sesEntries(g, 'quiz', e => stageOk(e, g) && !S.askedToday.includes(e.id));
+  if (!pool.length || Math.random() >= ASK_CHANCE) return null;
+  const e = pickRnd(pool); S.askedToday.push(e.id);
+  const st = playSteps(e.steps); st.forEach(x => { if (x.choices) x.choices.sort(() => Math.random() - .5); }); return st;
+}
 // called by the map: a memory was cleared (react), a gate opened (a layer came off)
 function sessionLevelWon(g, p, first) {
   if (S.flags.chamber) return;
-  if (!first || !S.session || S.active) return;
-  if (Math.random() < .55) { const st = sesSteps(g, 'react', e => !e.trigger || /^(WIN|PERFECT)_/.test(e.trigger)); if (st) runDialogue(seq('session', g, st, 'NONE')); }
+  if (!first || !S.session) return;
+  const st = Math.random() < .6 ? sesSteps(g, 'react', e => stageOk(e, g)) : null, ask = sesAsk(g);
+  if (st || ask) sessionTalk([...(st || []), ...(ask || [])]);
 }
 async function sessionLayerOpened(g, L) {
   if (S.flags.chamber) { owSay(`gate ${L} open (test)`); return; }
   S.todayLayers++;
   await breakLayerFx(g, L);
   const extra = L >= 3 ? [{ lines: [['sys', `*** ${GIRLS[g].id} · core reached · every layer faced ***`]] }] : [];
-  runDialogue(seq('session', g, [...sesBreak(g, L), ...extra], 'NONE'));
+  sessionTalk([...sesBreak(g, L), ...extra]);
   const R = REWARD[g] && REWARD[g][L];
   if (R) { (S.mailQueue = S.mailQueue || []).push({ from: g, ...R, atts: (R.atts || []).map(a => ({ ...a })) }); }   // delivered tonight
   if (L >= 3) { S.todayFixed.push(g); setTimeout(() => runDialogue(seq('boss', 'boss', [{ lines: [`${GIRLS[g].name} faced her last layer! Gold star, rookie.`, 'She stays with us until the end of the program, though. Rules are rules. Like visas.'] }])), 5200); }
@@ -1684,7 +1750,12 @@ async function closeSession(quick) {
   glitch('soft'); toast('Yappy Yappy', `<b>session_${g}.tmp</b> deleted.`);
   refresh();
 }
-// leaving early: she says bye, then the chat is deleted
+// End session: she says bye, the chat is deleted, and the work day is over (one patient a day) → night
+async function endSessionDay() {
+  const g = S.session && S.session.g;
+  await closeSession();
+  if (g && g !== 'ray' && S.phase === 'day' && !S.flags.chamber) { S.dayOver = true; goNight(); }
+}
 function endSessionEarly() {
   if (S.flags.chamber) { if (typeof owClose === 'function') owClose(); closeWin('fixit'); return; }
   const ss = S.session; if (!ss || S.active) return;

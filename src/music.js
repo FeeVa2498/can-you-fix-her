@@ -145,7 +145,8 @@ function mbSetVol(v) { MB.vol = v; mbSave(); if (MB.el) MB.el.volume = v * .55 *
 function openMusicBox() {
   S.used = S.used || {}; S.used['MusicBox.exe'] = true;
   auInit(); mbInit(); pcBusy(6);
-  openWin('music', { title: 'MusicBox.exe', icon: 'note', w: 360, h: 196, x: 40, y: 380, skin: true, render: (b, rec) => {
+  if (WINS.music) { WINS.music.tray = false; renderTrayApps(); }
+  openWin('music', { title: 'MusicBox.exe', icon: 'note', w: 360, h: 196, x: 40, y: 380, skin: true, tray: true, render: (b, rec) => {
     b.innerHTML = `<div class="mbx">
       <div class="mbx-face">
         <div class="mbx-lcd"><div class="mbx-mq"><span id="mb-title"></span></div><div class="mbx-row"><span id="mb-mode"></span><span id="mb-time">00:00</span></div><canvas id="mb-vis" width="150" height="34"></canvas></div>

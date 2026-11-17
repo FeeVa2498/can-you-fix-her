@@ -174,11 +174,12 @@ function pixieOn() {
     if (d.drag) { PIX.mode = 'fly'; PIX.tx = PIX.x; PIX.ty = PIX.y; PIX.until = performance.now() + 1500; SFX.pop(); }
     else pixieMenu(!PIX.menu); });
   toast('Pixie.exe', 'A little fairy is out on your desktop. Click her. Hold to carry her.');
+  renderTrayApps();
   pixieSay('✨', 1600); SFX.pop();
   const loop = now => { if (!PIX.on) return; pixieStep(now); PIX.raf = requestAnimationFrame(loop); }; PIX.raf = requestAnimationFrame(loop);
   refresh();
 }
-function pixieOff() { if (!PIX.on) return; PIX.on = false; cancelAnimationFrame(PIX.raf); pixieMenu(false); if (PIX.el) { PIX.el.classList.add('bye'); const e = PIX.el; setTimeout(() => e.remove(), 500); } PIX.el = null; refresh(); }
+function pixieOff() { if (!PIX.on) return; PIX.on = false; setTimeout(renderTrayApps, 0); cancelAnimationFrame(PIX.raf); pixieMenu(false); if (PIX.el) { PIX.el.classList.add('bye'); const e = PIX.el; setTimeout(() => e.remove(), 500); } PIX.el = null; refresh(); }
 function pixieStep(now) {
   const B = pixieBounds(), el = PIX.el; if (!el) return;
   if (PIX.mode === 'fly' && !PIX.menu) {

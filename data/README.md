@@ -120,10 +120,10 @@ Cột: `id, girl, kind, layer, trigger, if` + các cột hội thoại.
 | kind | Khi nào | layer | trigger |
 |---|---|---|---|
 | `intro` | đầu mỗi buổi sửa, chọn ngẫu nhiên 1 đoạn | — | — |
-| `react` | sau mỗi level, ngẫu nhiên trong các đoạn khớp | layer **đang sửa** (1, 2, 3) | kết quả level (bảng dưới) |
+| `react` | sau mỗi memory thắng lần đầu (~60%), ngẫu nhiên trong các đoạn khớp | layer **đang sửa** (1, 2, 3) | để trống (trigger cũ vẫn đọc được) |
 | `break` | khi vừa vỡ một layer | layer **vừa vỡ** (1, 2, 3) | — |
 | `outro` | hết 5 level | — | — |
-| `quiz` | thỉnh thoảng (30%) chen sau `react` khi qua màn; thứ tự lựa chọn tự xáo | — | — |
+| `quiz` | thỉnh thoảng (~40%) sau khi qua một memory, không lặp trong ngày; thứ tự lựa chọn tự xáo. Lựa chọn đúng có `effects` = `buff` (+15 phút stamina, hoặc hiếm khi +1 solution, tối đa 1/ngày). Không trả lời trước sự kiện tiếp theo thì câu hỏi bị ghi đè | layer = giai đoạn (1/2/3, trống = mọi lúc) | — |
 
 `trigger` cho `react`:
 

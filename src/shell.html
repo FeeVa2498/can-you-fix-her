@@ -88,6 +88,10 @@ button{font-family:inherit;font-size:inherit;color:inherit}
 #tray{display:flex;align-items:center;gap:8px;padding:2px 10px;flex:none;font-family:var(--mono);font-size:19px;line-height:1;background:var(--paper);border:2px solid var(--line);border-radius:12px}
 #tray button{background:none;border:0;padding:0 2px;cursor:pointer;font-family:var(--mono);font-size:19px;color:var(--pink-deep)}
 #tray .trayStats{display:flex;gap:6px}
+#trayApps{display:flex;gap:4px;align-items:center}#trayApps button{display:grid;place-items:center;width:26px;height:26px;border-radius:6px}#trayApps button:hover,#trayApps button.on{background:var(--pink-soft,#ffd3ea)}#trayApps svg{width:20px;height:20px}
+#traymenu{position:fixed;z-index:9000;min-width:150px;padding:4px;background:var(--paper);border:2px solid var(--line);border-radius:8px;box-shadow:0 6px 18px rgba(60,20,80,.25);font:14px var(--mono)}#traymenu b{display:block;padding:4px 8px;color:var(--ink-soft,#8a6fb0);font-size:12px}#traymenu button{display:block;width:100%;text-align:left;padding:6px 10px;background:none;border:0;border-radius:5px;cursor:pointer;font:inherit;color:var(--ink,#4a2d6e)}#traymenu button:hover{background:var(--pink-soft,#ffd3ea)}
+#clock .cl-ic{margin-left:6px}
+
 #tray .ts-s{color:var(--sky-deep)} #tray .ts-t{color:var(--mint)} #tray .ts-d{color:var(--pink-deep)}
 #saveflag{color:var(--mint);opacity:0;transition:opacity .4s}
 #saveflag.on{opacity:1}
@@ -1156,6 +1160,7 @@ line.ed-hov{stroke-width:.14}
 .ow-card{position:absolute;left:10px;bottom:10px;padding:6px 10px;border:2px solid var(--acc);border-radius:6px;background:rgba(13,7,20,.9);font-family:var(--mono);font-size:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:60%}
 .ow-card .new{color:#ffd86e}.ow-card .got{color:#7be3a4}.ow-card .go{color:var(--acc);font-weight:bold}
 .nz-testing{display:flex;flex-direction:column}.nz-testing>.nz{flex:1;min-height:0;height:auto}.nz-test{flex:none;display:flex;align-items:center;gap:6px;padding:4px 8px;background:#1d1030;color:#ffd86e;font:12px var(--mono)}.nz-test b{letter-spacing:.06em}.nz-test button,.nz-test select{font:12px var(--mono);padding:1px 6px}.nz-test small{margin-left:auto;opacity:.6}
+.sel-one{display:block;font-size:.5em;letter-spacing:.2em;opacity:.7;margin-top:2px}
 .boss-sub{position:absolute;left:50%;bottom:22px;transform:translate(-50%,6px);max-width:86%;text-align:center;font:italic clamp(14px,1.55vw,19px)/1.45 Georgia,serif;color:#fff;background:rgba(10,4,20,.66);padding:7px 18px;border-radius:4px;text-shadow:0 1px 2px #000;opacity:0;pointer-events:none;z-index:6;transition:opacity .45s,transform .45s}
 .boss-sub.on{opacity:1;transform:translate(-50%,0)}
 .ow-sub{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);max-width:88%;text-align:center;font:italic clamp(14px,1.6vw,19px)/1.4 Georgia,serif;color:#fff;background:rgba(10,4,20,.62);padding:6px 16px;border-radius:4px;text-shadow:0 1px 2px #000;opacity:0;pointer-events:none}
@@ -1541,6 +1546,7 @@ body.reckon #app{animation:none}
     <div id="tray">
       <span id="saveflag" title="autosaved">saved</span>
       <span class="trayStats" id="trayStats"></span>
+      <span id="trayApps"></span>
       <button id="soundbtn" title="Toggle sound" aria-label="Toggle sound">♪</button>
       <span id="clock">09:00</span>
     </div>

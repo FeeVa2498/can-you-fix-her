@@ -182,7 +182,7 @@ function owHud() {
   $('#ow-reg').textContent = `Layer ${region < 0 ? 3 : region + 1} · ${rg}`;
   }
   const pct = staminaPct(), st = $('#ow-stam');
-  st.querySelector('i').style.width = pct + '%'; st.querySelector('b').textContent = `${clockStr()} · ${pct}%`; st.classList.toggle('low', pct <= 15);
+  st.querySelector('i').style.width = pct + '%'; st.querySelector('b').textContent = `stamina ${pct}%`; st.classList.toggle('low', pct <= 15);
   // the card for the memory you're standing on
   const card = $('#ow-card'); if (!card) return;
   const ni = M.nodeAt.get(o.y * M.W + o.x);
@@ -378,7 +378,21 @@ function owEnter() {
 // the projector's bar in story mode: back to the map instead of the panel list; no answer button, no editor
 function storyProjectorChrome(b, p) {
   const back = $('#pj-back', b); back.textContent = '◂ Map'; back.onclick = () => { SFX.click(); owBack(); };
-  ['#pj-sol', '#pj-next', '#pj-solbox'].forEach(s => { const e = $(s, b); if (e) e.remove(); });
+  const nx = $('#pj-next', b); if (nx) nx.remove();
+  // a SOLUTION (a rare buff from the session chat): spend one to see this memory's answer; once opened here, it stays free
+  const sb = $('#pj-sol', b), used = () => !!(S.solUsed && S.solUsed[p.id]);
+  const label = () => { if (!PJ || !PJ.solOn) sb.textContent = used() ? '✦ Solution' : `✦ Solution ×${S.solutions || 0}`; };
+  if (S.flags.chamber || PJ_STORY.g === 'ray' || !(used() || (S.solutions || 0) > 0)) { sb.remove(); const bx = $('#pj-solbox', b); if (bx) bx.remove(); }
+  else {
+    label(); sb.title = 'Spend a solution to watch this memory solved';
+    sb.onclick = () => {
+      if (!used()) {   // first click asks, second click spends
+        if (!sb.dataset.arm) { sb.dataset.arm = '1'; SFX.click(); sb.textContent = `Use 1 of ${S.solutions}? Click again`; setTimeout(() => { delete sb.dataset.arm; label(); }, 3000); return; }
+        delete sb.dataset.arm; S.solutions--; (S.solUsed = S.solUsed || {})[p.id] = true; save(); owSay('✦ solution used');
+      }
+      SFX.click(); solMode(!PJ.solOn); label();
+    };
+  }
   const ed = $('[data-m="edit"]', b); if (ed) ed.remove();
   const bk = $('[data-m="back"] span', b); if (bk) bk.textContent = 'Back to the map';
   const dbg = $('.pj-debug', b); if (dbg) dbg.remove();
